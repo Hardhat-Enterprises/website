@@ -9,8 +9,8 @@
     {% endif %}  
       <div class="container position-relative">
           <a class="navbar-brand me-lg-5" href="/">
-              <img class="navbar-brand-dark" src="{% static 'assets/img/brand/light.svg' %}" alt="Logo light">
-              <img class="navbar-brand-light" src="{% static 'assets/img/brand/dark.svg' %}" alt="Logo dark">
+              <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light">
+              <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark">
           </a>
           <div class="navbar-collapse collapse me-auto" id="navbar_global">
               <div class="navbar-collapse-header">
@@ -43,8 +43,8 @@
                                         <a class="megamenu-link" href="{% url 'contact_us' %}">Contact</a>
                                     </li>
                                     <li class="mb-2 megamenu-item">
-                                    <a class="megamenu-link" href="{% url 'appattack' %}">AppAttack</a>
-                                </li>
+                                    {% comment %} <a class="megamenu-link" href="{% url 'appattack' %}">AppAttack</a> {% endcomment %}
+                                    </li>
                                 </ul>
                             </div>
                             <div class="col-6 col-lg-4">
