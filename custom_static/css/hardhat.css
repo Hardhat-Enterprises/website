@@ -15951,7 +15951,7 @@ textarea.form-control-lg {
     padding-top: 6rem;
     padding-bottom: 6rem; }
   .section-header {
-    position: relative;
+    position: static;
     padding-top: 10rem;
     padding-bottom: 10rem; }
     .section-header.section-sm {
@@ -18366,7 +18366,7 @@ label {
   color: #1d58a5; }
 
 .fill-tertiary {
-  fill: #1d58a5; }
+  fill: #FFCD11; }
 
 .icon-shape-primary-app {
   color: #EBF4F6;
