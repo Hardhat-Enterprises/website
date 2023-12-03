@@ -12,3 +12,8 @@ def malwarehome(request):
 
     # Page from the theme 
     return render(request, 'pages/malware_visualization/main.html')
+
+def ptguihome(request):
+
+    # Page from the theme 
+    return render(request, 'pages/pt_gui/main.html')
