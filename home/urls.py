@@ -5,6 +5,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('malware_viz', views.malwarehome, name='malware_viz_main'),
+    path('malware_joinus', views.malwareform, name='malware_viz_form'),
 ]
-
-
