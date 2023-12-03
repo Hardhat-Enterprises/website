@@ -7,3 +7,8 @@ def index(request):
 
     # Page from the theme 
     return render(request, 'pages/index.html')
+
+def malwarehome(request):
+
+    # Page from the theme 
+    return render(request, 'pages/malware_visualization/main.html')
