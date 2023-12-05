@@ -2804,14 +2804,14 @@ textarea.form-control-lg {
     border-color: #1c2540; }
 
 .btn-tertiary {
-  color: #ffffff;
-  background-color: #1d58a5;
-  border-color: #1d58a5;
+  color: #000000;
+  background-color: #FFCD11;
+  border-color: #000000;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(23, 31, 56, 0.075); }
   .btn-tertiary:hover {
     color: #ffffff;
-    background-color: #194b8c;
-    border-color: #174684; }
+    background-color: #000000;
+    border-color: #000000; }
   .btn-check:focus + .btn-tertiary, .btn-tertiary:focus {
     color: #ffffff;
     background-color: #194b8c;
@@ -18346,7 +18346,7 @@ label {
   background-color: rgba(36, 46, 76, 0.1); }
 
 .icon-primary span {
-  color: #242e4c; }
+  color: #FFCD11; }
 
 .fill-primary {
   fill: #242e4c; }
