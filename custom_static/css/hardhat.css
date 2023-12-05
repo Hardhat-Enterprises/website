@@ -16,7 +16,7 @@
 */
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700&display=swap");
 .datepicker {
-  display: none; }
+  display: grid; }
   .datepicker.active {
     display: block; }
 
@@ -33,7 +33,7 @@
 .datepicker-picker {
   display: inline-block;
   border-radius: 1rem;
-  background-color: #ffffff; }
+  background-color: var(--bs-yellow) }
   .datepicker-dropdown .datepicker-picker {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px; }
   .datepicker-picker span {
@@ -15942,8 +15942,11 @@ textarea.form-control-lg {
 
 .section-header {
   position: relative;
-  padding-top: 7rem;
-  padding-bottom: 3rem; }
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: 900;
+    padding-bottom: 25px;
+    color: #fff; }
 
 @media (min-width: 576px) {
   .section {
@@ -19345,5 +19348,89 @@ blockquote {
 .ct-area,
 .ct-line {
   pointer-events: none; }
+
+    body{    
+      background: dimgray;
+      font-family: montserrat;
+      
+  }
+  
+  .section {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+  }
+
+  .section-header{
+    position: relative;
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: 900;
+    padding-bottom: 25px;
+    color: #fff;
+}
+.section-header:after{
+  content: '';
+  height: 3px;
+  width: 200px;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 100px);
+  background: #fff;
+}
+  .section-header span {
+    display: block;
+    font-size: 15px;
+    font-weight: 300;
+  }
+
+
+  .testimonials{
+    max-width: 1000px;
+    padding: 0 15px 50px;
+    margin: 0 auto 80px auto;
+}
+.single-item{
+  background: #fff;
+  color: #111;
+  padding: 15px;
+  margin: 50px 15px;
+}
+
+.profile{
+  margin-bottom: 30px;
+  text-align: center;    
+}
+.img-area {
+margin: 0 15px 15px 15px;
+}
+.img-area img {
+height: 200px;
+width: 200px;
+border-radius: 50%;
+border: 7px #171f38 !important;
+}
+
+.content{
+  font-size: 18px;
+}
+.content p {
+text-align: justify;
+}
+.content p span {
+font-size: 48px;
+margin-right: 20px;
+  color: #171f38 !important;
+}
+.socials i {
+margin-right: 25px;
+}
+.bio h4 {
+font-family: var(--bs-font-sans-serif);
+}
+.carousel-control-next-icon, .carousel-control-prev-icon {
+background-color: #171f38 !important;
+}
+
 
 /*# sourceMappingURL=pixel.css.map */
