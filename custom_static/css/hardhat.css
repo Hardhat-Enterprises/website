@@ -16228,8 +16228,7 @@ label {
   transition: all 0.2s ease;
   font-size: 1rem;
   border-radius: 1rem; 
-  background-color:#000000;
-  color:#ffc107;
+
 }
   .btn-group .btn, .input-group .btn {
     margin-right: 0;
