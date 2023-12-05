@@ -16227,7 +16227,9 @@ label {
   position: relative;
   transition: all 0.2s ease;
   font-size: 1rem;
-  border-radius: 1rem; }
+  border-radius: 1rem; 
+
+}
   .btn-group .btn, .input-group .btn {
     margin-right: 0;
     transform: translateY(0); }
