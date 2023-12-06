@@ -4468,6 +4468,11 @@ textarea.form-control-lg {
   .navbar-dark .navbar-text a:focus {
     color: #ffffff; }
 
+.small-card {
+  width: 150px;
+  height: 150px;
+}
+
 .card {
   position: relative;
   display: flex;
