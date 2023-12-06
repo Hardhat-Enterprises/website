@@ -20,7 +20,7 @@ def malwarehome(request):
     return render(request, 'pages/malware_visualization/main.html')
 
 
-def malwareform(request):
+def malware_joinus(request):
 
     # Page from the theme
-    return render(request, 'pages/malware_visualization/malware_viz_form.html')
+    return render(request, 'pages/malware_visualization/malware_viz_joinus.html')
