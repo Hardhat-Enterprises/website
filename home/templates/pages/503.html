@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+    {% include 'includes/pre-loader.html' %}
+    <section class="section-header bg-primary text-black py-5">
+		<div class="px-4 py-5 my-5 text-center">
+			<h2 class="fw-bold display-2">Sorry! This page is under maintenance</h1>
+			<img width="500" height="500" src="{% static 'assets/img/pages/home/under-construction.svg' %}" alt="Hero image">
+			<div class="col-lg-6 mx-auto">
+			</div>
+		</div>
+    </section>
+
+</main>
+
+
+{% endblock content %}
