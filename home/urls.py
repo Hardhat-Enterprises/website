@@ -11,4 +11,5 @@ urlpatterns = [
          views.products_services, name='malware_products'),
     path('malware_viz', views.malwarehome, name='malware_viz_main'),
     path('ptgui_viz', views.ptguihome, name='ptgui_viz_main'),
+    path('maintenance', views.http_503, name='maintenance'),
 ]
