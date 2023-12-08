@@ -3,6 +3,7 @@ import uuid
 from django.db.models.deletion import PROTECT
 from django.db import models
 from django.core.mail import send_mail
+from django.conf import settings
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
@@ -84,7 +85,7 @@ class Student(AbstractBaseSet):
             "unique": _("A user with that Student ID already exists."),
         },
     )
-    user_id = models.OneToOneField(User, on_delete=PROTECT, related_name="users", blank=False, null=False)
+    user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="users", blank=False, null=False)
     p1 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p1", blank=False, null=False)
     p2 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p2", blank=False, null=False)
     p3 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p3", blank=False, null=False)
