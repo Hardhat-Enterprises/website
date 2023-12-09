@@ -40,6 +40,9 @@ def ptguihome(request):
     # Page from the theme
     return render(request, 'pages/pt_gui/main.html')
 
+def ptgui_contact_us(request):
+    return render(request, 'pages/pt_gui/contact-us.html')
+
 
 def http_503(request):
     return render(request, 'pages/503.html')
