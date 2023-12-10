@@ -2,9 +2,11 @@
 
 {% block content %}
 
-<div class="preloader bg-primary flex-column justify-content-center align-items-center">
-  <svg
-    viewBox="0 0 100 200">
+<div class="preloader bg-primary flex-column">
+  <svg viewBox="0 0 100 120">
+    <!-- LOGO -->
+    <image xlink:href="{% static 'assets/img/brand/logo.svg' %}" width="40" height="40" x="30" y="20" />
+
     <!-- Rectangle 1-->
     <rect x="50" fill="#ffcc00" width="3" height="10" transform="translate(0) rotate(180 45 50)">
     <animate
@@ -54,7 +56,6 @@
         repeatCount="indefinite"
         begin="0.1s"/>
     </rect>
-    <image xlink:href="{% static 'assets/img/brand/logo.svg' %}" width="40" height="40" x="30" y="120" />
   </svg>
      
 </div>
