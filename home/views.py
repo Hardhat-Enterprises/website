@@ -85,3 +85,9 @@ class UserPasswordResetConfirmView(PasswordResetConfirmView):
 class UserPasswordChangeView(PasswordChangeView):
   template_name = 'accounts/password_change.html'
   form_class = UserPasswordChangeForm
+def login_view(request):
+    return render(request, 'pages/login.html')
+
+def resources_view(request):
+    return render(request, 'pages/resources.html.')
+    

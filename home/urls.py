@@ -13,4 +13,7 @@ urlpatterns = [
     path('ptgui_viz', views.ptguihome, name='ptgui_viz_main'),
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
+    path('register/', views.register_view, name='register'),
+    path('login/', views.login_view, name='login2'),
+    path('resources/', views.resources_view, name='resources') 
 ]
