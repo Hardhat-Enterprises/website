@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, JoinUsForm
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
@@ -12,7 +12,7 @@ def index(request):
     return render(request, 'pages/index.html')
 
 def abouts_us(request):
-  return render(request, 'pages/about.html')
+    return render(request, 'pages/about.html')
 
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
@@ -45,40 +45,56 @@ def http_503(request):
     return render(request, 'pages/503.html')
 
 
+def join_project(request):
+    if request.method == 'POST':
+        form = JoinUsForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            print("Preferences saved successfully!")
+            return redirect('')
+        else:
+            print("Could not save preferences!")
+    else:
+        form = JoinUsForm()
+
+    context = { 'form': form }
+    return render(request, 'joinus.html', context)
+   
+
 
 # Authentication
 class UserLoginView(LoginView):
-  template_name = 'accounts/sign-in.html'
-  form_class = UserLoginForm
+    template_name = 'accounts/sign-in.html'
+    form_class = UserLoginForm
 
 def logout_view(request):
-  logout(request)
-  return redirect('/accounts/login')
+    logout(request)
+    return redirect('/accounts/login')
 
 def register(request):
-  print("in register view")
-  if request.method == 'POST':
-    form = RegistrationForm(request.POST)
-    if form.is_valid():
-      form.save()
-      print("Account created successfully!")
-      return redirect('/accounts/login')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print("Account created successfully!")
+            return redirect('/accounts/login')
+        else:
+            print("Registration failed!")
     else:
-      print("Registration failed!")
-  else:
-    form = RegistrationForm()
+        form = RegistrationForm()
 
-  context = { 'form': form }
-  return render(request, 'accounts/sign-up.html', context)
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up.html', context)
 
 class UserPasswordResetView(PasswordResetView):
-  template_name = 'accounts/password_reset.html'
-  form_class = UserPasswordResetForm
+    template_name = 'accounts/password_reset.html'
+    form_class = UserPasswordResetForm
 
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
-  template_name = 'accounts/password_reset_confirm.html'
-  form_class = UserSetPasswordForm
+    template_name = 'accounts/password_reset_confirm.html'
+    form_class = UserSetPasswordForm
 
 class UserPasswordChangeView(PasswordChangeView):
-  template_name = 'accounts/password_change.html'
-  form_class = UserPasswordChangeForm
+    template_name = 'accounts/password_change.html'
+    form_class = UserPasswordChangeForm
