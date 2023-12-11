@@ -13,4 +13,4 @@ env
 *.sqlite*
 
 .env
-.vscode/settings.json
+.vscode/
