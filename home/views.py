@@ -80,7 +80,7 @@ class UserLoginView(LoginView):
 
 def logout_view(request):
     logout(request)
-    return redirect('/accounts/login')
+    return redirect('/')
 
 def register(request):
     if request.method == 'POST':
