@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, JoinUsForm
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
+from .models import Student
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
-
 
 def index(request):
     # Page from the theme
@@ -49,20 +49,27 @@ def http_503(request):
 
 
 def join_project(request):
+    context = {'student_exists': False}
     if request.method == 'POST':
-        form = JoinUsForm(request.POST)
+        form = StudentForm(request.POST)
 
         if form.is_valid():
+            student = form.save(commit=False)
+            student.user = request.user
+            student.save()
             form.save()
             print("Preferences saved successfully!")
-            return redirect('')
+            return redirect('/')
         else:
             print("Could not save preferences!")
     else:
-        form = JoinUsForm()
+        user = request.user
+        if Student.objects.filter(user=user.id).exists():
+            context['student_exists'] = True
+        form = StudentForm()
 
-    context = { 'form': form }
-    return render(request, 'joinus.html', context)
+    context['form'] = form
+    return render(request, 'pages/joinus.html', context)
    
 
 

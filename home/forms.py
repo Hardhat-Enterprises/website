@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 from .models import Student
 
@@ -81,3 +82,21 @@ class UserPasswordChangeForm(PasswordChangeForm):
     new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
         'class': 'form-control', 'placeholder': 'Confirm New Password'
     }), label=_("Confirm New Password"))
+
+
+class StudentForm(forms.ModelForm):
+    id = forms.IntegerField(label=_('Deakin Student ID'))
+    year = forms.ChoiceField(
+        choices=possible_years(((timezone.now()).year), 2020),
+        label=_("Year")
+    )
+    
+    class Meta:
+        model = Student
+        fields = ("id", "year", "trimester", "unit", "course", "p1", "p2", "p3", )
+        labels = {
+            'p1': '1st Priority',
+            'p2': '2nd Priority',
+            'p3': '3rd Priority',
+        }
+
