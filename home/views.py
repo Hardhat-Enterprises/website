@@ -14,6 +14,9 @@ def index(request):
 def abouts_us(request):
     return render(request, 'pages/about.html')
 
+def error_404(request, exception):
+    return render(request, 'pages/404.html', status=404)
+
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
 
