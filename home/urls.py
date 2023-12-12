@@ -8,6 +8,7 @@ urlpatterns = [
 
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
+    path('appattack/join', views.appattack_join, name='appattack'),
     path('malware_viz/products_and_services',
          views.products_services, name='malware_products'),
     path('malware_viz', views.malwarehome, name='malware_viz_main'),
