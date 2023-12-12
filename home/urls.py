@@ -13,4 +13,9 @@ urlpatterns = [
     path('ptgui_viz', views.ptguihome, name='ptgui_viz_main'),
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
+
+    #Statistics
+    path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
+    path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
+    path('stats', views.statistics_view, name='project-stats')
 ]
