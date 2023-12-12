@@ -21,3 +21,8 @@ def ptguihome(request):
     # Page from the theme 
     return render(request, 'pages/pt_gui/main.html')
 
+
+def ptgui_join_us(request):
+
+    # Page from the theme 
+    return render(request, 'pages/pt_gui/join_us.html')
