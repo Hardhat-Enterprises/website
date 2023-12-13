@@ -1,0 +1,204 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .section-lg {
+        padding: 60px 0;
+    }
+
+    .faq-question {
+        cursor: pointer;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #e8e6dc;
+        border: 1px solid #000;
+        border-radius: 5px;
+        position: relative;
+        color: #000;
+        font-size: 20px;
+    }
+
+    .faq-question::after {
+        content: '\25B6';
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        transition: transform 0.3s ease-in-out;
+        color: #000;
+    }
+
+    .faq-question.open::after {
+        transform: translateY(-50%) rotate(90deg);
+    }
+
+    .faq-answer {
+        display: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: #000;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .search-bar {
+        position: fixed;
+        top: 120px;
+        right: 12px;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar input {
+        border: 2px solid #000;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 18px;
+        margin-right: 10px;
+    }
+
+    .search-icon {
+        font-size: 30px;
+        color: #000;
+    }
+</style>
+
+<main>
+    <div class="search-bar">
+        <i class="fa fa-search search-icon"></i>
+        <input type="text" id="faq-search" placeholder="Search FAQs...">
+    </div>
+    {% include 'includes/pre-loader.html' %}
+
+    <!-- Hero Section -->
+    <section class="section-header overflow-hidden pt-7 pt-lg-5 pb-9 pb-lg-1 bg-tertiary text-black">
+        <div class="container col-xxl-8 px-4 py-5">
+            <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+                <div class="col-12 col-sm-8 col-lg-6">
+                    <img src="{% static 'assets/img/pages/home/ptgui_faqq.svg' %}" alt="Hero image"
+                        style="max-width: 100%; height: auto;">
+                </div>
+
+                <div class="col-lg-6">
+                    <h1 class="fw-bolder display-1">FAQs</h1>
+                    <h2 class="lead fw-normal mb-4 px-lg-1">Illuminate Your Understanding with Our
+                        Comprehensive FAQs.</h2>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            var faqQuestions = document.querySelectorAll('.faq-question');
+
+            faqQuestions.forEach(function (question) {
+                question.addEventListener('click', function () {
+                    question.classList.toggle('open');
+                    var answer = question.nextElementSibling;
+                    if (answer.style.display === 'block') {
+                        answer.style.display = 'none';
+                    } else {
+                        answer.style.display = 'block';
+                    }
+
+                    // Search functionality
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var faqQuestions = document.querySelectorAll('.faq-question');
+
+                        document.getElementById('faq-search').addEventListener('input', function () {
+                            var searchTerm = this.value.toLowerCase();
+
+                            faqQuestions.forEach(function (question) {
+                                var questionText = question.textContent.toLowerCase();
+                                var answer = question.nextElementSibling;
+
+                                if (questionText.includes(searchTerm)) {
+                                    question.style.display = 'block';
+                                    answer.style.display = 'block';
+                                } else {
+                                    question.style.display = 'none';
+                                    answer.style.display = 'none';
+                                }
+                            });
+                        });
+                    });
+
+                });
+            });
+        });
+    </script>
+
+    <section class="section section-lg bg-primary text-black py-5">
+        <div class="container">
+            <h1 class="fw-bolder display-5 text-center mb-5 mt-5">Explore the answers to common questions about PT-GUI
+                and enhance your understanding of our cybersecurity toolkit.</h1>
+            <div class="row g-5">
+                <div class="col-12">
+                    <p class="lead fw-normal mb-4">Here are some frequently asked questions:</p>
+                    <div class="faq-question">How can I install PT-GUI on my system?</div>
+                    <div class="faq-answer">You can install PT-GUI by following the installation instructions provided
+                        in the official PT-GUI documentation. The installation process typically involves downloading
+                        the necessary files, configuring dependencies, and running the installation script.</div>
+
+                    <div class="faq-question">What operating systems does PT-GUI support?</div>
+                    <div class="faq-answer">PT-GUI is designed to be cross-platform and supports various operating
+                        systems, including Windows, macOS, and Linux. Make sure to check the documentation for specific
+                        requirements and compatibility details.</div>
+
+                    <div class="faq-question">Are there any tutorials available for using PT-GUI?</div>
+                    <div class="faq-answer">Yes, PT-GUI provides tutorials and walkthroughs to help users get started
+                        with the toolkit. These tutorials cover a range of topics, from basic tool usage to advanced
+                        penetration testing techniques. Check the official PT-GUI website and documentation for the
+                        latest tutorials.</div>
+
+                    <div class="faq-question">Can I customize the PT-GUI interface?</div>
+                    <div class="faq-answer">PT-GUI offers some degree of customization for the user interface. Users can
+                        configure settings, choose themes, and personalize the layout to suit their preferences. Refer
+                        to the PT-GUI documentation for details on how to customize the interface.</div>
+
+                    <div class="faq-question">Does PT-GUI support collaboration and team usage?</div>
+                    <div class="faq-answer">Yes, PT-GUI is designed to support collaboration and team usage. It provides
+                        features for sharing projects, collaborating on assessments, and managing user roles within the
+                        toolkit. Team members can work together seamlessly using PT-GUI's collaborative capabilities.
+                    </div>
+
+                    <div class="faq-question">What security measures are in place for PT-GUI?</div>
+                    <div class="faq-answer">PT-GUI prioritizes security and follows best practices to ensure a secure
+                        environment for penetration testing. Regular updates and security patches are released to
+                        address vulnerabilities. Users are encouraged to stay informed about security practices and
+                        update PT-GUI regularly.</div>
+
+                    <div class="faq-question">Can I integrate PT-GUI with other cybersecurity tools?</div>
+                    <div class="faq-answer">Yes, PT-GUI is designed with integration in mind. Users can integrate PT-GUI
+                        with other cybersecurity tools and frameworks to enhance their workflow. The documentation
+                        provides guidance on integrating PT-GUI with third-party tools and services.</div>
+
+                    <div class="faq-question">Is there a community forum or support channel for PT-GUI users?</div>
+                    <div class="faq-answer">Yes, PT-GUI has an active community forum and support channels where users
+                        can seek help, share experiences, and collaborate with other cybersecurity enthusiasts. Joining
+                        the community provides an opportunity to connect with like-minded individuals and receive
+                        assistance from experienced users.</div>
+
+                    <div class="faq-question">What is the roadmap for future PT-GUI developments?</div>
+                    <div class="faq-answer">The PT-GUI development team is committed to continuous improvement and
+                        innovation. The roadmap for future developments includes expanding the toolkit's toolset,
+                        enhancing user experience, and incorporating feedback from the community. Stay tuned to official
+                        announcements and releases for updates on PT-GUI's evolution.</div>
+
+                    <div class="faq-question">How can I report bugs or contribute to PT-GUI development?</div>
+                    <div class="faq-answer">To report bugs or contribute to PT-GUI development, visit the official
+                        PT-GUI GitHub repository. You can submit bug reports, contribute code, or participate in
+                        discussions with the development community. Your contributions play a crucial role in making
+                        PT-GUI a robust and effective cybersecurity toolkit.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock content %}
