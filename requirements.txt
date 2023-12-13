@@ -1,6 +1,7 @@
 # Core
 django==4.1.12
 python-dotenv==1.0.0
+django-extensions==3.2.3
 
 # UI
 django-theme-pixel==1.0.3

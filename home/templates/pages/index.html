@@ -17,8 +17,8 @@
           <h1 class="fw-bolder display-1">Hardhat Enterprises</h1>
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1">Security is a necessity. Not a choice</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Explore Projects</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Join Us</button>
+            <a type="button" href="#projects" class="btn btn-primary btn-lg px-4 me-md-2">Explore Projects</a>
+            <a type="button" href="{% url 'join-project' %}" class="btn btn-outline-secondary btn-lg px-4">Join Us</a>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
   </section>
 
   <!-- Projects -->
-  <section class="section section-lg bg-tertiary">
+  <section id="projects" class="section section-lg bg-tertiary">
     <div class="container">
       <h1 class="fw-bolder display-2 text-center mb-lg-2">Projects</h1>
       <div class="row mb-5">
@@ -68,8 +68,8 @@
             </div>  
             <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
               <h3 class="h5 card-title">AppAttack</h3>
-              <p class="mt-3">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#">
+              <p class="mt-3">We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets</p>
+              <a href="{% url 'appattack' %}">
                 <div class="btn btn-secondary">
                   Learn More
                 </div>
@@ -83,9 +83,9 @@
                 <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Neil Portrait">
               </div>  
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
-                <h3 class="h5 card-title">Threat Intelligence</h3>
-                <p class="mt-3">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#">
+                <h3 class="h5 card-title">Malware Visualization</h3>
+                <p class="mt-3">The Malware Visualization project develops an interactive visual analytics tool to make malware analysis easier.​Integrated with existing visualization tools, this stand-alone application offers a user-friendly visual analysis</p>
+                <a href="{% url 'malware_viz_main' %}">
                   <div class="btn btn-secondary">
                     Learn More
                   </div>
@@ -100,8 +100,8 @@
               </div>  
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
                 <h3 class="h5 card-title">PT-GUI</h3>
-                <p class="mt-3">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#">
+                <p class="mt-3">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a revolution in cybersecurity practice.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
                   <div class="btn btn-secondary">
                     Learn More
                   </div>
