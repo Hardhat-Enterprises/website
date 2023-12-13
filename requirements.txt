@@ -2,6 +2,8 @@
 django==4.1.12
 python-dotenv==1.0.0
 django-extensions==3.2.3
+factory-boy==3.3.0
+django-light==0.1.0.post3
 
 # UI
 django-theme-pixel==1.0.3

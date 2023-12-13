@@ -1,0 +1,123 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+{% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+  &rsaquo;
+  {% for app in app_list %}
+  {{ app.name }}
+  {% endfor %}
+</div>
+{% endblock %}
+{% endif %}
+{% block content %}
+<div style="float: left">
+  <div id="content-main">
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+  </div>
+  <div id="content-statistics">
+    <h1>Statistics</h1>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+      crossorigin="anonymous">
+    </script>
+    <form id="filterForm">
+        <label for="priority">Choose a priority:</label>
+        <select name="priority" id="priority"></select>
+        <input type="submit" value="Load" name="_load">
+    </form>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+              url: "/chart/filter-options",
+              type: "GET",
+              dataType: "json",
+              success: (jsonResponse) => {
+                // Load all the options
+                jsonResponse.options.forEach(option => {
+                  $("#priority").append(new Option(option, option));
+                });
+                // Load data for the first option
+                loadAllCharts($("#priority").children().first().val());
+              },
+              error: () => console.log("Failed to fetch chart filter options!")
+            });
+          });
+        
+          $("#filterForm").on("submit", (event) => {
+            event.preventDefault();
+        
+            const priority = $("#priority").val();
+            loadAllCharts(priority)
+          });
+        
+          function loadChart(chart, endpoint) {
+            $.ajax({
+              url: endpoint,
+              type: "GET",
+              dataType: "json",
+              success: (jsonResponse) => {
+                // Extract data from the response
+                const title = jsonResponse.title;
+                const labels = jsonResponse.data.labels;
+                const datasets = jsonResponse.data.datasets;
+        
+                // Reset the current chart
+                chart.data.datasets = [];
+                chart.data.labels = [];
+        
+                // Load new data into the chart
+                chart.options.title.text = title;
+                chart.options.title.display = true;
+                chart.data.labels = labels;
+                datasets.forEach(dataset => {
+                  chart.data.datasets.push(dataset);
+                });
+                chart.update();
+              },
+              error: () => console.log("Failed to fetch chart data from " + endpoint + "!")
+            });
+          }
+        
+          function loadAllCharts(priority) {
+            loadChart(priorityChart, `/chart/project-priority/${priority}`);
+            // loadChart(spendPerCustomerChart, `/shop/chart/spend-per-customer/${priority}/`);
+            // loadChart(paymentSuccessChart, `/shop/chart/payment-success/${priority}/`);
+            // loadChart(paymentMethodChart, `/shop/chart/payment-method/${priority}/`);
+          }
+    </script>
+    <canvas id="priorityChart"></canvas>
+    {% comment %} <canvas id="salesChart"></canvas>
+    <canvas id="spendPerCustomerChart"></canvas>
+    <canvas id="paymentSuccessChart"></canvas>
+    <canvas id="paymentMethodChart"></canvas> {% endcomment %}
+    <script>
+        let priorityCtx = document.getElementById("priorityChart").getContext("2d");
+        let priorityChart = new Chart(priorityCtx, {
+        type: "pie",
+        options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                aspectRatio: 1,
+                title: {
+                display: false,
+                text: ""
+                },
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 25
+                    }
+                }
+            }
+        });
+    </script>
+  </div>
+</div>
+{% endblock %}
