@@ -45,6 +45,8 @@ def ptguihome(request):
 def ptgui_contact_us(request):
     return render(request, 'pages/pt_gui/contact-us.html')
 
+def ptgui_join_us(request):
+    return render(request, 'pages/pt_gui/join_us.html')
 
 def http_503(request):
     return render(request, 'pages/503.html')
@@ -110,3 +112,5 @@ class UserPasswordResetConfirmView(PasswordResetConfirmView):
 class UserPasswordChangeView(PasswordChangeView):
     template_name = 'accounts/password_change.html'
     form_class = UserPasswordChangeForm
+
+
