@@ -7,6 +7,7 @@ urlpatterns = [
 
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
+    path('appattack/join', views.appattack_join, name='appattack_join'),
     path('malware_viz/products_and_services',
          views.products_services, name='malware_products'),
     path('malware_viz', views.malwarehome, name='malware_viz_main'),
@@ -16,4 +17,10 @@ urlpatterns = [
     path('ptgui_viz/faq/', views.faq, name='faq'),
 
 
+
+    #Statistics
+    path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
+    path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
+    path('stats', views.statistics_view, name='project-stats'),
+    path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 ]

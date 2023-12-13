@@ -1,0 +1,76 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    {% include 'includes/pre-loader.html' %}
+
+    <!-- Title -->
+    <div class="section-header bg-tertiary text-black pb-0">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <div class="mt-4 mb-5">
+                        <h2 class="fw-bolder text-dark">Join Us at Deakin Detonator Toolkit</h2>
+                    <img src="{% static 'assets/img/pages/home/pt-gui-join-us.svg' %}" alt="Join Us" width="300" height="300">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Title Section -->
+    <section>
+        <div class="bg-primary-app text-dark px-10 mb-4">
+            <!-- About  -->
+            <div class="row g-5">
+                <div class="col-12 col-md-6">
+                    <form action="#">
+                        <!-- Form -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" placeholder="Enter your full name" id="name"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" placeholder="Enter your email address" id="email"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="mobile" class="form-label">Mobile</label>
+                            <input type="tel" class="form-control" placeholder="Enter your mobile" id="mobile" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="Reason" class="form-label">Experience</label>
+                            <textarea class="form-control" id="experience" rows="4"
+                                placeholder="Enter your prior experience"></textarea>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary mt-4 mb-5" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 col-md-6">
+                    <h3 class="fw-bolder text-dark">Why Join DDT?</h3>
+                    <p class="mb-4">Join our dynamic cybersecurity community for
+                        unparalleled
+                        opportunities with hands-on experiences, access cutting-edge tools, and collaborate
+                        on
+                        impactful projects. Enjoy a supportive environment that recognizes your
+                        contributions,
+                        fostering continuous learning and growth. Your journey to cybersecurity excellence
+                        starts here.</p>
+                    <div class="bg-primary-app">
+                        <div class="mt-4 mb-5">
+                            <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2"
+                                alt="Click to immerse yourself in practical cybersecurity experiences."><span
+                                    class="fas fa-envelope"></span>
+                                Get in Touch</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Social Links Section -->
+    {% endblock content %}
