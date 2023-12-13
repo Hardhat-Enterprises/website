@@ -21,6 +21,8 @@ def abouts_us(request):
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
 
+def appattack_join(request):
+    return render(request, 'pages/appattack/join.html')
 
 def products_services(request):
     # Page from the theme
