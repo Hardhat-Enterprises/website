@@ -18,5 +18,6 @@ urlpatterns = [
     #Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
-    path('stats', views.statistics_view, name='project-stats')
+    path('stats', views.statistics_view, name='project-stats'),
+    path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 ]
