@@ -19,7 +19,10 @@ from django.contrib.auth import views as auth_views
 from home import views
 from django.conf.urls import handler404
 
+from .admin import admin_statistics_view
+
 urlpatterns = [
+    path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     # path('', include('theme_pixel.urls')),

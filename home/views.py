@@ -1,9 +1,13 @@
 from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import logout
+from django.db.models import Count, F, Sum, Avg
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from .models import Student
+from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
+from .models import Student, Project
 from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
@@ -48,6 +52,8 @@ def ptguihome(request):
 def ptgui_contact_us(request):
     return render(request, 'pages/pt_gui/contact-us.html')
 
+def ptgui_join_us(request):
+    return render(request, 'pages/pt_gui/join_us.html')
 
 def http_503(request):
     return render(request, 'pages/503.html')
@@ -113,3 +119,36 @@ class UserPasswordResetConfirmView(PasswordResetConfirmView):
 class UserPasswordChangeView(PasswordChangeView):
     template_name = 'accounts/password_change.html'
     form_class = UserPasswordChangeForm
+
+
+# Chart Views
+
+@staff_member_required
+def get_filter_options(request):
+    return JsonResponse({
+        "options": ['p1', 'p2', 'p3']
+    })
+
+@staff_member_required
+def get_priority_breakdown(request, priority):
+    students = Student.objects.all()
+    project_titles = list(Project.objects.all().values('title').order_by()) # list of dictionaries: [{'title': 'AppAttack'}, {'title': 'Malware Visualization'},...
+    
+    project_count = students.values(f'{priority}__title').annotate(dcount=Count('p1')).order_by()
+    
+    return JsonResponse({
+        'title': f'Projects on {priority}',
+        'data': {
+            'labels': [d['title'] for d in project_titles],
+            'datasets': [{
+                'label': 'Students',
+                'backgroundColor': generate_color_palette(len(project_titles)),
+                'borderColor': generate_color_palette(len(project_titles)),
+                'data': [p['dcount'] for p in project_count]
+            }]
+        }
+    })
+
+
+def statistics_view(request):
+    return render(request, 'charts/statistics.html')
