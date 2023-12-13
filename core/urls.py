@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from home import views
-from django.conf.urls import handler404
 
 from .admin import admin_statistics_view
 
@@ -48,5 +47,3 @@ urlpatterns = [
     ), name='password_reset_complete'),
 
 ]
-
-handler404 = views.error_404

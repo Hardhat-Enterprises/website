@@ -1,5 +1,4 @@
 from django.urls import path
-from django.conf.urls import handler404
 
 from . import views
 
@@ -15,17 +14,11 @@ urlpatterns = [
     path('ptgui_viz', views.ptguihome, name='ptgui_viz_main'),
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
-<<<<<<< HEAD
-    path('404_error', views.error_404, name='error'),
-=======
 
     #Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
->>>>>>> f6be6459eed9a0d30724961eb88b05eddc8ecb23
 ]
 
-
-handler404 = views.error_404
