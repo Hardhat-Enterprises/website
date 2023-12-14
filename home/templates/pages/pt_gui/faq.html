@@ -62,6 +62,13 @@
         font-size: 30px;
         color: #000;
     }
+
+    #no-match-message {
+        display: none;
+        color: red;
+        font-size: 18px;
+        margin-top: 10px;
+    }
 </style>
 
 <main>
@@ -69,6 +76,7 @@
         <i class="fa fa-search search-icon"></i>
         <input type="text" id="faq-search" placeholder="Search FAQs...">
     </div>
+    
     {% include 'includes/pre-loader.html' %}
 
     <!-- Hero Section -->
@@ -94,41 +102,56 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var faqQuestions = document.querySelectorAll('.faq-question');
+            var searchInput = document.getElementById('faq-search');
+            var noMatchMessage = document.getElementById('no-match-message');
 
-            faqQuestions.forEach(function (question) {
+            // Initialize the state array to track open/closed status of each question
+            var questionStates = Array.from(faqQuestions).map(function () {
+                return { open: false };
+            });
+
+            faqQuestions.forEach(function (question, index) {
                 question.addEventListener('click', function () {
-                    question.classList.toggle('open');
-                    var answer = question.nextElementSibling;
-                    if (answer.style.display === 'block') {
-                        answer.style.display = 'none';
-                    } else {
-                        answer.style.display = 'block';
-                    }
-
-                    // Search functionality
-                    document.addEventListener('DOMContentLoaded', function () {
-                        var faqQuestions = document.querySelectorAll('.faq-question');
-
-                        document.getElementById('faq-search').addEventListener('input', function () {
-                            var searchTerm = this.value.toLowerCase();
-
-                            faqQuestions.forEach(function (question) {
-                                var questionText = question.textContent.toLowerCase();
-                                var answer = question.nextElementSibling;
-
-                                if (questionText.includes(searchTerm)) {
-                                    question.style.display = 'block';
-                                    answer.style.display = 'block';
-                                } else {
-                                    question.style.display = 'none';
-                                    answer.style.display = 'none';
-                                }
-                            });
-                        });
-                    });
-
+                    questionStates[index].open = !questionStates[index].open;
+                    updateQuestionState();
                 });
             });
+
+            searchInput.addEventListener('input', function () {
+                var searchTerm = this.value.toLowerCase();
+                var matchFound = false;
+
+                faqQuestions.forEach(function (question, index) {
+                    var questionText = question.textContent.toLowerCase();
+                    var answer = question.nextElementSibling;
+
+                    if (questionText.includes(searchTerm)) {
+                        question.style.display = 'block';
+                        answer.style.display = questionStates[index].open ? 'block' : 'none';
+                        matchFound = true;
+                    } else {
+                        question.style.display = 'none';
+                        answer.style.display = 'none';
+                    }
+                });
+
+                updateNoMatchMessage(matchFound);
+            });
+
+            function updateQuestionState() {
+                faqQuestions.forEach(function (question, index) {
+                    var answer = question.nextElementSibling;
+                    answer.style.display = questionStates[index].open ? 'block' : 'none';
+                });
+            }
+
+            function updateNoMatchMessage(matchFound) {
+                if (matchFound) {
+                    noMatchMessage.style.display = 'none';
+                } else {
+                    noMatchMessage.style.display = 'block';
+                }
+            }
         });
     </script>
 
@@ -139,6 +162,7 @@
             <div class="row g-5">
                 <div class="col-12">
                     <p class="lead fw-normal mb-4">Here are some frequently asked questions:</p>
+                    <div id="no-match-message">No matched searches found</div>
                     <div class="faq-question">How can I install PT-GUI on my system?</div>
                     <div class="faq-answer">You can install PT-GUI by following the installation instructions provided
                         in the official PT-GUI documentation. The installation process typically involves downloading
@@ -199,5 +223,4 @@
         </div>
     </section>
 </main>
-
 {% endblock content %}
