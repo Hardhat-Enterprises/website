@@ -76,7 +76,7 @@
         <i class="fa fa-search search-icon"></i>
         <input type="text" id="faq-search" placeholder="Search FAQs...">
     </div>
-    
+
     {% include 'includes/pre-loader.html' %}
 
     <!-- Hero Section -->
@@ -105,7 +105,6 @@
             var searchInput = document.getElementById('faq-search');
             var noMatchMessage = document.getElementById('no-match-message');
 
-            // Initialize the state array to track open/closed status of each question
             var questionStates = Array.from(faqQuestions).map(function () {
                 return { open: false };
             });
