@@ -18,11 +18,15 @@ from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from home import views
 
+from .admin import admin_statistics_view
+
 urlpatterns = [
+    path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     # path('', include('theme_pixel.urls')),
     path('about-us/', views.abouts_us, name='about_us'),
+    path('joinus/', views.join_project, name='join-project'),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),

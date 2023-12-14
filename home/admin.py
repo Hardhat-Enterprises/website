@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import (
     User,
     Student,
-    Project
+    Project,
+    Course,
 )
 
 admin.site.site_header = "Hardhat Enterprises Administration"
@@ -21,3 +22,10 @@ class StudentAdmin(admin.ModelAdmin):
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Project._meta.fields]
+
+
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Course._meta.fields]
+
+

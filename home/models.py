@@ -45,6 +45,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
+    def __str__(self):
+        return self.get_full_name()
+
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
@@ -68,8 +71,39 @@ class Project(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     title = models.CharField(_("project title"), max_length=150, blank=True)
-    
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Course(AbstractBaseSet):
+
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
+    title = models.CharField(_("course title"), max_length=150, blank=True)
+    code = models.CharField(_("course code"), max_length=150, blank=True)
+    is_postgraduate = models.BooleanField(_("postgraduate status"), default=False)
+
+    def __str__(self) -> str:
+        return self.title
+
+
 class Student(AbstractBaseSet):
+
+    T1 = 'T1'
+    T2 = 'T2'
+    T3 = 'T3'
+    TRIMESTERS = [
+        (T1, 'Trimester 1'),
+        (T2, 'Trimester 2'),
+        (T3, 'Trimester 3'),
+    ]
+
+    SIT782 = 'SIT782'
+    SIT764 = 'SIT764'
+    UNITS = [
+        (SIT782, 'SIT782'),
+        (SIT764, 'SIT764'),
+    ]
 
     student_id_validator = StudentIdValidator()
 
@@ -77,16 +111,21 @@ class Student(AbstractBaseSet):
         _("student_id"),
         primary_key=True,
         unique=True,
-        help_text=_(
-            "Required. Enter Deakin Student ID. Digits only."
-        ),
+        help_text=_("Required. Enter Deakin Student ID. Digits only."),
         validators=[StudentIdValidator],
         error_messages={
             "unique": _("A user with that Student ID already exists."),
         },
     )
-    user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="users", blank=False, null=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="users", blank=False, null=False)
+    year = models.PositiveIntegerField(blank=True)
+    trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
+    unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
+    course = models.ForeignKey(Course, on_delete=PROTECT, related_name="course", blank=True, null=True)
     p1 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p1", blank=False, null=False)
     p2 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p2", blank=False, null=False)
     p3 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p3", blank=False, null=False)
     allocated = models.ForeignKey(Project, on_delete=PROTECT, related_name="allocated", blank=True, null=True)
+
+    def __str__(self) -> str:
+        return str(self.user)
