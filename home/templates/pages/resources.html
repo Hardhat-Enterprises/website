@@ -4,6 +4,77 @@
 {% block header %}{% endblock header %}
 
 {% block content %}
+<header class="header-global">
+    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
+      <div class="container position-relative">
+          <a class="navbar-brand me-lg-5" href="/">
+              <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light">
+              <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark">
+          </a>
+          <div class="navbar-collapse collapse me-auto" id="navbar_global">
+              <div class="navbar-collapse-header">
+                  <div class="row">
+                      <div class="col-6 collapse-brand">
+                          <a href="/">
+                              <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo">
+                          </a>
+                      </div>
+                      <div class="col-6 collapse-close">
+                          <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
+                      </div>
+                  </div>
+              </div>
+              <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+                <li class="nav-item">
+                    <a href="{% url 'index' %}" class="nav-link">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'about_us' %}" class="nav-link">
+                        About
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+                        Projects
+                        <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+                    </a>
+                    <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+                        <div class="row">
+                            <div class="col">
+                                <ul class="list-style-none mb-4">
+                                    <li class="mb-2 menu-item">
+                                        <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
+                                    </li>
+                                    <li class="mb-2 menu-item">
+                                        <a class="menu-link" href="{% url 'malware_viz_main' %}">Malware</a>
+                                    </li>
+                                    <li class="mb-2 menu-item">
+                                        <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+              </ul>
+          </div>
+          <div class="d-flex align-items-center">              
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}"
+                   class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span class="fas fa-sign-out-alt me-2"></span> Logout</a>            
+            {% else %}
+                <a href="{% url 'login' %}"
+                    class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span class="fas fa-sign-in-alt me-2"></span> Sign In</a>            
+            {% endif %}
+              <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+          </div>
+      </div>
+  </nav>
+</header>
 
 <main>
     <head>
@@ -204,6 +275,76 @@
     </div>
 </section>
 </main>
+
+<footer class="footer pt-6 pb-5 bg-secondary text-white">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-4">
+            <p>Hardhat Enterprises offers open-source protection, so it's free for everyone.</p>
+              <ul class="social-buttons mb-5 mb-lg-0">
+                  <li>
+                      <a href="https://twitter.com/" aria-label="twitter social link"
+                          class="icon-white me-2">
+                          <span class="fab fa-twitter"></span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="https://www.facebook.com/" class="icon-white me-2"
+                          aria-label="facebook social link">
+                          <span class="fab fa-facebook"></span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="https://github.com/Hardhat-Enterprises/website" aria-label="github social link" class="icon-white me-2">
+                          <span class="fab fa-github"></span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="https://dribbble.com/" class="icon-white" aria-label="dribbble social link">
+                          <span class="fab fa-dribbble"></span>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-5 mb-lg-0">
+              <ul class="footer-links mt-2">
+                <li><a href="{% url 'maintenance' %}" class="nav-link">Blog</a></li>
+                  <li><a href="#" class="nav-link">Home</a></li>
+              </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-5 mb-lg-0">
+                <ul class="footer-links mt-2">
+                    <li><a href="{% url 'about_us' %}" class="nav-link">About Us</a></li>
+                    <li><a href="{% url 'maintenance' %}" class="nav-link">Contact Us</a></li>
+              </ul>
+          </div>
+          <div class="col-12 col-md-4 mb-5 mb-lg-0">
+              <span class="h5">The OWASP Top 10</span>
+              <p class="text-muted font-small mt-2">Learn more about cyber security standards and applications</p>
+              <form action="#">
+                  <div class="form-row mb-2">
+                      <div class="col-12 d-grid">
+                          <a href="https://owasp.org/www-project-top-ten/" target="_blank" class="btn btn-secondary">OWASP Top 10</a>
+                        </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+      <hr class="bg-secondary my-3 my-lg-5">
+      <div class="row">
+          <div class="col mb-md-0">
+              <a href="https://themesberg.com" target="_blank" class="d-flex justify-content-center mb-3">
+                  <img src="{% static 'assets/img/brand/logo.svg' %}" height="30" class="me-2" alt="hardhat Logo">
+                  <p class="fw-bold footer-logo-text m-0">Hardhat Enterprises</p>
+              </a>
+              <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+                  <p class="fw-normal font-small mb-0 text-muted">
+                    &copy; copyright 2023.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</footer>
 
 {% endblock content %}
 
