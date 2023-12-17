@@ -10,14 +10,16 @@
         {% include 'includes/pre-loader.html' %}
 
         <!-- Section -->
-        <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/form-image.jpg' %}">
+        <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/login/login-bg.svg' %}">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 d-flex align-items-center justify-content-center">
                         <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
                             <div class="text-center text-md-center mb-4 mt-md-0">
+                                <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt="Logo" class="mb-3">
                                 <h1 class="mb-0 h3">Sign in to our platform</h1>
                             </div>
+
                             <form method="post" class="mt-4">
                                 {% csrf_token %}
                                 <!-- Form -->
@@ -49,9 +51,10 @@
                                     <div><a href="{% url 'password_reset' %}" class="small text-right">Lost password?</a></div>
                                 </div>
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Sign in</button>
+                                    <button type="submit" class="btn btn-warning btn-primary">Sign in</button>
                                 </div>
                             </form>
+
                             <div class="d-flex justify-content-center align-items-center mt-4">
                                 <span class="fw-normal">
                                     Not registered?
