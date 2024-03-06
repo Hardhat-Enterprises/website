@@ -117,6 +117,10 @@ class UserPasswordChangeView(PasswordChangeView):
     template_name = 'accounts/password_change.html'
     form_class = UserPasswordChangeForm
 
+def resources_view(request):
+    return render(request, 'pages/resources.html.')
+    
+
 
 # Chart Views
 
