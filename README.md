@@ -10,12 +10,12 @@ In this document, I will describe the process of deploying the website from the 
 Step 1: First, a user account needs to be opened using the free tier (Beginners). In this case, the login credentials are:
 Username: hardhatwebdev2024
 Email: s222340498@deakin.edu.au
-Password: <consult project lead>
+Password: <consult>
 Web app domain: hardhatwebdev2024.pythonanywhere.com
 
 Step 2: Launch the bash console. Run the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
 
-Step 3: Create a virtual environment using the command – ‘mkvirtualenv <virtual env name>’. The name of the virtual environment can be anything. Keeping it simple and short is recommended. In this case, I have used ‘venv’ as the environment name.
+Step 3: Create a virtual environment using the command – ‘mkvirtualenv <virtual environment name>’. The name of the virtual environment can be anything. Keeping it simple and short is recommended. In this case, I have used ‘venv’ as the environment name.
 
 Step 4: Once the virtual environment is created, the necessary tools and dependencies need to be installed in it using the command- ‘pip install -r requirements.txt’. This command will install all the necessary tools with the correct versions that are needed to launch the website. 
 
