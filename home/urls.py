@@ -23,3 +23,4 @@ urlpatterns = [
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
 ]
+
