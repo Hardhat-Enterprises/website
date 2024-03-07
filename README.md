@@ -8,9 +8,9 @@ For launching the Hardhat website, we have chosen the Python Anywhere platform s
 In this document, I will describe the process of deploying the website from the platform with the steps necessary.
 
 Step 1: First, a user account needs to be opened using the free tier (Beginners). In this case, the login credentials are:
-Username: hardhatwebdev2024
-Email: s222340498@deakin.edu.au
-Password: <consult>
+Username: hardhatwebdev2024;
+Email: s222340498@deakin.edu.au;
+Password: "consult lead";
 Web app domain: hardhatwebdev2024.pythonanywhere.com
 
 Step 2: Launch the bash console. Run the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
