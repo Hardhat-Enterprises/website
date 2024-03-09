@@ -28,6 +28,8 @@ if not SECRET_KEY:
     SECRET_KEY = ''.join(random.choice( string.ascii_lowercase  ) for i in range( 32 ))
 
 # Render Deployment Code
+#DEBUG = False
+#original: 
 DEBUG = 'RENDER' not in os.environ
 
 # Docker HOST
@@ -166,7 +168,7 @@ STATICFILES_DIRS = [
 
 
 #if not DEBUG:
-#    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
