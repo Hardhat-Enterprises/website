@@ -2,70 +2,109 @@
 
 <footer class="footer pt-6 pb-5 bg-secondary text-white">
   <div class="container">
-      <div class="row">
-          <div class="col-md-4">
-            <p>Hardhat Enterprises offers open-source protection, so it's free for everyone.</p>
-              <ul class="social-buttons mb-5 mb-lg-0">
-                  <li>
-                      <a href="https://twitter.com/" aria-label="twitter social link"
-                          class="icon-white me-2">
-                          <span class="fab fa-twitter"></span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://www.facebook.com/" class="icon-white me-2"
-                          aria-label="facebook social link">
-                          <span class="fab fa-facebook"></span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://github.com/Hardhat-Enterprises/website" aria-label="github social link" class="icon-white me-2">
-                          <span class="fab fa-github"></span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="https://dribbble.com/" class="icon-white" aria-label="dribbble social link">
-                          <span class="fab fa-dribbble"></span>
-                      </a>
-                  </li>
-              </ul>
-          </div>
-          <div class="col-6 col-md-2 mb-5 mb-lg-0">
-              <ul class="footer-links mt-2">
-                <li><a href="{% url 'maintenance' %}" class="nav-link">Blog</a></li>
-                  <li><a href="#" class="nav-link">Home</a></li>
-              </ul>
-          </div>
-          <div class="col-6 col-md-2 mb-5 mb-lg-0">
-                <ul class="footer-links mt-2">
-                    <li><a href="{% url 'about_us' %}" class="nav-link">About Us</a></li>
-                    <li><a href="{% url 'maintenance' %}" class="nav-link">Contact Us</a></li>
-              </ul>
-          </div>
-          <div class="col-12 col-md-4 mb-5 mb-lg-0">
-              <span class="h5">The OWASP Top 10</span>
-              <p class="text-muted font-small mt-2">Learn more about cyber security standards and applications</p>
-              <form action="#">
-                  <div class="form-row mb-2">
-                      <div class="col-12 d-grid">
-                          <a href="https://owasp.org/www-project-top-ten/" target="_blank" class="btn btn-secondary">OWASP Top 10</a>
-                        </div>
-                  </div>
-              </form>
-          </div>
+    <div class="row">
+      <div class="col-md-4">
+        <p>
+          Hardhat Enterprises offers open-source protection, so it's free for
+          everyone.
+        </p>
+        <ul class="social-buttons mb-5 mb-lg-0">
+          <li>
+            <a
+              href="https://twitter.com/"
+              aria-label="twitter social link"
+              target="_blank"
+              class="icon-white me-2"
+            >
+              <span class="fab fa-twitter"></span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.facebook.com/"
+              class="icon-white me-2"
+              target="_blank"
+              aria-label="facebook social link"
+            >
+              <span class="fab fa-facebook"></span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/Hardhat-Enterprises/website"
+              aria-label="github social link"
+              class="icon-white me-2"
+              target="_blank"
+            >
+              <span class="fab fa-github"></span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://dribbble.com/"
+              class="icon-white"
+              aria-label="dribbble social link"
+              target="_blank"
+            >
+              <span class="fab fa-dribbble"></span>
+            </a>
+          </li>
+        </ul>
       </div>
-      <hr class="bg-secondary my-3 my-lg-5">
-      <div class="row">
-          <div class="col mb-md-0">
-              <a href="https://themesberg.com" target="_blank" class="d-flex justify-content-center mb-3">
-                  <img src="{% static 'assets/img/brand/logo.svg' %}" height="30" class="me-2" alt="hardhat Logo">
-                  <p class="fw-bold footer-logo-text m-0">Hardhat Enterprises</p>
-              </a>
-              <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
-                  <p class="fw-normal font-small mb-0 text-muted">
-                    &copy; copyright 2023.</p>
-              </div>
-          </div>
+      <div class="col-6 col-md-2 mb-5 mb-lg-0">
+        <ul class="footer-links mt-2">
+          <li><a href="{% url 'maintenance' %}" class="nav-link">Blog</a></li>
+          <li><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+        </ul>
       </div>
+      <div class="col-6 col-md-2 mb-5 mb-lg-0">
+        <ul class="footer-links mt-2">
+          <li><a href="{% url 'about_us' %}" class="nav-link">About Us</a></li>
+          <li>
+            <a href="{% url 'maintenance' %}" class="nav-link">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-12 col-md-4 mb-5 mb-lg-0">
+        <span class="h5">The OWASP Top 10</span>
+        <p class="text-muted font-small mt-2">
+          Learn more about cyber security standards and applications
+        </p>
+        <form action="#">
+          <div class="form-row mb-2">
+            <div class="col-12 d-grid">
+              <a
+                href="https://owasp.org/www-project-top-ten/"
+                target="_blank"
+                class="btn btn-secondary"
+                >OWASP Top 10</a
+              >
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <hr class="bg-secondary my-3 my-lg-5" />
+    <div class="row">
+      <div class="col mb-md-0">
+        <a href="{% url 'index' %}" class="d-flex justify-content-center mb-3">
+          <img
+            src="{% static 'assets/img/brand/logo.svg' %}"
+            height="30"
+            class="me-2"
+            alt="hardhat Logo"
+          />
+          <p class="fw-bold footer-logo-text m-0">Hardhat Enterprises</p>
+        </a>
+        <div
+          class="d-flex text-center justify-content-center align-items-center"
+          role="contentinfo"
+        >
+          <p class="fw-normal font-small mb-0 text-muted">
+            &copy; copyright 2023.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </footer>
