@@ -1,65 +1,67 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
-
-{% block header %}{% endblock header %}
-
-{% block content %}
-    <main>
-
-        {% include 'includes/pre-loader.html' %}
-
-        <!-- Section -->
-        <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
-                            <div class="text-center text-md-center mb-4 mt-md-0">
-                                <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt="Logo" class="mb-3">
-                                <h1 class="mb-0 h3">Create an account</h1>
-                            </div>
-                            <form method="post">
-                                {% csrf_token %}
-                                <!-- Form -->
-                                {% for field in form %}
-                                    <div class="form-group mb-4">
-                                        <label for="email">{{ field.label }}</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon3">
-                                                <span class="fas 
-                                                    {% if field.name == 'email' %} 
-                                                        fa-envelope 
-                                                    {% elif field.name == 'first_name' or field.name == 'last_name'  %}
-                                                        fa-user 
-                                                    {% elif field.name == 'year' %}
-                                                        fa-calendar
-                                                    {% else %} 
-                                                        fa-unlock-alt 
-                                                    {% endif %}">
-                                                </span>
-                                            </span>
-                                            {{ field }}
-                                        </div>  
-                                    </div>
-                                    <span class="text-danger"> {{ field.errors }} </span>
-                                {% endfor %}
-                                <!-- End of Form -->
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-warning btn-primary">Sign up</button>
-                                </div>
-                            </form>
-                            <div class="d-flex justify-content-center align-items-center mt-4">
-                                <span class="fw-normal">
-                                    Already have an account?
-                                    <a href="{% url 'login' %}" class="fw-bold text-underline">Login here</a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{% extends 'layouts/base.html' %} {% load static %} {% block header %} {% endblock header %} {% block content %}
+<main>
+  {% include 'includes/pre-loader.html' %} 
+  
+  <!-- Section -->
+  <section
+    class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+    data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}"
+  >
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+          <div
+            class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
+          >
+            <div class="text-center text-md-center mb-4 mt-md-0">
+              <img
+                src="{% static 'assets/img/pages/login/favicon.ico' %}"
+                alt="Logo"
+                class="mb-3"
+              />
+              <h1 class="mb-0 h3">Create an account</h1>
             </div>
-        </section>
-    </main>
+            <form method="post">
+              {% csrf_token %}
+              <!-- Form -->
+              {% for field in form %}
+              <div class="form-group mb-4">
+                <label for="email">{{ field.label }}</label>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">
+                    <span
+                      class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"
+                    >
+                    </span>
+                  </span>
+                  {{ field }}
+                </div>
+              </div>
+              <span class="text-danger"> {{ field.errors }} </span>
+              {% endfor %}
+              <!-- End of Form -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-warning btn-primary">
+                  Sign up
+                </button>
+              </div>
+            </form>
+            <div class="d-flex justify-content-center align-items-center mt-4">
+              <span class="fw-normal">
+                Already have an account?
+                <a href="{% url 'login' %}" class="fw-bold text-underline"
+                  >Login here</a
+                >
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% include 'includes/footer.html' %}
+  
+</main>
 
-{% endblock content %}
-{% block footer %}{% endblock footer %}
+
+{% endblock content %} {% block footer %}{% endblock footer %}
