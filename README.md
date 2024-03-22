@@ -3,6 +3,8 @@
 Hardhat Enterprises is an organization that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company will be open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met. 
 
 # [Hardhat Enterprises](hardhatwebdev2024.pythonanywhere.com/) T1 2024
+[Note: The Hardhat website has been deployed already. Below is the rundown of how it can be deployed from PythonAnywhere. For T1 2024, it already has been deployed. It can be accessed through this domain: hardhatwebdev2024.pythonanywhere.com ]
+
 Deploying HardHat Website from Python Anywhere Platform
 For launching the Hardhat website, we have chosen the Python Anywhere platform since it offers free tiers and the website can be hosted for three months without any charge or cost. 
 In this document, I will describe the process of deploying the website from the platform with the steps necessary.
