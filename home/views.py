@@ -18,6 +18,9 @@ def index(request):
 def abouts_us(request):
     return render(request, 'pages/about.html')
 
+def what_we_do(request):
+    return render(request, 'pages/what_we_do.html')
+
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
 
