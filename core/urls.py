@@ -46,5 +46,8 @@ urlpatterns = [
     path('accounts/password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='accounts/password_reset_complete.html'
     ), name='password_reset_complete'),
+    
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
 ]

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import logout
 from django.db.models import Count, F, Sum, Avg
@@ -7,7 +8,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
-from .models import Student, Project
+from .models import Student, Project, Progress
 from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
@@ -160,3 +161,19 @@ def get_priority_breakdown(request, priority):
 
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
+
+@login_required
+def dashboard(request):
+    user = request.user
+    student = Student.objects.get(user=user)
+    progress = Progress.objects.filter(student=student)
+    context = {'user': user, 'student': student, 'progress': progress}
+    return render(request, 'pages/dashboard.html', context)
+
+def update_progress(request, progress_id):
+    progress = get_object_or_404(Progress, id=progress_id)
+    if request.method == 'POST':
+        new_progress = request.POST.get('progress')
+        progress.progress = new_progress
+        progress.save()
+    return redirect('dashboard')
