@@ -86,7 +86,14 @@ def join_project(request):
     context['form'] = form
     return render(request, 'pages/joinus.html', context)
    
+def threatmirror(request):
+    return render(request, 'pages/threat_mirror/main.html')
+    
+def smishingdetection(request):
+    return render(request, 'pages/smishing_detection/main.html')
 
+def smishingdetection_joinus(request):
+    return render(request, 'pages/smishing_detection/join_us.html')
 
 # Authentication
 class UserLoginView(LoginView):
@@ -160,3 +167,4 @@ def get_priority_breakdown(request, priority):
 
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
+
