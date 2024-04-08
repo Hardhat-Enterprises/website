@@ -85,14 +85,11 @@ def join_project(request):
 
     context['form'] = form
     return render(request, 'pages/joinus.html', context)
-   
-def threatmirror(request):
-    return render(request, 'pages/threat_mirror/main.html')
     
 def smishingdetection(request):
     return render(request, 'pages/smishing_detection/main.html')
 
-def smishingdetection_joinus(request):
+def smishingdetection_join_us(request):
     return render(request, 'pages/smishing_detection/join_us.html')
 
 # Authentication
