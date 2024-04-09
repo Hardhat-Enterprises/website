@@ -129,3 +129,11 @@ class Student(AbstractBaseSet):
 
     def __str__(self) -> str:
         return str(self.user)
+    
+class Upskill (AbstractBaseSet):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title

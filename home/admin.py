@@ -4,6 +4,7 @@ from .models import (
     Student,
     Project,
     Course,
+    Upskill
 )
 
 admin.site.site_header = "Hardhat Enterprises Administration"
@@ -27,5 +28,9 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Course._meta.fields]
+    
+@admin.register(Upskill)
+class UpskillAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Upskill._meta.fields]
 
 

@@ -17,6 +17,9 @@ urlpatterns = [
     path('ptgui_viz/faq/', views.faq, name='faq'),
     path('smishing_detection', views.smishingdetection, name='smishing_detection_main'),
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
+    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
+    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
+    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
 
     #Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),

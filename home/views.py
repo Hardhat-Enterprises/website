@@ -92,6 +92,18 @@ def smishingdetection(request):
 def smishingdetection_join_us(request):
     return render(request, 'pages/smishing_detection/join_us.html')
 
+# Upskill Pages
+def upskill_repository(request):
+    return render(request), 'pages/upskilling/repository.html'
+
+def upskill_roadmap(request):
+    return render(request), 'pages/upskilling/roadmap.html'
+
+def upskill_progress(request):
+    return render(request), 'pages/upskilling/progress.html'
+
+
+
 # Authentication
 class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
@@ -131,7 +143,6 @@ class UserPasswordChangeView(PasswordChangeView):
 def resources_view(request):
     return render(request, 'pages/resources.html.')
     
-
 
 # Chart Views
 
