@@ -171,6 +171,6 @@ def contact(request):
         name=request.POST['name']
         email=request.POST['email']
         message=request.POST['message']
-        contact=Contact.objects.create(name=name,email=email,message=message)
+        contact=Contact.objects.create(name=name, email=email, message=message)
         messages.success(request,'The message has been received')
     return render(request,'pages/index.html')
