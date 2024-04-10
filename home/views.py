@@ -5,9 +5,10 @@ from django.contrib.auth import logout
 from django.db.models import Count, F, Sum, Avg
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
-from .models import Student, Project
+from .models import Student, Project, Contact
 from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
@@ -165,3 +166,11 @@ def get_priority_breakdown(request, priority):
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
 
+def contact(request):
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        message=request.POST['message']
+        contact=Contact.objects.create(name=name,email=email,message=message)
+        messages.success(request,'The message has been received')
+    return render(request,'pages/index.html')
