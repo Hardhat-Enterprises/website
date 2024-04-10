@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('home.urls')),
     # path('', include('theme_pixel.urls')),
     path('about-us/', views.abouts_us, name='about_us'),
+    path('contact',views.contact,name='contact'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
 
