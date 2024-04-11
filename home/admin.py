@@ -4,6 +4,7 @@ from .models import (
     Student,
     Project,
     Course,
+    Contact
 )
 
 admin.site.site_header = "Hardhat Enterprises Administration"
@@ -28,4 +29,7 @@ class ProjectAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Course._meta.fields]
 
+@admin.register(Contact)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Contact._meta.fields]
 
