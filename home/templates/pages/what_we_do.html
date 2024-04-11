@@ -18,9 +18,8 @@
                             architecture, tools, processes, and mitigation techniques that are generated satisfy market gaps and
                             requirements. Some deliverables due to their nature, like testing reports, are private to the appropriate
                             parties.</p>
-                        <a href="#" class="btn btn-tertiary me-3 animate-up-2">What we do <span class="ms-2"><span class="fas fa-arrow-right"></span></span></a>
                     </div>
-                  <div class="col-12 col-md-5 d-none d-md-block text-center"><img src="{% static 'assets/img/pages/about/hero.svg' %}" alt=""></div>
+                  <div class="col-12 col-md-5 d-none d-md-block text-center"><img src="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}" alt=""></div>
                </div>
             </div>
         </section>
@@ -30,7 +29,7 @@
             <div class="container">
                 <div class="row align-items-center justify-content-around">
                     <div class="col-md-6 col-xl-6 mb-5">
-                        <img class="img-fluid" src="{% static 'assets/img/pages/about/challenges.svg' %}" alt="Office Desk">
+                        <img class="img-fluid" src="{% static 'assets/img/pages/home/company-mission.svg' %}" alt="Our Structure">
                     </div>
                     <div class="col-md-6 col-xl-5 text-center text-md-left">
                         <h2 class="h1 mb-5">Company Structure and Project Overview</h2>
@@ -47,38 +46,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4 col-lg-4 text-center">
-                        <!-- Visit Box -->
-                        <div class="icon-box mb-4">
-                            <div class="icon icon-primary mb-4">
-                                <span class="fas fa-user"></span>
-                            </div>
-                            <h3 class="h5">Team Members</h3>
-                            <span class="counter display-3 text-gray d-block">60</span>
-                        </div>
-                        <!-- End of Visit Box -->
-                    </div>
-                    <div class="col-md-4 col-lg-4 text-center">
-                        <!-- Call Box -->
-                        <div class="icon-box mb-4">
-                            <div class="icon icon-primary mb-4">
-                                <span class="fas fa-money-check"></span>
-                            </div>
-                            <h3 class="h5">Projects Secured</h3>
-                            <span class="counter display-3 text-gray d-block">12</span>
-                        </div>
                         <!-- End of Call Box -->
                     </div>
                     <div class="col-md-4 col-lg-4 text-center">
-                        <!-- Email Box -->
-                        <div class="icon-box mb-4">
-                            <div class="icon icon-primary mb-4">
-                                {% comment %} <span class="fa-solid fa-triangle-exclamation"></span> {% endcomment %}
-                                <svg xmlns="http://www.w3.org/2000/svg" height="45" width="36" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
-                            </div>
-                            <h3 class="h5">Threats found</h3>
-                            <span class="counter display-3 text-gray d-block">150+</span>
-                        </div>
-                        <!-- End of Email Box -->
                     </div>
                 </div>
             </div>
@@ -94,38 +64,113 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col">
-                        <h2 class="h1 fw-light"><span class="fw-bold">Our</span> history</h2>
-                    </div>
+                        <h1 class="fw-bolder display-2 text-center mb-lg-2">Our Projects</h1>
+                  <!-- Projects -->
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
+          <div class="card border-0 overflow-hidden">
+            <div class="position-relative">
+              <img src="{% static 'assets/img/pages/home/appattack-card.svg' %}" class="card-img-top" alt="Neil Portrait">
+            </div>  
+            <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
+              <h3 class="h5 card-title">AppAttack</h3>
+              <p class="mt-3">We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets</p>
+              <a href="{% url 'appattack' %}">
+                <div class="btn btn-secondary">
+                  Learn More
                 </div>
-                <div class="row justify-content-center mt-6">
-                    <div class="row justify-content-center">
-                        <div class="col-md-12 col-lg-8">
-                            <div class="timeline timeline-one dark px-3 px-sm-0">
-                                <!-- Timeline Item 1 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Present</h3>
-                                    <p>Established an incident response team and provided remote work security solutions. Actively engaged with the global cybersecurity community. Continued growth, adapting to emerging threats and technologies.</p>
-                                </div>
-                                <!-- Timeline Item 2 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Technology and Innovation </h3>
-                                    <p>Introduced advanced threat detection technologies. Established a cybersecurity training academy and embraced AI integration. Released a proprietary threat intelligence platform.</p>
-                                </div>
-                                <!-- Timeline Item 3 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Growth and Recognition</h3>
-                                    <p>Expanded services to include penetration testing and vulnerability assessments. Formed strategic partnerships and received industry awards. Achieved international expansion and collaborated on a major research project.</p>
-                                </div>
-                                <!-- Timeline Item 4 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Establishment and Early Success</h3>
-                                    <p>Founded in 2022 by a group of cybersecurity enthusiasts. Initial focus on basic cybersecurity awareness training and consulting. Secured first clients and gained a reputation for reliable services.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </a>
             </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
+          <div class="card border-0 overflow-hidden">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/pt-gui-card-2.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
+                <h3 class="h5 card-title">PT-GUI</h3>
+                <p class="mt-3">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a revolution in cybersecurity practice.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
+                  <div class="btn btn-secondary">
+                    Learn More
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
+          <div class="card border-0 overflow-hidden">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
+                <h3 class="h5 card-title">CyberSafe VR</h3>
+                <p class="mt-3">The Deakin CyberSafe VR (DCyberSafe) aims to revolutionize cybersecurity training for small
+                  businesses.Leveraging interactive virtual reality (VR) technology, the company seeks to bridge
+                  the gap between theoretical knowledge and practical application of cybersecurity measures
+                  among small business owners and employees.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
+                  <div class="btn btn-secondary">
+                    Learn More
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
+          <div class="card border-0 overflow-hidden">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/cards/icon2.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
+                <h3 class="h5 card-title">Smishing Detection</h3>
+                <p class="mt-3">Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to
+                  moderate the risks associated with SMS phishing attacks.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
+                  <div class="btn btn-secondary">
+                    Learn More
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
+          <div class="card border-0 overflow-hidden">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
+                <h3 class="h5 card-title">Threat Mirror</h3>
+                <p class="mt-3">Threat Mirror aims to investigate open-source threat intelligence platforms,
+                  assessing their suitability and adaptability for SMEs and developing economies.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
+                  <div class="btn btn-secondary">
+                    Learn More
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
+          <div class="card border-0 overflow-hidden">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
+                <h3 class="h5 card-title">Malware Visualization (not functioning)</h3>
+                <p class="mt-3">The Malware Visualization project develops an interactive visual analytics tool to make malware analysis easier.​Integrated with existing visualization tools, this stand-alone application offers a user-friendly visual analysis.</p>
+                <a href="{% url 'malware_viz_main' %}">
+                  <div class="btn btn-secondary">
+                    Learn More
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
             <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
                 <svg class="fill-white" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 43.4" style="enable-background:new 0 0 1920 43.4;" xml:space="preserve">
                    <path d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"></path>
