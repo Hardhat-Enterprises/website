@@ -17,61 +17,35 @@
 			<h1 class="fw-bold display-1">AppAttack</h1>
 			<img width="500" height="500" src="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}" alt="Hero image">
 			<div class="col-lg-6 mx-auto">
-			  <p class="lead mb-4">We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets</p>
+			  <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
 			  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-				<button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="Services">Explore Services</button>
-				<script>
+			</head>
+			<body>
+			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
+			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
+			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
+			  
+			  <script> src=document.getElementById("penTesting").addEventListener("click", function() {
+				window.location.href = "{% url 'pen-testing' %}";
+			  });
+			  document.getElementById("secureCodeReview").addEventListener("click", function() {
+				window.location.href = "{% url 'secure-code-review' %}";
+			  });
+			  document.getElementById("comprehensiveReports").addEventListener("click", function() {
+				window.location.href = "{% url 'comphrehensive_report' %}";
+			  });
+			</script>
+			</body>
+			</html>
+			
 					
-document.getElementById("Services").addEventListener("click", function() {
-    window.scrollBy({
-        top: 450, //change this to alter the scroll amount
-        behavior: 'smooth'
-    });
-}); 
-				</script>
+
+				
 			  </div>
 			</div>
 		</div>
     </section>
 	<!-- End of Hero Section -->
-	<!-- Services -->
-	<section class="section bg-primary text-black">
-		<div class="container">
-			<h2 class="fw-bolder display-2 text-center">Services</h2>
-			<div class="row text-center">
-				<div class="col-6 mobile-img text-left">
-					<img src="{% static 'assets/img/pages/appattack/pen-test.svg' %}" class="img-fluid" alt="mobile screen">
-				</div>
-				<div class="col-6 my-auto">
-					<h1 class="font-tertiary">Pen-Testing </h1>
-					<h6 class="font-tertiary">Our dedicated team engages in collaborative dialogues with partner organizations, creating custom testing environments to reveal vulnerabilities in essential applications. We conduct thorough analyses, delivering detailed reports that not only identify vulnerabilities but also offer strategic remediation steps</h6>
-				</div>
-			</div>	
-		</div>
-		<div class="container">
-			<div class="row text-center">
-				<div class="col-6 my-auto">
-					<h1 class="font-tertiary">Secure Code Review </h1>
-					<h6 class="font-tertiary">We specialize in evaluating and testing critical infrastructures using advanced tools. Our team goes beyond identifying vulnerabilities, suggesting and implementing remediations to enhance code security. Thorough documentation of test exploitations ensures our clients receive a clear roadmap for fortifying their code infrastructure.</h6>
-				</div>
-				<div class="col-6 mobile-img text-right">
-					<img src="{% static 'assets/img/pages/appattack/scr.svg' %}" class="img-fluid" alt="mobile screen">
-				</div>
-			</div>	
-		</div>
-		<div class="container">
-			<div class="row text-center">
-				<div class="col-6 mobile-img text-left">
-					<img src="{% static 'assets/img/pages/appattack/report.svg' %}" class="img-fluid" alt="mobile screen">
-				</div>
-				<div class="col-6 my-auto">
-					<h1 class="font-tertiary">Comprehensive Reports</h1>
-					<h6 class="font-tertiary">Following thorough penetration testing and secure code reviews, we deliver detailed reports to our clients. These reports go beyond identifying vulnerabilities; they provide a strategic roadmap for remediation, empowering organizations to enhance their cybersecurity posture</h6>
-				</div>
-			</div>	
-		</div>
-	</section>
-	<!-- End Services -->
 	<!-- Tools -->
 	<section class="section section-lg bg-tertiary">
 		<div class="container">
