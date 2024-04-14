@@ -1,22 +1,23 @@
-from django.shortcuts import render
+# views.py
+
+from django.shortcuts import render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import logout
-from django.db.models import Count, F, Sum, Avg
+from django.db.models import Count
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
+from utils.charts import generate_color_palette
 from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
-# Create your views here.
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
+
+# Regular Views
 
 def index(request):
-    # Page from the theme
     return render(request, 'pages/index.html')
 
-def abouts_us(request):
+def about_us(request):
     return render(request, 'pages/about.html')
 
 def what_we_do(request):
@@ -29,32 +30,21 @@ def appattack_join(request):
     return render(request, 'pages/appattack/join.html')
 
 def products_services(request):
-    # Page from the theme
     return render(request, 'pages/malware_visualization/products_and_services.html')
 
-
 def malwarehome(request):
-
-    # Page from the theme
     return render(request, 'pages/malware_visualization/main.html')
 
-
 def malware_joinus(request):
-
-    # Page from the theme
     return render(request, 'pages/malware_visualization/malware_viz_joinus.html')
 
-
 def ptguihome(request):
-
-    # Page from the theme
     return render(request, 'pages/pt_gui/main.html')
 
 def ptgui_contact_us(request):
     return render(request, 'pages/pt_gui/contact-us.html')
 
 def faq(request):
-     # Page from the theme
     return render(request, 'pages/pt_gui/faq.html')
 
 def ptgui_join_us(request):
@@ -63,12 +53,10 @@ def ptgui_join_us(request):
 def http_503(request):
     return render(request, 'pages/503.html')
 
-
 def join_project(request):
     context = {'student_exists': False}
     if request.method == 'POST':
         form = StudentForm(request.POST)
-
         if form.is_valid():
             student = form.save(commit=False)
             student.user = request.user
@@ -86,14 +74,15 @@ def join_project(request):
 
     context['form'] = form
     return render(request, 'pages/joinus.html', context)
-    
-def smishingdetection(request):
+
+def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
 
-def smishingdetection_join_us(request):
+def smishing_detection_join_us(request):
     return render(request, 'pages/smishing_detection/join_us.html')
 
 # Authentication
+
 class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
@@ -130,9 +119,7 @@ class UserPasswordChangeView(PasswordChangeView):
     form_class = UserPasswordChangeForm
 
 def resources_view(request):
-    return render(request, 'pages/resources.html.')
-    
-
+    return render(request, 'pages/resources.html')
 
 # Chart Views
 
@@ -161,7 +148,6 @@ def get_priority_breakdown(request, priority):
             }]
         }
     })
-
 
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
