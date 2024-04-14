@@ -129,6 +129,7 @@ class Student(AbstractBaseSet):
 
     def __str__(self) -> str:
         return str(self.user)
+<<<<<<< HEAD
     
 class Upskill (AbstractBaseSet):
     title = models.CharField(max_length=100)
@@ -137,3 +138,13 @@ class Upskill (AbstractBaseSet):
 
     def __str__(self):
         return self.title
+=======
+
+class Contact(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.CharField(max_length=200)
+    message=models.TextField(max_length=1000)
+
+    def __str__(self):
+        return self.name
+>>>>>>> 1d527c2c016cb46d08f7aa7256473f6dca5b3a47
