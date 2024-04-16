@@ -16,8 +16,8 @@ urlpatterns = [
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
     path('ptgui_viz/faq/', views.faq, name='faq'),
-    path('smishing_detection', views.smishingdetection, name='smishing_detection_main'),
-    path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
+    path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
+    path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
     
 
 
