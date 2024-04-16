@@ -4,9 +4,10 @@ from .models import (
     Student,
     Project,
     Course,
-    Contact
+    Contact,
+    Article
 )
-
+admin.site.register(Article)
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
 admin.site.index_title = "Welcome to Hardhat Admin Portal"

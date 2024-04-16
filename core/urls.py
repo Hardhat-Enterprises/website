@@ -29,6 +29,14 @@ urlpatterns = [
     path('contact', views.contact, name='contact'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
+    
+     # blog
+    #path('admin/', admin.site.urls),
+    # path('blog/', include('blogs.urls')),
+    #path('', include('blogs.urls')),
+    #path('accounts/', include('users.urls')),
+    path('blog/', views.blog, name='blog'),
+    path('tinymce/', include('tinymce.urls')),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
