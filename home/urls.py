@@ -19,10 +19,13 @@ urlpatterns = [
     path('smishing_detection', views.smishingdetection, name='smishing_detection_main'),
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
     
+
+
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+
 
     #Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
