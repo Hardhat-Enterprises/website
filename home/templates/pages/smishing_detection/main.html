@@ -1,0 +1,97 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    {% include 'includes/pre-loader.html' %}
+
+    <!-- Hero -->
+    <div class="section-header bg-primary-app pb-0">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <img src="{% static 'assets/img/pages/home/smishing_detection.svg' %}" alt="Dashboard Preview"
+                        width="500" height="500">
+                    <div class="mt-4 mb-5">
+                        <h2 class="fw-bolder text-dark">Smishing Detection</h2>
+                        <h5 class="fw-normal text-dark">Transforming mobile security with innovative detection
+                            technology.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Hero Section -->
+
+    <section>
+        <!-- About  -->
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="fw-bolder text-dark">Overview</h2>
+                    <p class="mb-4">Introducing the Smishing Detection app – a groundbreaking solution designed to
+                        combat SMS phishing attacks on Android and iOS devices. With the proliferation of smartphones
+                        for sensitive communications and transactions, the threat of smishing attacks looms large. Our
+                        app aims to mitigate these risks by detecting and alerting users to potential smishing attempts,
+                        safeguarding personal information and reducing instances of fraud. By leveraging cutting-edge
+                        technology, we strive to enhance mobile security, promote cybersecurity awareness, and
+                        contribute to the broader effort against scammers.</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="{% static 'assets/img/pages/home/smishing_detection-about.svg' %}" class="img-fluid"
+                        alt="About Us">
+                </div>
+            </div>
+            <!-- End of About  -->
+            <!-- Goals -->
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <img src="{% static 'assets/img/pages/home/smishing_detection-goals.svg' %}" class="img-fluid"
+                        alt="Goals and Objectives">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="fw-bolder text-dark">Goals</h2>
+                    <ul class="mb-4">
+                        <li>User-friendly platform for seamless interaction and engagement.</li>
+                        <li>Strengthen mobile security to protect users' personal data</li>
+                        <li>Educate users on cybersecurity risks and mitigation strategies</li>
+                        <li>Aid global anti-scam efforts with effective detection tools..</li>
+
+                    </ul>
+                    <h2 class="fw-bolder text-dark">Objectives</h2>
+                    <ul class="mb-4">
+                        <li>Implement machine learning algorithms for accurate detection of smishing attempts.</li>
+                        <li>Integrate real-time notification features to alert users promptly to potential threats.</li>
+                        <li>Provide educational resources within the app to increase users' awareness of smishing
+                            techniques and best practices for prevention.</li>
+                        <li>Collaborate with cybersecurity experts and organizations to stay updated on emerging threats
+                            and best practices.</li>
+                        <li>Continuously improve the app based on user feedback and evolving threat landscapes to ensure
+                            maximum effectiveness in mitigating smishing attacks.</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- End of Goals -->
+            <!-- Class of Action Section -->
+            <div class="bg-primary-app">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <div class="mt-4 mb-5">
+                            <h2 class="fw-bolder text-dark">Join Us</h2>
+                            <p class="mb-4">Join our mission to revolutionize mobile security and combat SMS phishing
+                                attacks. Whether you're a skilled developer, cybersecurity enthusiast, or passionate
+                                advocate for online safety, there are numerous ways to get involved. </p>
+                            <a href="{% url 'smishingdetection_join_us' %}" class="btn btn-primary animate-up-2"
+                                alt="Join Us"><span class="fas fa-handshake me-2"></span>
+                                Join Us</a>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Class of Action Section -->
+    </section>
+    <!-- End of Social Links Section -->
+    {% endblock content %}

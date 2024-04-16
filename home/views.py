@@ -1,26 +1,45 @@
-from django.shortcuts import render, get_object_or_404
+
+# from django.shortcuts import render, get_object_or_404
+
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import logout
-from django.db.models import Count, F, Sum, Avg
+from django.db.models import Count
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.views import View
+from django.views.generic import ListView, DetailView
+from .models import Article, Student, Project, Contact
+
+# from utils.charts import generate_color_palette
+# from .models import Student, Project, Contact
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
+
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from .models import Student, Project, Progress
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
+# from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
+# Regular Views
+
+
 def index(request):
-    # Page from the theme
     return render(request, 'pages/index.html')
 
-def abouts_us(request):
+def about_us(request):
     return render(request, 'pages/about.html')
 
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
+
+def blog(request):
+    return render(request, 'blog/index.html')
 
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
@@ -29,32 +48,21 @@ def appattack_join(request):
     return render(request, 'pages/appattack/join.html')
 
 def products_services(request):
-    # Page from the theme
     return render(request, 'pages/malware_visualization/products_and_services.html')
 
-
 def malwarehome(request):
-
-    # Page from the theme
     return render(request, 'pages/malware_visualization/main.html')
 
-
 def malware_joinus(request):
-
-    # Page from the theme
     return render(request, 'pages/malware_visualization/malware_viz_joinus.html')
 
-
 def ptguihome(request):
-
-    # Page from the theme
     return render(request, 'pages/pt_gui/main.html')
 
 def ptgui_contact_us(request):
     return render(request, 'pages/pt_gui/contact-us.html')
 
 def faq(request):
-     # Page from the theme
     return render(request, 'pages/pt_gui/faq.html')
 
 def ptgui_join_us(request):
@@ -63,12 +71,10 @@ def ptgui_join_us(request):
 def http_503(request):
     return render(request, 'pages/503.html')
 
-
 def join_project(request):
     context = {'student_exists': False}
     if request.method == 'POST':
         form = StudentForm(request.POST)
-
         if form.is_valid():
             student = form.save(commit=False)
             student.user = request.user
@@ -86,10 +92,15 @@ def join_project(request):
 
     context['form'] = form
     return render(request, 'pages/joinus.html', context)
-   
 
+def smishing_detection(request):
+    return render(request, 'pages/smishing_detection/main.html')
+
+def smishing_detection_join_us(request):
+    return render(request, 'pages/smishing_detection/join_us.html')
 
 # Authentication
+
 class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
@@ -126,9 +137,7 @@ class UserPasswordChangeView(PasswordChangeView):
     form_class = UserPasswordChangeForm
 
 def resources_view(request):
-    return render(request, 'pages/resources.html.')
-    
-
+    return render(request, 'pages/resources.html')
 
 # Chart Views
 
@@ -158,9 +167,9 @@ def get_priority_breakdown(request, priority):
         }
     })
 
-
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
+
 
 @login_required
 def dashboard(request):
@@ -177,3 +186,45 @@ def update_progress(request, progress_id):
         progress.progress = new_progress
         progress.save()
     return redirect('dashboard')
+
+def contact(request):
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        message=request.POST['message']
+        contact=Contact.objects.create(name=name, email=email, message=message)
+        messages.success(request,'The message has been received')
+    return render(request,'pages/index.html')
+
+
+# Blog
+class Index(ListView):
+    model = Article
+    queryset = Article.objects.all().order_by('-date')
+    template_name = 'blog/index.html'
+    paginate_by = 1
+    
+class DetailArticleView(DetailView):
+    model = Article
+    template_name = 'blog/blog_post.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(DetailArticleView, self).get_context_data(*args, **kwargs)
+        context['liked_by_user']  = False  
+        article = Article.objects.get(id=self.kwargs.get('pk'))    
+        if article.likes.filter(pk=self.request.user.id).exists():
+            context['liked_by_user']  = True
+        return context
+  
+class LikeArticle(View):
+    def post(self, request, pk):
+        article = Article.objects.get(id=pk)
+        if article.likes.filter(pk=self.request.user.id).exists():
+            article.likes.remove(request.user.id)
+        else:
+            article.likes.add(request.user.id)
+        article.save()
+        return redirect('detail_article', pk)
+          
+
+

@@ -4,10 +4,15 @@ from .models import (
     Student,
     Project,
     Course,
+
     Skill,
     Progress,
-)
 
+    Contact,
+    Article
+
+)
+admin.site.register(Article)
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
 admin.site.index_title = "Welcome to Hardhat Admin Portal"
@@ -38,4 +43,7 @@ class SkillAdmin(admin.ModelAdmin):
 class ProgressAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Progress._meta.fields]
 
+@admin.register(Contact)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Contact._meta.fields]
 
