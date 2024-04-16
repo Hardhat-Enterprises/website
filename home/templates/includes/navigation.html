@@ -2,6 +2,8 @@
 
 <header class="header-global">
 
+
+
     <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
       <div class="container position-relative">
           <a class="navbar-brand me-lg-5" href="/">
@@ -78,6 +80,7 @@
                   <span class="navbar-toggler-icon"></span>
               </button>
 
+
   <nav
     id="navbar-main"
     aria-label="Primary navigation"
@@ -126,6 +129,14 @@
           <li class="nav-item">
             <a href="{% url 'index' %}" class="nav-link"> Home </a>
           </li>
+
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          {% endif %}
+
+
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
           </li>
@@ -162,6 +173,8 @@
                         >PT-GUI</a
                       >
                     </li>
+
+
                     <li class="mb-2 menu-item">
                       <a
                         class="menu-link"
@@ -169,14 +182,18 @@
                         >Smishing Detection</a
                       >
                     </li>
+
                   </ul>
                 </div>
               </div>
             </div>
           </li>
+
+
 		  <li class="nav-item">
             <a href="{% url 'blog' %}" class="nav-link"> Blog </a>
           </li>
+
         </ul>
       </div>
       <div class="d-flex align-items-center">

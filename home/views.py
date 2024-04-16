@@ -1,7 +1,12 @@
+
+# from django.shortcuts import render, get_object_or_404
+
 # views.py
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import logout
 from django.db.models import Count
@@ -9,13 +14,20 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
-from .models import Article
+from .models import Article, Student, Project, Contact
 
-from utils.charts import generate_color_palette
-from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm
+# from utils.charts import generate_color_palette
+# from .models import Student, Project, Contact
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
+
+
+from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
+from .models import Student, Project, Progress
+# from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
+# Create your views here.
 
 # Regular Views
+
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -158,6 +170,23 @@ def get_priority_breakdown(request, priority):
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
 
+
+@login_required
+def dashboard(request):
+    user = request.user
+    student = Student.objects.get(user=user)
+    progress = Progress.objects.filter(student=student)
+    context = {'user': user, 'student': student, 'progress': progress}
+    return render(request, 'pages/dashboard.html', context)
+
+def update_progress(request, progress_id):
+    progress = get_object_or_404(Progress, id=progress_id)
+    if request.method == 'POST':
+        new_progress = request.POST.get('progress')
+        progress.progress = new_progress
+        progress.save()
+    return redirect('dashboard')
+
 def contact(request):
     if request.method=='POST':
         name=request.POST['name']
@@ -166,9 +195,6 @@ def contact(request):
         contact=Contact.objects.create(name=name, email=email, message=message)
         messages.success(request,'The message has been received')
     return render(request,'pages/index.html')
-
-
-
 
 
 # Blog
@@ -200,4 +226,5 @@ class LikeArticle(View):
         article.save()
         return redirect('detail_article', pk)
           
+
 
