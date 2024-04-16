@@ -4,7 +4,7 @@
 
 
 
-    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
+    {% comment %} <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
       <div class="container position-relative">
           <a class="navbar-brand me-lg-5" href="/">
               <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light">
@@ -52,7 +52,7 @@
                                     <li class="mb-2 menu-item">
                                         <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
                                     </li>
-                                    <li class="mb-2 menu-item">
+                                     <li class="mb-2 menu-item">
                                         <a class="menu-link" href="{% url 'smishing_detection_main' %}">Smishing Detection</a>
                                     </li>
                                     <li class="mb-2 menu-item">
@@ -60,7 +60,7 @@
                                     </li>
                                     <li class="mb-2 menu-item">
                                         <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror</a>
-                                    </li>
+                                    </li> 
                                 </ul>
                             </div>
                         </div>
@@ -79,9 +79,11 @@
               <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
               </button>
+      </nav> {% endcomment %}
 
 
-  <nav
+  
+      <nav
     id="navbar-main"
     aria-label="Primary navigation"
     class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light"
@@ -182,6 +184,14 @@
                         >Smishing Detection</a
                       >
                     </li>
+
+                
+                  <li class="mb-2 menu-item">
+                      <a class="menu-link" href="#">Deakin CyberSafe VR</a>
+                  </li>
+                  <li class="mb-2 menu-item">
+                      <a class="menu-link" href="#">Deakin Threat mirror</a>
+                  </li> 
 
                   </ul>
                 </div>
