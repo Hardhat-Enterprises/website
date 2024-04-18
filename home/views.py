@@ -13,7 +13,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
-from .models import Article, Student, Project, Contact
+from .models import Article, Student, Project, Contact_central, Contact
 
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
@@ -206,6 +206,15 @@ def contact(request):
         contact=Contact.objects.create(name=name, email=email, message=message)
         messages.success(request,'The message has been received')
     return render(request,'pages/index.html')
+
+def Contact_central(request):
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        message=request.POST['message']
+        contact=Contact_central.objects.create(name=name, email=email, message=message)
+        messages.success(request,'The message has been received')
+    return render(request,'pages/Contactus.html')
 
 
 # Blog
