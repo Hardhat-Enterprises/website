@@ -55,7 +55,9 @@ urlpatterns = [
     path('accounts/password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='accounts/password_reset_complete.html'
     ), name='password_reset_complete'),
-    
+    path('comphrensive-report', views.comphrehensive_reports, name='comphrehensive_report'),
+    path('pen-testing', views.pen_testing, name='pen-testing'),
+    path('secure-code-review', views.secure_code_review, name='secure-code-review'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 

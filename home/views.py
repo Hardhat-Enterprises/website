@@ -1,4 +1,3 @@
-
 # from django.shortcuts import render, get_object_or_404
 
 # views.py
@@ -151,9 +150,9 @@ def get_filter_options(request):
 def get_priority_breakdown(request, priority):
     students = Student.objects.all()
     project_titles = list(Project.objects.all().values('title').order_by()) # list of dictionaries: [{'title': 'AppAttack'}, {'title': 'Malware Visualization'},...
-    
+
     project_count = students.values(f'{priority}__title').annotate(dcount=Count('p1')).order_by()
-    
+
     return JsonResponse({
         'title': f'Projects on {priority}',
         'data': {
@@ -169,6 +168,18 @@ def get_priority_breakdown(request, priority):
 
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
+
+def comphrehensive_reports(request):
+    # Page from the theme
+    return render(request, 'pages/appattack/comprehensive_reports.html')
+
+def pen_testing(request):
+    # Page from the theme
+    return render(request, 'pages/appattack/pen_testing.html')
+
+def secure_code_review(request):
+    # Page from the theme
+    return render(request, 'pages/appattack/secure_code_review.html')
 
 
 @login_required
@@ -203,11 +214,11 @@ class Index(ListView):
     queryset = Article.objects.all().order_by('-date')
     template_name = 'blog/index.html'
     paginate_by = 1
-    
+
 class DetailArticleView(DetailView):
     model = Article
     template_name = 'blog/blog_post.html'
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super(DetailArticleView, self).get_context_data(*args, **kwargs)
         context['liked_by_user']  = False  
@@ -215,7 +226,7 @@ class DetailArticleView(DetailView):
         if article.likes.filter(pk=self.request.user.id).exists():
             context['liked_by_user']  = True
         return context
-  
+
 class LikeArticle(View):
     def post(self, request, pk):
         article = Article.objects.get(id=pk)
@@ -225,6 +236,5 @@ class LikeArticle(View):
             article.likes.add(request.user.id)
         article.save()
         return redirect('detail_article', pk)
-          
 
 
