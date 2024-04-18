@@ -18,6 +18,7 @@ urlpatterns = [
     path('ptgui_viz/faq/', views.faq, name='faq'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
     path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
+    # path('contact-central/', views.Contact_central, name='contact-central'),
     
 
 

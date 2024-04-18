@@ -7,8 +7,10 @@ from .models import (
 
     Skill,
     Progress,
-
     Contact,
+
+    
+    Contact_central,
     Article
 
 )
@@ -44,6 +46,10 @@ class ProgressAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Progress._meta.fields]
 
 @admin.register(Contact)
-class CourseAdmin(admin.ModelAdmin):
+class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
+    
+@admin.register(Contact_central)
+class Contact_centralAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Contact_central._meta.fields]
 
