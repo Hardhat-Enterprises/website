@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
+from tinymce.models import HTMLField
+from django.contrib.auth.models import User 
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
@@ -130,10 +132,44 @@ class Student(AbstractBaseSet):
     def __str__(self) -> str:
         return str(self.user)
 
+    
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+
 class Contact(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.CharField(max_length=200)
+    message=models.TextField(max_length=1000)
+    
+    def __str__(self):
+        return self.name
+    
+
+class Contact_central(models.Model):
     name=models.CharField(max_length=100)
     email=models.CharField(max_length=200)
     message=models.TextField(max_length=1000)
 
     def __str__(self):
         return self.name
+
+
+class Progress(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    progress = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.student} - {self.skill}: {self.progress}%'
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = HTMLField()
+    date = models.DateField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    featured = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
+

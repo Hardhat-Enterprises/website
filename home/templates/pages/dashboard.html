@@ -1,0 +1,49 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main class="pt-6">
+  {% include 'includes/pre-loader.html' %}
+
+  <!-- Hero -->
+  <section class="section-header bg-tertiary text-black text-center py-5">
+    <h1>Welcome to your dashboard, {{ user.first_name }}</h1>
+    <p>Unit: {{ student.unit }}</p>
+    <p>Student ID: {{ student.id }}</p>
+  </section>
+
+  <!-- Project Preferences -->
+  <section class="text-center pt-5">
+    <h2>Your Project Preferences</h2>
+    <p>Preference 1: {{ student.p1 }}</p>
+    <p>Preference 2: {{ student.p2 }}</p>
+    <p>Preference 3: {{ student.p3 }}</p>
+  </section>
+
+  <!-- Upskilling Progress Tracker -->
+  <section class="text-center">
+    <h2>Your Upskilling Progress</h2>
+    {% for p in progress %}
+    <form method="post" action="{% url 'update_progress' p.id %}">
+      {% csrf_token %}
+      <label for="progress">{{ p.skill.name }}:</label>
+      <input
+        type="number"
+        id="progress"
+        name="progress"
+        value="{{ p.progress }}"
+        min="0"
+        max="100"
+      />
+      <input type="submit" value="Update" />
+    </form>
+    {% endfor %}
+  </section>
+
+  <!-- Allocation -->
+  <section class="text-center pb-5">
+    <h2>Your Allocation</h2>
+    <p>Status: {{ student.allocated }}</p>
+  </section>
+
+  <!-- End of section -->
+</main>
+
+{% endblock content %}

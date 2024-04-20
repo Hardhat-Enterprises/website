@@ -25,10 +25,19 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     # path('', include('theme_pixel.urls')),
-    path('about-us/', views.abouts_us, name='about_us'),
+    path('about-us/', views.about_us, name='about_us'),
     path('contact', views.contact, name='contact'),
+    path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
+    
+    # blog
+    #path('admin/', admin.site.urls),
+    # path('blog/', include('blogs.urls')),
+    #path('', include('blogs.urls')),
+    #path('accounts/', include('users.urls')),
+    path('blog/', views.blog, name='blog'),
+    path('tinymce/', include('tinymce.urls')),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
@@ -47,5 +56,10 @@ urlpatterns = [
     path('accounts/password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='accounts/password_reset_complete.html'
     ), name='password_reset_complete'),
+    path('comphrensive-report', views.comphrehensive_reports, name='comphrehensive_report'),
+    path('pen-testing', views.pen_testing, name='pen-testing'),
+    path('secure-code-review', views.secure_code_review, name='secure-code-review'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
 ]
