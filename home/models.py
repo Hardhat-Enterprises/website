@@ -132,13 +132,37 @@ class Student(AbstractBaseSet):
     def __str__(self) -> str:
         return str(self.user)
 
+    
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+
 class Contact(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.CharField(max_length=200)
+    message=models.TextField(max_length=1000)
+    
+    def __str__(self):
+        return self.name
+    
+
+class Contact_central(models.Model):
     name=models.CharField(max_length=100)
     email=models.CharField(max_length=200)
     message=models.TextField(max_length=1000)
 
     def __str__(self):
         return self.name
+
+
+class Progress(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    progress = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.student} - {self.skill}: {self.progress}%'
 
 
 class Article(models.Model):
@@ -148,3 +172,4 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     featured = models.BooleanField(default=False)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
+

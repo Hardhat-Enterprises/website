@@ -17054,7 +17054,7 @@ label {
     height: 36px !important;
     border: none;
     text-align: center; }
-
+.custom-height { min-height: 240px; }
 /**
  * = Custom forms
  */
