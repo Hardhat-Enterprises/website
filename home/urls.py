@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import Index, DetailArticleView, LikeArticle
 
 from . import views
 
@@ -20,6 +21,11 @@ urlpatterns = [
     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+    
+    # Blog URLs
+    path('blog/', Index.as_view(), name = 'blog'),
+    path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
+    path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
 
     #Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
