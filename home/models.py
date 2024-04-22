@@ -131,22 +131,38 @@ class Student(AbstractBaseSet):
 
     def __str__(self) -> str:
         return str(self.user)
-    
-class Upskill (AbstractBaseSet):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    completed = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.title
+    
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
 
 class Contact(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.CharField(max_length=200)
+    message=models.TextField(max_length=1000)
+    
+    def __str__(self):
+        return self.name
+    
+
+class Contact_central(models.Model):
     name=models.CharField(max_length=100)
     email=models.CharField(max_length=200)
     message=models.TextField(max_length=1000)
 
     def __str__(self):
         return self.name
+
+
+class Progress(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    progress = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.student} - {self.skill}: {self.progress}%'
 
 
 class Article(models.Model):

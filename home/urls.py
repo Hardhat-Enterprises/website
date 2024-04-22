@@ -16,16 +16,20 @@ urlpatterns = [
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
     path('ptgui_viz/faq/', views.faq, name='faq'),
-    path('smishing_detection', views.smishingdetection, name='smishing_detection_main'),
-    path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
+    path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
+    path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+    # path('contact-central/', views.Contact_central, name='contact-central'),
     
+
+
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+
 
     #Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
