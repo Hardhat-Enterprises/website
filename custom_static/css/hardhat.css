@@ -404,6 +404,11 @@ a {
   a:hover {
     color: #0b0f18; }
 
+a.lost-password:hover,
+a.create-account:hover {
+  color: #0b0f18; 
+}
+
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
   color: inherit;
   text-decoration: none; }
