@@ -210,13 +210,13 @@
         {% if request.user.is_authenticated %}
         <a
           href="{% url 'logout' %}"
-          class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"
+          class="btn btn-outline-gray-100 me-md-3"
           ><span class="fas fa-sign-out-alt me-2"></span> Logout</a
         >
         {% else %}
         <a
           href="{% url 'login' %}"
-          class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"
+          class="btn btn-outline-gray-100 me-md-3"
           ><span class="fas fa-sign-in-alt me-2"></span> Sign In</a
         >
         {% endif %}
@@ -231,7 +231,7 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-      </div>
+    </div>
     </div>
   </nav>
 </header>
