@@ -14,6 +14,8 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from .models import Article, Student, Project, Contact_central, Contact
+import os
+from .models import Smishingdetection_join_us
 
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
@@ -96,7 +98,20 @@ def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
 
 def smishing_detection_join_us(request):
-    return render(request, 'pages/smishing_detection/join_us.html')
+
+    
+     if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        message=request.POST['message']
+
+        if len(name)<2 or len(email)<3 or len(message)<4:
+            messages.error(request, "Please fill the form correctly")
+        else:
+            contact= Smishingdetection_join_us(name=name, email=email, message=message)
+            contact.save()
+            messages.success(request, "Your message has been successfully sent") 
+     return render(request, 'pages/smishing_detection/join_us.html')
 
 # Authentication
 
