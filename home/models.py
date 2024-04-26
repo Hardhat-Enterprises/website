@@ -9,6 +9,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
+import secrets
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
@@ -102,9 +103,13 @@ class Student(AbstractBaseSet):
 
     SIT782 = 'SIT782'
     SIT764 = 'SIT764'
+    SIT284 = 'SIT284'
+    SIT236 = 'SIT236'
     UNITS = [
         (SIT782, 'SIT782'),
         (SIT764, 'SIT764'),
+        (SIT284, 'SIT284'),
+        (SIT236, 'SIT236'),
     ]
 
     student_id_validator = StudentIdValidator()
@@ -147,13 +152,13 @@ class Contact(models.Model):
         return self.name
     
 
-class Contact_central(models.Model):
-    name=models.CharField(max_length=100)
-    email=models.CharField(max_length=200)
-    message=models.TextField(max_length=1000)
+# class Contact_central(models.Model):
+#     name=models.CharField(max_length=100)
+#     email=models.CharField(max_length=200)
+#     message=models.TextField(max_length=1000)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 class Progress(models.Model):
@@ -173,3 +178,12 @@ class Article(models.Model):
     featured = models.BooleanField(default=False)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
+class OtpToken(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
+    otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
+    tp_created_at = models.DateTimeField(auto_now_add=True)
+    otp_expires_at = models.DateTimeField(blank=True, null=True)
+    
+    
+    def __str__(self):
+        return self.user.email
