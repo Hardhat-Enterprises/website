@@ -4,15 +4,20 @@ from .models import (
     Student,
     Project,
     Course,
-
     Skill,
     Progress,
     Contact,
 
+    # Contact_central,
+    Article, 
+    OtpToken
+
+
     
-    Contact_central,
-    Article,
+    
+    
     Smishingdetection_join_us
+
 
 )
 
@@ -20,6 +25,7 @@ from .models import (
 
 admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
+
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
 admin.site.index_title = "Welcome to Hardhat Admin Portal"
@@ -54,7 +60,13 @@ class ProgressAdmin(admin.ModelAdmin):
 class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
     
-@admin.register(Contact_central)
-class Contact_centralAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Contact_central._meta.fields]
+# @admin.register(Contact_central)
+# class Contact_centralAdmin(admin.ModelAdmin):
+#     list_display = [field.name for field in Contact_central._meta.fields]
+
+class OtpTokenAdmin(admin.ModelAdmin):
+    list_display = ("user", "otp_code")
+
+admin.site.register(OtpToken, OtpTokenAdmin)
+
 
