@@ -178,6 +178,7 @@ class Article(models.Model):
     featured = models.BooleanField(default=False)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
+
 class OtpToken(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
     otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
@@ -187,3 +188,10 @@ class OtpToken(models.Model):
     
     def __str__(self):
         return self.user.email
+
+class Smishingdetection_join_us(models.Model):
+    name= models.CharField(max_length=100)
+    email= models.CharField(max_length=200)
+    message= models.TextField(max_length=1000)
+
+

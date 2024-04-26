@@ -7,11 +7,23 @@ from .models import (
     Skill,
     Progress,
     Contact,
+
     # Contact_central,
     Article, 
     OtpToken
 
+
+    
+    
+    
+    Smishingdetection_join_us
+
+
 )
+
+
+
+admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
 
 admin.site.site_header = "Hardhat Enterprises Administration"
