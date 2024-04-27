@@ -136,6 +136,8 @@ class Student(AbstractBaseSet):
 class Skill(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    def __str__(self):
+        return self.name
 
 
 class Contact(models.Model):
@@ -162,7 +164,7 @@ class Progress(models.Model):
     progress = models.IntegerField()
 
     def __str__(self):
-        return f'{self.student} - {self.skill}: {self.progress}%'
+        return f'{self.student} - {self.skill.name}: {self.progress}%'
 
 
 class Article(models.Model):
