@@ -10,7 +10,7 @@ from .models import (
 
     # Contact_central,
     Article, 
-    OtpToken
+    OtpToken,
 
 
     

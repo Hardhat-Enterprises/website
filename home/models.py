@@ -103,13 +103,13 @@ class Student(AbstractBaseSet):
 
     SIT782 = 'SIT782'
     SIT764 = 'SIT764'
-    SIT284 = 'SIT284'
-    SIT236 = 'SIT236'
+    SIT378 = 'SIT378'
+    SIT374 = 'SIT374'
     UNITS = [
         (SIT782, 'SIT782'),
         (SIT764, 'SIT764'),
-        (SIT284, 'SIT284'),
-        (SIT236, 'SIT236'),
+        (SIT378, 'SIT378'),
+        (SIT374, 'SIT374'),
     ]
 
     student_id_validator = StudentIdValidator()
