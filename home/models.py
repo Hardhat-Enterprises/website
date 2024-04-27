@@ -7,6 +7,9 @@ from django.conf import settings
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
+from tinymce.models import HTMLField
+from django.contrib.auth.models import User 
+import secrets
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
@@ -100,9 +103,13 @@ class Student(AbstractBaseSet):
 
     SIT782 = 'SIT782'
     SIT764 = 'SIT764'
+    SIT284 = 'SIT284'
+    SIT236 = 'SIT236'
     UNITS = [
         (SIT782, 'SIT782'),
         (SIT764, 'SIT764'),
+        (SIT284, 'SIT284'),
+        (SIT236, 'SIT236'),
     ]
 
     student_id_validator = StudentIdValidator()
@@ -130,10 +137,61 @@ class Student(AbstractBaseSet):
     def __str__(self) -> str:
         return str(self.user)
 
+    
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+
 class Contact(models.Model):
     name=models.CharField(max_length=100)
     email=models.CharField(max_length=200)
-    message=models.TextField()
-
+    message=models.TextField(max_length=1000)
+    
     def __str__(self):
         return self.name
+    
+
+# class Contact_central(models.Model):
+#     name=models.CharField(max_length=100)
+#     email=models.CharField(max_length=200)
+#     message=models.TextField(max_length=1000)
+
+#     def __str__(self):
+#         return self.name
+
+
+class Progress(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    progress = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.student} - {self.skill}: {self.progress}%'
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = HTMLField()
+    date = models.DateField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    featured = models.BooleanField(default=False)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
+
+
+class OtpToken(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
+    otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
+    tp_created_at = models.DateTimeField(auto_now_add=True)
+    otp_expires_at = models.DateTimeField(blank=True, null=True)
+    
+    
+    def __str__(self):
+        return self.user.email
+
+class Smishingdetection_join_us(models.Model):
+    name= models.CharField(max_length=100)
+    email= models.CharField(max_length=200)
+    message= models.TextField(max_length=1000)
+
+

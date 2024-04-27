@@ -404,6 +404,11 @@ a {
   a:hover {
     color: #0b0f18; }
 
+a.lost-password:hover,
+a.create-account:hover {
+  color: #0b0f18; 
+}
+
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
   color: inherit;
   text-decoration: none; }
@@ -4440,7 +4445,7 @@ textarea.form-control-lg {
   border-color: rgba(23, 31, 56, 0.1); }
 
 .navbar-light .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2823, 31, 56, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba255, 205, 17, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");}
 
 .navbar-light .navbar-text {
   color: rgba(23, 31, 56, 0.9); }
@@ -15656,7 +15661,7 @@ textarea.form-control-lg {
   width: 100%;
   z-index: 100; }
   .navbar-main .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>"); }
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='rgba(255, 205, 17, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>"); }
 
 .navbar .navbar-nav .nav-link {
   -webkit-transition: all 0.8s all 0.2s ease;
@@ -15816,7 +15821,7 @@ textarea.form-control-lg {
     color: #ffffff; }
 
 .navbar-light .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='rgba(23, 31, 56, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>"); }
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='rgba(255, 205, 17, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>"); }
 
 .navbar-light .navbar-brand-dark {
   display: none; }
@@ -17065,7 +17070,7 @@ label {
     height: 36px !important;
     border: none;
     text-align: center; }
-
+.custom-height { min-height: 240px; }
 /**
  * = Custom forms
  */

@@ -14,6 +14,8 @@ import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
 
+
+from django.contrib.messages import constants as messages
 load_dotenv()  # take environment variables from .env.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,6 +47,9 @@ if RENDER_EXTERNAL_HOSTNAME:
 # Application definition
 
 INSTALLED_APPS = [
+   'crispy_forms',
+    'tinymce',
+    'crispy_bootstrap5',
     "django_light",
     # "django.contrib.admin",
     "core.apps.CustomAdminConfig",
@@ -177,3 +182,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'error'
+}
+
+
+
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'success'
+}
