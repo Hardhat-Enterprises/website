@@ -4,7 +4,27 @@ from .models import (
     Student,
     Project,
     Course,
+    Skill,
+    Progress,
+    Contact,
+
+    # Contact_central,
+    Article, 
+    OtpToken
+
+
+    
+    
+    
+    Smishingdetection_join_us
+
+
 )
+
+
+
+admin.site.register(Smishingdetection_join_us)
+admin.site.register(Article)
 
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
@@ -27,5 +47,26 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Course._meta.fields]
+    
+@admin.register(Skill)
+class SkillAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Skill._meta.fields]
+
+@admin.register(Progress)
+class ProgressAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Progress._meta.fields]
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Contact._meta.fields]
+    
+# @admin.register(Contact_central)
+# class Contact_centralAdmin(admin.ModelAdmin):
+#     list_display = [field.name for field in Contact_central._meta.fields]
+
+class OtpTokenAdmin(admin.ModelAdmin):
+    list_display = ("user", "otp_code")
+
+admin.site.register(OtpToken, OtpTokenAdmin)
 
 

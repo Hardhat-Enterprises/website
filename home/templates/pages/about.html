@@ -1,182 +1,290 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main>
+  {% include 'includes/pre-loader.html' %}
 
-{% block content %}
-    <main>
-
-        {% include 'includes/pre-loader.html' %}
-
-        <!-- Hero -->
-        <section class="section-header bg-tertiary text-black">
-            <div class="container">
-               <div class="row justify-content-between align-items-center">
-                  <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
-                        <h1 class="display-2 mb-4">Full-Service <br class="d-none d-md-inline">Cyber Security Agency</h1>
-                        <p class="lead mb-4 text-muted">Hardhat can help you secure your webapps, review your code, visualize the threats and provide an interractive UI for pen-testing, that will bring your customers a peace of mind and security.</p>
-                        <a href="{% url 'what_we_do'%}" class="btn btn-tertiary me-3 animate-up-2">What we do <span class="ms-2"><span class="fas fa-arrow-right"></span></span></a>
-                    </div>
-                  <div class="col-12 col-md-5 d-none d-md-block text-center"><img src="{% static 'assets/img/pages/about/hero.svg' %}" alt=""></div>
-               </div>
+  <!-- Hero -->
+  <section class="section-header bg-tertiary text-black">
+    <div class="container">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
+          <h1 class="display-2 mb-4">
+            Full-Service <br class="d-none d-md-inline" />Cyber Security Agency
+          </h1>
+          <p class="lead mb-4 text-muted">
+            Hardhat can help you secure your webapps, review your code,
+            visualize the threats and provide an interractive UI for
+            pen-testing, that will bring your customers a peace of mind and
+            security.
+          </p>
+          <a
+            href="{% url 'what_we_do'%}"
+            class="btn btn-tertiary me-3 animate-up-2"
+            >What we do
+            <span class="ms-2"><span class="fas fa-arrow-right"></span></span
+          ></a>
+        </div>
+        <div class="col-12 col-md-5 d-none d-md-block text-center">
+          <img src="{% static 'assets/img/pages/about/hero.svg' %}" alt="" />
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End of Hero section -->
+  <!-- Section -->
+  <section class="section section-md">
+    <div class="container">
+      <div class="row align-items-center justify-content-around">
+        <div class="col-md-6 col-xl-6 mb-5">
+          <img
+            class="img-fluid"
+            src="{% static 'assets/img/pages/about/challenges.svg' %}"
+            alt="Office Desk"
+          />
+        </div>
+        <div class="col-md-6 col-xl-5 text-center text-md-left">
+          <h2 class="h1 mb-5">All challenges accepted.</h2>
+          <p class="lead">
+            Hardhat is an experienced and passionate group of cybersecurity
+            specialists and developers. Every client we work with becomes a part
+            of the team. Together we face the challenges and celebrate the
+            victories.
+          </p>
+          <p class="lead">
+            With a culture of collaboration and a roster of talent, the Hardhat
+            team is active in the creative community, endlessly interested in
+            what’s next, and generally pleasant to be around.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End of section -->
+  <!-- Section -->
+  <section class="section section-lg pt-0">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-lg-4 text-center">
+          <!-- Visit Box -->
+          <div class="icon-box mb-4">
+            <div class="icon icon-primary mb-4">
+              <span class="fas fa-user"></span>
             </div>
-        </section>
-        <!-- End of Hero section -->
-        <!-- Section -->
-        <section class="section section-md">
-            <div class="container">
-                <div class="row align-items-center justify-content-around">
-                    <div class="col-md-6 col-xl-6 mb-5">
-                        <img class="img-fluid" src="{% static 'assets/img/pages/about/challenges.svg' %}" alt="Office Desk">
-                    </div>
-                    <div class="col-md-6 col-xl-5 text-center text-md-left">
-                        <h2 class="h1 mb-5">All challenges accepted.</h2>
-                        <p class="lead">Hardhat is an experienced and passionate group of cybersecurity specialists and developers. Every client we work with becomes a part of the team. Together we face the challenges and celebrate the victories.</p>
-                        <p class="lead">With a culture of collaboration and a roster of talent, the Hardhat team is active in the creative community, endlessly interested in what’s next, and generally pleasant to be around.</p>
-                    </div>
-                </div>
+            <h3 class="h5">Team Members</h3>
+            <span class="counter display-3 text-gray d-block">60</span>
+          </div>
+          <!-- End of Visit Box -->
+        </div>
+        <div class="col-md-4 col-lg-4 text-center">
+          <!-- Call Box -->
+          <div class="icon-box mb-4">
+            <div class="icon icon-primary mb-4">
+              <span class="fas fa-money-check"></span>
             </div>
-        </section>
-        <!-- End of section -->
-        <!-- Section -->
-        <section class="section section-lg pt-0">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 col-lg-4 text-center">
-                        <!-- Visit Box -->
-                        <div class="icon-box mb-4">
-                            <div class="icon icon-primary mb-4">
-                                <span class="fas fa-user"></span>
-                            </div>
-                            <h3 class="h5">Team Members</h3>
-                            <span class="counter display-3 text-gray d-block">60</span>
-                        </div>
-                        <!-- End of Visit Box -->
-                    </div>
-                    <div class="col-md-4 col-lg-4 text-center">
-                        <!-- Call Box -->
-                        <div class="icon-box mb-4">
-                            <div class="icon icon-primary mb-4">
-                                <span class="fas fa-money-check"></span>
-                            </div>
-                            <h3 class="h5">Projects Secured</h3>
-                            <span class="counter display-3 text-gray d-block">12</span>
-                        </div>
-                        <!-- End of Call Box -->
-                    </div>
-                    <div class="col-md-4 col-lg-4 text-center">
-                        <!-- Email Box -->
-                        <div class="icon-box mb-4">
-                            <div class="icon icon-primary mb-4">
-                                {% comment %} <span class="fa-solid fa-triangle-exclamation"></span> {% endcomment %}
-                                <svg xmlns="http://www.w3.org/2000/svg" height="45" width="36" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
-                            </div>
-                            <h3 class="h5">Threats found</h3>
-                            <span class="counter display-3 text-gray d-block">150+</span>
-                        </div>
-                        <!-- End of Email Box -->
-                    </div>
-                </div>
+            <h3 class="h5">Projects Secured</h3>
+            <span class="counter display-3 text-gray d-block">12</span>
+          </div>
+          <!-- End of Call Box -->
+        </div>
+        <div class="col-md-4 col-lg-4 text-center">
+          <!-- Email Box -->
+          <div class="icon-box mb-4">
+            <div class="icon icon-primary mb-4">
+              <span class="fa-solid fa-triangle-exclamation"></span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="45"
+                width="36"
+                viewBox="0 0 512 512"
+              >
+                <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+                <path
+                  fill="#FFCD11"
+                  d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+                />
+              </svg>
             </div>
-        </section>
-        <!-- End of section -->
-        <!-- Section -->
-        <section class="section section-lg bg-gray-200">
-            <figure class="position-absolute top-0 left-0 w-100 d-none d-md-block mt-n3">
-                <svg class="fill-gray-200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 43.4" style="enable-background:new 0 0 1920 43.4;" xml:space="preserve">
-                   <path d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"></path>
-                </svg>
-             </figure>
-            <div class="container">
-                <div class="row text-center">
-                    <div class="col">
-                        <h2 class="h1 fw-light"><span class="fw-bold">Our</span> history</h2>
-                    </div>
-                </div>
-                <div class="row justify-content-center mt-6">
-                    <div class="row justify-content-center">
-                        <div class="col-md-12 col-lg-8">
-                            <div class="timeline timeline-one dark px-3 px-sm-0">
-                                <!-- Timeline Item 1 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Present</h3>
-                                    <p>Established an incident response team and provided remote work security solutions. Actively engaged with the global cybersecurity community. Continued growth, adapting to emerging threats and technologies.</p>
-                                </div>
-                                <!-- Timeline Item 2 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Technology and Innovation </h3>
-                                    <p>Introduced advanced threat detection technologies. Established a cybersecurity training academy and embraced AI integration. Released a proprietary threat intelligence platform.</p>
-                                </div>
-                                <!-- Timeline Item 3 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Growth and Recognition</h3>
-                                    <p>Expanded services to include penetration testing and vulnerability assessments. Formed strategic partnerships and received industry awards. Achieved international expansion and collaborated on a major research project.</p>
-                                </div>
-                                <!-- Timeline Item 4 -->
-                                <div class="timeline-item">
-                                    <h3 class="h4 mb-4">Establishment and Early Success</h3>
-                                    <p>Founded in 2022 by a group of cybersecurity enthusiasts. Initial focus on basic cybersecurity awareness training and consulting. Secured first clients and gained a reputation for reliable services.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <h3 class="h5">Threats found</h3>
+            <span class="counter display-3 text-gray d-block">150+</span>
+          </div>
+          <!-- End of Email Box -->
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End of section -->
+  <!-- Section -->
+  <section class="section section-lg bg-gray-200">
+    <figure
+      class="position-absolute top-0 left-0 w-100 d-none d-md-block mt-n3"
+    >
+      <svg
+        class="fill-gray-200"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 1920 43.4"
+        style="enable-background: new 0 0 1920 43.4"
+        xml:space="preserve"
+      >
+        <path
+          d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"
+        ></path>
+      </svg>
+    </figure>
+    <div class="container">
+      <div class="row text-center">
+        <div class="col">
+          <h2 class="h1 fw-light"><span class="fw-bold">Our</span> history</h2>
+        </div>
+      </div>
+      <div class="row justify-content-center mt-6">
+        <div class="row justify-content-center">
+          <div class="col-md-12 col-lg-8">
+            <div class="timeline timeline-one dark px-3 px-sm-0">
+              <!-- Timeline Item 1 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Present</h3>
+                <p>
+                  Established an incident response team and provided remote work
+                  security solutions. Actively engaged with the global
+                  cybersecurity community. Continued growth, adapting to
+                  emerging threats and technologies.
+                </p>
+              </div>
+              <!-- Timeline Item 2 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Technology and Innovation</h3>
+                <p>
+                  Introduced advanced threat detection technologies. Established
+                  a cybersecurity training academy and embraced AI integration.
+                  Released a proprietary threat intelligence platform.
+                </p>
+              </div>
+              <!-- Timeline Item 3 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Growth and Recognition</h3>
+                <p>
+                  Expanded services to include penetration testing and
+                  vulnerability assessments. Formed strategic partnerships and
+                  received industry awards. Achieved international expansion and
+                  collaborated on a major research project.
+                </p>
+              </div>
+              <!-- Timeline Item 4 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Establishment and Early Success</h3>
+                <p>
+                  Founded in 2022 by a group of cybersecurity enthusiasts.
+                  Initial focus on basic cybersecurity awareness training and
+                  consulting. Secured first clients and gained a reputation for
+                  reliable services.
+                </p>
+              </div>
             </div>
-            <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
-                <svg class="fill-white" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 43.4" style="enable-background:new 0 0 1920 43.4;" xml:space="preserve">
-                   <path d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"></path>
-                </svg>
-             </figure>
-        </section>
-        <!-- Section -->
-        <section class="section section-lg">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-8">
-                        <!-- Contact Card -->
-                        <div class="card border-0 p-2 p-md-3 p-lg-5">
-                            <div class="card-header bg-white border-0 text-center">
-                                <h2>Want to work with us?</h2>
-                                <p>Awesome! Tell us about yourself</p>
-                            </div>
-                            <div class="card-body pt-0">
-                                <form action="/contact" method="post">
-                                    <!-- Form -->
-                                    <div class="mb-4">
-                                        <label for="name">Your Name</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon3"><span class="fas fa-user-circle"></span></span>
-                                            <input type="text" class="form-control" placeholder="e.g. Bonnie Green" name="name" id="name" required>
-                                        </div>
-                                    </div>
-                                    <!-- End of Form -->
-                                    <!-- Form -->
-                                    <div class="mb-4">
-                                        <label for="email">Your Email</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon4"><span class="fas fa-envelope"></span></span>
-                                            <input type="email" class="form-control" placeholder="example@company.com" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" size="30" id="email" name="email" required>
-                                        </div>
-                                    </div>
-                                    <!-- End of Form -->
-                                    <div class="mb-4">
-                                        <label for="message">Your Message</label>
-                                        <textarea placeholder="Your message" class="form-control" id="message" name="message" rows="4" required></textarea>
-                                    </div>
-                                    <!-- End of Form -->
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-secondary">Send message</button>
-                                    </div>
-                                    {% csrf_token %}
-                                </form>
-                            </div>
-                        </div>
-                        <!-- End of Contact Card -->
-                    </div>
-                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figure
+      class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"
+    >
+      <svg
+        class="fill-white"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 1920 43.4"
+        style="enable-background: new 0 0 1920 43.4"
+        xml:space="preserve"
+      >
+        <path
+          d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"
+        ></path>
+      </svg>
+    </figure>
+  </section>
+  <!-- Section -->
+  <section class="section section-lg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <!-- Contact Card -->
+          <div class="card border-0 p-2 p-md-3 p-lg-5">
+            <div class="card-header bg-white border-0 text-center">
+              <h2>Want to work with us?</h2>
+              <p>Awesome! Tell us about yourself</p>
             </div>
-        </section>
-        <!-- End of section -->
-    </main>
+            <div class="card-body pt-0">
+              <form action="/contact" method="post">
+                <!-- Form -->
+                <div class="mb-4">
+                  <label for="name">Your Name</label>
+                  <div class="input-group">
+                    <span class="input-group-text" id="basic-addon3"
+                      ><span class="fas fa-user-circle"></span
+                    ></span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="e.g. Bonnie Green"
+                      name="name"
+                      id="name"
+                      required
+                    />
+                  </div>
+                </div>
+                <!-- End of Form -->
+                <!-- Form -->
+                <div class="mb-4">
+                  <label for="email">Your Email</label>
+                  <div class="input-group">
+                    <span class="input-group-text" id="basic-addon4"
+                      ><span class="fas fa-envelope"></span
+                    ></span>
+                    <input
+                      type="email"
+                      class="form-control"
+                      placeholder="example@company.com"
+                      pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+                      size="30"
+                      id="email"
+                      name="email"
+                      required
+                    />
+                  </div>
+                </div>
+                <!-- End of Form -->
+                <div class="mb-4">
+                  <label for="message">Your Message</label>
+                  <textarea
+                    placeholder="Your message"
+                    class="form-control"
+                    id="message"
+                    name="message"
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
+                <!-- End of Form -->
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-secondary">
+                    Send message
+                  </button>
+                </div>
+                {% csrf_token %}
+              </form>
+            </div>
+          </div>
+          <!-- End of Contact Card -->
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End of section -->
+</main>
 
 {% endblock content %}
-
-
