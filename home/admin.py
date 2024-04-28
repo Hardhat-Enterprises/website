@@ -4,7 +4,6 @@ from .models import (
     Student,
     Project,
     Course,
-
     Skill,
     Progress,
     Contact,
