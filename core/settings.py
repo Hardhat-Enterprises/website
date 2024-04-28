@@ -14,6 +14,8 @@ import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
 
+
+from django.contrib.messages import constants as messages
 load_dotenv()  # take environment variables from .env.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -184,3 +186,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'error'
+}
+
+
+
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'success'
+}
