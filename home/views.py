@@ -105,14 +105,14 @@ def join_project(request):
 def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
 
-def smishing_detection_join_us(request):
+def smishingdetection_join_us(request):
 
     if request.method == 'POST':
         form = sd_JoinUsForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Your message has been successfully sent")
-            return redirect('smishing_detection_join_us')  # Redirect to the same page after form submission
+            return redirect('smishingdetection_join_us')  # Redirect to the same page after form submission
         else:
             messages.error(request, "Please fill the form correctly")
     else:
