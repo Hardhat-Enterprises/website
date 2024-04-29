@@ -26,7 +26,7 @@ import os
 
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm
 
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
@@ -107,19 +107,17 @@ def smishing_detection(request):
 
 def smishing_detection_join_us(request):
 
-    
-     if request.method=='POST':
-        name=request.POST['name']
-        email=request.POST['email']
-        message=request.POST['message']
-
-        if len(name)<2 or len(email)<3 or len(message)<4:
-            messages.error(request, "Please fill the form correctly")
+    if request.method == 'POST':
+        form = sd_JoinUsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your message has been successfully sent")
+            return redirect('smishing_detection_join_us')  # Redirect to the same page after form submission
         else:
-            contact= Smishingdetection_join_us(name=name, email=email, message=message)
-            contact.save()
-            messages.success(request, "Your message has been successfully sent") 
-     return render(request, 'pages/smishing_detection/join_us.html')
+            messages.error(request, "Please fill the form correctly")
+    else:
+        form = sd_JoinUsForm()
+    return render(request, 'pages/smishing_detection/join_us.html', {'form': form})
 
 # Authentication
 
