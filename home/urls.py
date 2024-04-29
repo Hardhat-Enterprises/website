@@ -30,7 +30,8 @@ urlpatterns = [
     
     # Email OTP
     
-    path("verify-email/<slug:email>", views.verify_email, name="verify-email"),
+    #path("verify-email/", views.verify_email, name="verify-email"),
+    path("verify-email", views.verify_email, name="verify-email"),
     path("resend-otp", views.resend_otp, name="resend-otp"),
 
 

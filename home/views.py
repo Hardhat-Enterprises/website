@@ -139,9 +139,9 @@ def register(request):
         if form.is_valid():
             form.save()
             print("Account created successfully! An OTP was sent to your email. Check!")
-            # messages.success(request, "Account created successfully! An OTP was sent to your email! check message")
+            messages.success(request, "Account created successfully! An OTP was sent to your email! check message")
             return redirect('/accounts/login')
-           # return redirect('/accounts/verify_token')
+            # return redirect("verify-email", username=request.POST['first_name'])
         else:
             print("Registration failed!")
     else:
@@ -149,7 +149,7 @@ def register(request):
 
     context = { 'form': form }
     return render(request, 'accounts/sign-up.html', context)
-
+    
 # def signup(request):
 #     form = RegisterForm()
 #     if request.method == 'POST':
@@ -163,8 +163,8 @@ def register(request):
 
 
 # Email Verification 
-def verify_email(request, username):
-    user = get_user_model().objects.get(username=username)
+def verify_email(request, first_name):
+    user = get_user_model().objects.get(username=first_name)
     user_otp = OtpToken.objects.filter(user=user).last()
     
     
@@ -182,13 +182,13 @@ def verify_email(request, username):
             # expired token
             else:
                 messages.warning(request, "The OTP has expired, get a new OTP!")
-                return redirect("verify-email", username=user.username)
+                return redirect("verify-email", username=user.first_name)
         
         
         # invalid otp code
         else:
             messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
-            return redirect("verify-email", username=user.username)
+            return redirect("verify-email", username=user.first_name)
         
     context = {}
     return render(request, "verify_token.html", context)
@@ -225,7 +225,7 @@ def resend_otp(request):
                 )
             
             messages.success(request, "A new OTP has been sent to your email-address")
-            return redirect("verify-email", username=user.username)
+            return redirect("verify-email", username=user.first_name)
 
         else:
             messages.warning(request, "This email dosen't exist in the database")
