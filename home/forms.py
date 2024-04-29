@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-from .models import Student
+from .models import Student, Smishingdetection_join_us
 
 User = get_user_model()
 
@@ -100,3 +100,7 @@ class StudentForm(forms.ModelForm):
             'p3': '3rd Priority',
         }
 
+class sd_JoinUsForm(forms.ModelForm):
+    class Meta:
+        model = Smishingdetection_join_us
+        fields = ['name', 'email', 'message']
