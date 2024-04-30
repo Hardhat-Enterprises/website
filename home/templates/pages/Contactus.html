@@ -1,4 +1,6 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+{% extends 'layouts/base.html' %} {% load static %} {% block content %} 
+
+{% include 'includes/pre-loader.html' %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +69,7 @@
           255,
           255,
           255,
-          0.8
+          255
         ); /* Add semi-transparent white background */
         border-radius: 10px; /* Add rounded corners */
         padding: 30px; /* Add padding for better spacing */

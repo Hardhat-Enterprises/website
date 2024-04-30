@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle
 
 from . import views
@@ -26,6 +27,11 @@ urlpatterns = [
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+    
+    # Email OTP
+    
+    path("verify-email/<slug:email>", views.verify_email, name="verify-email"),
+    path("resend-otp", views.resend_otp, name="resend-otp"),
 
 
     #Statistics
