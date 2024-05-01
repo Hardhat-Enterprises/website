@@ -200,7 +200,10 @@ def secure_code_review(request):
 @login_required
 def dashboard(request):
     user = request.user
-    student = Student.objects.get(user=user)
+    try:
+        student = Student.objects.get(user=user)
+    except Student.DoesNotExist:
+        return redirect('/joinus')
     progress = Progress.objects.filter(student=student)
     context = {'user': user, 'student': student, 'progress': progress}
     return render(request, 'pages/dashboard.html', context)
