@@ -1,12 +1,8 @@
-{% extends "layouts/base.html" %} {% load static %} 
-
-{% block header %} 
-{% include 'includes/navigation.html' %}
-{% endblock header %} 
-{% block content %}
+{% extends "layouts/base.html" %} {% load static %} {% block header %} 
+{% include 'includes/navigation.html' %} {% endblock header %} {% block content %}
 
 <main>
-{% include 'includes/pre-loader.html' %}
+  {% include 'includes/pre-loader.html' %}
   <style>
     form {
       width: 500px;
@@ -39,7 +35,5 @@
     <p>Need a new OTP? <a href="{% url 'resend-otp' %}">Resend OTP</a></p>
   </form>
 </main>
-{% endblock content %}
-
-{% block footer %} {% include 'includes/footer.html' %}
+{% endblock content %} {% block footer %} {% include 'includes/footer.html' %}
 {% endblock footer %}
