@@ -27,10 +27,11 @@ urlpatterns = [
     # path('', include('theme_pixel.urls')),
     path('about-us/', views.about_us, name='about_us'),
     path('contact', views.contact, name='contact'),
+    path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
     
-     # blog
+    # blog
     #path('admin/', admin.site.urls),
     # path('blog/', include('blogs.urls')),
     #path('', include('blogs.urls')),

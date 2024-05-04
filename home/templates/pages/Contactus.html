@@ -1,127 +1,174 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %} 
+
+{% include 'includes/pre-loader.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title> <!-- Updated form title -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us</title>
+    <!-- Updated form title -->
     <!-- Added Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <!-- Link to custom CSS file -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif; /* Set a fallback font family */
-        }
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif; /* Set a fallback font family */
+      }
 
-        .container-fluid {
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('contactus.png'); /* Add background image */
-            background-size: cover; /* Make sure the background covers the entire viewport */
-            background-repeat: no-repeat; /* Prevent background from repeating */
-            padding: 20px; /* Add some padding for better spacing */
-        }
+      .container-fluid {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: url("contactus.png"); /* Add background image */
+        background-size: cover; /* Make sure the background covers the entire viewport */
+        background-repeat: no-repeat; /* Prevent background from repeating */
+        padding: 20px; /* Add some padding for better spacing */
+      }
 
-        .contact-box {
-            color: #ffffff; /* Change text color to white */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add shadow to text for better readability */
-        }
+      .contact-box {
+        color: #ffffff; /* Change text color to white */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add shadow to text for better readability */
+      }
 
-        .contact-box h4 {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px; /* Add spacing below heading */
-        }
+      .contact-box h4 {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px; /* Add spacing below heading */
+      }
 
-        .contact-box p {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px; /* Add spacing below paragraphs */
-        }
+      .contact-box p {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px; /* Add spacing below paragraphs */
+      }
 
-        .contact-box ul {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px; /* Add spacing below list */
-            list-style-type: none; /* Remove default list styles */
-            padding-left: 0; /* Remove default padding */
-        }
+      .contact-box ul {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px; /* Add spacing below list */
+        list-style-type: none; /* Remove default list styles */
+        padding-left: 0; /* Remove default padding */
+      }
 
-        .contact-box ul li {
-            margin-bottom: 5px; /* Add spacing between list items */
-        }
+      .contact-box ul li {
+        margin-bottom: 5px; /* Add spacing between list items */
+      }
 
-        .Recruitment {
-            background-color: rgba(255, 255, 255, 0.8); /* Add semi-transparent white background */
-            border-radius: 10px; /* Add rounded corners */
-            padding: 30px; /* Add padding for better spacing */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow effect */
-        }
+      .Recruitment {
+        background-color: rgba(
+          255,
+          255,
+          255,
+          255
+        ); /* Add semi-transparent white background */
+        border-radius: 10px; /* Add rounded corners */
+        padding: 30px; /* Add padding for better spacing */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add subtle shadow effect */
+      }
 
-        .Recruitment h1 {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 30px; /* Add spacing below heading */
-        }
+      .Recruitment h1 {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 30px; /* Add spacing below heading */
+      }
 
-        .form-group label {
-            font-weight: bold; /* Make labels bold */
-        }
+      .form-group label {
+        font-weight: bold; /* Make labels bold */
+      }
 
-        .btn-primary {
-            font-weight: bold; /* Make button text bold */
-        }
+      .btn-primary {
+        font-weight: bold; /* Make button text bold */
+      }
     </style>
-</head>
-<body>
-
-<div class="container-fluid p-0">
-    <div class="row no-gutters">
+  </head>
+  <body>
+    <div class="container-fluid p-0">
+      <div class="row no-gutters">
         <div class="col-md-6 contact-section">
-            <div class="contact-box">
-                <h4>Contact us</h4>
-                <p>For further information, please contact us using the details below:</p>
-                <ul>
-                    <li>Email: hardhat@gmail.com</li>
-                    <li>Phone No.: 04******</li>
-                    <li>Address: 221 Burwood Hwy, Burwood VIC 3125</li>
-                </ul>
-            </div>
+          <div class="contact-box">
+            <h4>Contact us</h4>
+            <p>
+              For further information, please contact us using the details
+              below:
+            </p>
+            <ul>
+              <li>Email: hardhat@gmail.com</li>
+              <li>Phone No.: 04******</li>
+              <li>Address: 221 Burwood Hwy, Burwood VIC 3125</li>
+            </ul>
+          </div>
         </div>
         <div class="col-md-6 recruitment-section">
-            <div class="Recruitment">
-                <h1 class="text-center mb-4">Contact Us</h1> <!-- Updated form title -->
-                <form>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea class="form-control" id="message" rows="4" placeholder="Enter your message"></textarea>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
+          <div class="Recruitment">
+            <h1 class="text-center mb-4">Contact Us</h1>
+            <!-- Updated form title -->
+            <form action="/contact-central" method="post">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="name">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    required
+                  />
+                </div>
+                {% comment %}
+                <div class="form-group col-md-6">
+                  <label for="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lastName"
+                    placeholder="Enter your last name"
+                    required
+                  />
+                </div>
+                {% endcomment %}
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea
+                  class="form-control"
+                  id="message"
+                  name="message"
+                  rows="4"
+                  placeholder="Enter your message"
+                ></textarea>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+              {% csrf_token %}
+            </form>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
-</body>
+  </body>
 </html>
+
+{% endblock content %}
