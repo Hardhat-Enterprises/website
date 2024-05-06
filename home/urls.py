@@ -22,9 +22,12 @@ urlpatterns = [
     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+    path('dashboard', views.dashboard, name='dashboard'),
     # path('contact-central/', views.Contact_central, name='contact-central'),
     
-
+    
+    # Search result page
+    path('search_results/', views.search_results, name='pages/search-results'),
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),

@@ -131,6 +131,15 @@ def upskill_roadmap(request):
 def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
 
+#Search-Results page
+
+def search_results(request):
+    if request.method == 'POST':
+        searched = request.POST['q']
+        return render(request, 'pages/search-results.html', {"searched" :searched})
+    else:
+        return render(request, 'pages/search-results.html', {})
+    
 
 
 # Authentication
