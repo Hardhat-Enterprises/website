@@ -1,8 +1,9 @@
-
-{% extends 'layouts/base.html' %} {% load static %} {% block header %} {% endblock header %} {% block content %}
+{% extends 'layouts/base.html' %} {% load static %} {% block header %} 
+ {% include 'includes/navigation.html'%}
+{% endblock header %} {% block content %}
 <main>
-  {% include 'includes/pre-loader.html' %} {% include 'includes/navigation.html' %}
-  
+  {% include 'includes/pre-loader.html' %}
+
   <!-- Section -->
   <section
     class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
@@ -10,11 +11,11 @@
   >
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 d-flex align-items-center justify-content-center">
+        <div class="col-17 d-flex align-items-center justify-content-center">
           <div
             class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
           >
-            <div class="text-center text-md-center mb-4 mt-md-0">
+            <div class="text-center text-md-center mb-4 mt-md-6">
               <img
                 src="{% static 'assets/img/pages/login/favicon.ico' %}"
                 alt="Logo"
@@ -61,8 +62,6 @@
     </div>
   </section>
   {% include 'includes/footer.html' %}
-  
 </main>
-
 
 {% endblock content %} {% block footer %}{% endblock footer %}
