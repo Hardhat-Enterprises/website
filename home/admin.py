@@ -8,14 +8,8 @@ from .models import (
     Progress,
     Contact,
 
-    # Contact_central,
+    # Contact_central, OtpToken
     Article, 
-    OtpToken,
-
-
-    
-    
-    
     Smishingdetection_join_us
 
 
@@ -67,7 +61,7 @@ class ContactAdmin(admin.ModelAdmin):
 class OtpTokenAdmin(admin.ModelAdmin):
     list_display = ("user", "otp_code")
 
-admin.site.register(OtpToken, OtpTokenAdmin)
+#admin.site.register(OtpToken, OtpTokenAdmin)
 
 
 

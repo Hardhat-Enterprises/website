@@ -191,7 +191,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'error'
 }
 
-
+EMAIL_HOST_USER = {'kaviuln@gmail.com'}
 
 MESSAGE_TAGS = {
     messages.SUCCESS: 'success'

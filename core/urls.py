@@ -41,6 +41,8 @@ urlpatterns = [
     #path('accounts/', include('users.urls')),
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
+    
+    path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
