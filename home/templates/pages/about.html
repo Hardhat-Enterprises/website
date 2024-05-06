@@ -30,7 +30,7 @@
     </div>
   </section>
   <!-- End of Hero section -->
-  <!-- Section -->
+ <!-- Section -->
   <section class="section section-md">
     <div class="container">
       <div class="row align-items-center justify-content-around">
@@ -63,7 +63,7 @@
   <section class="section section-lg pt-0">
     <div class="container">
       <div class="row">
-        <div class="col-md-4 col-lg-4 text-center">
+        {% comment %} <div class="col-md-4 col-lg-4 text-center">
           <!-- Visit Box -->
           <div class="icon-box mb-4">
             <div class="icon icon-primary mb-4">
@@ -79,13 +79,56 @@
           <div class="icon-box mb-4">
             <div class="icon icon-primary mb-4">
               <span class="fas fa-money-check"></span>
-            </div>
-            <h3 class="h5">Projects Secured</h3>
-            <span class="counter display-3 text-gray d-block">12</span>
+            </div> {% endcomment %}
+
+        </section>
+        <!-- End of section -->
+        <!-- Section -->
+        <section class="section section-lg pt-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 text-center">
+                        <!-- Visit Box -->
+                        <div class="icon-box mb-4">
+                            <div class="icon icon-primary mb-4">
+                                <span class="fas fa-user"></span>
+                            </div>
+                            <h3 class="h5">Team Members</h3>
+                            <span class="counter display-3 text-gray d-block">60</span>
+                        </div>
+                        <!-- End of Visit Box -->
+                    </div>
+                    <div class="col-md-4 col-lg-4 text-center">
+                        <!-- Call Box -->
+                        <div class="icon-box mb-4">
+                            <div class="icon icon-primary mb-4">
+                                <span class="fas fa-money-check"></span>
+                            </div>
+                            <h3 class="h5">Projects Secured</h3>
+                            <span class="counter display-3 text-gray d-block">12</span>
+                        </div>
+                        <!-- End of Call Box -->
+                    </div>
+                    <div class="col-md-4 col-lg-4 text-center">
+                        <!-- Email Box -->
+                        <div class="icon-box mb-4">
+                            <div class="icon icon-primary mb-4">
+                                {% comment %} <span class="fa-solid fa-triangle-exclamation"></span> {% endcomment %}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35.75" width="36" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
+                            </div>
+                            <h3 class="h5">Threats found</h3>
+                            <span class="counter display-3 text-gray d-block">150+</span>
+                        </div>
+                        <!-- End of Email Box -->
+                    </div>
+                </div>
+
+            {% comment %} <h3 class="h5">Projects Secured</h3>
+            <span class="counter display-3 text-gray d-block">12</span> {% endcomment %}
           </div>
           <!-- End of Call Box -->
         </div>
-        <div class="col-md-4 col-lg-4 text-center">
+        {% comment %} <div class="col-md-4 col-lg-4 text-center">
           <!-- Email Box -->
           <div class="icon-box mb-4">
             <div class="icon icon-primary mb-4">
@@ -107,11 +150,12 @@
             <span class="counter display-3 text-gray d-block">150+</span>
           </div>
           <!-- End of Email Box -->
-        </div>
+        </div> {% endcomment %}
       </div>
     </div>
   </section>
   <!-- End of section -->
+
   <!-- Section -->
   <section class="section section-lg bg-gray-200">
     <figure
@@ -182,6 +226,7 @@
                   reliable services.
                 </p>
               </div>
+
             </div>
           </div>
         </div>

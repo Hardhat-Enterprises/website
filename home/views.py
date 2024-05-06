@@ -13,11 +13,15 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.mail import send_mail
+# from Website.settings import EMAIL_HOST_USER
+import random
 
 
 import os
@@ -30,7 +34,7 @@ from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserP
 
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
-from .models import Student, Project, Progress, OtpToken
+from .models import Student, Project, Progress
 
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
@@ -132,14 +136,23 @@ def logout_view(request):
 
 
 def register(request):
+    form = RegistrationForm()
     if request.method == 'POST':
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
         form = RegistrationForm(request.POST)
+        
         if form.is_valid():
-            form.save()
+            #form.save()
+            otp = random.randint(100000, 999999)
+            send_mail("User Data:", f"Verify Your Mail with the OTP: /n {otp}", "kaviuln@gmail.com", [email], fail_silently=False)
             print("Account created successfully! An OTP was sent to your email. Check!")
-            # messages.success(request, "Account created successfully! An OTP was sent to your email! check message")
-            return redirect('/accounts/login')
-           # return redirect('/accounts/verify_token')
+            messages.success(request, "Account created successfully!")
+            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
+            # return redirect("verify-email", username=request.POST['first_name'])
         else:
             print("Registration failed!")
     else:
@@ -147,7 +160,24 @@ def register(request):
 
     context = { 'form': form }
     return render(request, 'accounts/sign-up.html', context)
-
+ 
+@csrf_exempt
+def VerifyOTP(request):
+    if request.method == "POST":
+        userotp = request.POST.get('otp')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        
+        if password1 == password2:
+            form = User(first_name=first_name, last_name=last_name, email=email, password=password1)
+            form.save()
+            
+        print("OTP: ", userotp)
+    return JsonResponse({'data': 'Hello'}, status=200)  
+   
 # def signup(request):
 #     form = RegisterForm()
 #     if request.method == 'POST':
@@ -161,77 +191,77 @@ def register(request):
 
 
 # Email Verification 
-def verify_email(request, username):
-    user = get_user_model().objects.get(username=username)
-    user_otp = OtpToken.objects.filter(user=user).last()
+# def verify_email(request, first_name):
+#     user = get_user_model().objects.get(username=first_name)
+#     user_otp = OtpToken.objects.filter(user=user).last()
     
     
-    if request.method == 'POST':
-        # valid token
-        if user_otp.otp_code == request.POST['otp_code']:
+#     if request.method == 'POST':
+#         # valid token
+#         if user_otp.otp_code == request.POST['otp_code']:
             
-            # checking for expired token
-            if user_otp.otp_expires_at > timezone.now():
-                user.is_active=True
-                user.save()
-                messages.success(request, "Account activated successfully!! You can Login.")
-                return redirect("signin")
+#             # checking for expired token
+#             if user_otp.otp_expires_at > timezone.now():
+#                 user.is_active=True
+#                 user.save()
+#                 messages.success(request, "Account activated successfully!! You can Login.")
+#                 return redirect("signin")
             
-            # expired token
-            else:
-                messages.warning(request, "The OTP has expired, get a new OTP!")
-                return redirect("verify-email", username=user.username)
+#             # expired token
+#             else:
+#                 messages.warning(request, "The OTP has expired, get a new OTP!")
+#                 return redirect("verify-email", username=user.first_name)
         
         
-        # invalid otp code
-        else:
-            messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
-            return redirect("verify-email", username=user.username)
+#         # invalid otp code
+#         else:
+#             messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
+#             return redirect("verify-email", username=user.first_name)
         
-    context = {}
-    return render(request, "verify_token.html", context)
+#     context = {}
+#     return render(request, "verify_token.html", context)
 
 
-def resend_otp(request):
-    if request.method == 'POST':
-        user_email = request.POST["otp_email"]
+# def resend_otp(request):
+#     if request.method == 'POST':
+#         user_email = request.POST["otp_email"]
         
-        if get_user_model().objects.filter(email=user_email).exists():
-            user = get_user_model().objects.get(email=user_email)
-            otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
+#         if get_user_model().objects.filter(email=user_email).exists():
+#             user = get_user_model().objects.get(email=user_email)
+#             otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
             
             
-            # email variables
-            subject="Email Verification"
-            message = f"""
-                                Hi {user.username}, here is your OTP {otp.otp_code} 
-                                it expires in 5 minute, use the url below to redirect back to the website
-                                http://127.0.0.1:8000/verify-email/{user.username}
+#             # email variables
+#             subject="Email Verification"
+#             message = f"""
+#                                 Hi {user.username}, here is your OTP {otp.otp_code} 
+#                                 it expires in 5 minute, use the url below to redirect back to the website
+#                                 http://127.0.0.1:8000/verify-email/{user.username}
                                 
-                                """
-            sender = "kaviuln@gmail.com"
-            receiver = [user.email, ]
+#                                 """
+#             sender = "kaviuln@gmail.com"
+#             receiver = [user.email, ]
         
         
-            # send email
-            send_mail(
-                    subject,
-                    message,
-                    sender,
-                    receiver,
-                    fail_silently=False,
-                )
+#             # send email
+#             send_mail(
+#                     subject,
+#                     message,
+#                     sender,
+#                     receiver,
+#                     fail_silently=False,
+#                 )
             
-            messages.success(request, "A new OTP has been sent to your email-address")
-            return redirect("verify-email", username=user.username)
+#             messages.success(request, "A new OTP has been sent to your email-address")
+#             return redirect("verify-email", username=user.first_name)
 
-        else:
-            messages.warning(request, "This email dosen't exist in the database")
-            return redirect("resend-otp")
+#         else:
+#             messages.warning(request, "This email dosen't exist in the database")
+#             return redirect("resend-otp")
         
            
-    context = {}
-    return render(request, "resend_otp.html", context)
+#     context = {}
+#     return render(request, "resend_otp.html", context)
 
 
 class UserPasswordResetView(PasswordResetView):
