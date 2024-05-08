@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.db.models import Count
 from django.http import JsonResponse
@@ -16,6 +17,7 @@ from django.views.generic import ListView, DetailView
 from .models import Article, Student, Project, Contact_central, Contact
 import os
 from .models import Smishingdetection_join_us
+import json
 
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
@@ -23,7 +25,7 @@ from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserP
 
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
-from .models import Student, Project, Progress
+from .models import Student, Project, Progress, Skill
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
@@ -211,10 +213,24 @@ def dashboard(request):
 def update_progress(request, progress_id):
     progress = get_object_or_404(Progress, id=progress_id)
     if request.method == 'POST':
-        new_progress = request.POST.get('progress')
+        data = json.loads(request.body)
+        new_progress = data.get('progress')
+
+        print(f'Received new_progress: {new_progress}')  # Debugging line
+
+        if new_progress is None:
+            new_progress = 0 
+        else:
+            new_progress = int(new_progress)
+
         progress.progress = new_progress
         progress.save()
-    return redirect('dashboard')
+
+        print(f'Saved new_progress: {progress.progress}')  # Debugging line
+
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
 def contact(request):
     if request.method=='POST':
@@ -263,5 +279,61 @@ class LikeArticle(View):
             article.likes.add(request.user.id)
         article.save()
         return redirect('detail_article', pk)
+
+
+class UpskillingView(LoginRequiredMixin, ListView):
+    login_url = '/accounts/login/' 
+    model = Skill
+    template_name = 'pages/upskilling.html'  
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            student = Student.objects.get(user=self.request.user)
+            # Get the progress objects for the student
+            progress = Progress.objects.filter(student=student)
+            # Return the associated skills
+            return [p.skill for p in progress]
+        else:
+            return self.model.objects.none()
+
+class UpskillingSkillView(LoginRequiredMixin, DetailView):
+    login_url = '/accounts/login/'  
+    model = Skill
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            student = Student.objects.get(user=self.request.user)
+            # Check if the progress objects for the student exist
+            if not Progress.objects.filter(student=student).exists():
+                # If not, redirect to the home page
+                return redirect('/')
+            try:
+                # Get the progress associated with the student and the current skill
+                progress = Progress.objects.get(student=student, skill=self.get_object())
+                # If progress does not exist, redirect to home page
+            except Progress.DoesNotExist:
+                return redirect('/')
+        # Otherwise, proceed as usual
+        return super().get(request, *args, **kwargs)
+
+    def get_template_names(self):
+        return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            # Get the student
+            student = Student.objects.get(user=self.request.user)
+
+            # Get the progress associated with the student and the current skill
+            progress = Progress.objects.get(student=student, skill=self.object)
+            # Add the progress_id to the context
+            context['progress_id'] = progress.id
+
+        return context
+
 
 

@@ -12,7 +12,7 @@ from .models import (
     
     Contact_central,
     Article,
-    Smishingdetection_join_us
+    Smishingdetection_join_us,
 
 )
 
