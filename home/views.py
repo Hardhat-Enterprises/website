@@ -40,7 +40,7 @@ from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserP
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 
 from .models import Student, Project, Progress, Skill
-=======
+
 #from .models import Student, Project, Progress
 
 
