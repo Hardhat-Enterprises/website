@@ -9,7 +9,11 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
+
+from django.utils.text import slugify
+
 import secrets
+
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
@@ -89,6 +93,13 @@ class Course(AbstractBaseSet):
     def __str__(self) -> str:
         return self.title
 
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    slug = models.SlugField(blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Student(AbstractBaseSet):
 
@@ -133,14 +144,13 @@ class Student(AbstractBaseSet):
     p2 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p2", blank=False, null=False)
     p3 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p3", blank=False, null=False)
     allocated = models.ForeignKey(Project, on_delete=PROTECT, related_name="allocated", blank=True, null=True)
-
+    skills = models.ManyToManyField(Skill, through='Progress')
+    
     def __str__(self) -> str:
         return str(self.user)
 
     
-class Skill(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
+
 
 
 class Contact(models.Model):
@@ -162,12 +172,16 @@ class Contact(models.Model):
 
 
 class Progress(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
-    progress = models.IntegerField()
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    skill = models.ForeignKey('Skill', on_delete=models.CASCADE)
+    progress = models.IntegerField(default=0)
+    completed = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('student', 'skill')
 
     def __str__(self):
-        return f'{self.student} - {self.skill}: {self.progress}%'
+        return f'{self.student} - {self.skill}: {"Completed" if self.completed else "Not completed"}'
 
 
 class Article(models.Model):
@@ -179,11 +193,11 @@ class Article(models.Model):
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
 
-class OtpToken(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
-    otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
-    tp_created_at = models.DateTimeField(auto_now_add=True)
-    otp_expires_at = models.DateTimeField(blank=True, null=True)
+# class OtpToken(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
+#     otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
+#     tp_created_at = models.DateTimeField(auto_now_add=True)
+#     otp_expires_at = models.DateTimeField(blank=True, null=True)
     
     
     def __str__(self):
