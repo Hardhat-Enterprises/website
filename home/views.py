@@ -16,7 +16,8 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us
+
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -130,6 +131,43 @@ def smishingdetection_join_us(request):
     else:
         form = sd_JoinUsForm()
     return render(request, 'pages/smishing_detection/join_us.html', {'form': form})
+
+# Upskill Pages
+def upskill_repository(request):
+    return render(request), 'pages/upskilling/repository.html'
+
+def upskill_roadmap(request):
+    return render(request), 'pages/upskilling/roadmap.html'
+
+def upskill_progress(request):
+    return render(request), 'pages/upskilling/progress.html'
+
+#Search-Results page
+def search_results(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        
+        webpages = Webpage.objects.filter(title__contains=searched)
+        return render(request, 'pages/search-results.html',
+            {'searched':searched, 
+            'webpages':webpages})
+    else:
+        return render(request, 'pages/search-results.html', {})
+    
+#    if request.method == 'GET':
+#        searched = request.GET.get('searched')
+#        results = None
+#        if searched:
+#            results = Webpage.objects.filter(url__icontains=searched)
+#        return render(request, 'pages/search-results.html', {})
+
+# 
+    
+##def dynamic_articles_view(request):
+##    context['object_list'] = article.objects.filter(title__icontains=request.GET.get('search'))
+##    return render(request, "encyclopedia/article_detail.html", context)
+    
+
 
 # Authentication
 
@@ -285,7 +323,9 @@ class UserPasswordChangeView(PasswordChangeView):
     form_class = UserPasswordChangeForm
 
 def resources_view(request):
-    return render(request, 'pages/resources.html')
+    return render(request, 'pages/resources.html.')
+    
+
 
 # Chart Views
 
@@ -410,6 +450,8 @@ class LikeArticle(View):
             article.likes.add(request.user.id)
         article.save()
         return redirect('detail_article', pk)
+
+
 
 
 class UpskillingView(LoginRequiredMixin, ListView):

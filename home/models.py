@@ -74,6 +74,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+#Search Bar Models:
+
+class Webpage(AbstractBaseSet):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
+    url = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    
+    def __str__(self) -> str:
+        return self.title
+
+
 class Project(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
@@ -90,7 +101,7 @@ class Course(AbstractBaseSet):
     code = models.CharField(_("course code"), max_length=150, blank=True)
     is_postgraduate = models.BooleanField(_("postgraduate status"), default=False)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
 
 class Skill(models.Model):
@@ -151,6 +162,14 @@ class Student(AbstractBaseSet):
 
     
 
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    def __str__(self):
+        return self.name
+
+
+
 
 
 class Contact(models.Model):
@@ -181,7 +200,11 @@ class Progress(models.Model):
         unique_together = ('student', 'skill')
 
     def __str__(self):
+
+        return f'{self.student} - {self.skill.name}: {self.progress}%'
+
         return f'{self.student} - {self.skill}: {"Completed" if self.completed else "Not completed"}'
+
 
 
 class Article(models.Model):
