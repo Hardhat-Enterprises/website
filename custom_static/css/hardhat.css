@@ -19370,4 +19370,10 @@ blockquote {
 .ct-line {
   pointer-events: none; }
 
+
+.tools-link{
+  p{
+    color: #000000;
+  }
+}
 /*# sourceMappingURL=pixel.css.map */
