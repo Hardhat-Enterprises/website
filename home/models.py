@@ -162,11 +162,11 @@ class Student(AbstractBaseSet):
 
     
 
-class Skill(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    def __str__(self):
-        return self.name
+# class Skill(models.Model):
+#     name = models.CharField(max_length=255)
+#     description = models.TextField()
+#     def __str__(self):
+#         return self.name
 
 
 
@@ -223,8 +223,8 @@ class Article(models.Model):
 #     otp_expires_at = models.DateTimeField(blank=True, null=True)
     
     
-    def __str__(self):
-        return self.user.email
+    # def __str__(self):
+    #     return self.user.email
 
 class Smishingdetection_join_us(models.Model):
     name= models.CharField(max_length=100)
