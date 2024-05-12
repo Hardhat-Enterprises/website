@@ -7,11 +7,15 @@ from .models import (
     Skill,
     Progress,
     Contact,
+
     Webpage,
 
-    # Contact_central, OtpToken
-    Article, 
-    Smishingdetection_join_us
+    
+    # Contact_central,
+    Article,
+    Smishingdetection_join_us,
+
+
 
 
 )

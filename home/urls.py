@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView
 
 from . import views
 
@@ -18,11 +18,21 @@ urlpatterns = [
     path('maintenance', views.http_503, name='maintenance'),
     path('ptgui_viz/faq/', views.faq, name='faq'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
+
+    #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
+    path('upskilling/', UpskillingView.as_view(), name='upskilling'),
+    path('upskilling/<slug:slug>/', UpskillingSkillView.as_view(), name='upskilling_skill'),
+    path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
+
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
+
     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
     path('dashboard/', views.dashboard, name='dashboard'),
+
+
+
     # path('contact-central/', views.Contact_central, name='contact-central'),
     
     
