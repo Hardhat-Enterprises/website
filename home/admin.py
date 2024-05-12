@@ -69,8 +69,8 @@ class Webpage(admin.ModelAdmin):
 # class Contact_centralAdmin(admin.ModelAdmin):
 #     list_display = [field.name for field in Contact_central._meta.fields]
 
-class OtpTokenAdmin(admin.ModelAdmin):
-    list_display = ("user", "otp_code")
+# class OtpTokenAdmin(admin.ModelAdmin):
+#     list_display = ("user", "otp_code")
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
 
