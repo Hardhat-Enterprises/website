@@ -70,6 +70,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+#Search Bar Models:
+
+class Webpage(AbstractBaseSet):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
+    url = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    
+    def __str__(self) -> str:
+        return self.title
+
+
 class Project(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
@@ -86,7 +97,7 @@ class Course(AbstractBaseSet):
     code = models.CharField(_("course code"), max_length=150, blank=True)
     is_postgraduate = models.BooleanField(_("postgraduate status"), default=False)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
 
 

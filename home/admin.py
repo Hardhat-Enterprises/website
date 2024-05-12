@@ -7,6 +7,7 @@ from .models import (
     Skill,
     Progress,
     Contact,
+    Webpage,
 
     # Contact_central, OtpToken
     Article, 
@@ -54,6 +55,12 @@ class ProgressAdmin(admin.ModelAdmin):
 class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
     
+#Webpage Search Model
+@admin.register(Webpage)
+class Webpage(admin.ModelAdmin):
+    list_display = [field.name for field in Webpage._meta.fields]
+    
+    
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):
 #     list_display = [field.name for field in Contact_central._meta.fields]
@@ -62,6 +69,8 @@ class OtpTokenAdmin(admin.ModelAdmin):
     list_display = ("user", "otp_code")
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
+
+
 
 
 

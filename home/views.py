@@ -15,7 +15,8 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us
+
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -134,13 +135,29 @@ def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
 
 #Search-Results page
-
 def search_results(request):
-    if request.method == 'POST':
-        searched = request.POST['q']
-        return render(request, 'pages/search-results.html', {"searched" :searched})
+    if request.method == "POST":
+        searched = request.POST['searched']
+        
+        webpages = Webpage.objects.filter(title__contains=searched)
+        return render(request, 'pages/search-results.html',
+            {'searched':searched, 
+            'webpages':webpages})
     else:
         return render(request, 'pages/search-results.html', {})
+    
+#    if request.method == 'GET':
+#        searched = request.GET.get('searched')
+#        results = None
+#        if searched:
+#            results = Webpage.objects.filter(url__icontains=searched)
+#        return render(request, 'pages/search-results.html', {})
+
+# 
+    
+##def dynamic_articles_view(request):
+##    context['object_list'] = article.objects.filter(title__icontains=request.GET.get('search'))
+##    return render(request, "encyclopedia/article_detail.html", context)
     
 
 
