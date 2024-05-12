@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
+from .models import User
 from django.utils import timezone
 from django.core.mail import send_mail
 # from Website.settings import EMAIL_HOST_USER
@@ -236,78 +236,6 @@ def VerifyOTP(request):
 #     return render(request, "signup.html", context)
 
 
-# Email Verification 
-# def verify_email(request, first_name):
-#     user = get_user_model().objects.get(username=first_name)
-#     user_otp = OtpToken.objects.filter(user=user).last()
-    
-    
-#     if request.method == 'POST':
-#         # valid token
-#         if user_otp.otp_code == request.POST['otp_code']:
-            
-#             # checking for expired token
-#             if user_otp.otp_expires_at > timezone.now():
-#                 user.is_active=True
-#                 user.save()
-#                 messages.success(request, "Account activated successfully!! You can Login.")
-#                 return redirect("signin")
-            
-#             # expired token
-#             else:
-#                 messages.warning(request, "The OTP has expired, get a new OTP!")
-#                 return redirect("verify-email", username=user.first_name)
-        
-        
-#         # invalid otp code
-#         else:
-#             messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
-#             return redirect("verify-email", username=user.first_name)
-        
-#     context = {}
-#     return render(request, "verify_token.html", context)
-
-
-# def resend_otp(request):
-#     if request.method == 'POST':
-#         user_email = request.POST["otp_email"]
-        
-#         if get_user_model().objects.filter(email=user_email).exists():
-#             user = get_user_model().objects.get(email=user_email)
-#             otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
-            
-            
-#             # email variables
-#             subject="Email Verification"
-#             message = f"""
-#                                 Hi {user.username}, here is your OTP {otp.otp_code} 
-#                                 it expires in 5 minute, use the url below to redirect back to the website
-#                                 http://127.0.0.1:8000/verify-email/{user.username}
-                                
-#                                 """
-#             sender = "kaviuln@gmail.com"
-#             receiver = [user.email, ]
-        
-        
-#             # send email
-#             send_mail(
-#                     subject,
-#                     message,
-#                     sender,
-#                     receiver,
-#                     fail_silently=False,
-#                 )
-            
-#             messages.success(request, "A new OTP has been sent to your email-address")
-#             return redirect("verify-email", username=user.first_name)
-
-#         else:
-#             messages.warning(request, "This email dosen't exist in the database")
-#             return redirect("resend-otp")
-        
-           
-#     context = {}
-#     return render(request, "resend_otp.html", context)
 
 
 class UserPasswordResetView(PasswordResetView):

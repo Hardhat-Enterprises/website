@@ -216,15 +216,6 @@ class Article(models.Model):
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
 
-# class OtpToken(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
-#     otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
-#     tp_created_at = models.DateTimeField(auto_now_add=True)
-#     otp_expires_at = models.DateTimeField(blank=True, null=True)
-    
-    
-    # def __str__(self):
-    #     return self.user.email
 
 class Smishingdetection_join_us(models.Model):
     name= models.CharField(max_length=100)
