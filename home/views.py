@@ -7,20 +7,29 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.db.models import Count
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us
+
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
+from .models import User
 from django.utils import timezone
 from django.core.mail import send_mail
+# from Website.settings import EMAIL_HOST_USER
+import random
 
 
 import os
+
+from .models import Smishingdetection_join_us
+import json
 
 
 
@@ -30,7 +39,11 @@ from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserP
 
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
-from .models import Student, Project, Progress, OtpToken
+
+from .models import Student, Project, Progress, Skill
+
+#from .models import Student, Project, Progress
+
 
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
@@ -119,6 +132,43 @@ def smishingdetection_join_us(request):
         form = sd_JoinUsForm()
     return render(request, 'pages/smishing_detection/join_us.html', {'form': form})
 
+# Upskill Pages
+def upskill_repository(request):
+    return render(request), 'pages/upskilling/repository.html'
+
+def upskill_roadmap(request):
+    return render(request), 'pages/upskilling/roadmap.html'
+
+def upskill_progress(request):
+    return render(request), 'pages/upskilling/progress.html'
+
+#Search-Results page
+def search_results(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        
+        webpages = Webpage.objects.filter(title__contains=searched)
+        return render(request, 'pages/search-results.html',
+            {'searched':searched, 
+            'webpages':webpages})
+    else:
+        return render(request, 'pages/search-results.html', {})
+    
+#    if request.method == 'GET':
+#        searched = request.GET.get('searched')
+#        results = None
+#        if searched:
+#            results = Webpage.objects.filter(url__icontains=searched)
+#        return render(request, 'pages/search-results.html', {})
+
+# 
+    
+##def dynamic_articles_view(request):
+##    context['object_list'] = article.objects.filter(title__icontains=request.GET.get('search'))
+##    return render(request, "encyclopedia/article_detail.html", context)
+    
+
+
 # Authentication
 
 class UserLoginView(LoginView):
@@ -132,14 +182,23 @@ def logout_view(request):
 
 
 def register(request):
+    form = RegistrationForm()
     if request.method == 'POST':
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
         form = RegistrationForm(request.POST)
+        
         if form.is_valid():
-            form.save()
+            #form.save()
+            otp = random.randint(100000, 999999)
+            send_mail("User Data:", f"Verify Your Mail with the OTP: /n {otp}", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
             print("Account created successfully! An OTP was sent to your email. Check!")
-            # messages.success(request, "Account created successfully! An OTP was sent to your email! check message")
-            return redirect('/accounts/login')
-           # return redirect('/accounts/verify_token')
+            messages.success(request, "Account created successfully!")
+            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
+            # return redirect("verify-email", username=request.POST['first_name'])
         else:
             print("Registration failed!")
     else:
@@ -147,7 +206,24 @@ def register(request):
 
     context = { 'form': form }
     return render(request, 'accounts/sign-up.html', context)
-
+ 
+@csrf_exempt
+def VerifyOTP(request):
+    if request.method == "POST":
+        userotp = request.POST.get('otp')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        
+        if password1 == password2:
+            form = User(first_name=first_name, last_name=last_name, email=email, password=password1)
+            form.save()
+            
+        print("OTP: ", userotp)
+    return JsonResponse({'data': 'Hello'}, status=200)  
+   
 # def signup(request):
 #     form = RegisterForm()
 #     if request.method == 'POST':
@@ -160,78 +236,6 @@ def register(request):
 #     return render(request, "signup.html", context)
 
 
-# Email Verification 
-def verify_email(request, username):
-    user = get_user_model().objects.get(username=username)
-    user_otp = OtpToken.objects.filter(user=user).last()
-    
-    
-    if request.method == 'POST':
-        # valid token
-        if user_otp.otp_code == request.POST['otp_code']:
-            
-            # checking for expired token
-            if user_otp.otp_expires_at > timezone.now():
-                user.is_active=True
-                user.save()
-                messages.success(request, "Account activated successfully!! You can Login.")
-                return redirect("signin")
-            
-            # expired token
-            else:
-                messages.warning(request, "The OTP has expired, get a new OTP!")
-                return redirect("verify-email", username=user.username)
-        
-        
-        # invalid otp code
-        else:
-            messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
-            return redirect("verify-email", username=user.username)
-        
-    context = {}
-    return render(request, "verify_token.html", context)
-
-
-def resend_otp(request):
-    if request.method == 'POST':
-        user_email = request.POST["otp_email"]
-        
-        if get_user_model().objects.filter(email=user_email).exists():
-            user = get_user_model().objects.get(email=user_email)
-            otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
-            
-            
-            # email variables
-            subject="Email Verification"
-            message = f"""
-                                Hi {user.username}, here is your OTP {otp.otp_code} 
-                                it expires in 5 minute, use the url below to redirect back to the website
-                                http://127.0.0.1:8000/verify-email/{user.username}
-                                
-                                """
-            sender = "kaviuln@gmail.com"
-            receiver = [user.email, ]
-        
-        
-            # send email
-            send_mail(
-                    subject,
-                    message,
-                    sender,
-                    receiver,
-                    fail_silently=False,
-                )
-            
-            messages.success(request, "A new OTP has been sent to your email-address")
-            return redirect("verify-email", username=user.username)
-
-        else:
-            messages.warning(request, "This email dosen't exist in the database")
-            return redirect("resend-otp")
-        
-           
-    context = {}
-    return render(request, "resend_otp.html", context)
 
 
 class UserPasswordResetView(PasswordResetView):
@@ -247,7 +251,9 @@ class UserPasswordChangeView(PasswordChangeView):
     form_class = UserPasswordChangeForm
 
 def resources_view(request):
-    return render(request, 'pages/resources.html')
+    return render(request, 'pages/resources.html.')
+    
+
 
 # Chart Views
 
@@ -295,7 +301,10 @@ def secure_code_review(request):
 @login_required
 def dashboard(request):
     user = request.user
-    student = Student.objects.get(user=user)
+    try:
+        student = Student.objects.get(user=user)
+    except Student.DoesNotExist:
+        return redirect('/joinus')
     progress = Progress.objects.filter(student=student)
     context = {'user': user, 'student': student, 'progress': progress}
     return render(request, 'pages/dashboard.html', context)
@@ -303,10 +312,24 @@ def dashboard(request):
 def update_progress(request, progress_id):
     progress = get_object_or_404(Progress, id=progress_id)
     if request.method == 'POST':
-        new_progress = request.POST.get('progress')
+        data = json.loads(request.body)
+        new_progress = data.get('progress')
+
+        print(f'Received new_progress: {new_progress}')  # Debugging line
+
+        if new_progress is None:
+            new_progress = 0 
+        else:
+            new_progress = int(new_progress)
+
         progress.progress = new_progress
         progress.save()
-    return redirect('dashboard')
+
+        print(f'Saved new_progress: {progress.progress}')  # Debugging line
+
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
 def contact(request):
     if request.method=='POST':
@@ -355,5 +378,63 @@ class LikeArticle(View):
             article.likes.add(request.user.id)
         article.save()
         return redirect('detail_article', pk)
+
+
+
+
+class UpskillingView(LoginRequiredMixin, ListView):
+    login_url = '/accounts/login/' 
+    model = Skill
+    template_name = 'pages/upskilling.html'  
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            student = Student.objects.get(user=self.request.user)
+            # Get the progress objects for the student
+            progress = Progress.objects.filter(student=student)
+            # Return the associated skills
+            return [p.skill for p in progress]
+        else:
+            return self.model.objects.none()
+
+class UpskillingSkillView(LoginRequiredMixin, DetailView):
+    login_url = '/accounts/login/'  
+    model = Skill
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            student = Student.objects.get(user=self.request.user)
+            # Check if the progress objects for the student exist
+            if not Progress.objects.filter(student=student).exists():
+                # If not, redirect to the home page
+                return redirect('/')
+            try:
+                # Get the progress associated with the student and the current skill
+                progress = Progress.objects.get(student=student, skill=self.get_object())
+                # If progress does not exist, redirect to home page
+            except Progress.DoesNotExist:
+                return redirect('/')
+        # Otherwise, proceed as usual
+        return super().get(request, *args, **kwargs)
+
+    def get_template_names(self):
+        return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            # Get the student
+            student = Student.objects.get(user=self.request.user)
+
+            # Get the progress associated with the student and the current skill
+            progress = Progress.objects.get(student=student, skill=self.object)
+            # Add the progress_id to the context
+            context['progress_id'] = progress.id
+
+        return context
+
 
 

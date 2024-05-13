@@ -1,0 +1,35 @@
+{% extends 'pages/upskilling/skill_base.html' %} 
+{% load static %}
+
+{% block skill_content %}
+
+<div class="container">
+  <div id="sections" class="my-5">
+    <section class="section card mb-3 p-3">
+      <h2 class="card-title">Demo</h2>
+      <p class="card-text">Django uses a model-view-template structure...</p>
+    </section>
+
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Demo</h2>
+      <p class="card-text">In Django, you define your data models in Python...</p>
+    </section>
+
+    <!-- More sections... -->
+  </div>
+
+  <div class="d-flex justify-content-between">
+    <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
+    <button id="next-button" class="btn btn-primary">Next</button>
+    <button id="finishButton" class="btn btn-success" style="display: none">Finish</button>
+  </div>
+</div>
+
+<script>
+    window.progressId = "{{ progress_id }}";
+    window.csrfToken = "{{ csrf_token }}";
+</script>
+
+<script src="{% static 'skill_navigation.js' %}"></script>
+
+{% endblock %}

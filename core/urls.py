@@ -31,6 +31,9 @@ urlpatterns = [
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
     
+    # Search result page
+    path('search_results/', views.search_results, name='pages/search-results'),
+    
     # blog
     #path('admin/', admin.site.urls),
     # path('blog/', include('blogs.urls')),
@@ -38,6 +41,8 @@ urlpatterns = [
     #path('accounts/', include('users.urls')),
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
+    
+    path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),

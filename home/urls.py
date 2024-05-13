@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView
 
 from . import views
 
@@ -12,16 +12,32 @@ urlpatterns = [
     path('appattack/join', views.appattack_join, name='appattack_join'),
     path('malware_viz/products_and_services',
          views.products_services, name='malware_products'),
-    path('malware_viz', views.malwarehome, name='malware_viz_main'),
-    path('ptgui_viz', views.ptguihome, name='ptgui_viz_main'),
+    path('malware_viz/', views.malwarehome, name='malware_viz_main'),
+    path('ptgui_viz/', views.ptguihome, name='ptgui_viz_main'),
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
     path('ptgui_viz/faq/', views.faq, name='faq'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
+
+    #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
+    path('upskilling/', UpskillingView.as_view(), name='upskilling'),
+    path('upskilling/<slug:slug>/', UpskillingSkillView.as_view(), name='upskilling_skill'),
+    path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
+
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
+
+    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
+    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
+    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+
+
+
     # path('contact-central/', views.Contact_central, name='contact-central'),
     
-
+    
+    # Search result page
+    path('search_results/', views.search_results, name='pages/search-results'),
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
@@ -30,8 +46,9 @@ urlpatterns = [
     
     # Email OTP
     
-    path("verify-email/<slug:email>", views.verify_email, name="verify-email"),
-    path("resend-otp", views.resend_otp, name="resend-otp"),
+    path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
+    # path("verify-email", views.verify_email, name="verify-email"),
+    # path("resend-otp", views.resend_otp, name="resend-otp"),
 
 
     #Statistics
