@@ -21,19 +21,10 @@
   <section class="text-center">
     <h2>Your Upskilling Progress</h2>
     {% for p in progress %}
-    <form method="post" action="{% url 'update_progress' p.id %}">
-      {% csrf_token %}
+    <div>
       <label for="progress">{{ p.skill.name }}:</label>
-      <input
-        type="number"
-        id="progress"
-        name="progress"
-        value="{{ p.progress }}"
-        min="0"
-        max="100"
-      />
-      <input type="submit" value="Update" />
-    </form>
+      <span>{{ p.progress }}%</span>
+    </div>
     {% endfor %}
   </section>
 

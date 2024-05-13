@@ -56,7 +56,7 @@
     <link type="text/css" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
     
     <!-- Pixel CSS -->
-    <link type="text/css" href="{% static 'css/hardhat.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/hardhat.css' %}?v=2" rel="stylesheet">
     
 </head>
 
@@ -68,7 +68,35 @@
   
   {% endblock header %}
 
-  {% block content %}{% endblock content %}
+
+                  {% comment %}
+                    {% for result in results %}
+                        <li><a href="{{ result.url }}">{{ result.title }}</a></li>
+                    {% empty %}
+                        <li>No results found</li>
+                    {% endfor %}
+                  {% endcomment %}
+
+
+  {% block content %}
+    <center>
+      {% if searched%}
+        <h1> Relevant Pages </h1>
+        <h1>You Searched For {{searched}}</h1>
+        <br/>
+        <br/>
+          {% for webpage in webpages%}
+
+            <a href="{% url webpage.url %}">{{webpage}}</a>
+            <br/>
+
+          {% endfor %}
+      {% else %}
+        <h1>Empty Search, You may have forgotten to enter a search term?</h1>
+      {%endif%}
+    </center>
+
+  {% endblock content %}
 
   {% block footer %}
   
@@ -79,6 +107,8 @@
   {% include 'includes/scripts.html' %}
   {% block javascripts %}{% endblock javascripts %}
 
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
 </body>
 
