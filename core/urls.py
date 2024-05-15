@@ -31,9 +31,6 @@ urlpatterns = [
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
     
-    # Search result page
-    path('search_results/', views.search_results, name='pages/search-results'),
-    
     # blog
     #path('admin/', admin.site.urls),
     # path('blog/', include('blogs.urls')),
@@ -48,6 +45,7 @@ urlpatterns = [
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
     path('accounts/logout/', views.logout_view, name='logout'),
     path('accounts/register/', views.register, name='register'),
+    path('accounts/password-gen/', views.password_gen, name='password_gen'),
     path('accounts/password-change/', views.UserPasswordChangeView.as_view(), name='password_change'),
     path('accounts/password-change-done/', auth_views.PasswordChangeDoneView.as_view(
         template_name = 'accounts/password_change_done.html'
