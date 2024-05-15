@@ -67,7 +67,16 @@ def appattack(request):
     return render(request, 'pages/appattack/main.html')
 
 def appattack_join(request):
-    return render(request, 'pages/appattack/join.html')
+    if request.method == 'POST':
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        contact = Contact(name=firstname + lastname,email=email,message=message)
+        contact.save()
+        return redirect("appattack_join")
+    else:
+        return render(request, 'pages/appattack/join.html')
 
 def products_services(request):
     return render(request, 'pages/malware_visualization/products_and_services.html')
