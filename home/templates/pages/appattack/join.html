@@ -73,43 +73,44 @@
 
  <!-- form -->
 
-   <div class="row justify-content-center">
-        <div class="col-12 col-md-10 text-center mb-4">
-          <h2>Send Us a Message</h2>
-          </div>
-          <div class="col-12 col-lg-8">
-          <form class="row g-3">
-        <div class="col-mb-4">
-          <label for="validationDefault01" class="form-label align-items-center">First name</label>
-          <input type="text" class="form-control align-items-center" id="validationDefault01" required>
-        </div>
-        <div class="col-mb-4">
-          <label for="validationDefault02" class="form-label">Last name</label>
-          <input type="text" class="form-control" id="validationDefault02" required>
-        </div>
-        
-        <div class="mb-4">
-            <label for="email">Email</label>
-            <div class="input-group">
-              <span class="input-group-text" id="basic-addon4">
-                <span class="fas fa-envelope"></span>
-              </span>
-              <input type="email" class="form-control" placeholder="example@company.com" id="email" required="">
-            </div>
-          </div>
-
-          <div class="mb-4">
-            <label for="message">Drop a Message</label>
-            <textarea placeholder="Your message" class="form-control" id="message" rows="4" required=""></textarea>
-          </div>
-       
-        <div class="d-grid">
-          <button class="btn btn-primary" type="submit">Submit form</button>
-        </div>
-      </form>
+ <div class="row justify-content-center" id="form-join">
+  <div class="col-12 col-md-10 text-center mb-4">
+    <h2>Send Us a Message</h2>
+    </div>
+    <div class="col-12 col-lg-8">
+    <form class="row g-3" action="/appattack/join" method="post">
+      {% csrf_token %}
+  <div class="col-mb-4">
+    <label for="validationDefault01" class="form-label align-items-center">First name</label>
+    <input type="text" class="form-control align-items-center" name="firstname" id="validationDefault01" required>
+  </div>
+  <div class="col-mb-4">
+    <label for="validationDefault02" class="form-label">Last name</label>
+    <input type="text" class="form-control" name="lastname" id="validationDefault02" required>
+  </div>
+  
+  <div class="mb-4">
+      <label for="email">Email</label>
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon4">
+          <span class="fas fa-envelope"></span>
+        </span>
+        <input type="email" class="form-control" name="email" placeholder="example@company.com" id="email" required="">
+      </div>
     </div>
 
-    
+    <div class="mb-4">
+      <label for="message">Drop a Message</label>
+      <textarea placeholder="Your message" class="form-control" name="message" id="message" rows="4" required=""></textarea>
+    </div>
+ 
+  <div class="d-grid">
+    <button class="btn btn-primary" type="submit">Submit form</button>
+  </div>
+</form>
+</div>
+
+
 </main>
 
 {% endblock content %}
