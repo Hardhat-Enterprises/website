@@ -81,10 +81,11 @@
   {% block content %}
     <center>
       {% if searched%}
-        <h1> Relevant Pages </h1>
-        <h1>You Searched For {{searched}}</h1>
-        <br/>
-        <br/>
+      <div class="row">
+        <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+          <h1 class="fw-bolder">Search Results</h1>
+          <h5>You Searched For {{searched}}</h5>
+        </div>
           {% for webpage in webpages%}
 
             <a href="{% url webpage.url %}">{{webpage}}</a>
