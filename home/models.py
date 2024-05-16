@@ -180,6 +180,18 @@ class Contact(models.Model):
     
     def __str__(self):
         return self.name
+
+class DDT_contact(models.Model):
+    fullname=models.CharField(max_length=100)
+    email=models.CharField(max_length=200)
+    mobile=models.CharField(max_length=200)
+    message=models.TextField(max_length=1000)
+    
+    def __str__(self):
+        return self.fullname
+    class Meta:
+        verbose_name = "DDT_contact"
+        verbose_name_plural = "DDT_contact"
     
 
 # class Contact_central(models.Model):
