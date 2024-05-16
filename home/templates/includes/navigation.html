@@ -214,13 +214,13 @@
         </ul>
 
       
-        <!--action="{% url 'pages/search-results'%}"-->
+        {% comment %} <!--action="{% url 'pages/search-results'%}"--> {% endcomment %}
 
-        <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">
+       <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">
           {% csrf_token %}
           <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..." aria-label="Search" name="searched">
           <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;" type="submit">Search</button>
-        </form>
+        </form>  
 
       </div>
       <div class="d-flex align-items-center">

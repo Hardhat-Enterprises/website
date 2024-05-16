@@ -26,10 +26,10 @@ urlpatterns = [
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
 
-    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
-    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
-    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+   path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
+   path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
+   path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+   path('dashboard/', views.dashboard, name='dashboard'),
 
 
 
@@ -47,8 +47,7 @@ urlpatterns = [
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
-    # path("verify-email", views.verify_email, name="verify-email"),
-    # path("resend-otp", views.resend_otp, name="resend-otp"),
+   
 
 
     #Statistics
