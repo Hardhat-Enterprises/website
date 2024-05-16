@@ -8,8 +8,9 @@
     {% include 'includes/pre-loader.html' %}
 
     <!-- Upskilling Resources Page -->
+
     <section class="section bg-tertiary text-black">
-        <div class="container">
+        <div class="container"> </br> </br>
             <div class="row justify-content-between align-items-center">
                 <div class="col-12 col-md-7 text-center text-md-left">
                     <h1 class="display-3 mb-4">Upskilling Resources</h1>
@@ -17,56 +18,79 @@
             </div>
         </div>
     </section>
-    <section class="section section-md">
-        <div class="container">
-            <div class="row align-items-center justify-content-around">
-                <h2>Front-end Upskilling</h2>
-                <p>To Enhance your front-end development skills follow these resources:</p>
-                <p>
-                    <a href="#">W3 school - Learn HTML</a>
-                </p>
-                <p>
-                    <a href="#">CSS for Beginners</a>
-                </p>
+
+    <br><br>
+    <div class="container">
+        <div class="row align-items-center justify-content-around">
+            <h2>Front-end Upskilling</h2>
+            <p>Front-end ecosystms is vast and growing, to Enhance your front-end development skills follow these
+                resources</p>
+            <p>
+                <a href="https://www.w3schools.com/howto/howto_blog_become_frontenddev.asp">W3 school - Learn
+                    Frontend Development</a>
+            </p>
+            <p>
+                <a href="https://www.youtube.com/watch?v=kUMe1FH4CHE">Learn HTML - Full Tutorial for Beginners </a>
+            </p>
+            <p>
+                <a href="https://youtu.be/3dfDshSCp6I">CSS Tutorial - Full Course for Beginners</a>
+            </p>
+            <p>
+                <a
+                    href="https://www.udemy.com/course/lern-front-end-web-development-with-javascript/?couponCode=NVDPPOT42722">
+                    JavaScript: Learn Front End Web Development
+                </a>
+            </p>
 
 
-            </div>
         </div>
-
-    </section>
-
-
-    <section class="section section-md">
-        <div class="container">
-            <div class="row align-items-center justify-content-around">
-                <h2>Back-end Upskilling</h2>
-                <p>To Enhance your back-end development skills follow these resources:</p>
-                <p>
-                    <a href="#">MDN Web Docs - Learn HTML</a>
-                </p>
-                <p>
-                    <a href="#">CSS-Tricks - Beginner's Guide to CSS</a>
-                </p>
-
-            </div>
-        </div>
-
-    </section>
-
-
-    <section class="section section-md">
-        <div class="container">
-            <div class="row align-items-center justify-content-around">
-                <h2>Upskilling Roadmap</h2>
-                <p>For a comprehensive guide to upskilling, check out our roadmap:</p>
-                <a href="/home/templates/pages/upskilling/roadmap.html">Upskilling Roadmap</a>
-            </div>
-        </div>
-
-    </section>
     </div>
 
 
+    <br><br><br>
+
+    <div class="container">
+        <div class="row align-items-center justify-content-around">
+            <h2>Back-end Upskilling</h2>
+            <p>Back-end technologies form the foundation of web applications and are cruical for
+                full stack developers,</br> to Enhance your front-end development skills follow these resources</p>
+            <p>
+                <a href="https://learnjavascript.online/">Learn JavaScript</a>
+            </p>
+            <p>
+                <a href="https://reactnative.dev/docs/tutorial">Learn React Native</a>
+            </p>
+
+            <h5>Django Upskilling</h5>
+            <p>
+                <a href="https://www.djangoproject.com/start/">Getting Started with Django</a>
+            </p>
+            <p>
+                <a href="https://reactnative.dev/docs/tutorial">Django tutorial by W3schools </a>
+            </p>
+            <p>
+                <a href="https://learndjango.com/tutorials/getting-started-django-tutorial  ">Getting started with
+                    Django Tutorial - LearnDjango
+                </a>
+            </p>
+        </div>
+    </div>
+
+
+    <br><br><br><br>
+
+    <div class="container">
+        <div class="row align-items-center justify-content-around">
+            <h2>Upskilling Roadmap</h2>
+            <p>For a comprehensive guide to upskilling, check out our roadmap:</p>
+            <a href="/home/templates/pages/upskilling/roadmap.html">Upskilling Roadmap</a>
+        </div>
+    </div>
+
+
+    </div>
+
+    <br><br><br><br>
 </main>
 
 {% endblock content %}

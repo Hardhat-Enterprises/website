@@ -41,6 +41,19 @@
               </div>
               <span class="text-danger"> {{ field.errors }} </span>
               {% endfor %}
+              <div class="d-flex mb-4" style="margin-left: 31%;">
+                  <span class="fw-normal" style="margin-right: 0.4rem;">
+                      <a onclick="get_rand_pass()" href="javascript:;" class="fw-bold text-underline"
+                        >Generate password</a
+                      >
+                  </span>
+                          <br />
+                  <span >
+                      <a onclick="show_rand_pass()" href="javascript:;" class="fw-bold text-underline"
+                        >Show password</a
+                      >
+                  </span>
+              </div>
               <!-- End of Form -->
               <div class="d-grid">
                 <button type="submit" class="btn btn-warning btn-primary">
@@ -63,5 +76,16 @@
   </section>
   {% include 'includes/footer.html' %}
 </main>
+
+<script>
+    function get_rand_pass() {
+        fetch("/accounts/password-gen").then(d => d.json()).then(j => {document.getElementsByName("password1")[0].value = j.data; document.getElementsByName("password2")[0].value = j.data})
+    }
+
+    function show_rand_pass() {
+        document.getElementsByName("password1")[0].type = "text";
+        document.getElementsByName("password2")[0].type = "text";
+    }
+</script>
 
 {% endblock content %} {% block footer %}{% endblock footer %}

@@ -4523,7 +4523,9 @@ textarea.form-control-lg {
   padding: 1.25rem 1.5rem; }
 
 .card-title {
-  margin-bottom: 0.75rem; }
+  min-height: 52px;
+  margin-bottom: 0.75rem; 
+} 
 
 .card-subtitle {
   margin-top: -0.375rem;
@@ -17071,7 +17073,11 @@ label {
     height: 36px !important;
     border: none;
     text-align: center; }
-.custom-height { min-height: 240px; }
+
+.custom-height { min-height: 360px; }
+  
+.custom-height-2 { min-height: 350px; line-height: 2rem;}
+
 /**
  * = Custom forms
  */
