@@ -9,6 +9,7 @@ from .models import (
     Contact,
 
     Webpage,
+    DDT_contact,
 
     
     # Contact_central,
@@ -24,6 +25,7 @@ from .models import (
 
 admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
+admin.site.register(DDT_contact)
 
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"

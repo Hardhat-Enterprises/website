@@ -28,7 +28,7 @@ import random
  
 import os
  
-from .models import Smishingdetection_join_us
+from .models import Smishingdetection_join_us, DDT_contact
 import json
  
  
@@ -87,7 +87,17 @@ def faq(request):
     return render(request, 'pages/pt_gui/faq.html')
  
 def ptgui_join_us(request):
-    return render(request, 'pages/pt_gui/join_us.html')
+    if request.method == 'POST':
+        ddt_contact = DDT_contact(
+            fullname = request.POST.get('fullname',''),
+            email = request.POST.get('email',''),
+            mobile = request.POST.get('mobile',''),
+            message = request.POST.get('message',''),
+        )
+        ddt_contact.save()
+        return redirect('ptgui_join_us')
+    else:
+        return render(request, 'pages/pt_gui/join_us.html')
  
 def http_503(request):
     return render(request, 'pages/503.html')
