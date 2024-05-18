@@ -717,7 +717,9 @@ progress {
 
 @media (min-width: 576px) {
   .container-sm, .container {
-    max-width: 540px; } }
+    max-width: 540px; } 
+  
+  }
 
 @media (min-width: 768px) {
   .container-md, .container-sm, .container {
@@ -19380,6 +19382,14 @@ blockquote {
 .tools-link{
   p{
     color: #000000;
+  }
+}
+@media only screen and (max-width: 760px) {
+  .text-center-head{
+    text-align: center;
+  }
+  .mobile-heading{
+    justify-content: center;
   }
 }
 /*# sourceMappingURL=pixel.css.map */
