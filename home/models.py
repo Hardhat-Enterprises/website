@@ -77,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 #Search Bar Models:
 
-class Webpage(AbstractBaseSet):
+class Webpage(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     url = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
