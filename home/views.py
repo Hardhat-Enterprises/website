@@ -178,9 +178,19 @@ def search_results(request):
 
 
 ## Web-Form 
+
 def website_form(request):
-    form = NewWebURL()
-    return render(request, 'pages/website-form.html', {"form":form})
+    if request.method == "POST":
+        form = NewWebURL(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data["title"]
+            u = form.cleaned_data["url"]
+            w = Webpage(title=t, url=u)
+            w.save()
+        return render(request, 'pages/website-form.html', {"form":form})
+    else:
+        form = NewWebURL()
+        return render(request, 'pages/website-form.html', {"form":form})
 
         
     
