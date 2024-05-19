@@ -38,6 +38,7 @@ urlpatterns = [
     
     # Search result page
     path('search_results/', views.search_results, name='pages/search-results'),
+    path('website_form/', views.website_form, name='pages/website-form'),
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),

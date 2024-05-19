@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-from .models import Student, Smishingdetection_join_us
+from .models import Student, Smishingdetection_join_us, Webpage
 
 User = get_user_model()
 
@@ -104,3 +104,10 @@ class sd_JoinUsForm(forms.ModelForm):
     class Meta:
         model = Smishingdetection_join_us
         fields = ['name', 'email', 'message']
+
+
+class NewWebURL(forms.ModelForm):
+        class Meta:
+            model = Webpage
+            fields = ['id', 'url', 'title']
+            

@@ -34,7 +34,7 @@ import json
  
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, NewWebURL
  
  
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
@@ -175,7 +175,25 @@ def search_results(request):
 ##def dynamic_articles_view(request):
 ##    context['object_list'] = article.objects.filter(title__icontains=request.GET.get('search'))
 ##    return render(request, "encyclopedia/article_detail.html", context)
-   
+
+
+## Web-Form 
+
+def website_form(request):
+    if request.method == "POST":
+        form = NewWebURL(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data["title"]
+            u = form.cleaned_data["url"]
+            w = Webpage(title=t, url=u)
+            w.save()
+        return render(request, 'pages/website-form.html', {"form":form})
+    else:
+        form = NewWebURL()
+        return render(request, 'pages/website-form.html', {"form":form})
+
+        
+    
  
  
 # Authentication
