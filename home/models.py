@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
 
+
 from django.utils.text import slugify
 
 import secrets
@@ -74,6 +75,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+#Search Bar Models:
+
+class Webpage(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
+    url = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    
+    def __str__(self) -> str:
+        return self.title
+
+
 class Project(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
@@ -90,7 +102,7 @@ class Course(AbstractBaseSet):
     code = models.CharField(_("course code"), max_length=150, blank=True)
     is_postgraduate = models.BooleanField(_("postgraduate status"), default=False)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
 
 class Skill(models.Model):
@@ -151,6 +163,14 @@ class Student(AbstractBaseSet):
 
     
 
+# class Skill(models.Model):
+#     name = models.CharField(max_length=255)
+#     description = models.TextField()
+#     def __str__(self):
+#         return self.name
+
+
+
 
 
 class Contact(models.Model):
@@ -160,6 +180,18 @@ class Contact(models.Model):
     
     def __str__(self):
         return self.name
+
+class DDT_contact(models.Model):
+    fullname=models.CharField(max_length=100)
+    email=models.CharField(max_length=200)
+    mobile=models.CharField(max_length=200)
+    message=models.TextField(max_length=1000)
+    
+    def __str__(self):
+        return self.fullname
+    class Meta:
+        verbose_name = "DDT_contact"
+        verbose_name_plural = "DDT_contact"
     
 
 # class Contact_central(models.Model):
@@ -181,7 +213,11 @@ class Progress(models.Model):
         unique_together = ('student', 'skill')
 
     def __str__(self):
+
+        return f'{self.student} - {self.skill.name}: {self.progress}%'
+
         return f'{self.student} - {self.skill}: {"Completed" if self.completed else "Not completed"}'
+
 
 
 class Article(models.Model):
@@ -193,15 +229,6 @@ class Article(models.Model):
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
 
-# class OtpToken(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps")
-#     otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
-#     tp_created_at = models.DateTimeField(auto_now_add=True)
-#     otp_expires_at = models.DateTimeField(blank=True, null=True)
-    
-    
-    def __str__(self):
-        return self.user.email
 
 class Smishingdetection_join_us(models.Model):
     name= models.CharField(max_length=100)

@@ -717,7 +717,9 @@ progress {
 
 @media (min-width: 576px) {
   .container-sm, .container {
-    max-width: 540px; } }
+    max-width: 540px; } 
+  
+  }
 
 @media (min-width: 768px) {
   .container-md, .container-sm, .container {
@@ -4523,7 +4525,9 @@ textarea.form-control-lg {
   padding: 1.25rem 1.5rem; }
 
 .card-title {
-  margin-bottom: 0.75rem; }
+  min-height: 52px;
+  margin-bottom: 0.75rem; 
+} 
 
 .card-subtitle {
   margin-top: -0.375rem;
@@ -15821,9 +15825,7 @@ textarea.form-control-lg {
     background: #1c2540;
     color: #ffffff; }
 
-.navbar-light .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Crect width='30' height='30' fill='rgba(255, 205, 17, 0.9)' rx='5' ry='5'/%3E%3Cpath stroke='%231F2937' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
+
     
 
 .navbar-light .navbar-brand-dark {
@@ -17073,7 +17075,11 @@ label {
     height: 36px !important;
     border: none;
     text-align: center; }
-.custom-height { min-height: 240px; }
+
+.custom-height { min-height: 360px; }
+  
+.custom-height-2 { min-height: 350px; line-height: 2rem;}
+
 /**
  * = Custom forms
  */
@@ -19372,4 +19378,18 @@ blockquote {
 .ct-line {
   pointer-events: none; }
 
+
+.tools-link{
+  p{
+    color: #000000;
+  }
+}
+@media only screen and (max-width: 760px) {
+  .text-center-head{
+    text-align: center;
+  }
+  .mobile-heading{
+    justify-content: center;
+  }
+}
 /*# sourceMappingURL=pixel.css.map */

@@ -1,0 +1,116 @@
+<!--
+
+=========================================================
+* Pixel Free Bootstrap 5 UI Kit
+=========================================================
+
+* Product Page: https://themesberg.com/product/ui-kit/pixel-free-bootstrap-5-ui-kit
+* Copyright 2021 Themesberg (https://www.themesberg.com)
+
+* Coded by https://themesberg.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Contact us if you want to remove it.
+
+-->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- Primary Meta Tags -->
+    <title>Hardhat Enterprises</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="title" content="Hardhat Enterprises">
+    <meta name="author" content="Themesberg">
+    <meta name="description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <link rel="canonical" href="https://hardhat.pythonanywhere.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hardhat.pythonanywhere.com/">
+    <meta property="og:title" content="Hardhat Enterprises">
+    <meta property="og:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <meta property="og:image" content="https://hardhat.pythonanywhere.com/custom_static/assets/img/pages/home/hero-image.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://hardhat.pythonanywhere.com/">
+    <meta property="twitter:title" content="Hardhat Enterprises">
+    <meta property="twitter:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <meta property="twitter:image" content="https://hardhat.pythonanywhere.com/custom_static/assets/img/pages/home/hero-image.svg">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'assets/img/favicon/site.webmanifest' %}">
+    <link rel="mask-icon" href="{% static 'assets/img/favicon/safari-pinned-tab.svg' %}" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Fontawesome -->
+    <link type="text/css" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    
+    <!-- Pixel CSS -->
+    <link type="text/css" href="{% static 'css/hardhat.css' %}?v=2" rel="stylesheet">
+    
+</head>
+
+<body>
+
+  {% block header %}
+  
+    {% include 'includes/navigation.html' %}
+  
+  {% endblock header %}
+
+
+                  {% comment %}
+                    {% for result in results %}
+                        <li><a href="{{ result.url }}">{{ result.title }}</a></li>
+                    {% empty %}
+                        <li>No results found</li>
+                    {% endfor %}
+                  {% endcomment %}
+
+
+  {% block content %}
+    <center>
+      {% if searched%}
+      <div class="row">
+        <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+          <h1 class="fw-bolder">Search Results</h1>
+          <h5>You Searched For {{searched}}</h5>
+        </div>
+          {% for webpage in webpages%}
+
+            <a href="{% url webpage.url %}">{{webpage}}</a>
+            <br/>
+
+          {% endfor %}
+      {% else %}
+        <h1>Empty Search, You may have forgotten to enter a search term?</h1>
+      {%endif%}
+    </center>
+
+  {% endblock content %}
+
+  {% block footer %}
+  
+    {% include 'includes/footer.html' %}
+  
+  {% endblock footer %}
+
+  {% include 'includes/scripts.html' %}
+  {% block javascripts %}{% endblock javascripts %}
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>

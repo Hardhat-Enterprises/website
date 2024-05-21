@@ -140,8 +140,38 @@
           </li>
 
           {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="/dashboard">Dashboard</a>
+          <li class="nav-item dropdown">
+            <a
+              href="#"
+              class="nav-link dropdown-toggle"
+              id="frontPagesDropdown"
+              aria-expanded="false"
+              data-bs-toggle="dropdown"
+            >
+              Upskilling
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div
+              class="dropdown-menu px-0 py-2 p-lg-4"
+              aria-labelledby="frontPagesDropdown"
+            >
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none mb-4">
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'dashboard' %}"
+                        >Dashboard</a
+                      >
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'upskilling' %}"
+                        >Skills</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </li>
           {% endif %}
 
@@ -212,10 +242,16 @@
           </li>
 
         </ul>
-        <form class="d-flex align-items-center">
-      <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..." aria-label="Search">
-      <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;" type="submit">Search</button>
-    </form>
+
+      
+        {% comment %} <!--action="{% url 'pages/search-results'%}"--> {% endcomment %}
+
+       <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">
+          {% csrf_token %}
+          <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..." aria-label="Search" name="searched">
+          <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;" type="submit">Search</button>
+        </form>  
+
       </div>
       <div class="d-flex align-items-center">
         {% if request.user.is_authenticated %}

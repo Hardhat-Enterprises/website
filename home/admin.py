@@ -7,11 +7,16 @@ from .models import (
     Skill,
     Progress,
     Contact,
+
+    Webpage,
+    DDT_contact,
+
     
     # Contact_central,
     Article,
     Smishingdetection_join_us,
     Projects_join_us,
+
 
 
 )
@@ -20,6 +25,7 @@ from .models import (
 
 admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
+admin.site.register(DDT_contact)
 
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
@@ -55,13 +61,23 @@ class ProgressAdmin(admin.ModelAdmin):
 class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
     
+#Webpage Search Model
+@admin.register(Webpage)
+class Webpage(admin.ModelAdmin):
+    list_display = [field.name for field in Webpage._meta.fields]
+    
+    
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):
 #     list_display = [field.name for field in Contact_central._meta.fields]
 
-class OtpTokenAdmin(admin.ModelAdmin):
-    list_display = ("user", "otp_code")
+# class OtpTokenAdmin(admin.ModelAdmin):
+#     list_display = ("user", "otp_code")
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(Projects_join_us)
+
+
+
+
 
