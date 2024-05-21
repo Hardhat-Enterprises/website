@@ -4,7 +4,10 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-from .models import Student, Smishingdetection_join_us, Webpage
+
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage
+
+
 
 User = get_user_model()
 
@@ -61,7 +64,7 @@ class UserLoginForm(AuthenticationForm):
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Email'
+        'placeholder': 'example@deakin.edu.au'
     }), label=_("Your Email"))
   
 class UserSetPasswordForm(SetPasswordForm):
@@ -106,8 +109,16 @@ class sd_JoinUsForm(forms.ModelForm):
         fields = ['name', 'email', 'message']
 
 
+class projects_JoinUsForm(forms.ModelForm):
+    class Meta:
+        model = Projects_join_us
+        fields = ['name', 'email', 'message','page_name']
+        
+
+
 class NewWebURL(forms.ModelForm):
-        class Meta:
-            model = Webpage
-            fields = ['id', 'url', 'title']
+    class Meta:
+        model = Webpage
+        fields = ['id', 'url', 'title']
             
+

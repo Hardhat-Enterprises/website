@@ -26,6 +26,16 @@ urlpatterns = [
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
 
+    path('deakinThreatmirror/', views.Deakin_Threat_mirror_main, name='Deakin_Threat_mirror_main'),
+    path('deakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='threat_mirror_join_us'),
+    path('vr/', views.Vr_main, name='Vr_main'),
+    path('vr/join_us', views.vr_join_us, name='cybersafe_vr_join_us'),
+    # path('contact-central/', views.Contact_central, name='contact-central'),
+    
+    path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
+    path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+
    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
@@ -39,6 +49,7 @@ urlpatterns = [
     # Search result page
     path('search_results/', views.search_results, name='pages/search-results'),
     path('website_form/', views.website_form, name='pages/website-form'),
+
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
