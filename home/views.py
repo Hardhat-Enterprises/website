@@ -6,7 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.db.models import Count
@@ -21,6 +22,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+
 # from Website.settings import EMAIL_HOST_USER
 import random
 
@@ -130,6 +135,18 @@ def smishingdetection_join_us(request):
     else:
         form = sd_JoinUsForm()
     return render(request, 'pages/smishing_detection/join_us.html', {'form': form})
+
+def Deakin_Threat_mirror(request):
+    return render(request, 'pages/DeakinThreatmirror/main.html')
+
+def Deakin_Threat_mirror_joinus(request):
+    return render(request, 'pages/DeakinThreatmirror/join_us.html')
+
+def Vr(request):
+    return render(request, 'pages/Vr/main.html')
+
+def Vr_joinus(request):
+    return render(request, 'pages/Vr/join_us.html')
 
 # Authentication
 
@@ -466,5 +483,44 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
 
         return context
 
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'accounts/password_reset.html'
+    form_class = UserPasswordResetForm
+    def form_valid(self, form):
+        try:
+            # Get the email address from the form
+            email = form.cleaned_data['email']
+            print(email)
+            print(get_user_model().objects.get(email=email))
+            user = get_user_model().objects.get(email=email)
+            
+            # Generate a password reset token
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            # Generate a password reset email content
+            subject = 'Password Reset'
+            message = (
+                     "You're receiving this email because you have requested a password reset for your user account at "
+                    f"{self.request.META['HTTP_HOST']}.\n\n"
+                    f"Please go to the following page and choose a new password:\n"
+                    f"http://{self.request.META['HTTP_HOST']}/accounts/password-reset-confirm/{uid}/{token}\n\n"
+                    f"Regards,\n"
+                    f"Hardhat Enterprises"
+            )
+            # Send the email
+            send_mail(subject, message, 'deakinhardhatwebsite@gmail.com', [email])
+            print("Email sent successfully")
+        except Exception as e:
+            print("An error occurred during email sending:", e)
+        return super().form_valid(form)
+
+
+
+class UserPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'accounts/password_reset_done.html'
+    form_class = UserPasswordResetForm
+
+   
 
 

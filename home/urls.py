@@ -25,9 +25,15 @@ urlpatterns = [
     path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
-
+    path('DeakinThreatmirror/', views.Deakin_Threat_mirror, name='Deakin_Threat_mirror_main'),
+    path('DeakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='Deakin_Threat_mirror_joinus'),
+    path('Vr/', views.Vr, name='Vr_main'),
+    path('Vr/Vr_joinus', views.smishingdetection_join_us, name='Vr_joinus'),
     # path('contact-central/', views.Contact_central, name='contact-central'),
     
+    path('accounts/password_reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
+    path('accounts/password_reset_done/', views.UserPasswordResetDoneView.as_view(), name='password_reset_done'),
+
 
 
     # Blog URLs
