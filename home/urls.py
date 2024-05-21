@@ -25,16 +25,14 @@ urlpatterns = [
     path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
-    path('DeakinThreatmirror/', views.Deakin_Threat_mirror, name='Deakin_Threat_mirror_main'),
-    path('DeakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='Deakin_Threat_mirror_joinus'),
-    path('Vr/', views.Vr, name='Vr_main'),
-    path('Vr/Vr_joinus', views.smishingdetection_join_us, name='Vr_joinus'),
+    path('deakinThreatmirror/', views.Deakin_Threat_mirror_main, name='Deakin_Threat_mirror_main'),
+    path('deakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='threat_mirror_join_us'),
+    path('vr/', views.Vr_main, name='Vr_main'),
+    path('vr/join_us', views.vr_join_us, name='cybersafe_vr_join_us'),
     # path('contact-central/', views.Contact_central, name='contact-central'),
     
-    path('accounts/password_reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
-    path('accounts/password_reset_done/', views.UserPasswordResetDoneView.as_view(), name='password_reset_done'),
-
-
+    path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
+    path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),

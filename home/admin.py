@@ -11,7 +11,7 @@ from .models import (
     # Contact_central,
     Article,
     Smishingdetection_join_us,
-
+    Projects_join_us,
 
 
 )
@@ -63,5 +63,5 @@ class OtpTokenAdmin(admin.ModelAdmin):
     list_display = ("user", "otp_code")
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
-
+admin.site.register(Projects_join_us)
 

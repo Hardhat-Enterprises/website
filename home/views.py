@@ -17,7 +17,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -25,21 +25,14 @@ from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-
+from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-
-
 import os
-
-from .models import Smishingdetection_join_us
 import json
-
-
-
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm
 
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
@@ -136,17 +129,11 @@ def smishingdetection_join_us(request):
         form = sd_JoinUsForm()
     return render(request, 'pages/smishing_detection/join_us.html', {'form': form})
 
-def Deakin_Threat_mirror(request):
+def Deakin_Threat_mirror_main(request):
     return render(request, 'pages/DeakinThreatmirror/main.html')
 
-def Deakin_Threat_mirror_joinus(request):
-    return render(request, 'pages/DeakinThreatmirror/join_us.html')
-
-def Vr(request):
+def Vr_main(request):
     return render(request, 'pages/Vr/main.html')
-
-def Vr_joinus(request):
-    return render(request, 'pages/Vr/join_us.html')
 
 # Authentication
 
@@ -288,10 +275,6 @@ def VerifyOTP(request):
 #     context = {}
 #     return render(request, "resend_otp.html", context)
 
-
-class UserPasswordResetView(PasswordResetView):
-    template_name = 'accounts/password_reset.html'
-    form_class = UserPasswordResetForm
 
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'accounts/password_reset_confirm.html'
@@ -487,40 +470,54 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
     form_class = UserPasswordResetForm
+
     def form_valid(self, form):
-        try:
-            # Get the email address from the form
-            email = form.cleaned_data['email']
-            print(email)
-            print(get_user_model().objects.get(email=email))
-            user = get_user_model().objects.get(email=email)
-            
-            # Generate a password reset token
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            # Generate a password reset email content
-            subject = 'Password Reset'
-            message = (
-                     "You're receiving this email because you have requested a password reset for your user account at "
-                    f"{self.request.META['HTTP_HOST']}.\n\n"
-                    f"Please go to the following page and choose a new password:\n"
-                    f"http://{self.request.META['HTTP_HOST']}/accounts/password-reset-confirm/{uid}/{token}\n\n"
-                    f"Regards,\n"
-                    f"Hardhat Enterprises"
-            )
-            # Send the email
-            send_mail(subject, message, 'deakinhardhatwebsite@gmail.com', [email])
-            print("Email sent successfully")
-        except Exception as e:
-            print("An error occurred during email sending:", e)
-        return super().form_valid(form)
+        email = form.cleaned_data['email']
+        users = get_user_model().objects.filter(email=email)
+        if users.exists():
+            for user in users:
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = default_token_generator.make_token(user)
+                reset_url = self.request.build_absolute_uri(
+                    reverse_lazy('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+                )
+                subject = 'Password Reset'
+                message = (
+                    f"You're receiving this email because you have requested a password reset for your user account at {self.request.META['HTTP_HOST']}.\n\n"
+                    f"Please go to the following page and choose a new password:\n{reset_url}\n\n"
+                    "If you didn't request a password reset, please contact us at your earliest convenience.\n\n"
+                    "Regards,\nHardhat Enterprises"
+                )
+            send_mail(subject, message, 'deakinhardhatwebsite@gmail.com', [email], fail_silently=False)
+            return redirect('password_reset_done')
+        else:
+            messages.error(self.request, "User does not exist. Please enter a valid email address.")
+            return self.form_invalid(form)
 
 
+def vr_join_us(request):
+    return projects_join_us(request, 'pages/Vr/join_us.html', 'cybersafe_vr_join_us')
 
-class UserPasswordResetDoneView(PasswordResetDoneView):
-    template_name = 'accounts/password_reset_done.html'
-    form_class = UserPasswordResetForm
+def Deakin_Threat_mirror_joinus(request):
+    return projects_join_us(request, 'pages/DeakinThreatmirror/join_us.html', 'threat_mirror_join_us')
 
-   
-
-
+def projects_join_us(request, page_url, page_name):
+    if request.method == 'POST':
+        # Copy of POST data 
+        post_data = request.POST.copy()
+        # Set the page_name value 
+        post_data['page_name'] = page_name
+        # Form with the modified POST data
+        form = projects_JoinUsForm(post_data)
+        print(form)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your message has been successfully sent")
+            return redirect(page_name) 
+        else:
+            print(request)
+            messages.error(request, "Please fill the form correctly")
+    else:
+        form = projects_JoinUsForm(initial={'page_name': page_name})
+    print(request)
+    return render(request, page_url, {'form': form, 'page_name': page_name})
