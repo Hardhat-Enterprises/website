@@ -626,5 +626,5 @@ def projects_join_us(request, page_url, page_name):
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
  
-        return context
+       # return context
 
