@@ -247,7 +247,8 @@ def register(request):
         if form.is_valid():
             #form.save()
             otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Verify Your Mail with the OTP: /n {otp}", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
+            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
             print("Account created successfully! An OTP was sent to your email. Check!")
             messages.success(request, "Account created successfully!")
             return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
@@ -626,5 +627,5 @@ def projects_join_us(request, page_url, page_name):
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
  
-        return context
+       # return context
 
