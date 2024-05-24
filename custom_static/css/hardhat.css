@@ -19393,3 +19393,60 @@ blockquote {
   }
 }
 /*# sourceMappingURL=pixel.css.map */
+/* Contactus page */
+.contact-image img {
+  width: 70%; 
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.contact-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px 50px; 
+}
+
+.contact-info {
+  max-width: 500px;
+}
+
+.contact-info p {
+  font-size: 20px;
+  margin-bottom: 10px; 
+  color: #333;
+}
+
+.contact-info h1 {
+  font-size: 50px;
+  margin-bottom: 20px;
+ 
+}
+
+.contact-info .icon-text {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; 
+  font-size: 15px; 
+}
+
+.contact-info .icon-text i {
+  font-size: 28px; 
+  margin-right: 10px;
+  
+}
+
+
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 20px;
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+
+  .contact-image img {
+    width: 80%; 
+  }
+}
