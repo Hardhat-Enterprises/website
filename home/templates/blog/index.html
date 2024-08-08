@@ -1,70 +1,149 @@
-{% extends 'layouts/base.html' %} {% block content %}
+{% extends 'layouts/base.html' %}
+
+{% block content %}
 
 {% include 'includes/pre-loader.html' %}
 
 <div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5 text-center">
     <h1 class="fw-bolder">Hardhat Enterprise Blog</h1>
     <h5 class="text-muted">It's a blog page for Hardhat Enterprise students</h5>
   </div>
 
-  {% for object in object_list %}
+  <!-- Achievements Section -->
+  <div class="col-md-12 mx-3 mt-5 mb-5">
+    <h2 class="fw-bolder">Achievements and Notable Events</h2>
+    <div class="accordion" id="achievementsAccordion">
+      <!-- Trimester 3 of 2023 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingT3">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseT3" aria-expanded="true" aria-controls="collapseT3">
+            Trimester 3 (T3) of 2023
+          </button>
+        </h2>
+        <div id="collapseT3" class="accordion-collapse collapse show" aria-labelledby="headingT3" data-bs-parent="#achievementsAccordion">
+          <div class="accordion-body">
+            <h4>Website Development Project:</h4>
+            <ul>
+              <li>Continued enhancements to the HardHat website, focusing on showcasing company projects and improving user experience.</li>
+              <li>Developed features such as user profile management, login authentication, and a resource tracker for project management.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
+      <!-- Trimester 1 of 2024 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingT1">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseT1" aria-expanded="false" aria-controls="collapseT1">
+            Trimester 1 (T1) of 2024
+          </button>
+        </h2>
+        <div id="collapseT1" class="accordion-collapse collapse" aria-labelledby="headingT1" data-bs-parent="#achievementsAccordion">
+          <div class="accordion-body">
+            <h4>Innofest 2024:</h4>
+            <ul>
+              <li>HardHat Enterprises participated in Innofest 2024, showcasing their projects and achievements, including the ongoing website development and cybersecurity initiatives.</li>
+            </ul>
+            <h4>AppAttack Project:</h4>
+            <ul>
+              <li>Conducted a comprehensive security analysis of ThotTech's OnTrack Project, including secure code reviews and penetration testing.</li>
+              <li>Delivered a detailed security report with findings and recommendations, contributing to the improved security posture of the OnTrack application.</li>
+            </ul>
+            <h4>Website Development Project:</h4>
+            <ul>
+              <li>Significant enhancements made to the HardHat website, including the addition of new features such as a blog, resource tracker, and admin portal.</li>
+              <li>Deployed the website on PythonAnywhere and Docker to ensure compatibility with microservice deployment architecture.</li>
+            </ul>
+            <h4>Penetration Testing GUI (PT-GUI):</h4>
+            <ul>
+              <li>Released an updated and refurbished version of the Deakin Detonator Toolkits (DDT), a penetration testing tool, with improved functionalities and new tool integrations.</li>
+            </ul>
+            <h4>Smishing Detection Project:</h4>
+            <ul>
+              <li>Developed a prototype smishing detection app with AI-based algorithms to identify smishing content in SMS messages.</li>
+              <li>Initiated the creation of a database for storing smishing patterns and conducted user testing sessions for feedback.</li>
+            </ul>
+            <h4>Deakin Threat Mirror Project:</h4>
+            <ul>
+              <li>Conducted research on open-source threat intelligence platforms and the challenges faced by SMEs and developing economies in cybersecurity.</li>
+              <li>Released the first version of the Deakin Threat Mirror platform, aimed at providing robust cybersecurity solutions for SMEs and developing economies.</li>
+            </ul>
+            <h4>Deakin CyberSafe VR Project:</h4>
+            <ul>
+              <li>Developed interactive VR modules focusing on cybersecurity training for small businesses.</li>
+              <li>Released a Minimum Viable Product (MVP) for the VR platform, including modules on password security, data encryption, and safe web browsing.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trimester 2 of 2024 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingT2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseT2" aria-expanded="false" aria-controls="collapseT2">
+            Trimester 2 (T2) of 2024
+          </button>
+        </h2>
+        <div id="collapseT2" class="accordion-collapse collapse" aria-labelledby="headingT2" data-bs-parent="#achievementsAccordion">
+          <div class="accordion-body">
+            <h4>Innofest 2024 Continuation:</h4>
+            <ul>
+              <li>Participation in ongoing events, including demonstrations of the projects developed during T1 and the progress made in T2.</li>
+            </ul>
+            <h4>Awards and Recognition:</h4>
+            <ul>
+              <li>Recognition and awards received for the successful deployment and functionality of the HardHat website and the Deakin Detonator Toolkits (DDT) during industry events.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog Posts -->
+  {% for object in object_list %}
   <div class="row">
     <div class="col-md-6 col-12 mx-md-auto mx-3 mt-2 mb-5">
       <h3 class="fw-bold">{{ object.title }}</h3>
       <p class="text-muted">{{ object.date }}</p>
       <p class="text-muted">Posted by {{ object.author.username }}</p>
       {% if object.likes.count == 1 %}
-      <p class="text-muted">{{ object.likes.count}} person likes this post</p>
+      <p class="text-muted">{{ object.likes.count }} person likes this post</p>
       {% else %}
-      <p class="text-muted">{{ object.likes.count}} people like this post</p>
+      <p class="text-muted">{{ object.likes.count }} people like this post</p>
       {% endif %}
-
       <div class="my-3">{{ object.content|truncatewords_html:50|safe }}</div>
       <a href="{% url 'detail_article' object.id %}">Read More</a>
     </div>
   </div>
-
   {% endfor %}
 
+  <!-- Pagination -->
   <nav>
     <ul class="pagination">
       <div class="mx-auto d-flex flex-row mt-5">
         {% if page_obj.has_previous %}
         <li class="page-item">
-          <a class="page-link" href="?page=1">&laquo; First </a>
+          <a class="page-link" href="?page=1">&laquo; First</a>
         </li>
-
         <li class="page-item">
-          <a class="page-link" href="?page={{page_obj.previous_page_number}}">
-            Previous
-          </a>
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
         </li>
         {% endif %}
-
         <li class="page-item">
-          <a class="page-link" href="#"
-            >Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-          </a>
+          <a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
         </li>
-
         {% if page_obj.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{page_obj.next_page_number}}">
-            Next
-          </a>
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
         </li>
-
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
-            Last &raquo;
-          </a>
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
         </li>
         {% endif %}
       </div>
     </ul>
   </nav>
 
-  {% endblock content %}
-</div>
+{% endblock content %}
