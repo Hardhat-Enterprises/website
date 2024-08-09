@@ -421,7 +421,6 @@ a {
     color: #0b0f18; }
 
 a.lost-password:hover,
-a.login-here:hover,
 a.create-account:hover {
   color: #0b0f18; 
 }
@@ -15989,17 +15988,10 @@ textarea.form-control-lg {
   padding-top: 7rem;
   padding-bottom: 3rem; }
 
-.ptgui_viz-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 500px;
-}
-
 @media (min-width: 576px) {
   .section {
     position: relative;
-    padding-top: 2rem;
+    padding-top: 6rem;
     padding-bottom: 6rem; }
   .section-header {
     position: static;
