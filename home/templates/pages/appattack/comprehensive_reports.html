@@ -67,28 +67,50 @@
             height: auto;
             max-height: 400px; 
         }
+        #header-ul {
+            display: flex;
+            flex-direction: column;
+        }
+        #header-ul>li {
+            list-style: none;
+            width: 60%;
+            text-align: left;
+            margin-left: 20%;
+            margin-top: 3rem;
+            line-height: 2rem;
+        }
+        .text-style-1{
+            line-height: 3rem;
+            text-align: left;
+            font-family: var(--bs-font-sans-serif);
+            font-size: 1rem;
+        }
     </style>
 
     <div class="section-header">
         <h1>Comprehensive Reports</h1>
-        <ul>
+        <ul id="header-ul">
             <li>Comprehensive reports based on penetration testing and secure code reviews serve as detailed 
                 documentation of the findings and insights gathered during the assessment process. These reports 
-                typically include a thorough analysis of vulnerabilities identified through penetration testing and 
+                typically include a analysis of vulnerabilities identified through penetration testing and 
                 code review activities, along with recommendations for remediation and risk mitigation strategies. They outline 
                 the specific security weaknesses discovered, their potential impact on an organization's systems and data, and 
-                actionable steps to address them effectively. Additionally, comprehensive reports often provide prioritization of 
+                actionable steps to address them effectively. 
+            </li>
+            <li>Additionally, comprehensive reports often provide prioritization of 
                 vulnerabilities based on severity levels, helping organizations allocate resources efficiently to address the most 
                 critical issues first. These reports, in turn, serve as invaluable resources for organizations to enhance their cybersecurity 
-                posture, strengthen their defenses, and minimize the risk of security breaches and data compromise.
-            </li>
-            <li> Following thorough our penetration testing and secure code reviews, we deliver detailed reports to our clients. 
-                These reports go beyond identifying vulnerabilities; 
-                they provide a strategic roadmap for remediation, empowering 
-                organizations to enhance their cybersecurity posture</li>
+                posture, strengthen their defenses, and minimize the risk of security breaches and data compromise.</li>
         </ul>
-        <div class="image-container">
-            <img src="{% static 'assets/img/pages/appattack/report.svg' %}" class="img-fluid" alt="Two people examining code for bugs">
+        <div class="image-container" style="display: flex;">
+            <img style="width: 50%;" src="{% static 'assets/img/pages/appattack/report.svg' %}" class="img-fluid" alt="Two people examining code for bugs">
+            <div style="width: 50%;display: flex;align-items: center;justify-content: center;">
+                <div class="text-style-1"> Following thorough our penetration testing and secure code reviews, we deliver detailed reports to our clients. 
+                    These reports go beyond identifying vulnerabilities; 
+                    they provide a strategic roadmap for remediation, empowering 
+                    organizations to enhance their cybersecurity posture</div>
+            </div>
+            
         </div>
         <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen Testing Services</button>
         <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>

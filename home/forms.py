@@ -12,14 +12,20 @@ from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpag
 User = get_user_model()
 
 def validate_password(value):
+    errors = [
+        "Password must be more than 8 digits.",
+        "Require at least one letter.",
+        "Require at least one number.",
+        "Require at least one special character."
+    ]
     if len(value) < 8:
-        raise ValidationError("Password must be more than 8 digits.")
+        raise ValidationError(errors)
     if not re.search(r'[A-Za-z]', value):
-        raise ValidationError("Require at least one letter.")
+        raise ValidationError(errors)
     if not re.search(r'[0-9]', value):
-        raise ValidationError("Require at least one number.")
+        raise ValidationError(errors)
     if not re.search(r'[^A-Za-z0-9]', value):
-        raise ValidationError("Require at least one special character.")
+        raise ValidationError(errors)
 
 def possible_years(first_year_in_scroll, last_year_in_scroll):
     p_year = []
