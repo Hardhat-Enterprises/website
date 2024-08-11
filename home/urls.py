@@ -30,6 +30,7 @@ urlpatterns = [
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('project_preferences/', views.project_preferences, name='project_preferences'),
 
 
 

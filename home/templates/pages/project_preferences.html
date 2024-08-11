@@ -1,0 +1,82 @@
+{% extends 'layouts/base.html' %} 
+{% load static %} 
+{% block content %}
+<main class="pt-6 px-3 mt-3">
+  {% include 'includes/pre-loader.html' %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h1>Project Preferences</h1>
+        
+        <!-- First Project Preference -->
+        <div class="mt-4">
+          <div class="d-flex justify-content-center align-items-start">
+            <h5 class="mr-2">1.</h5>
+            <div>
+              <h5>What is your first project preference?</h5>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="firstPreference" id="firstOption1" value="option1">
+                <label class="form-check-label" for="firstOption1">Company Website</label>
+              </div>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="firstPreference" id="firstOption2" value="option2">
+                <label class="form-check-label" for="firstOption2">App Attack</label>
+              </div>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="firstPreference" id="firstOption3" value="option3">
+                <label class="form-check-label" for="firstOption3">Pentesting GUI</label>
+              </div>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="firstPreference" id="firstOption4" value="option4">
+                <label class="form-check-label" for="firstOption4">Deakin CyberSafe VR</label>
+              </div>
+              <div class="form-check text-left mb-4">
+                <input class="form-check-input" type="radio" name="firstPreference" id="firstOption5" value="option5">
+                <label class="form-check-label" for="firstOption5">Smishing Detection</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Second Project Preference -->
+        <div class="mt-4">
+          <div class="d-flex justify-content-center align-items-start">
+            <h5 class="mr-2">2.</h5>
+            <div>
+              <h5>What is your second project preference?</h5>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="secondPreference" id="secondOption1" value="option1">
+                <label class="form-check-label" for="secondOption1">Company Website</label>
+              </div>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="secondPreference" id="secondOption2" value="option2">
+                <label class="form-check-label" for="secondOption2">App Attack</label>
+              </div>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="secondPreference" id="secondOption3" value="option3">
+                <label class="form-check-label" for="secondOption3">Pentesting GUI</label>
+              </div>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="secondPreference" id="secondOption4" value="option4">
+                <label class="form-check-label" for="secondOption4">Deakin CyberSafe VR</label>
+              </div>
+              <div class="form-check text-left">
+                <input class="form-check-input" type="radio" name="secondPreference" id="secondOption5" value="option5">
+                <label class="form-check-label" for="secondOption5">Smishing Detection</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Centered Submit Button -->
+        <div class="mt-5">
+          <a href="#" class="btn btn-tertiary animate-up-2">Submit!
+            <span class="ms-2"><span class="fas fa-arrow-right"></span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+

@@ -1,17 +1,184 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
-<main class="pt-6 px-3 mt-3">
+{% extends 'layouts/base.html' %} 
+{% load static %} 
+{% block content %}
+<main class="pt-6 px-3 mt-3 text-center">
   {% include 'includes/pre-loader.html' %}
 
   <h1>Upskilling</h1>
-
-  {% for skill in object_list %}
-  <div>
-    <h2>
-        <a href="{% url 'upskilling_skill' slug=skill.slug %}">{{ skill.name }}</a>
-    </h2>
+  <h2>Company Website</h2>
+  <div class="d-flex justify-content-center">
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Django</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Projects used in: Company Website</h6>
+        <p class="card-text">Django</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">HTML</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Projects used in: Company Website</h6>
+        <p class="card-text">HTML</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">CSS</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Projects used in: Company Website</h6>
+        <p class="card-text">CSS</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">JavaScript</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Projects used in: Company Website</h6>
+        <p class="card-text">JavaScript</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
   </div>
-  {% empty %}
-  <p>No skills assigned yet.</p>
-  {% endfor %}
+  <h2>App Attack</h2>
+  <div class="d-flex justify-content-center">
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+  </div>
+  <h2>Pentesting GUI</h2>
+  <div class="d-flex justify-content-center">
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+  </div>
+  <h2>Deakin CyberSafe VR</h2>
+  <div class="d-flex justify-content-center">
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+  </div>
+  <h2>Smishing Dectection</h2>
+  <div class="d-flex justify-content-center mb-5">
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+    <div class="card mx-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Template</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Template</h6>
+        <p class="card-text">Template</p>
+        <a href="#" class="card-link">Link</a>
+      </div>
+    </div>
+  </div>
 </main>
 {% endblock %}

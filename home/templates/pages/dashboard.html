@@ -3,20 +3,21 @@
 {% block content %}
 <main class="pt-6">
   {% include 'includes/pre-loader.html' %}
-
+ 
   <!-- Hero -->
   <section class="section-header bg-tertiary text-black text-center py-5">
     <h1>Welcome to your dashboard, {{ user.first_name }}</h1>
     <p>Unit: {{ student.unit }}</p>
     <p>Student ID: {{ student.id }}</p>
   </section>
-
+ 
   <div class="container">
     <div class="row">
       <!-- Project Preferences Section -->
       <div class="col-md-6">
         <section class="pt-5">
           <h2>Project Preferences</h2>
+          <p>These are your project preferences, you can select your preferences by hitting the button below.</p>
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -33,21 +34,177 @@
                 <th scope="row">2</th>
                 <td>Preference 2: {{ student.p2 }}</td>
               </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Preference 3: {{ student.p3 }}</td>
-              </tr>
             </tbody>
           </table>
         </section>
+        <a
+        href="{% url 'project_preferences' %}"
+        class="btn btn-tertiary me-3 animate-up-2"
+        >To Project Preference Selection!
+        <span class="ms-2"><span class="fas fa-arrow-right"></span></span
+      ></a>
       </div>
-
-      <!-- Upskilling Progress Tracker -->
+ 
+      <!-- Upskilling Tracker Section -->
       <div class="col-md-6">
+        <section class="pt-5">
+          <h2>Your Upskilling Tracker</h2>
+          <p>Tick the checkbox once you've completed upskilling on that skill to calculate your progress in your overall upskilling.</p>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDjango">
+            <label class="form-check-label" for="flexCheckDjango">
+              Django
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckHTML">
+            <label class="form-check-label" for="flexCheckHTML">
+              HTML
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckCSS">
+            <label class="form-check-label" for="flexCheckCSS">
+              CSS
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckJS">
+            <label class="form-check-label" for="flexCheckJS">
+              JavaScript
+            </label>
+          </div>
+        </section>
+        <div class="progress mt-2" style="height: 20px;">
+          <div id="progress-bar" class="progress-bar progress-bar-custom bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+        </div>
+        <a
+        href="{% url 'upskilling' %}"
+        class="btn btn-tertiary me-3 animate-up-2"
+        >To Upskilling!
+        <span class="ms-2"><span class="fas fa-arrow-right"></span></span
+      ></a>
+      </div>
+    </div>
+ 
+    <!-- Allocation -->
+    <section class="text-left pb-5 pt-5">
+      <h2>Your Allocation</h2>
+      <p>Your project allocation will appear below once you've been allocated a project.</p>
+      <h5>Status: {{ student.allocated }}</h5>
+    </section>
+ 
+    <!-- Calendar Section -->
+    <section class="text-left pb-5 pt-5">
+      <h2>Weekly Calendar</h2>
+      <div id="calendar" class="table-responsive">
+        <!-- Calendar will be rendered here -->
+      </div>
+      <section class="pt-5">
+        <h2>Add an Event</h2>
+        <form id="event-form">
+          <div class="mb-3">
+            <label for="event-date" class="form-label">Date</label>
+            <input type="date" id="event-date" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="event-description" class="form-label">Event</label>
+            <input type="text" id="event-description" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Event</button>
+        </form>
+      </section>
+    </section>
+  </div>
+</main>
+ 
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    const progressBar = document.getElementById('progress-bar');
+ 
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', updateProgress);
+    });
+ 
+    function updateProgress() {
+      const total = checkboxes.length;
+      const checked = document.querySelectorAll('.form-check-input:checked').length;
+      const progress = (checked / total) * 100;
+ 
+      progressBar.style.width = `${progress}%`;
+      progressBar.innerText = `${progress.toFixed(0)}%`;
+    }
+ 
+    // Calendar script
+    function renderCalendar() {
+      const now = new Date();
+      const startOfWeek = now.getDate() - now.getDay(); // Adjust to Sunday
+      const startDate = new Date(now.setDate(startOfWeek));
+      const endDate = new Date(now.setDate(startOfWeek + 6));
+      let calendarHTML = '<table class="table table-bordered">';
+      calendarHTML += '<thead><tr>';
+      calendarHTML += '<th scope="col">Sun</th>';
+      calendarHTML += '<th scope="col">Mon</th>';
+      calendarHTML += '<th scope="col">Tue</th>';
+      calendarHTML += '<th scope="col">Wed</th>';
+      calendarHTML += '<th scope="col">Thu</th>';
+      calendarHTML += '<th scope="col">Fri</th>';
+      calendarHTML += '<th scope="col">Sat</th>';
+      calendarHTML += '</tr></thead><tbody><tr>';
+ 
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        const dateStr = date.toISOString().split('T')[0];
+        calendarHTML += `<td data-date="${dateStr}" class="calendar-cell">${date.getDate()}</td>`;
+      }
+ 
+      calendarHTML += '</tr></tbody></table>';
+      document.getElementById('calendar').innerHTML = calendarHTML;
+      loadEvents();
+    }
+ 
+    function loadEvents() {
+      const events = JSON.parse(localStorage.getItem('events')) || {};
+      document.querySelectorAll('.calendar-cell').forEach(cell => {
+        const date = cell.getAttribute('data-date');
+        if (events[date]) {
+          cell.innerHTML += `<br><small>${events[date]}</small>`;
+        }
+      });
+    }
+ 
+    function addEvent(date, description) {
+      const events = JSON.parse(localStorage.getItem('events')) || {};
+      events[date] = description;
+      localStorage.setItem('events', JSON.stringify(events));
+    }
+ 
+    document.getElementById('event-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const date = document.getElementById('event-date').value;
+      const description = document.getElementById('event-description').value;
+      if (date && description) {
+        addEvent(date, description);
+        renderCalendar();
+        this.reset();
+      }
+    });
+ 
+    renderCalendar();
+  });
+</script>
+{% endblock content %}
+ 
+ 
+ 
+  <!-- Upskilling Progress Tracker -->
+      <!--<div class="col-md-6">
         <section class="text-left pt-5">
           <h2>Your Upskilling Progress</h2>
           {% for p in progress %}
-          <div class="mb-3">
+          <div class="msb-3">
             <label for="progress">{{ p.skill.name }}:</label>
             <span>{{ p.progress }}%</span>
             <div class="progress" style="height: 10px;">
@@ -58,14 +215,4 @@
         </section>
       </div>
     </div>
-
-    <!-- Allocation -->
-    <section class="text-left pb-5">
-      <h2>Your Allocation</h2>
-      <p>Status: {{ student.allocated }}</p>
-    </section>
-  </div>
-
-  <!-- End of section -->
-</main>
-{% endblock content %}
+  -->
