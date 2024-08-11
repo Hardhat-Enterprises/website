@@ -18656,6 +18656,13 @@ ul li {
   color: var(--darkmode-text);
 }
 
+/* Target specific dark backgrounds when dark mode is off */
+.text-white p,
+.text-white ol li,
+.text-white ul li {
+  color: #ffffff; /* White text for dark backgrounds */
+}
+
 a,
 .text-action {
   color: #FFCD11;
