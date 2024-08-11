@@ -10,6 +10,7 @@ from .models import (
 
     Webpage,
     DDT_contact,
+    Feedback,
 
     
     # Contact_central,
@@ -65,6 +66,18 @@ class ContactAdmin(admin.ModelAdmin):
 @admin.register(Webpage)
 class Webpage(admin.ModelAdmin):
     list_display = [field.name for field in Webpage._meta.fields]
+    
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('feedback_type', 'user', 'created_at')
+    list_filter = ('feedback_type', 'created_at')
+    search_fields = ('content', 'user__email')
+    readonly_fields = ('created_at',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # editing an existing object
+            return self.readonly_fields + ('user', 'feedback_type', 'content')
+        return self.readonly_fields
     
     
 # @admin.register(Contact_central)

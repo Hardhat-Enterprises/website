@@ -68,5 +68,8 @@ urlpatterns = [
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
+    # Feedback
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
 ]
 
