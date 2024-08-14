@@ -39,6 +39,9 @@ urlpatterns = [
     # Search result page
     path('search_results/', views.search_results, name='pages/search-results'),
 
+    # Search Suggestions
+    path('search/suggestions/', views.search_suggestions, name='search_suggestions'),
+
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),

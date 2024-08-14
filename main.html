@@ -5,7 +5,6 @@
 <main>
     {% include 'includes/pre-loader.html' %}
 
-
     <!-- Hero -->
     <div class="section-header bg-primary-app pb-0">
         <div class="container">
@@ -25,185 +24,161 @@
 
     <!-- Hero Section -->
     <section class="section-header bg-tertiary text-black py-5">
-		<div class="px-4 py-5 my-5 text-center">
-			<h1 class="fw-bold display-1">AppAttack</h1>
-			<img width="500" height="500" src="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}" alt="Hero image">
-			<div class="col-lg-6 mx-auto">
-			  <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
-			  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-			</head>
-			<body>
-			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
-			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
-			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
-			  
-			  <script> src=document.getElementById("penTesting").addEventListener("click", function() {
-				window.location.href = "{% url 'pen-testing' %}";
-			  });
-			  document.getElementById("secureCodeReview").addEventListener("click", function() {
-				window.location.href = "{% url 'secure-code-review' %}";
-			  });
-			  document.getElementById("comprehensiveReports").addEventListener("click", function() {
-				window.location.href = "{% url 'comphrehensive_report' %}";
-			  });
-			</script>
-			</body>
-			</html>
-			
-					
-
-				
-			  </div>
-			</div>
-		</div>
+        <div class="px-4 py-5 my-5 text-center">
+            <h1 class="fw-bold display-1">AppAttack</h1>
+            <img width="500" height="500" src="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}" alt="Hero image">
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
+                </div>
+            </div>
+        </div>
     </section>
-	<!-- End of Hero Section -->
-	<!-- Tools -->
-	<section class="section section-lg bg-tertiary">
-		<div class="container">
-		  <h2 class="fw-bolder display-2 text-center">Tools</h2>
-		  <div class="row">
-			<div class="col-sm mb-5 mb-lg-0">
-				<div class="text-center">
-					<img class="small-card rounded shadow border-0" src="https://nmap.org/images/sitelogo-nmap.svg" alt="Nmap logo">
-					<p class="fw-bold mt-2">NMAP</p>
-				</div>
-			</div>
-			<div class="col-sm mb-5 mb-lg-0">
-				<div class="text-center">
-					<img class="small-card rounded shadow border-0" src="https://avatars.githubusercontent.com/u/13749115" alt="burp suite logo">
-					<p class="fw-bold mt-2">Burp Suite</p>
-				</div>
-			</div>
-			<div class="col-sm mb-5 mb-lg-0">
-				<div class="text-center">
-					<img class="small-card rounded shadow border-0" src="https://avatars.githubusercontent.com/u/6716868" alt="OWASP ZAP logo">
-					<p class="fw-bold mt-2">OWASP ZAP</p>
-				</div>
-			</div>
-			<div class="col-sm mb-5 mb-lg-0">
-				<div class="text-center">
-					<img class="small-card rounded shadow border-0" src="{% static "assets/img/pages/appattack/coverity-logo-svg-vector.svg" %}" alt="Coverity logo">
-					<p class="fw-bold mt-2">Coverity</p>
-				</div>
-			</div>
-			<div class="col-sm mb-5 mb-lg-0">
-				<div class="text-center">
-					<img class="small-card rounded shadow border-0" src="{% static "assets/img/pages/appattack/veracode.svg" %}" alt="veracode logo">
-					<p class="fw-bold mt-2">Veracode</p>
-				</div>
-			</div>
-			<div class="col-sm mb-5 mb-lg-0">
-				<div class="text-center">
-					<img class="small-card rounded shadow border-0" src="https://avatars.githubusercontent.com/u/15811295" alt="checkmarx logo">
-					<p class="fw-bold mt-2">Checkmarx</p>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Tools -->
-	<!-- Join Us -->
-	<section class="section section-md">
-		<div class="container">
-			<div class="row mb-5">
-				<div class="col-12 mt-5">
-					<div class="card shadow mb-6">
-						<div class="card-body px-5 py-5 text-center text-md-left">
-							<div class="row align-items-center">
-								<div class="col-md-6">
-									<h2 class="mb-3">Join Us Today!</h2>
-									<p class="mb-0">
-										Empower your future in cybersecurity! Join AppAttack and contribute to shaping a secure digital landscape. Explore opportunities, join us today!
-									</p>
-								</div>
-								<div class="col-12 col-md-6 mt-4 mt-md-0 text-md-right">
-									<a href="#" class="btn btn-primary">
-										<span class="me-1">
-											<span class="fas fa-handshake"></span>
-										</span>
-										Join Us
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+    <!-- End of Hero Section -->
 
-	<!-- End Join Us -->
+    <!-- Tools -->
+    <section class="section section-lg bg-tertiary">
+        <div class="container">
+            <h2 class="fw-bolder display-2 text-center">Tools</h2>
+            <div class="row">
+                <!-- Tools content here -->
+            </div>
+        </div>
+    </section>
+    <!-- End Tools -->
 
+    <!-- Join Us -->
+    <section class="section section-md">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 mt-5">
+                    <div class="card shadow mb-6">
+                        <div class="card-body px-5 py-5 text-center text-md-left">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h2 class="mb-3">Join Us Today!</h2>
+                                    <p class="mb-0">
+                                        Empower your future in cybersecurity! Join AppAttack and contribute to shaping a secure digital landscape. Explore opportunities, join us today!
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4 mt-md-0 text-md-right">
+                                    <a href="#" class="btn btn-primary">
+                                        <span class="me-1">
+                                            <span class="fas fa-handshake"></span>
+                                        </span>
+                                        Join Us
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Join Us -->
 
     <section>
-        <!-- About  -->
+        <!-- About -->
         <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Overview</h2>
-                    <p class="mb-4">Introducing Deakin Cybersafe VR – an innovative project that aims to educate and
-                        raise awareness about cybersecurity using immersive virtual reality experiences. By
-                        simulating real-world cyber threats and scenarios, users can learn best practices for
-                        protecting themselves and their data in a safe and engaging environment. Our goal is to
-                        empower individuals with the knowledge and skills to navigate the digital landscape securely
-                        and confidently.</p>
+                    <p class="mb-4">Introducing Deakin Cybersafe VR – an innovative project that aims to educate and raise awareness about cybersecurity using immersive virtual reality experiences. By simulating real-world cyber threats and scenarios, users can learn best practices for protecting themselves and their data in a safe and engaging environment. Our goal is to empower individuals with the knowledge and skills to navigate the digital landscape securely and confidently.</p>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/deakin_cybersafe_vr-about.svg' %}" class="img-fluid"
-                        alt="About Us">
+                    <img src="{% static 'assets/img/pages/home/deakin_cybersafe_vr-about.svg' %}" class="img-fluid" alt="About Us">
                 </div>
             </div>
-            <!-- End of About  -->
+            <!-- End of About -->
+
             <!-- Goals -->
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/deakin_cybersafe_vr-goals.svg' %}" class="img-fluid"
-                        alt="Goals and Objectives">
+                    <img src="{% static 'assets/img/pages/home/deakin_cybersafe_vr-goals.svg' %}" class="img-fluid" alt="Goals and Objectives">
                 </div>
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Goals</h2>
                     <ul class="mb-4">
                         <li>Create immersive VR experiences that effectively simulate cyber threats and challenges.</li>
                         <li>Educate users about cybersecurity best practices in a memorable and interactive way.</li>
-                        <li>Engage diverse audiences, including students, professionals, and the general public, in
-                            cybersecurity awareness initiatives.</li>
-                        <li>Collaborate with industry partners and educational institutions to expand access to
-                            cybersafe VR experiences.</li>
+                        <li>Engage diverse audiences, including students, professionals, and the general public, in cybersecurity awareness initiatives.</li>
+                        <li>Collaborate with industry partners and educational institutions to expand access to cybersafe VR experiences.</li>
                     </ul>
                     <h2 class="fw-bolder text-dark">Objectives</h2>
                     <ul class="mb-4">
                         <li>Develop high-quality VR content that addresses key cybersecurity concepts and scenarios.</li>
-                        <li>Integrate interactive elements and feedback mechanisms to enhance user engagement and
-                            learning outcomes.</li>
-                        <li>Conduct user testing and feedback sessions to iterate and improve the VR experience based
-                            on user input.</li>
-                        <li>Partner with Deakin University and other institutions to promote and distribute Cybersafe VR
-                            experiences to students and educators.</li>
+                        <li>Integrate interactive elements and feedback mechanisms to enhance user engagement and learning outcomes.</li>
+                        <li>Conduct user testing and feedback sessions to iterate and improve the VR experience based on user input.</li>
+                        <li>Partner with Deakin University and other institutions to promote and distribute Cybersafe VR experiences to students and educators.</li>
                     </ul>
                 </div>
             </div>
             <!-- End of Goals -->
-            <!-- Class of Action Section -->
+
+            <!-- Call to Action Section -->
             <div class="bg-primary-app">
                 <div class="row justify-content-center text-center">
                     <div class="col-lg-8">
                         <div class="mt-4 mb-5">
                             <h2 class="fw-bolder text-dark">Join Us</h2>
-                            <p class="mb-4">Join our mission to revolutionize cybersecurity education through
-                                immersive VR experiences. Whether you're a developer, designer, educator, or simply
-                                passionate about cybersecurity, there's a place for you in our community.</p>
-                            <a href="{% url 'cybersafe_vr_join_us' %}" class="btn btn-primary animate-up-2"
-                                alt="Join Us"><span class="fas fa-handshake me-2"></span>
-                                Join Us</a>
-
+                            <p class="mb-4">Join our mission to revolutionize cybersecurity education through immersive VR experiences. Whether you're a developer, designer, educator, or simply passionate about cybersecurity, there's a place for you in our community.</p>
+                            <a href="{% url 'cybersafe_vr_join_us' %}" class="btn btn-primary animate-up-2" alt="Join Us"><span class="fas fa-handshake me-2"></span>Join Us</a>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End of Class of Action Section -->
+        <!-- End of Call to Action Section -->
     </section>
     <!-- End of Social Links Section -->
+
+    <!-- Search Form -->
+    <form class="d-flex align-items-center position-relative" method="POST" action="{% url 'pages/search-results' %}">
+        {% csrf_token %}
+        <input class="form-control mr-sm-2" id="search-box" type="search" placeholder="Search..." aria-label="Search" name="searched">
+        <button class="btn btn-outline-gray-100 me-md-3 px-4" type="submit">Search</button>
+        <ul id="suggestions" class="list-group position-absolute bg-white border rounded-3 shadow" style="top: 100%; left: 0; z-index: 1000; width: 100%;"></ul>
+    </form>
+
+    <script>
+        document.getElementById("penTesting").addEventListener("click", function() {
+            window.location.href = "{% url 'pen-testing' %}";
+        });
+        document.getElementById("secureCodeReview").addEventListener("click", function() {
+            window.location.href = "{% url 'secure-code-review' %}";
+        });
+        document.getElementById("comprehensiveReports").addEventListener("click", function() {
+            window.location.href = "{% url 'comprehensive_report' %}";
+        });
+
+        document.getElementById("search-box").addEventListener("input", function() {
+			const query = this.value;
+			if (query.length >= 2) {
+				fetch(`{% url 'search_suggestions' %}?query=${query}`)
+					.then(response => response.json())
+					.then(data => {
+						const suggestionsBox = document.getElementById("suggestions");
+						suggestionsBox.innerHTML = "";
+						data.forEach(item => {
+							const suggestionItem = document.createElement("div");
+							suggestionItem.classList.add("dropdown-item");
+							suggestionItem.textContent = item;
+							suggestionItem.addEventListener("click", function() {
+								document.getElementById("search-box").value = this.textContent;
+								suggestionsBox.innerHTML = "";
+								document.querySelector(".search-form-container").submit(); // Submit form
+							});
+							suggestionsBox.appendChild(suggestionItem);
+						});
+					});
+			} else {
+				document.getElementById("suggestions").innerHTML = "";
+			}
+		});
+    </script>
 </main>
 {% endblock content %}
