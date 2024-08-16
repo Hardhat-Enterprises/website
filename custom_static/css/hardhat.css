@@ -19450,3 +19450,12 @@ blockquote {
     width: 80%; 
   }
 }
+.dark-mode {
+  .form-check-input:checked {
+    background-color: #FFCD11;
+    border-color: #FFCD11;
+  }
+  .form-check-label {
+    color: #FFCD11;
+  }
+}
