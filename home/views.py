@@ -49,7 +49,8 @@ from .models import Smishingdetection_join_us, DDT_contact
 # from .models import Student, Project, Contact
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, NewWebURL
  
- 
+ from django_ratelimit.decorators import ratelimit    
+ # Import the `ratelimit` decorator from the `django_ratelimit` package
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
