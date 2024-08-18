@@ -39,6 +39,8 @@ urlpatterns = [
     
     # Search result page
     path('search_results/', views.search_results, name='pages/search-results'),
+    path('website_form/', views.website_form, name='pages/website-form'),
+
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
@@ -48,8 +50,7 @@ urlpatterns = [
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
-    # path("verify-email", views.verify_email, name="verify-email"),
-    # path("resend-otp", views.resend_otp, name="resend-otp"),
+   
 
 
     #Statistics

@@ -9,12 +9,13 @@ from .models import (
     Contact,
 
     Webpage,
+    DDT_contact,
 
     
     # Contact_central,
     Article,
     Smishingdetection_join_us,
-
+    Projects_join_us,
 
 
 
@@ -24,6 +25,7 @@ from .models import (
 
 admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
+admin.site.register(DDT_contact)
 
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
@@ -73,7 +75,7 @@ class Webpage(admin.ModelAdmin):
 #     list_display = ("user", "otp_code")
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
-
+admin.site.register(Projects_join_us)
 
 
 

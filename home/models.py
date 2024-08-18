@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
 
+
 from django.utils.text import slugify
 
 import secrets
@@ -76,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 #Search Bar Models:
 
-class Webpage(AbstractBaseSet):
+class Webpage(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     url = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
@@ -179,6 +180,18 @@ class Contact(models.Model):
     
     def __str__(self):
         return self.name
+
+class DDT_contact(models.Model):
+    fullname=models.CharField(max_length=100)
+    email=models.CharField(max_length=200)
+    mobile=models.CharField(max_length=200)
+    message=models.TextField(max_length=1000)
+    
+    def __str__(self):
+        return self.fullname
+    class Meta:
+        verbose_name = "DDT_contact"
+        verbose_name_plural = "DDT_contact"
     
 
 # class Contact_central(models.Model):
@@ -222,4 +235,8 @@ class Smishingdetection_join_us(models.Model):
     email= models.CharField(max_length=200)
     message= models.TextField(max_length=1000)
 
-
+class Projects_join_us(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    message = models.TextField(max_length=1000)
+    page_name = models.CharField(max_length=100)

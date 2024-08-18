@@ -25,26 +25,27 @@
             <div class="bg-primary-app text-dark py-5">
                 <div class="row g-5">
                     <div class="col-12 col-md-6">
-                        <form action="#">
+                        <form method="post">
+                            {% csrf_token %}
                             <!-- Form -->
                             <div class="mb-4">
                                 <label for="name" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" placeholder="Enter your full name" id="name"
+                                <input type="text" class="form-control" placeholder="Enter your full name" id="name" name="fullname"
                                     required>
                             </div>
                             <div class="mb-4">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" placeholder="Enter your deakin email address"
-                                    id="email" required>
+                                    id="email" name="email" required>
                             </div>
                             <div class="mb-4">
                                 <label for="mobile" class="form-label">Mobile</label>
-                                <input type="tel" class="form-control" placeholder="Enter your mobile" id="mobile"
+                                <input type="tel" class="form-control" placeholder="Enter your mobile" id="mobile" name="mobile"
                                     required>
                             </div>
                             <div class="mb-4">
                                 <label for="experience" class="form-label">Experience</label>
-                                <textarea class="form-control" id="experience" rows="4"
+                                <textarea class="form-control" id="experience" rows="4" name="message"
                                     placeholder="Enter your prior experience"></textarea>
                             </div>
                             <div>
