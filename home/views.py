@@ -18,7 +18,7 @@ from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
  
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage,Document
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -34,10 +34,8 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL,DocumentForm
 
-
- 
  
 # import os
  
@@ -628,4 +626,35 @@ def projects_join_us(request, page_url, page_name):
 
  
        # return context
+class DocumentUploadView(View):
+    def get(self, request):
+        form = DocumentForm()
+        return render(request, 'documents/document_upload.html', {'form': form})
+
+    def post(self, request):
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save(commit=False)
+            # document.uploaded_by = request.user
+            document.save()
+            return redirect('document_list')
+        else:
+            # Log form errors for debugging
+            print("Form errors:", form.errors)
+        return render(request, 'documents/document_upload.html', {'form': form})
+
+class DocumentListView(ListView):
+    model = Document
+    template_name = 'documents/document_list.html'
+    context_object_name = 'documents'
+
+    def get_queryset(self):
+        return Document.objects.all()  
+
+class DocumentDetailsView(DetailView):
+    model = Document
+    template_name = 'documents/document_detail.html'
+    context_object_name = 'document'
+    pk_url_kwarg = 'document_id'  
+
 

@@ -20,6 +20,11 @@ from home import views
 
 from .admin import admin_statistics_view
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+
 urlpatterns = [
     path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
     path('admin/', admin.site.urls),
@@ -66,3 +71,7 @@ urlpatterns = [
     path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

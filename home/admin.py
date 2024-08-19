@@ -11,6 +11,8 @@ from .models import (
     Webpage,
     DDT_contact,
 
+
+    Document,
     
     # Contact_central,
     Article,
@@ -78,6 +80,6 @@ class Webpage(admin.ModelAdmin):
 admin.site.register(Projects_join_us)
 
 
-
-
-
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Document._meta.fields]

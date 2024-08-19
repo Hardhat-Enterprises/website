@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Document
 
 
 
@@ -121,4 +121,13 @@ class NewWebURL(forms.ModelForm):
         model = Webpage
         fields = ['id', 'url', 'title']
             
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['title', 'file']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Title'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
