@@ -50,7 +50,7 @@ class RegistrationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         # Define the regex pattern for the required email format
-        pattern = r'^s\d{9}@deakin\.edu\.au$'
+        pattern = r'@deakin\.edu\.au$'
         
         if not re.match(pattern, email):
             raise ValidationError(_("Email must be match with your Deakin email."))

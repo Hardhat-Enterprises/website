@@ -1,8 +1,8 @@
-{% extends 'layouts/base.html' %} 
-{% load static %} 
-{% block header %} 
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block header %}
   {% include 'includes/navigation.html'%}
-{% endblock header %} 
+{% endblock header %}
 {% block content %}
 <main>
   {% include 'includes/pre-loader.html' %}
@@ -61,6 +61,7 @@
                   <li id="symbol-check" class="text-danger"><i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)</li>
                 </ul>
               </div>
+
               <!-- End of Form -->
               <div class="d-grid">
                 <button type="submit" class="btn btn-warning btn-primary">
@@ -88,33 +89,61 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
       // Email Validation
-    const emailField = document.getElementById("id_email");
-    const emailErrorMessage = document.getElementById("email-error");
-    const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
+      const emailField = document.getElementById("id_email");
+      const emailErrorMessage = document.getElementById("email-error");
+      const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
 
-    emailField.addEventListener("input", function() {
-        const emailPattern = /^s\d{9}@deakin\.edu\.au$/;
-        const emailValue = emailField.value;
+      emailField.addEventListener("input", function() {
+          const emailPattern = /@deakin\.edu\.au$/;
+          const emailValue = emailField.value;
 
-        if (emailPattern.test(emailValue)) {
-            emailErrorMessage.textContent = "";
-            emailField.classList.remove("is-invalid");
-            emailField.classList.add("is-valid");
-            emailIcon.classList.remove("fa-envelope");
-            emailIcon.classList.add("fa-check-circle");
-            emailIcon.style.color = "green";
-        } else {
-            emailErrorMessage.textContent = "Email must match your Deakin email (e.g., s123456789@deakin.edu.au).";
-            emailField.classList.remove("is-valid");
-            emailField.classList.add("is-invalid");
-            emailIcon.classList.remove("fa-check-circle");
-            emailIcon.classList.add("fa-envelope");
-            emailIcon.style.color = "red";
-        }
+          if (emailPattern.test(emailValue)) {
+              emailErrorMessage.textContent = "";
+              emailField.classList.remove("is-invalid");
+              emailField.classList.add("is-valid");
+              emailIcon.classList.remove("fa-envelope");
+              emailIcon.classList.add("fa-check-circle");
+              emailIcon.style.color = "green";
+          } else {
+              emailErrorMessage.textContent = "Email must match your Deakin email address";
+              emailField.classList.remove("is-valid");
+              emailField.classList.add("is-invalid");
+              emailIcon.classList.remove("fa-check-circle");
+              emailIcon.classList.add("fa-envelope");
+              emailIcon.style.color = "red";
+          }
       });
 
       // Password Validation
       const passwordField = document.getElementById("id_password1");
+      const confirmPasswordField = document.getElementById("id_password2");
+      const confirmIcon = document.querySelector("#confirm-addon .fa-unlock-alt");
+
+      passwordField.addEventListener("input", validatePasswordMatch);
+      confirmPasswordField.addEventListener("input", validatePasswordMatch);
+
+      function validatePasswordMatch() {
+          const passwordValue = passwordField.value;
+          const confirmPasswordValue = confirmPasswordField.value;
+
+          if (confirmPasswordValue === passwordValue) {
+              confirmPasswordField.classList.remove("is-invalid");
+              confirmPasswordField.classList.add("is-valid");
+              confirmIcon.classList.remove("fa-unlock-alt");
+              confirmIcon.classList.add("fa-check-circle");
+              confirmIcon.style.color = "green";
+              document.getElementById("confirm-password-error").textContent = "";
+          } else {
+              confirmPasswordField.classList.remove("is-valid");
+              confirmPasswordField.classList.add("is-invalid");
+              confirmIcon.classList.remove("fa-check-circle");
+              confirmIcon.classList.add("fa-unlock-alt");
+              confirmIcon.style.color = "red";
+              document.getElementById("confirm-password-error").textContent = "Passwords do not match.";
+          }
+      }
+
+      // Existing password checks (length, lowercase, etc.)
       const lengthCheck = document.getElementById("length-check");
       const lowercaseCheck = document.getElementById("lowercase-check");
       const uppercaseCheck = document.getElementById("uppercase-check");
@@ -199,6 +228,9 @@
   .is-invalid {
       border-color: red;
   }
+  .is-valid {
+      border-color: green;
+  }
   .text-success {
       color: green !important;
   }
@@ -207,5 +239,5 @@
   }
 </style>
 
-{% endblock content %} 
+{% endblock content %}
 {% block footer %}{% endblock footer %}
