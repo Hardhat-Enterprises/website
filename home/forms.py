@@ -5,9 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Document
-
-
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Article, Comment
 
 User = get_user_model()
 
@@ -120,14 +118,22 @@ class NewWebURL(forms.ModelForm):
     class Meta:
         model = Webpage
         fields = ['id', 'url', 'title']
-            
 
-class DocumentForm(forms.ModelForm):
+
+class ArticleForm(forms.ModelForm):
     class Meta:
-        model = Document
-        fields = ['title', 'file']
+        model = Article
+        fields = ['title', 'content']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Title'}),
-            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Blog Title'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Write your blog here...'}),
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a comment...'}),
         }
 

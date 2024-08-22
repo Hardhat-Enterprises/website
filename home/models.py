@@ -216,19 +216,26 @@ class Progress(models.Model):
 
         return f'{self.student} - {self.skill.name}: {self.progress}%'
 
-        return f'{self.student} - {self.skill}: {"Completed" if self.completed else "Not completed"}'
-
-
-
 class Article(models.Model):
     title = models.CharField(max_length=255)
-    content = HTMLField()
-    date = models.DateField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
-    likes = models.ManyToManyField(User, related_name='likes', blank=True)
+    likes = models.ManyToManyField(User, related_name='liked_articles', blank=True)
+
+    def __str__(self):
+        return self.title
 
 
+class Comment(models.Model):
+    article = models.ForeignKey(Article, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Comment by {self.user.username}'
 
 class Smishingdetection_join_us(models.Model):
     name= models.CharField(max_length=100)
@@ -240,14 +247,4 @@ class Projects_join_us(models.Model):
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
-    
-
-class Document(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
-    title = models.CharField(max_length=255)
-    file = models.FileField(upload_to='documents/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
 

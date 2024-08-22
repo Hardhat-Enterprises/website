@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, DocumentListView, DocumentDetailsView, DocumentUploadView
+from .views import Index, DetailArticleView, LikeArticle, CreateArticleView, ArticleDetailView, add_comment, UpskillingView, UpskillingSkillView
 
 from . import views
 
@@ -52,16 +52,12 @@ urlpatterns = [
 
 
     # Blog URLs
-    path('blog/', Index.as_view(), name = 'blog'),
-    path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
-    path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+    path('blog/', Index.as_view(), name='blog'),
+    path('blog/new/', CreateArticleView.as_view(), name='new_article'),
+    path('blog/<int:pk>/', ArticleDetailView.as_view(), name='detail_article'),
+    path('blog/<int:article_id>/comment/', add_comment, name='add_comment'),
+    path('blog/<int:pk>/like', LikeArticle.as_view(), name='like_article'),
 
-   
-    #DocumentURLS
-    path('documents/', DocumentListView.as_view(), name='document_list'),
-    path('documents/upload/', DocumentUploadView.as_view(), name='document_upload'),
-    path('documents/<uuid:document_id>/', DocumentDetailsView.as_view(), name='document_details'),
-    
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),

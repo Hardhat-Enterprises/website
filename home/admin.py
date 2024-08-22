@@ -9,17 +9,11 @@ from .models import (
     Contact,
 
     Webpage,
-    DDT_contact,
-
-
-    Document,
-    
+    DDT_contact,    
     # Contact_central,
     Article,
     Smishingdetection_join_us,
     Projects_join_us,
-
-
 
 )
 
@@ -78,8 +72,3 @@ class Webpage(admin.ModelAdmin):
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(Projects_join_us)
-
-
-@admin.register(Document)
-class DocumentAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Document._meta.fields]

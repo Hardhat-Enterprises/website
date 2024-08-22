@@ -18,7 +18,7 @@ from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
  
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage,Document
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -34,7 +34,7 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL,DocumentForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
 
  
 # import os
@@ -52,7 +52,14 @@ from .models import Smishingdetection_join_us, DDT_contact
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
 from .models import Student, Project, Progress, Skill
- 
+
+
+    
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView
+from django.shortcuts import redirect, render
+from .models import Article, Comment
+from .forms import ArticleForm, CommentForm
 #from .models import Student, Project, Progress
  
  
@@ -509,10 +516,45 @@ class LikeArticle(View):
             article.likes.add(request.user.id)
         article.save()
         return redirect('detail_article', pk)
- 
- 
- 
- 
+
+
+class CreateArticleView(CreateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'blog/new_article.html'
+    success_url = reverse_lazy('blog')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = 'blog/blog_post.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['comment_form'] = CommentForm()
+        return context
+
+def add_comment(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article
+            comment.user = request.user
+            comment.save()
+            messages.success(request, "Your comment has been added.")
+            return redirect('detail_article', pk=article.id)
+        else:
+            print(form.errors)
+    else:
+        form = CommentForm()
+    
+    return redirect('detail_article', pk=article.id)
+
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
@@ -626,35 +668,5 @@ def projects_join_us(request, page_url, page_name):
 
  
        # return context
-class DocumentUploadView(View):
-    def get(self, request):
-        form = DocumentForm()
-        return render(request, 'documents/document_upload.html', {'form': form})
-
-    def post(self, request):
-        form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            document = form.save(commit=False)
-            # document.uploaded_by = request.user
-            document.save()
-            return redirect('document_list')
-        else:
-            # Log form errors for debugging
-            print("Form errors:", form.errors)
-        return render(request, 'documents/document_upload.html', {'form': form})
-
-class DocumentListView(ListView):
-    model = Document
-    template_name = 'documents/document_list.html'
-    context_object_name = 'documents'
-
-    def get_queryset(self):
-        return Document.objects.all()  
-
-class DocumentDetailsView(DetailView):
-    model = Document
-    template_name = 'documents/document_detail.html'
-    context_object_name = 'document'
-    pk_url_kwarg = 'document_id'  
 
 
