@@ -269,6 +269,7 @@
   --section-bs: #ffffff;
   --darkmode-text: #1c2540;
   --darkmode-secondary-button: #1c2540;
+  --collaspebs: #ffffff;
   --dm-bg-gray:#F3F4F6;
   --dm-bg-primary: #ffffff;
   --bs-font-sans-serif: "Nunito Sans", sans-serif;
@@ -304,6 +305,7 @@ body {
     --darkmode-secondary-button: #ffc107;
     --dm-bg-gray:#ffc107;
     --dm-bg-primary: #ffc107;
+    --collaspebs: #1c2540;
   }
 
 hr {
@@ -15966,6 +15968,7 @@ textarea.form-control-lg {
       text-align: right; }
   .navbar-collapse.collapsing,
   .navbar-collapse.show {
+    background-color: var(--collaspebs) !important;
     padding: 1.5rem;
     border-radius: 1rem;
     background: #ffffff;
@@ -19468,6 +19471,15 @@ blockquote {
   .contact-image img {
     width: 80%; 
   }
+  .dark-mode{
+    .form-check-label{
+      display: none;
+    }
+  }
+  .auth-style{
+    margin-right: 8px;
+  }
+  
 }
 
 .dark-mode{
@@ -19478,4 +19490,11 @@ blockquote {
   .form-check-label{
     color: #FFCD11;
   }
+}
+.auth-style{
+  margin-left: 16px;
+}
+.additional-margin{
+  margin-top: 160px !important;
+  margin-bottom: 60px !important;
 }
