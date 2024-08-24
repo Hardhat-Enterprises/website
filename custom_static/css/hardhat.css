@@ -15968,7 +15968,7 @@ textarea.form-control-lg {
   .navbar-collapse.show {
     padding: 1.5rem;
     border-radius: 1rem;
-    background: #ffffff;
+    background-color: var(--section-bs);
     animation: show-navbar-collapse .2s ease forwards;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
   .navbar-collapse.collapsing-out {
