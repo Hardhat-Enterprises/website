@@ -15972,7 +15972,10 @@ textarea.form-control-lg {
     animation: show-navbar-collapse .2s ease forwards;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
   .navbar-collapse.collapsing-out {
-    animation: hide-navbar-collapse .2s ease forwards; } }
+    animation: hide-navbar-collapse .2s ease forwards; }
+  .res-hide{
+    display: none;
+  } }
 
 /**
  * = Sections
