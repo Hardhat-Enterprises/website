@@ -19470,12 +19470,13 @@ blockquote {
   }
 }
 
-.dark-mode{
-  .form-check-input:checked{
+
+.dark-mode {
+  .form-check-input:checked {
     background-color: #FFCD11;
     border-color: #FFCD11;
   }
-  .form-check-label{
+  .form-check-label {
     color: #FFCD11;
   }
 }
