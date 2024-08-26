@@ -45,7 +45,12 @@
 
     <!-- Content Security Policy -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://hardhat.pythonanywhere.com/; style-src 'self' https://hardhat.pythonanywhere.com/;">
+<meta http-equiv="Content-Security-Policy" content="
+    default-src 'self'; 
+    script-src 'self' https://hardhat.pythonanywhere.com/ 'unsafe-inline' http://localhost:8000 https://buttons.github.io https://unpkg.com; 
+    style-src 'self' https://hardhat.pythonanywhere.com/ 'unsafe-inline' http://localhost:8000 https://fonts.googleapis.com; 
+    font-src 'self' https://fonts.gstatic.com; 
+    img-src 'self' data:;">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
