@@ -15988,10 +15988,17 @@ textarea.form-control-lg {
   padding-top: 7rem;
   padding-bottom: 3rem; }
 
+.ptgui_viz-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+}
+
 @media (min-width: 576px) {
   .section {
     position: relative;
-    padding-top: 6rem;
+    padding-top: 2rem;
     padding-bottom: 6rem; }
   .section-header {
     position: static;
