@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Article, Comment
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Article, Comment, Document
 
 User = get_user_model()
 
@@ -135,5 +135,15 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
         widgets = {
             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a comment...'}),
+        }
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['title', 'description', 'file']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Title'}),
+            'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Description'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 

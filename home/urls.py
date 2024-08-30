@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, CreateArticleView, ArticleDetailView, add_comment, UpskillingView, UpskillingSkillView
+from .views import Index, DetailArticleView, LikeArticle, CreateArticleView, ArticleDetailView, add_comment, UpskillingView, UpskillingSkillView, DocumentListView, DocumentDetailsView, DocumentUploadView, DocumentDeleteView
 
 from . import views
 
@@ -58,6 +58,12 @@ urlpatterns = [
     path('blog/<int:article_id>/comment/', add_comment, name='add_comment'),
     path('blog/<int:pk>/like', LikeArticle.as_view(), name='like_article'),
 
+
+    #DocumentURLS
+    path('documents/', DocumentListView.as_view(), name='documents'),
+    path('documents/upload/', DocumentUploadView.as_view(), name='document_upload'),
+    path('documents/<uuid:document_id>/', DocumentDetailsView.as_view(), name='document_details'),
+    path('documents/<uuid:document_id>/delete/', DocumentDeleteView.as_view(), name='document_delete'),
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),

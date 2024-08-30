@@ -14,11 +14,11 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
  
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage, Document
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -26,7 +26,7 @@ from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-from django.urls import reverse_lazy
+
 # from Website.settings import EMAIL_HOST_USER
 import random
 
@@ -34,7 +34,7 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, DocumentForm
 
  
 # import os
@@ -610,6 +610,43 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
 
         return context
 
+class DocumentUploadView(View):
+    def get(self, request):
+        form = DocumentForm()
+        return render(request, 'documents/document_upload.html', {'form': form})
+
+    def post(self, request):
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.save()
+            return redirect('documents')
+        else:
+            print("Form errors:", form.errors)
+        return render(request, 'documents/document_upload.html', {'form': form})
+
+class DocumentListView(LoginRequiredMixin,ListView):
+    model = Document
+    template_name = 'documents/document_list.html'
+    context_object_name = 'documents'
+
+    def get_queryset(self):
+        return Document.objects.all()  
+
+class DocumentDetailsView(DetailView):
+    model = Document
+    template_name = 'documents/document_detail.html'
+    context_object_name = 'document'
+    pk_url_kwarg = 'document_id'  
+
+
+class DocumentDeleteView(DeleteView):
+    model = Document
+    template_name = 'documents/document_confirm_delete.html'
+    success_url = reverse_lazy('documents')
+    context_object_name = 'document'
+    pk_url_kwarg = 'document_id'
+
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
@@ -668,5 +705,6 @@ def projects_join_us(request, page_url, page_name):
 
  
        # return context
+
 
 

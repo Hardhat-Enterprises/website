@@ -7,7 +7,7 @@ from .models import (
     Skill,
     Progress,
     Contact,
-
+    Document,
     Webpage,
     DDT_contact,    
     # Contact_central,
@@ -72,3 +72,7 @@ class Webpage(admin.ModelAdmin):
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(Projects_join_us)
+
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Document._meta.fields]
