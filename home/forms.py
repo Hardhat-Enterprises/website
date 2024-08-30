@@ -35,6 +35,13 @@ def possible_years(first_year_in_scroll, last_year_in_scroll):
     return p_year
 
 class RegistrationForm(UserCreationForm):
+    # Newly added...........................
+    email = forms.EmailField(
+        label=_("Email"),
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+    )
+    # .......................................
+
     password1 = forms.CharField(
         label=_("Your Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
@@ -45,6 +52,29 @@ class RegistrationForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
         validators=[validate_password],
     )
+    # Newly added................................................
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        # Define the regex pattern for the required password format
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+        
+        if not re.match(pattern, password):
+            raise ValidationError(
+                _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
+            )
+    # ...........................................................
+
+    # Newly added...........................
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # Define the regex pattern for the required email format
+        pattern = r'@deakin\.edu\.au$'
+        
+        if not re.match(pattern, email):
+            raise ValidationError(_("Email must be match with your Deakin email."))
+        
+        return email
+    # .......................................
 
 
     class Meta:
