@@ -89,7 +89,7 @@
         <button type="button" class="btn" id="backButton">Back</button>
         <script> 
             document.getElementById("backButton").addEventListener("click", function() {
-                window.location.href = "https://hardhatwebdev2024.pythonanywhere.com/appattack/";
+                window.location.href = "{% url 'appattack' %}";
             });
 
             document.getElementById("secureCodeReview").addEventListener("click", function() {
