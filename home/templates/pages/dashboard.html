@@ -44,36 +44,36 @@
         <span class="ms-2"><span class="fas fa-arrow-right"></span></span
       ></a>
       </div>
- 
+    
       <!-- Upskilling Tracker Section -->
       <div class="col-md-6">
         <section class="pt-5">
           <h2>Your Upskilling Tracker</h2>
           <p>Tick the checkbox once you've completed upskilling on that skill to calculate your progress in your overall upskilling.</p>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDjango">
+            <input class="upskilling-checkbox" type="checkbox" value="" id="flexCheckDjango">
             <label class="form-check-label" for="flexCheckDjango">
               Django
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckHTML">
+            <input class="upskilling-checkbox" type="checkbox" value="" id="flexCheckHTML">
             <label class="form-check-label" for="flexCheckHTML">
               HTML
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckCSS">
+            <input class="upskilling-checkbox" type="checkbox" value="" id="flexCheckCSS">
             <label class="form-check-label" for="flexCheckCSS">
               CSS
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckJS">
+            <input class="upskilling-checkbox" type="checkbox" value="" id="flexCheckJS">
             <label class="form-check-label" for="flexCheckJS">
               JavaScript
             </label>
-          </div>
+          </div>          
         </section>
         <div class="progress mt-2" style="height: 20px;">
           <div id="progress-bar" class="progress-bar progress-bar-custom bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
@@ -86,21 +86,38 @@
       ></a>
       </div>
     </div>
- 
-    <!-- Allocation -->
-    <section class="text-left pb-5 pt-5">
-      <h2>Your Allocation</h2>
-      <p>Your project allocation will appear below once you've been allocated a project.</p>
-      <h5>Status: {{ student.allocated }}</h5>
-    </section>
- 
-    <!-- Calendar Section -->
-    <section class="text-left pb-5 pt-5">
-      <h2>Weekly Calendar</h2>
-      <div id="calendar" class="table-responsive">
-        <!-- Calendar will be rendered here -->
+  
+    <div class="row">
+      <!-- To-Do List Section -->
+      <div class="col-md-6">
+        <section class="pt-5">
+          <h2>Your To-Do List</h2>
+          <form id="todo-form">
+            <div class="mb-3">
+              <input type="text" id="todo-task" class="form-control" placeholder="Enter a new task" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Task</button>
+          </form>
+          <ul id="todo-list" class="list-group mt-3">
+            <!-- To-do items will be dynamically added here -->
+          </ul>
+        </section>
       </div>
+      
+      <!-- Allocation Section -->
+      <div class="col-md-6">
+        <section class="pt-5">
+          <h2>Your Allocation</h2>
+          <p>Your project allocation will appear below once you've been allocated a project.</p>
+          <h5>Status: {{ student.allocated }}</h5>
+        </section>
+      </div>
+    </div>
+      <!-- Calendar Section -->
       <section class="pt-5">
+        <h2>Calendar</h2>
+        <p>To remove a event or task double click the task and a pop up message will appear</p>
+        <div id="calendar"></div>
         <h2>Add an Event</h2>
         <form id="event-form">
           <div class="mb-3">
@@ -111,108 +128,175 @@
             <label for="event-description" class="form-label">Event</label>
             <input type="text" id="event-description" class="form-control" required>
           </div>
-          <button type="submit" class="btn btn-primary">Add Event</button>
+          <div class="mb-3">
+            <label for="event-recurrence" class="form-label">Recurrence</label>
+            <select id="event-recurrence" class="form-control">
+              <option value="none">None</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary mb-5">Add Event</button>
         </form>
       </section>
-    </section>
-  </div>
-</main>
- 
+  </main>
 <script>
+  //Progress Bar
   document.addEventListener('DOMContentLoaded', (event) => {
-    const checkboxes = document.querySelectorAll('.form-check-input');
-    const progressBar = document.getElementById('progress-bar');
- 
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', updateProgress);
-    });
- 
-    function updateProgress() {
-      const total = checkboxes.length;
-      const checked = document.querySelectorAll('.form-check-input:checked').length;
-      const progress = (checked / total) * 100;
- 
-      progressBar.style.width = `${progress}%`;
-      progressBar.innerText = `${progress.toFixed(0)}%`;
+  const checkboxes = document.querySelectorAll('.upskilling-checkbox');
+  const progressBar = document.getElementById('progress-bar');
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', updateProgress);
+  });
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const checked = document.querySelectorAll('.upskilling-checkbox:checked').length;
+    const progress = (checked / total) * 100;
+
+    console.log('Checkbox elements:', checkboxes);  // Log all checkbox elements
+    console.log('Checked:', checked, ', Total:', total, ', Progress:', progress.toFixed(0) + '%');
+
+    progressBar.style.width = `${progress}%`;
+    progressBar.innerText = `${progress.toFixed(0)}%`;
+  }
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  const todoForm = document.getElementById('todo-form');
+  const todoList = document.getElementById('todo-list');
+
+  // Function to add a task to the to-do list
+  todoForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const task = document.getElementById('todo-task').value;
+
+    if (task) {
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+      li.innerHTML = `
+        ${task}
+        <button class="btn btn-danger btn-sm remove-task">Remove</button>
+      `;
+
+      todoList.appendChild(li);
+      this.reset();
     }
- 
-    // Calendar script
-    function renderCalendar() {
-      const now = new Date();
-      const startOfWeek = now.getDate() - now.getDay(); // Adjust to Sunday
-      const startDate = new Date(now.setDate(startOfWeek));
-      const endDate = new Date(now.setDate(startOfWeek + 6));
-      let calendarHTML = '<table class="table table-bordered">';
-      calendarHTML += '<thead><tr>';
-      calendarHTML += '<th scope="col">Sun</th>';
-      calendarHTML += '<th scope="col">Mon</th>';
-      calendarHTML += '<th scope="col">Tue</th>';
-      calendarHTML += '<th scope="col">Wed</th>';
-      calendarHTML += '<th scope="col">Thu</th>';
-      calendarHTML += '<th scope="col">Fri</th>';
-      calendarHTML += '<th scope="col">Sat</th>';
-      calendarHTML += '</tr></thead><tbody><tr>';
- 
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(startDate);
-        date.setDate(startDate.getDate() + i);
-        const dateStr = date.toISOString().split('T')[0];
-        calendarHTML += `<td data-date="${dateStr}" class="calendar-cell">${date.getDate()}</td>`;
-      }
- 
-      calendarHTML += '</tr></tbody></table>';
-      document.getElementById('calendar').innerHTML = calendarHTML;
-      loadEvents();
+  });
+
+  // Function to remove a task from the to-do list
+  todoList.addEventListener('click', function(event) {
+    if (event.target.classList.contains('remove-task')) {
+      event.target.parentElement.remove();
     }
- 
-    function loadEvents() {
-      const events = JSON.parse(localStorage.getItem('events')) || {};
-      document.querySelectorAll('.calendar-cell').forEach(cell => {
-        const date = cell.getAttribute('data-date');
-        if (events[date]) {
-          cell.innerHTML += `<br><small>${events[date]}</small>`;
+  });
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+
+  // Calendar script
+  function renderCalendar() {
+    const now = new Date();
+    const startOfWeek = now.getDate() - now.getDay(); // Adjust to Sunday
+    const startDate = new Date(now.setDate(startOfWeek));
+    let calendarHTML = '<table class="table table-bordered">';
+    calendarHTML += '<thead><tr>';
+    calendarHTML += '<th scope="col">Sun</th>';
+    calendarHTML += '<th scope="col">Mon</th>';
+    calendarHTML += '<th scope="col">Tue</th>';
+    calendarHTML += '<th scope="col">Wed</th>';
+    calendarHTML += '<th scope="col">Thu</th>';
+    calendarHTML += '<th scope="col">Fri</th>';
+    calendarHTML += '<th scope="col">Sat</th>';
+    calendarHTML += '</tr></thead><tbody><tr>';
+
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      const dateStr = date.toISOString().split('T')[0];
+      calendarHTML += `<td data-date="${dateStr}" class="calendar-cell">${date.getDate()}</td>`;
+    }
+
+    calendarHTML += '</tr></tbody></table>';
+    document.getElementById('calendar').innerHTML = calendarHTML;
+    loadEvents();
+  }
+
+  function loadEvents() {
+    const events = JSON.parse(localStorage.getItem('events')) || {};
+    const now = new Date();
+    const startOfWeek = now.getDate() - now.getDay();
+    const startDate = new Date(now.setDate(startOfWeek));
+
+    document.querySelectorAll('.calendar-cell').forEach(cell => {
+      const date = cell.getAttribute('data-date');
+      for (const [eventDate, event] of Object.entries(events)) {
+        const eventDateObj = new Date(eventDate);
+        
+        // Check if the event is recurring and if it should appear on this date
+        if (date === eventDate || isRecurringEvent(eventDateObj, event.recurrence, date)) {
+          cell.innerHTML += `<br><small class="event-description">${event.description}</small>`;
         }
-      });
-    }
- 
-    function addEvent(date, description) {
-      const events = JSON.parse(localStorage.getItem('events')) || {};
-      events[date] = description;
+      }
+    });
+  }
+
+  function addEvent(date, description, recurrence) {
+    const events = JSON.parse(localStorage.getItem('events')) || {};
+    events[date] = { description, recurrence };
+    localStorage.setItem('events', JSON.stringify(events));
+  }
+
+  function removeEvent(date) {
+    const events = JSON.parse(localStorage.getItem('events')) || {};
+    if (events[date]) {
+      delete events[date];
       localStorage.setItem('events', JSON.stringify(events));
     }
- 
-    document.getElementById('event-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const date = document.getElementById('event-date').value;
-      const description = document.getElementById('event-description').value;
-      if (date && description) {
-        addEvent(date, description);
-        renderCalendar();
-        this.reset();
-      }
-    });
- 
-    renderCalendar();
+  }
+
+  function isRecurringEvent(eventDate, recurrence, targetDateStr) {
+    const targetDate = new Date(targetDateStr);
+
+    if (recurrence === 'daily') {
+      return true;
+    } else if (recurrence === 'weekly') {
+      return eventDate.getDay() === targetDate.getDay();
+    } else if (recurrence === 'monthly') {
+      return eventDate.getDate() === targetDate.getDate();
+    }
+
+    return false;
+  }
+
+  document.getElementById('event-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const date = document.getElementById('event-date').value;
+    const description = document.getElementById('event-description').value;
+    const recurrence = document.getElementById('event-recurrence').value;
+
+    if (date && description) {
+      addEvent(date, description, recurrence);
+      renderCalendar();
+      this.reset();
+    }
   });
+
+  // Add event listener to calendar cells to allow removal of events this appears in a pop up message
+  document.getElementById('calendar').addEventListener('click', function(event) {
+    const target = event.target;
+    if (target.classList.contains('event-description')) {
+      const date = target.closest('.calendar-cell').getAttribute('data-date');
+      if (confirm(`Do you want to remove the event: "${target.textContent}"?`)) {
+        removeEvent(date);
+        renderCalendar();
+      }
+    }
+  });
+
+  renderCalendar();
+});
 </script>
 {% endblock content %}
- 
- 
- 
-  <!-- Upskilling Progress Tracker -->
-      <!--<div class="col-md-6">
-        <section class="text-left pt-5">
-          <h2>Your Upskilling Progress</h2>
-          {% for p in progress %}
-          <div class="msb-3">
-            <label for="progress">{{ p.skill.name }}:</label>
-            <span>{{ p.progress }}%</span>
-            <div class="progress" style="height: 10px;">
-              <div class="progress-bar bg-warning" role="progressbar" style="width: {{ p.progress }}%;" aria-valuenow="{{ p.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          {% endfor %}
-        </section>
-      </div>
-    </div>
-  -->

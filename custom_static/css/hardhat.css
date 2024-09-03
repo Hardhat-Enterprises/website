@@ -19480,3 +19480,34 @@ blockquote {
     color: #FFCD11;
   }
 }
+
+  .chat-box {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+  }
+
+  .chat-message {
+    margin-bottom: 10px;
+  }
+
+  .chat-message .user-name {
+    font-weight: bold;
+  }
+
+  .chat-message .timestamp {
+    font-size: 0.8em;
+    color: #999;
+  }
+
+  h1, h2 {
+    text-align: center;
+  }
+
+  .list-group-item {
+    cursor: pointer;
+  }

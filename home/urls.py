@@ -31,6 +31,7 @@ urlpatterns = [
     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('project_preferences/', views.project_preferences, name='project_preferences'),
+    path('upskill/chat', views.team_chat, name='team_chat'),
 
 
 

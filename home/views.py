@@ -147,6 +147,9 @@ def upskill_progress(request):
 
 def project_preferences(request):
     return render(request, 'pages/project_preferences.html')
+
+def team_chat(request):
+    return render(request, 'pages/team_chat.html')
  
 #Search-Results page
 def search_results(request):
