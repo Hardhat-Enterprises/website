@@ -6,7 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.db.models import Count
@@ -15,28 +16,41 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
- 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
  
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
- 
- 
+
 import os
+import json
+# from utils.charts import generate_color_palette
+# from .models import Student, Project, Contact
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
+
+
+ 
+ 
+# import os
  
 from .models import Smishingdetection_join_us, DDT_contact
-import json
+# import json
  
  
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm
+# from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, NewWebURL
  
  
+
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
 from .models import Student, Project, Progress, Skill
@@ -183,7 +197,35 @@ def search_results(request):
 ##def dynamic_articles_view(request):
 ##    context['object_list'] = article.objects.filter(title__icontains=request.GET.get('search'))
 ##    return render(request, "encyclopedia/article_detail.html", context)
-   
+
+
+def Deakin_Threat_mirror_main(request):
+    return render(request, 'pages/DeakinThreatmirror/main.html')
+
+def Vr_main(request):
+    return render(request, 'pages/Vr/main.html')
+
+# Authentication
+
+
+
+## Web-Form 
+
+def website_form(request):
+    if request.method == "POST":
+        form = NewWebURL(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data["title"]
+            u = form.cleaned_data["url"]
+            w = Webpage(title=t, url=u)
+            w.save()
+        return render(request, 'pages/website-form.html', {"form":form})
+    else:
+        form = NewWebURL()
+        return render(request, 'pages/website-form.html', {"form":form})
+
+        
+    
  
  
 # Authentication
@@ -213,7 +255,8 @@ def register(request):
         if form.is_valid():
             #form.save()
             otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Verify Your Mail with the OTP: /n {otp}", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
+            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
             print("Account created successfully! An OTP was sent to your email. Check!")
             messages.success(request, "Account created successfully!")
             return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
@@ -253,6 +296,84 @@ def VerifyOTP(request):
 #             return redirect("verify-email", username=request.POST['username'])
 #     context = {"form": form}
 #     return render(request, "signup.html", context)
+
+
+
+# Email Verification 
+# def verify_email(request, first_name):
+#     user = get_user_model().objects.get(username=first_name)
+#     user_otp = OtpToken.objects.filter(user=user).last()
+    
+    
+#     if request.method == 'POST':
+#         # valid token
+#         if user_otp.otp_code == request.POST['otp_code']:
+            
+#             # checking for expired token
+#             if user_otp.otp_expires_at > timezone.now():
+#                 user.is_active=True
+#                 user.save()
+#                 messages.success(request, "Account activated successfully!! You can Login.")
+#                 return redirect("signin")
+            
+#             # expired token
+#             else:
+#                 messages.warning(request, "The OTP has expired, get a new OTP!")
+#                 return redirect("verify-email", username=user.first_name)
+        
+        
+#         # invalid otp code
+#         else:
+#             messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
+#             return redirect("verify-email", username=user.first_name)
+        
+#     context = {}
+#     return render(request, "verify_token.html", context)
+
+
+# def resend_otp(request):
+#     if request.method == 'POST':
+#         user_email = request.POST["otp_email"]
+        
+#         if get_user_model().objects.filter(email=user_email).exists():
+#             user = get_user_model().objects.get(email=user_email)
+#             otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
+            
+            
+#             # email variables
+#             subject="Email Verification"
+#             message = f"""
+#                                 Hi {user.username}, here is your OTP {otp.otp_code} 
+#                                 it expires in 5 minute, use the url below to redirect back to the website
+#                                 http://127.0.0.1:8000/verify-email/{user.username}
+                                
+#                                 """
+#             sender = "kaviuln@gmail.com"
+#             receiver = [user.email, ]
+        
+        
+#             # send email
+#             send_mail(
+#                     subject,
+#                     message,
+#                     sender,
+#                     receiver,
+#                     fail_silently=False,
+#                 )
+            
+#             messages.success(request, "A new OTP has been sent to your email-address")
+#             return redirect("verify-email", username=user.first_name)
+
+#         else:
+#             messages.warning(request, "This email dosen't exist in the database")
+#             return redirect("resend-otp")
+        
+           
+#     context = {}
+#     return render(request, "resend_otp.html", context)
+
+
+
  
  
  
@@ -261,6 +382,7 @@ class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
     form_class = UserPasswordResetForm
  
+
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'accounts/password_reset_confirm.html'
     form_class = UserSetPasswordForm
@@ -452,5 +574,66 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
             progress = Progress.objects.get(student=student, skill=self.object)
             # Add the progress_id to the context
             context['progress_id'] = progress.id
- 
+
+
         return context
+
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'accounts/password_reset.html'
+    form_class = UserPasswordResetForm
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        users = get_user_model().objects.filter(email=email)
+        if users.exists():
+            for user in users:
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = default_token_generator.make_token(user)
+                reset_url = self.request.build_absolute_uri(
+                    reverse_lazy('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+                )
+                subject = 'Password Reset'
+                message = (
+                    f"You're receiving this email because you have requested a password reset for your user account at {self.request.META['HTTP_HOST']}.\n\n"
+                    f"Please go to the following page and choose a new password:\n{reset_url}\n\n"
+                    "If you didn't request a password reset, please contact us at your earliest convenience.\n\n"
+                    "Regards,\nHardhat Enterprises"
+                )
+            send_mail(subject, message, 'deakinhardhatwebsite@gmail.com', [email], fail_silently=False)
+            return redirect('password_reset_done')
+        else:
+            messages.error(self.request, "User does not exist. Please enter a valid email address.")
+            return self.form_invalid(form)
+
+
+def vr_join_us(request):
+    return projects_join_us(request, 'pages/Vr/join_us.html', 'cybersafe_vr_join_us')
+
+def Deakin_Threat_mirror_joinus(request):
+    return projects_join_us(request, 'pages/DeakinThreatmirror/join_us.html', 'threat_mirror_join_us')
+
+def projects_join_us(request, page_url, page_name):
+    if request.method == 'POST':
+        # Copy of POST data 
+        post_data = request.POST.copy()
+        # Set the page_name value 
+        post_data['page_name'] = page_name
+        # Form with the modified POST data
+        form = projects_JoinUsForm(post_data)
+        print(form)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your message has been successfully sent")
+            return redirect(page_name) 
+        else:
+            print(request)
+            messages.error(request, "Please fill the form correctly")
+    else:
+        form = projects_JoinUsForm(initial={'page_name': page_name})
+    print(request)
+    return render(request, page_url, {'form': form, 'page_name': page_name})
+
+ 
+       # return context
+

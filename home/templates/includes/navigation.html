@@ -56,10 +56,10 @@
                                         <a class="menu-link" href="{% url 'smishing_detection_main' %}">Smishing Detection</a>
                                     </li>
                                     <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'Vr_main' %}">Deakin CyberSafe VR</a>
+                                        <a class="menu-link" href="{% url 'Vr_main' %}">CyberSafe VR</a>
                                     </li>
                                     <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror</a>
+                                        <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
                                     </li> 
                                 </ul>
                             </div>
@@ -204,7 +204,7 @@
                     </li>
                     <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'malware_viz_main' %}"
-                        >Malware</a
+                        >Malware (On Hold)</a
                       >
                     </li>
                     <li class="mb-2 menu-item">
@@ -224,10 +224,10 @@
 
                 
                   <li class="mb-2 menu-item">
-                      <a class="menu-link" href="#">Deakin CyberSafe VR</a>
+                      <a class="menu-link" href="{% url 'Vr_main' %}">Deakin CyberSafe VR</a>
                   </li>
                   <li class="mb-2 menu-item">
-                      <a class="menu-link" href="#">Deakin Threat mirror</a>
+                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror (On Hold)</a>
                   </li> 
 
                   </ul>
@@ -280,6 +280,11 @@
           <span class="navbar-toggler-icon"></span>
         </button>
     </div>
+    <div class="form-check form-switch dark-mode">
+      <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+      <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
+    </div>
     </div>
   </nav>
 </header>
+<script src="{% static 'js/toggles.js' %}"></script>

@@ -77,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 #Search Bar Models:
 
-class Webpage(AbstractBaseSet):
+class Webpage(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     url = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
@@ -235,4 +235,8 @@ class Smishingdetection_join_us(models.Model):
     email= models.CharField(max_length=200)
     message= models.TextField(max_length=1000)
 
-
+class Projects_join_us(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    message = models.TextField(max_length=1000)
+    page_name = models.CharField(max_length=100)
