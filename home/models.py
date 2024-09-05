@@ -5,6 +5,7 @@ from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
@@ -240,3 +241,39 @@ class Projects_join_us(models.Model):
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
+
+
+User = get_user_model()
+
+class Feedback(models.Model):
+    GENERAL_INQUIRY = 'general'
+    BUG = 'bug'
+    IMPROVEMENT = 'improvement'
+    FEATURE_REQUEST = 'feature'
+
+    FEEDBACK_TYPES = [
+        (GENERAL_INQUIRY, 'General Inquiry'),
+        (BUG, 'Bug Report'),
+        (IMPROVEMENT, 'Improvement Suggestion'),
+        (FEATURE_REQUEST, 'Request for a Feature')
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    feedback_type = models.CharField(
+        max_length=20,
+        choices=FEEDBACK_TYPES,
+    )
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        feedback_type_display = self.get_feedback_type_display()
+        return f"{feedback_type_display} - {self.created_at}"
+
+
+

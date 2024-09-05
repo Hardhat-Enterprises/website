@@ -1,91 +1,134 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block header %} 
+<!----{% extends 'layouts/base.html' %} {% load static %} {% block header %}
  {% include 'includes/navigation.html'%}
-{% endblock header %} {% block content %}
-<main>
-  {% include 'includes/pre-loader.html' %}
+{% endblock header %} {% block content %}-->
+{% extends 'layouts/base.html' %}
+{% load static %}
 
-  <!-- Section -->
-  <section
-    class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
-    data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}"
-  >
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-17 d-flex align-items-center justify-content-center">
-          <div
-            class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
-          >
-            <div class="text-center text-md-center mb-4 mt-md-6">
-              <img
-                src="{% static 'assets/img/pages/login/favicon.ico' %}"
-                alt="Logo"
-                class="mb-3"
-              />
-              <h1 class="mb-0 h3">Create an account</h1>
-            </div>
-            <form method="post">
-              {% csrf_token %}
-              <!-- Form -->
-              {% for field in form %}
-              <div class="form-group mb-4">
-                <label for="email">{{ field.label }}</label>
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon3">
-                    <span
-                      class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"
-                    >
-                    </span>
-                  </span>
-                  {{ field }}
+{% block header %}
+    {% include 'includes/navigation.html' %}
+{% endblock header %}
+
+{% block content %}
+
+<main>
+    {% include 'includes/pre-loader.html' %}
+
+    <!-- Section -->
+    <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+             data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-17 d-flex align-items-center justify-content-center">
+                    <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
+                        <div class="text-center text-md-center mb-4 mt-md-6">
+                            <img src="{% static 'assets/img/pages/login/favicon.ico' %}"
+                                 alt="Logo"
+                                 class="mb-3" />
+                            <h1 class="mb-0 h3">Create an account</h1>
+                        </div>
+                        <form method="post">
+                            {% csrf_token %}
+                            <!-- Form -->
+                            {% for field in form %}
+                            <div class="form-group mb-4">
+                                <label for="email">{{ field.label }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon3">
+                                        <span class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}">
+                                        </span>
+                                    </span>
+                                    {{ field }}
+                                </div>
+                            </div>
+                            <span class="text-danger"> {{ field.errors }} </span>
+                            {% endfor %}
+                            <!--<div class="d-flex mb-4" style="margin-left: 31%;">
+                                <span class="fw-normal" style="margin-right: 0.4rem;">
+                                    <a onclick="get_rand_pass()" href="javascript:;" class="fw-bold text-underline">Generate password</a>
+                                </span>
+                                <br />
+                                <span>
+                                    <a onclick="show_rand_pass()" href="javascript:;" class="fw-bold text-underline">Show password</a>
+                            </span>-->
+                            <div class="d-flex mb-4" style="margin-left: 31%;">
+                                <span class="fw-normal" style="margin-right: 0.4rem;">
+                                    <a href="javascript:void(0);"
+                                       onclick="get_rand_pass()"
+                                       class="fw-bold text-underline">
+                                        Generate password
+                                    </a>
+                                </span>
+                                <br />
+                                <span>
+                                    <a id="togglePasswordLink"
+                                       href="javascript:void(0);"
+                                       onclick="togglePasswordVisibility()"
+                                       class="fw-bold text-underline">
+                                        Show password
+                                    </a>
+                                </span>
+                            </div>
+
+                            <!-- End of Form -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-warning btn-primary">
+                                    Sign up
+                                </button>
+                            </div>
+                        </form>
+                        <div class="d-flex justify-content-center align-items-center mt-4">
+                            <span class="fw-normal">
+                                Already have an account?
+                                <a href="{% url 'login' %}" class="fw-bold text-underline">Login here</a>
+                            </span>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <span class="text-danger"> {{ field.errors }} </span>
-              {% endfor %}
-              <div class="d-flex mb-4" style="margin-left: 31%;">
-                  <span class="fw-normal" style="margin-right: 0.4rem;">
-                      <a onclick="get_rand_pass()" href="javascript:;" class="fw-bold text-underline"
-                        >Generate password</a
-                      >
-                  </span>
-                          <br />
-                  <span >
-                      <a onclick="show_rand_pass()" href="javascript:;" class="fw-bold text-underline"
-                        >Show password</a
-                      >
-                  </span>
-              </div>
-              <!-- End of Form -->
-              <div class="d-grid">
-                <button type="submit" class="btn btn-warning btn-primary">
-                  Sign up
-                </button>
-              </div>
-            </form>
-            <div class="d-flex justify-content-center align-items-center mt-4">
-              <span class="fw-normal">
-                Already have an account?
-                <a href="{% url 'login' %}" class="fw-bold text-underline"
-                  >Login here</a
-                >
-              </span>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
-  {% include 'includes/footer.html' %}
+    </section>
+    {% include 'includes/footer.html' %}
 </main>
 
-<script>
+<!--<script>
     function get_rand_pass() {
-        fetch("/accounts/password-gen").then(d => d.json()).then(j => {document.getElementsByName("password1")[0].value = j.data; document.getElementsByName("password2")[0].value = j.data})
+    fetch("/accounts/password-gen").then(d => d.json()).then(j => {document.getElementsByName("password1")[0].value = j.data; document.getElementsByName("password2")[0].value = j.data})
     }
 
     function show_rand_pass() {
-        document.getElementsByName("password1")[0].type = "text";
-        document.getElementsByName("password2")[0].type = "text";
+    document.getElementsByName("password1")[0].type = "text";
+    document.getElementsByName("password2")[0].type = "text";
     }
+</script>-->
+<script>
+    function generateRandomPassword() {
+    fetch("/accounts/password-gen")
+        .then(response => response.json())
+        .then(data => {
+            const passwordFields = document.getElementsByName("password1")[0];
+            const confirmPasswordFields = document.getElementsByName("password2")[0];
+            passwordFields.value = data.data;
+            confirmPasswordFields.value = data.data;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function togglePasswordVisibility() {
+    const passwordFields = [
+        document.getElementsByName("password1")[0],
+        document.getElementsByName("password2")[0]
+    ];
+    const toggleLink = document.getElementById("togglePasswordLink");
+
+    const isPasswordHidden = passwordFields[0].type === "password";
+    const newType = isPasswordHidden ? "text" : "password";
+    const newLinkText = isPasswordHidden ? "Hide password" : "Show password";
+
+    passwordFields.forEach(field => field.type = newType);
+    toggleLink.innerText = newLinkText;
+    }
+
+
 </script>
 
 {% endblock content %} {% block footer %}{% endblock footer %}
