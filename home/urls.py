@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, search_results
 
 from . import views
 

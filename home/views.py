@@ -10,15 +10,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
- 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, User, Course, Skill 
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -175,15 +173,16 @@ def search_suggestions(request):
 
 #Search-Results page
 def search_results(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-       
-        webpages = Webpage.objects.filter(title__contains=searched)
-        return render(request, 'pages/search-results.html',
-            {'searched':searched,
-            'webpages':webpages})
-    else:
-        return render(request, 'pages/search-results.html', {})
+    query = request.POST.get('q', '')  # Get search query from request
+    results = {
+        'searched': query,
+        'webpages': Webpage.objects.filter(title__icontains=query),
+        'projects': Project.objects.filter(title__icontains=query),
+        'courses': Course.objects.filter(title__icontains=query),
+        'skills': Skill.objects.filter(name__icontains=query),
+        'articles': Article.objects.filter(title__icontains=query),
+    }
+    return render(request, 'pages/search-results.html', results)
    
 #    if request.method == 'GET':
 #        searched = request.GET.get('searched')
