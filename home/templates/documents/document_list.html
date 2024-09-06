@@ -5,10 +5,29 @@
 <main>
     {% include 'includes/pre-loader.html' %}
 
+    <!-- Messages Section -->
+    {% if messages %}
+        <div class="container mt-3">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <!-- End Messages Section -->
+
     <!-- Hero Section -->
     <section class="section-header bg-tertiary text-black py-2">
         <div class="px-2 py-5 my-5 text-center">
-            <h1 class="fw-bold display-1">Documents</h1>
+            <h1 class="fw-bold display-1">Documents Vault</h1>
             <p class="lead mb-4">Explore all uploaded documents below.</p>
         </div>
     </section>
@@ -29,17 +48,49 @@
                 {% for document in documents %}
                 <div class="col-md-4 mb-3">
                     <div class="card shadow border-0" style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ document.title }}</h5>
-                            <a href="{% url 'document_details' document.id %}" class="btn btn-outline-primary">View Details</a>
-                            <a href="{{ document.file.url }}" class="btn btn-outline-secondary">Download</a>
-                            <a href="{% url 'document_delete' document.id %}" class="btn btn-outline-danger">Delete</a>
+                            <div class="d-flex justify-content-center mt-3">
+                                <a href="{% url 'document_details' document.id %}" class="btn btn-outline-primary btn-sm mx-1">View Details</a>
+                                <a href="{{ document.file.url }}" class="btn btn-outline-secondary btn-sm mx-1">Download</a>
+                                <a href="{% url 'document_delete' document.id %}" class="btn btn-outline-danger btn-sm mx-1">Delete</a>
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
                 {% empty %}
                 <p>No documents available.</p>
                 {% endfor %}
+
+                <!-- Pagination -->
+                <nav>
+                    <ul class="pagination">
+                    <div class="mx-auto d-flex flex-row mt-5">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page=1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item">
+                        <a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+                        </li>
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                        {% endif %}
+                    </div>
+                    </ul>
+                </nav>
+  
             </div>
         </div>
     </section>

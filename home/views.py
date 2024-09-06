@@ -624,15 +624,24 @@ class DocumentUploadView(View):
         else:
             print("Form errors:", form.errors)
         return render(request, 'documents/document_upload.html', {'form': form})
+       
 
-class DocumentListView(LoginRequiredMixin,ListView):
+class DocumentListView(LoginRequiredMixin, ListView):
     model = Document
     template_name = 'documents/document_list.html'
     context_object_name = 'documents'
+    paginate_by = 10 #10 docs per page 
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'You do not have access to this page. Please login.')
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         return Document.objects.all()  
-
+    
+    
 class DocumentDetailsView(DetailView):
     model = Document
     template_name = 'documents/document_detail.html'

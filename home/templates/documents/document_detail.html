@@ -23,6 +23,10 @@
                         <div class="card-body">
                             <h2 class="fw-bolder">{{ document.title }}</h2>
                             <p class="text-muted">Uploaded at: {{ document.uploaded_at|date:"F j, Y" }}</p>
+                            <div class="mt-4">
+                                <h4>Description</h4>
+                                <p>{{ document.description|default:"No description provided." }}</p>
+                            </div>
                             <p class="text-muted">Download the file to view.</p>
                             <a href="{{ document.file.url }}" class="btn btn-outline-primary">Download File</a>
                             <a href="{% url 'document_delete' document.id %}" class="btn btn-outline-danger">Delete</a>
