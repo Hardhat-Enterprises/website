@@ -1,7 +1,119 @@
 {% extends 'layouts/base.html' %} {% load static %} {% block content %}
 <main>
   {% include 'includes/pre-loader.html' %}
+<style>
+  /* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
 
+/* Body Background and Text Color */
+body {
+    background-color: #fafafa;
+    color: #333;
+}
+
+/* Main Team Section Styling */
+#team {
+    background-color: #f5d13b;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+/* Team Section Header Styling */
+.team-header h2 {
+    font-size: 42px;
+    color: #1a1a1a;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Team Section Subheading */
+.team-header p {
+    font-size: 20px;
+    color: #333;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+/* Grid Container for Team Members */
+.team-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+/* Styling Individual Team Member Cards */
+.team-member {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    width: 280px;
+    margin: 20px;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Team Member Hover Effect */
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Team Member Photo Styling */
+.team-photo {
+    width: 100%;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 3px solid #f5d13b;
+}
+
+/* Team Member Name Styling */
+.team-member h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #f5d13b;
+}
+
+/* Team Member Position Styling */
+.team-member p {
+    font-size: 18px;
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+/* Bio Section - Initially Hidden */
+.bio {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #f0f0f0;
+    display: none;
+}
+
+/* Bio Section Visibility Toggle */
+.bio.expanded {
+    display: block;
+}
+
+/* Footer Section Styling */
+footer {
+    background-color: #1a1a1a;
+    padding: 20px 0;
+    text-align: center;
+    color: #fff;
+}
+
+footer p {
+    font-size: 14px;
+}
+
+</style>
   <!-- Hero -->
   <section class="section-header bg-tertiary text-black">
     <div class="container">
@@ -30,6 +142,77 @@
     </div>
   </section>
   <!-- End of Hero section -->
+  <section id="team">
+    <div class="team-header">
+        <!-- Section Title -->
+        <h2>Meet Our Team</h2>
+        <!-- Section Subheading -->
+        <p>We are a diverse team of professionals, dedicated to delivering top-notch security solutions tailored for your business.</p>
+    </div>
+
+    <!-- Team Grid (Using Flexbox for Responsive Layout) -->
+    <div class="team-grid">
+        <!-- Team Member 1 -->
+        <div class="team-member">
+            <img src="https://via.placeholder.com/150" alt="John Smith" class="team-photo">
+            <h3>John Smith</h3>
+            <p>CEO & Founder</p>
+            <div class="bio">
+                <p>John has over 15 years of experience in cloud security. He founded Hardhat Enterprises to revolutionize enterprise security solutions worldwide.</p>
+            </div>
+        </div>
+        
+        <!-- Team Member 2 -->
+        <div class="team-member">
+            <img src="https://via.placeholder.com/150" alt="Jane Doe" class="team-photo">
+            <h3>Jane Doe</h3>
+            <p>Chief Security Officer</p>
+            <div class="bio">
+                <p>Jane leads our security protocols and has successfully managed security measures for multiple Fortune 500 clients.</p>
+            </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="team-member">
+            <img src="https://via.placeholder.com/150" alt="Mike Jones" class="team-photo">
+            <h3>Mike Jones</h3>
+            <p>Lead Developer</p>
+            <div class="bio">
+                <p>Mike specializes in developing cutting-edge security software solutions. He has been integral in Hardhat’s product development.</p>
+            </div>
+        </div>
+
+        <!-- Team Member 4 -->
+        <div class="team-member">
+            <img src="https://via.placeholder.com/150" alt="Sara Williams" class="team-photo">
+            <h3>Sara Williams</h3>
+            <p>Head of Marketing</p>
+            <div class="bio">
+                <p>Sara manages all marketing campaigns and digital outreach strategies. Her efforts have significantly boosted the company’s visibility.</p>
+            </div>
+        </div>
+
+        <!-- Team Member 5 -->
+        <div class="team-member">
+            <img src="https://via.placeholder.com/150" alt="David Lee" class="team-photo">
+            <h3>David Lee</h3>
+            <p>Data Analyst</p>
+            <div class="bio">
+                <p>David excels at data analysis and ensures our security systems are always evolving based on the latest data insights.</p>
+            </div>
+        </div>
+
+        <!-- Team Member 6 -->
+        <div class="team-member">
+            <img src="https://via.placeholder.com/150" alt="Emily Brown" class="team-photo">
+            <h3>Emily Brown</h3>
+            <p>UX/UI Designer</p>
+            <div class="bio">
+                <p>Emily designs intuitive user experiences and interfaces for our products, ensuring ease of use while maintaining top security standards.</p>
+            </div>
+        </div>
+    </div>
+</section>
  <!-- Section -->
   <section class="section section-md">
     <div class="container">
