@@ -9,6 +9,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
+from django.db import models
 
 
 from django.utils.text import slugify
@@ -240,3 +241,15 @@ class Projects_join_us(models.Model):
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
+
+
+
+class SecurityEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    event_type = models.CharField(max_length=50)  # e.g., 'login_success', 'login_failure'
+    ip_address = models.GenericIPAddressField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    details = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
