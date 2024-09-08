@@ -19480,6 +19480,7 @@ blockquote {
     color: #FFCD11;
   }
 }
+
 .profile-container {
   display: flex;
   align-items: center;
@@ -19505,3 +19506,4 @@ blockquote {
   font-weight: bold;
   display: block;
 }
+
