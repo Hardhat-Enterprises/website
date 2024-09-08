@@ -240,3 +240,11 @@ class Projects_join_us(models.Model):
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    bio = models.TextField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username

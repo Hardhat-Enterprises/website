@@ -19459,3 +19459,28 @@ blockquote {
     color: #FFCD11;
   }
 }
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none; 
+}
+
+.profile-container::before {
+  content: none;
+}
+
+.profile-avatar {
+  border: 2px solid #fff;
+  transition: transform 0.2s ease-in-out;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.1);
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+}
