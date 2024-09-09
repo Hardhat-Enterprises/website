@@ -164,7 +164,7 @@ def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
  
 # Search Suggestions
-def search_suggestions(request):
+def SearchSuggestions(request):
     query = request.GET.get('query', '')
     if len(query) >= 2:
         suggestions = User.objects.filter(name__icontains=query).values_list('name', flat=True)[:5]
@@ -172,7 +172,7 @@ def search_suggestions(request):
     return JsonResponse([], safe=False)
 
 #Search-Results page
-def search_results(request):
+def SearchResults(request):
     query = request.POST.get('q', '')  # Get search query from request
     results = {
         'searched': query,

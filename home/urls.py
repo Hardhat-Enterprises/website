@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, search_results
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults
 
 from . import views
 
@@ -47,12 +47,12 @@ urlpatterns = [
     
     
     # Search result page
-    path('search_results/', views.search_results, name='pages/search-results'),
+    path('SearchResults/', views.SearchResults, name='pages/search-results'),
     path('website_form/', views.website_form, name='pages/website-form'),
 
 
     # Search Suggestions
-    path('search/suggestions/', views.search_suggestions, name='search_suggestions'),
+    path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
