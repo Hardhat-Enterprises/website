@@ -17,7 +17,8 @@ from .models import (
     Smishingdetection_join_us,
     Projects_join_us,
 
-
+    # Logging
+    SecurityEvent
 
 )
 
@@ -60,6 +61,10 @@ class ProgressAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
+
+@admin.register(SecurityEvent)
+class SecurityEventAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in SecurityEvent._meta.fields]
     
 #Webpage Search Model
 @admin.register(Webpage)
