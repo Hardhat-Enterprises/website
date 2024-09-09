@@ -85,11 +85,34 @@
   
   {% endblock footer %}
 
+  <button id="backToTop" style="
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #3a3a32;
+  color: rgb(236, 232, 2); 
+  padding: 5px; 
+  border: none;
+  border-radius: 30%;
+  cursor: pointer;
+  z-index: 1000;
+  display: none;
+  width: 35px; 
+  height: 35px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;"> 
+  &#8593;
+  </button>
+
   {% include 'includes/scripts.html' %}
   {% block javascripts %}{% endblock javascripts %}
 
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="{% static 'backToTop.js' %}"></script>
 
 </body>
 
