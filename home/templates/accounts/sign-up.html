@@ -1,0 +1,284 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block header %} {%include 'includes/navigation.html'%} {% endblock header %} {% block content %}
+
+<main>
+  {% include 'includes/pre-loader.html' %}
+  
+
+  <!-- Section -->
+  <section
+    class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+    data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}"
+  >
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-17 d-flex align-items-center justify-content-center">
+          <div
+            class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
+          >
+            <div class="text-center text-md-center mb-4 mt-md-6">
+              <img
+                src="{% static 'assets/img/pages/login/favicon.ico' %}"
+                alt="Logo"
+                class="mb-3"
+              />
+              <h1 class="mb-0 h3">Create an account</h1>
+            </div>
+            <form method="post">
+              {% csrf_token %}
+              <!-- Form -->
+              {% for field in form %}
+              <div class="form-group mb-4">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">
+                    <span
+                      class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"
+                    >
+                    </span>
+                  </span>
+                  {{ field }}
+                </div>
+                {% if field.name == 'email' %}
+                <span id="email-error" class="text-danger"></span>
+                {% elif field.name == 'password1' %}
+                <span id="password-error" class="text-danger"></span>
+                {% endif %}
+              </div>
+              <span class="text-danger"> {{ field.errors }} </span>
+              {% endfor %}
+              <div class="d-flex mb-4" style="margin-left: 31%">
+                <span class="fw-normal" style="margin-right: 0.4rem">
+                  <a
+                    onclick="get_rand_pass()"
+                    href="javascript:;"
+                    class="fw-bold text-underline"
+                    >Generate password</a
+                  >
+                </span>
+                <br />
+                <span>
+                  <a
+                    id="togglePasswordLink"
+                    onclick="togglePasswordVisibility()"
+                    href="javascript:;"
+                    class="fw-bold text-underline"
+                    >Show password</a
+                  >
+                </span>
+              </div>
+
+              <!-- Real-Time Password Requirements Checklist -->
+              <div class="form-group">
+                <label>Password must include:</label>
+                <ul class="password-requirements">
+                  <li id="length-check" class="text-danger"><i class="fas fa-times"></i> At least 8 characters</li>
+                  <li id="lowercase-check" class="text-danger"><i class="fas fa-times"></i> At least one lowercase letter</li>
+                  <li id="uppercase-check" class="text-danger"><i class="fas fa-times"></i> At least one uppercase letter</li>
+                  <li id="number-check" class="text-danger"><i class="fas fa-times"></i> At least one number</li>
+                  <li id="symbol-check" class="text-danger"><i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)</li>
+                </ul>
+              </div>
+
+              <!-- End of Form -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-warning btn-primary">
+                  Sign up
+                </button>
+              </div>
+            </form>
+            <div class="d-flex justify-content-center align-items-center mt-4">
+              <span class="fw-normal">
+                Already have an account?
+                <a href="{% url 'login' %}" class="fw-bold text-underline"
+                  >Login here</a
+                >
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% include 'includes/footer.html' %}
+</main>
+
+<!-- Newly added...................................... -->
+<script>
+  function get_rand_pass() {
+    fetch("/accounts/password-gen")
+      .then((d) => d.json())
+      .then((j) => {
+        document.getElementsByName("password1")[0].value = j.data;
+        document.getElementsByName("password2")[0].value = j.data;
+      });
+  }
+
+  function togglePasswordVisibility() {
+    var passwordField1 = document.getElementsByName("password1")[0];
+    var passwordField2 = document.getElementsByName("password2")[0];
+    var toggleLink = document.getElementById("togglePasswordLink");
+  
+    if (passwordField1.type === "password") {
+      passwordField1.type = "text";
+      passwordField2.type = "text";
+      toggleLink.innerText = "Hide password";
+    } else {
+      passwordField1.type = "password";
+      passwordField2.type = "password";
+      toggleLink.innerText = "Show password";
+    }
+  }
+  document.addEventListener("DOMContentLoaded", function() {
+      // Email Validation
+      const emailField = document.getElementById("id_email");
+      const emailErrorMessage = document.getElementById("email-error");
+      const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
+
+      emailField.addEventListener("input", function() {
+          const emailPattern = /@deakin\.edu\.au$/;
+          const emailValue = emailField.value;
+
+          if (emailPattern.test(emailValue)) {
+              emailErrorMessage.textContent = "";
+              emailField.classList.remove("is-invalid");
+              emailField.classList.add("is-valid");
+              emailIcon.classList.remove("fa-envelope");
+              emailIcon.classList.add("fa-check-circle");
+              emailIcon.style.color = "green";
+          } else {
+              emailErrorMessage.textContent = "Email must match your Deakin email address";
+              emailField.classList.remove("is-valid");
+              emailField.classList.add("is-invalid");
+              emailIcon.classList.remove("fa-check-circle");
+              emailIcon.classList.add("fa-envelope");
+              emailIcon.style.color = "red";
+          }
+      });
+
+      // Password Validation
+      const passwordField = document.getElementById("id_password1");
+      const confirmPasswordField = document.getElementById("id_password2");
+      const confirmIcon = document.querySelector("#confirm-addon .fa-unlock-alt");
+
+      passwordField.addEventListener("input", validatePasswordMatch);
+      confirmPasswordField.addEventListener("input", validatePasswordMatch);
+
+      function validatePasswordMatch() {
+          const passwordValue = passwordField.value;
+          const confirmPasswordValue = confirmPasswordField.value;
+
+          if (confirmPasswordValue === passwordValue) {
+              confirmPasswordField.classList.remove("is-invalid");
+              confirmPasswordField.classList.add("is-valid");
+              confirmIcon.classList.remove("fa-unlock-alt");
+              confirmIcon.classList.add("fa-check-circle");
+              confirmIcon.style.color = "green";
+              document.getElementById("confirm-password-error").textContent = "";
+          } else {
+              confirmPasswordField.classList.remove("is-valid");
+              confirmPasswordField.classList.add("is-invalid");
+              confirmIcon.classList.remove("fa-check-circle");
+              confirmIcon.classList.add("fa-unlock-alt");
+              confirmIcon.style.color = "red";
+              document.getElementById("confirm-password-error").textContent = "Passwords do not match.";
+          }
+      }
+
+      // Existing password checks (length, lowercase, etc.)
+      const lengthCheck = document.getElementById("length-check");
+      const lowercaseCheck = document.getElementById("lowercase-check");
+      const uppercaseCheck = document.getElementById("uppercase-check");
+      const numberCheck = document.getElementById("number-check");
+      const symbolCheck = document.getElementById("symbol-check");
+
+      passwordField.addEventListener("input", function() {
+          const passwordValue = passwordField.value;
+
+          // Check password length
+          if (passwordValue.length >= 8) {
+              lengthCheck.classList.remove("text-danger");
+              lengthCheck.classList.add("text-success");
+              lengthCheck.innerHTML = '<i class="fas fa-check"></i> At least 8 characters';
+          } else {
+              lengthCheck.classList.remove("text-success");
+              lengthCheck.classList.add("text-danger");
+              lengthCheck.innerHTML = '<i class="fas fa-times"></i> At least 8 characters';
+          }
+
+          // Check for lowercase letter
+          if (/[a-z]/.test(passwordValue)) {
+              lowercaseCheck.classList.remove("text-danger");
+              lowercaseCheck.classList.add("text-success");
+              lowercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one lowercase letter';
+          } else {
+              lowercaseCheck.classList.remove("text-success");
+              lowercaseCheck.classList.add("text-danger");
+              lowercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one lowercase letter';
+          }
+
+          // Check for uppercase letter
+          if (/[A-Z]/.test(passwordValue)) {
+              uppercaseCheck.classList.remove("text-danger");
+              uppercaseCheck.classList.add("text-success");
+              uppercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one uppercase letter';
+          } else {
+              uppercaseCheck.classList.remove("text-success");
+              uppercaseCheck.classList.add("text-danger");
+              uppercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one uppercase letter';
+          }
+
+          // Check for number
+          if (/\d/.test(passwordValue)) {
+              numberCheck.classList.remove("text-danger");
+              numberCheck.classList.add("text-success");
+              numberCheck.innerHTML = '<i class="fas fa-check"></i> At least one number';
+          } else {
+              numberCheck.classList.remove("text-success");
+              numberCheck.classList.add("text-danger");
+              numberCheck.innerHTML = '<i class="fas fa-times"></i> At least one number';
+          }
+
+          // Check for special symbol
+          if (/[@$!%*?&]/.test(passwordValue)) {
+              symbolCheck.classList.remove("text-danger");
+              symbolCheck.classList.add("text-success");
+              symbolCheck.innerHTML = '<i class="fas fa-check"></i> At least one special symbol (@, $, !, %, *, ?, &)';
+          } else {
+              symbolCheck.classList.remove("text-success");
+              symbolCheck.classList.add("text-danger");
+              symbolCheck.innerHTML = '<i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)';
+          }
+      });
+  });
+
+  function get_rand_pass() {
+      fetch("/accounts/password-gen").then(d => d.json()).then(j => {
+          document.getElementsByName("password1")[0].value = j.data; 
+          document.getElementsByName("password2")[0].value = j.data;
+      })
+  }
+
+  function show_rand_pass() {
+      document.getElementsByName("password1")[0].type = "text";
+      document.getElementsByName("password2")[0].type = "text";
+  }
+</script>
+
+<!-- Optional CSS for Invalid Input Styling -->
+<style>
+  .is-invalid {
+      border-color: red;
+  }
+  .is-valid {
+      border-color: green;
+  }
+  .text-success {
+      color: green !important;
+  }
+  .text-danger {
+      color: red !important;
+  }
+</style>
+
+{% endblock content %}
+{% block footer %}{% endblock footer %}
