@@ -3,13 +3,29 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-
-
+from django.core.exceptions import ValidationError
+import re
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage
 
 
 
 User = get_user_model()
+
+def validate_password(value):
+    errors = [
+        "Password must be more than 8 digits.",
+        "Require at least one letter.",
+        "Require at least one number.",
+        "Require at least one special character."
+    ]
+    if len(value) < 8:
+        raise ValidationError(errors)
+    if not re.search(r'[A-Za-z]', value):
+        raise ValidationError(errors)
+    if not re.search(r'[0-9]', value):
+        raise ValidationError(errors)
+    if not re.search(r'[^A-Za-z0-9]', value):
+        raise ValidationError(errors)
 
 def possible_years(first_year_in_scroll, last_year_in_scroll):
     p_year = []
@@ -29,10 +45,12 @@ class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(
         label=_("Your Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+        validators=[validate_password],
     )
     password2 = forms.CharField(
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
+        validators=[validate_password],
     )
     # Newly added................................................
     def clean_password1(self):
@@ -82,6 +100,8 @@ class RegistrationForm(UserCreationForm):
                 'placeholder': 'example@deakin.edu.au'
             })
         }
+
+
 
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
