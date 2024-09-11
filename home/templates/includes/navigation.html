@@ -204,7 +204,7 @@
                     </li>
                     <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'malware_viz_main' %}"
-                        >Malware</a
+                        >Malware (On Hold)</a
                       >
                     </li>
                     <li class="mb-2 menu-item">
@@ -227,7 +227,7 @@
                       <a class="menu-link" href="{% url 'Vr_main' %}">Deakin CyberSafe VR</a>
                   </li>
                   <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror</a>
+                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror (On Hold)</a>
                   </li> 
 
                   </ul>
@@ -249,10 +249,11 @@
        <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">
           {% csrf_token %}
           <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..." aria-label="Search" name="searched">
-          <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;" type="submit">Search</button>
+          <div>
+            <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;margin-top: 0;" type="submit">Search</button>
+          </div>
         </form>  
-
-      </div>
+</div>
       <div class="d-flex align-items-center">
         {% if request.user.is_authenticated %}
           <!-- Show Logout Button if User is Authenticated -->
@@ -305,7 +306,7 @@
           </div>
         {% endif %}
       
-        <!-- Navbar Toggler for Mobile View -->
+     
         <button
           class="navbar-toggler ms-2"
           type="button"
@@ -317,21 +318,16 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+    </div>
+    <div class="form-check form-switch dark-mode" style="margin-bottom: 0px;display: flex;align-items: center;justify-content: center;">
+      <div>
+        <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
       </div>
-      
-      <!-- Dark Mode Toggle -->
-      <div class="form-check form-switch dark-mode" style="margin-bottom: 0px; display: flex; align-items: center; justify-content: center;">
-        <div>
-          <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
-        </div>
-        <div>
-          <label class="form-check-label" style="margin-bottom: 0; text-wrap: nowrap;" for="flexSwitchCheckChecked">Dark Mode</label>
-        </div>
+      <div>
+        <label class="form-check-label" style="margin-bottom: 0;text-wrap: nowrap;" for="flexSwitchCheckChecked">Dark Mode</label>
       </div>
-      </div>
-      </nav>
-      </header>
-      
-      <!-- JavaScript for toggles -->
-      <script src="{% static 'js/toggles.js' %}"></script>
-      
+    </div>
+    </div>
+  </nav>
+</header>
+<script src="{% static 'js/toggles.js' %}"></script>
