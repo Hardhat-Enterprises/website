@@ -261,7 +261,8 @@
           ><span class="fas fa-sign-out-alt me-2"></span> Logout</a
         >
         {% else %}
-        <div  class="btn btn-outline-gray-100 me-md-3">
+
+        <div class="btn btn-outline-gray-100 me-md-3">
           <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
               Sign In
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
@@ -271,37 +272,38 @@
                   <div class="col">
                       <ul class="list-style-none mb-2">
                           <li class="mb-2 menu-item">
-                              <a class="menu-link" href="{% url 'login' %}">Team Log in</a>
+                              <a class="menu-link" href="{% url 'login' %}">Team Sign in</a>
                           </li>
                           <li class="mb-2 menu-item">
-                              <a class="menu-link" href="#">Client Log in</a>
+                              <a class="menu-link" href="#">Client Sign in</a>
                           </li>
                       </ul>
                   </div>
               </div>
           </div>
-      </div>
-      <div  class="btn btn-outline-gray-100 me-md-3">
-        <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-            Sign Up
-            <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-        </a>
-        <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-            <div class="row">
-                <div class="col">
-                    <ul class="list-style-none mb-2">
-                        <li class="mb-2 menu-item">
-                            <a class="menu-link" href="{% url 'register' %}">Team Sign Up</a>
-                        </li>
-                        <li class="mb-2 menu-item">
-                            <a class="menu-link" href="#">Client Sign Up</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
-    </div>
-    
+        
+        <div class="btn btn-outline-gray-100 me-md-3">
+          <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+              Sign Up
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+          </a>
+          <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+              <div class="row">
+                  <div class="col">
+                      <ul class="list-style-none mb-2">
+                          <li class="mb-2 menu-item">
+                              <a class="menu-link" href="{% url 'register' %}">Team Sign Up</a>
+                          </li>
+                          <li class="mb-2 menu-item">
+                              <a class="menu-link" href="#">Client Sign Up</a>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+        </div>
+           
         {% endif %}
         <button
           class="navbar-toggler ms-2"
