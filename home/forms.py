@@ -26,6 +26,8 @@ def validate_password(value):
         raise ValidationError(errors)
     if not re.search(r'[^A-Za-z0-9]', value):
         raise ValidationError(errors)
+    
+    return value
 
 def possible_years(first_year_in_scroll, last_year_in_scroll):
     p_year = []
@@ -62,6 +64,7 @@ class RegistrationForm(UserCreationForm):
             raise ValidationError(
                 _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
             )
+        return password
     # ...........................................................
 
     # Newly added...........................
@@ -70,7 +73,7 @@ class RegistrationForm(UserCreationForm):
         # Define the regex pattern for the required email format
         pattern = r'@deakin\.edu\.au$'
         
-        if not re.match(pattern, email):
+        if not re.search(pattern, email):
             raise ValidationError(_("Email must be match with your Deakin email."))
         
         return email
