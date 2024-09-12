@@ -53,7 +53,7 @@ from .models import Smishingdetection_join_us, DDT_contact
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
-from .models import Student, Project, Progress, Skill
+from .models import Student, Project, Progress, Skill, CyberChallenge, UserChallenge
  
 #from .models import Student, Project, Progress
  
@@ -628,4 +628,34 @@ def projects_join_us(request, page_url, page_name):
 
  
        # return context
+def challenge_list(request):
+    categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
+    return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
+def category_challenges(request, category):
+    challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
+    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges})
+
+@login_required
+def challenge_detail(request, challenge_id):
+    challenge = get_object_or_404(CyberChallenge, id=challenge_id)
+    user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
+    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge})
+
+@login_required
+def submit_answer(request, challenge_id):
+    if request.method == 'POST':
+        challenge = get_object_or_404(CyberChallenge, id=challenge_id)
+        user_answer = request.POST.get('answer')
+        is_correct = user_answer == challenge.correct_answer
+        user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
+        if is_correct and not user_challenge.completed:
+            user_challenge.completed = True
+            user_challenge.score = challenge.points
+            user_challenge.save()
+        return JsonResponse({
+            'is_correct': is_correct,
+            'explanation': challenge.explanation,
+            'score': user_challenge.score if is_correct else 0
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
