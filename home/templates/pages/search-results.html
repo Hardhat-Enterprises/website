@@ -20,29 +20,32 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!-- Primary Meta Tags -->
     <title>Hardhat Enterprises</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="title" content="Hardhat Enterprises">
     <meta name="author" content="Themesberg">
-    <meta name="description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <meta name="description"
+          content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
     <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}/">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}/">
     <meta property="og:title" content="Hardhat Enterprises">
-    <meta property="og:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <meta property="og:description"
+          content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
     <meta property="og:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ request.scheme }}://{{ request.get_host }}/">
     <meta property="twitter:title" content="Hardhat Enterprises">
-    <meta property="twitter:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <meta property="twitter:description"
+          content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
     <meta property="twitter:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
-    
+
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicon/favicon-32x32.png' %}">
@@ -51,62 +54,126 @@
     <link rel="mask-icon" href="{% static 'assets/img/favicon/safari-pinned-tab.svg' %}" color="#ffffff">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-    
+
     <!-- Fontawesome -->
     <link type="text/css" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
-    
+
     <!-- Pixel CSS -->
     <link type="text/css" href="{% static 'css/hardhat.css' %}?v=2" rel="stylesheet">
-    
+
 </head>
 
 <body>
 
-  {% block header %}
-  
-    {% include 'includes/navigation.html' %}
-  
-  {% endblock header %}
+{% block header %}
+
+{% include 'includes/navigation.html' %}
+
+{% endblock header %}
 
 
-                  {% comment %}
-                    {% for result in results %}
-                        <li><a href="{{ result.url }}">{{ result.title }}</a></li>
-                    {% empty %}
-                        <li>No results found</li>
-                    {% endfor %}
-                  {% endcomment %}
+<!--                  {% comment %}-->
+<!--                    {% for result in results %}-->
+<!--                        <li><a href="{{ result.url }}">{{ result.title }}</a></li>-->
+<!--                    {% empty %}-->
+<!--                        <li>No results found</li>-->
+<!--                    {% endfor %}-->
+<!--                  {% endcomment %}-->
 
 
-  {% block content %}
-    <center>
-      {% if searched%}
-      <div class="row">
+{% block content %}
+<center>
+    <div class="row">
         <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
-          <h1 class="fw-bolder">Search Results</h1>
-          <h5>You Searched For {{searched}}</h5>
+            <h1 class="fw-bolder">Search the Webpages</h1>
+            <!-- Search Input -->
+            <input type="text" id="search" placeholder="Search..." autocomplete="off" class="form-control">
+            <ul id="suggestions"></ul>
         </div>
-          {% for webpage in webpages%}
+    </div> <!-- Closing the div properly here -->
+    {% if searched%}
+    <div class="row">
+        <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+            <h1 class="fw-bolder">Search Results</h1>
+            <h5>You Searched For {{searched}}</h5>
+        </div>
+        {% for webpage in webpages %}
+        <a href="{{ webpage.url }}">{{ webpage.title }}</a>
+        <br/>
 
-            <a href="{% url webpage.url %}">{{webpage}}</a>
-            <br/>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h1>Empty Search, You may have forgotten to enter a search term?</h1>
+    {% endif %}
+</center>
 
-          {% endfor %}
-      {% else %}
-        <h1>Empty Search, You may have forgotten to enter a search term?</h1>
-      {%endif%}
-    </center>
+{% endblock content %}
 
-  {% endblock content %}
+{% block footer %}
 
-  {% block footer %}
-  
-    {% include 'includes/footer.html' %}
-  
-  {% endblock footer %}
+{% include 'includes/footer.html' %}
 
-  {% include 'includes/scripts.html' %}
-  {% block javascripts %}{% endblock javascripts %}
+{% endblock footer %}
+
+{% include 'includes/scripts.html' %}
+{% block javascripts %}{% endblock javascripts %}
+
+<!-- Search Suggestion AJAX and JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#search').keyup(function() {
+            var query = $(this).val();  // Get the user input from the search box
+            if (query != '') {
+                $.ajax({
+                    url: '{% url "search_suggestions" %}',  // AJAX call to fetch suggestions
+                    data: {
+                        'term': query  // Send user input as 'term' parameter
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#suggestions').empty();  // Clear any previous suggestions
+                        $.each(data, function(index, item) {
+                            // Append each suggestion as a clickable link with title and URL
+                            $('#suggestions').append('<li><a href="' + item.url + '">' + item.title + '</a></li>');
+                        });
+                    }
+                });
+            } else {
+                $('#suggestions').empty();  // Clear suggestions if input is empty
+            }
+        });
+    });
+</script>
+
+<!-- Optional Styling for Suggestions List -->
+<style>
+    #suggestions {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        background-color: #f8f8f8;
+        border: 0px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    #suggestions li {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #suggestions li a {
+        text-decoration: none;
+        color: black;
+        display: block;
+    }
+
+    #suggestions li:hover {
+        background-color: #f0f0f0;
+    }
+</style>
 
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

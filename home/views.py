@@ -629,3 +629,16 @@ def projects_join_us(request, page_url, page_name):
  
        # return context
 
+#Search suggestion ~ Raja Singh
+def search_suggestions(request):
+    if 'term' in request.GET:
+        term = request.GET.get('term')
+        # Filter the Webpage model by title containing the search term
+        webpages = Webpage.objects.filter(title__icontains=term)[:5]
+        suggestions = []
+        for webpage in webpages:
+            suggestions.append({
+                'title': webpage.title,
+                 'url': webpage.url or 'URL not available'
+            })
+        return JsonResponse(suggestions, safe=False)

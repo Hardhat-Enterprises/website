@@ -244,14 +244,33 @@
         </ul>
 
       
-        {% comment %} <!--action="{% url 'pages/search-results'%}"--> {% endcomment %}
+<!--        {% comment %} &lt;!&ndash;action="{% url 'pages/search-results'%}"&ndash;&gt; {% endcomment %}-->
 
-       <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">
-          {% csrf_token %}
-          <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..." aria-label="Search" name="searched">
-          <div>
-            <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;margin-top: 0;" type="submit">Search</button>
-          </div>
+<!--       <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">-->
+<!--          {% csrf_token %}-->
+<!--          <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..." aria-label="Search" name="searched">-->
+<!--          <div>-->
+<!--            <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;margin-top: 0;" type="submit">Search</button>-->
+<!--          </div>-->
+
+          <!-- Search Form -->
+                <form class="d-flex align-items-center" method="POST" action="{% url 'pages/search-results' %}"
+                      style="position: relative;">
+                    {% csrf_token %}
+                    <input
+                            class="form-control mr-sm-2"
+                            id="header-search"
+                            type="search"
+                            style="margin-left: 50px;"
+                            placeholder="Search..."
+                            aria-label="Search"
+                            name="searched"
+                    />
+                    <ul id="header-suggestions" class="suggestions-list"></ul>
+                    <!-- Suggestion results will be displayed here -->
+                    <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;" type="submit">
+                        Search
+                    </button>
         </form>  
 </div>
       <div class="d-flex align-items-center">
@@ -329,4 +348,75 @@
     </div>
   </nav>
 </header>
+
+<!-- Add JavaScript for search suggestions -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+      // Search suggestions for the header search input
+      $('#header-search').keyup(function () {
+        var query = $(this).val();
+        if (query != '') {
+          $.ajax({
+            url: '{% url "search_suggestions" %}', // AJAX call to fetch suggestions
+            data: {
+              term: query // Send user input as 'term' parameter
+            },
+            dataType: 'json',
+            success: function (data) {
+              $('#header-suggestions').empty(); // Clear previous suggestions
+              $.each(data, function (index, item) {
+                $('#header-suggestions').append(
+                  '<li><a href="' + item.url + '">' + item.title + '</a></li>'
+                );
+              });
+            }
+          });
+        } else {
+          $('#header-suggestions').empty(); // Clear suggestions if input is empty
+        }
+      });
+    });
+</script>
+
+<!-- Additional CSS for suggestion results (make sure it does not interfere with existing CSS) -->
+<style>
+
+    #header-suggestions {
+          list-style-type: none;
+   padding: 0;
+   margin: 0;
+   position: absolute;
+   background-color: white;
+   width: 42%;
+   border: 0px solid #ddd;
+   z-index: 1000;
+   top: calc(100% + 5px);
+   left: 55px;
+   border-radius: 4px;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    #header-suggestions li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+    }
+
+    #header-suggestions li a {
+        text-decoration: none;
+        color: black;
+        display: block;
+        width: 100%;
+    }
+
+    #header-suggestions li:hover {
+        background-color: #f0f0f0;
+    }
+
+    #header-suggestions li:last-child {
+        border-bottom: none;
+    }
+</style>
+
 <script src="{% static 'js/toggles.js' %}"></script>
