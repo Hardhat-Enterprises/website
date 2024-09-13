@@ -45,53 +45,55 @@
                         Upload a New Document
                     </a>
                 </div>
-                {% for document in documents %}
-                <div class="col-md-4 mb-3">
-                    <div class="card shadow border-0" style="background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
-
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ document.title }}</h5>
-                            <div class="d-flex justify-content-center mt-3">
-                                <a href="{% url 'document_details' document.id %}" class="btn btn-outline-primary btn-sm mx-1">View Details</a>
-                                <a href="{{ document.file.url }}" class="btn btn-outline-secondary btn-sm mx-1">Download</a>
-                                <a href="{% url 'document_delete' document.id %}" class="btn btn-outline-danger btn-sm mx-1">Delete</a>
-                            </div>
-                        </div>
-                        
-                    </div>
+            <form method="GET" action="{% url 'documents' %}" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search for documents" value="{{ request.GET.q }}">
+                    <button class="btn btn-primary" type="submit">Search</button>
                 </div>
-                {% empty %}
-                <p>No documents available.</p>
-                {% endfor %}
-
-                <!-- Pagination -->
-                <nav>
-                    <ul class="pagination">
-                    <div class="mx-auto d-flex flex-row mt-5">
-                        {% if page_obj.has_previous %}
-                        <li class="page-item">
-                        <a class="page-link" href="?page=1">&laquo; First</a>
-                        </li>
-                        <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                        </li>
-                        {% endif %}
-                        <li class="page-item">
-                        <a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
-                        </li>
-                        {% if page_obj.has_next %}
-                        <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                        </li>
-                        <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-                        </li>
-                        {% endif %}
-                    </div>
-                    </ul>
-                </nav>
-  
-            </div>
+            </form>
+            
+            <h2 class="text-center mb-4">Documents List</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Uploaded At</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                    <tr>
+                        <td>{{ document.title }}</td>
+                        <td>{{ document.description }}</td>
+                        <td>{{ document.uploaded_at|date:"F j, Y" }}</td>
+                        <td>
+                            <a href="{% url 'document_details' document.id %}" class="btn btn-outline-primary btn-sm">View</a>
+                            <a href="{{ document.file.url }}" class="btn btn-outline-secondary btn-sm">Download</a>
+                            <a href="{% url 'document_delete' document.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-center">No documents available.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item disabled"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
     </section>
     <!-- End Document List -->

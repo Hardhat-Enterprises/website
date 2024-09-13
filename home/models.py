@@ -10,6 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
 
+from datetime import datetime
+
 
 from django.utils.text import slugify
 
@@ -249,11 +251,14 @@ class Projects_join_us(models.Model):
     page_name = models.CharField(max_length=100)
 
 
+def file_directory(instance, filename):
+    return f'documents/{datetime.now().strftime("%Y/%m/%d")}/{filename}'
+
 class Document(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=255)
-    file = models.FileField(upload_to='documents/')
+    file = models.FileField(upload_to= file_directory)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -141,6 +141,7 @@ class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = ['title', 'description', 'file']
+        ordering = ['-uploaded_at']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Title'}),
             'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Description'}),

@@ -26,6 +26,7 @@ from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
+from django.db.models import Q
 
 # from Website.settings import EMAIL_HOST_USER
 import random
@@ -625,12 +626,11 @@ class DocumentUploadView(View):
             print("Form errors:", form.errors)
         return render(request, 'documents/document_upload.html', {'form': form})
        
-
 class DocumentListView(LoginRequiredMixin, ListView):
     model = Document
     template_name = 'documents/document_list.html'
     context_object_name = 'documents'
-    paginate_by = 10 #10 docs per page 
+    paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -639,7 +639,12 @@ class DocumentListView(LoginRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Document.objects.all()  
+        query = self.request.GET.get('q')
+        if query:
+            return Document.objects.filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            )
+        return Document.objects.order_by('-uploaded_at')
     
     
 class DocumentDetailsView(DetailView):
