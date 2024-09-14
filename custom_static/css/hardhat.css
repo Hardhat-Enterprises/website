@@ -5602,6 +5602,7 @@ textarea.form-control-lg {
   background-clip: padding-box;
   border: 0.0625rem solid rgba(23, 31, 56, 0.2);
   border-radius: 0.3rem;
+  background-color: var(--section-bs);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   outline: 0; }
 
@@ -5622,7 +5623,7 @@ textarea.form-control-lg {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 1rem 1rem;
   border-bottom: 0.0625rem solid #E5E7EB;
   border-top-left-radius: 0.2375rem;
@@ -5638,7 +5639,9 @@ textarea.form-control-lg {
 .modal-body {
   position: relative;
   flex: 1 1 auto;
-  padding: 1rem; }
+  padding: 1rem;
+  text-align: center; 
+}
 
 .modal-footer {
   display: flex;

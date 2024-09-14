@@ -65,7 +65,9 @@ from .models import Student, Project, Progress, Skill
  
  
 def index(request):
-    return render(request, 'pages/index.html')
+    show_announcement = True
+    announcement_message = "Important Announcement! New Features Coming Soon"
+    return render(request, 'pages/index.html',{'announcement_message': announcement_message, 'show_announcement': show_announcement})
  
 def about_us(request):
     return render(request, 'pages/about.html')
