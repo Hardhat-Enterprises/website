@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Career Webpage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffd700;
+            /* Light yellow background */
+        }
+
+        .navbar {
+            background-color: #141514;
+            /* Green navbar */
+            overflow: hidden;
+        }
+
+        .navbar .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .navbar .dropbtn {
+            font-size: 18px;
+            border: none;
+            outline: none;
+            color: #ffd700;
+            padding: 14px 16px;
+            background-color: inherit;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .navbar .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .navbar .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .navbar .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .navbar .dropdown:hover .dropbtn {
+            background-color: #575757;
+        }
+
+        .carousel {
+            position: relative;
+            max-width: 70%;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-images {
+            position: relative;
+        }
+
+        .carousel-images img {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .carousel-images img.active {
+            display: block;
+        }
+
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .search-container {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container input[type="text"] {
+            width: calc(100% - 110px);
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-container button {
+            width: 100px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #45a049;
+        }
+
+        .job-listings {
+            margin-top: 20px;
+        }
+
+        .job-listings div {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .job-listings div:last-child {
+            border-bottom: none;
+        }
+
+        .job-listings div:hover {
+            background-color: #f1f1f1;
+        }
+
+        .job-details {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .job-details h2 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .job-details p {
+            margin-bottom: 10px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .navbar .dropbtn {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+
+            .navbar .dropdown-content a {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+
+            .prev,
+            .next {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .search-container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .search-container input[type="text"] {
+                font-size: 14px;
+            }
+
+            .job-details {
+                width: 90%;
+                padding: 15px;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+
+            .prev,
+            .next {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="dropdown">
+            <button class="dropbtn">Careers <i class="fa fa-caret-down"></i></button>
+            <div class="dropdown-content">
+                <a href="#" id="link1">Find Jobs</a>
+                <a href="#" id="link2">Company Reviews</a>
+                <a href="#" id="link3">How We Hire</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="carousel" class="carousel">
+        <div class="carousel-images">
+            <!-- Images and search bar will be injected here dynamically -->
+        </div>
+        <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+        <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    </div>
+
+    <div id="job-details" class="job-details">
+        <!-- Job details will be injected here dynamically -->
+    </div>
+
+    <script>
+        document.getElementById('link1').addEventListener('click', function (event) {
+            event.preventDefault();
+            loadCarousel('link1');
+        });
+
+        document.getElementById('link2').addEventListener('click', function (event) {
+            event.preventDefault();
+            loadCarousel('link2');
+        });
+
+        document.getElementById('link3').addEventListener('click', function (event) {
+            event.preventDefault();
+            loadCarousel('link3');
+        });
+
+        let slideIndex = 0;
+
+        function loadCarousel(link) {
+            const carouselImagesDiv = document.querySelector('.carousel-images');
+            let images;
+            let searchBarHtml = '';
+
+            // Hide job details when navigating to other links
+            document.getElementById('job-details').style.display = 'none';
+
+            switch (link) {
+                case 'link1':
+                    images = [
+                        'https://www.shutterstock.com/image-photo/career-businessman-on-blurred-abstract-260nw-1152345887.jpg',
+                        'https://www.pascotata.com/uploads/cms/8587carredutyu.jpg',
+                        'https://watermark.lovepik.com/photo/50076/9860.jpg_wh1200.jpg'
+                    ];
+                    searchBarHtml = `
+                        <div class="search-container">
+                            <input type="text" id="search-input" placeholder="Search for jobs...">
+                            <button id="search-button">Search</button>
+                            <div class="job-listings" id="job-listings"></div>
+                        </div>
+                    `;
+                    break;
+                case 'link2':
+                    images = [
+                        'https://via.placeholder.com/800x400/FF9933/FFFFFF?text=Company+Reviews',
+                        'https://via.placeholder.com/800x400/33CCFF/FFFFFF?text=Employee+Feedback',
+                        'https://via.placeholder.com/800x400/FF66CC/FFFFFF?text=Work+Culture'
+                    ];
+                    searchBarHtml = '';
+                    break;
+                case 'link3':
+                    images = [
+                        'https://via.placeholder.com/800x400/66FF33/FFFFFF?text=Our+Hiring+Process',
+                        'https://via.placeholder.com/800x400/FF3366/FFFFFF?text=Career+Growth',
+                        'https://via.placeholder.com/800x400/9933FF/FFFFFF?text=Join+Our+Team'
+                    ];
+                    searchBarHtml = '';
+                    break;
+            }
+
+            carouselImagesDiv.innerHTML = searchBarHtml;
+            images.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                if (index === 0) img.classList.add('active');
+                carouselImagesDiv.appendChild(img);
+            });
+
+            slideIndex = 0;
+            showSlide(slideIndex);
+
+            if (link === 'link1') {
+                loadJobs();
+                document.getElementById('search-input').addEventListener('input', filterJobs);
+                document.getElementById('search-button').addEventListener('click', filterJobs);
+            }
+        }
+
+        function changeSlide(n) {
+            showSlide(slideIndex += n);
+        }
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.carousel-images img');
+            if (n >= slides.length) slideIndex = 0;
+            if (n < 0) slideIndex = slides.length - 1;
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[slideIndex].classList.add('active');
+        }
+
+        const jobs = [
+            { id: 1, title: 'Frontend Developer', technology: 'React', responsibilities: 'Develop and maintain web applications using JavaScript.', requirements: 'Experience with React or Angular.' },
+            { id: 2, title: 'Backend Developer', technology: 'Node.js', responsibilities: 'Develop and maintain full stack applications using Nodejs.', requirements: 'Experience with Node JS.' },
+            { id: 3, title: 'Full Stack Developer', technology: 'Django', responsibilities: 'Develop and maintain web applications using Django.', requirements: 'Experience with Django.' },
+            { id: 4, title: 'Software Developer', technology: 'JavaScript', responsibilities: 'Develop and maintain web applications using JavaScript.', requirements: 'Experience with React or Angular.' },
+            { id: 5, title: 'Backend Developer', technology: 'Java', responsibilities: 'Build and maintain server-side applications.', requirements: 'Experience with Spring Boot or similar frameworks.' },
+            { id: 6, title: 'Full Stack Developer', technology: 'Python', responsibilities: 'Work on both front-end and back-end tasks.', requirements: 'Experience with Django or Flask.' },
+            { id: 7, title: 'Data Scientist', technology: 'Python', responsibilities: 'Analyze data and build machine learning models.', requirements: 'Experience with pandas, scikit-learn, and TensorFlow.' },
+            { id: 8, title: 'UX Designer', technology: 'JavaScript', responsibilities: 'Design user interfaces and user experiences.', requirements: 'Experience with wireframing and prototyping tools.' }
+        ];
+
+        function loadJobs() {
+            const jobListingsDiv = document.getElementById('job-listings');
+            jobListingsDiv.innerHTML = jobs.map(job => `<div data-id="${job.id}">${job.title} - ${job.technology}</div>`).join('');
+            document.querySelectorAll('.job-listings div').forEach(item => {
+                item.addEventListener('click', () => displayJobDetails(item.getAttribute('data-id')));
+            });
+        }
+
+        function filterJobs() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filteredJobs = jobs.filter(job =>
+                job.title.toLowerCase().includes(query) || job.technology.toLowerCase().includes(query)
+            );
+
+            const jobListingsDiv = document.getElementById('job-listings');
+            jobListingsDiv.innerHTML = filteredJobs.map(job =>
+                `<div data-id="${job.id}">${job.title} - ${job.technology}</div>`
+            ).join('');
+
+            document.querySelectorAll('.job-listings div').forEach(item => {
+                item.addEventListener('click', () => displayJobDetails(item.getAttribute('data-id')));
+            });
+        }
+
+        function displayJobDetails(jobId) {
+            const job = jobs.find(job => job.id === parseInt(jobId));
+            const jobDetailsDiv = document.getElementById('job-details');
+            jobDetailsDiv.innerHTML = `
+                <h2>${job.title}</h2>
+                <p><strong>Technology:</strong> ${job.technology}</p>
+                <p><strong>Responsibilities:</strong> ${job.responsibilities}</p>
+                <p><strong>Requirements:</strong> ${job.requirements}</p>
+            `;
+            jobDetailsDiv.style.display = 'block';
+        }
+    </script>
+
+</body>
+
+</html>

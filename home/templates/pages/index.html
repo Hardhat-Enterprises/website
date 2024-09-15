@@ -6,7 +6,8 @@
 <main>
 
   {% include 'includes/pre-loader.html' %}
-  <!-- Hero -->
+
+  <!-- Hero Section -->
   <section class="section-header overflow-hidden pt-7 pt-lg-5 pb-9 pb-lg-1 bg-tertiary text-black">
     <div class="container col-xxl-8 px-4 py-5">
       <div class="row flex-lg-row-reverse align-items-center g-5 py-5 mobile-heading">
@@ -18,56 +19,69 @@
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">Security is a necessity. Not a choice</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">Explore Projects</a>
-            <a type="button" href="{% url 'join-project' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">Join Us</a>
+            <a type="button" href="{% url 'join-project' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">Join
+              Us</a>
           </div>
         </div>
       </div>
-    <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"><svg class="fill-white"
-        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
-        <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
-      </svg></figure>
+      <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
+        <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
+          <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
+        </svg>
+      </figure>
+    </div>
   </section>
 
-  <!-- Vision and Mission -->
+  <!-- Vision and Mission Section -->
   <section class="section section-lg">
     <div class="container">
       <div class="row justify-content-between align-items-center mb-5 mb-lg-2">
         <div class="col-12 col-lg-5 mb-5 mb-lg-0 order-lg-2">
           <h2 class="h1 text-center">Company Vision</h2>
-          <p class="mb-4 lead fw-bold text-center">Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company will be open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met</p>
+          <p class="mb-4 lead fw-bold text-center">Hardhat Enterprises is an organisation that aims to create cyber
+            weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company
+            will be open source so that anyone may use and benefit from them. These deliverables should either improve
+            on existing tools or fill a market need that is not yet met.</p>
         </div>
         <div class="col-12 col-lg-6 order-lg-1">
-          <img src="{% static 'assets/img/pages/home/company-vision.svg' %}" alt="Front pages overview">
+          <img src="{% static 'assets/img/pages/home/company-vision.svg' %}" alt="Company Vision">
         </div>
       </div>
       <div class="row justify-content-between align-items-center mb-5 mb-lg-2">
         <div class="col-lg-5 mb-5 mb-lg-0">
           <h2 class="h1 text-center">Company Mission</h2>
-          <p class="mb-4 lead fw-bold text-center">Achieve an engaging learning experience for students within the company. An opportunity for students to gain cross department/project experience and the opportunity to share their expertise outside of their project team.</p>
+          <p class="mb-4 lead fw-bold text-center">Achieve an engaging learning experience for students within the
+            company. An opportunity for students to gain cross-department/project experience and the opportunity to
+            share their expertise outside of their project team.</p>
         </div>
         <div class="col-lg-6">
-          <img src="{% static 'assets/img/pages/home/company-mission.svg' %}" alt="MapBox Leaflet.js Custom Integration Mockup">
+          <img src="{% static 'assets/img/pages/home/company-mission.svg' %}" alt="Company Mission">
         </div>
       </div>
     </div>
-    <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"><svg class="fill-tertiary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
-      <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
-    </svg></figure>
+    <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
+      <svg class="fill-tertiary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
+        <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
+      </svg>
+    </figure>
   </section>
 
-  <!-- Projects -->
+  <!-- Projects Section -->
   <section id="projects" class="section section-lg bg-tertiary">
     <div class="container">
-    <h1 class="fw-bolder display-2 text-center mb-lg-2">Projects</h1>
+      <h1 class="fw-bolder display-2 text-center mb-lg-2">Projects</h1>
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <div class="col">
           <div class="card border-0 overflow-hidden h-100">
             <div class="position-relative">
-              <img src="{% static 'assets/img/pages/home/appattack-card.svg' %}" class="card-img-top" alt="Neil Portrait">
-            </div>  
-            <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+              <img src="{% static 'assets/img/pages/home/appattack-card.svg' %}" class="card-img-top" alt="AppAttack">
+            </div>
+            <div
+              class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
               <h3 class="h5 card-title">AppAttack</h3>
-              <p class="mt-3">We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets</p>
+              <p class="mt-3">We deliver comprehensive reports to clients, providing actionable insights to enhance code
+                security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard
+                their digital assets.</p>
               <a href="{% url 'appattack' %}">
                 <div class="btn btn-secondary mt-auto">
                   Learn More
@@ -78,94 +92,357 @@
         </div>
         <div class="col">
           <div class="card border-0 overflow-hidden h-100">
-              <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/pt-gui-card-2.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
-              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">PT-GUI</h3>
-                <p class="mt-3">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a revolution in cybersecurity practice.</p>
-                <a href="{% url 'ptgui_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
-                </a>
-              </div>
+            <div class="position-relative">
+              <img src="{% static 'assets/img/pages/home/pt-gui-card-2.svg' %}" class="card-img-top" alt="PT-GUI">
+            </div>
+            <div
+              class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+              <h3 class="h5 card-title">PT-GUI</h3>
+              <p class="mt-3">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern
+                penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a
+                revolution in cybersecurity practice.</p>
+              <a href="{% url 'ptgui_viz_main' %}">
+                <div class="btn btn-secondary mt-auto">
+                  Learn More
+                </div>
+              </a>
+            </div>
           </div>
         </div>
         <div class="col">
           <div class="card border-0 overflow-hidden h-100">
-              <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
-              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">CyberSafe VR</h3>
-                <p class="mt-3">Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using interactive VR technology to blend theory with practical application for owners and employees taking cybersecurity measures.</p>
-                <a href="{% url 'ptgui_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
-                </a>
-              </div>
+            <div class="position-relative">
+              <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="CyberSafe VR">
+            </div>
+            <div
+              class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+              <h3 class="h5 card-title">CyberSafe VR</h3>
+              <p class="mt-3">Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using
+                interactive VR technology to blend theory with practical application for owners and employees taking
+                cybersecurity measures.</p>
+              <a href="{% url 'ptgui_viz_main' %}">
+                <div class="btn btn-secondary mt-auto">
+                  Learn More
+                </div>
+              </a>
+            </div>
           </div>
         </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
-              <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/cards/icon2.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
-              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">Smishing Detection</h3>
-                <p class="mt-3">Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to
-                  moderate the risks associated with SMS phishing attacks.</p>
-                <a href="{% url 'ptgui_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
-                </a>
-              </div>
-          </div>
+        <!-- Additional project cards as required -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat Box -->
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Draggable Chatbot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+      #chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
+      #chatbot-icon {
+        width: 60px;
+        height: 60px;
+        cursor: move;
+        background: url('https://api.dicebear.com/6.x/bottts/svg?seed=Dusty') no-repeat center center;
+        background-size: cover;
+        border-radius: 50%;
+      }
+
+      #chatbot-box {
+        display: none;
+        position: absolute;
+        bottom: 70px;
+        right: 0;
+        width: 300px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+      }
+
+      .card-body {
+        padding: 10px;
+      }
+
+      #chat-content {
+        height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 5px;
+        margin-bottom: 10px;
+      }
+
+      .input-group {
+        display: flex;
+        margin-top: 10px;
+      }
+
+      #chat-input {
+        flex-grow: 1;
+        padding: 5px;
+      }
+
+      .btn {
+        padding: 5px 10px;
+        margin-left: 5px;
+      }
+
+      #emoji-gif-picker {
+        display: none;
+        padding: 5px;
+        border: 1px solid #ddd;
+        max-height: 150px;
+        overflow-y: auto;
+      }
+
+      .emoji,
+      .gif {
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin: 2px;
+      }
+
+      .gif img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+      }
+
+      .tab {
+        display: inline-block;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      .tab.active {
+        background-color: #ddd;
+      }
+
+      #gif-search {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="chatbot-container">
+      <div id="chatbot-icon"></div>
+      <div id="chatbot-box">
+        <div class="card-header">
+          Chatbot
+          <button type="button" class="close"
+            style="float: right; font-size: 1.5rem; background: none; border: none; color: white;" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
-              <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
-              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">Threat Mirror</h3>
-                <p class="mt-3">Threat Mirror aims to investigate open-source threat intelligence platforms,
-                  assessing their suitability and adaptability for SMEs and developing economies.</p>
-                <a href="{% url 'ptgui_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
-                </a>
-              </div>
+        <div class="card-body">
+          <div id="chat-content"></div>
+          <div class="input-group">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button class="btn" id="send-button"><i class="fas fa-paper-plane"></i></button>
+            <button class="btn" id="emoji-gif-button"><i class="far fa-smile"></i></button>
           </div>
-        </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
-              <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
-              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">Malware Visualization</h3>
-                <p class="mt-3">The Malware Visualisation project creates a user-friendly tool that simplifies malware analysis by integrating with existing visual analytics applications.</p>
-                <a href="{% url 'malware_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
-                </a>
-              </div>
+          <div id="emoji-gif-picker">
+            <div>
+              <span class="tab active" data-tab="emojis">Emojis</span>
+              <span class="tab" data-tab="gifs">GIFs</span>
+            </div>
+            <div id="emoji-container"></div>
+            <div id="gif-container" style="display: none;">
+              <input type="text" id="gif-search" placeholder="Search GIFs...">
+              <div id="gif-results"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"><svg class="fill-white"
-      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
-      <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
-    </svg></figure>
-  </section>
+
+    <script>
+      // Show chatbot after 5 seconds
+      setTimeout(() => {
+        document.getElementById('chatbot-icon').style.display = 'block';
+      }, 5000);
+
+      // Make chatbot icon draggable
+      const chatbotContainer = document.getElementById('chatbot-container');
+      const chatbotIcon = document.getElementById('chatbot-icon');
+
+      let isDragging = false;
+      let startX, startY, startLeft, startTop;
+
+      chatbotIcon.addEventListener('mousedown', startDragging);
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', stopDragging);
+
+      function startDragging(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = chatbotContainer.offsetLeft;
+        startTop = chatbotContainer.offsetTop;
+      }
+
+      function drag(e) {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        chatbotContainer.style.left = `${startLeft + dx}px`;
+        chatbotContainer.style.top = `${startTop + dy}px`;
+      }
+
+      function stopDragging() {
+        isDragging = false;
+      }
+
+      // Toggle chatbot box visibility
+      chatbotIcon.addEventListener('click', (e) => {
+        if (!isDragging) {
+          const chatbotBox = document.getElementById('chatbot-box');
+          chatbotBox.style.display = chatbotBox.style.display === 'none' ? 'block' : 'none';
+        }
+      });
+
+      // Close chatbot box
+      document.querySelector('.close').addEventListener('click', () => {
+        document.getElementById('chatbot-box').style.display = 'none';
+      });
+
+      // Handle sending messages
+      document.getElementById('send-button').addEventListener('click', sendMessage);
+      document.getElementById('chat-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+
+      function sendMessage() {
+        const chatInput = document.getElementById('chat-input');
+        const chatContent = document.getElementById('chat-content');
+
+        if (chatInput.value.trim() !== '') {
+          appendMessage('You', chatInput.value);
+          const userMessage = chatInput.value.toLowerCase();
+          chatInput.value = '';
+
+          // Simple chatbot response logic
+          setTimeout(() => {
+            let botResponse;
+            if (userMessage.includes('hi') || userMessage.includes('hello')) {
+              botResponse = "Hello! How can I assist you today?";
+            } else if (userMessage.includes('how are you')) {
+              botResponse = "I'm doing well, thank you for asking! How about you?";
+            } else if (userMessage.includes('bye')) {
+              botResponse = "Goodbye! Have a great day!";
+            } else {
+              botResponse = "I'm sorry, I didn't quite understand that. Could you please rephrase?";
+            }
+            appendMessage('Chatbot', botResponse);
+          }, 1000);
+        }
+      }
+
+      function appendMessage(sender, message) {
+        const chatContent = document.getElementById('chat-content');
+        const messageDiv = document.createElement('div');
+        messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+        chatContent.appendChild(messageDiv);
+        chatContent.scrollTop = chatContent.scrollHeight;
+      }
+
+      // Toggle emoji-gif picker visibility
+      document.getElementById('emoji-gif-button').addEventListener('click', () => {
+        const emojiGifPicker = document.getElementById('emoji-gif-picker');
+        emojiGifPicker.style.display = emojiGifPicker.style.display === 'none' ? 'block' : 'none';
+      });
+
+      // Populate emoji picker
+      const emojiContainer = document.getElementById('emoji-container');
+      const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤐', '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕'];
+
+      emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.textContent = emoji;
+        span.classList.add('emoji');
+        span.addEventListener('click', () => {
+          document.getElementById('chat-input').value += emoji;
+          document.getElementById('emoji-gif-picker').style.display = 'none';
+        });
+        emojiContainer.appendChild(span);
+      });
+
+      // GIF search functionality
+      const gifSearch = document.getElementById('gif-search');
+      const gifResults = document.getElementById('gif-results');
+
+      gifSearch.addEventListener('input', debounce(searchGifs, 300));
+
+      function searchGifs() {
+        const query = gifSearch.value;
+        if (query.length > 2) {
+          fetch(`https://api.giphy.com/v1/gifs/search?api_key=YOUR_GIPHY_API_KEY&q=${query}&limit=10`)
+            .then(response => response.json())
+            .then(data => {
+              gifResults.innerHTML = '';
+              data.data.forEach(gif => {
+                const img = document.createElement('img');
+                img.src = gif.images.fixed_height_small.url;
+                img.addEventListener('click', () => {
+                  appendMessage('You', `<img src="${gif.images.fixed_height.url}" alt="GIF">`);
+                  document.getElementById('emoji-gif-picker').style.display = 'none';
+                });
+                gifResults.appendChild(img);
+              });
+            });
+        }
+      }
+
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
+      // Tab switching
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          if (tab.dataset.tab === 'emojis') {
+            document.getElementById('emoji-container').style.display = 'block';
+            document.getElementById('gif-container').style.display = 'none';
+          } else {
+            document.getElementById('emoji-container').style.display = 'none';
+            document.getElementById('gif-container').style.display = 'block';
+          }
+        });
+      });
+    </script>
+  </body>
+
+  </html>
 
 </main>
 
-{% endblock content %}
+{% endblock %}
