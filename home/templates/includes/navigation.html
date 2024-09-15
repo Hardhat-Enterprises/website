@@ -68,7 +68,13 @@
                       <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
                     </li>
                     <li class="mb-2 menu-item">
+<<<<<<< HEAD
                       <a class="menu-link" href="{% url 'malware_viz_main' %}">Malware</a>
+=======
+                      <a class="menu-link" href="{% url 'malware_viz_main' %}"
+                        >Malware (On Hold)</a
+                      >
+>>>>>>> upstream/main
                     </li>
                     <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
@@ -78,10 +84,18 @@
                     </li>
                     <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'Vr_main' %}">Deakin CyberSafe VR</a>
+<<<<<<< HEAD
                     </li>
                     <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror</a>
                     </li>
+=======
+                  </li>
+                  <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror (On Hold)</a>
+                  </li> 
+
+>>>>>>> upstream/main
                   </ul>
                 </div>
               </div>
@@ -101,6 +115,7 @@
 
         <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">
           {% csrf_token %}
+<<<<<<< HEAD
           <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..."
             aria-label="Search" name="searched">
           <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;" type="submit">Search</button>
@@ -123,3 +138,87 @@
     </div>
   </nav>
 </header>
+=======
+          <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" placeholder="Search..." aria-label="Search" name="searched">
+          <div>
+            <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;margin-top: 0;" type="submit">Search</button>
+          </div>
+        </form>  
+</div>
+      <div class="d-flex align-items-center">
+        {% if request.user.is_authenticated %}
+          <!-- Show Logout Button if User is Authenticated -->
+          <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3">
+            <span class="fas fa-sign-out-alt me-2"></span> Logout
+          </a>
+        {% else %}
+          <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
+          <div class="btn btn-outline-gray-100 me-md-3">
+            <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+              Sign In
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none mb-2">
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'login' %}">Team Sign In</a>
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="#">Client Sign In</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Sign Up Dropdown for Team/Client -->
+          <div class="btn btn-outline-gray-100 me-md-3">
+            <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+              Sign Up
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none mb-2">
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'register' %}">Team Sign Up</a>
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="#">Client Sign Up</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      
+        <button
+          class="navbar-toggler ms-2"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar_global"
+          aria-controls="navbar_global"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="form-check form-switch dark-mode" style="margin-bottom: 0px;display: flex;align-items: center;justify-content: center;">
+      <div>
+        <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+      </div>
+      <div>
+        <label class="form-check-label" style="margin-bottom: 0;text-wrap: nowrap;" for="flexSwitchCheckChecked">Dark Mode</label>
+      </div>
+    </div>
+    </div>
+  </nav>
+</header>
+<script src="{% static 'js/toggles.js' %}"></script>
+>>>>>>> upstream/main

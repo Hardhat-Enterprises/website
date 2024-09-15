@@ -245,7 +245,7 @@ def register(request):
         form = RegistrationForm(request.POST)
        
         if form.is_valid():
-            #form.save()
+            form.save()
             otp = random.randint(100000, 999999)
             send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
                     "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)

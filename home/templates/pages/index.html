@@ -19,8 +19,7 @@
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">Security is a necessity. Not a choice</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">Explore Projects</a>
-            <a type="button" href="{% url 'join-project' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">Join
-              Us</a>
+            <a type="button" href="{% url 'join-project' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">Join Us</a>
           </div>
         </div>
       </div>
@@ -111,165 +110,68 @@
         </div>
         <div class="col">
           <div class="card border-0 overflow-hidden h-100">
-            <div class="position-relative">
-              <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="CyberSafe VR">
-            </div>
-            <div
-              class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
-              <h3 class="h5 card-title">CyberSafe VR</h3>
-              <p class="mt-3">Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using
-                interactive VR technology to blend theory with practical application for owners and employees taking
-                cybersecurity measures.</p>
-              <a href="{% url 'ptgui_viz_main' %}">
-                <div class="btn btn-secondary mt-auto">
-                  Learn More
-                </div>
-              </a>
-            </div>
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">CyberSafe VR</h3>
+                <p class="mt-3">Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using interactive VR technology to blend theory with practical application for owners and employees taking cybersecurity measures.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
+                  <div class="btn btn-secondary mt-auto">
+                    Learn More
+                  </div>
+                </a>
+              </div>
           </div>
         </div>
-        <!-- Additional project cards as required -->
-      </div>
-    </div>
-  </section>
-
-  <!-- Chat Box -->
-  <!DOCTYPE html>
-  <html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Draggable Chatbot</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-      #chatbot-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-      }
-
-      #chatbot-icon {
-        width: 60px;
-        height: 60px;
-        cursor: move;
-        background: url('https://api.dicebear.com/6.x/bottts/svg?seed=Dusty') no-repeat center center;
-        background-size: cover;
-        border-radius: 50%;
-      }
-
-      #chatbot-box {
-        display: none;
-        position: absolute;
-        bottom: 70px;
-        right: 0;
-        width: 300px;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .card-header {
-        background-color: #007bff;
-        color: white;
-        padding: 10px;
-      }
-
-      .card-body {
-        padding: 10px;
-      }
-
-      #chat-content {
-        height: 200px;
-        overflow-y: auto;
-        border: 1px solid #ddd;
-        padding: 5px;
-        margin-bottom: 10px;
-      }
-
-      .input-group {
-        display: flex;
-        margin-top: 10px;
-      }
-
-      #chat-input {
-        flex-grow: 1;
-        padding: 5px;
-      }
-
-      .btn {
-        padding: 5px 10px;
-        margin-left: 5px;
-      }
-
-      #emoji-gif-picker {
-        display: none;
-        padding: 5px;
-        border: 1px solid #ddd;
-        max-height: 150px;
-        overflow-y: auto;
-      }
-
-      .emoji,
-      .gif {
-        font-size: 1.5rem;
-        cursor: pointer;
-        margin: 2px;
-      }
-
-      .gif img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-      }
-
-      .tab {
-        display: inline-block;
-        padding: 5px 10px;
-        cursor: pointer;
-      }
-
-      .tab.active {
-        background-color: #ddd;
-      }
-
-      #gif-search {
-        width: 100%;
-        margin-bottom: 5px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="chatbot-container">
-      <div id="chatbot-icon"></div>
-      <div id="chatbot-box">
-        <div class="card-header">
-          Chatbot
-          <button type="button" class="close"
-            style="float: right; font-size: 1.5rem; background: none; border: none; color: white;" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="card-body">
-          <div id="chat-content"></div>
-          <div class="input-group">
-            <input type="text" id="chat-input" placeholder="Type a message...">
-            <button class="btn" id="send-button"><i class="fas fa-paper-plane"></i></button>
-            <button class="btn" id="emoji-gif-button"><i class="far fa-smile"></i></button>
+        <div class="col">
+          <div class="card border-0 overflow-hidden h-100">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/cards/icon2.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">Smishing Detection</h3>
+                <p class="mt-3">Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to
+                  moderate the risks associated with SMS phishing attacks.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
+                  <div class="btn btn-secondary mt-auto">
+                    Learn More
+                  </div>
+                </a>
+              </div>
           </div>
-          <div id="emoji-gif-picker">
-            <div>
-              <span class="tab active" data-tab="emojis">Emojis</span>
-              <span class="tab" data-tab="gifs">GIFs</span>
-            </div>
-            <div id="emoji-container"></div>
-            <div id="gif-container" style="display: none;">
-              <input type="text" id="gif-search" placeholder="Search GIFs...">
-              <div id="gif-results"></div>
-            </div>
+        </div>
+        <div class="col">
+          <div class="card border-0 overflow-hidden h-100">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">Threat Mirror</h3>
+                <p class="mt-3">Threat Mirror aims to investigate open-source threat intelligence platforms,
+                  assessing their suitability and adaptability for SMEs and developing economies.</p>
+                <a href="{% url 'ptgui_viz_main' %}">
+                  <div class="btn btn-secondary mt-auto">
+                    Learn More
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card border-0 overflow-hidden h-100">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">Malware Visualization</h3>
+                <p class="mt-3">The Malware Visualisation project creates a user-friendly tool that simplifies malware analysis by integrating with existing visual analytics applications.</p>
+                <a href="{% url 'malware_viz_main' %}">
+                  <div class="btn btn-secondary mt-auto">
+                    Learn More
+                  </div>
+                </a>
+              </div>
           </div>
         </div>
       </div>
