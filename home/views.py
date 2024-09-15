@@ -626,6 +626,8 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
- 
+def careers(request):
+    return render(request, 'careers/careers.html')
+
        # return context
 

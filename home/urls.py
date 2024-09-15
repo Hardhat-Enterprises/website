@@ -41,6 +41,9 @@ urlpatterns = [
    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
    path('dashboard/', views.dashboard, name='dashboard'),
 
+  #carrers path
+       path('careers/', views.careers, name='careers'),
+
 
 
     # path('contact-central/', views.Contact_central, name='contact-central'),
