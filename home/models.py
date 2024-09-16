@@ -9,6 +9,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
+from django.urls import reverse
 
 
 from django.utils.text import slugify
@@ -218,17 +219,25 @@ class Progress(models.Model):
 
         return f'{self.student} - {self.skill}: {"Completed" if self.completed else "Not completed"}'
 
-
-
 class Article(models.Model):
     title = models.CharField(max_length=255)
-    content = HTMLField()
+    content = models.TextField()
     date = models.DateField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     featured = models.BooleanField(default=False)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
+    def __str__(self):
+        return self.title + ' | ' + str(self.author)
 
+class Comment(models.Model):
+    post = models.ForeignKey(Article, related_name="comments", on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    content = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '%s - %s' % (self.post.title, self.name)
 
 class Smishingdetection_join_us(models.Model):
     name= models.CharField(max_length=100)

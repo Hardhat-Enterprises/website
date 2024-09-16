@@ -9,8 +9,13 @@
   <div class="col-md-6 col-11 mx-md-auto mb-3 pb-2 mx-3">
     <h1>{{ object.title}}</h1>
     <p class="text-muted">{{object.date}}</p>
-    <p class="text-muted">Posted by {{ object.author.username}}</p>
-
+    <p class="text-muted">Posted by {{ object.author.first_name}}</p>
+    {% if request.user.is_authenticated %}
+      {% if user.id == object.author.id  %}
+        <a href="{% url 'update_article' object.id %}">Edit</a>
+        <a href="{% url 'delete_article' object.id %}">| Delete</a>
+      {% endif %}
+    {% endif %}
     <div>{{ object.content|safe }}</div>
   </div>
 </div>
@@ -24,16 +29,15 @@
     {% endif %} 
 	
 	{% if request.user.is_authenticated %}
-	 {% if liked_by_user %}
+ 	 {% if liked_by_user %}
 	   <form method="POST" action="{% url 'like_article' object.id %}">
 	    {% csrf_token %}
-		<button class="btn btn-outline-primary"><ion-icon name="heart-dislike-outline"></ion-icon> Unlike this post</button>
+		<button class="btn btn-outline-primary"><ion-icon name="heart-dislike-outline"></ion-icon> Unlike</button>
 	   </form>
-	   
 	 {% else %}
 	    <form method="POST" action="{% url 'like_article' object.id %}">
 	    {% csrf_token %}
-		<button class="btn btn-outline-primary"><ion-icon name="heart-outline"></ion-icon> Like this post</button>
+		<button class="btn btn-outline-primary"><ion-icon name="heart-outline"></ion-icon> Like</button>
 	   </form>
 	 {% endif %}
 	{% else %}
@@ -41,5 +45,33 @@
 	{% endif %}
   </div>
 </div>
-
+<div class="row my-5"></div>
+  <div class="col-md-6 col-11 mx-md-auto mx-3">
+    <h3>Comments</h3>
+    {% if object.comments.all %}
+      {% for comment in object.comments.all %}
+        <div class="comment mb-4">
+          <p><strong>{{ comment.user.username }}</strong> {{ comment.created_at|date:"F j, Y" }}</p>
+          <p>{{ comment.content|safe }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+  </div>
+</div>
+{% if request.user.is_authenticated %}
+<div class="row">
+  <div class="col-md-6 col-11 mx-md-auto mx-3">
+    <h4>Add a Comment</h4>
+    <form method="POST" action="{% url 'add_comment' object.id %}">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% else %}
+<p class="text-center">You must <a href="{% url 'login' %}">login</a> to add a comment.</p>
+{% endif %}
 {% endblock content %}

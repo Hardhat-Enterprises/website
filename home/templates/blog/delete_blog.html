@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+      <a class="btn btn-outline-secondary" href="{% url 'blog' %}"> Go Back </a>
+    </div>
+  </div>
+
+    <section class="section section-lg bg-light"> 
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <h3>   Are you sure you want to delete - '{{ object.title }}' ?</h3>
+                                <button type="submit" class="btn btn-primary">Delete Blog</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

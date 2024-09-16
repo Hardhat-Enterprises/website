@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Article, Comment
 
 
 
@@ -151,4 +151,30 @@ class NewWebURL(forms.ModelForm):
         model = Webpage
         fields = ['id', 'url', 'title']
             
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'author', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'author': forms.TextInput(attrs={'class': 'form-control', 'value': '', 'id': 'elder', 'type' : 'hidden'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+class UpdateForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a comment...'}),
+        }
 

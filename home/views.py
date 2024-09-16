@@ -14,11 +14,10 @@ from django.db.models import Count
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
- 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Comment 
+
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -34,7 +33,7 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, ArticleForm, UpdateForm, CommentForm
 
 
  
@@ -488,7 +487,7 @@ class Index(ListView):
     model = Article
     queryset = Article.objects.all().order_by('-date')
     template_name = 'blog/index.html'
-    paginate_by = 1
+    paginate_by = 2
  
 class DetailArticleView(DetailView):
     model = Article
@@ -497,11 +496,51 @@ class DetailArticleView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(DetailArticleView, self).get_context_data(*args, **kwargs)
         context['liked_by_user']  = False  
+        context['comment_form'] = CommentForm()
         article = Article.objects.get(id=self.kwargs.get('pk'))    
         if article.likes.filter(pk=self.request.user.id).exists():
             context['liked_by_user']  = True
         return context
- 
+
+def AddArticlecomment(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = article
+            comment.user = request.user
+            comment.save()
+            messages.success(request, "Your comment has been added.")
+            return redirect('detail_article', pk=article.id)
+        else:
+            print(form.errors)
+    else:
+        form = CommentForm()
+
+    return redirect('detail_article', pk=article.id)
+
+class CreateArticleView(CreateView):
+    model = Article
+    template_name = 'blog/add_blog.html'
+    form_class = ArticleForm
+    success_url = reverse_lazy('blog')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class UpdateArticleView(UpdateView):
+    model = Article
+    template_name = 'blog/update_blog.html'
+    form_class = UpdateForm
+    success_url = reverse_lazy('blog')
+
+class DeleteArticleView(DeleteView):
+    model = Article
+    template_name = 'blog/delete_blog.html'
+    success_url = reverse_lazy('blog')
+
 class LikeArticle(View):
     def post(self, request, pk):
         article = Article.objects.get(id=pk)
@@ -511,9 +550,6 @@ class LikeArticle(View):
             article.likes.add(request.user.id)
         article.save()
         return redirect('detail_article', pk)
- 
- 
- 
  
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'

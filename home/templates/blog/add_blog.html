@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<main>
+
+    <section class="section section-lg bg-light"> 
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-primary">Post</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<script>
+    var name = "{{ user.id }}";
+    document.getElementById("elder").value = name;
+</script>
+
+</main>
+{% endblock content %}
