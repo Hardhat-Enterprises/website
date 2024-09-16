@@ -4,13 +4,33 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import logging
-
+from django.core.exceptions import ValidationError
+import re
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, SecurityEvent
+
 
 
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
+
+def validate_password(value):
+    errors = [
+        "Password must be more than 8 digits.",
+        "Require at least one letter.",
+        "Require at least one number.",
+        "Require at least one special character."
+    ]
+    if len(value) < 8:
+        raise ValidationError(errors)
+    if not re.search(r'[A-Za-z]', value):
+        raise ValidationError(errors)
+    if not re.search(r'[0-9]', value):
+        raise ValidationError(errors)
+    if not re.search(r'[^A-Za-z0-9]', value):
+        raise ValidationError(errors)
+    
+    return value
 
 def possible_years(first_year_in_scroll, last_year_in_scroll):
     p_year = []
@@ -30,10 +50,12 @@ class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(
         label=_("Your Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+        validators=[validate_password],
     )
     password2 = forms.CharField(
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
+        validators=[validate_password],
     )
     # Newly added................................................
     def clean_password1(self):
@@ -45,6 +67,7 @@ class RegistrationForm(UserCreationForm):
             raise ValidationError(
                 _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
             )
+        return password
     # ...........................................................
 
     # Newly added...........................
@@ -53,7 +76,7 @@ class RegistrationForm(UserCreationForm):
         # Define the regex pattern for the required email format
         pattern = r'@deakin\.edu\.au$'
         
-        if not re.match(pattern, email):
+        if not re.search(pattern, email):
             raise ValidationError(_("Email must be match with your Deakin email."))
         
         return email
@@ -83,6 +106,8 @@ class RegistrationForm(UserCreationForm):
                 'placeholder': 'example@deakin.edu.au'
             })
         }
+
+
 
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
