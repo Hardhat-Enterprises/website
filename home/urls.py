@@ -26,12 +26,26 @@ urlpatterns = [
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
 
-    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
-    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
-    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('project_preferences/', views.project_preferences, name='project_preferences'),
-    path('upskill/chat', views.team_chat, name='team_chat'),
+    path('deakinThreatmirror/', views.Deakin_Threat_mirror_main, name='Deakin_Threat_mirror_main'),
+    path('deakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='threat_mirror_join_us'),
+    path('vr/', views.Vr_main, name='Vr_main'),
+    path('vr/join_us', views.vr_join_us, name='cybersafe_vr_join_us'),
+    # path('contact-central/', views.Contact_central, name='contact-central'),
+    
+    path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
+    path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+
+   path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
+   path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
+   path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+   path('dashboard/', views.dashboard, name='dashboard'),
+   path('project_preferences/', views.project_preferences, name='project_preferences'),
+   path('upskill/chat', views.team_chat, name='team_chat'),
+   path('upskill/django', views.django_skill, name='django_skill'), 
+   path('upskill/html', views.html_skill, name='html_skill'),
+   path('upskill/css', views.css_skill, name='css_skill'),
+   path('upslill/javascript', views.javascript_skill, name='javascript_skill'),
 
 
 
@@ -61,4 +75,3 @@ urlpatterns = [
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
 ]
-

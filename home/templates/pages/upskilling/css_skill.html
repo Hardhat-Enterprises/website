@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<main class="pt-6">
+  {% include 'includes/pre-loader.html' %}
+  <section class="section-header bg-tertiary text-black text-center py-5">
+    <h1 class="fw-bolder">CSS</h1>
+  </section>
+  <header class="container">
+    <h2 class="text-left">Welcome to CSS Learning Resources</h2>
+    <p class="text-left">Enhance your CSS skills with these valuable resources</p>
+</header>
+<main class="container">
+    <section>
+        <h2 class="text-left">About CSS</h2>
+        <p class="text-left">CSS (Cascading Style Sheets) is the language used to describe the presentation of web pages, including colors, layout, and fonts. It allows you to adapt the presentation to different types of devices, such as large screens, small screens, or printers. Learning CSS is crucial for creating visually appealing and responsive web designs.</p>
+    </section>
+
+    <section>
+        <h2 class="text-left">Why Learn CSS?</h2>
+        <p class="text-left">CSS is essential for web developers and designers to control the look and feel of a website. By learning CSS, you can create visually engaging and user-friendly websites that work across different devices and screen sizes. Whether you're styling a simple web page or developing a complex user interface, CSS is a must-have skill.</p>
+    </section>
+    <section>
+        <h2 class="text-left">Resources to Improve Your CSS Skills</h2>
+        <ul class="resources-list list-unstyled">
+            <li class="mb-3">
+                <h3 class="text-left">- MDN Web Docs</h3>
+                <p class="text-left">MDN Web Docs offers comprehensive documentation and tutorials on CSS. It's a valuable resource for both beginners and advanced users, covering a wide range of topics.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank">Visit MDN Web Docs</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- CSS-Tricks</h3>
+                <p class="text-left">CSS-Tricks is a popular website that offers tips, tricks, and tutorials on all things CSS. It's a great resource for learning new techniques and staying updated with the latest trends.</p>
+                <a href="https://css-tricks.com/" target="_blank">Visit CSS-Tricks</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- freeCodeCamp's Responsive Web Design Course</h3>
+                <p class="text-left">freeCodeCamp provides a free, comprehensive course that covers CSS in the context of responsive web design. It's a great way to build your skills through hands-on projects and exercises.</p>
+                <a href="https://www.freecodecamp.org/learn/responsive-web-design/" target="_blank">Visit freeCodeCamp Responsive Web Design Course</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- CSS: The Definitive Guide</h3>
+                <p class="text-left">This book by Eric A. Meyer and Estelle Weyl is a comprehensive guide to CSS, offering in-depth coverage of all aspects of CSS, from the basics to advanced topics.</p>
+                <a href="https://www.oreilly.com/library/view/css-the-definitive/9781449325053/" target="_blank">Buy CSS: The Definitive Guide</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- Smashing Magazine's CSS Articles</h3>
+                <p class="text-left">Smashing Magazine offers a wealth of articles and tutorials on CSS, covering everything from basic styling to complex layouts and animations.</p>
+                <a href="https://www.smashingmagazine.com/category/css" target="_blank">Visit Smashing Magazine's CSS Articles</a>
+            </li>
+        </ul>
+    </section>
+</main>
+{% endblock %}

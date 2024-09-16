@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<main class="pt-6">
+  {% include 'includes/pre-loader.html' %}
+  <section class="section-header bg-tertiary text-black text-center py-5">
+    <h1 class="fw-bolder">JavaScript</h1>
+  </section>
+  <header class="container">
+    <h2 class="text-left">Welcome to JavaScript Learning Resources</h2>
+    <p class="text-left">Enhance your JavaScript skills with these valuable resources</p>
+</header>
+<main class="container">
+    <section>
+        <h2 class="text-left">About JavaScript</h2>
+        <p class="text-left">JavaScript is a versatile programming language used to create interactive and dynamic content on the web. It allows you to build complex web applications, control multimedia, and much more. Mastering JavaScript is essential for modern web development and can greatly enhance the functionality and user experience of your websites.</p>
+    </section>
+
+    <section>
+        <h2 class="text-left">Why Learn JavaScript?</h2>
+        <p class="text-left">JavaScript is crucial for web developers as it enables the creation of dynamic and interactive elements on websites. By learning JavaScript, you can build responsive user interfaces, manage asynchronous operations, and develop full-fledged web applications. It's a fundamental skill for any web developer or designer aiming to create engaging web experiences.</p>
+    </section>
+    <section>
+        <h2 class="text-left">Resources to Improve Your JavaScript Skills</h2>
+        <ul class="resources-list list-unstyled">
+            <li class="mb-3">
+                <h3 class="text-left">- MDN Web Docs</h3>
+                <p class="text-left">MDN Web Docs provides comprehensive documentation and tutorials on JavaScript. It's an invaluable resource for both beginners and experienced developers, covering a wide range of JavaScript topics.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">Visit MDN Web Docs</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- JavaScript.info</h3>
+                <p class="text-left">JavaScript.info is an extensive tutorial that covers JavaScript from the basics to advanced topics, with practical examples and exercises to help you master the language.</p>
+                <a href="https://javascript.info/" target="_blank">Visit JavaScript.info</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- freeCodeCamp's JavaScript Algorithms and Data Structures Course</h3>
+                <p class="text-left">freeCodeCamp offers a free, comprehensive course that covers JavaScript algorithms and data structures through hands-on projects and coding exercises.</p>
+                <a href="https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" target="_blank">Visit freeCodeCamp JavaScript Course</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- You Don't Know JS (Book Series)</h3>
+                <p class="text-left">This series by Kyle Simpson dives deep into JavaScript, exploring its nuances and complexities. It's a must-read for anyone looking to gain a deep understanding of JavaScript.</p>
+                <a href="https://github.com/getify/You-Dont-Know-JS" target="_blank">Read You Don't Know JS</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- JavaScript30</h3>
+                <p class="text-left">JavaScript30 is a 30-day challenge created by Wes Bos that focuses on building projects with vanilla JavaScript. It's a great way to practice and improve your JavaScript skills through hands-on projects.</p>
+                <a href="https://javascript30.com/" target="_blank">Visit JavaScript30</a>
+            </li>
+        </ul>
+    </section>
+</main>
+{% endblock %}
