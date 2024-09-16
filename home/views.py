@@ -262,78 +262,28 @@ def register(request):
     verification_form = VerificationForm()
 
     if request.method == 'POST':
-        if 'sign-up-btn' in request.POST:
-            # Collect user data
-            email = request.POST.get('email')
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            password1 = request.POST.get('password1')
-            password2 = request.POST.get('password2')
-
-            # Validate form data
-            form = RegistrationForm(request.POST)
-            if form.is_valid():
-                phone_number = form.cleaned_data.get('phone_number')
-
-                if phone_number:
-                    # Generate and send OTP
-                    verification_code = str(random.randint(100000, 999999))
-                    send_verification_sms(phone_number, verification_code)
-
-                    # Store the verification code and user data in the session
-                    request.session['verification_code'] = verification_code
-                    request.session['email'] = email
-                    request.session['first_name'] = first_name
-                    request.session['last_name'] = last_name
-                    request.session['password1'] = password1
-                    request.session['password2'] = password2
-
-                    # Show verification form
-                    messages.success(request, "Verification code sent.")
-                    form_show_verification = True
-                    verification_form = VerificationForm()
-                else:
-                    messages.error(request, "Invalid phone number.")
-                    form_show_verification = False
-            else:
-                messages.error(request, "Registration failed! Please correct the errors below.")
-                form_show_verification = False
-
-        elif 'verify-btn' in request.POST:
-            # Handle OTP verification
-            verification_form = VerificationForm(request.POST)
-            mobile_otp_sent = request.session.get('verification_code')
-
-            if verification_form.is_valid():
-                verification_code_entered = request.POST.get('verification_code')
-
-                if verification_code_entered == mobile_otp_sent:
-                    # Retrieve user data from the session
-                    email = request.session.get('email')
-                    first_name = request.session.get('first_name')
-                    last_name = request.session.get('last_name')
-                    password1 = request.session.get('password1')
-                    password2 = request.session.get('password2')
-
-                    # Create and save the user
-                    user = User(first_name=first_name, last_name=last_name, email=email, password=password1)
-                    user.save()
-
-                    messages.success(request, "Your account has been verified! You can now log in.")
-                    return redirect('login')
-                else:
-                    messages.error(request, "Invalid verification code. Please try again.")
-                    form_show_verification = True
-
-            else:
-                messages.error(request, "Please enter a valid verification code.")
-                form_show_verification = True
-
-    context = {
-        'form': form,
-        'verification_form': verification_form,
-        'form_show_verification': form_show_verification
-    }
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        form = RegistrationForm(request.POST)
+       
+        if form.is_valid():
+            #form.save()
+            otp = random.randint(100000, 999999)
+            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
+            print("Account created successfully! An OTP was sent to your email. Check!")
+            messages.success(request, "Account created successfully!")
+            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
+            # return redirect("verify-email", username=request.POST['first_name'])
+        else:
+            print("Registration failed!")
+    else:
+        form = RegistrationForm()
+ 
+    context = { 'form': form }
     return render(request, 'accounts/sign-up.html', context)
 
 
