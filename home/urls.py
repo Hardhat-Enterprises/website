@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
 
 from . import views
 
@@ -23,6 +23,8 @@ urlpatterns = [
     path('upskilling/', UpskillingView.as_view(), name='upskilling'),
     path('upskilling/<slug:slug>/', UpskillingSkillView.as_view(), name='upskilling_skill'),
     path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
+    path('join-us/', join_project, name='join_us'),
+    path('success/', UpskillSuccessView, name='success'),
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
 
