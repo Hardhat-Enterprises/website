@@ -245,10 +245,10 @@ def register(request):
         form = RegistrationForm(request.POST)
        
         if form.is_valid():
-            form.save()
+            #form.save()
             otp = random.randint(100000, 999999)
             send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
+                    "Regards, \nHardhat Enterprises", "zhaoyeye1103@yahoo.com", [email], fail_silently=False)
             print("Account created successfully! An OTP was sent to your email. Check!")
             messages.success(request, "Account created successfully!")
             return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
@@ -257,7 +257,6 @@ def register(request):
             print("Registration failed!")
     else:
         form = RegistrationForm()
- 
     context = { 'form': form }
     return render(request, 'accounts/sign-up.html', context)
  
@@ -592,7 +591,7 @@ class UserPasswordResetView(PasswordResetView):
                     "If you didn't request a password reset, please contact us at your earliest convenience.\n\n"
                     "Regards,\nHardhat Enterprises"
                 )
-            send_mail(subject, message, 'deakinhardhatwebsite@gmail.com', [email], fail_silently=False)
+            send_mail(subject, message, 'zhaoyeye1103@yahoo.com', [email], fail_silently=False)
             return redirect('password_reset_done')
         else:
             messages.error(self.request, "User does not exist. Please enter a valid email address.")

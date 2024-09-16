@@ -183,11 +183,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.mail.yahoo.com'
 EMAIL_PORT = 587 # For TLS, 465 for SSL
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'hardhatcompanywebsite@gmail.com'
-EMAIL_HOST_PASSWORD = 'nuje nbmo cfqe skjb'
+EMAIL_HOST_USER = 'zhaoyeye1103@yahoo.com'
+EMAIL_HOST_PASSWORD = 'atgpvgijlxtaucif'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
