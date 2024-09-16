@@ -15969,11 +15969,14 @@ textarea.form-control-lg {
   .navbar-collapse.show {
     padding: 1.5rem;
     border-radius: 1rem;
-    background: #ffffff;
+    background-color: var(--section-bs);
     animation: show-navbar-collapse .2s ease forwards;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
   .navbar-collapse.collapsing-out {
-    animation: hide-navbar-collapse .2s ease forwards; } }
+    animation: hide-navbar-collapse .2s ease forwards; }
+  .res-hide{
+    display: none;
+  } }
 
 /**
  * = Sections
@@ -18662,6 +18665,13 @@ ul li {
   font-weight: 300;
   line-height: 1.6;
   color: var(--darkmode-text);
+}
+
+/* Target specific dark backgrounds when dark mode is off */
+.text-white p,
+.text-white ol li,
+.text-white ul li {
+  color: #ffffff; /* White text for dark backgrounds */
 }
 
 a,

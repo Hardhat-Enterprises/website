@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ challenge.title }}</h1>
+    <p>{{ challenge.description }}</p>
+    <p>
+        <span class="badge bg-primary">{{ challenge.get_difficulty_display }}</span>
+        <span class="badge bg-secondary">{{ challenge.get_category_display }}</span>
+        <span class="badge bg-info">{{ challenge.points }} points</span>
+    </p>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Question:</h5>
+            <p class="card-text">{{ challenge.question }}</p>
+            <form id="challenge-form">
+                {% csrf_token %}
+                {% for choice in challenge.choices %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer" id="choice{{ forloop.counter }}" value="{{ choice }}">
+                        <label class="form-check-label" for="choice{{ forloop.counter }}">
+                            {{ choice }}
+                        </label>
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary mt-3">Submit Answer</button>
+            </form>
+        </div>
+    </div>
+    <div id="result" class="alert" style="display: none;"></div>
+</div>
+
+<script>
+document.getElementById('challenge-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('{% url "submit_answer" challenge.id %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        if (data.is_correct) {
+            resultDiv.className = 'alert alert-success';
+            resultDiv.innerHTML = `Correct! You earned ${data.score} points. ${data.explanation}`;
+        } else {
+            resultDiv.className = 'alert alert-danger';
+            resultDiv.innerHTML = `Incorrect. ${data.explanation}`;
+        }
+    });
+});
+</script>
+{% endblock %}
