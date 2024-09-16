@@ -256,34 +256,100 @@ def logout_view(request):
 def password_gen(request):
     return JsonResponse({'data': gen_password()}, status=200)
 
+
 def register(request):
     form_show_verification = False  # Controls which form to show
-    form = RegistrationForm(request.POST or None)
+    form = RegistrationForm()
     verification_form = VerificationForm()
 
     if request.method == 'POST':
-        email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        form = RegistrationForm(request.POST)
-       
-        if form.is_valid():
-            #form.save()
-            otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
-            print("Account created successfully! An OTP was sent to your email. Check!")
-            messages.success(request, "Account created successfully!")
-            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
-            # return redirect("verify-email", username=request.POST['first_name'])
-        else:
-            print("Registration failed!")
-    else:
-        form = RegistrationForm()
- 
-    context = { 'form': form }
+        if 'sign-up-btn' in request.POST:  # Check if the registration form is submitted
+            form = RegistrationForm(request.POST)
+
+            if form.is_valid():
+                phone_number = form.cleaned_data.get('phone_number')
+
+                if phone_number:
+                    # Generate a random 6-digit verification code
+                    verification_code = str(random.randint(100000, 999999))
+
+                    request.session['registration_data'] = {
+                        'email': form.cleaned_data.get('email'),
+                        'first_name': form.cleaned_data.get('first_name'),
+                        'last_name': form.cleaned_data.get('last_name'),
+                        'password1': form.cleaned_data.get('password1'),
+                        'password2': form.cleaned_data.get('password2')
+                    }
+
+                    # Send the verification code using the utility function
+                    send_verification_sms(phone_number, verification_code)
+
+                    # Store the verification code in the session for later validation
+                    request.session['verification_code'] = verification_code
+
+                    # Send response indicating success
+                    messages.success(request, "Verification code sent.")
+                    form_show_verification = True
+                    verification_form = VerificationForm()
+                else:
+                    messages.error(request, "Invalid phone number.")
+                    form_show_verification = False
+
+            else:
+                messages.error(request, "Registration failed! Please correct the errors below.")
+                form_show_verification = False
+
+        elif 'verify-btn' in request.POST:  # Check if the verification form is submitted
+            verification_form = VerificationForm(request.POST)
+            otp_sent = request.session.get('verification_code')  # Get OTP sent (stored in session)
+
+            if verification_form.is_valid():
+                verification_code_entered =request.POST.get('verification_code')
+
+                if verification_code_entered == otp_sent:
+                    # OTP matched; complete registration and redirect
+                    messages.success(request, 'Your phone number has been verified!')
+                    registration_data = request.session.get('registration_data')
+
+                    if registration_data:
+                        email = registration_data.get('email')
+                        first_name = registration_data.get('first_name')
+                        last_name = registration_data.get('last_name')
+                        password1 = registration_data.get('password1')
+                        password2 = registration_data.get('password2')
+
+                        otp = random.randint(100000, 999999)
+                        send_mail("User Data:",
+                                  f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n"
+                                  f"If you didn't request an OTP or open an account with us, please contact us.",
+                                  "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
+
+                        messages.success(request, "Account created successfully!")
+                        return render(request, 'accounts/verify_token.html', {
+                            'otp': otp,
+                            'first_name': first_name,
+                            'last_name': last_name,
+                            'email': email,
+                            'password1': password1,
+                            'password2': password2
+                        })
+                    else:
+                        print("Registration failed!")
+                else:
+                    messages.error(request, 'Invalid verification code. Please try again.')
+                    form_show_verification = True
+
+            else:
+                messages.error(request, 'Please enter a valid verification code.')
+                form_show_verification = True
+
+    # Default context for GET and failed POST
+    context = {
+        'form': form,
+        'verification_form': verification_form,
+        'form_show_verification': form_show_verification
+    }
+
     return render(request, 'accounts/sign-up.html', context)
 
 
