@@ -1,6 +1,8 @@
 from django.urls import path
 from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView
+from django_ratelimit.decorators import ratelimit
+from .views import UserLoginView
 
 from . import views
 
@@ -67,6 +69,8 @@ urlpatterns = [
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
+
+    path('accounts/login/', UserLoginView.as_view(), name='login'),
 
 ]
 
