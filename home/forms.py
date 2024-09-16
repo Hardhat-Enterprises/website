@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 from django.utils import timezone
+import re
 
 
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage
@@ -34,6 +36,13 @@ class RegistrationForm(UserCreationForm):
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
     )
+
+    phone_number = forms.CharField(
+        label=_("Phone Number"),
+        max_length=15,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+    )
+
     # Newly added................................................
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
@@ -52,7 +61,7 @@ class RegistrationForm(UserCreationForm):
         # Define the regex pattern for the required email format
         pattern = r'@deakin\.edu\.au$'
         
-        if not re.match(pattern, email):
+        if not re.search(pattern, email):
             raise ValidationError(_("Email must be match with your Deakin email."))
         
         return email
@@ -151,4 +160,9 @@ class NewWebURL(forms.ModelForm):
         model = Webpage
         fields = ['id', 'url', 'title']
             
-
+class VerificationForm(forms.Form):
+    verification_code = forms.CharField(
+        label=_("Verification Code"),
+        max_length=6,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your verification code'}),
+    )

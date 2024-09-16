@@ -26,7 +26,7 @@
               />
               <h1 class="mb-0 h3">Create an account</h1>
             </div>
-            <form method="post">
+            <form method="post" id="registration-form" class="{% if not form_show_verification %}d-block{% else %}d-none{% endif %}">
               {% csrf_token %}
               <!-- Form -->
               {% for field in form %}
@@ -49,6 +49,8 @@
               </div>
               <span class="text-danger"> {{ field.errors }} </span>
               {% endfor %}
+              <!-- Add a span to show email error message -->
+              <span id="email-error" class="text-danger"></span>
 
               <!-- Real-Time Password Requirements Checklist -->
               <div class="form-group">
@@ -64,8 +66,34 @@
 
               <!-- End of Form -->
               <div class="d-grid">
-                <button type="submit" class="btn btn-warning btn-primary">
+                <button  id="sign-up-btn" name="sign-up-btn" type="submit" class="btn btn-warning btn-primary">
                   Sign up
+                </button>
+              </div>
+            </form>
+
+            <!-- Second Form (Verification Code) -->
+            <form method="post" id="verification-form" class="{% if form_show_verification %}d-block{% else %}d-none{% endif %}">
+              {% csrf_token %}
+              <div id="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" style="color: red; font-weight: bold;">{{ message }}</div>
+                {% endfor %}
+              </div>
+              <div class="form-group mb-4">
+                <label for="verification_code">Verification Code</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <span class="fas fa-key"></span>
+                  </span>
+                  {{ verification_form.verification_code }}
+                </div>
+                <span class="text-danger">{{ verification_form.verification_code.errors }}</span>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" name="verify-btn" class="btn btn-primary" id="verify-btn">
+                  Verify Code
                 </button>
               </div>
             </form>
@@ -93,6 +121,14 @@
       const emailErrorMessage = document.getElementById("email-error");
       const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
 
+      function clearEmailError() {
+        emailErrorMessage.textContent = "";
+        emailField.classList.remove("is-invalid");
+        emailField.classList.remove("is-valid");
+      }
+
+      emailField.addEventListener("focus", clearEmailError);
+      
       emailField.addEventListener("input", function() {
           const emailPattern = /@deakin\.edu\.au$/;
           const emailValue = emailField.value;

@@ -2,11 +2,18 @@ from django.urls import path
 from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView
 
+from .views import send_verification_code  # Import the view
+from .views import verify_code  # Import the view
+
 from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    # Newly added................................................
+    path('send-verification-code/', send_verification_code, name='send_verification_code'),
 
+    path('verify-code/', verify_code, name='verify_code'),
+    # ...........................................................
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
     path('appattack/join', views.appattack_join, name='appattack_join'),
@@ -56,9 +63,6 @@ urlpatterns = [
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
     
-    # Email OTP
-    
-    path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
    
 
 
