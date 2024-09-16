@@ -203,7 +203,7 @@ def register(request):
         form = RegistrationForm(request.POST)
        
         if form.is_valid():
-            #form.save()
+            form.save()
             otp = random.randint(100000, 999999)
             send_mail("User Data:", f"Verify Your Mail with the OTP: /n {otp}", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
             print("Account created successfully! An OTP was sent to your email. Check!")
