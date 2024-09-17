@@ -1,0 +1,198 @@
+{% extends "layouts/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="profile-page-container">
+
+<!-- Confirmation Message -->
+<div id="profile-container" class="container mt-5">
+  <h1>User Profile</h1>
+
+  {% if messages %}
+    <div id="success-message" class="alert alert-success">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Background Color Picker -->
+  <div class="background-picker-container">
+    <label for="bg-color-picker"><strong>Select Background Color:</strong></label>
+    <input type="color" id="bg-color-picker" value="#ffffff"> 
+  </div>
+
+  <!-- Div for icon --> 
+  <div class="profile-icon-container text-center mb-4">
+    <img id="avatar-preview" 
+         src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}" 
+         alt="Profile Picture" class="rounded-circle" width="400" height="400">
+  </div>
+
+  <div class="profile-details">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <div class="form-group mb-3">
+        <label for="avatar"><strong>Change Profile Picture:</strong></label>
+        <input type="file" name="avatar" id="avatar-input" class="form-control">
+        <button type="button" id="clear-avatar" class="btn btn-warning mt-2">Clear</button>
+        <button type="submit" class="btn btn-primary mt-2">Save</button>
+      </div>    
+
+
+      <div class="form-group mb-3">
+        <label for="id_first_name"><strong>First Name:</strong></label>
+        {{ u_form.first_name }}
+      </div>
+      
+      <div class="form-group mb-3">
+        <label for="id_last_name"><strong>Last Name:</strong></label>
+        {{ u_form.last_name }}
+      </div>
+
+      <div class="form-group mb-3">
+        <label><strong>Email:</strong></label>
+        <input type="text" value="{{ request.user.email }}" class="form-control" readonly>
+      </div>
+
+      <div class="form-right">
+        <div class="form-group mb-3">
+          <label for="bio"><strong>Description:</strong></label>
+          {{ p_form.bio }}
+        </div>
+      </div>
+
+      <div style="clear: both;"></div>
+
+      <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
+    </form>
+  </div>
+</div>
+</div>
+
+
+<!-- CSS -->
+<style>
+#clear-avatar {
+    background-color: #FF5733; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+}
+
+.profile-page-container {
+    padding: 20px;
+    background-color: white; 
+    border-radius: 8px;
+    width: 100%;
+    margin: 0 auto; 
+    margin-top: 60px;
+}
+
+.background-picker-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.profile-icon-container {
+    position: absolute;
+    right: 25%; 
+    top: 210px;  
+    text-align: center;
+    transform: translateX(50%);
+}
+
+.profile-details form {
+    max-width: 500px;
+}
+
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-right {
+    width: 45%;
+}
+
+.form-right textarea {
+    width: 400px;
+    height: 200px;
+}
+
+#success-message {
+    position: fixed; 
+    top: 10px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 1000;
+    opacity: 0; 
+    transition: opacity 1s ease-in-out; 
+    width: auto;
+    text-align: center;
+    background-color: #d4edda; 
+    color: #155724; 
+    padding: 10px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+}
+
+</style>
+
+<!-- JavaScript -->
+<script>
+// Successful change message fade
+document.addEventListener('DOMContentLoaded', function() {
+    var message = document.getElementById('success-message');
+    if (message) {
+        message.style.opacity = 1; 
+        setTimeout(function() {
+            message.style.opacity = 0; 
+        }, 4000);
+    }
+});
+
+    // Avatar preview
+    document.getElementById('avatar-input').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var avatarPreview = document.getElementById('avatar-preview');
+            avatarPreview.src = reader.result;
+        };
+        if (event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    });
+
+    document.getElementById('clear-avatar').addEventListener('click', function() {
+    var avatarInput = document.getElementById('avatar-input');
+    var avatarPreview = document.getElementById('avatar-preview');
+    var defaultAvatar = "{% static 'assets/img/pages/home/profile_icon.jpeg' %}";
+    avatarInput.value = ''; 
+    avatarPreview.src = defaultAvatar;
+});
+    // Background color handling
+    var profileContainer = document.querySelector('.profile-page-container');
+    var storedColor = localStorage.getItem('bgColor');
+    if (storedColor) {
+        profileContainer.style.backgroundColor = storedColor;
+        document.getElementById('bg-color-picker').value = storedColor;
+    }
+
+    // Background color change 
+    var bgColorPicker = document.getElementById('bg-color-picker');
+    bgColorPicker.addEventListener('input', function() {
+        var selectedColor = bgColorPicker.value;
+        profileContainer.style.backgroundColor = selectedColor;
+        localStorage.setItem('bgColor', selectedColor);
+    });
+
+
+</script>
+
+{% endblock %}
