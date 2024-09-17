@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, AddArticlecomment, CreateArticleView, UpdateArticleView, DeleteArticleView, UpskillingView, UpskillingSkillView
+
+from .views import Index, DetailArticleView, LikeArticle, AddArticlecomment, CreateArticleView, UpdateArticleView, DeleteArticleView, UpskillingView, UpskillingSkillView, SearchResults
 
 from . import views
 
@@ -47,9 +48,12 @@ urlpatterns = [
     
     
     # Search result page
-    path('search_results/', views.search_results, name='pages/search-results'),
+    path('SearchResults/', views.SearchResults, name='pages/search-results'),
     path('website_form/', views.website_form, name='pages/website-form'),
 
+
+    # Search Suggestions
+    path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
 
     # Blog URLs
     path('blog/', Index.as_view(), name = 'blog'),
@@ -69,5 +73,10 @@ urlpatterns = [
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
-]
+    path('challenges/', views.challenge_list, name='challenge_list'),
+    path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
+    path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
+    path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
 
+
+]

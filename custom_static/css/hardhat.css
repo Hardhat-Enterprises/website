@@ -421,6 +421,7 @@ a {
     color: #0b0f18; }
 
 a.lost-password:hover,
+a.login-here:hover,
 a.create-account:hover {
   color: #0b0f18; 
 }
@@ -15968,11 +15969,14 @@ textarea.form-control-lg {
   .navbar-collapse.show {
     padding: 1.5rem;
     border-radius: 1rem;
-    background: #ffffff;
+    background-color: var(--section-bs);
     animation: show-navbar-collapse .2s ease forwards;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
   .navbar-collapse.collapsing-out {
-    animation: hide-navbar-collapse .2s ease forwards; } }
+    animation: hide-navbar-collapse .2s ease forwards; }
+  .res-hide{
+    display: none;
+  } }
 
 /**
  * = Sections
@@ -15988,10 +15992,17 @@ textarea.form-control-lg {
   padding-top: 7rem;
   padding-bottom: 3rem; }
 
+.ptgui_viz-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+}
+
 @media (min-width: 576px) {
   .section {
     position: relative;
-    padding-top: 6rem;
+    padding-top: 2rem;
     padding-bottom: 6rem; }
   .section-header {
     position: static;
@@ -16467,27 +16478,27 @@ label {
     background-color: #3aaf85;
     border-color: #3aaf85; }
 
-.btn-dribbble {
+.btn-linkedin {
   color: #ffffff;
   background-color: #ea4c89;
   border-color: #ea4c89;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(23, 31, 56, 0.075); }
-  .btn-dribbble:hover {
+  .btn-linkedin:hover {
     color: #ffffff;
     background-color: #c74174;
     border-color: #bb3d6e; }
-  .btn-check:focus + .btn-dribbble, .btn-dribbble:focus {
+  .btn-check:focus + .btn-linkedin, .btn-linkedin:focus {
     color: #ffffff;
     background-color: #c74174;
     border-color: #bb3d6e;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(23, 31, 56, 0.075), 0 0 0 0.2rem rgba(237, 103, 155, 0.5); }
-  .btn-check:checked + .btn-dribbble, .btn-check:active + .btn-dribbble, .btn-dribbble:active, .btn-dribbble.active, .show > .btn-dribbble.dropdown-toggle {
+  .btn-check:checked + .btn-linkedin, .btn-check:active + .btn-linkedin, .btn-linkedin:active, .btn-linkedin.active, .show > .btn-linkedin.dropdown-toggle {
     color: #ffffff;
     background-color: #bb3d6e;
     border-color: #b03967; }
-    .btn-check:checked + .btn-dribbble:focus, .btn-check:active + .btn-dribbble:focus, .btn-dribbble:active:focus, .btn-dribbble.active:focus, .show > .btn-dribbble.dropdown-toggle:focus {
+    .btn-check:checked + .btn-linkedin:focus, .btn-check:active + .btn-linkedin:focus, .btn-linkedin:active:focus, .btn-linkedin.active:focus, .show > .btn-linkedin.dropdown-toggle:focus {
       box-shadow: inset 0 3px 5px rgba(23, 31, 56, 0.125), 0 0 0 0.2rem rgba(237, 103, 155, 0.5); }
-  .btn-dribbble:disabled, .btn-dribbble.disabled {
+  .btn-linkedin:disabled, .btn-linkedin.disabled {
     color: #ffffff;
     background-color: #ea4c89;
     border-color: #ea4c89; }
@@ -18656,6 +18667,13 @@ ul li {
   color: var(--darkmode-text);
 }
 
+/* Target specific dark backgrounds when dark mode is off */
+.text-white p,
+.text-white ol li,
+.text-white ul li {
+  color: #ffffff; /* White text for dark backgrounds */
+}
+
 a,
 .text-action {
   color: #FFCD11;
@@ -19349,7 +19367,7 @@ blockquote {
 .text-slack {
   color: #3aaf85; }
 
-.text-dribbble {
+.text-linkedin {
   color: #ea4c89; }
 
 .text-dropbox {

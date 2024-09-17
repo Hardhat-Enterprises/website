@@ -1,11 +1,8 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
-{% block header %}
-  {% include 'includes/navigation.html'%}
-{% endblock header %}
-{% block content %}
+{% extends 'layouts/base.html' %} {% load static %} {% block header %} {%include 'includes/navigation.html'%} {% endblock header %} {% block content %}
+
 <main>
   {% include 'includes/pre-loader.html' %}
+  
 
   <!-- Section -->
   <section
@@ -49,6 +46,26 @@
               </div>
               <span class="text-danger"> {{ field.errors }} </span>
               {% endfor %}
+              <div class="d-flex mb-4" style="margin-left: 31%">
+                <span class="fw-normal" style="margin-right: 0.4rem">
+                  <a
+                    onclick="get_rand_pass()"
+                    href="javascript:;"
+                    class="fw-bold text-underline"
+                    >Generate password</a
+                  >
+                </span>
+                <br />
+                <span>
+                  <a
+                    id="togglePasswordLink"
+                    onclick="togglePasswordVisibility()"
+                    href="javascript:;"
+                    class="fw-bold text-underline"
+                    >Show password</a
+                  >
+                </span>
+              </div>
 
               <!-- Real-Time Password Requirements Checklist -->
               <div class="form-group">
@@ -72,7 +89,7 @@
             <div class="d-flex justify-content-center align-items-center mt-4">
               <span class="fw-normal">
                 Already have an account?
-                <a href="{% url 'login' %}" class="fw-bold text-underline"
+                <a href="{% url 'login' %}" class="fw-bold text-underline login-here"
                   >Login here</a
                 >
               </span>
@@ -87,6 +104,30 @@
 
 <!-- Newly added...................................... -->
 <script>
+  function get_rand_pass() {
+    fetch("/accounts/password-gen")
+      .then((d) => d.json())
+      .then((j) => {
+        document.getElementsByName("password1")[0].value = j.data;
+        document.getElementsByName("password2")[0].value = j.data;
+      });
+  }
+
+  function togglePasswordVisibility() {
+    var passwordField1 = document.getElementsByName("password1")[0];
+    var passwordField2 = document.getElementsByName("password2")[0];
+    var toggleLink = document.getElementById("togglePasswordLink");
+  
+    if (passwordField1.type === "password") {
+      passwordField1.type = "text";
+      passwordField2.type = "text";
+      toggleLink.innerText = "Hide password";
+    } else {
+      passwordField1.type = "password";
+      passwordField2.type = "password";
+      toggleLink.innerText = "Show password";
+    }
+  }
   document.addEventListener("DOMContentLoaded", function() {
       // Email Validation
       const emailField = document.getElementById("id_email");

@@ -17,6 +17,9 @@ from .models import (
     Comment,
     Smishingdetection_join_us,
     Projects_join_us,
+    CyberChallenge,
+    UserChallenge,
+
 
 
 
@@ -67,7 +70,14 @@ class ContactAdmin(admin.ModelAdmin):
 @admin.register(Webpage)
 class Webpage(admin.ModelAdmin):
     list_display = [field.name for field in Webpage._meta.fields]
-    
+
+@admin.register(CyberChallenge)
+class CyberChallengeAdmin(admin.ModelAdmin):
+    list_display = ['title', 'difficulty', 'category', 'points']
+
+@admin.register(UserChallenge)
+class UserChallengeAdmin(admin.ModelAdmin):
+    list_display = ['user', 'challenge', 'completed', 'score']
     
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):

@@ -5,6 +5,7 @@ from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
@@ -249,3 +250,32 @@ class Projects_join_us(models.Model):
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
+    
+class CyberChallenge(models.Model):
+    DIFFICULTY_CHOICES = [
+        ('easy', 'Easy'),
+        ('medium', 'Medium'),
+        ('hard', 'Hard'),
+    ]
+    CATEGORY_CHOICES = [
+        ('network', 'Network Security'),
+        ('web', 'Web Application Security'),
+        ('crypto', 'Cryptography'),
+        ('general', 'General Knowledge'),
+    ]
+    
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    question = models.TextField()
+    choices = models.JSONField()  # For multiple choice questions
+    correct_answer = models.CharField(max_length=200)
+    explanation = models.TextField()
+    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    points = models.IntegerField(default=10)
+
+class UserChallenge(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
+    score = models.IntegerField(default=0)
