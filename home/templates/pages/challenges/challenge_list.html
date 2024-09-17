@@ -1,0 +1,33 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Cyber Challenges</h1>
+    <p class="text-center mb-5">Test your cybersecurity knowledge and skills across various domains. Choose a category to begin!</p>
+    <div class="row">
+        {% for category in categories %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ category.category|title }}</h5>
+                        <p class="card-text flex-grow-1">
+                            {% if category.category == 'network' %}
+                                Explore challenges related to network security, including firewalls, intrusion detection, and secure protocols.
+                            {% elif category.category == 'web' %}
+                                Test your knowledge of web application security, including SQL injection, XSS, and CSRF attacks.
+                            {% elif category.category == 'crypto' %}
+                                Dive into cryptography challenges, covering encryption, hashing, and secure communication.
+                            {% elif category.category == 'general' %}
+                                General cybersecurity knowledge questions covering a wide range of topics.
+                            {% endif %}
+                        </p>
+                        <p class="mb-2"><strong>{{ category.count }}</strong> challenge{{ category.count|pluralize }}</p>
+                        <a href="{% url 'category_challenges' category.category %}" class="btn btn-primary mt-auto">View Challenges</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
