@@ -43,13 +43,13 @@
                             <span class="text-danger"> {{ field.errors }} </span>
                             {% endfor %}
                             <!--<div class="d-flex mb-4" style="margin-left: 31%;">
-                                <span class="fw-normal" style="margin-right: 0.4rem;">
-                                    <a onclick="get_rand_pass()" href="javascript:;" class="fw-bold text-underline">Generate password</a>
-                                </span>
-                                <br />
-                                <span>
-                                    <a onclick="show_rand_pass()" href="javascript:;" class="fw-bold text-underline">Show password</a>
-                            </span>-->
+        <span class="fw-normal" style="margin-right: 0.4rem;">
+            <a onclick="get_rand_pass()" href="javascript:;" class="fw-bold text-underline">Generate password</a>
+        </span>
+        <br />
+        <span>
+            <a onclick="show_rand_pass()" href="javascript:;" class="fw-bold text-underline">Show password</a>
+        </span>-->
                             <div class="d-flex mb-4" style="margin-left: 31%;">
                                 <span class="fw-normal" style="margin-right: 0.4rem;">
                                     <a href="javascript:void(0);"
@@ -103,20 +103,20 @@
 <script>
     function generateRandomPassword() {
     fetch("/accounts/password-gen")
-        .then(response => response.json())
-        .then(data => {
-            const passwordFields = document.getElementsByName("password1")[0];
-            const confirmPasswordFields = document.getElementsByName("password2")[0];
-            passwordFields.value = data.data;
-            confirmPasswordFields.value = data.data;
-        })
-        .catch(error => console.error('Error:', error));
+    .then(response => response.json())
+    .then(data => {
+    const passwordFields = document.getElementsByName("password1")[0];
+    const confirmPasswordFields = document.getElementsByName("password2")[0];
+    passwordFields.value = data.data;
+    confirmPasswordFields.value = data.data;
+    })
+    .catch(error => console.error('Error:', error));
     }
 
     function togglePasswordVisibility() {
     const passwordFields = [
-        document.getElementsByName("password1")[0],
-        document.getElementsByName("password2")[0]
+    document.getElementsByName("password1")[0],
+    document.getElementsByName("password2")[0]
     ];
     const toggleLink = document.getElementById("togglePasswordLink");
 

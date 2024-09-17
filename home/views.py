@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
@@ -16,6 +17,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 #from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
+
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Feedback
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
@@ -625,7 +627,7 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
- 
+
 def feedback_view(request):
     return render(request, 'pages/feedback.html')
 
@@ -649,5 +651,7 @@ def submit_feedback(request):
 #def thank_you(request):
     #return render(request, 'feedback/thank_you.html')
     #return render('thank_you')
-       
+
+ 
+       # return context
 

@@ -243,7 +243,7 @@ class Projects_join_us(models.Model):
     page_name = models.CharField(max_length=100)
 
 
-User = get_user_model()
+    User = get_user_model()
 
 class Feedback(models.Model):
     GENERAL_INQUIRY = 'general'
@@ -274,6 +274,5 @@ class Feedback(models.Model):
     def __str__(self):
         feedback_type_display = self.get_feedback_type_display()
         return f"{feedback_type_display} - {self.created_at}"
-
 
 
