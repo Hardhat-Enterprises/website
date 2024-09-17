@@ -167,19 +167,19 @@ def project_preferences(request):
     return render(request), 'pages/project_preferences.html'
 
 def team_chat(request):
-    return render(request), 'pages/team_chat.html'
+    return render(request, 'pages/team_chat.html')
 
 def django_skill(request):
-    return render(request), 'pages/upskilling/django_skill.html'
+    return render(request, 'pages/upskilling/django_skill.html')
 
 def html_skill(request):
-    return render(request), 'pages/upksilling/html_skill.html'
+    return render(request, 'pages/upksilling/html_skill.html')
 
 def css_skill(request):
-    return render(request), 'pages/upskilling/css_skill.html'
+    return render(request, 'pages/upskilling/css_skill.html')
 
 def javascript_skill(request):
-    return render(request), 'pages/upskilling/javascript_skill.html'
+    return render(request, 'pages/upskilling/javascript_skill.html')
  
 # Search Suggestions
 def SearchSuggestions(request):
