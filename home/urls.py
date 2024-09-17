@@ -1,13 +1,17 @@
 from django.urls import path
 from django.contrib import admin
 
+
 from .views import Index, DetailArticleView, LikeArticle, AddArticlecomment, CreateArticleView, UpdateArticleView, DeleteArticleView, UpskillingView, UpskillingSkillView, SearchResults
+
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-
+    path('profile/', views.profile, name='profile'),
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
     path('appattack/join', views.appattack_join, name='appattack_join'),
@@ -78,5 +82,7 @@ urlpatterns = [
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
 
-
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

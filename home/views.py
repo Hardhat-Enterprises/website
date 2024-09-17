@@ -17,8 +17,8 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, User, Course, Skill, Comment 
-
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Comment
+ 
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -29,6 +29,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 import os
 import json
@@ -72,6 +73,10 @@ def about_us(request):
  
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
+
+@login_required
+def profile(request):
+    return render(request, 'pages/profile.html')
  
 def blog(request):
     return render(request, 'blog/index.html')
@@ -678,6 +683,39 @@ def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
+
+
+@login_required
+def profile(request):
+    # Ensure the user has a profile, create it if not
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            # Fetch the updated profile object to ensure it's refreshed
+            profile = request.user.profile
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+    }
+
+    return render(request, 'pages/profile.html', context)
+
 def category_challenges(request, category):
     challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
     return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges})
@@ -705,3 +743,4 @@ def submit_answer(request, challenge_id):
             'score': user_challenge.score if is_correct else 0
         })
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
