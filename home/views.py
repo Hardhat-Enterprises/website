@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill
  
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage, Feedback
 
 from django.contrib.auth import get_user_model
 from .models import User
@@ -708,4 +708,23 @@ def submit_answer(request, challenge_id):
             'score': user_challenge.score if is_correct else 0
         })
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def feedback_view(request):
+    return render(request, 'pages/feedback.html')
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        feedback_type = request.POST.get('feedback_type')
+        content = request.POST.get('feedback_content')
+        
+        feedback = Feedback(
+            user=request.user if request.user.is_authenticated else None,
+            feedback_type=feedback_type,
+            content=content
+        )
+        feedback.save()
+        
+        messages.success(request, 'Thank you for your feedback!')
+        return redirect('feedback')
+    return redirect('feedback')
 
