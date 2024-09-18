@@ -30,6 +30,7 @@ urlpatterns = [
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
+    path('feedback-error/', views.feedback_error, name='feedback_error'),
     
     # blog
     #path('admin/', admin.site.urls),

@@ -99,6 +99,9 @@ def ptgui_contact_us(request):
  
 def faq(request):
     return render(request, 'pages/pt_gui/faq.html')
+
+def feedback_error(request):
+    return render(request, 'pages/feedback_error.html')
  
 def ptgui_join_us(request):
     if request.method == 'POST':
