@@ -1,0 +1,37 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <section class="section section-lg bg-soft">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow">
+                        <div class="card-body">
+                            <h2 class="h3 mb-4">Provide Feedback</h2>
+                            <form action="{% url 'submit_feedback' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-4">
+                                    <label for="feedback_type">Feedback Type</label>
+                                    <select class="form-select" id="feedback_type" name="feedback_type" required>
+                                        <option value="">Select type</option>
+                                        <option value="general">General Feedback</option>
+                                        <option value="bug">Report a Bug</option>
+                                        <option value="improvement">Suggest an Improvement</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="feedback_content">Your Feedback</label>
+                                    <textarea class="form-control" id="feedback_content" name="feedback_content" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

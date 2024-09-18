@@ -10,6 +10,7 @@ from .models import (
 
     Webpage,
     DDT_contact,
+    Feedback,
 
     
     # Contact_central,
@@ -76,6 +77,19 @@ class CyberChallengeAdmin(admin.ModelAdmin):
 @admin.register(UserChallenge)
 class UserChallengeAdmin(admin.ModelAdmin):
     list_display = ['user', 'challenge', 'completed', 'score']
+    
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('feedback_type', 'user', 'created_at')
+    list_filter = ('feedback_type', 'created_at')
+    search_fields = ('content', 'user__email')
+    readonly_fields = ('created_at',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # editing an existing object
+            return self.readonly_fields + ('user', 'feedback_type', 'content')
+        return self.readonly_fields
+    
     
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):
