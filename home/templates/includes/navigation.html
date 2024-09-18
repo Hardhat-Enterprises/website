@@ -285,7 +285,7 @@
         {% else %}
           <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
           <div class="btn btn-outline-gray-100 me-md-3">
-            <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+            <a href="#" class=" d-flex align-items-center" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
               Sign In
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
@@ -307,7 +307,7 @@
       
           <!-- Sign Up Dropdown for Team/Client -->
           <div class="btn btn-outline-gray-100 me-md-3">
-            <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+            <a href="#" class="d-flex align-items-center" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
               Sign Up
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
@@ -319,7 +319,7 @@
                       <a class="menu-link" href="{% url 'register' %}">Team Sign Up</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="#">Client Sign Up</a>
+                      <a class="menu-link" href="{% url 'register' %}">Client Sign Up</a>
                     </li>
                   </ul>
                 </div>
