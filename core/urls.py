@@ -65,4 +65,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
+    path("evnet/", include("event.urls"), name="event")
 ]

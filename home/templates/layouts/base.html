@@ -104,7 +104,40 @@
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src="{% static 'backToTop.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function(event) {
+        if (event.target.tagName) {
+            var pageUrl = window.location.href;
 
+            // Gets the element's tag name, class name, and ID
+            var tagName = event.target.tagName.toLowerCase();
+            var className = event.target.className ? ` class="${event.target.className}"` : '';
+            var idName = event.target.id ? ` id="${event.target.id}"` : '';
+
+            // Build the format of clickedElement
+            var clickedElement = `${tagName}${className}${idName}`;
+
+            fetch('{% url "event:evnet" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Include CSRF token for security
+                },
+                body: JSON.stringify({
+                    page_url: pageUrl,
+                    clicked_element: clickedElement
+                })
+            }).then(response => {
+                if (!response.ok) {
+                    console.error('Failed to send click event');
+                }
+            }).catch(error => console.error('Error:', error));
+        }
+    });
+});
+
+</script>
 </body>
 
 </html>

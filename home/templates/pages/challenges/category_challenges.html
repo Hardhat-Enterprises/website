@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">{{ category|title }} Challenges</h1>
+    <a href="{% url 'challenge_list' %}" class="btn btn-secondary mb-4">Back to Categories</a>
+    <div class="row">
+        {% for challenge in challenges %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ challenge.title }}</h5>
+                        <p class="card-text">{{ challenge.description|truncatewords:20 }}</p>
+                        <p>
+                            <span class="badge bg-primary">{{ challenge.get_difficulty_display }}</span>
+                            <span class="badge bg-info">{{ challenge.points }} points</span>
+                        </p>
+                        <a href="{% url 'challenge_detail' challenge.id %}" class="btn btn-primary mt-auto">Take Challenge</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
