@@ -17,10 +17,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill
- 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
-
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -641,6 +638,31 @@ def projects_join_us(request, page_url, page_name):
         form = projects_JoinUsForm(initial={'page_name': page_name})
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
+
+
+def feedback_view(request):
+    return render(request, 'pages/feedback.html')
+
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        feedback_type = request.POST.get('feedback_type')
+        content = request.POST.get('feedback_content')
+
+        Feedback.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            feedback_type=feedback_type,
+            content=content
+        )
+
+        messages.success(request, 'Thank you for your feedback!')
+        return redirect('feedback')
+       #return redirect('thank_you') # Redirect to the thank you page after submission
+
+    return redirect('feedback')
+#def thank_you(request):
+    #return render(request, 'feedback/thank_you.html')
+    #return render('thank_you')
 
  
        # return context
