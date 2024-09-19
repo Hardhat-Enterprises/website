@@ -1,0 +1,106 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+      .btn-custom {
+        background-color: yellow; /* Yellow background */
+        color: black; /* Black text color */
+      }
+    </style>
+
+    <title>Multiple user login</title>
+  </head>
+  <body>
+  <div class="content" style="background-color: #eadc4b;">
+    <div class="container" style="background-color: #0e0d0d;">
+      <div class="row justify-content-center">
+        <div class="col-md-6 contents" style="background-color: rgba(255, 255, 0, 0.901);">
+          <div class="row justify-content-center">
+            <div class="col-md-12">
+              <div class="form-block">
+                  <div class="mb-4">
+                      <h1>User Registration page</h1>
+                </div>
+                  <span class="mb-0 text-muted">
+                {% if msg %}
+                    {{ msg | safe }}
+                {% else %}
+                    Login page
+                {% endif %}
+              </span>
+                <form  method="post">
+                    {% csrf_token %}
+                  <div class="form-group first">
+                    <label for="username">Username</label>
+                      {{ form.username }}
+                  </div>
+                  <div class="form-group first">
+                    <label for="email">Email</label>
+                      {{ form.email}}
+                  </div>
+                  <div class="form-group last mb-4">
+                    <label for="password">Password</label>
+                      {{ form.password1 }}
+                  </div>
+                  <div class="form-group last mb-4">
+                    <label for="password">confirm Password</label>
+                      {{ form.password2 }}
+                  </div>
+                  <div class="d-flex mb-5 align-items-center">
+                    <label class="control control--checkbox mb-0"><span class="caption">Platform Leader</span>
+                        {{ form.is_platform_leader }}
+                      <div class="control__indicator"></div>
+                    </label>
+                  </div>
+                  <div class="d-flex mb-5 align-items-center">
+                    <label class="control control--checkbox mb-0"><span class="caption">Platform Senior Developer</span>
+                        {{ form.is_platform_senior_developer }}
+                      <div class="control__indicator"></div>
+                    </label>
+                  </div>
+                  <div class="d-flex mb-5 align-items-center">
+                    <label class="control control--checkbox mb-0"><span class="caption">Platform General Developer</span>
+                        {{ form.is_platform_general_developer }}
+                      <div class="control__indicator"></div>
+                    </label>
+                  </div>
+                    <label class="control control--checkbox mb-0"><span class="caption">External User</span>
+                        {{ form.is_external_user }}
+                      <div class="control__indicator"></div>
+                    </label>
+                  </div>
+                    <span class="text-error">{{ form.errors }}</span>
+                  <input type="submit"  value="Register" class="btn btn-pill btn-custom btn-block">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>
