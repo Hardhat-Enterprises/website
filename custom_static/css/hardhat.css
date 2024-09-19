@@ -19525,3 +19525,20 @@ blockquote {
   display: block;
 }
 
+
+.navbar-profile-container {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.navbar-profile-container img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.navbar-profile-container span {
+  margin-left: 10px;
+  font-size: 14px;
+}
