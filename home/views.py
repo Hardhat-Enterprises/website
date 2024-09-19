@@ -10,15 +10,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
+
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill
  
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
+
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -29,6 +31,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 import os
 import json
@@ -53,7 +56,7 @@ from .models import Smishingdetection_join_us, DDT_contact
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
-from .models import Student, Project, Progress, Skill
+from .models import Student, Project, Progress, Skill, CyberChallenge, UserChallenge
  
 #from .models import Student, Project, Progress
  
@@ -75,6 +78,10 @@ def about_us(request):
  
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
+
+@login_required
+def profile(request):
+    return render(request, 'pages/profile.html')
  
 def blog(request):
     return render(request, 'blog/index.html')
@@ -168,17 +175,26 @@ def upskill_roadmap(request):
 def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
  
+# Search Suggestions
+def SearchSuggestions(request):
+    query = request.GET.get('query', '')
+    if len(query) >= 2:
+        suggestions = User.objects.filter(name__icontains=query).values_list('name', flat=True)[:5]
+        return JsonResponse(list(suggestions), safe=False)
+    return JsonResponse([], safe=False)
+
 #Search-Results page
-def search_results(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-       
-        webpages = Webpage.objects.filter(title__contains=searched)
-        return render(request, 'pages/search-results.html',
-            {'searched':searched,
-            'webpages':webpages})
-    else:
-        return render(request, 'pages/search-results.html', {})
+def SearchResults(request):
+    query = request.POST.get('q', '')  # Get search query from request
+    results = {
+        'searched': query,
+        'webpages': Webpage.objects.filter(title__icontains=query),
+        'projects': Project.objects.filter(title__icontains=query),
+        'courses': Course.objects.filter(title__icontains=query),
+        'skills': Skill.objects.filter(name__icontains=query),
+        'articles': Article.objects.filter(title__icontains=query),
+    }
+    return render(request, 'pages/search-results.html', results)
    
 #    if request.method == 'GET':
 #        searched = request.GET.get('searched')
@@ -265,7 +281,7 @@ def register(request):
         form = RegistrationForm()
  
     context = { 'form': form }
-    return render(request, 'accounts/sign-up.html', context)
+    return render(request, 'pages/index.html', context)
  
 @csrf_exempt
 def VerifyOTP(request):
@@ -634,4 +650,68 @@ def projects_join_us(request, page_url, page_name):
 
  
        # return context
+def challenge_list(request):
+    categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
+    return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
+
+
+
+@login_required
+def profile(request):
+    # Ensure the user has a profile, create it if not
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            # Fetch the updated profile object to ensure it's refreshed
+            profile = request.user.profile
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+    }
+
+    return render(request, 'pages/profile.html', context)
+
+def category_challenges(request, category):
+    challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
+    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges})
+
+@login_required
+def challenge_detail(request, challenge_id):
+    challenge = get_object_or_404(CyberChallenge, id=challenge_id)
+    user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
+    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge})
+
+@login_required
+def submit_answer(request, challenge_id):
+    if request.method == 'POST':
+        challenge = get_object_or_404(CyberChallenge, id=challenge_id)
+        user_answer = request.POST.get('answer')
+        is_correct = user_answer == challenge.correct_answer
+        user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
+        if is_correct and not user_challenge.completed:
+            user_challenge.completed = True
+            user_challenge.score = challenge.points
+            user_challenge.save()
+        return JsonResponse({
+            'is_correct': is_correct,
+            'explanation': challenge.explanation,
+            'score': user_challenge.score if is_correct else 0
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 

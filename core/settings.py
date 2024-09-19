@@ -209,6 +209,7 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
 RATELIMIT_ENABLE = True
 RATELIMIT_VIEW = 'django_ratelimit.ratelimit_view'
 RATELIMIT_USE_CACHE = 'default'
@@ -219,4 +220,7 @@ RATELIMIT_SETTINGS = {
         'block_expiration': 60,  # block for 1 minute after 5 attempts
     },
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
