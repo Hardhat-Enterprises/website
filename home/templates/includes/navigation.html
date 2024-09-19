@@ -1,69 +1,7 @@
 {% load static %}
 
 <header class="header-global">
-    <style>
-        /* Style for the modal (popup) */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 300px;
-            border-radius: 10px;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-            .close:hover, .close:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-        .form-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-            .form-container input[type=text], .form-container input[type=email] {
-                padding: 10px;
-                margin: 10px 0;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-            }
-
-            .form-container button {
-                padding: 10px;
-                background-color: #FFC700;
-                color: black;
-                border: none;
-                text-decoration: bold;
-                cursor: pointer;
-                border-radius: 5px;
-            }
-
-                .form-container button:hover {
-                    background-color: #26355D;
-                    color: white;
-                }
-    </style>
 
 
     {% comment %} <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
@@ -271,9 +209,6 @@
                     <li class="nav-item">
                         <a href="{% url 'blog' %}" class="nav-link"> Blog </a>
                     </li>
-                    <li class="nav-item" id="openModalBtn">
-                        <a type="button" class="nav-link"> Feedback-Error </a>
-                    </li>
 
                 </ul>
 
@@ -324,19 +259,19 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="rating" id="rating1" value="excellent">
                                     <label class="form-check-label" for="rating1">
-                                        <span>Poor</span>
+                                        <span>☹️ Poor</span>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="rating" id="rating1" value="excellent">
                                     <label class="form-check-label" for="rating1">
-                                        <span>Average</span>
+                                        <span>😐 Average</span>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="rating" id="rating1" value="excellent">
                                     <label class="form-check-label" for="rating1">
-                                        <span>Good</span>
+                                        <span>😊 Good</span>
                                     </label>
                                 </div>
                             </div>
