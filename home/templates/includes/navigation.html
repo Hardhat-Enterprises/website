@@ -54,14 +54,14 @@
                 background-color: #FFC700;
                 color: black;
                 border: none;
-                text-decoration : bold;
+                text-decoration: bold;
                 cursor: pointer;
                 border-radius: 5px;
             }
 
                 .form-container button:hover {
                     background-color: #26355D;
-                    color : white;
+                    color: white;
                 }
     </style>
 
@@ -272,7 +272,7 @@
                         <a href="{% url 'blog' %}" class="nav-link"> Blog </a>
                     </li>
                     <li class="nav-item" id="openModalBtn">
-                        <a class="nav-link"> Feedback-Error </a>
+                        <a type="button" class="nav-link"> Feedback-Error </a>
                     </li>
 
                 </ul>
@@ -307,52 +307,149 @@
             </div>
         </div>
     </nav>
+    <div id="myModal" class="modal">
+        <div class="d-flex-center" style="padding:90px 0px 30px 0px;">
+            <div class="card" style="width: 100%; max-width: 500px; margin:auto; border-radius:0px !important; padding-bottom: 40px;">
+                <button id="close-btn" style="padding: 20px;position: absolute;right: 0;outline: none;border: 0px;" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="d-flex flex-column " style="background-color: #ffc307; padding:40px 20px 20px 20px;">
+                    <h5 class="card-titles">Send us your feedback !</h5>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
+                </div>
+                <div class="card-body">
 
-    <div id="myModal" class="modal" >
+                    <form>
+                        <div class="mb-3">
+                            <label for="feedbackTextarea" class="form-label">Plase rate here</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rating" id="rating1" value="excellent">
+                                    <label class="form-check-label" for="rating1">
+                                        <span>Poor</span>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rating" id="rating1" value="excellent">
+                                    <label class="form-check-label" for="rating1">
+                                        <span>Average</span>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rating" id="rating1" value="excellent">
+                                    <label class="form-check-label" for="rating1">
+                                        <span>Good</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="modal-content" style="width:500px">
-            <div class="text-right"><span class="close">&times;</span></div>
-            <form class="form-container">
-                <label for="name">Please mention your concern</label>
-                <textarea class="form-control" id="textArea" rows="3" style="margin-bottom : 20px" ></textarea>
+                        <div class="mb-3">
+                            <label for="feedbackTextarea" class="form-label">Describe Your Experince Here</label>
+                            <textarea class="form-control" id="feedbackTextarea" rows="4"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">How would you rate us?</label>
 
-
-                <label for="name">Please rate your concern</label>
-
-                <ul class="pagination pagination-lg" style="margin-top : 10px">
-                    <li class="page-item"><a class="page-link bg-warning" href="#" id="btn1" onclick="clickRation('btn1')">Low</a></li>
-                    <li class="page-item"><a class="page-link" href="#" id="btn2" onclick="clickRation('btn2')">Medium</a></li>
-                    <li class="page-item"><a class="page-link" href="#" id="btn3" onclick="clickRation('btn3')">High</a></li>
-                </ul>
-
-                <button type="submit" id="successButton" style="margin-top : 20px">Submit</button>
-            </form>
+                            <div class="d-flex justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rating" id="rating1" value="excellent">
+                                    <label class="form-check-label" for="rating1">
+                                        Bug
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rating" id="rating2" value="good">
+                                    <label class="form-check-label" for="rating2">
+                                        Suggestion
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rating" id="rating3" value="poor">
+                                    <label class="form-check-label" for="rating3">
+                                        Other
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </div>
+            </div>
         </div>
-
     </div>
+
+    <!-- Success Message Modal -->
+    <div id="successModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0, 0, 0, 0.5);">
+        <div class="d-flex-center" style="padding:90px 0px 30px 0px;">
+            <div class="card" style="width: 100%; max-width: 500px; margin:auto; border-radius:0px !important; padding-bottom: 40px;">
+                <button id="successCloseBtn" style="padding: 20px; position: absolute; right: 0; outline: none; border: 0px;" type="button" class="btn-close" aria-label="Close"></button>
+                <div class="d-flex flex-column" style="background-color: #28a745; padding:40px 20px 20px 20px;">
+                    <h5 class="card-title text-white">Thank You!</h5>
+                    <p class="text-white">Your feedback has been submitted successfully.</p>
+                </div>
+                <div class="card-body">
+                    <button id="successOkBtn" type="button" class="btn btn-primary w-100">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        var modal = document.getElementById("myModal");
-        var clickedId = "btn1";
-        function clickRation(id) {
-            document.getElementById(clickedId).classList.remove("bg-warning");
-            clickedId = id;
-            document.getElementById(clickedId).classList.add("bg-warning");
-        }
-        var btn = document.getElementById("openModalBtn");
-        var btnSuccess = document.getElementById("successButton");
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get modal elements and buttons
+            var modal = document.getElementById('myModal');
+            var openModalBtn = document.getElementById('openModalBtn');
+            var closeModalBtn = document.getElementById('close-btn');
+            var successModal = document.getElementById('successModal');
+            var successCloseBtn = document.getElementById('successCloseBtn');
+            var successOkBtn = document.getElementById('successOkBtn');
+            var feedbackForm = document.querySelector('#myModal form');
 
-        var span = document.getElementsByClassName("close")[0];
+            // Function to show the modal
+            function openModal() {
+              modal.style.display = 'block'; // Show the feedback modal
+            }
 
-        btn.onclick = function () {
-            modal.style.display = "block";
-        }
-        btnSuccess.onclick = function () {
-            alert("Successfully Submitted");
-        }
+            // Function to hide the modal
+            function closeModal() {
+              modal.style.display = 'none'; // Hide the feedback modal
+            }
 
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
+            // Function to show success modal
+            function showSuccessModal() {
+              successModal.style.display = 'block'; // Show the success modal
+            }
 
+            // Function to hide success modal
+            function closeSuccessModal() {
+              successModal.style.display = 'none'; // Hide the success modal
+            }
+
+            // Event listener for opening the feedback modal
+            openModalBtn.addEventListener('click', openModal);
+
+            // Event listener for closing the feedback modal
+            closeModalBtn.addEventListener('click', closeModal);
+
+            // Event listener for closing the success modal
+            successCloseBtn.addEventListener('click', closeSuccessModal);
+            successOkBtn.addEventListener('click', closeSuccessModal);
+
+            // Close modal if clicked outside of the modal content
+            window.addEventListener('click', function(event) {
+              if (event.target === modal) {
+                closeModal();
+              }
+              if (event.target === successModal) {
+                closeSuccessModal();
+              }
+            });
+
+            // Handle form submission
+            feedbackForm.addEventListener('submit', function(event) {
+              event.preventDefault(); // Prevent the form from submitting the default way
+              closeModal(); // Close the feedback modal
+              showSuccessModal(); // Show the success modal
+            });
+          });
     </script>
 </header>
