@@ -28,25 +28,23 @@
   <meta name="author" content="Themesberg">
   <meta name="description"
     content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
-  <link rel="canonical" href="https://hardhat.pythonanywhere.com/">
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}/">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://hardhat.pythonanywhere.com/">
+  <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}/">
   <meta property="og:title" content="Hardhat Enterprises">
   <meta property="og:description"
     content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
-  <meta property="og:image"
-    content="https://hardhat.pythonanywhere.com/custom_static/assets/img/pages/home/hero-image.svg">
+  <meta property="og:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://hardhat.pythonanywhere.com/">
+  <meta property="twitter:url" content="{{ request.scheme }}://{{ request.get_host }}/">
   <meta property="twitter:title" content="Hardhat Enterprises">
   <meta property="twitter:description"
     content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
-  <meta property="twitter:image"
-    content="https://hardhat.pythonanywhere.com/custom_static/assets/img/pages/home/hero-image.svg">
+  <meta property="twitter:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
 
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
