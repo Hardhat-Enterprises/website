@@ -44,6 +44,12 @@ urlpatterns = [
    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
    path('dashboard/', views.dashboard, name='dashboard'),
+   path('project_preferences/', views.project_preferences, name='project_preferences'),
+   path('upskill/chat', views.team_chat, name='team_chat'),
+   path('upskill/django', views.django_skill, name='django_skill'), 
+   path('upskill/html', views.html_skill, name='html_skill'),
+   path('upskill/css', views.css_skill, name='css_skill'),
+   path('upslill/javascript', views.javascript_skill, name='javascript_skill'),
 
 
 

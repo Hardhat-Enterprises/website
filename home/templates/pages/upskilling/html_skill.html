@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<main class="pt-6">
+  {% include 'includes/pre-loader.html' %}
+  <section class="section-header bg-tertiary text-black text-center py-5">
+    <h1 class="fw-bolder">HTML</h1>
+  </section>
+  <header class="container">
+    <h2 class="text-left">Welcome to HTML Learning Resources</h2>
+    <p class="text-left">Enhance your HTML skills with these valuable resources</p>
+</header>
+<main class="container">
+    <section>
+        <h2 class="text-left">About HTML</h2>
+        <p class="text-left">HTML (HyperText Markup Language) is the standard markup language for creating web pages. It forms the structure of web content and allows the integration of text, images, links, and other multimedia elements into web pages. Learning HTML is essential for anyone interested in web development.</p>
+    </section>
+
+    <section>
+        <h2 class="text-left">Why Learn HTML?</h2>
+        <p class="text-left">HTML is the foundation of the web, making it a critical skill for web developers and designers. By learning HTML, you gain the ability to create structured, accessible, and responsive web content. Whether you're building a personal blog or a complex web application, HTML is a skill you'll need.</p>
+    </section>
+    <section>
+        <h2 class="text-left">Resources to Improve Your HTML Skills</h2>
+        <ul class="resources-list list-unstyled">
+            <li class="mb-3">
+                <h3 class="text-left">- MDN Web Docs</h3>
+                <p class="text-left">MDN Web Docs is a comprehensive resource for learning HTML. It provides detailed documentation, examples, and tutorials that cover everything from the basics to advanced concepts.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank">Visit MDN Web Docs</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- W3Schools HTML Tutorial</h3>
+                <p class="text-left">W3Schools offers an interactive HTML tutorial that allows you to learn and practice HTML online. It's a great starting point for beginners.</p>
+                <a href="https://www.w3schools.com/html/" target="_blank">Visit W3Schools HTML Tutorial</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- freeCodeCamp's HTML and CSS Course</h3>
+                <p class="text-left">freeCodeCamp provides a free, comprehensive course that covers HTML and CSS. It's a great way to build your skills through hands-on projects and exercises.</p>
+                <a href="https://www.freecodecamp.org/learn/responsive-web-design/" target="_blank">Visit freeCodeCamp HTML and CSS Course</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- HTML & CSS: Design and Build Websites</h3>
+                <p class="text-left">This book by Jon Duckett offers a beginner-friendly introduction to HTML and CSS, with a focus on visual learning and practical examples.</p>
+                <a href="https://www.htmlandcssbook.com/" target="_blank">Buy HTML & CSS: Design and Build Websites</a>
+            </li>
+            <li class="mb-3">
+                <h3 class="text-left">- HTML5 Rocks</h3>
+                <p class="text-left">HTML5 Rocks is a resource for learning about the latest features of HTML5, with tutorials and articles written by experts in the field.</p>
+                <a href="https://www.html5rocks.com/en/" target="_blank">Visit HTML5 Rocks</a>
+            </li>
+        </ul>
+    </section>
+</main>
+{% endblock %}

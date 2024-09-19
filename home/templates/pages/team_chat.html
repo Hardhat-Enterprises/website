@@ -1,0 +1,149 @@
+{% extends 'layouts/base.html' %} 
+{% load static %} 
+{% block content %}
+<main class="pt-6 px-3 mt-3">
+  {% include 'includes/pre-loader.html' %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h1>Team Chat</h1>
+        
+        <!-- Group Chat Section -->
+        <div class="container mt-4">
+          <h2>Create or Select a Group Chat</h2>
+          <form id="group-form" class="mb-3">
+            <div class="input-group">
+              <input type="text" id="group-input" class="form-control" placeholder="Enter group name" required>
+              <button type="submit" class="btn btn-primary">Create Group</button>
+            </div>
+          </form>
+          <div id="group-list" class="list-group">
+            <!-- List of groups will be dynamically added here -->
+          </div>
+        </div>
+        
+        <!-- Chat Section -->
+        <div class="container mt-4">
+          <h2 id="current-group-name">Chat with Your Project Team</h2>
+          <div id="chat-box" class="chat-box text-left">
+            <!-- Messages will be dynamically added here -->
+          </div>
+          <form id="chat-form" class="mt-3">
+            <div class="input-group">
+              <input type="text" id="chat-input" class="form-control" placeholder="Type a message..." required>
+              <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+          </form>
+        </div>
+        
+      </div> 
+    </div>
+  </div>
+</main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const groupForm = document.getElementById('group-form');
+    const groupInput = document.getElementById('group-input');
+    const groupList = document.getElementById('group-list');
+    const currentGroupName = document.getElementById('current-group-name');
+    const chatBox = document.getElementById('chat-box');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+  
+    let currentGroup = null;
+  
+    const userName = '{{ user.first_name }}';
+  
+    // Load groups
+    function loadGroups() {
+      const groups = JSON.parse(localStorage.getItem('chatGroups')) || [];
+      groupList.innerHTML = '';
+      groups.forEach(group => {
+        const groupElement = document.createElement('button');
+        groupElement.classList.add('list-group-item', 'list-group-item-action');
+        groupElement.textContent = group.name;
+        groupElement.addEventListener('click', () => selectGroup(group.name));
+        groupList.appendChild(groupElement);
+      });
+    }
+  
+    // Create a new group
+    groupForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const groupName = groupInput.value.trim();
+      if (groupName) {
+        let groups = JSON.parse(localStorage.getItem('chatGroups')) || [];
+        if (!groups.find(group => group.name === groupName)) {
+          groups.push({ name: groupName, messages: [] });
+          localStorage.setItem('chatGroups', JSON.stringify(groups));
+          loadGroups();
+          groupInput.value = '';  // Clear the input field
+        } else {
+          alert('Group already exists!');
+        }
+      }
+    });
+  
+    // Select a group
+    function selectGroup(groupName) {
+      currentGroup = groupName;
+      currentGroupName.textContent = `Chat in: ${currentGroup}`;
+      loadChat();
+    }
+  
+    // Load chat history for the selected group
+    function loadChat() {
+      if (!currentGroup) return;
+      const groups = JSON.parse(localStorage.getItem('chatGroups')) || [];
+      const group = groups.find(group => group.name === currentGroup);
+      chatBox.innerHTML = '';
+      if (group) {
+        group.messages.forEach(msg => {
+          displayMessage(msg.user, msg.text, msg.timestamp);
+        });
+      }
+      scrollToBottom();
+    }
+  
+    // Display a message
+    function displayMessage(user, text, timestamp) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('chat-message');
+      messageElement.innerHTML = `
+        <p><span class="user-name">${user}:</span> ${text}</p>
+        <p class="timestamp">${timestamp}</p>
+      `;
+      chatBox.appendChild(messageElement);
+    }
+  
+    // Scroll to the bottom of the chat box
+    function scrollToBottom() {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  
+    // Handle new message submission
+    chatForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const text = chatInput.value;
+      const timestamp = new Date().toLocaleTimeString();
+  
+      if (text.trim() && currentGroup) {
+        const message = { user: userName, text, timestamp };
+        let groups = JSON.parse(localStorage.getItem('chatGroups')) || [];
+        const group = groups.find(group => group.name === currentGroup);
+        if (group) {
+          group.messages.push(message);
+          localStorage.setItem('chatGroups', JSON.stringify(groups));
+          displayMessage(userName, text, timestamp);
+          chatInput.value = '';  // Clear the input field
+          scrollToBottom();  // Scroll to the bottom after adding a new message
+        }
+      }
+    });
+  
+    // Initial load
+    loadGroups();
+  });
+</script>
+      {% endblock content %}
