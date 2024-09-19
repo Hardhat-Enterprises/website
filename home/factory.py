@@ -1,5 +1,6 @@
 import random
 import factory
+import os
 
 from factory.fuzzy import FuzzyInteger, FuzzyChoice
 from factory.django import DjangoModelFactory, Password
@@ -13,7 +14,7 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
-    password = Password('f@ct0ryb0y')
+    Password = os.environ.get("Password", "***")
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     email = factory.Faker("email")
