@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html' %}
+
+{% block header %}
+    {% include 'includes/navigation.html' %}
+{% endblock header %}
+
+{% block content %}
+    <main>
+        <section class="min-vh-100 d-flex align-items-center">
+            <div class="container text-center">
+                <h1 class="h3">Your preferences have been submitted successfully!</h1>
+                <p>Thank you for joining a project. You will be allocated a project soon.</p>
+                <a href="{% url 'index' %}" class="btn btn-primary">Return to Home</a>
+            </div>
+        </section>
+    </main>
+{% endblock content %}

@@ -22,6 +22,7 @@ from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
@@ -34,7 +35,7 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 
  
@@ -140,7 +141,7 @@ def join_project(request):
         form = StudentForm()
  
     context['form'] = form
-    return render(request, 'pages/joinus.html', context)
+    return render(request, 'pages/joinproject.html', context)
  
 def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
@@ -168,6 +169,26 @@ def upskill_roadmap(request):
  
 def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
+
+def UpskillSuccessView(request):
+    return render(request, 'pages/upskilling/UpskillingFormSuccess.html')
+def UpskillingJoinProjectView(request):
+    student_exists = Student.objects.filter(user=request.user).exists()
+
+    if student_exists:
+        return render(request, 'joinproject.html', {'student_exists': True})
+
+    if request.method == 'POST':
+        form = Upskilling_JoinProjectForm(request.POST)
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.user = request.user  # Assign the current user
+            student.save()
+            return redirect('success_page')  # Redirect to success page
+    else:
+        form = Upskilling_JoinProjectForm()
+
+    return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
  
 # Search Suggestions
 def SearchSuggestions(request):
