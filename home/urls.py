@@ -1,98 +1,68 @@
-from django.urls import path
+"""core URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/4.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
 from django.contrib import admin
+from django.urls import include, path
+from django.contrib.auth import views as auth_views
+from home import views
 
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
-
-from django.conf import settings
-from django.conf.urls.static import static
-
-
-from . import views
+from .admin import admin_statistics_view
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('profile/', views.profile, name='profile'),
-    path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
-    path('appattack/', views.appattack, name='appattack'),
-    path('appattack/join', views.appattack_join, name='appattack_join'),
-    path('malware_viz/products_and_services',
-         views.products_services, name='malware_products'),
-    path('malware_viz/', views.malwarehome, name='malware_viz_main'),
-    path('ptgui_viz/', views.ptguihome, name='ptgui_viz_main'),
-    path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
-    path('maintenance', views.http_503, name='maintenance'),
-    path('ptgui_viz/faq/', views.faq, name='faq'),
-    path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
-
-    #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
-    path('upskilling/', UpskillingView.as_view(), name='upskilling'),
-    path('upskilling/<slug:slug>/', UpskillingSkillView.as_view(), name='upskilling_skill'),
-    path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
-    path('join-us/', join_project, name='join_us'),
-    path('success/', UpskillSuccessView, name='success'),
-
-    path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
-
-    path('deakinThreatmirror/', views.Deakin_Threat_mirror_main, name='Deakin_Threat_mirror_main'),
-    path('deakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='threat_mirror_join_us'),
-    path('vr/', views.Vr_main, name='Vr_main'),
-    path('vr/join_us', views.vr_join_us, name='cybersafe_vr_join_us'),
-    # path('contact-central/', views.Contact_central, name='contact-central'),
+    path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
+    path('admin/', admin.site.urls),
+    path('', include('home.urls')),
+    # path('', include('theme_pixel.urls')),
+    path('about-us/', views.about_us, name='about_us'),
+    path('contact', views.contact, name='contact'),
+    path('contact-central', views.Contact_central, name='contact-central'),
+    path('joinus/', views.join_project, name='join-project'),
+    path('what-we-do/', views.what_we_do, name='what_we_do'),
     
-    path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
-    path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-
-
-   path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
-   path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
-   path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
-   path('dashboard/', views.dashboard, name='dashboard'),
-
-
-
-    # path('contact-central/', views.Contact_central, name='contact-central'),
-    
-    
-    # Search result page
-    path('SearchResults/', views.SearchResults, name='pages/search-results'),
-    path('website_form/', views.website_form, name='pages/website-form'),
-
-
-    # Search Suggestions
-    path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
-
-    # Blog URLs
-    path('blog/', Index.as_view(), name = 'blog'),
-    path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
-    path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
-    
-    # Email OTP
+    # blog
+    #path('admin/', admin.site.urls),
+    # path('blog/', include('blogs.urls')),
+    #path('', include('blogs.urls')),
+    #path('accounts/', include('users.urls')),
+    path('blog/', views.blog, name='blog'),
+    path('tinymce/', include('tinymce.urls')),
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
-   
 
-
-    #Statistics
-    path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
-    path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
-    path('stats', views.statistics_view, name='project-stats'),
-    path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
-
-    path('feedback/', views.feedback, name='feedback'),
-
-] 
-    path('challenges/', views.challenge_list, name='challenge_list'),
-    path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
-    path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
-    path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
-
-
-    #Feedback
-    path('feedback/', views.feedback_view, name='feedback'),
-    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
-
+    # Authentication
+    path('accounts/login/', views.UserLoginView.as_view(), name='login'),
+    path('accounts/logout/', views.logout_view, name='logout'),
+    path('accounts/register/', views.register, name='register'),
+    path('accounts/password-gen/', views.password_gen, name='password_gen'),
+    path('accounts/password-change/', views.UserPasswordChangeView.as_view(), name='password_change'),
+    path('accounts/password-change-done/', auth_views.PasswordChangeDoneView.as_view(
+        template_name = 'accounts/password_change_done.html'
+    ), name='password_change_done'),
+    path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
+    path('accounts/password-reset-done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='accounts/password_reset_done.html'
+    ), name='password_reset_done'),
+    path('accounts/password-reset-confirm/<uidb64>/<token>/', 
+       views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('accounts/password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='accounts/password_reset_complete.html'
+    ), name='password_reset_complete'),
+    path('comphrensive-report', views.comphrehensive_reports, name='comphrehensive_report'),
+    path('pen-testing', views.pen_testing, name='pen-testing'),
+    path('secure-code-review', views.secure_code_review, name='secure-code-review'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
