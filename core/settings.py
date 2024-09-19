@@ -130,20 +130,20 @@ else:
 AUTH_USER_MODEL = "home.User"
 
 # Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-********-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.********_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": "django.contrib.auth.********_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": "django.contrib.auth.********_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": "django.contrib.auth.********_validation.NumericPasswordValidator",
     },
 ]
 
@@ -186,8 +186,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587 # For TLS, 465 for SSL
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'hardhatcompanywebsite@gmail.com'
-EMAIL_HOST_PASSWORD = 'nuje nbmo cfqe skjb'
+EMAIL_HOST_USER = 'deakinhardhatwebsite@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get("PASSWORD", "***")
+
+
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -201,6 +204,3 @@ MESSAGE_TAGS = {
 MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

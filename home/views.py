@@ -10,41 +10,45 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
-
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage 
+ 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
 from django.core.mail import send_mail
-from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm
 
 import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
 
-
- 
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render
+from django.http import HttpResponse
+import re
+from .models import Webpage 
  
 # import os
  
 from .models import Smishingdetection_join_us, DDT_contact
 # import json
- 
+
+import logging
+from django.utils import timezone
  
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
@@ -54,11 +58,13 @@ from .models import Smishingdetection_join_us, DDT_contact
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
-from .models import Student, Project, Progress, Skill, CyberChallenge, UserChallenge
+from .models import Student, Project, Progress, Skill
  
 #from .models import Student, Project, Progress
  
-from .forms import FeedbackForm
+from django.shortcuts import render, redirect
+from .forms import SearchForm
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
@@ -73,10 +79,6 @@ def about_us(request):
  
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
-
-@login_required
-def profile(request):
-    return render(request, 'pages/profile.html')
  
 def blog(request):
     return render(request, 'blog/index.html')
@@ -141,7 +143,7 @@ def join_project(request):
         form = StudentForm()
  
     context['form'] = form
-    return render(request, 'pages/joinproject.html', context)
+    return render(request, 'pages/joinus.html', context)
  
 def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
@@ -169,47 +171,51 @@ def upskill_roadmap(request):
  
 def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
-
-def UpskillSuccessView(request):
-    return render(request, 'pages/upskilling/UpskillingFormSuccess.html')
-def UpskillingJoinProjectView(request):
-    student_exists = Student.objects.filter(user=request.user).exists()
-
-    if student_exists:
-        return render(request, 'joinproject.html', {'student_exists': True})
-
-    if request.method == 'POST':
-        form = Upskilling_JoinProjectForm(request.POST)
-        if form.is_valid():
-            student = form.save(commit=False)
-            student.user = request.user  # Assign the current user
-            student.save()
-            return redirect('success_page')  # Redirect to success page
-    else:
-        form = Upskilling_JoinProjectForm()
-
-    return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
  
-# Search Suggestions
-def SearchSuggestions(request):
-    query = request.GET.get('query', '')
-    if len(query) >= 2:
-        suggestions = User.objects.filter(name__icontains=query).values_list('name', flat=True)[:5]
-        return JsonResponse(list(suggestions), safe=False)
-    return JsonResponse([], safe=False)
-
 #Search-Results page
-def SearchResults(request):
-    query = request.POST.get('q', '')  # Get search query from request
-    results = {
-        'searched': query,
-        'webpages': Webpage.objects.filter(title__icontains=query),
-        'projects': Project.objects.filter(title__icontains=query),
-        'courses': Course.objects.filter(title__icontains=query),
-        'skills': Skill.objects.filter(name__icontains=query),
-        'articles': Article.objects.filter(title__icontains=query),
-    }
-    return render(request, 'pages/search-results.html', results)
+# def search_results(request):
+#   if request.method == "POST":
+#       searched = request.POST['searched']
+#       
+#       webpages = Webpage.objects.filter(title__contains=searched)
+#        return render(request, 'pages/search-results.html',
+#            {'searched':searched,
+#            'webpages':webpages})
+#    else:
+#        return render(request, 'pages/search-results.html', {}) 
+
+# Function to detect potential XSS attacks
+def detect_xss(input_value):
+    xss_patterns = ['<script>', '</script>', 'onerror', 'alert', 'onload']  # Common XSS patterns
+    for pattern in xss_patterns:
+        if pattern.lower() in input_value.lower():  # Case-insensitive check
+            return True
+    return False
+
+# Search results function with XSS detection
+def search_results(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+
+        # Check for potential XSS attack
+        if detect_xss(searched):
+            # Redirect to hacker alert page if XSS attack is detected
+            return redirect('hacker_alert')
+
+        # Normal search logic if no XSS detected
+        webpages = Webpage.objects.filter(title__contains=searched)
+        return render(request, 'pages/search-results.html', {
+            'searched': searched,
+            'webpages': webpages
+        })
+
+    # Render empty search results page if not a POST request
+    return render(request, 'pages/search-results.html', {})
+
+# Hacker alert view to display a warning message
+def hacker_alert(request):
+    # Render the custom hacker alert page
+    return render(request, 'pages/hacker_alert.html', {})
    
 #    if request.method == 'GET':
 #        searched = request.GET.get('searched')
@@ -233,21 +239,6 @@ def Vr_main(request):
 
 # Authentication
 
-
-
-
-
-
-
-def feedback(request):
-    if request.method == 'POST':
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
-            return redirect('feedback')  # Redirect to the same page
-    else:
-        form = FeedbackForm()
-    return render(request, 'pages/feedback.html', {'form': form})
 
 
 ## Web-Form 
@@ -294,7 +285,7 @@ def register(request):
         form = RegistrationForm(request.POST)
        
         if form.is_valid():
-            form.save()
+            #form.save()
             otp = random.randint(100000, 999999)
             send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
                     "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
@@ -308,7 +299,7 @@ def register(request):
         form = RegistrationForm()
  
     context = { 'form': form }
-    return render(request, 'pages/index.html', context)
+    return render(request, 'accounts/sign-up.html', context)
  
 @csrf_exempt
 def VerifyOTP(request):
@@ -326,6 +317,24 @@ def VerifyOTP(request):
            
         print("OTP: ", userotp)
     return JsonResponse({'data': 'Hello'}, status=200)  
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        # Check for basic XSS patterns
+        if re.search(r'<script.?>.?</script>', username, re.IGNORECASE) or re.search(r'<script.?>.?</script>', password, re.IGNORECASE):
+            return HttpResponse("XSS attack detected! This action has been logged.", status=403)
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponse("Login successful!")
+        else:
+            return HttpResponse("Invalid credentials!")
+    
+    return render(request, 'main.html')
    
 # def signup(request):
 #     form = RegisterForm()
@@ -675,95 +684,42 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
-
-def feedback_view(request):
-    return render(request, 'pages/feedback.html')
-
-
-def submit_feedback(request):
-    if request.method == 'POST':
-        feedback_type = request.POST.get('feedback_type')
-        content = request.POST.get('feedback_content')
-
-        Feedback.objects.create(
-            user=request.user if request.user.is_authenticated else None,
-            feedback_type=feedback_type,
-            content=content
-        )
-
-        messages.success(request, 'Thank you for your feedback!')
-        return redirect('feedback')
-       #return redirect('thank_you') # Redirect to the thank you page after submission
-
-    return redirect('feedback')
-#def thank_you(request):
-    #return render(request, 'feedback/thank_you.html')
-    #return render('thank_you')
-
  
        # return context
-def challenge_list(request):
-    categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
-    return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
-
-
-@login_required
-def profile(request):
-    # Ensure the user has a profile, create it if not
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=request.user)
-
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, 'Your profile has been updated successfully.')
-            # Fetch the updated profile object to ensure it's refreshed
-            profile = request.user.profile
-            return redirect('profile')
+def search(request):
+    form = SearchForm(request.GET or None)
+    if form.is_valid():
+        query = form.cleaned_data.get('query')
+        # Process the valid query
+        # ...
+        return render(request, 'search_results.html', {'query': query})
     else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        # If an XSS attempt is detected, redirect to the custom error page
+        return redirect('hacker_alert')
 
-    context = {
-        'u_form': u_form,
-        'p_form': p_form,
-        'profile': profile,
-    }
+def hacker_alert_view(request):
+    return render(request, 'hacker_alert.html')
 
-    return render(request, 'pages/profile.html', context)
+# Configure logging (you can adjust the path to your desired log file)
+logging.basicConfig(filename='xss_attempts.log', level=logging.INFO)
 
-def category_challenges(request, category):
-    challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
-    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges})
+def hacker_alert(request):
+    # Log the attack details
+    ip_address = get_client_ip(request)
+    attack_time = timezone.now()
+    attempted_input = request.GET.get('searched', 'N/A')  # This would be the search query or whatever input was flagged
+    
+    logging.info(f"XSS Attempt: IP={ip_address}, Time={attack_time}, Input={attempted_input}")
+    
+    # Render the alert page
+    return render(request, 'pages/hacker_alert.html', {})
 
-@login_required
-def challenge_detail(request, challenge_id):
-    challenge = get_object_or_404(CyberChallenge, id=challenge_id)
-    user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge})
-
-@login_required
-def submit_answer(request, challenge_id):
-    if request.method == 'POST':
-        challenge = get_object_or_404(CyberChallenge, id=challenge_id)
-        user_answer = request.POST.get('answer')
-        is_correct = user_answer == challenge.correct_answer
-        user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-        if is_correct and not user_challenge.completed:
-            user_challenge.completed = True
-            user_challenge.score = challenge.points
-            user_challenge.save()
-        return JsonResponse({
-            'is_correct': is_correct,
-            'explanation': challenge.explanation,
-            'score': user_challenge.score if is_correct else 0
-        })
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
+# Helper function to get the client's IP address
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

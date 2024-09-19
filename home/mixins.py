@@ -7,7 +7,7 @@ class CustomUserManager(BaseUserManager):
 
     def _create_user(self, email, password, **extra_fields):
         user = self.model(email=email, **extra_fields)
-
+        
         if password:
             user.set_password(password)
         else:
