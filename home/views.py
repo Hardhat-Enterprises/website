@@ -66,6 +66,9 @@ from .models import Student, Project, Progress, Skill
  
 def index(request):
     return render(request, 'pages/index.html')
+
+def error_404_view(request,exception):
+    return render(request,'includes/404-error-page.html', status=404)
  
 def about_us(request):
     return render(request, 'pages/about.html')
