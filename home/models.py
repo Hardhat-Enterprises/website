@@ -20,6 +20,7 @@ import secrets
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 from django.db import models
+from django.utils import timezone
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
@@ -283,11 +284,22 @@ class UserChallenge(models.Model):
     score = models.IntegerField(default=0)
 
 
-class BlogPost(models.Model):  # Ensure it's named `BlogPost` and not `blog_post`
+class BlogPost(models.Model):  #
     title = models.CharField(max_length=255)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    url = models.URLField(null=True, blank=True)  # Optional: URL to redirect when clicked
+    created_at = models.DateTimeField(default=timezone.now)
+    read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.message
 

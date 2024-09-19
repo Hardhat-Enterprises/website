@@ -1,0 +1,12 @@
+<ul class="dropdown-menu">
+    {% for notification in notifications %}
+    <li class="{% if not notification.read %}unread{% endif %}">
+        <a href="{{ notification.url }}" class="notification-link" data-id="{{ notification.id }}">
+            <span class="message">{{ notification.message }}</span>
+            <small class="time">{{ notification.created_at|timesince }} ago</small>
+        </a>
+    </li>
+    {% empty %}
+    <li>No new notifications</li>
+    {% endfor %}
+</ul>

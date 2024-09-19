@@ -60,6 +60,7 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 from django.core.paginator import Paginator
 from .models import BlogPost
 from django.template.loader import render_to_string
+from .models import Notification
  
 #from .models import Student, Project, Progress
  
@@ -729,3 +730,18 @@ def blog_list(request):
     # AJAX request: send paginated posts as JSON
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
+
+def dashboard(request):
+    notifications = request.user.notifications.filter(read=False)  # Only unread notifications
+    return render(request, 'dashboard.html', {'notifications': notifications})
+
+def mark_notification_as_read(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+    notification.read = True
+    notification.save()
+    return redirect(notification.url)
+
+def fetch_notifications(request):
+    notifications = request.user.notifications.filter(read=False)
+    html = render_to_string('partials/notifications.html', {'notifications': notifications})
+    return JsonResponse({'html': html})
