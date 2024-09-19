@@ -67,29 +67,50 @@
             height: auto;
             max-height: 400px; 
         }
+        #header-ul {
+            display: flex;;
+        }
+        #header-ul>li {
+            list-style: none;
+            width: 60%;
+            margin-left: 20%;
+            margin-top: 3rem;
+            line-height: 3rem;
+            text-align: left;
+        }
+        .text-style-1{
+            line-height: 3rem;
+            text-align: left;
+            font-family: var(--bs-font-sans-serif);
+            font-size: 1rem;
+            font-weight: 300;
+        }
     </style>
 
     <div class="section-header">
         <h1>Pen Testing Services</h1>
-        <ul>
+        <ul id="header-ul">
             <li>Penetration testing, often referred to as pen testing or ethical hacking, 
                 is a proactive approach to assessing the security of computer systems, networks, and applications. 
                 It involves simulating real-world cyber attacks to identify vulnerabilities that malicious actors could exploit. 
                 Penetration testers utilize a variety of techniques, tools, and methodologies to mimic the tactics of hackers, aiming 
                 to uncover weaknesses in an organization's defenses before they can be exploited by adversaries.</li>
-            <li> Similarly, Our dedicated team engages in collaborative dialogues with partner organizations, creating custom testing 
-                environments to reveal vulnerabilities in essential applications. We conduct thorough analyses, delivering detailed reports 
-                that not only identify vulnerabilities but also offer strategic remediation steps.</li>
+            
         </ul>
-        <div class="image-container">
-            <img class="img-fluid" src="{% static 'assets/img/pages/appattack/pen-test.svg' %}" alt="A burglar running off with sensitive information with phone in background">
+        <div class="image-container" style="display: flex;">
+            <img class="img-fluid" style="width: 50%;" src="{% static 'assets/img/pages/appattack/pen-test.svg' %}" alt="A burglar running off with sensitive information with phone in background">
+            <div style="width: 50%;display: flex;align-items: center;justify-content: center;">
+                <div class="text-style-1"> Similarly, Our dedicated team engages in collaborative dialogues with partner organizations, creating custom testing 
+                    environments to reveal vulnerabilities in essential applications. We conduct thorough analyses, delivering detailed reports 
+                    that not only identify vulnerabilities but also offer strategic remediation steps.</div>
+            </div>
         </div>
         <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
         <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
         <button type="button" class="btn" id="backButton">Back</button>
         <script> 
             document.getElementById("backButton").addEventListener("click", function() {
-                window.location.href = "https://hardhatwebdev2024.pythonanywhere.com/appattack/";
+                window.location.href = "{% url 'appattack' %}";
             });
 
             document.getElementById("secureCodeReview").addEventListener("click", function() {
