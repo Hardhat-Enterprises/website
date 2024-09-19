@@ -52,6 +52,35 @@
                 </div>
             </form>
             
+
+            <div class="d-flex justify-content-end mb-4">
+                <!-- Sorting Dropdown -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort by
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown" style="background-color: rgb(247, 246, 246)">
+                        <li><a class="dropdown-item {% if request.GET.sort == 'newest' or not request.GET.sort %}active{% endif %}" href="?sort=newest" style="color: black">Newest</a></li>
+                        <li><a class="dropdown-item {% if request.GET.sort == 'alphabetical' %}active{% endif %}" href="?sort=alphabetical" style="color: black;">Alphabetical</a></li>
+                    </ul>
+                </div>
+
+                <!-- Filter Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter by
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="filterDropdown" style="background-color: rgb(247, 246, 246)">
+                        <li><a class="dropdown-item {% if request.GET.filter == 'pdf' %}active{% endif %}" href="?filter=pdf" style="color: black">PDF</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'word' %}active{% endif %}" href="?filter=word" style="color: black;">Word Document</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'xls' %}active{% endif %}" href="?filter=xls" style="color: black;">Excel File</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'txt' %}active{% endif %}" href="?filter=txt" style="color: black;">Text File</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'csv' %}active{% endif %}" href="?filter=csv" style="color: black;">CSV File</a></li>
+                    </ul>
+
+                </div>
+            </div>
+
             <h2 class="text-center mb-4">Documents List</h2>
             <table class="table table-striped">
                 <thead>
@@ -68,7 +97,7 @@
                         <td>{{ document.title }}</td>
                         <td>{{ document.description }}</td>
                         <td>{{ document.uploaded_at|date:"F j, Y" }}</td>
-                        <td>
+                        <td  style="white-space: nowrap;">
                             <a href="{% url 'document_details' document.id %}" class="btn btn-outline-primary btn-sm">View</a>
                             <a href="{{ document.file.url }}" class="btn btn-outline-secondary btn-sm">Download</a>
                             <a href="{% url 'document_delete' document.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
@@ -79,18 +108,18 @@
                     {% endfor %}
                 </tbody>
             </table>
-    
+
             <!-- Pagination -->
             <nav>
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="?page=1&sort={{ request.GET.sort }}">&laquo; First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort={{ request.GET.sort }}">Previous</a></li>
                     {% endif %}
                     <li class="page-item disabled"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
                     {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&sort={{ request.GET.sort }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&sort={{ request.GET.sort }}">Last &raquo;</a></li>
                     {% endif %}
                 </ul>
             </nav>

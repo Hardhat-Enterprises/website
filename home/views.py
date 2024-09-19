@@ -29,6 +29,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.db.models import Q
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 # from Website.settings import EMAIL_HOST_USER
 import random
@@ -627,7 +629,7 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
 
         return context
 
-class DocumentUploadView(View):
+class DocumentUploadView(LoginRequiredMixin,View):
     def get(self, request):
         form = DocumentForm()
         return render(request, 'documents/document_upload.html', {'form': form})
@@ -656,21 +658,47 @@ class DocumentListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('q')
+        sort_by = self.request.GET.get('sort', 'newest')
+        filter_by = self.request.GET.get('filter', None)  
+        
+        queryset = Document.objects.all()
+
+       
         if query:
-            return Document.objects.filter(
+            queryset = queryset.filter(
                 Q(title__icontains=query) | Q(description__icontains=query)
             )
-        return Document.objects.order_by('-uploaded_at')
+
+        if filter_by == 'pdf':
+            queryset = queryset.filter(file__icontains='.pdf')
+        elif filter_by == 'word':
+            queryset = queryset.filter(file__icontains='.docx')
+        elif filter_by == 'xls':
+            queryset = queryset.filter(file__icontains='.xls')
+        elif filter_by == 'txt':
+            queryset = queryset.filter(file__icontains='.txt')
+        elif filter_by == 'csv':
+            queryset = queryset.filter(file__icontains='.csv')
+
+
+        
+        if sort_by == 'alphabetical':
+            return queryset.order_by('title')  
+        return queryset.order_by('-uploaded_at') 
     
-    
-class DocumentDetailsView(DetailView):
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return render(self.request, 'includes/document_list.html', context)
+        return super().render_to_response(context, **response_kwargs)
+
+class DocumentDetailsView(LoginRequiredMixin, DetailView):
     model = Document
     template_name = 'documents/document_detail.html'
     context_object_name = 'document'
     pk_url_kwarg = 'document_id'  
 
 
-class DocumentDeleteView(DeleteView):
+class DocumentDeleteView(LoginRequiredMixin, DeleteView):
     model = Document
     template_name = 'documents/document_confirm_delete.html'
     success_url = reverse_lazy('documents')

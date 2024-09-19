@@ -298,6 +298,7 @@ class UserChallenge(models.Model):
 def file_directory(instance, filename):
     return f'documents/{datetime.now().strftime("%Y/%m/%d")}/{filename}'
 
+
 class Document(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     title = models.CharField(max_length=50)

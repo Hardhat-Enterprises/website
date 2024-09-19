@@ -22,7 +22,7 @@
                 <div class="col-md-8">
                     <div class="card shadow border-0">
                         <div class="card-body">
-                            <form method="POST" enctype="multipart/form-data">
+                            <form method="POST" action="{% url 'document_upload' %}" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="mb-3">
                                     <label for="title" class="form-label">Document Title</label>

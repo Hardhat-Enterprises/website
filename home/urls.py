@@ -71,6 +71,7 @@ urlpatterns = [
     path('documents/upload/', DocumentUploadView.as_view(), name='document_upload'),
     path('documents/<uuid:document_id>/', DocumentDetailsView.as_view(), name='document_details'),
     path('documents/<uuid:document_id>/delete/', DocumentDeleteView.as_view(), name='document_delete'),
+    
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),

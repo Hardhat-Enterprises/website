@@ -7,8 +7,7 @@ from django.utils import timezone
 
 from django.core.exceptions import ValidationError
 import re
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, Article, Comment, Documentimport re
-from django.core.exceptions import ValidationError
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, Article, Comment, Document
 
 
 User = get_user_model()
@@ -204,9 +203,7 @@ class DocumentForm(forms.ModelForm):
             'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Description'}),
             'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-
-
-            
+       
 User = get_user_model()
 
 class UserUpdateForm(forms.ModelForm):
