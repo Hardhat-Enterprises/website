@@ -246,8 +246,23 @@
           </li>
 
 
-		  <li class="nav-item">
-            <a href="{% url 'blog' %}" class="nav-link"> Blog </a>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Blog
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none mb-4">
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'feedback' %}">User Experience</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </li>
 
           <li class="nav-item">

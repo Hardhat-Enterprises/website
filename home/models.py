@@ -274,6 +274,10 @@ class Projects_join_us(models.Model):
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
 
+class Feedback(models.Model):
+    name = models.CharField(max_length=100)
+    feedback = models.TextField()
+    rating = models.CharField(max_length=20)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
