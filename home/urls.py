@@ -24,7 +24,7 @@ urlpatterns = [
     path('ptgui_viz/faq/', views.faq, name='faq'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
 
-    #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
+    #path('smishing_detection/join_us', view.smishing_detection_join_us, name='smishingdetection_join_us'),
     path('upskilling/', UpskillingView.as_view(), name='upskilling'),
     path('upskilling/<slug:slug>/', UpskillingSkillView.as_view(), name='upskilling_skill'),
     path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),

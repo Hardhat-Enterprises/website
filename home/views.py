@@ -62,7 +62,7 @@ from .forms import FeedbackForm
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
-# Regular Views
+# Regular View
  
  
 def index(request):

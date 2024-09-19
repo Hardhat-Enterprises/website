@@ -232,7 +232,7 @@ class DDT_contact(models.Model):
 #     email=models.CharField(max_length=200)
 #     message=models.TextField(max_length=1000)
 
-#     def __str__(self):
+#     def__str__(self):
 #         return self.name
 
 
