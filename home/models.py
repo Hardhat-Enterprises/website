@@ -218,6 +218,8 @@ class Progress(models.Model):
     def __str__(self):
 
         return f'{self.student} - {self.skill.name}: {self.progress}%'
+    
+        return f'{self.student} - {self.skill}: {"Completed" if self.completed else "Not completed"}'
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
