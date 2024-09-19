@@ -240,3 +240,8 @@ class Projects_join_us(models.Model):
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
+
+class Feedback(models.Model):
+    name = models.CharField(max_length=100)
+    feedback = models.TextField()
+    rating = models.CharField(max_length=20)

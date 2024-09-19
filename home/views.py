@@ -57,7 +57,7 @@ from .models import Student, Project, Progress, Skill
  
 #from .models import Student, Project, Progress
  
- 
+from .forms import FeedbackForm
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
@@ -199,6 +199,21 @@ def Vr_main(request):
 
 # Authentication
 
+
+
+
+
+
+
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
+            return redirect('feedback')  # Redirect to the same page
+    else:
+        form = FeedbackForm()
+    return render(request, 'pages/feedback.html', {'form': form})
 
 
 ## Web-Form 

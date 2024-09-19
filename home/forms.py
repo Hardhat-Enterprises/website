@@ -121,4 +121,13 @@ class NewWebURL(forms.ModelForm):
         model = Webpage
         fields = ['id', 'url', 'title']
             
+class FeedbackForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True, label='Name')
+    feedback = forms.CharField(widget=forms.Textarea, required=True, label='Customer Feedback')
+    rating = forms.ChoiceField(choices=[
+        ('Excellent', 'Excellent'),
+        ('Good', 'Good'),
+        ('Poor', 'Poor'),
+        ('Disappointing', 'Disappointing')
+    ], required=True, label='Rating')
 
