@@ -19498,33 +19498,60 @@ blockquote {
     color: #FFCD11;
   }
 }
-  .chat-box {
-    text-align: left;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    max-height: 400px;
-    overflow-y: auto;
-    background-color: #f8f9fa;
-  }
 
-  .chat-message {
-    margin-bottom: 10px;
-  }
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none; 
+}
 
-  .chat-message .user-name {
-    font-weight: bold;
-  }
+.profile-container::before {
+  content: none;
+}
 
-  .chat-message .timestamp {
-    font-size: 0.8em;
-    color: #999;
-  }
+.profile-avatar {
+  border: 2px solid #fff;
+  transition: transform 0.2s ease-in-out;
+}
 
-  h1, h2 {
-    text-align: center;
-  }
+.profile-avatar:hover {
+  transform: scale(1.1);
+}
 
-  .list-group-item {
-    cursor: pointer;
-  }
+.form-group label {
+  font-weight: bold;
+  display: block;
+}
+.chat-box {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+}
+
+.chat-message .user-name {
+  font-weight: bold;
+}
+
+.chat-message .timestamp {
+  font-size: 0.8em;
+  color: #999;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+.list-group-item {
+  cursor: pointer;
+}
+

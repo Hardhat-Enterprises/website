@@ -3,10 +3,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+
+
 from django.core.exceptions import ValidationError
 import re
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage
-
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Profile
 
 import re
 from django.core.exceptions import ValidationError
@@ -177,4 +178,28 @@ class NewWebURL(forms.ModelForm):
         model = Webpage
         fields = ['id', 'url', 'title']
             
+User = get_user_model()
 
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+        labels = {
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First Name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last Name'
+            }),
+        }
+
+class ProfileUpdateForm(forms.ModelForm):  
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio']
