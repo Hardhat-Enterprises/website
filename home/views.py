@@ -1,6 +1,7 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
+from django.db.models.functions import Lower
  
 from django.shortcuts import render, redirect, get_object_or_404
  
@@ -662,8 +663,6 @@ class DocumentListView(LoginRequiredMixin, ListView):
         filter_by = self.request.GET.get('filter', None)  
         
         queryset = Document.objects.all()
-
-       
         if query:
             queryset = queryset.filter(
                 Q(title__icontains=query) | Q(description__icontains=query)
@@ -679,11 +678,10 @@ class DocumentListView(LoginRequiredMixin, ListView):
             queryset = queryset.filter(file__icontains='.txt')
         elif filter_by == 'csv':
             queryset = queryset.filter(file__icontains='.csv')
-
-
-        
+   
         if sort_by == 'alphabetical':
-            return queryset.order_by('title')  
+            return queryset.order_by(Lower('title'))
+         
         return queryset.order_by('-uploaded_at') 
     
     def render_to_response(self, context, **response_kwargs):
