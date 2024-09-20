@@ -17,18 +17,20 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
-
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, User, Course, Skill 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, \
+    User, Course, Skill, Feedback
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
+from .forms import UserUpdateForm, ProfileUpdateForm, VerificationForm
 
 #....Newly added...............................................
 from core.utils import send_verification_sms  # Import the function created
@@ -38,8 +40,8 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, VerificationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, \
-    UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, \
+    StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 # import os
 
@@ -58,6 +60,9 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 #from .models import Student, Project, Progress
 
 
+from .forms import FeedbackForm
+
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
@@ -74,6 +79,11 @@ def about_us(request):
 
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
+
+
+@login_required
+def profile(request):
+    return render(request, 'pages/profile.html')
 
 
 def blog(request):
@@ -182,7 +192,31 @@ def upskill_roadmap(request):
 
 def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
- 
+
+
+def UpskillSuccessView(request):
+    return render(request, 'pages/upskilling/UpskillingFormSuccess.html')
+
+
+def UpskillingJoinProjectView(request):
+    student_exists = Student.objects.filter(user=request.user).exists()
+
+    if student_exists:
+        return render(request, 'joinproject.html', {'student_exists': True})
+
+    if request.method == 'POST':
+        form = Upskilling_JoinProjectForm(request.POST)
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.user = request.user  # Assign the current user
+            student.save()
+            return redirect('success_page')  # Redirect to success page
+    else:
+        form = Upskilling_JoinProjectForm()
+
+    return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
+
+
 # Search Suggestions
 def SearchSuggestions(request):
     query = request.GET.get('query', '')
@@ -190,6 +224,7 @@ def SearchSuggestions(request):
         suggestions = User.objects.filter(name__icontains=query).values_list('name', flat=True)[:5]
         return JsonResponse(list(suggestions), safe=False)
     return JsonResponse([], safe=False)
+
 
 #Search-Results page
 def SearchResults(request):
@@ -203,7 +238,8 @@ def SearchResults(request):
         'articles': Article.objects.filter(title__icontains=query),
     }
     return render(request, 'pages/search-results.html', results)
-   
+
+
 #    if request.method == 'GET':
 #        searched = request.GET.get('searched')
 #        results = None
@@ -230,6 +266,20 @@ def Vr_main(request):
 
 
 ## Web-Form
+
+
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
+            return redirect('feedback')  # Redirect to the same page
+    else:
+        form = FeedbackForm()
+    return render(request, 'pages/feedback.html', {'form': form})
+
+
+## Web-Form 
 
 def website_form(request):
     if request.method == "POST":
@@ -308,7 +358,7 @@ def register(request):
             otp_sent = request.session.get('verification_code')  # Get OTP sent (stored in session)
 
             if verification_form.is_valid():
-                verification_code_entered =request.POST.get('verification_code')
+                verification_code_entered = request.POST.get('verification_code')
 
                 if verification_code_entered == otp_sent:
                     # OTP matched; complete registration and redirect
@@ -416,6 +466,7 @@ def verify_code(request):
         messages.error(request, "Invalid request method.")
         return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
+
 #...............................................................
 
 # Newly added...............................................
@@ -429,13 +480,14 @@ def VerifyOTP(request):
         email = request.POST.get('email')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-       
+
         if password1 == password2:
             form = User(first_name=first_name, last_name=last_name, email=email, password=password1)
             form.save()
-           
+
         print("OTP: ", userotp)
-    return JsonResponse({'data': 'Hello'}, status=200) 
+    return JsonResponse({'data': 'Hello'}, status=200)
+
 
 #..................................................................
 
@@ -708,21 +760,85 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
- 
-       # return context
+
+def feedback_view(request):
+    return render(request, 'pages/feedback.html')
+
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        feedback_type = request.POST.get('feedback_type')
+        content = request.POST.get('feedback_content')
+
+        Feedback.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            feedback_type=feedback_type,
+            content=content
+        )
+
+        messages.success(request, 'Thank you for your feedback!')
+        return redirect('feedback')
+    #return redirect('thank_you') # Redirect to the thank you page after submission
+
+    return redirect('feedback')
+
+
+#def thank_you(request):
+#return render(request, 'feedback/thank_you.html')
+#return render('thank_you')
+
+
+# return context
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
+
+@login_required
+def profile(request):
+    # Ensure the user has a profile, create it if not
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            # Fetch the updated profile object to ensure it's refreshed
+            profile = request.user.profile
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+    }
+
+    return render(request, 'pages/profile.html', context)
+
+
 def category_challenges(request, category):
     challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
-    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges})
+    return render(request, 'pages/challenges/category_challenges.html',
+                  {'category': category, 'challenges': challenges})
+
 
 @login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(CyberChallenge, id=challenge_id)
     user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge})
+    return render(request, 'pages/challenges/challenge_detail.html',
+                  {'challenge': challenge, 'user_challenge': user_challenge})
+
 
 @login_required
 def submit_answer(request, challenge_id):

@@ -1,6 +1,11 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults
+
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 from .views import send_verification_code  # Import the view
 from .views import verify_code  # Import the view
@@ -14,6 +19,7 @@ urlpatterns = [
 
     path('verify-code/', verify_code, name='verify_code'),
     # ...........................................................
+    path('profile/', views.profile, name='profile'),
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
     path('appattack/join', views.appattack_join, name='appattack_join'),
@@ -30,6 +36,8 @@ urlpatterns = [
     path('upskilling/', UpskillingView.as_view(), name='upskilling'),
     path('upskilling/<slug:slug>/', UpskillingSkillView.as_view(), name='upskilling_skill'),
     path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
+    path('join-us/', join_project, name='join_us'),
+    path('success/', UpskillSuccessView, name='success'),
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
 
@@ -75,10 +83,20 @@ urlpatterns = [
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
+    path('feedback/', views.feedback, name='feedback'),
+ 
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
 
 
+    #Feedback
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+
+
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
