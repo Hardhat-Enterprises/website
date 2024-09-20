@@ -11,7 +11,7 @@
 <main>
     {% include 'includes/pre-loader.html' %}
 
-    <!-- Hero Section -->
+    <!-- Hero Section  -->
     <section class="section-header bg-tertiary text-black py-5">
 		<div class="px-4 py-5 my-5 text-center">
 			<h1 class="fw-bold display-1">AppAttack</h1>
@@ -21,9 +21,9 @@
 			  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 			</head>
 			<body>
-			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
-			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
-			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
+			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3 buttonProject1" id="penTesting">Pen-Testing</button>
+			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3 buttonProject1" id="secureCodeReview">Secure Code Review</button>
+			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3 buttonProject1" id="comprehensiveReports">Comprehensive Reports</button>
 			  
 			  <script> src=document.getElementById("penTesting").addEventListener("click", function() {
 				window.location.href = "{% url 'pen-testing' %}";
@@ -47,7 +47,7 @@
     </section>
 	<!-- End of Hero Section -->
 	<!-- Tools -->
-	<section class="section section-lg bg-tertiary">
+	<!-- <section class="section section-lg bg-tertiary "> 
 		<div class="container">
 		  <h2 class="fw-bolder display-2 text-center">Tools</h2>
 		  <div class="row">
@@ -100,11 +100,92 @@
 				</a>
 			</div>
 			<h1 style="text-align: center;">Offical Documentation of App Attack For Upskilling</h1>
-
-			<a type="button" href="https://app-attack-docs.netlify.app/" style="font-size: 20px; text-align: center;"><button class="btn btn-primary">App Attack Docs</button></a>
+			<a href="https://app-attack-docs.netlify.app/" style="font-size: 20px; text-align: center;">App Attack Docs</a>
 		</div>
-	</section>
+	</section>  -->
 	<!-- End Tools -->
+
+<!-- Tools Section new-->
+<section class="section section-lg bg-tertiary py-5" >
+    <div class="container">
+        <h2 class="fw-bolder display-4 text-center mb-5">Tools</h2>
+        <div class="row row-cols-2 row-cols-md-3 g-4">
+            <!-- Tool Card -->
+            <div class="col" >
+                <a href="https://nmap.org/" target="_blank" class="tools-link-new text-decoration-none">
+                    <div class="card text-center border-0 shadow-sm h-100">
+                        <img src="https://nmap.org/images/sitelogo-nmap.svg" class="card-img-top small-card rounded-top tool-img" alt="Nmap logo">
+                        <div class="card-body">
+                            <p class="card-title fw-bold fs-5 mb-0">NMAP</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- Repeat for other tools -->
+            <div class="col">
+                <a href="https://portswigger.net/burp" target="_blank" class="tools-link-new text-decoration-none">
+                    <div class="card text-center border-0 shadow-sm h-100">
+                        <img src="https://avatars.githubusercontent.com/u/13749115" class="card-img-top small-card rounded-top tool-img" alt="Burp Suite logo">
+                        <div class="card-body">
+                            <p class="card-title fw-bold fs-5 mb-0">Burp Suite</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://www.zaproxy.org/" target="_blank" class="tools-link-new text-decoration-none">
+                    <div class="card text-center border-0 shadow-sm h-100">
+                        <img src="https://avatars.githubusercontent.com/u/6716868" class="card-img-top small-card rounded-top tool-img" alt="OWASP ZAP logo">
+                        <div class="card-body">
+                            <p class="card-title fw-bold fs-5 mb-0">OWASP ZAP</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://scan.coverity.com/" target="_blank" class="tools-link-new text-decoration-none">
+                    <div class="card text-center border-0 shadow-sm h-100">
+                        <img src="{% static 'assets/img/pages/appattack/coverity-logo-svg-vector.svg' %}" class="card-img-top small-card rounded-top tool-img" alt="Coverity logo">
+                        <div class="card-body ">
+                            <p class="card-title fw-bold fs-5 mb-0">Coverity</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://www.veracode.com/" target="_blank" class="tools-link-new text-decoration-none">
+                    <div class="card text-center border-0 shadow-sm h-100">
+                        <img src="{% static 'assets/img/pages/appattack/veracode.svg' %}" class="card-img-top small-card rounded-top tool-img" alt="Veracode logo">
+                        <div class="card-body">
+                            <p class="card-title fw-bold fs-5 mb-0">Veracode</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://checkmarx.com/" target="_blank" class="tools-link-new text-decoration-none">
+                    <div class="card text-center border-0 shadow-sm h-100">
+                        <img src="https://avatars.githubusercontent.com/u/15811295" class="card-img-top small-card rounded-top tool-img" alt="Checkmarx logo">
+                        <div class="card-body">
+                            
+							<p class="card-title fw-bold fs-5 mb-0">Checkmarx</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Documentation Link -->
+        <div class="text-center mt-5">
+            <h3 class="fw-bold mb-2">Official Documentation of App Attack For Upskilling</h3>
+            <a href="https://app-attack-docs.netlify.app/" class="btn btn-primary buttonProject1" target="_blank">Visit App Attack Docs</a>
+        </div>
+    </div>
+</section>
+<!-- End Tools Section -->
+
+
+
 	<!-- Join Us -->
 	<section class="section section-md">
 		<div class="container">
@@ -120,7 +201,7 @@
 									</p>
 								</div>
 								<div class="col-12 col-md-6 mt-4 mt-md-0 text-md-right">
-									<a href="{% url 'appattack_join' %}" class="btn btn-primary">
+									<a href="{% url 'appattack_join' %}" class="btn btn-primary buttonProject1">
 										<span class="me-1">
 											<span class="fas fa-handshake"></span>
 										</span>
