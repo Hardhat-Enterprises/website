@@ -6,22 +6,26 @@
   <section class="section-header bg-tertiary text-black">
     <div class="container">
       <div class="row justify-content-between align-items-center">
-        <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
+        <div class="col-12 col-md-7 col-lg-6 text-center text-md-left" >
           <h1 class="display-2 mb-4">
             Full-Service <br class="d-none d-md-inline" />Cyber Security Agency
           </h1>
           <p class="lead mb-4 text-muted">
             Hardhat can help you secure your webapps, review your code,
-            visualize the threats and provide an interractive UI for
-            pen-testing, that will bring your customers a peace of mind and
+            visualize the threats and provide an interactive UI for
+            pen-testing, that will bring your customers peace of mind and
             security.
           </p>
           <a
             href="{% url 'what_we_do'%}"
-            class="btn btn-tertiary me-3 animate-up-2"
-            >What we do
-            <span class="ms-2"><span class="fas fa-arrow-right"></span></span
-          ></a>
+            class="btn btn-tertiary me-3  buttonProject1"
+            
+          >
+            What we do
+            <span class="ms-2"><span class="fas fa-arrow-right"></span></span>
+          </a> 
+          <!-- animate-up-2 -->
+           
         </div>
         <div class="col-12 col-md-5 d-none d-md-block text-center">
           <img src="{% static 'assets/img/pages/about/hero.svg' %}" alt="" />
@@ -29,6 +33,7 @@
       </div>
     </div>
   </section>
+  
   <!-- End of Hero section -->
  <!-- Section -->
   <section class="section section-md">
@@ -43,13 +48,19 @@
         </div>
         <div class="col-md-6 col-xl-5 text-center text-md-left">
           <h2 class="h1 mb-5">All challenges accepted.</h2>
-          <p class="lead">
+          <p class="lead" data-aos="fade-zoom-in"
+          data-aos-easing="ease-in-back"
+          data-aos-delay="300"
+          data-aos-offset="1">
             Hardhat is an experienced and passionate group of cybersecurity
             specialists and developers. Every client we work with becomes a part
             of the team. Together we face the challenges and celebrate the
             victories.
           </p>
-          <p class="lead">
+          <p class="lead"data-aos="fade-zoom-in"
+          data-aos-easing="ease-in-back"
+          data-aos-delay="300"
+          data-aos-offset="1">
             With a culture of collaboration and a roster of talent, the Hardhat
             team is active in the creative community, endlessly interested in
             what’s next, and generally pleasant to be around.
@@ -94,7 +105,7 @@
                                 <span class="fas fa-user"></span>
                             </div>
                             <h3 class="h5">Team Members</h3>
-                            <span class="counter display-3 d-block">60</span>
+                            <span class="counter display-3 text-gray d-block">60</span>
                         </div>
                         <!-- End of Visit Box -->
                     </div>
@@ -105,7 +116,7 @@
                                 <span class="fas fa-money-check"></span>
                             </div>
                             <h3 class="h5">Projects Secured</h3>
-                            <span class="counter display-3 d-block">12</span>
+                            <span class="counter display-3 text-gray d-block">12</span>
                         </div>
                         <!-- End of Call Box -->
                     </div>
@@ -117,14 +128,14 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" height="35.75" width="36" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
                             </div>
                             <h3 class="h5">Threats found</h3>
-                            <span class="counter display-3 d-block">150+</span>
+                            <span class="counter display-3 text-gray d-block">150+</span>
                         </div>
                         <!-- End of Email Box -->
                     </div>
                 </div>
 
             {% comment %} <h3 class="h5">Projects Secured</h3>
-            <span class="counter display-3 d-block">12</span> {% endcomment %}
+            <span class="counter display-3 text-gray d-block">12</span> {% endcomment %}
           </div>
           <!-- End of Call Box -->
         </div>
@@ -147,7 +158,7 @@
               </svg>
             </div>
             <h3 class="h5">Threats found</h3>
-            <span class="counter display-3  d-block">150+</span>
+            <span class="counter display-3 text-gray d-block">150+</span>
           </div>
           <!-- End of Email Box -->
         </div> {% endcomment %}
@@ -158,11 +169,9 @@
 
   <!-- Section -->
   <section class="section section-lg bg-gray-200">
-    <figure
-      class="position-absolute top-0 left-0 w-100 d-none d-md-block mt-n3"
-    >
+    <figure class="position-absolute top-0 left-0 w-100 d-none d-md-block mt-n3">
       <svg
-        class="fill-gray-200"
+        class="fill-gray-200 svg-animate"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -188,7 +197,7 @@
           <div class="col-md-12 col-lg-8">
             <div class="timeline timeline-one dark px-3 px-sm-0">
               <!-- Timeline Item 1 -->
-              <div class="timeline-item">
+              <div class="timeline-item in-view-history">
                 <h3 class="h4 mb-4">Present</h3>
                 <p>
                   Established an incident response team and provided remote work
@@ -198,7 +207,7 @@
                 </p>
               </div>
               <!-- Timeline Item 2 -->
-              <div class="timeline-item">
+              <div class="timeline-item in-view-history">
                 <h3 class="h4 mb-4">Technology and Innovation</h3>
                 <p>
                   Introduced advanced threat detection technologies. Established
@@ -207,7 +216,7 @@
                 </p>
               </div>
               <!-- Timeline Item 3 -->
-              <div class="timeline-item">
+              <div class="timeline-item in-view-history">
                 <h3 class="h4 mb-4">Growth and Recognition</h3>
                 <p>
                   Expanded services to include penetration testing and
@@ -217,7 +226,7 @@
                 </p>
               </div>
               <!-- Timeline Item 4 -->
-              <div class="timeline-item">
+              <div class="timeline-item in-view-history">
                 <h3 class="h4 mb-4">Establishment and Early Success</h3>
                 <p>
                   Founded in 2022 by a group of cybersecurity enthusiasts.
@@ -226,17 +235,14 @@
                   reliable services.
                 </p>
               </div>
-
             </div>
           </div>
         </div>
       </div>
     </div>
-    <figure
-      class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"
-    >
+    <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
       <svg
-        class="fill-white"
+        class="fill-white svg-animate"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -252,6 +258,7 @@
       </svg>
     </figure>
   </section>
+  
   <!-- Section -->
   <section class="section section-lg">
     <div class="container">
@@ -302,7 +309,7 @@
                     />
                   </div>
                 </div>
-                <!-- End of Form -->
+                <!-- End of Form section -->
                 <div class="mb-4">
                   <label for="message">Your Message</label>
                   <textarea
@@ -316,7 +323,7 @@
                 </div>
                 <!-- End of Form -->
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-secondary">
+                  <button type="submit" class="btn btn-secondary buttonProject">
                     Send message
                   </button>
                 </div>

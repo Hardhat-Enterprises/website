@@ -5,7 +5,7 @@
 <main>
     {% include 'includes/pre-loader.html' %}
 
-    <!-- Hero -->
+    <!-- Hero section-->
     <div class="section-header bg-primary-app pb-0">
         <div class="container">
             <div class="row justify-content-center text-center">
@@ -28,7 +28,8 @@
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">About Us</h2>
-                    <p class="mb-4">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern
+                    <p class="mb-4" data-aos="fade-up"
+                    data-aos-duration="3000">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern
                         penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit;
                         it's a revolution in cybersecurity practice. Harnessing the robust Tauri framework alongside
                         React and Mantine, DDT offers an intuitive interface that simplifies complex pen-testing
@@ -93,7 +94,8 @@
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Simplified Penetration Testing</h2>
-                    <p class="mb-4">Explore the world of penetration testing with ease using our GUI-based tools. Say
+                    <p class="mb-4" data-aos="fade-up"
+                    data-aos-duration="3000">Explore the world of penetration testing with ease using our GUI-based tools. Say
                         goodbye to complex command lines. Our user-friendly interface empowers users to conduct
                         penetration tests efficiently, making cybersecurity assessments more accessible and intuitive.
                     </p>
@@ -112,7 +114,8 @@
                 </div>
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Streamlined Tool Usage</h2>
-                    <p class="mb-4">Experience cybersecurity tool usage like never before. Our Usage Service simplifies
+                    <p class="mb-4" data-aos="fade-up"
+                    data-aos-duration="3000">Experience cybersecurity tool usage like never before. Our Usage Service simplifies
                         the practical application of cybersecurity tools, focusing on simplicity without sacrificing
                         effectiveness. Navigate through tasks effortlessly, whether you're a seasoned professional or
                         new to the field.</p>
@@ -123,7 +126,8 @@
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Beginner's Cyber Toolkit</h2>
-                    <p class="mb-4">Embark on your cybersecurity learning journey with our dedicated tool for beginners.
+                    <p class="mb-4" data-aos="fade-up"
+                    data-aos-duration="3000">Embark on your cybersecurity learning journey with our dedicated tool for beginners.
                         This service educates newcomers on fundamental commands and tools, providing a supportive
                         environment for learning. Start your exploration into cybersecurity confidently, laying the
                         groundwork for a successful career.</p>
@@ -182,28 +186,27 @@
             </div>
         </div>
         <!-- End of Tools List Section -->
+
         <!-- How Do We Do It Section -->
         <div class="row justify-content-center text-center">
             <h2 class="text-center fw-bolder text-dark">How Do We Do It?</h2>
             <div class="row text-center">
                 <div class="col-md-4">
-                    <div class="ptgui_viz-card">
+                    <div height="400">
                         <img src="{% static 'assets/img/pages/home/pt-gui-how1.svg' %}" alt="Tool Screenshot 1">
                     </div>
-                    <p class="mb-4" style="    font-size: 0.75rem;">To initiate the tool, just click the "Go" button to start the execution.</p>
+                    <p class="mb-4">To initiate the tool, just click the "Go" button to start the execution.</p>
                 </div>
                 <div class="col-md-4">
-                    <div class="ptgui_viz-card">
+                    <div height="400">
                         <img src="{% static 'assets/img/pages/home/pt-gui-how2.svg' %}" alt="Tool Screenshot 2">
                     </div>
-                    <p class="mb-4" style="    font-size: 0.75rem;">Provide the necessary information and select the "Scan" button to initiate the
+                    <p class="mb-4">Provide the necessary information and select the "Scan" button to initiate the
                         operation.</p>
                 </div>
                 <div class="col-md-4">
-                    <div class="ptgui_viz-card">
-                        <img src="{% static 'assets/img/pages/home/pt-gui-how3.svg' %}" alt="Tool Screenshot 3">
-                    </div>
-                    <p class="mb-4" style="    font-size: 0.75rem;">Check the Output section to see the results of the scan.</p>
+                    <img src="{% static 'assets/img/pages/home/pt-gui-how3.svg' %}" alt="Tool Screenshot 3">
+                    <p class="mb-4">Check the Output section to see the results of the scan.</p>
                 </div>
             </div>
         </div>
@@ -216,7 +219,8 @@
                     <div class="col-lg-8">
                         <div class="mt-4 mb-5">
                             <h2 class="fw-bolder">DDT GitHub</h2>
-                            <p class="mb-4 text-white">Explore the PT-GUI GitHub Repository for in-depth access to the source
+                            <p class="mb-4" data-aos="fade-up"
+                            data-aos-duration="3000">Explore the PT-GUI GitHub Repository for in-depth access to the source
                                 code,
                                 documentation, and collaborative resources. Contribute to the development of this
                                 powerful cybersecurity tool, designed to simplify complex operations for both
@@ -226,7 +230,7 @@
                                 width="500" height="400">
                             <div>
                                 <a href="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit"
-                                    class="btn btn-outline-gray-100 me-md-3">
+                                    class="btn btn-outline-gray-100 me-md-3 buttonJoinUs">
                                     <span class="fab fa-github me-2"></span>
                                     Visit GitHub</a>
                             </div>
@@ -246,11 +250,11 @@
                         <p class="mb-4">Ready to level up your cybersecurity skills? Join us to experience
                             user-friendly
                             tools and collaborative learning.</p>
-                        <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2"
+                        <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2 buttonProject"
                             alt="Click to immerse yourself in practical cybersecurity experiences."><span
                                 class="fas fa-envelope"></span>
                             Get in Touch</a>
-                        <a href="{% url 'ptgui_join_us' %}" class="btn btn-primary animate-up-2"
+                        <a href="{% url 'ptgui_join_us' %}" class="btn btn-primary animate-up-2 buttonProject"
                             alt="Join our team of cybersecurity professionals"><span
                                 class="fas fa-handshake me-2"></span>
                             Join Us</a>
