@@ -283,10 +283,11 @@ class UserChallenge(models.Model):
     score = models.IntegerField(default=0)
 
 
-class BlogPost(models.Model):  # Ensure it's named `BlogPost` and not `blog_post`
+class BlogPost(models.Model): 
     title = models.CharField(max_length=255)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    page_name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.title
