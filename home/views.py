@@ -712,6 +712,19 @@ def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
+#Search suggestion ~ Raja_Singh
+def search_suggestions(request):
+    if 'term' in request.GET:
+        term = request.GET.get('term')
+        # Filter the Webpage model by title containing the search term
+        webpages = Webpage.objects.filter(title__icontains=term)[:5]
+        suggestions = []
+        for webpage in webpages:
+            suggestions.append({
+                'title': webpage.title,
+                 'url': webpage.url or 'URL not available'
+            })
+        return JsonResponse(suggestions, safe=False)
 
 
 @login_required
