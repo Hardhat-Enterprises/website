@@ -685,7 +685,13 @@ def projects_join_us(request, page_url, page_name):
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
  
-       # return context
+      
+
+
+
+
+ #    create a log If an XSS attempt is detected
+
 
 def search(request):
     form = SearchForm(request.GET or None)

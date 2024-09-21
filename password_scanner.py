@@ -5,7 +5,7 @@ import re
 root_directory = r'C:\Users\User\Desktop\test'
 script_name = os.path.basename(__file__)  # Get the current script's filename
 
-# Updated regex patterns to match sensitive information (like passwords, secret keys)
+# Updated regex pattern to match sensitive information (like passwords, secret keys)
 password_patterns = [
     re.compile(r'(?i)(secret_key\s*=\s*[\'"].+?[\'"])'),  # Matches 'SECRET_KEY = "..."'
     re.compile(r'(?i)(password\s*=\s*[\'"].+?[\'"])'),    # Matches 'PASSWORD = "..."'
