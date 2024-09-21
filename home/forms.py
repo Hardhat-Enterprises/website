@@ -1,32 +1,17 @@
 from django import forms
+import re
+from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+
 
 from django.core.exceptions import ValidationError
 import re
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, Article, Comment
 
 User = get_user_model()
-
-def validate_password(value):
-    errors = [
-        "Password must be more than 8 digits.",
-        "Require at least one letter.",
-        "Require at least one number.",
-        "Require at least one special character."
-    ]
-    if len(value) < 8:
-        raise ValidationError(errors)
-    if not re.search(r'[A-Za-z]', value):
-        raise ValidationError(errors)
-    if not re.search(r'[0-9]', value):
-        raise ValidationError(errors)
-    if not re.search(r'[^A-Za-z0-9]', value):
-        raise ValidationError(errors)
-    
-    return value
 
 def possible_years(first_year_in_scroll, last_year_in_scroll):
     p_year = []
@@ -46,12 +31,10 @@ class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(
         label=_("Your Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
-        validators=[validate_password],
     )
     password2 = forms.CharField(
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
-        validators=[validate_password],
     )
     # Newly added................................................
     def clean_password1(self):
@@ -63,7 +46,6 @@ class RegistrationForm(UserCreationForm):
             raise ValidationError(
                 _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
             )
-        return password
     # ...........................................................
 
     # Newly added...........................
@@ -72,7 +54,7 @@ class RegistrationForm(UserCreationForm):
         # Define the regex pattern for the required email format
         pattern = r'@deakin\.edu\.au$'
         
-        if not re.search(pattern, email):
+        if not re.match(pattern, email):
             raise ValidationError(_("Email must be match with your Deakin email."))
         
         return email
@@ -102,8 +84,6 @@ class RegistrationForm(UserCreationForm):
                 'placeholder': 'example@deakin.edu.au'
             })
         }
-
-
 
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
@@ -165,7 +145,30 @@ class projects_JoinUsForm(forms.ModelForm):
     class Meta:
         model = Projects_join_us
         fields = ['name', 'email', 'message','page_name']
-        
+    
+class Upskilling_JoinProjectForm(forms.ModelForm):
+    p1 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
+    p2 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
+    p3 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
+
+    class Meta:
+        model = Student
+        fields = ['year', 'trimester', 'unit', 'course', 'p1', 'p2', 'p3']
+        widgets = {
+            'trimester': forms.Select(choices=Student.TRIMESTERS),
+            'unit': forms.Select(choices=Student.UNITS),
+            'course': forms.Select(choices=Student.COURSES),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        p1 = cleaned_data.get('p1')
+        p2 = cleaned_data.get('p2')
+        p3 = cleaned_data.get('p3')
+
+        if p1 and p2 and p3:
+            if len({p1, p2, p3}) < 3:
+                self.add_error(None, 'Project preferences must be unique.')
 
 
 class NewWebURL(forms.ModelForm):
@@ -199,6 +202,16 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a comment...'}),
         }
+            
+class FeedbackForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True, label='Name')
+    feedback = forms.CharField(widget=forms.Textarea, required=True, label='Customer Feedback')
+    rating = forms.ChoiceField(choices=[
+        ('Excellent', 'Excellent'),
+        ('Good', 'Good'),
+        ('Poor', 'Poor'),
+        ('Disappointing', 'Disappointing')
+    ], required=True, label='Rating')
 
 User = get_user_model()
 

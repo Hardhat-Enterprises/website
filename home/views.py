@@ -17,12 +17,13 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Comment
- 
+from .models import Article, Comment, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback
+
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
@@ -35,10 +36,8 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, ArticleForm, UpdateForm, CommentForm
 
-
- 
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm,  ArticleForm, UpdateForm, CommentForm
  
 # import os
  
@@ -55,10 +54,13 @@ from .models import Smishingdetection_join_us, DDT_contact
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
 from .models import Student, Project, Progress, Skill, CyberChallenge, UserChallenge
+from django.core.paginator import Paginator
+from .models import BlogPost
+from django.template.loader import render_to_string
  
 #from .models import Student, Project, Progress
  
- 
+from .forms import FeedbackForm
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
@@ -67,6 +69,9 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
  
 def index(request):
     return render(request, 'pages/index.html')
+
+def error_404_view(request,exception):
+    return render(request,'includes/404-error-page.html', status=404)
  
 def about_us(request):
     return render(request, 'pages/about.html')
@@ -141,7 +146,7 @@ def join_project(request):
         form = StudentForm()
  
     context['form'] = form
-    return render(request, 'pages/joinus.html', context)
+    return render(request, 'pages/joinproject.html', context)
  
 def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
@@ -169,6 +174,26 @@ def upskill_roadmap(request):
  
 def upskill_progress(request):
     return render(request), 'pages/upskilling/progress.html'
+
+def UpskillSuccessView(request):
+    return render(request, 'pages/upskilling/UpskillingFormSuccess.html')
+def UpskillingJoinProjectView(request):
+    student_exists = Student.objects.filter(user=request.user).exists()
+
+    if student_exists:
+        return render(request, 'joinproject.html', {'student_exists': True})
+
+    if request.method == 'POST':
+        form = Upskilling_JoinProjectForm(request.POST)
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.user = request.user  # Assign the current user
+            student.save()
+            return redirect('success_page')  # Redirect to success page
+    else:
+        form = Upskilling_JoinProjectForm()
+
+    return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
  
 # Search Suggestions
 def SearchSuggestions(request):
@@ -213,6 +238,21 @@ def Vr_main(request):
 
 # Authentication
 
+
+
+
+
+
+
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
+            return redirect('feedback')  # Redirect to the same page
+    else:
+        form = FeedbackForm()
+    return render(request, 'pages/feedback.html', {'form': form})
 
 
 ## Web-Form 
@@ -677,6 +717,31 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
+
+def feedback_view(request):
+    return render(request, 'pages/feedback.html')
+
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        feedback_type = request.POST.get('feedback_type')
+        content = request.POST.get('feedback_content')
+
+        Feedback.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            feedback_type=feedback_type,
+            content=content
+        )
+
+        messages.success(request, 'Thank you for your feedback!')
+        return redirect('feedback')
+       #return redirect('thank_you') # Redirect to the thank you page after submission
+
+    return redirect('feedback')
+#def thank_you(request):
+    #return render(request, 'feedback/thank_you.html')
+    #return render('thank_you')
+
  
        # return context
 def challenge_list(request):
@@ -744,3 +809,20 @@ def submit_answer(request, challenge_id):
         })
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+#
+def blog_list(request):
+    # Initial blog post rendering (first page)
+    posts = BlogPost.objects.all().order_by('-created_at')
+    paginator = Paginator(posts, 5)  # 5 posts per page
+
+    # Page number from request (default to 1)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Non-AJAX request: initial page load
+    if not request.is_ajax():
+        return render(request, 'blog_list.html', {'page_obj': page_obj})
+
+    # AJAX request: send paginated posts as JSON
+    posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
+    return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
