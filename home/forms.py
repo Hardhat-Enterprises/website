@@ -198,6 +198,7 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
         widgets = {
             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a comment...'}),
+        }
 
 User = get_user_model()
 
