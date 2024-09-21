@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
+from django.utils import timezone
 
 
 from django.utils.text import slugify
@@ -353,3 +354,10 @@ class Feedback(models.Model):
         return f"{feedback_type_display} - {self.created_at}"
 
 
+class Announcement(models.Model):
+    message = models.TextField()
+    isActive = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.message[:50]  # Return the first 50 characters of the message

@@ -19546,4 +19546,6 @@ blockquote {
   font-weight: bold;
   display: block;
 }
-
+.carousel-text-container{
+  background-color: transparent !important;
+}
