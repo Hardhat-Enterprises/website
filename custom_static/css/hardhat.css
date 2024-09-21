@@ -19549,3 +19549,32 @@ blockquote {
 .carousel-text-container{
   background-color: transparent !important;
 }
+
+/* Basic styling for the Load More button */
+#load-more-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff; /* Blue background */
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+    /* Styling for the button on hover */
+    #load-more-btn:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        border-color: #0056b3;
+    }
+
+    /* Styling for the button when disabled */
+    #load-more-btn:disabled {
+        background-color: #c0c0c0; /* Gray background for disabled state */
+        border-color: #a0a0a0;
+        color: #6c757d; /* Text color for disabled state */
+        cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
+    }
+
