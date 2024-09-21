@@ -712,7 +712,7 @@ def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
-#Search suggestion ~ Raja Singh
+#Search suggestion ~ Raja_Singh
 def search_suggestions(request):
     if 'term' in request.GET:
         term = request.GET.get('term')

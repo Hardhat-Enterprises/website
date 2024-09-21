@@ -55,10 +55,10 @@ urlpatterns = [
     path('SearchResults/', views.SearchResults, name='pages/search-results'),
     path('website_form/', views.website_form, name='pages/website-form'),
 
-    # New URL for AJAX-based search suggestions
+    # New URL for AJAX-based search suggestions Raja Singh
     path('search_suggestions/', views.search_suggestions, name='search_suggestions'),
 
-    # Search Suggestions
+    # Search Suggestions 
     path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
 
     # Blog URLs
