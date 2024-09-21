@@ -15,6 +15,7 @@ from .models import (
     
     # Contact_central,
     Article,
+    Comment,
     Smishingdetection_join_us,
     Projects_join_us,
     CyberChallenge,
@@ -29,6 +30,7 @@ from .models import (
 
 admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
+admin.site.register(Comment)
 admin.site.register(DDT_contact)
 
 admin.site.site_header = "Hardhat Enterprises Administration"

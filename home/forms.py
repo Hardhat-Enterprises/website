@@ -6,9 +6,10 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile
 
-
+from django.core.exceptions import ValidationError
+import re
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, Article, Comment
 
 User = get_user_model()
 
@@ -174,6 +175,33 @@ class NewWebURL(forms.ModelForm):
     class Meta:
         model = Webpage
         fields = ['id', 'url', 'title']
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'author', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'author': forms.TextInput(attrs={'class': 'form-control', 'value': '', 'id': 'elder', 'type' : 'hidden'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+class UpdateForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a comment...'}),
+        }
             
 class FeedbackForm(forms.Form):
     name = forms.CharField(max_length=100, required=True, label='Name')
@@ -184,6 +212,7 @@ class FeedbackForm(forms.Form):
         ('Poor', 'Poor'),
         ('Disappointing', 'Disappointing')
     ], required=True, label='Rating')
+
 User = get_user_model()
 
 class UserUpdateForm(forms.ModelForm):
