@@ -58,7 +58,7 @@ class RegistrationForm(UserCreationForm):
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
         # Define the regex pattern for the required password format
-        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};\'\\:"|,.<>\/?`~])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};\'\\:"|,.<>\/?`~]{8,}$'
         
         if not re.match(pattern, password):
             raise ValidationError(
