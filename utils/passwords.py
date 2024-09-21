@@ -1,7 +1,7 @@
 import secrets
 import string
 
-# Define the character sets
+# Define the character set
 def gen_password():
     upper = string.ascii_uppercase
     lower = string.ascii_lowercase
