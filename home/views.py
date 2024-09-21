@@ -50,7 +50,7 @@ from .models import Smishingdetection_join_us, DDT_contact
 # from .models import Student, Project, Contact
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, NewWebURL
  
- 
+
 
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
@@ -67,6 +67,9 @@ from .forms import FeedbackForm
  
 # Regular Views
  
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
+from .forms import UserLoginForm
  
 def index(request):
     return render(request, 'pages/index.html')
@@ -280,6 +283,9 @@ def website_form(request):
 class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
+    @method_decorator(ratelimit(key='user', rate='5/m', block=True))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
  
 def logout_view(request):
     logout(request)

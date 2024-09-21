@@ -1,7 +1,16 @@
 from django.urls import path
 from django.contrib import admin
 
+
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView
+from django_ratelimit.decorators import ratelimit
+from .views import UserLoginView
+
+
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults
+
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
+
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -78,18 +87,26 @@ urlpatterns = [
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
+
+
+    path('accounts/login/', UserLoginView.as_view(), name='login'),
+
+
     path('feedback/', views.feedback, name='feedback'),
 
-] 
+]
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
 
 
+
+
     #Feedback
     path('feedback/', views.feedback_view, name='feedback'),
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+
 
 
 ]

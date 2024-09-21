@@ -30,5 +30,10 @@ sqlparse==0.5.1
 virtualenv==20.25.1
 wheel==0.44.0
 
+django_ratelimit==4.1.0
+pymemcache==4.0.0
+
+
 # Image Processing
 Pillow==9.5.0
+

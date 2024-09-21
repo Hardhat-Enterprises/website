@@ -29,6 +29,8 @@ Step 7: We have to open the ‘settings.py’ config file from the ‘Files’ t
 
 Step 8: After reloading the website using the green reload button on the Web configuration page, the URL can be used to check the deployed website.
 
+Step 9:
+
 
 
 

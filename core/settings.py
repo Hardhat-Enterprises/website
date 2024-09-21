@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
-
+    "django_ratelimit",
     'home',
     'theme_pixel'
 ]
@@ -77,6 +77,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "home.security_middleware.XContentTypeOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -200,11 +201,31 @@ MESSAGE_TAGS = {
     messages.ERROR: 'error'
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',  # Default Memcached server address
+    }
+}
+
 #EMAIL_HOST_USER = {'kaviuln@gmail.com'}
 
 MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
+RATELIMIT_ENABLE = True
+RATELIMIT_VIEW = 'django_ratelimit.ratelimit_view'
+RATELIMIT_USE_CACHE = 'default'
+
+RATELIMIT_SETTINGS = {
+    'login': {
+        'rate': '5/m',  # 5 attempts per minute
+        'block_expiration': 60,  # block for 1 minute after 5 attempts
+    },
+}
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
