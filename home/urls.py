@@ -88,8 +88,13 @@ urlpatterns = [
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
 
+
     path('accounts/login/', UserLoginView.as_view(), name='login'),
 
+
+    path('feedback/', views.feedback, name='feedback'),
+
+]
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
