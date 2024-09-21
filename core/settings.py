@@ -32,7 +32,11 @@ if not SECRET_KEY:
 # Render Deployment Code
 #DEBUG = False
 #original: 
-DEBUG = 'RENDER' not in os.environ
+# DEBUG = 'RENDER' not in os.environ
+PRODUCTION = 'RUN_MAIN' not in os.environ
+# Set DEBUG based on the environment. TO test 404 locally, set Debug = False.
+DEBUG = not PRODUCTION
+
 
 # Docker HOST
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -201,3 +205,6 @@ MESSAGE_TAGS = {
 MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

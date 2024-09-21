@@ -15969,11 +15969,14 @@ textarea.form-control-lg {
   .navbar-collapse.show {
     padding: 1.5rem;
     border-radius: 1rem;
-    background: #ffffff;
+    background-color: var(--section-bs);
     animation: show-navbar-collapse .2s ease forwards;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
   .navbar-collapse.collapsing-out {
-    animation: hide-navbar-collapse .2s ease forwards; } }
+    animation: hide-navbar-collapse .2s ease forwards; }
+  .res-hide{
+    display: none;
+  } }
 
 /**
  * = Sections
@@ -18664,6 +18667,13 @@ ul li {
   color: var(--darkmode-text);
 }
 
+/* Target specific dark backgrounds when dark mode is off */
+.text-white p,
+.text-white ol li,
+.text-white ul li {
+  color: #ffffff; /* White text for dark backgrounds */
+}
+
 a,
 .text-action {
   color: #FFCD11;
@@ -19488,3 +19498,59 @@ blockquote {
     color: #FFCD11;
   }
 }
+
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none; 
+}
+
+.profile-container::before {
+  content: none;
+}
+
+.profile-avatar {
+  border: 2px solid #fff;
+  transition: transform 0.2s ease-in-out;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.1);
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+}
+
+/* Basic styling for the Load More button */
+#load-more-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff; /* Blue background */
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+    /* Styling for the button on hover */
+    #load-more-btn:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        border-color: #0056b3;
+    }
+
+    /* Styling for the button when disabled */
+    #load-more-btn:disabled {
+        background-color: #c0c0c0; /* Gray background for disabled state */
+        border-color: #a0a0a0;
+        color: #6c757d; /* Text color for disabled state */
+        cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
+    }
+
+

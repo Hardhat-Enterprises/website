@@ -1,11 +1,18 @@
 from django.urls import path
+from django.contrib import admin
+
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 from . import views
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView
 
 urlpatterns = [
     path('', views.index, name='index'),
-
+    path('profile/', views.profile, name='profile'),
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
     path('appattack/join', views.appattack_join, name='appattack_join'),
@@ -22,6 +29,8 @@ urlpatterns = [
     path('upskilling/', UpskillingView.as_view(), name='upskilling'),
     path('upskilling/<slug:slug>/', UpskillingSkillView.as_view(), name='upskilling_skill'),
     path('update-progress/<int:progress_id>/', views.update_progress, name='update_progress'),
+    path('join-us/', join_project, name='join_us'),
+    path('success/', UpskillSuccessView, name='success'),
 
     path('smishing_detection/join_us', views.smishingdetection_join_us, name='smishingdetection_join_us'),
 
@@ -43,11 +52,14 @@ urlpatterns = [
     # path('contact-central/', views.Contact_central, name='contact-central'),
 
     # Search result page
-    path('search_results/', views.search_results, name='pages/search-results'),
+    path('SearchResults/', views.SearchResults, name='pages/search-results'),
     path('website_form/', views.website_form, name='pages/website-form'),
 
     # New URL for AJAX-based search suggestions
     path('search_suggestions/', views.search_suggestions, name='search_suggestions'),
+
+    # Search Suggestions
+    path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
 
     # Blog URLs
     path('blog/', Index.as_view(), name='blog'),
@@ -64,4 +76,21 @@ urlpatterns = [
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
 
+    path('feedback/', views.feedback, name='feedback'),
+
+ 
+    path('challenges/', views.challenge_list, name='challenge_list'),
+    path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
+    path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
+    path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
+
+
+    #Feedback
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+
+
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
