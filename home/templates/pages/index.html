@@ -226,6 +226,35 @@
     </svg></figure>
   </section>
 
+  {% if show_announcement %}
+  <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="announcementModalLabel">Announcement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>{{ announcement_message }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+
+<script>
+  window.onload = function() {
+    setTimeout(function() {
+      var announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
+      announcementModal.show();
+    }, 3000);
+  };
+</script>
+ 
 </main>
 
 {% endblock content %}

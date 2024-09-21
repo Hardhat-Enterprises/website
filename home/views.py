@@ -30,6 +30,7 @@ from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
 from .forms import UserUpdateForm, ProfileUpdateForm
+from home.models import Announcement
 
 import os
 import json
@@ -69,7 +70,10 @@ from .forms import FeedbackForm
  
  
 def index(request):
-    return render(request, 'pages/index.html')
+    recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
+    show_announcement = recent_announcement.isActive
+    announcement_message = recent_announcement.message
+    return render(request, 'pages/index.html',{'announcement_message': announcement_message, 'show_announcement': show_announcement})
 
 def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)

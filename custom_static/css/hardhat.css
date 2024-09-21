@@ -269,6 +269,7 @@
   --section-bs: #ffffff;
   --darkmode-text: #1c2540;
   --darkmode-secondary-button: #1c2540;
+  --collaspebs: #ffffff;
   --dm-bg-gray:#F3F4F6;
   --dm-bg-primary: #ffffff;
   --bs-font-sans-serif: "Nunito Sans", sans-serif;
@@ -304,6 +305,7 @@ body {
     --darkmode-secondary-button: #ffc107;
     --dm-bg-gray:#ffc107;
     --dm-bg-primary: #ffc107;
+    --collaspebs: #1c2540;
   }
 
 hr {
@@ -5601,6 +5603,7 @@ textarea.form-control-lg {
   background-clip: padding-box;
   border: 0.0625rem solid rgba(23, 31, 56, 0.2);
   border-radius: 0.3rem;
+  background-color: var(--section-bs);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   outline: 0; }
 
@@ -5621,7 +5624,7 @@ textarea.form-control-lg {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 1rem 1rem;
   border-bottom: 0.0625rem solid #E5E7EB;
   border-top-left-radius: 0.2375rem;
@@ -5637,7 +5640,9 @@ textarea.form-control-lg {
 .modal-body {
   position: relative;
   flex: 1 1 auto;
-  padding: 1rem; }
+  padding: 1rem;
+  text-align: center; 
+}
 
 .modal-footer {
   display: flex;
@@ -15967,6 +15972,7 @@ textarea.form-control-lg {
       text-align: right; }
   .navbar-collapse.collapsing,
   .navbar-collapse.show {
+    background-color: var(--collaspebs) !important;
     padding: 1.5rem;
     border-radius: 1rem;
     background-color: var(--section-bs);
@@ -19486,6 +19492,15 @@ blockquote {
   .contact-image img {
     width: 80%; 
   }
+  .dark-mode{
+    .form-check-label{
+      display: none;
+    }
+  }
+  .auth-style{
+    margin-right: 8px;
+  }
+  
 }
 
 
@@ -19497,6 +19512,13 @@ blockquote {
   .form-check-label {
     color: #FFCD11;
   }
+}
+.auth-style{
+  margin-left: 16px;
+}
+.additional-margin{
+  margin-top: 160px !important;
+  margin-bottom: 60px !important;
 }
 
 .profile-container {
@@ -19523,6 +19545,9 @@ blockquote {
 .form-group label {
   font-weight: bold;
   display: block;
+}
+.carousel-text-container{
+  background-color: transparent !important;
 }
 
 /* Basic styling for the Load More button */
@@ -19552,5 +19577,4 @@ blockquote {
         color: #6c757d; /* Text color for disabled state */
         cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
     }
-
 
