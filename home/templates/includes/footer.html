@@ -85,6 +85,11 @@
        #     > {% endcomment %}
 
           </li>
+            <li class="nav-item">
+              <a href="{% url 'feedback' %}" class="nav-link">Feedback</a>
+           </li>
+
+          </li>
         </ul>
       </div>
       <div class="col-12 col-md-4 mb-4 mb-lg-0">
@@ -129,4 +134,34 @@
       </div>
     </div>
   </div>
+  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+    <div class="container mt-5">
+      <div class="alert alert-custom" role="alert">
+        <strong>Last Updated:</strong> <span id="last-updated"></span>
+      </div>
+    </div>
+  </div>
+  <style>
+    .alert-custom {
+        background-color: transparent; /* Removes the background color */
+        border: none;                  /* Removes the border */
+        box-shadow: none;              /* Removes the box shadow if present */
+    }
+</style>
+  <script>// script.js
+    // script.js
+
+    // Function to format the date
+    function formatDate(date) {
+      return date.toLocaleDateString() + ' ' + 'at' + ' ' + date.toLocaleTimeString();
+    }
+
+    // Update the last updated time on page load
+    window.onload = function () {
+      const lastUpdatedElement = document.getElementById('last-updated');
+      const lastUpdatedDate = new Date(document.lastModified);
+      lastUpdatedElement.textContent = formatDate(lastUpdatedDate);
+    };
+
+  </script>
 </footer>

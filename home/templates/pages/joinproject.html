@@ -1,7 +1,9 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block header %}{% endblock header %}
+{% block header %}
+    {% include 'includes/navigation.html' %}
+{% endblock header %}
 
 {% block content %}
     <main>
@@ -27,7 +29,7 @@
                                     <div class="text-center text-md-center mb-4 mt-md-0">
                                         <h1 class="mb-0 h3">Join a project</h1>
                                     </div>
-                                    <form method="post">
+                                    <form method="post" action="{% url 'join_us' %}">
                                         {% csrf_token %}
                                         <!-- Form -->
                                         {% for field in form %}

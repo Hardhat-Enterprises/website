@@ -91,7 +91,7 @@
   <button id="backToTop" style="
   position: fixed;
   bottom: 50px;
-  left: 50%;
+  left: 95%;
   transform: translateX(-50%);
   background-color: #3a3a32;
   color: rgb(236, 232, 2); 
@@ -104,11 +104,13 @@
   width: 35px; 
   height: 35px; 
   display: flex;
+  opacity: 0;
   align-items: center;
   justify-content: center;
-  font-size: 15px;"> 
+  font-size: 15px;
+  transition: opacity 0.5s ease-in-out;"> 
   &#8593;
-  </button>
+</button>
 
   {% include 'includes/scripts.html' %}
   {% block javascripts %}{% endblock javascripts %}
