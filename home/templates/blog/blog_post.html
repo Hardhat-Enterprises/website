@@ -2,78 +2,66 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
-    <a class="btn btn-outline-secondary" href="{% url 'blog' %}">Go Back</a>
-  </div>
+	<div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+		<a class="btn btn-outline-secondary" href="{% url 'blog' %}"> Go Back </a>
+	</div>
 </div>
 
 <div class="row">
-  <div class="col-md-6 col-11 mx-md-auto mb-3 pb-2 mx-3">
-    <h1>{{object.title}}</h1>
-    <p class="text-muted">{{object.date}}</p>
-    <div>{{ object.content|safe }}</div>
-  </div>
+	<div class="col-md-6 col-11 mx-md-auto mb-3 pb-2 mx-3">
+		<h1>{{ object.title}}</h1>
+		<p class="text-muted">{{object.date}}</p>
+		<p class="text-muted">Posted by {{ object.author.username}}</p>
+
+		<div>{{ object.content|safe }}</div>
+	</div>
 </div>
 
 <div class="row my-3">
-  <div class="col-md-6 col-12 mx-md-auto mx-3">
-    {% if object.likes.count == 1 %}
-    <p>{{ object.likes.count}} person likes this post</p>
-    {% else %}
-    <p>{{ object.likes.count}} people like this post</p>
-    {% endif %} 
+	<div class="col-md-6 col-12 mx-md-auto mx-3">
+		{% if object.likes.count == 1 %}
+		<p>{{ object.likes.count}} person likes this post</p>
+		{% else %}
+		<p>{{ object.likes.count}} people like this post</p>
+		{% endif %}
 
-    {% if request.user.is_authenticated %}
-      {% if liked_by_user %}
-        <form method="POST" action="{% url 'like_article' object.id %}">
-          {% csrf_token %}
-          <button class="btn btn-outline-primary"><ion-icon name="heart-dislike-outline"></ion-icon> Unlike this post</button>
-        </form>
-      {% else %}
-        <form method="POST" action="{% url 'like_article' object.id %}">
-          {% csrf_token %}
-          <button class="btn btn-outline-primary"><ion-icon name="heart-outline"></ion-icon> Like this post</button>
-        </form>
-      {% endif %}
-    {% else %}
-      <a href= "{% url 'login' %}"> <button class= "btn btn-outline-primary">Login to like this post</button></a>
-    {% endif %}
-  </div>
+		{% if request.user.is_authenticated %}
+		{% if liked_by_user %}
+		<form method="POST" action="{% url 'like_article' object.id %}">
+			{% csrf_token %}
+			<button class="btn btn-outline-primary"><ion-icon name="heart-dislike-outline"></ion-icon> Unlike this post</button>
+		</form>
+
+		{% else %}
+		<form method="POST" action="{% url 'like_article' object.id %}">
+			{% csrf_token %}
+			<button class="btn btn-outline-primary"><ion-icon name="heart-outline"></ion-icon> Like this post</button>
+		</form>
+		{% endif %}
+		{% else %}
+		<a href="{% url 'login' %}"> <button class="btn btn-outline-primary" href="{% url 'login' %}"> Login to like this post</button></a>
+		{% endif %}
+	</div>
 </div>
 
-<!-- Comments Section -->
-<div class="row my-5">
-  <div class="col-md-6 col-11 mx-md-auto mx-3">
-    <h3>Comments</h3>
-    {% if object.comments.all %}
-      {% for comment in object.comments.all %}
-        <div class="comment mb-4">
-          <p><strong>{{ comment.user.username }}</strong> {{ comment.created_at|date:"F j, Y" }}</p>
-          <p>{{ comment.content|safe }}</p>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p>No comments yet. Be the first to comment!</p>
-    {% endif %}
-  </div>
+<!--Display the initial blog posts and include a "Load More" button.-->
+<div id="post-container">
+	{% include 'posts_partial.html' %}
 </div>
 
-
-<!-- Add Comment Form -->
-{% if request.user.is_authenticated %}
-<div class="row">
-  <div class="col-md-6 col-11 mx-md-auto mx-3">
-    <h4>Add a Comment</h4>
-    <form method="POST" action="{% url 'add_comment' object.id %}">
-      {% csrf_token %}
-      {{ comment_form.as_p }}
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
-</div>
-{% else %}
-<p class="text-center">You must <a href="{% url 'login' %}">login</a> to add a comment.</p>
-{% endif %}
+<button id="load-more-btn" data-page="2">Load More</button>
+<script>
+	var load_more_url = "{% url 'blog_post' %}";
+</script>
+<script src="{% custom_static 'js/load_more.js' %}"></script>
 
 
+<!--If JavaScript is disabled, you can still allow users to navigate between pages using traditional Django pagination links
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">Next Page</a>
+{% endif %}-->
+<!--This ensures that the button is only displayed if there are more pages to load
+{% if page_obj.has_next %}
+	<button id="load-more-btn" data-page="2">Load More</button>
+{% endif %}-->
 {% endblock content %}

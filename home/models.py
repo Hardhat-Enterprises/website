@@ -23,6 +23,7 @@ import secrets
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
+from django.db import models
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
@@ -285,6 +286,10 @@ class Projects_join_us(models.Model):
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
 
+class Feedback(models.Model):
+    name = models.CharField(max_length=100)
+    feedback = models.TextField()
+    rating = models.CharField(max_length=20)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -324,7 +329,18 @@ class UserChallenge(models.Model):
     completed = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
 
+
+
+class BlogPost(models.Model): 
+    title = models.CharField(max_length=255)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
     page_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+    
 
 
     User = get_user_model()

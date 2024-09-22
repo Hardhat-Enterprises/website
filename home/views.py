@@ -60,6 +60,9 @@ from .models import Smishingdetection_join_us, DDT_contact
 from utils.charts import generate_color_palette, colorPrimary, colorSuccess, colorDanger
 from utils.passwords import gen_password
 from .models import Student, Project, Progress, Skill, CyberChallenge, UserChallenge
+from django.core.paginator import Paginator
+from .models import BlogPost
+from django.template.loader import render_to_string
 
 
     
@@ -70,7 +73,7 @@ from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 #from .models import Student, Project, Progress
  
- 
+from .forms import FeedbackForm
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
@@ -79,6 +82,9 @@ from .forms import ArticleForm, CommentForm
  
 def index(request):
     return render(request, 'pages/index.html')
+
+def error_404_view(request,exception):
+    return render(request,'includes/404-error-page.html', status=404)
  
 def about_us(request):
     return render(request, 'pages/about.html')
@@ -245,6 +251,21 @@ def Vr_main(request):
 
 # Authentication
 
+
+
+
+
+
+
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
+            return redirect('feedback')  # Redirect to the same page
+    else:
+        form = FeedbackForm()
+    return render(request, 'pages/feedback.html', {'form': form})
 
 
 ## Web-Form 
@@ -872,3 +893,20 @@ def submit_answer(request, challenge_id):
         })
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+#
+def blog_list(request):
+    # Initial blog post rendering (first page)
+    posts = BlogPost.objects.all().order_by('-created_at')
+    paginator = Paginator(posts, 5)  # 5 posts per page
+
+    # Page number from request (default to 1)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Non-AJAX request: initial page load
+    if not request.is_ajax():
+        return render(request, 'blog_list.html', {'page_obj': page_obj})
+
+    # AJAX request: send paginated posts as JSON
+    posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
+    return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
