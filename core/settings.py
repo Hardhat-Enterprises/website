@@ -65,7 +65,8 @@ INSTALLED_APPS = [
     "django_extensions",
 
     'home',
-    'theme_pixel'
+    'theme_pixel',
+    "event"
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'event.middleware.VisitorLogMiddleware'
 ]
 
 ROOT_URLCONF = "core.urls"
