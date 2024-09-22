@@ -246,8 +246,23 @@
           </li>
 
 
-		  <li class="nav-item">
-            <a href="{% url 'blog' %}" class="nav-link"> Blog </a>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Blog
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none mb-4">
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'feedback' %}">User Experience</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </li>
 
           <li class="nav-item">
@@ -277,7 +292,7 @@
           ><span class="fas fa-sign-out-alt me-2"></span> Logout</a
         >
         
-          <a class="profile-container" href="{% url 'profile' %}">
+          <!-- <a class="profile-container" href="{% url 'profile' %}"> -->
               <img src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}" 
                    class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
               <span>Profile</span>

@@ -20,6 +20,8 @@ from home import views
 
 from .admin import admin_statistics_view
 
+handler404 = 'home.views.error_404_view'
+
 urlpatterns = [
     path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
     path('admin/', admin.site.urls),
@@ -66,3 +68,5 @@ urlpatterns = [
     path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
 
 ]
+
+
