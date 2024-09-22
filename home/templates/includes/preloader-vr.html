@@ -1,0 +1,29 @@
+{% load static %}
+
+{% block content %}
+
+<div class="preloader bg-primary flex-column">
+  <svg viewBox="0 0 100 120">
+    <!-- VIDEO -->
+    <foreignObject x="0" y="0" width="100" height="120">
+      <video width="100" height="120" autoplay loop muted>
+        <source src="{% static 'assets/videos/vr.mp4' %}" type="video/mp4">
+      </video>
+    </foreignObject>
+  </svg>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get the preloader element
+    var preloader = document.querySelector('.preloader');
+
+    // Wait for 3 seconds before hiding the preloader
+    setTimeout(function() {
+      // Hide the preloader
+      preloader.style.display = 'none';
+    }, 3000); // 3000 milliseconds = 3 seconds
+  });
+</script>
+
+{% endblock content %}
