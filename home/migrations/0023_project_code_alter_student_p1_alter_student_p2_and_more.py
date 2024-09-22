@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='code',
-            field=models.CharField(choices=[('proj1', 'Project 1'), ('proj2', 'Project 2'), ('proj3', 'Project 3'), ('proj4', 'Project 4')], default='DEFAULT_CODE', max_length=10, unique=True),
+            field=models.CharField(choices=[('proj1', 'Project 1'), ('proj2', 'Project 2'), ('proj3', 'Project 3'), ('proj4', 'Project 4')], default='DEFAULT_CODE', max_length=10, unique=False),
         ),
         migrations.AlterField(
             model_name='student',
