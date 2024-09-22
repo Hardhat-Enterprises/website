@@ -1,6 +1,7 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
+from django.db.models.functions import Lower
  
 from django.shortcuts import render, redirect, get_object_or_404
  
@@ -14,10 +15,13 @@ from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill
+ 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Webpage, Document
+
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -26,7 +30,10 @@ from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-from django.urls import reverse_lazy
+from django.db.models import Q
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
 # from Website.settings import EMAIL_HOST_USER
 import random
 from .forms import UserUpdateForm, ProfileUpdateForm
@@ -35,10 +42,8 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm, DocumentForm
 
-
- 
  
 # import os
  
@@ -58,7 +63,14 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 from django.core.paginator import Paginator
 from .models import BlogPost
 from django.template.loader import render_to_string
- 
+
+
+    
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView
+from django.shortcuts import redirect, render
+from .models import Article, Comment
+from .forms import ArticleForm, CommentForm
 #from .models import Student, Project, Progress
  
 from .forms import FeedbackForm
@@ -566,10 +578,45 @@ class LikeArticle(View):
             article.likes.add(request.user.id)
         article.save()
         return redirect('detail_article', pk)
- 
- 
- 
- 
+
+
+class CreateArticleView(CreateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'blog/new_article.html'
+    success_url = reverse_lazy('blog')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = 'blog/blog_post.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['comment_form'] = CommentForm()
+        return context
+
+def add_comment(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article
+            comment.user = request.user
+            comment.save()
+            messages.success(request, "Your comment has been added.")
+            return redirect('detail_article', pk=article.id)
+        else:
+            print(form.errors)
+    else:
+        form = CommentForm()
+    
+    return redirect('detail_article', pk=article.id)
+
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
@@ -624,6 +671,79 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
 
 
         return context
+
+class DocumentUploadView(LoginRequiredMixin,View):
+    def get(self, request):
+        form = DocumentForm()
+        return render(request, 'documents/document_upload.html', {'form': form})
+
+    def post(self, request):
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.save()
+            return redirect('documents')
+        else:
+            print("Form errors:", form.errors)
+        return render(request, 'documents/document_upload.html', {'form': form})
+       
+class DocumentListView(LoginRequiredMixin, ListView):
+    model = Document
+    template_name = 'documents/document_list.html'
+    context_object_name = 'documents'
+    paginate_by = 10
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'You do not have access to this page. Please login.')
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        sort_by = self.request.GET.get('sort', 'newest')
+        filter_by = self.request.GET.get('filter', None)  
+        
+        queryset = Document.objects.all()
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            )
+
+        if filter_by == 'pdf':
+            queryset = queryset.filter(file__icontains='.pdf')
+        elif filter_by == 'word':
+            queryset = queryset.filter(file__icontains='.docx')
+        elif filter_by == 'xls':
+            queryset = queryset.filter(file__icontains='.xls')
+        elif filter_by == 'txt':
+            queryset = queryset.filter(file__icontains='.txt')
+        elif filter_by == 'csv':
+            queryset = queryset.filter(file__icontains='.csv')
+   
+        if sort_by == 'alphabetical':
+            return queryset.order_by(Lower('title'))
+         
+        return queryset.order_by('-uploaded_at') 
+    
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return render(self.request, 'includes/document_list.html', context)
+        return super().render_to_response(context, **response_kwargs)
+
+class DocumentDetailsView(LoginRequiredMixin, DetailView):
+    model = Document
+    template_name = 'documents/document_detail.html'
+    context_object_name = 'document'
+    pk_url_kwarg = 'document_id'  
+
+
+class DocumentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Document
+    template_name = 'documents/document_confirm_delete.html'
+    success_url = reverse_lazy('documents')
+    context_object_name = 'document'
+    pk_url_kwarg = 'document_id'
 
 
 class UserPasswordResetView(PasswordResetView):

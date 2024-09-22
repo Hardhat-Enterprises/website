@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<main>
+    <section class="section-header bg-tertiary text-black py-5">
+        <div class="px-4 py-5 my-5 text-center">
+            <h1 class="fw-bold display-1">New Blog Post</h1>
+        </div>
+    </section>
+
+    <section class="section section-lg bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-primary">Create Blog Post</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

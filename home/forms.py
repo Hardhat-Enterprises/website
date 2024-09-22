@@ -9,6 +9,10 @@ from django.utils import timezone
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile
 
 
+from django.core.exceptions import ValidationError
+import re
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, Article, Comment, Document
+
 
 User = get_user_model()
 
@@ -174,7 +178,36 @@ class NewWebURL(forms.ModelForm):
     class Meta:
         model = Webpage
         fields = ['id', 'url', 'title']
-            
+
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Blog Title'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Write your blog here...'}),
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a comment...'}),
+        }
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['title', 'description', 'file']
+        ordering = ['-uploaded_at']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Title'}),
+            'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Document Description'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+       
 class FeedbackForm(forms.Form):
     name = forms.CharField(max_length=100, required=True, label='Name')
     feedback = forms.CharField(widget=forms.Textarea, required=True, label='Customer Feedback')

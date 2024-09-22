@@ -7,7 +7,7 @@ from .models import (
     Skill,
     Progress,
     Contact,
-
+    Document,
     Webpage,
     DDT_contact,
     Feedback,
@@ -19,8 +19,6 @@ from .models import (
     Projects_join_us,
     CyberChallenge,
     UserChallenge,
-
-
 
 
 )
@@ -104,7 +102,6 @@ admin.site.register(Feedback, FeedbackAdmin)
 #admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(Projects_join_us)
 
-
-
-
-
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Document._meta.fields]

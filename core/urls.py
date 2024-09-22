@@ -20,6 +20,11 @@ from home import views
 
 from .admin import admin_statistics_view
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+
 handler404 = 'home.views.error_404_view'
 
 urlpatterns = [
@@ -70,3 +75,5 @@ urlpatterns = [
 ]
 
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

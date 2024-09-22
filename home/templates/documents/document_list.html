@@ -1,0 +1,162 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    {% include 'includes/pre-loader.html' %}
+
+    <!-- Messages Section -->
+    {% if messages %}
+        <div class="container mt-3">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <!-- End Messages Section -->
+
+    <!-- Hero Section -->
+    <section class="section-header bg-tertiary text-black py-2">
+        <div class="px-2 py-5 my-5 text-center">
+            <h1 class="fw-bold display-1">Documents Vault</h1>
+            <p class="lead mb-4">Explore all uploaded documents below.</p>
+        </div>
+    </section>
+    <!-- End of Hero Section -->
+
+    <!-- Document List -->
+    <section class="section section-lg bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center mb-4">
+                    <a href="{% url 'document_upload' %}" class="btn btn-custom-upload">
+                        <span class="me-1">
+                            <span class="fas fa-upload"></span>
+                        </span>
+                        Upload a New Document
+                    </a>
+                </div>
+            <form method="GET" action="{% url 'documents' %}" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search for documents" value="{{ request.GET.q }}">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+            
+
+            <div class="d-flex justify-content-end mb-4">
+                <!-- Sorting Dropdown -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort by
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown" style="background-color: rgb(247, 246, 246)">
+                        <li><a class="dropdown-item {% if request.GET.sort == 'newest' or not request.GET.sort %}active{% endif %}" href="?sort=newest" style="color: black">Newest</a></li>
+                        <li><a class="dropdown-item {% if request.GET.sort == 'alphabetical' %}active{% endif %}" href="?sort=alphabetical" style="color: black;">Alphabetical</a></li>
+                    </ul>
+                </div>
+
+                <!-- Filter Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter by
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="filterDropdown" style="background-color: rgb(247, 246, 246)">
+                        <li><a class="dropdown-item {% if request.GET.filter == 'pdf' %}active{% endif %}" href="?filter=pdf" style="color: black">PDF</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'word' %}active{% endif %}" href="?filter=word" style="color: black;">Word Document</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'xls' %}active{% endif %}" href="?filter=xls" style="color: black;">Excel File</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'txt' %}active{% endif %}" href="?filter=txt" style="color: black;">Text File</a></li>
+                        <li><a class="dropdown-item {% if request.GET.filter == 'csv' %}active{% endif %}" href="?filter=csv" style="color: black;">CSV File</a></li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <h2 class="text-center mb-4">Documents List</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Uploaded At</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                    <tr>
+                        <td>{{ document.title }}</td>
+                        <td>{{ document.description }}</td>
+                        <td>{{ document.uploaded_at|date:"F j, Y" }}</td>
+                        <td  style="white-space: nowrap;">
+                            <a href="{% url 'document_details' document.id %}" class="btn btn-outline-primary btn-sm">View</a>
+                            <a href="{{ document.file.url }}" class="btn btn-outline-secondary btn-sm">Download</a>
+                            <a href="{% url 'document_delete' document.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-center">No documents available.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1&sort={{ request.GET.sort }}">&laquo; First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort={{ request.GET.sort }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item disabled"><a class="page-link" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&sort={{ request.GET.sort }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&sort={{ request.GET.sort }}">Last &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </section>
+    <!-- End Document List -->
+
+    <!-- Join Us -->
+    <section class="section section-md">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 mt-4">
+                    <div class="card shadow mb-5">
+                        <div class="card-body px-4 py-4 text-center text-md-left">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h2 class="mb-3">Join Us Today!</h2>
+                                    <p class="mb-0">
+                                        Empower your future in cybersecurity! Join AppAttack and contribute to shaping a secure digital landscape. Explore opportunities, join us today!
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-6 mt-3 mt-md-0 text-md-right">
+                                    <a href="{% url 'appattack_join' %}" class="btn btn-primary">
+                                        <span class="me-1">
+                                            <span class="fas fa-handshake"></span>
+                                        </span>
+                                        Join Us
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Join Us -->
+
+</main>
+{% endblock content %}

@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
+from .views import Index, DetailArticleView, LikeArticle, CreateArticleView, ArticleDetailView, add_comment, UpskillingView, UpskillingSkillView, DocumentListView, DocumentDetailsView, DocumentUploadView, DocumentDeleteView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -62,16 +62,23 @@ urlpatterns = [
     path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
 
     # Blog URLs
-    path('blog/', Index.as_view(), name = 'blog'),
-    path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
-    path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+    path('blog/', Index.as_view(), name='blog'),
+    path('blog/new/', CreateArticleView.as_view(), name='new_article'),
+    path('blog/<int:pk>/', ArticleDetailView.as_view(), name='detail_article'),
+    path('blog/<int:article_id>/comment/', add_comment, name='add_comment'),
+    path('blog/<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+
+
+    #DocumentURLS
+    path('documents/', DocumentListView.as_view(), name='documents'),
+    path('documents/upload/', DocumentUploadView.as_view(), name='document_upload'),
+    path('documents/<uuid:document_id>/', DocumentDetailsView.as_view(), name='document_details'),
+    path('documents/<uuid:document_id>/delete/', DocumentDeleteView.as_view(), name='document_delete'),
     
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
    
-
-
     #Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
@@ -80,7 +87,7 @@ urlpatterns = [
 
     path('feedback/', views.feedback, name='feedback'),
 
-] 
+
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
