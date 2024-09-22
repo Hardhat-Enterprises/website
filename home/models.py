@@ -113,7 +113,7 @@ class Course(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     title = models.CharField(_("course title"), max_length=150, blank=True)
-    code = models.CharField(_("course code"), max_length=150, blank=True)
+    #code = models.CharField(_("course code"), max_length=150, blank=True)
     is_postgraduate = models.BooleanField(_("postgraduate status"), default=False)
 
     def __str__(self):
@@ -318,13 +318,7 @@ class UserChallenge(models.Model):
     completed = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
 
-
-
-class BlogPost(models.Model): 
-    title = models.CharField(max_length=255)
-    body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    page_name = models.CharField(max_length=100)
+    page_name = models.CharField(max_length=100, default=0)
 
     def __str__(self):
         return self.title
