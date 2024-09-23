@@ -10,6 +10,38 @@
     font-family: 'Roboto', sans-serif;
 }
 
+/* Modal Container */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  margin: 15% auto;
+  padding: 20px;
+  width: 30%;
+  background-color: white;
+  text-align: center;
+  border-radius: 8px;
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
 /* Body Background and Text Color */
 body {
     background-color: #fafafa;
@@ -150,6 +182,58 @@ footer p {
         <p>We are a diverse team of professionals, dedicated to delivering top-notch security solutions tailored for your business.</p>
     </div>
 
+    <!-- news letter pop-up-->
+    <!-- Trigger Button to Show Modal (Optional) -->
+    <button id="trigger-modal" style="display:none;">Open Newsletter Popup</button>
+
+    <!-- The Modal -->
+    <div id="newsletter-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Join Our Newsletter</h2>
+            <p>Stay updated with our latest projects and news.</p>
+            <input type="email" id="email-input" placeholder="Enter your email" required>
+            <br>
+            <button id="subscribe-button">Subscribe</button>
+        </div>
+    </div>
+
+    <script>
+        // Get modal and close button elements
+        const modal = document.getElementById('newsletter-modal');
+        const closeButton = document.querySelector('.close-button');
+        const subscribeButton = document.getElementById('subscribe-button');
+
+        // Show modal after 5 seconds
+        setTimeout(() => {
+            modal.style.display = 'flex'; // Make the modal visible
+        }, 5000);  // Change this value to adjust the delay
+
+        // Close modal when the close button is clicked
+        closeButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Optionally close modal if user clicks outside modal content
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Subscribe button logic (you can customize this as needed)
+        subscribeButton.addEventListener('click', () => {
+            const email = document.getElementById('email-input').value;
+            if (email) {
+                alert(`Thank you for subscribing with: ${email}`);
+                modal.style.display = 'none'; // Close modal after subscribing
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        });
+    </script>
+  
+
     <!-- Team Grid (Using Flexbox for Responsive Layout) -->
     <div class="team-grid">
         <!-- Team Member 1 -->
@@ -161,6 +245,7 @@ footer p {
                 <p>John has over 15 years of experience in cloud security. He founded Hardhat Enterprises to revolutionize enterprise security solutions worldwide.</p>
             </div>
         </div>
+        
         
         <!-- Team Member 2 -->
         <div class="team-member">
