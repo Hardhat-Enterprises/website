@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardhat Enterprises - Newsletter Popup</title>
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Modal Container */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Close Button */
+        .close-button {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Input Field */
+        input[type="email"] {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Subscribe Button */
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Trigger Button to Show Modal (Optional) -->
+    <button id="trigger-modal" style="display:none;">Open Newsletter Popup</button>
+
+    <!-- The Modal -->
+    <div id="newsletter-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Join Our Newsletter</h2>
+            <p>Stay updated with our latest projects and news.</p>
+            <input type="email" id="email-input" placeholder="Enter your email" required>
+            <br>
+            <button id="subscribe-button">Subscribe</button>
+        </div>
+    </div>
+
+    <script>
+        // Get modal and close button elements
+        const modal = document.getElementById('newsletter-modal');
+        const closeButton = document.querySelector('.close-button');
+        const subscribeButton = document.getElementById('subscribe-button');
+
+        // Show modal after 5 seconds
+        setTimeout(() => {
+            modal.style.display = 'flex'; // Make the modal visible
+        }, 5000);  // Change this value to adjust the delay
+
+        // Close modal when the close button is clicked
+        closeButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Optionally close modal if user clicks outside modal content
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Subscribe button logic (you can customize this as needed)
+        subscribeButton.addEventListener('click', () => {
+            const email = document.getElementById('email-input').value;
+            if (email) {
+                alert(`Thank you for subscribing with: ${email}`);
+                modal.style.display = 'none'; // Close modal after subscribing
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        });
+    </script>
+
+</body>
+</html>
