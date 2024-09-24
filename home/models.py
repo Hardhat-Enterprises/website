@@ -321,8 +321,6 @@ class UserChallenge(models.Model):
 
 
 
-class BlogPost(models.Model):  #
-
 class BlogPost(models.Model): 
     title = models.CharField(max_length=255)
     body = models.TextField()
