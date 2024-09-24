@@ -80,19 +80,22 @@ urlpatterns = [
 
     path('feedback/', views.feedback, name='feedback'),
 
-] 
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
+
+    path('notifications/<int:notification_id>/read/', views.mark_notification_as_read, name='mark_notification_as_read'),
+
 
 
     #Feedback
     path('feedback/', views.feedback_view, name='feedback'),
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
 
-
 ]
+
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
