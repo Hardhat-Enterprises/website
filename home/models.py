@@ -6,8 +6,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
 
@@ -19,6 +21,7 @@ import secrets
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
+from django.db import models
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
@@ -89,11 +92,21 @@ class Webpage(models.Model):
 
 class Project(AbstractBaseSet):
 
+    PROJECT_CHOICES = [
+        ('AppAttack', 'AppAttack'),
+        ('Malware', 'Malware'),
+        ('PT-GUI', 'PT-GUI'),
+        ('Smishing_Detection', 'Smishing Detection'),
+        ('Deakin_CyberSafe_VR', 'Deakin CyberSafe VR'),
+        ('Deakin_Threat_Mirror', 'Deakin Threat Mirror'),
+        ('Company_Website_Development', 'Company Website Development'),
+    ]
+
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
-    title = models.CharField(_("project title"), max_length=150, blank=True)
+    title = models.CharField(_("project title"), max_length=150, choices=PROJECT_CHOICES, blank=False)
 
     def __str__(self) -> str:
-        return self.title
+        return self.get_title_display()
 
 
 class Course(AbstractBaseSet):
@@ -136,6 +149,22 @@ class Student(AbstractBaseSet):
         (SIT374, 'SIT374'),
     ]
 
+    COURSES = [
+        ('BDS', 'Bachelor of Data Science'),
+        ('BCS', 'Bachelor of Computer Science'),
+        ('BCYB', 'Bachelor of Cyber Security'),
+        ('BIT', 'Bachelor of Information Technology'),
+        ('BSE', 'Bachelor of Software Enginerring'),
+        ('BAI', 'Bachelor of AI'),
+        ('MAAI', 'Master of Applied AI'),
+        ('MDS', 'Master of Data Science'),
+        ('MIT', 'Master of Information Technology'),
+        ('MITM', 'Master of IT Management'),
+        ('MCS', 'Master of Cyber Security')
+
+    ]
+
+
     student_id_validator = StudentIdValidator()
 
     id = models.BigIntegerField(
@@ -152,10 +181,14 @@ class Student(AbstractBaseSet):
     year = models.PositiveIntegerField(blank=True)
     trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
     unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
-    course = models.ForeignKey(Course, on_delete=PROTECT, related_name="course", blank=True, null=True)
-    p1 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p1", blank=False, null=False)
-    p2 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p2", blank=False, null=False)
-    p3 = models.ForeignKey(Project, on_delete=PROTECT, related_name="p3", blank=False, null=False)
+    course = models.CharField(max_length=10, choices=COURSES, blank=True, null=True)
+    p1 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p1_preferences", null=True, blank=True)
+    p2 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p2_preferences", null=True, blank=True)
+    p3 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p3_preferences", null=True, blank=True)
+
+    def clean(self):
+        if self.p1 == self.p2 or self.p1 == self.p3 or self.p2 == self.p3:
+            raise ValidationError("Project preferences p1, p2, and p3 must be unique.")
     allocated = models.ForeignKey(Project, on_delete=PROTECT, related_name="allocated", blank=True, null=True)
     skills = models.ManyToManyField(Skill, through='Progress')
     
@@ -242,6 +275,10 @@ class Projects_join_us(models.Model):
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
 
+class Feedback(models.Model):
+    name = models.CharField(max_length=100)
+    feedback = models.TextField()
+    rating = models.CharField(max_length=20)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -280,4 +317,51 @@ class UserChallenge(models.Model):
     challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
+
+
+
+class BlogPost(models.Model): 
+    title = models.CharField(max_length=255)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    page_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+    
+
+
+    User = get_user_model()
+
+class Feedback(models.Model):
+    GENERAL_INQUIRY = 'general'
+    BUG = 'bug'
+    IMPROVEMENT = 'improvement'
+    FEATURE_REQUEST = 'feature'
+
+    FEEDBACK_TYPES = [
+        (GENERAL_INQUIRY, 'General Inquiry'),
+        (BUG, 'Bug Report'),
+        (IMPROVEMENT, 'Improvement Suggestion'),
+        (FEATURE_REQUEST, 'Request for a Feature')
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    feedback_type = models.CharField(
+        max_length=20,
+        choices=FEEDBACK_TYPES,
+    )
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        feedback_type_display = self.get_feedback_type_display()
+        return f"{feedback_type_display} - {self.created_at}"
+
 
