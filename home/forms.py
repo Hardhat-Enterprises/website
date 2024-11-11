@@ -1,11 +1,12 @@
 from django import forms
+import re
+from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile
 
 
 
@@ -143,7 +144,30 @@ class projects_JoinUsForm(forms.ModelForm):
     class Meta:
         model = Projects_join_us
         fields = ['name', 'email', 'message','page_name']
-        
+    
+class Upskilling_JoinProjectForm(forms.ModelForm):
+    p1 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
+    p2 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
+    p3 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
+
+    class Meta:
+        model = Student
+        fields = ['year', 'trimester', 'unit', 'course', 'p1', 'p2', 'p3']
+        widgets = {
+            'trimester': forms.Select(choices=Student.TRIMESTERS),
+            'unit': forms.Select(choices=Student.UNITS),
+            'course': forms.Select(choices=Student.COURSES),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        p1 = cleaned_data.get('p1')
+        p2 = cleaned_data.get('p2')
+        p3 = cleaned_data.get('p3')
+
+        if p1 and p2 and p3:
+            if len({p1, p2, p3}) < 3:
+                self.add_error(None, 'Project preferences must be unique.')
 
 
 class NewWebURL(forms.ModelForm):
@@ -151,4 +175,37 @@ class NewWebURL(forms.ModelForm):
         model = Webpage
         fields = ['id', 'url', 'title']
             
+class FeedbackForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True, label='Name')
+    feedback = forms.CharField(widget=forms.Textarea, required=True, label='Customer Feedback')
+    rating = forms.ChoiceField(choices=[
+        ('Excellent', 'Excellent'),
+        ('Good', 'Good'),
+        ('Poor', 'Poor'),
+        ('Disappointing', 'Disappointing')
+    ], required=True, label='Rating')
+User = get_user_model()
 
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+        labels = {
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First Name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last Name'
+            }),
+        }
+
+class ProfileUpdateForm(forms.ModelForm):  
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio']

@@ -1,22 +1,34 @@
-# Core
-django==4.2.7
-python-dotenv==1.0.0
-django-extensions==3.2.3
-factory-boy==3.3.0
-django-light==0.1.0.post3
 
+# Core
+Django==4.2.14
+asgiref==3.8.1
+django-extensions==3.2.3
+django-light==0.1.0.post3
+factory_boy==3.3.1
+Faker==27.4.0
+python-dotenv==1.0.1
+filelock==3.13.4
+six==1.16.0
 
 # UI
+django-crispy-forms==2.3
+crispy-bootstrap5==2024.2
 django-theme-pixel==1.0.3
+django-tinymce==4.1.0
 
 # Deployment
-whitenoise==6.5.0
-gunicorn==21.2.0
+whitenoise==6.7.0
+gunicorn==23.0.0
 
-# psycopg2-binary
-# mysqlclient
+# Utilities
+distlib==0.3.8
+packaging==24.1
+platformdirs==4.2.0
+python-dateutil==2.9.0.post0
+setuptools==73.0.1
+sqlparse==0.5.1
+virtualenv==20.25.1
+wheel==0.44.0
 
-#blog
-django-crispy-forms==2.0
-django-tinymce==3.7.1
-crispy-bootstrap5
+# Image Processing
+Pillow==9.5.0

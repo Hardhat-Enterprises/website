@@ -32,7 +32,11 @@ if not SECRET_KEY:
 # Render Deployment Code
 #DEBUG = False
 #original: 
-DEBUG = 'RENDER' not in os.environ
+# DEBUG = 'RENDER' not in os.environ
+PRODUCTION = 'RUN_MAIN' not in os.environ
+# Set DEBUG based on the environment. TO test 404 locally, set Debug = False.
+DEBUG = not PRODUCTION
+
 
 # Docker HOST
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -186,9 +190,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587 # For TLS, 465 for SSL
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'deakinhardhatwebsite@gmail.com'
-EMAIL_HOST_PASSWORD = 'dtrv xywy rpqq tozw'
-
+EMAIL_HOST_USER = 'hardhatcompanywebsite@gmail.com'
+EMAIL_HOST_PASSWORD = 'nuje nbmo cfqe skjb'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -202,3 +205,6 @@ MESSAGE_TAGS = {
 MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
