@@ -69,7 +69,9 @@ from .forms import FeedbackForm
  
  
 def index(request):
-    return render(request, 'pages/index.html')
+    show_announcement = True
+    announcement_message = "This is important message!!"
+    return render(request, 'pages/index.html',{'announcement_message': announcement_message, 'show_announcement': show_announcement})
 
 def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)
