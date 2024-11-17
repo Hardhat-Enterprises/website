@@ -70,9 +70,20 @@ from .forms import FeedbackForm
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
-    show_announcement = recent_announcement.isActive
-    announcement_message = recent_announcement.message
-    return render(request, 'pages/index.html',{'announcement_message': announcement_message, 'show_announcement': show_announcement})
+    
+    if recent_announcement:
+        show_announcement = recent_announcement.isActive
+        announcement_message = recent_announcement.message
+    else:
+        show_announcement = False
+        announcement_message = "Welcome! Stay tuned for updates."
+    
+    return render(
+        request, 
+        'pages/index.html', 
+        {'announcement_message': announcement_message, 'show_announcement': show_announcement}
+    )
+
 
 def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)
