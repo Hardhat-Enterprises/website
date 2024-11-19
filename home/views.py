@@ -314,7 +314,7 @@ def register(request):
         form = RegistrationForm()
  
     context = { 'form': form }
-    return render(request, 'pages/index.html', context)
+    return render(request, 'accounts/sign-up.html', context)
  
 @csrf_exempt
 def VerifyOTP(request):
