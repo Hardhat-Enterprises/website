@@ -304,6 +304,7 @@ body {
     --darkmode-secondary-button: #ffc107;
     --dm-bg-gray:#ffc107;
     --dm-bg-primary: #ffc107;
+    --collaspebs: #1c2540;
   }
 
 hr {
@@ -19482,7 +19483,11 @@ blockquote {
   .contact-info {
     text-align: center;
   }
-
+  .dark-mode{
+    .form-check-label{
+      display: none;
+    }
+  }
   .contact-image img {
     width: 80%; 
   }
@@ -19496,6 +19501,14 @@ blockquote {
   }
   .form-check-label {
     color: #FFCD11;
+  }
+
+  .modal-content{
+    background-color: var(--bs-primary);
+
+    .btn-primary{
+      background-color: var(--bs-yellow);
+    }
   }
 }
 
