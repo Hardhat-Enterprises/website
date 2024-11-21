@@ -228,21 +228,22 @@
 
   {% if show_announcement %}
   <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="announcementModalLabel">Announcement</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content shadow-lg border-0">
+        <div class="modal-header bg-primary text-center">
+          <h5 class="modal-title w-100 fw-bold" id="announcementModalLabel">🌟 Announcement 🌟</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <p>{{ announcement_message }}</p>
+        <div class="modal-body text-center">
+          <p class="fs-4">{{ announcement_message }}</p>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="modal-footer justify-content-center border-top-0">
+          <button type="button" class="btn btn-primary px-5" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
+  
   {% endif %}
   
 <script>
