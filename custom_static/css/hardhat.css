@@ -19525,6 +19525,25 @@ blockquote {
   display: block;
 }
 
+
+
+.navbar-profile-container {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.navbar-profile-container img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.navbar-profile-container span {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
 /* Basic styling for the Load More button */
 #load-more-btn {
     display: inline-block;
@@ -19552,5 +19571,6 @@ blockquote {
         color: #6c757d; /* Text color for disabled state */
         cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
     }
+
 
 
