@@ -229,6 +229,15 @@
   .datepicker-input.in-edit:focus, .datepicker-input.in-edit:active {
     box-shadow: 0 0 0.25em 0.25em rgba(28, 36, 59, 0.2); }
 
+#loading-indicator {
+      display: none; /* Initially hidden */
+      text-align: center; /* Center the loading text */
+      font-size: 18px; /* Font size */
+      color: #007bff; /* Color of the loading text (Bootstrap primary color) */
+      margin: 20px 0; /* Margin for spacing */
+      font-weight: bold; /* Bold text */
+  }
+
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
