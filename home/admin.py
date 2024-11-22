@@ -19,7 +19,7 @@ from .models import (
     Projects_join_us,
     CyberChallenge,
     UserChallenge,
-    Announcement
+    Announcement,
 
     # Logging
     SecurityEvent
