@@ -176,14 +176,37 @@ class NewWebURL(forms.ModelForm):
         fields = ['id', 'url', 'title']
             
 class FeedbackForm(forms.Form):
-    name = forms.CharField(max_length=100, required=True, label='Name')
-    feedback = forms.CharField(widget=forms.Textarea, required=True, label='Customer Feedback')
-    rating = forms.ChoiceField(choices=[
-        ('Excellent', 'Excellent'),
-        ('Good', 'Good'),
-        ('Poor', 'Poor'),
-        ('Disappointing', 'Disappointing')
-    ], required=True, label='Rating')
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'style': 'width: 100%;',
+            'placeholder': 'Your Name'
+        }),
+        max_length=100, 
+        required=True, 
+        label='Name'
+    )
+    
+    feedback = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'style': 'width: 100%; height: 200px;',
+            'placeholder': 'Share your feedback here...'
+        }),
+        required=True,
+        label='Customer Feedback'
+    )
+    
+    rating = forms.ChoiceField(
+        choices=[
+            ('Excellent', 'Excellent'),
+            ('Good', 'Good'),
+            ('Poor', 'Poor'),
+            ('Disappointing', 'Disappointing')
+        ],
+        required=True,
+        label='Rating'
+    )
 User = get_user_model()
 
 class UserUpdateForm(forms.ModelForm):
