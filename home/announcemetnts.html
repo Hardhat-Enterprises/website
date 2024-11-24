@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardhat Homepage</title>
+    <style>
+        /* Flash Message Styling */
+        #flash-message {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            padding: 15px;
+            background-color: #007bff; /* Blue background for visibility */
+            color: white; /* White text for contrast */
+            font-size: 1.2rem; /* Moderate font size */
+            text-align: center; /* Center-align the text */
+            z-index: 1000; /* Ensure the flash message is on top of other elements */
+            border-radius: 5px; /* Rounded edges for a polished look */
+            display: none; /* Initially hidden */
+            animation: swing 2s ease-in-out infinite;
+        }
+
+        /* Swing animation for announcements */
+        @keyframes swing {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(-10deg); }
+            50% { transform: translateX(-50%) rotate(10deg); }
+            75% { transform: translateX(-50%) rotate(-10deg); }
+            100% { transform: translateX(-50%) rotate(0deg); }
+        }
+
+        /* Main website content styling */
+        body {
+            font-family: Arial, sans-serif; /* Default font for clean appearance */
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5; /* Light gray background */
+            text-align: center;
+            padding-top: 80px; /* Add padding to prevent content overlap with the flash message */
+        }
+
+        .content {
+            padding: 20px; /* Add padding to the main content */
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Announcement Message -->
+    <div id="flash-message"></div>
+
+    <!-- Main Website Content -->
+    <div class="content">
+        <h1>Welcome to the Hardhat Homepage</h1>
+        <p>Your main website content goes here...</p>
+    </div>
+
+    <script>
+        /**
+         * Function to check for announcements.
+         * If announcements exist, displays them. Otherwise, hides the flash message or shows "No announcements".
+         */
+        function showAnnouncements() {
+            const announcements = getAnnouncements(); // Fetch announcements dynamically
+            const flashMessageElement = document.getElementById('flash-message');
+
+            if (announcements) {
+                // Show the announcement message
+                flashMessageElement.textContent = announcements;
+                flashMessageElement.style.display = 'block'; // Make it visible
+            } else {
+                // Hide the announcement or display "No announcements" (optional)
+                flashMessageElement.textContent = "No announcements at the moment.";
+                flashMessageElement.style.display = 'none'; // Comment this line if you want "No announcements" to be visible
+            }
+        }
+
+        /**
+         * Simulates fetching announcements from a server or database.
+         * Replace this with actual server calls or dynamic content.
+         */
+        function getAnnouncements() {
+            // Example: Replace with actual logic to fetch announcements
+            // Return an announcement string if there is one
+            // Return null or an empty string if there are no announcements
+
+            const announcement = "Don't miss the team meeting at 3 PM!";
+            // const announcement = null; // Uncomment to test no announcements
+
+            return announcement;
+        }
+
+        // Initialize the announcements on page load
+        document.addEventListener('DOMContentLoaded', showAnnouncements);
+    </script>
+</body>
+</html>
