@@ -62,7 +62,7 @@ urlpatterns = [
     
     path('feedback/', views.feedback, name='feedback'),
 
-    # Challenge URLs
+
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
