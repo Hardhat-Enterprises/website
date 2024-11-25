@@ -42,6 +42,18 @@
     <meta property="twitter:title" content="Hardhat Enterprises">
     <meta property="twitter:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
     <meta property="twitter:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
+
+    <!-- Content Security Policy -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self'; 
+    script-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline' https://buttons.github.io https://unpkg.com https://code.jquery.com https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com; 
+    style-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline'  https://fonts.googleapis.com; 
+    font-src 'self' https://fonts.gstatic.com; 
+    img-src 'self' data:;">
+
+    
+
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">

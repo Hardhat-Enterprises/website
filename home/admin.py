@@ -19,9 +19,10 @@ from .models import (
     Projects_join_us,
     CyberChallenge,
     UserChallenge,
-    Announcement
+    Announcement,
 
-
+    # Logging
+    SecurityEvent
 
 )
 
@@ -64,6 +65,10 @@ class ProgressAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
+
+@admin.register(SecurityEvent)
+class SecurityEventAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in SecurityEvent._meta.fields]
     
 #Webpage Search Model
 @admin.register(Webpage)
