@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Page</title>
+
+    <!-- Link to Google Fonts for Lato font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap">
+
+    <!-- Link to Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        /* Basic body styling for the page */
+        body {
+            font-family: "Lato", sans-serif;
+            background-color: #121212; /* Slightly lighter than pure black */
+            color: #FFD84A; /* Yellow color used in the Hardhat site */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Styling for the main form container */
+        .container {
+            background-color: #1F1F1F; /* Dark grey background for the form container */
+            padding: 40px 50px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 10px; /* Reduced border-radius for a sharper look */
+            border-top: 4px solid #FFD84A; /* Yellow border at the top */
+            position: relative;
+            text-align: center; /* Center-align text for a more cohesive look */
+        }
+
+        /* Styling for the header text */
+        .feedback-header {
+            font-size: 26px;
+            color: #FFD84A; /* Yellow color for the header */
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px; /* Add letter-spacing for a cleaner look */
+        }
+
+        /* Container for input fields with icons */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left; /* Left-align text within input groups */
+        }
+
+        /* Label styling */
+        .input-group label {
+            font-weight: bold;
+            display: block;
+            color: #FFD84A; /* Yellow color for labels */
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        /* Input and textarea styling */
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #2C2C2C; /* Slightly lighter grey for inputs */
+            color: #FFD84A; /* Yellow text */
+            border: 1px solid #FFD84A; /* Yellow border */
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        /* Styling for input and textarea fields on focus */
+        .input-group input:focus,
+        .input-group textarea:focus {
+            border-color: #FFD84A;
+            box-shadow: 0 0 8px rgba(255, 216, 74, 0.3);
+            outline: none;
+        }
+
+        /* Textarea specific styling */
+        .input-group textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        /* Icon styling within input fields */
+        .input-group .fa {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #FFD84A;
+            font-size: 18px;
+        }
+
+        /* Padding adjustment for inputs to accommodate icons */
+        .input-group input,
+        .input-group textarea {
+            padding-left: 40px;
+        }
+
+        /* Button styling */
+        .button {
+            width: 100%;
+            padding: 14px;
+            background-color: #FFD84A; /* Yellow background for the button */
+            color: #000000; /* Black text */
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            border-radius: 30px; /* Rounded edges for a softer button look */
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            letter-spacing: 1.2px; /* Slight letter-spacing for clarity */
+        }
+
+        /* Button hover effect */
+        .button:hover {
+            background-color: #FBD240; /* Slightly lighter yellow on hover */
+        }
+
+        /* Responsive styling adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .feedback-header {
+                font-size: 24px;
+            }
+
+            .input-group input,
+            .input-group textarea {
+                padding-left: 40px;
+            }
+
+            .input-group .fa {
+                font-size: 16px;
+            }
+
+            .button {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Main Feedback Form Container -->
+    <div class="container">
+        <!-- Feedback Form Header -->
+        <div class="feedback-header">Feedback</div>
+
+        <!-- Feedback Form -->
+        <form id="feedbackForm" action="/action_page.php" target="_blank" onsubmit="return validateForm()">
+            <!-- Name Input Field -->
+            <div class="input-group">
+                <i class="fa fa-user"></i> <!-- User Icon -->
+                <label for="name">Name</label>
+                <input id="name" type="text" name="Name" required>
+            </div>
+
+            <!-- Email Input Field -->
+            <div class="input-group">
+                <i class="fa fa-envelope"></i> <!-- Email Icon -->
+                <label for="email">Email</label>
+                <input id="email" type="email" name="Email" required>
+            </div>
+
+            <!-- Subject Input Field -->
+            <div class="input-group">
+                <i class="fa fa-pencil"></i> <!-- Subject Icon -->
+                <label for="subject">Subject</label>
+                <input id="subject" type="text" name="Subject" required>
+            </div>
+
+            <!-- Message Textarea Field -->
+            <div class="input-group">
+                <i class="fa fa-comments"></i> <!-- Message Icon -->
+                <label for="message">Message</label>
+                <textarea id="message" name="Message" required></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="button">Send</button>
+        </form>
+    </div>
+
+    <!-- JavaScript Function to Validate Form -->
+    <script>
+        function validateForm() {
+            let name = document.forms["feedbackForm"]["Name"].value;
+            let email = document.forms["feedbackForm"]["Email"].value;
+            let subject = document.forms["feedbackForm"]["Subject"].value;
+            let message = document.forms["feedbackForm"]["Message"].value;
+
+            // Ensure all fields are filled out before submitting
+            if (name == "" || email == "" || subject == "" || message == "") {
+                alert("All fields must be filled out");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+</body>
+
+</html>
