@@ -1,6 +1,24 @@
 {% load static %}
 
-<footer class="footer pt-6 pb-5 bg-secondary text-white">
+<footer class="footer pt-2 pb-0 bg-secondary text-white">
+  <hr class="bg-secondary my-1 my-lg-1" />
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 mb-md-0">
+        <a href="{% url 'index' %}" class="d-flex mb-3">
+          <img
+            src="{% static 'assets/img/brand/logo.svg' %}"
+            height="30"
+            class="me-2"
+            alt="hardhat Logo"
+          />
+          <p class="fw-bold footer-logo-text m-0 text-white">HardHat Enterprises</p>
+        </a>
+     </div>
+    </div>
+  </div>
+</div>
+
   <div class="container">
     <div class="row">
       <div class="col-md-4">
@@ -40,6 +58,14 @@
             </a>
           </li>
         </ul>
+        <div
+          class="d-flex text-center "
+          role="contentinfo"
+        >
+          <p class="fw-normal font-small mb-0 text-muted">
+            &copy; copyright 2023.
+          </p>
+        </div> 
       </div>
 
       
@@ -111,32 +137,11 @@
         </form>
       </div>
     </div>
-    <hr class="bg-secondary my-3 my-lg-5" />
-    <div class="row">
-      <div class="col mb-md-0">
-        <a href="{% url 'index' %}" class="d-flex justify-content-center mb-3">
-          <img
-            src="{% static 'assets/img/brand/logo.svg' %}"
-            height="30"
-            class="me-2"
-            alt="hardhat Logo"
-          />
-          <p class="fw-bold footer-logo-text m-0 text-white">HardHat Enterprises</p>
-        </a>
-        <div
-          class="d-flex text-center justify-content-center align-items-center"
-          role="contentinfo"
-        >
-          <p class="fw-normal font-small mb-0 text-muted">
-            &copy; copyright 2023.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
-    <div class="container mt-5">
-      <div class="alert alert-custom" role="alert">
+    
+    
+  <div class="d-flex" role="contentinfo">
+    <div class=" mb-2">
+      <div class="alert-custom font-small" role="alert">
         <strong>Last Updated:</strong> <span id="last-updated"></span>
       </div>
     </div>
