@@ -23,36 +23,51 @@
     <section>
         <div class="container">
             <div class="bg-primary-app text-dark py-5">
-                <div class="row g-5">
+                <div class="row g-5 justify-content-center">
                     <div class="col-12 col-md-6">
-                        <form method="post">
-                            {% csrf_token %}
-                            <!-- Form -->
-                            <div class="mb-4">
-                                <label for="name" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" placeholder="Enter your full name" id="name" name="fullname"
-                                    required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" placeholder="Enter your deakin email address"
-                                    id="email" name="email" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="mobile" class="form-label">Mobile</label>
-                                <input type="tel" class="form-control" placeholder="Enter your mobile" id="mobile" name="mobile"
-                                    required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="experience" class="form-label">Experience</label>
-                                <textarea class="form-control" id="experience" rows="4" name="message"
-                                    placeholder="Enter your prior experience"></textarea>
-                            </div>
-                            <div>
-                                <button class="btn btn-primary mt-4 mb-5" type="submit">Submit</button>
-                            </div>
-                        </form>
-                        <!--End of Form -->
+                        <div class="card border-0 p-4 shadow-lg">
+                            <form method="post">
+                                {% csrf_token %}
+                                <!-- Form -->
+                                <div class="mb-4">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1">
+                                            <span class="fas fa-user-circle"></span>
+                                        </span>
+                                        <input type="text" class="form-control" placeholder="Enter your full name" id="name" name="fullname" required>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="email" class="form-label">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon2">
+                                            <span class="fas fa-envelope"></span>
+                                        </span>
+                                        <input type="email" class="form-control" placeholder="Enter your deakin email address" id="email" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="mobile" class="form-label">Mobile</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon3">
+                                            <span class="fas fa-phone"></span>
+                                        </span>
+                                        <input type="tel" class="form-control" placeholder="Enter your mobile" id="mobile" name="mobile" required>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="experience" class="form-label">Experience</label>
+                                    <textarea class="form-control" id="experience" rows="4" name="message"
+                                        placeholder="Enter your prior experience"></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-secondary">Submit</button>
+                                </div>
+                            </form>
+                            <!--End of Form -->
+                        </div>
+                        
                     </div>
                     <!-- Why Join DDT Section -->
                     <div class="col-12 col-md-6">
