@@ -70,19 +70,28 @@ from .forms import FeedbackForm
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
+    max_age = 3600;
     
     if recent_announcement:
-        show_announcement = recent_announcement.isActive
-        announcement_message = recent_announcement.message
+        has_cookies = request.COOKIES.get('announcement')
+        if has_cookies:
+            show_announcement = False
+            announcement_message = recent_announcement.message
+        else:
+            show_announcement = recent_announcement.isActive
+            announcement_message = recent_announcement.message   
     else:
         show_announcement = False
         announcement_message = "Welcome! Stay tuned for updates."
     
-    return render(
+    response = render(
         request, 
         'pages/index.html', 
         {'announcement_message': announcement_message, 'show_announcement': show_announcement}
     )
+
+    response.set_cookie('announcement', 'True', max_age=max_age)
+    return response
 
 
 def error_404_view(request,exception):
