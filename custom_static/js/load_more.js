@@ -1,8 +1,12 @@
 $(document).ready(function() {
     $('#load-more-btn').click(function() {
         var page = $(this).data('page');
+
+        
+        $('#loading-indicator').show();
+
         $.ajax({
-            url: load_more_url, // URL should be passed dynamically from the template
+            url: load_more_url, 
             type: 'GET',
             data: {
                 'page': page
@@ -12,7 +16,6 @@ $(document).ready(function() {
                     $('#post-container').append(data.posts_html);
                 }
 
-                // Check if there are more posts to load
                 if (!data.has_next) {
                     $('#load-more-btn').prop('disabled', true).text('No More Posts');
                 } else {
@@ -21,6 +24,10 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.log('Error loading more posts:', error);
+            },
+            complete: function() {
+                
+                $('#loading-indicator').hide();
             }
         });
     });
