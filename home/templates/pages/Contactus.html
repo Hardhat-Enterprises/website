@@ -2,8 +2,6 @@
 {% load static %}
 {% block content %}
 
-
-
 <main>
   {% include 'includes/pre-loader.html' %}
   <!-- Section -->
@@ -19,15 +17,15 @@
           <p>For further information, please contact us using the details below:</p>
           <div class="icon-text">
             <i class="fas fa-map-marker-alt"></i>
-            <span> 221 Burwood Hwy, Burwood VIC 3125</span>
+            <span><a href="https://g.co/kgs/abekme1" target="_blank">221 Burwood Hwy, Burwood VIC 3125</a></span>
           </div>
           <div class="icon-text">
             <i class="fas fa-phone"></i>
-            <span> 04******</span>
+            <span><a href="tel:+614******">04******</a></span> <!-- Phone number link -->
           </div>
           <div class="icon-text">
             <i class="fas fa-envelope"></i>
-            <span> hardhat@gmail.com</span>
+            <span><a href="mailto:hardhat@gmail.com">hardhat@gmail.com</a></span>
           </div>
         </div>
       </div>
@@ -35,7 +33,7 @@
   </section>
   <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/form-image.jpg' %}">
     <div class="container contact-container">
-      <div class="ustify-content-center">
+      <div class="justify-content-center">
             <h1 class="text-center">Leave us a message</h1>
             <form action="/contact-central" method="post">
               <div class="form-row">
@@ -58,7 +56,6 @@
               {% csrf_token %}
             </form>
           </div>
-       
       </div>
     </div>
   </section>
