@@ -4,145 +4,137 @@
 
 
 
-    {% comment %} <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
-      <div class="container position-relative">
-          <a class="navbar-brand me-lg-5" href="/">
-              <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light">
-              <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark">
-          </a>
-          <div class="navbar-collapse collapse me-auto" id="navbar_global">
-              <div class="navbar-collapse-header">
-                  <div class="row">
-                      <div class="col-6 collapse-brand">
-                          <a href="/">
-                              <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo">
-                          </a>
-                      </div>
-                      <div class="col-6 collapse-close">
-                          <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
-                      </div>
-                  </div>
-              </div>
-              <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-                <li class="nav-item">
-                    <a href="{% url 'index' %}" class="nav-link">
-                        Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'about_us' %}" class="nav-link">
-                        About
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-                        Projects
-                        <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-                    </a>
-                    <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-                        <div class="row">
-                            <div class="col">
-                                <ul class="list-style-none mb-4">
-                                    <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
-                                    </li>
-                                    <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'malware_viz_main' %}">Malware</a>
-                                    </li>
-                                    <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
-                                    </li>
-                                     <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'smishing_detection_main' %}">Smishing Detection</a>
-                                    </li>
-                                    <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'Vr_main' %}">CyberSafe VR</a>
-                                    </li>
-                                    <li class="mb-2 menu-item">
-                                        <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
-                                    </li> 
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item nav-mobile-link">
-                    {% if request.user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="btn btn-outline-gray-100 me-md-3">
-                      Profile
-                    </a>
-                        <a href="{% url 'logout' %}" class="nav-link">Logout</a>            
-                    {% else %}
-                        <a href="{% url 'login' %}" class="nav-link">Sign In</a>            
-                    {% endif %}
-                </li>
-                <a href="{% url 'profile' %}" class="nav-link d-flex align-items-center me-3">
-
-              </ul>
-          </div>
-          <div class="d-flex align-items-center">              
-            {% if request.user.is_authenticated %}
-                <a href="{% url 'logout' %}"
-                   class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span class="fas fa-sign-out-alt me-2"></span> Logout</a>
-                   {% else %}
-                <a href="{% url 'login' %}"
-                    class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span class="fas fa-sign-in-alt me-2"></span> Sign In</a>            
-            {% endif %}
-              <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-      </nav> {% endcomment %}
-
-
-  
-      <nav
-    id="navbar-main"
-    aria-label="Primary navigation"
-    class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light"
-  >
+  {% comment %} <nav id="navbar-main" aria-label="Primary navigation"
+    class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
     <div class="container position-relative">
       <a class="navbar-brand me-lg-5" href="/">
-        <img
-          class="navbar-brand-dark"
-          src="{% static 'assets/img/brand/logo.svg' %}"
-          alt="Logo light"
-        />
-        <img
-          class="navbar-brand-light"
-          src="{% static 'assets/img/brand/logo.svg' %}"
-          alt="Logo dark"
-        />
+        <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light">
+        <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark">
+      </a>
+      <div class="navbar-collapse collapse me-auto" id="navbar_global">
+        <div class="navbar-collapse-header">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="/">
+                <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo">
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
+                aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
+            </div>
+          </div>
+        </div>
+        <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+          <li class="nav-item">
+            <a href="{% url 'index' %}" class="nav-link">
+              Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'about_us' %}" class="nav-link">
+              About
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Projects
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none mb-4">
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'malware_viz_main' %}">Malware</a>
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'smishing_detection_main' %}">Smishing Detection</a>
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'Vr_main' %}">CyberSafe VR</a>
+                    </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item nav-mobile-link">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="btn btn-outline-gray-100 me-md-3">
+              Profile
+            </a>
+            <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="nav-link">Sign In</a>
+            {% endif %}
+          </li>
+          <a href="{% url 'profile' %}" class="nav-link d-flex align-items-center me-3">
+
+        </ul>
+      </div>
+      <div class="d-flex align-items-center">
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span
+            class="fas fa-sign-out-alt me-2"></span> Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span
+            class="fas fa-sign-in-alt me-2"></span> Sign In</a>
+        {% endif %}
+        <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global"
+          aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  </nav> {% endcomment %}
+
+
+
+  <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
+    <div class="navbar-container position-relative">
+      <a class="navbar-brand me-lg-5" href="/">
+        <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light" />
+        <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark" />
       </a>
       <div class="navbar-collapse collapse me-auto dark-mode" id="navbar_global">
         <div class="navbar-collapse-header">
           <div class="row">
             <div class="col-4 collapse-brand">
               <a href="/">
-                <img
-                  src="{% static 'assets/img/brand/dark.svg' %}"
-                  alt="Themesberg logo"
-                />
+                <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo" />
               </a>
             </div>
             <div class="col-6 form-check form-switch dark-mode">
-              <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+              <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch"
+                id="flexSwitchCheckChecked">
               <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
             </div>
             <div class="col-2 collapse-close">
-              <a
-                href="#navbar_global"
-                class="fas fa-times"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbar_global"
-                aria-controls="navbar_global"
-                aria-expanded="false"
-                title="close"
-                aria-label="Toggle navigation"
-              ></a>
+              <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
+                aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
             </div>
 
           </div>
         </div>
+
+        <form class="position-relative Search-container mobile-search-bar" method=POST
+          action="{% url 'pages/search-results'%}">
+          {% csrf_token %}
+          <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
+          <button class="search-btn" type="submit"><ion-icon class="search-icon" name="search-sharp"></ion-icon></button>
+
+
+          <div id="suggestions" class="dropdown-content"></div>
+        </form>
         <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
           <li class="nav-item">
             <a href="{% url 'index' %}" class="nav-link"> Home </a>
@@ -150,32 +142,20 @@
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
-            <a
-              href="#"
-              class="nav-link dropdown-toggle"
-              id="frontPagesDropdown"
-              aria-expanded="false"
-              data-bs-toggle="dropdown"
-            >
+            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
               Upskilling
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div
-              class="dropdown-menu px-0 py-2 p-lg-4"
-              aria-labelledby="frontPagesDropdown"
-            >
+            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
               <div class="row">
                 <div class="col">
                   <ul class="list-style-none mb-4">
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'dashboard' %}"
-                        >Dashboard</a
-                      >
+                      <a class="menu-link" href="{% url 'dashboard' %}">Dashboard</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'upskilling' %}"
-                        >Skills</a
-                      >
+                      <a class="menu-link" href="{% url 'upskilling' %}">Skills</a>
                     </li>
                   </ul>
                 </div>
@@ -188,63 +168,54 @@
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
           </li>
+
           <li class="nav-item dropdown">
-            <a
-              href="#"
-              class="nav-link dropdown-toggle"
-              id="frontPagesDropdown"
-              aria-expanded="false"
-              data-bs-toggle="dropdown"
-            >
+            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
               Projects
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div
-              class="dropdown-menu px-0 py-2 p-lg-4"
-              aria-labelledby="frontPagesDropdown"
-            >
-              <div class="row">
-                <div class="col">
-                  <ul class="list-style-none mb-4">
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'appattack' %}"
-                        >AppAttack</a
-                      >
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'malware_viz_main' %}"
-                        >Malware (On Hold)</a
-                      >
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'ptgui_viz_main' %}"
-                        >PT-GUI</a
-                      >
-                    </li>
+            <div class="dropdown-menu pt-2" style=" @media (max-width: 1280px) {
+              border: 1px solid #ffcd11;
+            }" aria-labelledby="frontPagesDropdown">
 
 
-                    <li class="mb-2 menu-item">
-                      <a
-                        class="menu-link"
-                        href="{% url 'smishing_detection_main' %}"
-                        >Smishing Detection</a
-                      >
-                    </li>
-
-                
-                  <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'Vr_main' %}">Deakin CyberSafe VR</a>
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'appattack' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    AppAttack
                   </li>
-                  <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror (On Hold)</a>
-                  </li> 
+                </a>
+                <a class="menu-link" href="{% url 'malware_viz_main' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Malware (On Hold)
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'ptgui_viz_main' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    PT-GUI
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'smishing_detection_main' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Smishing Detection
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'Vr_main' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Deakin CyberSafe VR
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Deakin Threat mirror (On
+                    Hold)
+                  </li>
+                </a>
 
-                  </ul>
-                </div>
-              </div>
+              </ul>
             </div>
           </li>
-
 
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
@@ -252,16 +223,21 @@
               Blog
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-              <div class="row">
-                <div class="col">
-                  <ul class="list-style-none mb-4">
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'feedback' %}">User Experience</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+            <div class="dropdown-menu pt-2" style=" @media (max-width: 1280px) {
+              border: 1px solid #ffcd11;
+            }" aria-labelledby="frontPagesDropdown">
+
+
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'feedback' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    User Experience
+                  </li>
+                </a>
+
+              </ul>
+
+
             </div>
           </li>
 
@@ -271,94 +247,94 @@
 
         </ul>
 
-      
+
         {% comment %} <!--action="{% url 'pages/search-results'%}"--> {% endcomment %}
 
-       <form class="d-flex align-items-center" method=POST action="{% url 'pages/search-results'%}">
-          {% csrf_token %}
-          <input class="form-control mr-sm-2" type="search" style="margin-left: 50px;" name="q" placeholder="Search..." aria-label="Search">
-          <button class="btn btn-outline-gray-100 me-md-3 px-4" style="margin-left: 10px;" type="submit">Search</button>
-
-         <div id="suggestions" class="dropdown-content"></div>
-        </form>  
-</div>
+      </div>
       <div class="d-flex align-items-center">
         {% if request.user.is_authenticated %}
-      
-                  <!-- Show Logout Button if User is Authenticated -->
-        <a
-          href="{% url 'logout' %}"
-          class="btn btn-outline-gray-100 me-md-3"
-          ><span class="fas fa-sign-out-alt me-2"></span> Logout</a
-        >
-        
-          <!-- <a class="profile-container" href="{% url 'profile' %}"> -->
-              <img src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}" 
-                   class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-              <span>Profile</span>
 
+        <!-- Show Logout Button if User is Authenticated -->
+        <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
+            class="fas fa-sign-out-alt me-2"></span> Logout</a>
+
+        <!-- <a class="profile-container" href="{% url 'profile' %}"> -->
+        <img
+          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+        <span>Profile</span>
 
         {% else %}
-          <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
-          <div class="btn btn-outline-gray-100 me-md-3">
-            <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-              Sign In
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-              <div class="row">
-                <div class="col">
-                  <ul class="list-style-none mb-2">
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'login' %}">Team Sign In</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="#">Client Sign In</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-      
-          <!-- Sign Up Dropdown for Team/Client -->
-          <div class="btn btn-outline-gray-100 me-md-3">
-            <a href="#" class="fas fa-sign-in-alt me-2" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-              Sign Up
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-              <div class="row">
-                <div class="col">
-                  <ul class="list-style-none mb-2">
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'register' %}">Team Sign Up</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="#">Client Sign Up</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="sign-up-button-container">
+
+        
+        <form class="position-relative Search-container desktop-search-bar" method=POST
+          action="{% url 'pages/search-results'%}">
+          {% csrf_token %}
+          <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
+          <button class="search-btn" type="submit"><ion-icon class="search-icon" name="search-sharp"></ion-icon></button>
+
+          <div id="suggestions" class="dropdown-content"></div>
+        </form>
         {% endif %}
-      
-        <button
-          class="navbar-toggler ms-2"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbar_global"
-          aria-controls="navbar_global"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+
+          <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
+          <div class="position-relative sign-up-button-inner-container">
+            <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
+              class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
+                Sign In
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </span></button>
+            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'login' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Team Sign In
+                  </li>
+                </a>
+                <a class="menu-link " href="#">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Client Sign In
+                  </li>
+                </a>
+
+              </ul>
+            </div>
+          </div>
+
+          <!-- Sign Up Dropdown for Team/Client -->
+          <div class="position-relative sign-up-button-inner-container">
+            <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
+              class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
+                Sign Up
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </span></button>
+            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'register' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Team Sign Up
+                  </li>
+                </a>
+                <a class="menu-link" href="#">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Client Sign Up
+                  </li>
+                </a>
+
+              </ul>
+            </div>
+          </div>
+
+        <spam class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global"
+          aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-    <div class="form-check form-switch dark-mode res-hide">
-      <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
-      <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
+        </span>
+      </div>
+      <!-- <div class="form-check form-switch dark-mode res-hide">
+        <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+        <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
+      </div> -->
     </div>
     </div>
   </nav>
