@@ -48,7 +48,7 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-#Secure Cookies
+#Secure Cookies - Ensure cookies are only sent over HTTPS. Prevents JavaScript from accessing session cookies. Mitigate CSRF attacks by restricting cross-origin cookie sharing. Ensure CSRF cookies are sent over HTTPS only. Ensure DEBUG is set to False in production to avoid sensitive information exposure.
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Strict'
