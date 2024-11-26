@@ -9,95 +9,95 @@
     class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
     data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}"
   >
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-17 d-flex align-items-center justify-content-center">
-          <div
-            class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
-          >
-            <div class="text-center text-md-center mb-4 mt-md-6">
-              <img
-                src="{% static 'assets/img/pages/login/favicon.ico' %}"
-                alt="Logo"
-                class="mb-3"
-              />
-              <h1 class="mb-0 h3">Create an account</h1>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-17 d-flex align-items-center justify-content-center">
+        <div
+          class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
+        >
+          <div class="text-center text-md-center mb-4 mt-md-6">
+            <img
+              src="{% static 'assets/img/pages/login/favicon.ico' %}"
+              alt="Logo"
+              class="mb-3"
+            />
+            <h1 class="mb-0 h3">Create an account</h1>
+          </div>
+          <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <!-- Form -->
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
             </div>
-            <form method="post">
-              {% csrf_token %}
-              <!-- Form -->
-              {% for field in form %}
-              <div class="form-group mb-4">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                <div class="input-group">
-                  <span class="input-group-text" id="basic-addon3">
-                    <span
-                      class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"
-                    >
-                    </span>
+            {% endif %}
+            {% for field in form %}
+            <div class="form-group mb-4">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon3">
+                  <span
+                    class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"
+                  >
                   </span>
-                  {{ field }}
-                </div>
-                {% if field.name == 'email' %}
-                <span id="email-error" class="text-danger"></span>
-                {% elif field.name == 'password1' %}
-                <span id="password-error" class="text-danger"></span>
-                {% endif %}
-              </div>
-              <span class="text-danger"> {{ field.errors }} </span>
-              {% endfor %}
-              <div class="d-flex mb-4" style="margin-left: 31%">
-                <span class="fw-normal" style="margin-right: 0.4rem">
-                  <a
-                    onclick="get_rand_pass()"
-                    href="javascript:;"
-                    class="fw-bold text-underline"
-                    >Generate password</a
-                  >
                 </span>
-                <br />
-                <span>
-                  <a
-                    id="togglePasswordLink"
-                    onclick="togglePasswordVisibility()"
-                    href="javascript:;"
-                    class="fw-bold text-underline"
-                    >Show password</a
-                  >
-                </span>
+                {{ field }}
               </div>
-
-              <!-- Real-Time Password Requirements Checklist -->
-              <div class="form-group">
-                <label>Password must include:</label>
-                <ul class="password-requirements">
-                  <li id="length-check" class="text-danger"><i class="fas fa-times"></i> At least 8 characters</li>
-                  <li id="lowercase-check" class="text-danger"><i class="fas fa-times"></i> At least one lowercase letter</li>
-                  <li id="uppercase-check" class="text-danger"><i class="fas fa-times"></i> At least one uppercase letter</li>
-                  <li id="number-check" class="text-danger"><i class="fas fa-times"></i> At least one number</li>
-                  <li id="symbol-check" class="text-danger"><i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)</li>
-                </ul>
-              </div>
-
-              <!-- End of Form -->
-              <div class="d-grid">
-                <button type="submit" class="btn btn-warning btn-primary">
-                  Sign up
-                </button>
-              </div>
-            </form>
-            <div class="d-flex justify-content-center align-items-center mt-4">
-              <span class="fw-normal">
-                Already have an account?
-                <a href="{% url 'login' %}" class="fw-bold text-underline login-here"
-                  >Login here</a
+              <span class="text-danger"> {{ field.errors }}</span>
+            </div>
+            {% endfor %}
+            <div class="d-flex mb-4" style="margin-left: 31%">
+              <span class="fw-normal" style="margin-right: 0.4rem">
+                <a
+                  onclick="get_rand_pass()"
+                  href="javascript:;"
+                  class="fw-bold text-underline"
+                  >Generate password</a
+                >
+              </span>
+              <br />
+              <span>
+                <a
+                  id="togglePasswordLink"
+                  onclick="togglePasswordVisibility()"
+                  href="javascript:;"
+                  class="fw-bold text-underline"
+                  >Show password</a
                 >
               </span>
             </div>
+  
+            <!-- Real-Time Password Requirements Checklist -->
+            <div class="form-group">
+              <label>Password must include:</label>
+              <ul class="password-requirements">
+                <li id="length-check" class="text-danger"><i class="fas fa-times"></i> At least 8 characters</li>
+                <li id="lowercase-check" class="text-danger"><i class="fas fa-times"></i> At least one lowercase letter</li>
+                <li id="uppercase-check" class="text-danger"><i class="fas fa-times"></i> At least one uppercase letter</li>
+                <li id="number-check" class="text-danger"><i class="fas fa-times"></i> At least one number</li>
+                <li id="symbol-check" class="text-danger"><i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)</li>
+              </ul>
+            </div>
+  
+            <div class="d-grid">
+              <button type="submit" class="btn btn-warning btn-primary">
+                Sign up
+              </button>
+            </div>
+          </form>
+          <div class="d-flex justify-content-center align-items-center mt-4">
+            <span class="fw-normal">
+              Already have an account?
+              <a href="{% url 'login' %}" class="fw-bold text-underline login-here"
+                >Login here</a
+              >
+            </span>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  
   </section>
   {% include 'includes/footer.html' %}
 </main>

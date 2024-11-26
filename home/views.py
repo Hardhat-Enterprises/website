@@ -333,16 +333,23 @@ def VerifyOTP(request):
         print("OTP: ", userotp)
     return JsonResponse({'data': 'Hello'}, status=200)  
    
-# def signup(request):
-#     form = RegisterForm()
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Account created successfully! An OTP was sent to your Email")
-#             return redirect("verify-email", username=request.POST['username'])
-#     context = {"form": form}
-#     return render(request, "signup.html", context)
+def signup(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password1'])
+            user.save()
+            messages.success(request, "Account created successfully!")
+            return redirect('login')  # Replace 'login' with the name of your login URL
+        else:
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'accounts/sign-up.html', {'form': form})
+
+
 
 
 
