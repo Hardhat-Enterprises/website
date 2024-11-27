@@ -290,31 +290,62 @@ def password_gen(request):
  
  
 def register(request):
-    form = RegistrationForm()
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        form = RegistrationForm(request.POST)
-       
-        if form.is_valid():
-            form.save()
-            otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
-            print("Account created successfully! An OTP was sent to your email. Check!")
-            messages.success(request, "Account created successfully!")
-            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
-            # return redirect("verify-email", username=request.POST['first_name'])
+    try:
+        if request.method == 'POST':
+            print(f"POST Data: {request.POST}")  # Debugging log for POST data
+            form = RegistrationForm(request.POST)
+            
+            if form.is_valid():
+                try:
+                    user = form.save(commit=False)  # Save user instance without committing
+                    user.set_password(form.cleaned_data['password1'])  # Hash the password
+                    user.save()  # Save the user
+                    print("User saved successfully.")
+
+                    # Generate OTP and send email
+                    otp = random.randint(100000, 999999)
+                    email = form.cleaned_data.get('email')
+                    send_mail(
+                        subject="User Data",
+                        message=(
+                            f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
+                            "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                            "Regards, \nHardhat Enterprises"
+                        ),
+                        from_email="deakinhardhatwebsite@gmail.com",
+                        recipient_list=[email],
+                        fail_silently=False,
+                    )
+                    print(f"OTP sent to {email}.")
+
+                    # Redirect to verify token page with context
+                    messages.success(request, "Account created successfully! Check your email for the OTP.")
+                    return render(
+                        request,
+                        'accounts/verify_token.html',
+                        {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
+                    )
+                except Exception as e:
+                    print(f"Error saving user or sending email: {e}")
+                    print(traceback.format_exc())  # Print detailed traceback
+                    messages.error(request, "An error occurred while creating the account. Please try again.")
+            else:
+                print("Form is invalid. Errors:")
+                print(form.errors)  # Debugging log for form errors
+                messages.error(request, "Please fix the errors below.")
         else:
-            print("Registration failed!")
-    else:
-        form = RegistrationForm()
- 
-    context = { 'form': form }
-    return render(request, 'pages/index.html', context)
+            print("GET request received for registration.")
+            form = RegistrationForm()
+
+        context = {'form': form}
+        return render(request, 'accounts/sign-up.html', context)
+
+    except Exception as e:
+        # Catch any unexpected errors and print to the terminal
+        print(f"Unexpected error in register view: {e}")
+        print(traceback.format_exc())
+        messages.error(request, "An unexpected error occurred. Please try again later.")
+        return render(request, 'accounts/sign-up.html', {'form': RegistrationForm()})
  
 @csrf_exempt
 def VerifyOTP(request):
@@ -333,16 +364,32 @@ def VerifyOTP(request):
         print("OTP: ", userotp)
     return JsonResponse({'data': 'Hello'}, status=200)  
    
-# def signup(request):
-#     form = RegisterForm()
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Account created successfully! An OTP was sent to your Email")
-#             return redirect("verify-email", username=request.POST['username'])
-#     context = {"form": form}
-#     return render(request, "signup.html", context)
+def signup(request):
+    if request.method == 'POST':
+        print(f"POST Data: {request.POST}")  # Log incoming POST data for debugging
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save(commit=False)
+                user.set_password(form.cleaned_data['password1'])  # Hash the password
+                user.save()  # Save the user to the database
+                print("User saved to database.")  # Success log
+                messages.success(request, "Account created successfully!")
+                return redirect('login')  # Replace 'login' with your login URL
+            except Exception as e:
+                # Log any exception that occurs while saving the user
+                print(f"Error saving user: {e}")
+                raise  # Optional: Re-raise the exception for debugging
+        else:
+            print("Form is invalid. Errors:")
+            print(form.errors.as_json())  # Log form errors for debugging
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'accounts/sign-up.html', {'form': form})
+
+
 
 
 

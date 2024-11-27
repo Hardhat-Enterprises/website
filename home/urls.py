@@ -66,6 +66,11 @@ urlpatterns = [
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
     
+
+    # Login
+    path('accounts/register/', views.signup, name='signup'),
+
+
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
