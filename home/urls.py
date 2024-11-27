@@ -35,10 +35,10 @@ urlpatterns = [
     path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 
 
-   path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
-   path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
-   path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
-   path('dashboard/', views.dashboard, name='dashboard'),
+    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
+    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
+    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+    path('dashboard/', views.dashboard, name='dashboard'),
 
 
 
@@ -68,7 +68,7 @@ urlpatterns = [
     
     path('feedback/', views.feedback, name='feedback'),
 
-] 
+
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
