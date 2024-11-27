@@ -25,6 +25,8 @@ from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 from django.db import models
 
+from bleach import clean
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     A User model with admin-compliant permissions.
@@ -210,12 +212,14 @@ class Student(AbstractBaseSet):
 
 
 class Contact(models.Model):
-    name=models.CharField(max_length=100)
-    email=models.CharField(max_length=200)
-    message=models.TextField(max_length=1000)
-    
-    def __str__(self):
-        return self.name
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    message = models.TextField(max_length=1000)
+
+    def save(self, *args, **kwargs):
+        self.name = clean(self.name, tags=[], attributes={})
+        self.message = clean(self.message, tags=[], attributes={})
+        super(Contact, self).save(*args, **kwargs)
 
 class DDT_contact(models.Model):
     fullname=models.CharField(max_length=100)

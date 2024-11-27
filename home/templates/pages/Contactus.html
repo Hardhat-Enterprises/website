@@ -38,6 +38,7 @@
       <div class="ustify-content-center">
             <h1 class="text-center">Leave us a message</h1>
             <form action="/contact-central" method="post">
+              {% csrf_token %}
               <div class="form-row">
                 <div class="form-group col-md-12">
                   <label for="name">Name</label>
@@ -55,10 +56,15 @@
               <div class="pt-3 text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
-              {% csrf_token %}
             </form>
-          </div>
-       
+
+            {% if message %}
+            <div class="user-message">
+              <h3>Thank you for your message:</h3>
+              <p>{{ message }}</p>
+            </div>
+            {% endif %}
+
       </div>
     </div>
   </section>
