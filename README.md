@@ -19,7 +19,7 @@ Step 2: Launch the bash console. Run the command ‘git clone https://github.com
 
 Step 3: Create a virtual environment using the command – ‘mkvirtualenv <virtual environment name>’. The name of the virtual environment can be anything. Keeping it simple and short is recommended. In this case, I have used ‘venv’ as the environment name.
 
-Step 4: Once the virtual environment is created, the necessary tools and dependencies need to be instmkvirtualenv <virtual environment name>alled in it using the command- ‘pip install -r requirements.txt’. This command will install all the necessary tools with the correct versions that are needed to launch the website. 
+Step 4: Once the virtual environment is created, the necessary tools and dependencies need to be installed in it using the command- ‘pip install -r requirements.txt’. This command will install all the necessary tools with the correct versions that are needed to launch the website. 
 
 Step 5: After that, we have to open the ‘web’ configuration page by clicking the ‘Web’ button on the top right option panel. In the config page, we have to add the exact name of the virtual environment name in the virtual environment section. 
 
