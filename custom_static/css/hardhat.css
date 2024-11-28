@@ -304,7 +304,6 @@ body {
     --darkmode-secondary-button: #ffc107;
     --dm-bg-gray:#ffc107;
     --dm-bg-primary: #ffc107;
-    --collaspebs: #1c2540;
   }
 
 hr {
@@ -7156,7 +7155,7 @@ textarea.form-control-lg {
   margin-right: 0.25rem !important; }
 
 .me-2 {
-  margin-right: 0.2rem !important; }
+  margin-right: 0.5rem !important; }
 
 .me-3 {
   margin-right: 1rem !important; }
@@ -19483,18 +19482,10 @@ blockquote {
   .contact-info {
     text-align: center;
   }
-  .dark-mode{
-    .form-check-label{
-      display: none;
-    }
-  }
+
   .contact-image img {
     width: 80%; 
   }
-  .section-header {
-    position: relative;
-    padding-top: 14rem;
-    padding-bottom: 3rem; }
 }
 
 
@@ -19505,14 +19496,6 @@ blockquote {
   }
   .form-check-label {
     color: #FFCD11;
-  }
-
-  .modal-content{
-    background-color: var(--bs-primary);
-
-    .btn-primary{
-      background-color: var(--bs-yellow);
-    }
   }
 }
 
@@ -19542,25 +19525,6 @@ blockquote {
   display: block;
 }
 
-
-
-.navbar-profile-container {
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-}
-
-.navbar-profile-container img {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-}
-
-.navbar-profile-container span {
-  margin-left: 10px;
-  font-size: 14px;
-}
-
 /* Basic styling for the Load More button */
 #load-more-btn {
     display: inline-block;
@@ -19588,4 +19552,5 @@ blockquote {
         color: #6c757d; /* Text color for disabled state */
         cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
     }
+
 

@@ -19,10 +19,9 @@ from .models import (
     Projects_join_us,
     CyberChallenge,
     UserChallenge,
-    Announcement,
 
-    # Logging
-    SecurityEvent
+
+
 
 )
 
@@ -65,10 +64,6 @@ class ProgressAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
-
-@admin.register(SecurityEvent)
-class SecurityEventAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in SecurityEvent._meta.fields]
     
 #Webpage Search Model
 @admin.register(Webpage)
@@ -82,13 +77,6 @@ class CyberChallengeAdmin(admin.ModelAdmin):
 @admin.register(UserChallenge)
 class UserChallengeAdmin(admin.ModelAdmin):
     list_display = ['user', 'challenge', 'completed', 'score']
-
-@admin.register(Announcement)
-class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ['message', 'isActive', 'created_at']
-    list_filter = ['isActive', 'created_at']
-    search_fields = ['message']
-    readonly_fields = ['created_at']
     
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):

@@ -108,24 +108,11 @@
               <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
           </svg>
       </figure>
-    <!-- Subresource Integrity -->
-    <script type="module"
-    src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
-    crossorigin="anonymous">
-    </script>
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <!-- Popper.js -->
-    <script type="module"
-    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" 
-    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" 
-    crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <!-- Bootstrap JS -->
-    <script type="module"
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
-    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" 
-    crossorigin="anonymous">
-    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </section>
   
   <!-- Projects -->
@@ -238,37 +225,6 @@
       <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
     </svg></figure>
   </section>
-
-  {% if show_announcement %}
-  <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content shadow-lg border-0">
-        <div class="modal-header text-center">
-          <h5 class="modal-title w-100 fw-bold" id="announcementModalLabel">🌟 Announcement 🌟</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-          <p class="fs-4">{{ announcement_message }}</p>
-        </div>
-        <div class="modal-footer justify-content-center border-top-0">
-          <button type="button" class="btn btn-primary px-5" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  {% endif %}
-  
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM fully loaded");
-    setTimeout(function() {
-        console.log("Showing announcement modal");
-        var announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
-        announcementModal.show();
-    }, 3000);
-});
-</script>
 
 </main>
 

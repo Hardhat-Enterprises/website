@@ -38,7 +38,7 @@ import json
 from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 
-from home.models import Announcement
+ 
  
 # import os
  
@@ -69,30 +69,7 @@ from .forms import FeedbackForm
  
  
 def index(request):
-    recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
-    max_age = 3600;
-    
-    if recent_announcement:
-        has_cookies = request.COOKIES.get('announcement')
-        if has_cookies:
-            show_announcement = False
-            announcement_message = recent_announcement.message
-        else:
-            show_announcement = recent_announcement.isActive
-            announcement_message = recent_announcement.message   
-    else:
-        show_announcement = False
-        announcement_message = "Welcome! Stay tuned for updates."
-    
-    response = render(
-        request, 
-        'pages/index.html', 
-        {'announcement_message': announcement_message, 'show_announcement': show_announcement}
-    )
-
-    response.set_cookie('announcement', 'True', max_age=max_age)
-    return response
-
+    return render(request, 'pages/index.html')
 
 def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)

@@ -76,14 +76,5 @@
         "is_active": true,
         "title": "AppAttack"
     }
-},
-{
-    "model": "home.announcement",
-    "pk": 1,
-    "fields": {
-        "message": "This is important announcement!!",
-        "isActive": true,
-        "created_at": "2024-01-01T00:00:00Z"
-    }
 }
 ]

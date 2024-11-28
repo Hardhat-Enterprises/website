@@ -5,15 +5,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from django.core.exceptions import ValidationError
-import logging
-import re
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile
 
 
-
-logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -95,34 +90,7 @@ class UserLoginForm(AuthenticationForm):
             label=_("Password"),
             strip=False,
             widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
-        )
-    def __init__(self, request=None, *args, **kwargs):
-        super().__init__(request, *args, **kwargs)
-        self.request = request
-
-    def confirm_login_allowed(self, user):
-        super().confirm_login_allowed(user)
-        # Log successful login event
-        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
-        SecurityEvent.objects.create(
-            user=user,
-            event_type='login_success',
-            ip_address=ip_address,
-            details='User logged in successfully.'
-        )
-        print(f'User {user} logged in successfully.')
-
-    def get_invalid_login_error(self):
-        # Log failed login event
-        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
-        SecurityEvent.objects.create(
-            user=None,  # No user as login failed
-            event_type='login_failure',
-            ip_address=ip_address,
-            details=f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}'
-        )
-        print(f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}')
-        return super().get_invalid_login_error()
+        )   
 
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
@@ -208,37 +176,14 @@ class NewWebURL(forms.ModelForm):
         fields = ['id', 'url', 'title']
             
 class FeedbackForm(forms.Form):
-    name = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'style': 'width: 100%;',
-            'placeholder': 'Your Name'
-        }),
-        max_length=100, 
-        required=True, 
-        label='Name'
-    )
-    
-    feedback = forms.CharField(
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'style': 'width: 100%; height: 200px;',
-            'placeholder': 'Share your feedback here...'
-        }),
-        required=True,
-        label='Customer Feedback'
-    )
-    
-    rating = forms.ChoiceField(
-        choices=[
-            ('Excellent', 'Excellent'),
-            ('Good', 'Good'),
-            ('Poor', 'Poor'),
-            ('Disappointing', 'Disappointing')
-        ],
-        required=True,
-        label='Rating'
-    )
+    name = forms.CharField(max_length=100, required=True, label='Name')
+    feedback = forms.CharField(widget=forms.Textarea, required=True, label='Customer Feedback')
+    rating = forms.ChoiceField(choices=[
+        ('Excellent', 'Excellent'),
+        ('Good', 'Good'),
+        ('Poor', 'Poor'),
+        ('Disappointing', 'Disappointing')
+    ], required=True, label='Rating')
 User = get_user_model()
 
 class UserUpdateForm(forms.ModelForm):
