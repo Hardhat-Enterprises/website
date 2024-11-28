@@ -65,7 +65,7 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Strict'
 
 #Ensure DEBUG is set to False in production to avoid sensitive information exposure
-DEBUG = False
+DEBUG = True
 
 
 # Application definition
