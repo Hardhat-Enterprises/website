@@ -9,6 +9,8 @@ Ex: <script src="{% static 'js/handleFormSubmit.js' %}"></script>
 
 3.In the form tag just add onsubmit=”handelFormSubmit(event)”
 
+4. Make sure you added crf token to form ex: {% csrf_token %}
+
 */
 function handleFormSubmit(event) {
   // Prevent default behavior so we can control the submission
@@ -37,6 +39,7 @@ function handleFormSubmit(event) {
         document.getElementById("form-body").style.display = "none";
       } else {
         // Handle errors
+        print(response.ok);
         alert("There was an error submitting the form. Please try again.");
       }
     })

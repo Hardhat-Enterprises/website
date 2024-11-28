@@ -265,6 +265,8 @@
             </div>
             <div id="form-body" class="card-body pt-0">
               <form id="contactForm" action="/contact" method="post" onsubmit="handleFormSubmit(event)">
+                {% csrf_token %}
+
                 <!-- Form -->
                 <div class="mb-4">
                   <label for="name">Your Name</label>
