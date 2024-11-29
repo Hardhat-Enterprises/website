@@ -1,33 +1,59 @@
-# [Hardhat Enterprises](https://hardhat.pythonanywhere.com/)
+# Hardhat Enterprises Deployment Process
 
-Hardhat Enterprises is an organization that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company will be open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met. 
+1. **Create an Account on PythonAnywhere**
+   - Go to [PythonAnywhere](https://www.pythonanywhere.com) and sign up for a free account (Beginner tier).
+   - Use the following credentials to log in:
+     - Username: `hardhatwebdev2024`
+     - Email: `s222340498@deakin.edu.au`
+     - Password: `consult lead`
+     - Web app domain: `hardhatwebdev2024.pythonanywhere.com`
 
-# [Hardhat Enterprises](hardhatwebdev2024.pythonanywhere.com/) T2 2024
-[Note: The Hardhat website has been deployed already. Below is the rundown of how it can be deployed from PythonAnywhere. For T1 2024, it already has been deployed. It can be accessed through this domain: hardhatwebdev2024.pythonanywhere.com ]
+2. **Clone the GitHub Repository**
+   - Open the **Bash console** in PythonAnywhere.
+   - Run the following command to clone the GitHub repository:
+     ```bash
+     git clone https://github.com/Hardhat-Enterprises/website.git
+     ```
 
-Deploying HardHat Website from Python Anywhere Platform
-For launching the Hardhat website, we have chosen the Python Anywhere platform since it offers free tiers and the website can be hosted for three months without any charge or cost. 
-In this document, I will describe the process of deploying the website from the platform with the steps necessary.
+3. **Create a Virtual Environment**
+   - In the Bash console, create a virtual environment by running:
+     ```bash
+     mkvirtualenv venv
+     ```
+   - (You can replace `venv` with any other name for the environment.)
 
-Step 1: First, a user account needs to be opened using the free tier (Beginners). In this case, the login credentials are:
-Username: hardhatwebdev2024;
-Email: s222340498@deakin.edu.au;
-Password: "consult lead";
-Web app domain: hardhatwebdev2024.pythonanywhere.com
+4. **Install Dependencies**
+   - Install the necessary dependencies by running:
+     ```bash
+     pip install -r requirements.txt
+     ```
 
-Step 2: Launch the bash console. Run the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
+5. **Configure the Web Application**
+   - In the **Web** tab on the PythonAnywhere dashboard, click the **Web** button.
+   - In the **Virtualenv** section, set the virtual environment to the one you created (`venv`).
 
-Step 3: Create a virtual environment using the command – ‘mkvirtualenv <virtual environment name>’. The name of the virtual environment can be anything. Keeping it simple and short is recommended. In this case, I have used ‘venv’ as the environment name.
+6. **Configure the WSGI File**
+   - In the **Web** configuration page, under the **Code** section, click on the **WSGI Configuration File**.
+   - Uncomment the relevant code in the **Django** section and set the path to the cloned repository:
+     ```python
+     import os
+     from django.core.wsgi import get_wsgi_application
 
-Step 4: Once the virtual environment is created, the necessary tools and dependencies need to be installed in it using the command- ‘pip install -r requirements.txt’. This command will install all the necessary tools with the correct versions that are needed to launch the website. 
+     os.environ['DJANGO_SETTINGS_MODULE'] = 'website.settings'
+     application = get_wsgi_application()
+     ```
 
-Step 5: After that, we have to open the ‘web’ configuration page by clicking the ‘Web’ button on the top right option panel. In the config page, we have to add the exact name of the virtual environment name in the virtual environment section. 
+7. **Update `settings.py`**
+   - Open the `settings.py` file from the **Files** tab.
+   - Add the following URL to the `ALLOWED_HOSTS` section:
+     ```python
+     ALLOWED_HOSTS = ['hardhatwebdev2024.pythonanywhere.com']
+     ```
 
-Step 6: From the web config page, under the ‘Code’ section, the WSGI Configuration File needs to be opened and in the ‘Django’ section, the code lines need to be uncommented as shown. The path needs to be changed to the git repository. The os.environ [‘DJANGO_SETTINGS_MODULE’] = ‘<folder_name>.settings’ should be set accordingly. The <folder_name> needs to be replaced by the name of the folder in which the settings.py file is located.
+8. **Reload the Website**
+   - Once all configurations are set, go back to the **Web** tab and click the green **Reload** button.
+   - The website will now be live at the following URL: `https://hardhatwebdev2024.pythonanywhere.com/`.
 
-Step 7: We have to open the ‘settings.py’ config file from the ‘Files’ tab and add the Hardhat website URL as an allowed host in the ‘Allowed_Hosts’ option brackets. This will allow the website URL to launch the website whenever searched from any browser. 
-
-Step 8: After reloading the website using the green reload button on the Web configuration page, the URL can be used to check the deployed website.
 
 
 
