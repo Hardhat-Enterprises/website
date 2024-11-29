@@ -147,6 +147,7 @@
           <li class="nav-item">
             <a href="{% url 'index' %}" class="nav-link"> Home </a>
           </li>
+         
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
@@ -188,6 +189,7 @@
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
           </li>
+          
           <li class="nav-item dropdown">
             <a
               href="#"
@@ -265,6 +267,10 @@
             </div>
           </li>
 
+          <li class="nav-item">
+            <a href="{% url 'career-list' %}" class="nav-link"> Careers </a>
+          </li>
+          
           <li class="nav-item">
             <a class="nav-link" href="{% url 'challenge_list' %}">Cyber Challenges</a>
           </li>
