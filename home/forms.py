@@ -125,7 +125,7 @@ class UserLoginForm(AuthenticationForm):
         return super().get_invalid_login_error()
 
 class ClientLoginForm(AuthenticationForm):
-    username = UsernameField(label='Client Email Address',widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
+    username = UsernameField(label='Client Email Address',widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@gmail.com"}))
     password = forms.CharField(
             label=_("Password"),
             strip=False,
