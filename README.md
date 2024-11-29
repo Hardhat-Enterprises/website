@@ -1,7 +1,7 @@
 # Hardhat Enterprises Deployment Process
 
 1. **Create an Account on PythonAnywhere**
-   - Go to [PythonAnywhere](https://www.pythonanywhere.com) and sign up for a free account (Beginner tier).
+   - [PythonAnywhere](https://www.pythonanywhere.com)
    - Use the following credentials to log in:
      - Username: `hardhatwebdev2024`
      - Email: `s222340498@deakin.edu.au`
@@ -20,7 +20,7 @@
      ```bash
      mkvirtualenv venv
      ```
-   - (You can replace `venv` with any other name for the environment.)
+   
 
 4. **Install Dependencies**
    - Install the necessary dependencies by running:

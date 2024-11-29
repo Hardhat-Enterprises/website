@@ -1,81 +1,31 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
+<div id="loading-indicator" style="display:none;">Loading...</div>
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Hardhat Enterprises - Search Results</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="title" content="Hardhat Enterprises">
-    <meta name="author" content="Themesberg">
-    <meta name="description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
-    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}/">
-    <link rel="stylesheet" href="{% static 'css/hardhat.css' %}?v=2">
-    <style>
-        /* Style the loading indicator */
-        #loading-indicator {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px 40px;
-            border-radius: 8px;
-            font-size: 18px;
-            text-align: center;
-            z-index: 1000;
-        }
-    </style>
-</head>
-
-<body>
-    {% block header %}
-    {% include 'includes/navigation.html' %}
-    {% endblock header %}
-
-    {% block content %}
-    <div id="loading-indicator">Loading...</div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
-                <h1 class="fw-bolder">Search Results</h1>
-                {% if searched %}
-                <h5>You Searched For: "{{ searched }}"</h5>
-                {% endif %}
-            </div>
-
-            {% if webpages %}
-            <div class="col-12">
-                <h2>Webpages</h2>
-                <ul>
-                    {% for webpage in webpages %}
-                    <li><a href="{{ webpage.url }}">{{ webpage.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+            <h1 class="fw-bolder">Search Results</h1>
+            {% if searched %}
+            <h5>You Searched For: "{{ searched }}"</h5>
             {% endif %}
-
-            <!-- Add similar content blocks for users, projects, courses, etc., as needed -->
         </div>
+
+        {% if webpages %}
+        <div class="col-12">
+            <h2>Webpages</h2>
+            <ul>
+                {% for webpage in webpages %}
+                <li><a href="{{ webpage.url }}">{{ webpage.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if not webpages %}
+        <div class="col-12">
+            <h2>No results found for "{{ searched }}"</h2>
+        </div>
+        {% endif %}
     </div>
-    {% endblock content %}
-
-    {% block footer %}
-    {% include 'includes/footer.html' %}
-    {% endblock footer %}
-
-    <script>
-        // JavaScript to toggle the loading indicator
-        function showLoadingIndicator() {
-            document.getElementById("loading-indicator").style.display = "block";
-        }
-
-        function hideLoadingIndicator() {
-            document.getElementById("loading-indicator").style.display = "none";
-        }
-    </script>
-</body>
-
-</html>
+</div>
+{% endblock content %}
