@@ -90,7 +90,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'xss_logger': {  # This is mainly for XSS Attacks
+        'xss_logger': {
             'handlers': ['xss_file'],
             'level': 'WARNING',
             'propagate': False,
@@ -105,7 +105,7 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],  # Ensure this includes the correct directory
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

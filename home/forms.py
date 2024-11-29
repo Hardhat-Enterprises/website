@@ -8,9 +8,10 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 import logging
 import re
-from bleach import clean
+import nh3
 
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent
+from .validators import xss_detection
 
 
 
@@ -272,7 +273,12 @@ class ContactForm(forms.Form):
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
 
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        name = xss_detection(name)
+        return nh3.clean(name, tags=[], attributes=[], styles=[], link_rel=[])
+
     def clean_message(self):
         message = self.cleaned_data['message']
-        # Sanitizing the messages
-        return clean(message, tags=[], attributes={})
+        message = xss_detection(message)
+        return nh3.clean(message, tags=[], attributes=[], styles=[], link_rel=[])

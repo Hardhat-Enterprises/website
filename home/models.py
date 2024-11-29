@@ -25,7 +25,7 @@ from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 from django.db import models
 
-from bleach import clean
+import nh3
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
@@ -210,16 +210,16 @@ class Student(AbstractBaseSet):
 
 
 
-
+#Contact Model
 class Contact(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=1000)
 
     def save(self, *args, **kwargs):
-        self.name = clean(self.name, tags=[], attributes={})
-        self.message = clean(self.message, tags=[], attributes={})
-        super(Contact, self).save(*args, **kwargs)
+        self.name = nh3.clean(self.name, tags=[], attributes=[], styles=[], link_rel=[])
+        self.message = nh3.clean(self.message, tags=[], attributes=[], styles=[], link_rel=[])
+        super(Contact, nh3.self).save(*args, **kwargs)
 
 class DDT_contact(models.Model):
     fullname=models.CharField(max_length=100)
