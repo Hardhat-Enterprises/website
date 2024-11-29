@@ -17,7 +17,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience #Feedback 
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -29,13 +29,13 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm
 
 import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm, ExperienceForm
 
 
 from home.models import Announcement
@@ -254,20 +254,21 @@ def Vr_main(request):
 # Authentication
 
 
-
-
-
-
-
 def feedback(request):
     if request.method == 'POST':
-        form = FeedbackForm(request.POST)
+        form = ExperienceForm(request.POST)
         if form.is_valid():
-            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
-            return redirect('feedback')  # Redirect to the same page
+            form.save()  # Save the feedback to the database
+            return redirect('feedback')  # Redirect to clear the form
+
     else:
-        form = FeedbackForm()
-    return render(request, 'pages/feedback.html', {'form': form})
+        form = ExperienceForm()
+
+    # Retrieve recent feedback from the database
+    feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
+
+    return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
+
 
 
 ## Web-Form 
@@ -697,31 +698,20 @@ def projects_join_us(request, page_url, page_name):
 
 
 def feedback_view(request):
-    return render(request, 'pages/feedback.html')
-
-
-def submit_feedback(request):
     if request.method == 'POST':
-        feedback_type = request.POST.get('feedback_type')
-        content = request.POST.get('feedback_content')
+        form = ExperienceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('feedback')
+    else:
+        form = ExperienceForm()
 
-        Feedback.objects.create(
-            user=request.user if request.user.is_authenticated else None,
-            feedback_type=feedback_type,
-            content=content
-        )
+    feedbacks = Experience.objects.all().order_by('-created_at')
+    return render(request, 'feedback.html', {
+        'form': form,
+        'feedbacks': feedbacks
+    })
 
-        messages.success(request, 'Thank you for your feedback!')
-        return redirect('feedback')
-       #return redirect('thank_you') # Redirect to the thank you page after submission
-
-    return redirect('feedback')
-#def thank_you(request):
-    #return render(request, 'feedback/thank_you.html')
-    #return render('thank_you')
-
- 
-       # return context
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
