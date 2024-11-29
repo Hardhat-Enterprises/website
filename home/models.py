@@ -12,6 +12,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
+from django.db import models
+from django.utils import timezone
 
 
 from django.utils.text import slugify
@@ -275,6 +277,7 @@ class Projects_join_us(models.Model):
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
 
+
 class Feedback(models.Model):
     name = models.CharField(max_length=100)
     feedback = models.TextField()
@@ -364,4 +367,19 @@ class Feedback(models.Model):
         feedback_type_display = self.get_feedback_type_display()
         return f"{feedback_type_display} - {self.created_at}"
 
+class Announcement(models.Model):
+    message = models.TextField()
+    isActive = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+
+class SecurityEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    event_type = models.CharField(max_length=50)  # e.g., 'login_success', 'login_failure'
+    ip_address = models.GenericIPAddressField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    details = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
 

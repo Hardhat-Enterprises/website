@@ -27,7 +27,7 @@
 <section class="section-header bg-tertiary text-black">
     <div class="container">
 
-        <h1 class="fw-bolder display-2 text-center mb-lg-2">Want to Work with us</h1>
+        <h1 class="fw-bolder display-2 text-center mb-lg-4">Want to work with us?</h1>
       <div class="row mb-5">
         <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
           <div class="card border-0 overflow-hidden">
@@ -35,7 +35,7 @@
                 <img src="{% static 'assets/img/pages/appattack/icon.1.svg' %}" class="card-img-top" alt="Neil Portrait">
             </div>  
             <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
-              <h3 class="h5 card-title">Carrer</h3>
+              <h5 class="card-title" style="min-height: auto;">Carrer</h3>
               <p class="mt-3">If you're looking for a reliable place to grow, there's nowhere better than Hardhat. Our teams face some of the toughest technical challenges out there. Every day is a learning opportunity and you'll never get bored</p>
              
             </div>
@@ -47,7 +47,7 @@
                 <img src="{% static 'assets/img/pages/appattack/icon.7.png' %}" class="card-img-top" alt="Neil Portrait">
               </div>  
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
-                <h3 class="h5 card-title">Our Missons</h3>
+                <h5 class="card-title" style="min-height: auto;">Our Missons</h3>
                 <p class="mt-3">At HardHat, everyone works together to create cyber security for the world around us. The work we do has a real impact and you could be part of the team trusted to educate, protect, and defend organisations around the world</p>
              
             
@@ -60,7 +60,7 @@
                 <img src="{% static 'assets/img/pages/appattack/icon.8.png' %}" class="card-img-top" alt="Neil Portrait">
               </div>  
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
-                <h3 class="h5 card-title">Support</h3>
+                <h5 class="card-title" style="min-height: auto;">Support</h3>
                 <p class="mt-3">At Hardhat you are surrounded by the brightest minds. And, working across different specialist teams, you’ll gain exposure to the latest thinking as you solve our customers’ complex challenges.</p>
                 
               </div>
@@ -73,42 +73,65 @@
 
  <!-- form -->
 
- <div class="row justify-content-center" id="form-join">
-  <div class="col-12 col-md-10 text-center mb-4">
-    <h2>Send Us a Message</h2>
-    </div>
-    <div class="col-12 col-lg-8">
-    <form class="row g-3" action="/appattack/join" method="post">
-      {% csrf_token %}
-  <div class="col-mb-4">
-    <label for="validationDefault01" class="form-label align-items-center">First name</label>
-    <input type="text" class="form-control align-items-center" name="firstname" id="validationDefault01" required>
-  </div>
-  <div class="col-mb-4">
-    <label for="validationDefault02" class="form-label">Last name</label>
-    <input type="text" class="form-control" name="lastname" id="validationDefault02" required>
-  </div>
-  
-  <div class="mb-4">
-      <label for="email">Email</label>
-      <div class="input-group">
-        <span class="input-group-text" id="basic-addon4">
-          <span class="fas fa-envelope"></span>
-        </span>
-        <input type="email" class="form-control" name="email" placeholder="example@company.com" id="email" required="">
+ <section class="section section-lg">
+  <div class="container">
+      <div class="row justify-content-center">
+          <div class="col-12 col-lg-8">
+              <!-- Contact Card -->
+              <div class="card border-0 p-4 shadow-lg">
+                  <div class="card-header bg-white border-0 text-center">
+                      <h2>Send Us a Message</h2>
+                      <p>We'd love to hear from you! Let's talk about your ideas.</p>
+                  </div>
+                  <div class="card-body pt-0">
+                      <form action="/appattack/join" method="POST">
+                        {% csrf_token %}
+                          <!-- Name Input -->
+                          <div class="mb-4">
+                              <label for="validationDefault01">First Name</label>
+                              <div class="input-group">
+                                  <span class="input-group-text" id="basic-addon1">
+                                      <span class="fas fa-user-circle"></span>
+                                  </span>
+                                  <input type="text" class="form-control" placeholder="e.g. John" id="validationDefault01" name="firstname" required>
+                              </div>
+                          </div>
+                          <div class="mb-4">
+                              <label for="validationDefault02">Last Name</label>
+                              <div class="input-group">
+                                  <span class="input-group-text" id="basic-addon2">
+                                      <span class="fas fa-user-circle"></span>
+                                  </span>
+                                  <input type="text" class="form-control" placeholder="e.g. Whare" id="validationDefault02" name="lastname" required>
+                              </div>
+                          </div>
+                          <!-- Email Input -->
+                          <div class="mb-4">
+                              <label for="email">Email</label>
+                              <div class="input-group">
+                                  <span class="input-group-text" id="basic-addon4">
+                                      <span class="fas fa-envelope"></span>
+                                  </span>
+                                  <input type="email" class="form-control" placeholder="example@company.com" id="email" name="email" required>
+                              </div>
+                          </div>
+                          <!-- Message Input -->
+                          <div class="mb-4">
+                              <label for="message">Drop Message</label>
+                              <textarea placeholder="Your message" class="form-control" id="message" name="message" rows="4" required></textarea>
+                          </div>
+                          <!-- Submit Button -->
+                          <div class="d-grid">
+                              <button type="submit" class="btn btn-dark text-white">Send message</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+              <!-- End of Contact Card -->
+          </div>
       </div>
-    </div>
-
-    <div class="mb-4">
-      <label for="message">Drop a Message</label>
-      <textarea placeholder="Your message" class="form-control" name="message" id="message" rows="4" required=""></textarea>
-    </div>
- 
-  <div class="d-grid">
-    <button class="btn btn-primary" type="submit">Submit form</button>
   </div>
-</form>
-</div>
+</section>
 
 
 </main>

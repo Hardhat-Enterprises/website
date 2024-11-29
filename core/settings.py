@@ -206,5 +206,21 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
+# Prevent MIME type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Protect against clickjacking
+X_FRAME_OPTIONS = 'DENY'  # Use 'SAMEORIGIN' if the site needs to be embedded in iframes from the same origin
+
+# Enable XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Enforce HTTPS (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
