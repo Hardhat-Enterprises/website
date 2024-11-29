@@ -1,8 +1,9 @@
-from django_cron import CronJobBase, Schedule
-from django.utils import timezone
 from datetime import timedelta
 from home.models import ExampleModel
+from django_cron import CronJobBase, Schedule
+from django.utils import timezone
 
+#class for runing cron job
 class CleanStaleRecordsCronJob(CronJobBase):
     RUN_EVERY_MINS = 1440  # Run daily
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)

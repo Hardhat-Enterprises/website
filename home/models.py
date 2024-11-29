@@ -386,7 +386,7 @@ class SecurityEvent(models.Model):
     def __str__(self):
         return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
 
-
+#Example model for cron job
 class ExampleModel(models.Model):
     name = models.CharField(max_length=255)  
     updated_at = models.DateTimeField(auto_now=True)  # Automatically updates the timestamp on save
