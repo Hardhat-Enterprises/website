@@ -263,7 +263,9 @@ def Vr_main(request):
 # Authentication
 
 
-
+def client_login(request):
+    form = UserLoginForm
+    return render(request, 'accounts/sign-in-client.html',{'form': form})
 
 
 
