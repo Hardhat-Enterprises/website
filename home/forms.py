@@ -124,6 +124,41 @@ class UserLoginForm(AuthenticationForm):
         print(f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}')
         return super().get_invalid_login_error()
 
+class ClientLoginForm(AuthenticationForm):
+    username = UsernameField(label='Client Email Address',widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
+    password = forms.CharField(
+            label=_("Password"),
+            strip=False,
+            widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
+        )
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request, *args, **kwargs)
+        self.request = request
+
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+        # Log successful login event
+        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+        SecurityEvent.objects.create(
+            user=user,
+            event_type='login_success',
+            ip_address=ip_address,
+            details='User logged in successfully.'
+        )
+        print(f'User {user} logged in successfully.')
+
+    def get_invalid_login_error(self):
+        # Log failed login event
+        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+        SecurityEvent.objects.create(
+            user=None,  # No user as login failed
+            event_type='login_failure',
+            ip_address=ip_address,
+            details=f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}'
+        )
+        print(f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}')
+        return super().get_invalid_login_error()
+
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',

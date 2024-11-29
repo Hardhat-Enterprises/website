@@ -35,7 +35,7 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 
 from home.models import Announcement
@@ -264,7 +264,7 @@ def Vr_main(request):
 
 
 def client_login(request):
-    form = UserLoginForm
+    form = ClientLoginForm
     return render(request, 'accounts/sign-in-client.html',{'form': form})
 
 
