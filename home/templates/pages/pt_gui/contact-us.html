@@ -1,0 +1,74 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+    {% include 'includes/pre-loader.html' %}
+    <!-- Hero Section -->
+    <div class="section-header bg-tertiary text-black py-5">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <div class="px-3 py-4 my-4 text-center"></div>
+                    <p class="lead mb-6">For any questions </p>
+                    <h1 class="fw-bold display-1">Contact Us</h1>
+                    <img width="400" height="400" src="{% static 'assets/img/pages/home/ptgui_contact.svg' %}"
+                        alt="Hero image">
+                </div>
+            </div>
+        </div>
+        <!--Contact Us -->
+        <section class="section section-lg bg-primary text-black py-5">
+            <div class="container">
+                <div class="card shadow mb-8">
+                    <div class="card-body px-5 py-5 text-center text-md-left">
+                        <div class="row align-items-center">
+                            <div class="row g-5">
+                                <div class="col-12 col-md-6">
+                                    <form>
+                                        <div class="mb-4">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName"
+                                                placeholder="Enter your first name">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName"
+                                                placeholder="Enter your last name">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="emailAddress" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="emailAddress"
+                                                placeholder="Enter your email address">
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="questionsAndQueries" class="form-label">Message</label>
+                                            <textarea class="form-control" id="questionsAndQueries" rows="4"
+                                                placeholder="Enter your questions or queries here"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary animate-up-1">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="lead fw-normal mb-2">
+                                        Feel free to reach out to us with any queries you have. Our team is ready to
+                                        assist you.</p>
+                                    <!-- Contact information -->
+                                    <p><strong>Phone:</strong> 0422 333 444</p>
+                                    <p><strong>Email:</strong> DDT@Email.com</p>
+                                    <p><strong>Address:</strong> 221 Burwood Highway, Burwood, VIC 3125</p>
+
+                                    <h1 class="fw-bolder display-5 mb-5 mt-5">Have any question in mind? <a
+                                            href="{% url 'faq' %}" class="btn btn-primary animate-up-1"><span
+                                                class="fas fa-th-large me-1"></span>FAQ!</a> </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+</main>
+
+{% endblock content %}

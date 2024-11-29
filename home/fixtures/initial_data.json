@@ -1,0 +1,89 @@
+[
+{
+    "model": "home.course",
+    "pk": "65a24bd1-5daa-4f2e-984e-6af58624bf4f",
+    "fields": {
+        "created_at": "2023-12-10T05:13:23.991Z",
+        "updated_at": "2023-12-10T05:13:23.991Z",
+        "is_active": true,
+        "title": "Bachelor of Cyber Security",
+        "code": "S334",
+        "is_postgraduate": false
+    }
+},
+{
+    "model": "home.course",
+    "pk": "7331b142-9449-40ed-abe7-bbe163818cfd",
+    "fields": {
+        "created_at": "2023-12-10T05:12:38.981Z",
+        "updated_at": "2023-12-10T05:12:38.981Z",
+        "is_active": true,
+        "title": "Bachelor of Data Science",
+        "code": "S379",
+        "is_postgraduate": false
+    }
+},
+{
+    "model": "home.course",
+    "pk": "7936e993-308c-476f-803e-c29944bc3c89",
+    "fields": {
+        "created_at": "2023-12-10T05:11:29.305Z",
+        "updated_at": "2023-12-10T05:11:29.305Z",
+        "is_active": true,
+        "title": "Master of Data Science",
+        "code": "S777",
+        "is_postgraduate": true
+    }
+},
+{
+    "model": "home.course",
+    "pk": "9fe960c4-c858-47ae-be70-612976e8059d",
+    "fields": {
+        "created_at": "2023-12-10T05:13:06.371Z",
+        "updated_at": "2023-12-10T05:13:06.371Z",
+        "is_active": true,
+        "title": "Master of Cyber Security",
+        "code": "S734",
+        "is_postgraduate": true
+    }
+},
+{
+    "model": "home.project",
+    "pk": "89c5f808-6a11-4609-b28e-6d242ef3c0e3",
+    "fields": {
+        "created_at": "2023-12-08T00:58:25.944Z",
+        "updated_at": "2023-12-08T00:58:25.944Z",
+        "is_active": true,
+        "title": "Malware Visualization"
+    }
+},
+{
+    "model": "home.project",
+    "pk": "8e97b8cc-7e7f-4177-afce-7eca90cde4e5",
+    "fields": {
+        "created_at": "2023-12-08T00:59:26.803Z",
+        "updated_at": "2023-12-08T00:59:26.803Z",
+        "is_active": true,
+        "title": "PenTesting GUI"
+    }
+},
+{
+    "model": "home.project",
+    "pk": "d5e7727f-7bff-40ac-ae88-a523e05a02d5",
+    "fields": {
+        "created_at": "2023-12-08T00:58:14.491Z",
+        "updated_at": "2023-12-08T00:58:14.491Z",
+        "is_active": true,
+        "title": "AppAttack"
+    }
+},
+{
+    "model": "home.announcement",
+    "pk": 1,
+    "fields": {
+        "message": "This is important announcement!!",
+        "isActive": true,
+        "created_at": "2024-01-01T00:00:00Z"
+    }
+}
+]

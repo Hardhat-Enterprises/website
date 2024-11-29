@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  <main class="pt-6">
+    {% include 'includes/pre-loader.html' %}
+
+    <div class="skill-detail px-3 mt-3">
+      <h1>{{ object.name }}</h1>
+      <p>{{ object.description }}</p>
+
+      {% block skill_content %}{% endblock %}
+    </div>
+  </main>
+{% endblock %}

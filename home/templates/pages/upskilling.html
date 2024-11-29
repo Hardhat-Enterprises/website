@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main class="pt-6 px-3 mt-3">
+  {% include 'includes/pre-loader.html' %}
+
+  <h1>Upskilling</h1>
+
+  {% for skill in object_list %}
+  <div>
+    <h2>
+        <a href="{% url 'upskilling_skill' slug=skill.slug %}">{{ skill.name }}</a>
+    </h2>
+  </div>
+  {% empty %}
+  <p>No skills assigned yet.</p>
+  {% endfor %}
+</main>
+{% endblock %}

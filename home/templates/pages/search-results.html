@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- Primary Meta Tags -->
+    <title>Hardhat Enterprises - Search Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="title" content="Hardhat Enterprises">
+    <meta name="author" content="Themesberg">
+    <meta name="description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}/">
+    <meta property="og:title" content="Hardhat Enterprises">
+    <meta property="og:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <meta property="og:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.scheme }}://{{ request.get_host }}/">
+    <meta property="twitter:title" content="Hardhat Enterprises">
+    <meta property="twitter:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
+    <meta property="twitter:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'assets/img/favicon/site.webmanifest' %}">
+    <link rel="mask-icon" href="{% static 'assets/img/favicon/safari-pinned-tab.svg' %}" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    
+    <!-- Fontawesome -->
+    <link type="text/css" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    
+    <!-- Pixel CSS -->
+    <link type="text/css" href="{% static 'css/hardhat.css' %}?v=2" rel="stylesheet">
+    
+</head>
+
+<body>
+
+  {% block header %}
+    {% include 'includes/navigation.html' %}
+  {% endblock header %}
+
+  {% block content %}
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+          <h1 class="fw-bolder">Search Results</h1>
+          {% if searched %}
+            <h5>You Searched For: "{{ searched }}"</h5>
+          {% endif %}
+        </div>
+
+        {% if webpages %}
+          <div class="col-12">
+            <h2>Webpages</h2>
+            <ul>
+              {% for webpage in webpages %}
+                <li><a href="{{ webpage.url }}">{{ webpage.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if users %}
+          <div class="col-12">
+            <h2>Users</h2>
+            <ul>
+              {% for user in users %}
+                <li>{{ user.get_full_name }} ({{ user.email }})</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if projects %}
+          <div class="col-12">
+            <h2>Projects</h2>
+            <ul>
+              {% for project in projects %}
+                <li>{{ project.title }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if courses %}
+          <div class="col-12">
+            <h2>Courses</h2>
+            <ul>
+              {% for course in courses %}
+                <li>{{ course.title }} ({{ course.code }})</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if skills %}
+          <div class="col-12">
+            <h2>Skills</h2>
+            <ul>
+              {% for skill in skills %}
+                <li>{{ skill.name }} - {{ skill.description }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if students %}
+          <div class="col-12">
+            <h2>Students</h2>
+            <ul>
+              {% for student in students %}
+                <li>{{ student.user.get_full_name }} ({{ student.user.email }})</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if contacts %}
+          <div class="col-12">
+            <h2>Contacts</h2>
+            <ul>
+              {% for contact in contacts %}
+                <li>{{ contact.name }} - {{ contact.email }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if articles %}
+          <div class="col-12">
+            <h2>Articles</h2>
+            <ul>
+              {% for article in articles %}
+                <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if not webpages and not users and not projects and not courses and not skills and not students and not contacts and not articles %}
+          <div class="col-12">
+            <h2>No results found for "{{ searched }}"</h2>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  {% endblock content %}
+
+  {% block footer %}
+    {% include 'includes/footer.html' %}
+  {% endblock footer %}
+
+  {% include 'includes/scripts.html' %}
+  {% block javascripts %}{% endblock javascripts %}
+<!--Subresource Integrity-->
+  <script type="module" 
+  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" 
+  integrity="sha384-xyQ/Vpt1cq1pdPYlRaT/QkcSj2vrYyWI3WOhxGBzqnP1vgvsS2yrhWXe3/wIoCr5" 
+  crossorigin="anonymous">
+  </script>
+  <script type="module" 
+  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" 
+  integrity="sha384-KAUcUASKfGZ0sxENVFRiH12jtpvd9SsVpgzvYdvv8ZMLqB99G3gX3DAts418wzIC" 
+  crossorigin="anonymous">
+  </script>
+
+</body>
+
+</html>

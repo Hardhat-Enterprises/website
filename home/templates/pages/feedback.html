@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+
+  {% include 'includes/pre-loader.html' %}
+<section class="section section-lg">
+    <div class="container">
+        <h4>User Experience</h4>
+        <br>
+        <p>Please provide your experiences with our company..</p>
+        <form method="post" class="card">
+            {% csrf_token %}
+            <div class="card-header">How was your experience?</div>
+            <br>
+            <div class="container">
+                <div class="col">
+                <div class="card-text form-group">
+                    <label for="id_name">Name:</label>
+                    {{ form.name }}
+                </div>
+                <br>
+                <div class="card-text form-group">
+                    <label for="id_feedback">User Experience:</label>
+                    {{ form.feedback }}
+                </div>
+                <br>
+                <button type="reset" class="btn btn-primary">Reset</button> 
+                <button type="submit" class="btn btn-primary">Submit</button> 
+                </div>
+                <br>
+            </div>
+        </form>
+        <br>
+    </div>
+    <!-- Subresource Integrity -->       
+    <script type="module"
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+    crossorigin="anonymous"></script>
+    <!-- Popper.js -->
+    <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" 
+    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" 
+    crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script type="module" 
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" 
+    crossorigin="anonymous"></script>
+</section>
+</main>
+
+{% endblock content %}
