@@ -19448,7 +19448,7 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
+  height: 100vh;
 }
 
 .contact-info {
@@ -19466,7 +19466,7 @@ body, html {
 .contact-info h1 {
   font-size: 50px;
   margin-bottom: 20px;
-  color: black; /* Text color set to black */
+  color: #174684; /* Text color set to the provided blue color */
 }
 
 .contact-info .icon-text {
@@ -19479,6 +19479,7 @@ body, html {
 .contact-info .icon-text i {
   font-size: 28px;
   margin-right: 10px;
+  color: black; /* Icon color set to black */
 }
 
 .contact-image img {
@@ -19496,7 +19497,7 @@ body, html {
 }
 
 .contact-form-container h2 {
-  color: black; /* Title text color set to black */
+  color: #174684; /* Heading text color set to the provided blue color */
 }
 
 .contact-form-container .form-group label {
@@ -19506,20 +19507,20 @@ body, html {
 .contact-form-container .form-group input,
 .contact-form-container .form-group textarea {
   width: 100%;
-  padding: 15px; 
-  margin: 10px 0; 
+  padding: 15px;
+  margin: 10px 0;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
 .contact-form-container .btn-submit {
-  background-color: blue; /* Submit button color set to blue */
+  background-color: #174684; /* Submit button color set to the provided blue color */
   color: white;
-  padding: 15px 20px; 
+  padding: 15px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .contact-form-container .btn-submit:hover {
@@ -19531,6 +19532,7 @@ body, html {
   text-align: center;
   padding: 50px;
   font-size: 24px;
+  color: black; /* Text color set to black */
 }
 
 /* Custom Section Header Background */
