@@ -383,3 +383,26 @@ class SecurityEvent(models.Model):
     def __str__(self):
         return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
 
+class Job(models.Model):
+    title = models.CharField(max_length=200)
+    description = HTMLField()
+    location = models.CharField(max_length=100,choices=[("Remote","Remote"),("OnSite","OnSite")])
+    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract')])
+    posted_date = models.DateField(auto_now_add=True)
+    closing_date = models.DateField()
+
+    def __str__(self):
+        return self.title
+    
+class JobApplication(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    resume = models.FileField(upload_to="resumes/")
+    cover_letter = models.TextField()
+    applied_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.job.title}"
+
+    
