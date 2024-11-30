@@ -7,8 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile
-
-
+from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
 
@@ -49,16 +48,36 @@ class RegistrationForm(UserCreationForm):
 
     # Newly added...........................
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        # Define the regex pattern for the required email format
-        pattern = r'@deakin\.edu\.au$'
-        
+        email = self.cleaned_data.get('email', '').strip()  # Normalize email
+        print(f"Validating email: {email}")  # Debugging log
+
+        # Regex pattern for validating Deakin email addresses
+        pattern = r'^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$'
+
         if not re.match(pattern, email):
-            raise ValidationError(_("Email must be match with your Deakin email."))
-        
+            print(f"Validation failed for email: {email}")  # Debug log for failed validation
+            raise ValidationError(_("Email must match your Deakin email."))
+
+        print(f"Validation succeeded for email: {email}")  # Debug log for success
         return email
     # .......................................
 
+    def set_password(self, raw_password):
+        """
+        Hashes the password using Django's password hashing system and returns it.
+        """
+        return make_password(raw_password)
+
+    def save(self, commit=True):
+        """
+        Overrides the save method to hash the password before saving the user instance.
+        """
+        user = super().save(commit=False)
+        raw_password = self.cleaned_data.get('password1')
+        user.password = self.set_password(raw_password)
+        if commit:
+            user.save()
+        return user
 
     class Meta:
         model = User
