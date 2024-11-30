@@ -50,9 +50,10 @@
   {% endblock header %}
 
   {% block content %}
+  <div id="loading-indicator" style="display:none;">Loading...</div>
+  
     <div class="container">
-    <div id="loading-indicator" style="display:none;">Loading...</div>
-      <div class="row">
+       <div class="row">
         <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
           <h1 class="fw-bolder">Search Results</h1>
           {% if searched %}
