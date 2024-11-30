@@ -1,0 +1,244 @@
+[33mcommit bf522387ebef16db2fe55cecf5112d61f56d3960[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mupdate-readme-md[m[33m)[m
+Author: linaya2004 <linayasuwanmipiyasiri@gmail.com>
+Date:   Sat Nov 30 10:54:01 2024 +1100
+
+    Updated hardhat.css, search-results.html, and applied migrations
+
+[33mcommit 085a71943d2dd7a4595eea1f632f5a4b0e6ff111[m[33m ([m[1;31morigin/update-readme-md[m[33m)[m
+Author: linaya2004 <linayasuwanmipiyasiri@gmail.com>
+Date:   Sat Nov 30 10:45:43 2024 +1100
+
+    Updated hardhat.css, search-results.html, and README.md; reverted changes to load_more.js
+
+[33mcommit e6b1266f3f0133cf0dd0846bb0efa28545c4a8d7[m
+Author: linaya2004 <linayasuwanmipiyasiri@gmail.com>
+Date:   Sat Nov 30 09:15:43 2024 +1100
+
+    Update README.md
+
+[33mcommit bcc584a1881340de21ac9c37b741c0ffef785fc8[m[33m ([m[1;31morigin/fix-loading-indicator[m[33m, [m[1;32mfix-loading-indicator[m[33m)[m
+Author: linaya2004 <linayasuwanmipiyasiri@gmail.com>
+Date:   Mon Nov 25 20:20:15 2024 +1100
+
+    Fix: Adjusted loading indicator positioning
+
+[33mcommit 24a70b74028eb42a98cd2b3c71d51c67801ea6cc[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: linaya2004 <linayasuwanmipiyasiri@gmail.com>
+Date:   Fri Nov 22 17:04:01 2024 +1100
+
+    Added loading indicators and improved responsiveness
+
+[33mcommit 5f2f333a038ba3299d046d9e1540a0695e943ad7[m
+Author: linaya2004 <linayasuwanmipiyasiri@gmail.com>
+Date:   Fri Nov 22 16:50:49 2024 +1100
+
+    i added the loading indicator
+
+[33mcommit f0e908dfe81e461167f007711a1330c55f57bb00[m
+Merge: 8690d5f8 5de35270
+Author: s-bonnor <101690237+s-bonnor@users.noreply.github.com>
+Date:   Fri Nov 22 13:09:31 2024 +1100
+
+    Merge pull request #172 from WaqasSarwar15/main
+    
+    Fixed dark mode toggle not working
+
+[33mcommit 8690d5f8ff894929acbf01a0ff56975704653a83[m
+Merge: 6e3c97fc d2b2d822
+Author: s-bonnor <101690237+s-bonnor@users.noreply.github.com>
+Date:   Fri Nov 22 13:03:05 2024 +1100
+
+    Merge pull request #161 from jbm1412/main
+    
+    Logos and FAQ
+
+[33mcommit 6e3c97fce84e5c93202915b01f8c0cab6d015dc7[m
+Merge: 5161705c fd10f0a6
+Author: s-bonnor <101690237+s-bonnor@users.noreply.github.com>
+Date:   Fri Nov 22 13:00:20 2024 +1100
+
+    Merge pull request #158 from medwut/main
+    
+    Fixed that Navbar Error
+
+[33mcommit 5de35270b582e86cfdd080abc5a6bddce03ab973[m
+Author: Waqas Sarwar <Waqassarwar15@yahoo.com>
+Date:   Thu Nov 21 16:38:53 2024 +0500
+
+    Fixed dark mode toggle not working
+
+[33mcommit 5161705ca4c8285f01a6cc92c26bbe7eba140ead[m
+Merge: 032f72f8 31e04ada
+Author: s-bonnor <101690237+s-bonnor@users.noreply.github.com>
+Date:   Thu Nov 21 18:13:34 2024 +1100
+
+    Merge pull request #170 from WaqasSarwar15/Resolve-Conflicts
+    
+    Annoucement feature added and all edge cases handled
+
+[33mcommit 31e04ada6c204ed3c5b411b717b69e81208b0fae[m
+Merge: c083190b 032f72f8
+Author: WaqasSarwar15 <143324834+WaqasSarwar15@users.noreply.github.com>
+Date:   Thu Nov 21 11:11:47 2024 +0500
+
+    Merge branch 'main' into Resolve-Conflicts
+
+[33mcommit c083190b5caa464462ecfd04db97d317d4f24a5f[m
+Author: Waqas Sarwar <Waqassarwar15@yahoo.com>
+Date:   Thu Nov 21 11:09:38 2024 +0500
+
+    Added Annoucement to Admin and updated styling
+
+[33mcommit 032f72f88379771f8331a8fc98bfa71cfeea1ff8[m
+Merge: 6438908e c3c29119
+Author: s-bonnor <101690237+s-bonnor@users.noreply.github.com>
+Date:   Tue Nov 19 19:53:51 2024 +1100
+
+    Merge pull request #171 from s-bonnor/fix/urgent
+    
+    Fix Urgent issues in Main
+
+[33mcommit c3c291197f00f050f1ee2ac83f69ee7103ba1652[m
+Author: s-bonnor <101690237+s-bonnor@users.noreply.github.com>
+Date:   Tue Nov 19 19:48:06 2024 +1100
+
+    Fix Urgent issues in Main
+    
+    - Syntax Error in home/urls
+    - Merge migrations
+    - Fix signup page incorrectly displaying the home page
+
+[33mcommit fd10f0a626ac04595b0a13034630ae211fdf0c89[m
+Merge: 48f28d31 6438908e
+Author: medwut <110501718+medwut@users.noreply.github.com>
+Date:   Tue Nov 19 16:02:07 2024 +1100
+
+    Merge branch 'main' into main
+
+[33mcommit c21df49b7dc3838204b4dd478450f7bfb22b80ca[m
+Author: Waqas Sarwar <Waqassarwar15@yahoo.com>
+Date:   Sun Nov 17 14:24:46 2024 +0500
+
+    Default annoucement added
+
+[33mcommit 589c54a90cb8b6d2377658237a1ba08dc5cb700f[m
+Author: Waqas Sarwar <Waqassarwar15@yahoo.com>
+Date:   Sun Nov 17 14:18:40 2024 +0500
+
+    Linked announcement with database
+
+[33mcommit 3257c46acba5c5ee4a76412e385633cce549b0c4[m
+Author: Waqas Sarwar <Waqassarwar15@yahoo.com>
+Date:   Fri Nov 15 13:53:57 2024 +0500
+
+    Announcement popup frontend added
+
+[33mcommit 6438908ef74bd5cd4bbefdaa6ec461696095407c[m
+Merge: 959760d1 13a925eb
+Author: Uzair Zafar <139586878+uzairzafarr@users.noreply.github.com>
+Date:   Sat Sep 21 16:13:59 2024 +1000
+
+    Merge pull request #152 from MisaAghera/main
+    
+    404 page not found
+
+[33mcommit 959760d1510cfd2332986c9b35a14a85274d1f25[m
+Merge: 1aebd12b d80fd83d
+Author: Uzair Zafar <139586878+uzairzafarr@users.noreply.github.com>
+Date:   Sat Sep 21 16:06:38 2024 +1000
+
+    Merge pull request #146 from DinalPrabathiya/Blogbutton
+    
+    Load-More button for Blogs
+
+[33mcommit d80fd83d48ca1b52bcd7fa0e31e107384eb7892e[m
+Merge: 079bcd3d 1aebd12b
+Author: Dinal Haththotuwa Gamage <132351938+DinalPrabathiya@users.noreply.github.com>
+Date:   Fri Sep 20 10:18:14 2024 +1000
+
+    Merge branch 'main' into Blogbutton
+
+[33mcommit 079bcd3dbed5e5b2d3e5b816d3108236fb0282ab[m
+Author: DilithaDun <s223732122@deakin.edu.au>
+Date:   Fri Sep 20 10:17:00 2024 +1000
+
+    Updated the models.py file to avoid merge conflicts.
+
+[33mcommit 48f28d318b10cfd64b1a51fadfcaea85457cacc6[m
+Merge: 085be7be 1aebd12b
+Author: medwut <110501718+medwut@users.noreply.github.com>
+Date:   Fri Sep 20 08:59:24 2024 +1000
+
+    Merge branch 'main' into main
+
+[33mcommit 1aebd12b4dd3dedea107ae8d9132f80d8cc27e10[m
+Merge: b25b632b 691d9350
+Author: Uzair Zafar <139586878+uzairzafarr@users.noreply.github.com>
+Date:   Fri Sep 20 00:49:07 2024 +1000
+
+    Merge pull request #159 from mduddukuru/main
+    
+    User Experience
+
+[33mcommit 691d935080eecd609a7f6c9eb8a1d438667e51c2[m
+Merge: 2bb61dba b25b632b
+Author: mduddukuru <mduddukuru@gmail.com>
+Date:   Fri Sep 20 00:06:14 2024 +1000
+
+    Merge remote-tracking branch 'upstream/main'
+
+[33mcommit 2bb61dbaa82261d050a352509ca906f2e9d645c5[m
+Author: mduddukuru <mduddukuru@gmail.com>
+Date:   Thu Sep 19 23:05:24 2024 +1000
+
+    User Experience
+
+[33mcommit d2b2d822209eba5920e30d89c70f02bde392a690[m
+Author: Manonarayanan J B <jbm1412@yahoo.com>
+Date:   Thu Sep 19 23:46:27 2024 +1000
+
+    Logos and FAQ
+
+[33mcommit b25b632babfb145374b348f49c54ae6cd3aeaa63[m
+Author: Uzair Zafar <139586878+uzairzafarr@users.noreply.github.com>
+Date:   Thu Sep 19 23:36:46 2024 +1000
+
+    Fix navigation issue
+
+[33mcommit 085be7be08a2c1cd27ec6692468452f92a779c49[m
+Author: medwut <ahmed.h.maghrabi@gmail.com>
+Date:   Thu Sep 19 22:22:19 2024 +1000
+
+    Fixed that Navbar Error
+    
+    Fixed error causing Profile link to take the div class of another larger item within the profile page. this change will fix the issue of the whole screen being pushed down
+
+[33mcommit 50cafda2f2b7a6f83dbaa50aa40bc5e910b0f8db[m
+Merge: 3091353c 120e5798
+Author: Uzair Zafar <139586878+uzairzafarr@users.noreply.github.com>
+Date:   Thu Sep 19 19:17:04 2024 +1000
+
+    Merge pull request #138 from ginish51/Fixed-Merge-Conflicts
+    
+    Add Project Choices, Enhance Form Validation, Integrate Navbar, and Fix Hover State Issues
+
+[33mcommit 120e57984f8934dae73a559eb4118c31bcb5f108[m
+Merge: f99f8b97 3091353c
+Author: ItsGinish <87330393+ginish51@users.noreply.github.com>
+Date:   Thu Sep 19 14:46:02 2024 +0530
+
+    Merge branch 'main' into Fixed-Merge-Conflicts
+
+[33mcommit 3091353c28d66fc71027b9f1d1c5513a9d7ddf65[m
+Merge: 0dab555e bad67093
+Author: Uzair Zafar <139586878+uzairzafarr@users.noreply.github.com>
+Date:   Thu Sep 19 19:13:07 2024 +1000
+
+    Merge pull request #153 from mduddukuru/lastupdatestatus
+    
+    Image Carousel
+
+[33mcommit 0dab555e0aafd733a5562ab4b3e0d203602385ae[m
+Merge: 8f2dbfe0 d0af1898
+Author: Uzair Zafar <139586878+uzairzafarr@users.noreply.github.com>
+Date:   Thu Se
