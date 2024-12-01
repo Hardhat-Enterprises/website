@@ -15677,9 +15677,32 @@ textarea.form-control-lg {
 /**
  * = Navigation bars
  */
+
+ .dropdown-menu1 {
+  display: none;
+  position: absolute;
+  background-color: black;
+  z-index: 1000;
+  min-width: 10rem;
+  width: 192px;
+  padding: 0.5rem 0;
+  margin: 0;
+  font-size: 1rem;
+  color: #1F2937;
+  text-align: left;
+  list-style: none;
+  background-clip: padding-box;
+  border: 0.0625rem solid #E5E7EB;
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.nav-item.dropdown1 {
+  position: relative;
+}
+
 .navbar-main {
   background-color: #000000;
-  position: absolute;
   top: 0;
   width: 100%;
   z-index: 100; }
