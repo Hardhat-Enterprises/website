@@ -44,6 +44,7 @@ urlpatterns = [
     #path('accounts/', include('users.urls')),
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
+    
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
 
     # Authentication
@@ -69,9 +70,6 @@ urlpatterns = [
     path('secure-code-review', views.secure_code_review, name='secure-code-review'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
-    path('accounts/register/', register, name='register'),
-    path('accounts/password-reset/', CustomPasswordResetView.as_view(), name='password_reset'),
-
 
 ]
 

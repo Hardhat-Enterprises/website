@@ -1,6 +1,7 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
+ 
 from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
@@ -69,12 +70,7 @@ from .forms import FeedbackForm
  
 # Regular Views
  
-def send_welcome_email(to_email):
-    subject = 'Welcome to HardHat Website!'
-    message = 'Thank you for signing up. Enjoy exploring our platform.'
-    from_email = 'hardhatenterprises00@gmail.com' 
-    send_mail(subject, message, from_email, [to_email], fail_silently=False)
-    
+ 
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
     max_age = 3600;
@@ -270,6 +266,11 @@ def Vr_main(request):
 # Authentication
 
 
+
+
+
+
+
 def feedback(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
@@ -315,27 +316,31 @@ def password_gen(request):
  
  
 def register(request):
-    form = RegistrationForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        user = form.save()
-        email = user.email
-        send_mail(
-            subject="Welcome to Hardhat Enterprises",
-            message=(
-                f"Hi {user.first_name},\n\n"
-                "Thank you for signing up with Hardhat Enterprises. We're thrilled to have you on board!\n\n"
-                "If you have any questions, feel free to contact us.\n\n"
-                "Best regards,\n"
-                "The Hardhat Enterprises Team"
-            ),
-            from_email="hardhatenterprises00@gmail.com",  # Verified email
-            recipient_list=[email],
-            fail_silently=False,
-        )
-        messages.success(request, "Account created successfully! A welcome email has been sent to your registered email.")
-        return redirect('login')  # Redirect to login page after signup
-    return render(request, 'accounts/sign-up.html', {'form': form})
-
+    form = RegistrationForm()
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        form = RegistrationForm(request.POST)
+       
+        if form.is_valid():
+            form.save()
+            otp = random.randint(100000, 999999)
+            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
+            print("Account created successfully! An OTP was sent to your email. Check!")
+            messages.success(request, "Account created successfully!")
+            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
+            # return redirect("verify-email", username=request.POST['first_name'])
+        else:
+            print("Registration failed!")
+    else:
+        form = RegistrationForm()
+ 
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up.html', context)
  
 @csrf_exempt
 def VerifyOTP(request):
@@ -440,25 +445,11 @@ def VerifyOTP(request):
 #     context = {}
 #     return render(request, "resend_otp.html", context)
 
-class CustomPasswordResetView(PasswordResetView):
-    email_template_name = 'accounts/password_reset_email.html'
-    success_url = reverse_lazy('password_reset_done')
 
-    def form_valid(self, form):
-        email = form.cleaned_data.get('email')
-        send_mail(
-            subject="Password Reset Request",
-            message=(
-                "You have requested a password reset for your account.\n\n"
-                "If you did not make this request, you can ignore this email.\n\n"
-                "Click the link below to reset your password:\n"
-                f"{self.request.build_absolute_uri(reverse_lazy('password_reset_confirm'))}"
-            ),
-            from_email="hardhatenterprises00@gmail.com",  # Verified email
-            recipient_list=[email],
-            fail_silently=False,
-        )
-        return super().form_valid(form)
+
+ 
+ 
+ 
  
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
@@ -663,6 +654,7 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset_email.html'
+    template_name = 'accounts/password_reset.html'
     form_class = UserPasswordResetForm
 
     def form_valid(self, form):
@@ -682,7 +674,7 @@ class UserPasswordResetView(PasswordResetView):
                     "If you didn't request a password reset, please contact us at your earliest convenience.\n\n"
                     "Regards,\nHardhat Enterprises"
                 )
-            send_mail(subject, message, 'hardhatenterprises00@gmail.com', [email], fail_silently=False)
+            send_mail(subject, message, 'deakinhardhatwebsite@gmail.com', [email], fail_silently=False)
             return redirect('password_reset_done')
         else:
             messages.error(self.request, "User does not exist. Please enter a valid email address.")
