@@ -3,6 +3,9 @@ from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
 from django.conf import settings
 from django.conf.urls.static import static
+from home.views import CustomPasswordResetView
+from home.views import register
+
 
 from . import views
 
@@ -70,6 +73,8 @@ urlpatterns = [
     
     # Feedback (duplicate removed)
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    path('accounts/register/', register, name='register'),
+    path('accounts/password-reset/', CustomPasswordResetView.as_view(), name='password_reset'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
