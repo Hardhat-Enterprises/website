@@ -31,4 +31,4 @@ virtualenv==20.25.1
 wheel==0.44.0
 
 # Image Processing
-Pillow==9.5.0
+Pillow==11.0.0

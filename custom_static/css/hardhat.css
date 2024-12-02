@@ -19589,3 +19589,13 @@ blockquote {
         cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
     }
 
+    .page-visit-counter {
+      font-size: 0.9rem;
+      margin-top: 15px;
+      padding-top: 10px;
+  }
+  .page-visit-counter span {
+      font-size: 1rem;
+  
+  }
+  
