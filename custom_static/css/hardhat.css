@@ -229,6 +229,18 @@
   .datepicker-input.in-edit:focus, .datepicker-input.in-edit:active {
     box-shadow: 0 0 0.25em 0.25em rgba(28, 36, 59, 0.2); }
 
+#loading-indicator {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+      padding: 100px;
+      z-index: 1000;
+      display: none;
+  }
+
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
