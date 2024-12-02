@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
+from datetime import timedelta
 import logging
 import re
 
@@ -90,30 +92,61 @@ class RegistrationForm(UserCreationForm):
         }
 
 class UserLoginForm(AuthenticationForm):
-    username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
+    username = UsernameField(
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"})
+    )
     password = forms.CharField(
-            label=_("Password"),
-            strip=False,
-            widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
-        )
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
+    )
+
     def __init__(self, request=None, *args, **kwargs):
         super().__init__(request, *args, **kwargs)
         self.request = request
 
     def confirm_login_allowed(self, user):
-        super().confirm_login_allowed(user)
-        # Log successful login event
-        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
-        SecurityEvent.objects.create(
-            user=user,
-            event_type='login_success',
-            ip_address=ip_address,
-            details='User logged in successfully.'
-        )
-        print(f'User {user} logged in successfully.')
+        failure_count_time = timezone.now() - timedelta(minutes=15)
+
+        login_failures_count = SecurityEvent.objects.filter(
+            event_type='login_failure',
+            timestamp__gte=failure_count_time
+        ).count()
+
+        if login_failures_count > 2:
+            raise ValidationError(
+                _("Too many login attempts. Please try again later."),
+                code='too_many_attempts',
+            )
+        else:
+            super().confirm_login_allowed(user)
+            
+            # Log successful login event
+            ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+            SecurityEvent.objects.create(
+                user=user,
+                event_type='login_success',
+                ip_address=ip_address,
+                details='User logged in successfully.'
+            )
+            print(f'User {user} logged in successfully.')
+
 
     def get_invalid_login_error(self):
         # Log failed login event
+        faliure_count_time = timezone.now() - timedelta(minutes=15)
+
+        login_failures_count = SecurityEvent.objects.filter(
+            event_type='login_failure',
+            timestamp__gte=faliure_count_time
+        ).count()
+
+        if login_failures_count > 2:
+            raise ValidationError(
+            _("Too many login attempts. Please try again later."),
+            code='too_many_attempts',
+            )
+
         ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
         SecurityEvent.objects.create(
             user=None,  # No user as login failed
