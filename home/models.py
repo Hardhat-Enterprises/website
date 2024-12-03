@@ -11,9 +11,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
-from django.contrib.auth.models import User 
 from django.db import models
 from django.utils import timezone
+from django.utils.timezone import now
 
 
 from django.utils.text import slugify
@@ -49,6 +49,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     created_at = models.DateTimeField(_("created_at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated_at"), auto_now=True)
+    
+    last_activity = models.DateTimeField(null=True, blank=True, default=now)
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
