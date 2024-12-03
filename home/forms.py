@@ -11,7 +11,7 @@ from datetime import timedelta
 import logging
 import re
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent, JobApplication
 
 
 
@@ -297,3 +297,19 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+        
+# class JobApplicationForm(forms.ModelForm):
+    
+#     class Meta:
+#         model = JobApplication
+#         fields = ['name', 'email', 'resume', 'cover_letter']
+    
+class JobApplicationForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
+    resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+    cover_letter = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control', 
+        'rows': 5, 
+        'placeholder': 'Write your cover letter here...'
+    }))
