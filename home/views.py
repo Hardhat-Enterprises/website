@@ -2,6 +2,7 @@
  
 # views.py
  
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
@@ -198,7 +199,65 @@ def UpskillingJoinProjectView(request):
         form = Upskilling_JoinProjectForm()
 
     return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
- 
+
+# OTP-Based Login
+
+def login_with_otp(request):
+    """
+    For Login
+    """
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user:
+            # Generate OTP
+            otp = random.randint(100000, 999999)
+            request.session['otp'] = otp
+            request.session['user_id'] = user.id
+
+            # Send OTP via email
+            send_mail(
+                subject="Your OTP Code",
+                message=f"Your OTP code is {otp}. Use it to verify your login.",
+                from_email="deakinhardhatwebsite@gmail.com",
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+            if settings.DEBUG:
+                print(f"DEBUG MODE: OTP for {user.email} is {otp}")
+
+            messages.success(request, "An OTP has been sent to your email. Please enter it below to continue.")
+            return redirect('verify_otp')
+        else:
+            messages.error(request, "Invalid username or password.")
+    return render(request, 'accounts/sign-in.html')
+
+
+
+def verify_otp(request):
+    """
+    OTP verification while login
+    """
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        saved_otp = request.session.get('otp')
+        user_id = request.session.get('user_id')
+
+        if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
+            user = User.objects.get(id=user_id)
+            login(request, user)  # Log the user in
+            del request.session['otp']  # Clear OTP from session
+            del request.session['user_id']  # Clear user ID from session
+            messages.success(request, "Login successful!")
+            return redirect('/')  # Redirect to the home page
+        else:
+            messages.error(request, "Invalid OTP. Please try again.")
+
+    return render(request, 'accounts/verify-otp.html')
+
 # Search Suggestions
 def SearchSuggestions(request):
     query = request.GET.get('query', '')
@@ -291,101 +350,89 @@ def logout_view(request):
 def password_gen(request):
     return JsonResponse({'data': gen_password()}, status=200)
  
- 
-def register(request):
-    try:
-        if request.method == 'POST':
-            print(f"POST Data: {request.POST}")  # Debugging log for POST data
-            form = RegistrationForm(request.POST)
-            
-            if form.is_valid():
-                try:
-                    user = form.save(commit=False)  # Save user instance without committing
-                    user.set_password(form.cleaned_data['password1'])  # Hash the password
-                    user.save()  # Save the user
-                    print("User saved successfully.")
-
-                    # Generate OTP and send email
-                    otp = random.randint(100000, 999999)
-                    email = form.cleaned_data.get('email')
-                    send_mail(
-                        subject="User Data",
-                        message=(
-                            f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
-                            "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                            "Regards, \nHardhat Enterprises"
-                        ),
-                        from_email="deakinhardhatwebsite@gmail.com",
-                        recipient_list=[email],
-                        fail_silently=False,
-                    )
-                    print(f"OTP sent to {email}.")
-
-                    # Redirect to verify token page with context
-                    messages.success(request, "Account created successfully! Check your email for the OTP.")
-                    return render(
-                        request,
-                        'accounts/verify_token.html',
-                        {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
-                    )
-                except Exception as e:
-                    print(f"Error saving user or sending email: {e}")
-                    print(traceback.format_exc())  # Print detailed traceback
-                    messages.error(request, "An error occurred while creating the account. Please try again.")
-            else:
-                print("Form is invalid. Errors:")
-                print(form.errors)  # Debugging log for form errors
-                messages.error(request, "Please fix the errors below.")
-        else:
-            print("GET request received for registration.")
-            form = RegistrationForm()
-
-        context = {'form': form}
-        return render(request, 'accounts/sign-up.html', context)
-
-    except Exception as e:
-        # Catch any unexpected errors and print to the terminal
-        print(f"Unexpected error in register view: {e}")
-        print(traceback.format_exc())
-        messages.error(request, "An unexpected error occurred. Please try again later.")
-        return render(request, 'accounts/sign-up.html', {'form': RegistrationForm()})
- 
 @csrf_exempt
 def VerifyOTP(request):
-    if request.method == "POST":
-        userotp = request.POST.get('otp')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-       
-        if password1 == password2:
-            form = User(first_name=first_name, last_name=last_name, email=email, password=password1)
-            form.save()
-           
-        print("OTP: ", userotp)
-    return JsonResponse({'data': 'Hello'}, status=200)  
+    """
+    For Account verification OTP verification.
+    """
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        saved_otp = request.session.get('otp')
+        user_id = request.session.get('user_id')
+
+        if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
+            try:
+                user = User.objects.get(id=user_id)
+                user.is_verified = True  # Mark the user as verified
+                user.is_active = True   # Ensure the account is active
+                user.save()             # Save changes
+                del request.session['otp']  # Clear OTP from session
+                del request.session['user_id']  # Clear user ID from session
+
+                # Print confirmation to terminal
+                print(f"OTP matched. Account for {user.email} has been activated and verified.")
+
+                messages.success(request, "Your account has been successfully verified and activated!")
+                #return redirect('/accounts/login/') 
+            except User.DoesNotExist:
+                messages.error(request, "User does not exist. Please register again.")
+                return redirect('/accounts/signup/')
+        else:
+            messages.error(request, "Invalid OTP. Please try again.")
+
+    return render(request, 'accounts/verify_token.html')
+
    
-def signup(request):
+def register(request):
+    """
+    Handles user registration and OTP verification.
+    """
     if request.method == 'POST':
         print(f"POST Data: {request.POST}")  # Log incoming POST data for debugging
         form = RegistrationForm(request.POST)
+
         if form.is_valid():
             try:
-                user = form.save(commit=False)
+                user = form.save(commit=False)  # Save user instance without committing
                 user.set_password(form.cleaned_data['password1'])  # Hash the password
                 user.save()  # Save the user to the database
                 print("User saved to database.")  # Success log
-                messages.success(request, "Account created successfully!")
-                return redirect('login')  # Replace 'login' with your login URL
+
+                # Generate OTP and send email
+                otp = random.randint(100000, 999999)
+                email = form.cleaned_data.get('email')
+                send_mail(
+                    subject="User Data",
+                    message=(
+                        f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
+                        "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                        "Regards, \nHardhat Enterprises"
+                    ),
+                    from_email="deakinhardhatwebsite@gmail.com",
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+
+                request.session['otp'] = otp
+                request.session['user_id'] = user.id
+
+                # Print OTP to terminal if DEBUG is True
+                if settings.DEBUG:
+                    print(f"DEBUG MODE: OTP for {user.email} is {otp}")
+
+                # Redirect to verify token page with context
+                messages.success(request, "Account created successfully! Check your email for the OTP.")
+                return render(
+                    request,
+                    'accounts/verify_token.html',
+                    {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
+                )
             except Exception as e:
-                # Log any exception that occurs while saving the user
-                print(f"Error saving user: {e}")
-                raise  # Optional: Re-raise the exception for debugging
+                print(f"Error saving user or sending email: {e}")
+                messages.error(request, "An error occurred while creating the account. Please try again.")
         else:
             print("Form is invalid. Errors:")
-            print(form.errors.as_json())  # Log form errors for debugging
+            print(form.errors)  # Debugging log for form errors
             messages.error(request, "Please fix the errors below.")
     else:
         form = RegistrationForm()

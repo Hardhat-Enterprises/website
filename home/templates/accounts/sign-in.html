@@ -24,40 +24,32 @@
                             <h1 class="mb-0 h3">Sign in to our platform</h1>
                         </div>
 
-                        <form method="post" class="mt-4">
+                        <form method="post" class="mt-4" action="{% url 'login_with_otp' %}">
                             {% csrf_token %}
                             <!-- Form -->
-                            {% if form.non_field_errors %}
-                                {% for error in form.non_field_errors %}
-                                    <span class="text-danger"> {{ error }} </span>
-                                {% endfor %}
-                            {% endif %}
-                            {% for field in form %}
                             <div class="form-group mb-4">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <label for="username">Username</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1">
-                                        <span class="fas {% if field.name == 'username' %} fa-user {% else %} fa-unlock-alt {% endif %}"></span>
+                                        <span class="fas fa-user"></span>
                                     </span>
-                                    {{ field }}
+                                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username">
                                 </div>  
-                                <span class="text-danger"> {{ field.errors }} </span>
+                                <span class="text-danger"> {{ form.username.errors|default_if_none:"" }} </span>
                             </div>
-                            {% endfor %}
-                            <!-- End of Form -->
 
-                            <!-- 2FA Input -->
+
                             <div class="form-group mb-4">
-                                <label for="2fa-code">2FA Code</label>
+                                <label for="password">Password</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon2">
-                                        <span class="fas fa-key"></span>
+                                        <span class="fas fa-unlock-alt"></span>
                                     </span>
-                                    <input type="text" id="2fa-code" name="2fa_code" class="form-control" placeholder="Enter your 2FA code">
-                                </div>
-                                <span class="text-danger" id="2fa-error"></span>
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password">
+                                </div>  
+                                <span class="text-danger"> {{ form.password.errors|default_if_none:"" }} </span>
                             </div>
-                            <!-- End of 2FA Input -->
+                            <!-- End of Form -->
 
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div class="form-check mb-0">
@@ -76,7 +68,7 @@
                         <div class="d-flex justify-content-center align-items-center mt-4">
                             <span class="fw-normal">
                                 Not registered?
-                                <a href="{% url 'register' %}" class="fw-bold text-underline create-account">Create account</a>
+                                <a href="{% url 'signup' %}" class="fw-bold text-underline create-account">Create account</a>
                             </span>
                         </div>
                     </div>

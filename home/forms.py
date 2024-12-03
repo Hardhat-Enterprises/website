@@ -42,8 +42,9 @@ class RegistrationForm(UserCreationForm):
         
         if not re.match(pattern, password):
             raise ValidationError(
-                _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
+                _("Password must be at least 8 characters long and include uppercase, lowercase letters, numbers, and special characters.")
             )
+        return password
     # ...........................................................
 
     # Newly added...........................
@@ -62,19 +63,11 @@ class RegistrationForm(UserCreationForm):
         return email
     # .......................................
 
-    def set_password(self, raw_password):
-        """
-        Hashes the password using Django's password hashing system and returns it.
-        """
-        return make_password(raw_password)
-
     def save(self, commit=True):
         """
-        Overrides the save method to hash the password before saving the user instance.
+        Overrides the save method to ensure the user instance is saved correctly.
         """
         user = super().save(commit=False)
-        raw_password = self.cleaned_data.get('password1')
-        user.password = self.set_password(raw_password)
         if commit:
             user.save()
         return user
@@ -82,7 +75,6 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', )
-
         labels = {
             'first_name': _('First Name'),
             'last_name': _('Last Name'),

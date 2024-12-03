@@ -45,6 +45,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
+    is_verified = models.BooleanField(
+        _("verified"),
+        default=False,
+        help_text=_("Designates whether the user has verified their account."),
+    )
     created_at = models.DateTimeField(_("created_at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated_at"), auto_now=True)
 
@@ -78,6 +83,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+    def activate_user(self):
+        """ Mark the user as verified and active."""
+        self.is_verified = True
+        self.is_active = True
+        self.save()
+        print(f"User {self.email} has been activated and verified.")
+
 
 #Search Bar Models:
 

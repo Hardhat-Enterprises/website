@@ -68,13 +68,14 @@ urlpatterns = [
     
 
     # Login
-    path('accounts/register/', views.signup, name='signup'),
+    path('accounts/signup/', views.register, name='signup'),
 
 
     # Email OTP
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
-   
+    path('accounts/login/', views.login_with_otp, name='login_with_otp'),
+    path('accounts/verify-otp/', views.verify_otp, name='verify_otp'),
 
 
     #Statistics
