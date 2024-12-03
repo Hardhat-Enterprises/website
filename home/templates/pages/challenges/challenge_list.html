@@ -2,10 +2,13 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="content-container container mt-5">
     <h1 class="mb-4 text-center">Cyber Challenges</h1>
-    <p class="text-center mb-5">Test your cybersecurity knowledge and skills across various domains. Choose a category to begin!</p>
-    <div class="row">
+    <p class="text-center mb-5">
+        Test your cybersecurity knowledge and skills across various domains. Choose a category to begin!
+    </p>
+
+
         {% for category in categories %}
             <div class="col-md-6 mb-4">
                 <div class="card h-100 shadow-sm">

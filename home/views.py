@@ -803,15 +803,20 @@ def profile(request):
 
     return render(request, 'pages/profile.html', context)
 
+@login_required
 def category_challenges(request, category):
     challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
-    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges})
+    completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
+    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges, 'completed_challenges': completed_challenges})
 
 @login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(CyberChallenge, id=challenge_id)
+    next_challenge = CyberChallenge.objects.filter(category=challenge.category, id__gt=challenge.id).order_by('id').first()
     user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge})
+    completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
+
+    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge,'next_challenge': next_challenge,'completed_challenges': completed_challenges,})
 
 @login_required
 def submit_answer(request, challenge_id):
@@ -826,6 +831,7 @@ def submit_answer(request, challenge_id):
             user_challenge.save()
         return JsonResponse({
             'is_correct': is_correct,
+            'message': 'Great job!' if is_correct else 'Try again!',
             'explanation': challenge.explanation,
             'score': user_challenge.score if is_correct else 0
         })
