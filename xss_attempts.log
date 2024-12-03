@@ -1,3 +1,0 @@
-List of XSS attacks detection: 
-XSS Attack Detected: <script>alert('XSS')</script>
-XSS Attack Detected: <script>alert('XSS')</script>

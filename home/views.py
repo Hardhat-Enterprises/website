@@ -558,7 +558,7 @@ def contact(request):
  
 #For XSS Log
 xss_logger = logging.getLogger('xss_logger')
-xss_logger.warning("List of XSS attacks detection: ")
+xss_logger.warning("List of latest XSS attacks detection: ")
 
 def log_suspicious_input(input_data):
     if input_data and "<script>" in input_data.lower():

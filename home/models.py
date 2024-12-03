@@ -217,8 +217,8 @@ class Contact(models.Model):
     message = models.TextField(max_length=1000)
 
     def save(self, *args, **kwargs):
-        self.name = nh3.clean(self.name, tags=[], attributes=[], styles=[], link_rel=[])
-        self.message = nh3.clean(self.message, tags=[], attributes=[], styles=[], link_rel=[])
+        self.name = nh3.clean(self.name, tags=set(), attributes={}, link_rel=None)
+        self.message = nh3.clean(self.message, tags=set(), attributes={}, link_rel=None)
         super(Contact, nh3.self).save(*args, **kwargs)
 
 class DDT_contact(models.Model):
