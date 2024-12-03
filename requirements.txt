@@ -32,4 +32,4 @@ wheel==0.44.0
 nh3==0.2.18
 
 # Image Processing
-Pillow==9.5.0
+Pillow==11.0.0

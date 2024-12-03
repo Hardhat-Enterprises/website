@@ -1,5 +1,8 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-q67YRD4QG2hHsm7K9U+xsP/fiY5NVR1F2Sc65XVfKwEYJBnp51BdehUGlNlAHzps" crossorigin="anonymous"></script>
+<script src="{% static 'js/vivus-fix.js' %}" defer></script>
+
 
 {% block content %}
 
@@ -7,18 +10,23 @@
 
   {% include 'includes/pre-loader.html' %}
   <!-- Hero -->
-  <section class="section-header overflow-hidden pt-7 pt-lg-5 pb-9 pb-lg-1 bg-tertiary text-black">
-    <div class="container col-xxl-8 px-4 py-5">
-      <div class="row flex-lg-row-reverse align-items-center g-5 py-5 mobile-heading">
-        <div class="col-10 col-sm-8 col-lg-6">
-          <img src="{% static 'assets/img/pages/home/hero-image.svg' %}" alt="Hero image">
+ <!-- Hero Section -->
+ <section class="section-header overflow-hidden pt-7 pt-lg-5 pb-9 pb-lg-1 bg-tertiary text-black">
+  <div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5 mobile-heading">
+      <div class="col-10 col-sm-8 col-lg-6">
+        <img src="{% static 'assets/img/pages/home/hero-image.svg' %}" alt="Hero image"> 
+          </svg>
         </div>
-        <div class="col-lg-6">
+      </div>
+      <div class="col-lg-6">
           <h1 class="fw-bolder display-1 text-center-head">Hardhat Enterprises</h1>
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">Security is a necessity. Not a choice</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">Explore Projects</a>
             <a type="button" href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">Join Us</a>
+             </svg>
+              </div>
           </div>
         </div>
       </div>
@@ -256,7 +264,7 @@
       </div>
     </div>
   </div>
-  
+
   {% endif %}
   
 <script>
@@ -269,6 +277,8 @@
     }, 3000);
 });
 </script>
+
+ 
 
 </main>
 
