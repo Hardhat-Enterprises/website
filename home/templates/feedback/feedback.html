@@ -9,25 +9,35 @@
 <body>
     <h1>Feedback Page</h1>
 
-    <h2>Survey</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ survey_form.as_p }}
-        <button type="submit">Submit Survey</button>
-    </form>
+    <section>
+        <h2>Survey</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ survey_form.as_p }}
+            <button type="submit">Submit Survey</button>
+        </form>
+    </section>
 
-    <h2>Poll</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ poll_form.as_p }}
-        <button type="submit">Submit Poll</button>
-    </form>
+    <section>
+        <h2>Poll</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ poll_form.as_p }}
+            <button type="submit">Submit Poll</button>
+        </form>
+    </section>
 
-    <h2>Feedback</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ feedback_form.as_p }}
-        <button type="submit">Submit Feedback</button>
-    </form>
+    <section>
+        <h2>Feedback</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ feedback_form.as_p }}
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; {{ current_year }} Your Company Name. All rights reserved.</p>
+    </footer>
 </body>
 </html>

@@ -4,9 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .form-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-container label {
+            font-weight: bold;
+        }
+        .form-container input, 
+        .form-container textarea, 
+        .form-container select, 
+        .form-container button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container button {
+            background-color: #007BFF;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Thank You!</h1>
-    <p>Thank you for your feedback. We appreciate your input.</p>
+    <p>Thank you for your feedback. appreciate your input.</p>
+
+    <div class="form-container">
+        <h2>Submit Additional Information</h2>
+        <form action="submit_form.php" method="POST">
+            <!-- Personal Details -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            
+            <!-- Project Feedback -->
+            <label for="projectFeedback">Feedback on Hardhat Safety Project:</label>
+            <textarea id="projectFeedback" name="projectFeedback" rows="4" placeholder="Share your thoughts..." required></textarea>
+
+            <!-- Safety Features -->
+            <label for="safetyFeatures">Select a safety feature you'd prioritize:</label>
+            <select id="safetyFeatures" name="safetyFeatures">
+                <option value="impactResistance">Impact Resistance</option>
+                <option value="lightweightDesign">Lightweight Design</option>
+                <option value="ventilation">Ventilation</option>
+                <option value="customFit">Custom Fit</option>
+            </select>
+
+            <!-- Submission -->
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
