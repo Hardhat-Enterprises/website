@@ -16,8 +16,8 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, #Feedback 
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience #Feedback 
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -29,7 +29,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
 
 import os
 import json
@@ -38,7 +38,7 @@ import json
 from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm, ExperienceForm
 
 
-from home.models import Announcement
+from home.models import Announcement, JobApplication
  
 # import os
  
@@ -70,19 +70,28 @@ from .forms import FeedbackForm
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
+    max_age = 3600;
     
     if recent_announcement:
-        show_announcement = recent_announcement.isActive
-        announcement_message = recent_announcement.message
+        has_cookies = request.COOKIES.get('announcement')
+        if has_cookies:
+            show_announcement = False
+            announcement_message = recent_announcement.message
+        else:
+            show_announcement = recent_announcement.isActive
+            announcement_message = recent_announcement.message   
     else:
         show_announcement = False
         announcement_message = "Welcome! Stay tuned for updates."
     
-    return render(
+    response = render(
         request, 
         'pages/index.html', 
         {'announcement_message': announcement_message, 'show_announcement': show_announcement}
     )
+
+    response.set_cookie('announcement', 'True', max_age=max_age)
+    return response
 
 
 def error_404_view(request,exception):
@@ -105,6 +114,8 @@ def appattack(request):
     return render(request, 'pages/appattack/main.html')
  
 def appattack_join(request):
+   # print("Hi");
+   # print(request.POST);
     return render(request, 'pages/appattack/join.html')
  
 def products_services(request):
@@ -794,3 +805,41 @@ def blog_list(request):
     # AJAX request: send paginated posts as JSON
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
+
+def list_careers(request):
+    jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
+    context = {
+        "jobs":jobs
+    }
+    return render(request,"careers/career-list.html",context)
+
+def career_detail(request,id):
+    job = get_object_or_404(Job, id=id)
+    context = {
+        "job":job
+    }
+    return render(request,"careers/career-detail.html",context)
+
+def career_application(request,id):
+    job = get_object_or_404(Job, id=id)
+    complete =False
+    if request.method == 'POST':
+        form = JobApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            JobApplication.objects.create(
+                job_id=job.id,
+                name=form.cleaned_data['name'],
+                email=form.cleaned_data['email'],
+                resume=form.cleaned_data['resume'],
+                cover_letter=form.cleaned_data['cover_letter']
+            )
+            complete=True
+            # return redirect('career_list')
+    else:
+        form = JobApplicationForm()
+    context = {
+        "form":form,
+        "job":job,
+        "complete":complete
+    }
+    return render(request,"careers/application-form.html",context)

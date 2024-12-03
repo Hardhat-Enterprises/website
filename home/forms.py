@@ -6,10 +6,16 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.timezone import now
+from datetime import timedelta
+import logging
+import re
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience
 
 
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -86,12 +92,70 @@ class RegistrationForm(UserCreationForm):
         }
 
 class UserLoginForm(AuthenticationForm):
-    username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
+    username = UsernameField(
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"})
+    )
     password = forms.CharField(
-            label=_("Password"),
-            strip=False,
-            widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
-        )   
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
+    )
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request, *args, **kwargs)
+        self.request = request
+
+    def confirm_login_allowed(self, user):
+        failure_count_time = timezone.now() - timedelta(minutes=15)
+
+        login_failures_count = SecurityEvent.objects.filter(
+            event_type='login_failure',
+            timestamp__gte=failure_count_time
+        ).count()
+
+        if login_failures_count > 2:
+            raise ValidationError(
+                _("Too many login attempts. Please try again later."),
+                code='too_many_attempts',
+            )
+        else:
+            super().confirm_login_allowed(user)
+            
+            # Log successful login event
+            ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+            SecurityEvent.objects.create(
+                user=user,
+                event_type='login_success',
+                ip_address=ip_address,
+                details='User logged in successfully.'
+            )
+            print(f'User {user} logged in successfully.')
+
+
+    def get_invalid_login_error(self):
+        # Log failed login event
+        faliure_count_time = timezone.now() - timedelta(minutes=15)
+
+        login_failures_count = SecurityEvent.objects.filter(
+            event_type='login_failure',
+            timestamp__gte=faliure_count_time
+        ).count()
+
+        if login_failures_count > 2:
+            raise ValidationError(
+            _("Too many login attempts. Please try again later."),
+            code='too_many_attempts',
+            )
+
+        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+        SecurityEvent.objects.create(
+            user=None,  # No user as login failed
+            event_type='login_failure',
+            ip_address=ip_address,
+            details=f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}'
+        )
+        print(f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}')
+        return super().get_invalid_login_error()
 
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
@@ -177,14 +241,37 @@ class NewWebURL(forms.ModelForm):
         fields = ['id', 'url', 'title']
             
 class FeedbackForm(forms.Form):
-    name = forms.CharField(max_length=100, required=True, label='Name')
-    feedback = forms.CharField(widget=forms.Textarea, required=True, label='Customer Feedback')
-    rating = forms.ChoiceField(choices=[
-        ('Excellent', 'Excellent'),
-        ('Good', 'Good'),
-        ('Poor', 'Poor'),
-        ('Disappointing', 'Disappointing')
-    ], required=True, label='Rating')
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'style': 'width: 100%;',
+            'placeholder': 'Your Name'
+        }),
+        max_length=100, 
+        required=True, 
+        label='Name'
+    )
+    
+    feedback = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'style': 'width: 100%; height: 200px;',
+            'placeholder': 'Share your feedback here...'
+        }),
+        required=True,
+        label='Customer Feedback'
+    )
+    
+    rating = forms.ChoiceField(
+        choices=[
+            ('Excellent', 'Excellent'),
+            ('Good', 'Good'),
+            ('Poor', 'Poor'),
+            ('Disappointing', 'Disappointing')
+        ],
+        required=True,
+        label='Rating'
+    )
 User = get_user_model()
 
 class UserUpdateForm(forms.ModelForm):
@@ -220,3 +307,18 @@ class ExperienceForm(ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
             'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
         }
+# class JobApplicationForm(forms.ModelForm):
+    
+#     class Meta:
+#         model = JobApplication
+#         fields = ['name', 'email', 'resume', 'cover_letter']
+    
+class JobApplicationForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
+    resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+    cover_letter = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control', 
+        'rows': 5, 
+        'placeholder': 'Write your cover letter here...'
+    }))

@@ -12,7 +12,8 @@ from .models import (
     Webpage,
     DDT_contact,
     #Feedback,
-    
+    Job,
+    JobApplication,
     
     # Contact_central,
     Article,
@@ -20,9 +21,10 @@ from .models import (
     Projects_join_us,
     CyberChallenge,
     UserChallenge,
-    Announcement
+    Announcement,
 
-
+    # Logging
+    SecurityEvent
 
 )
 
@@ -65,6 +67,10 @@ class ProgressAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Contact._meta.fields]
+
+@admin.register(SecurityEvent)
+class SecurityEventAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in SecurityEvent._meta.fields]
     
 #Webpage Search Model
 @admin.register(Webpage)
@@ -117,6 +123,23 @@ class FeedbackAdmin(admin.ModelAdmin):
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(Projects_join_us)
+
+@admin.register(Job)
+class JobAdmin(admin.ModelAdmin):
+    list_display = ['title', 'location', 'job_type', 'posted_date', 'closing_date']
+    list_filter=['location','job_type']
+
+@admin.register(JobApplication)
+class JobApplicationAdmin(admin.ModelAdmin):
+    list_display=['name', 'email','job__title','applied_date']
+    list_filter = ['job__title']
+    readonly_fields =['job','name','email','resume','cover_letter','applied_date']
+    
+    @admin.display(description="Job Title")
+    def job__title(self,obj):
+        return obj.job.title
+        
+
 
 
 

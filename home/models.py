@@ -11,7 +11,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
+from django.db import models
 from django.utils import timezone
 
 
@@ -369,6 +370,36 @@ class Announcement(models.Model):
     message = models.TextField()
     isActive = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
+
+
+class SecurityEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    event_type = models.CharField(max_length=50)  # e.g., 'login_success', 'login_failure'
+    ip_address = models.GenericIPAddressField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    details = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
+
+class Job(models.Model):
+    title = models.CharField(max_length=200)
+    description = HTMLField()
+    location = models.CharField(max_length=100,choices=[("Remote","Remote"),("OnSite","OnSite")])
+    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract')])
+    posted_date = models.DateField(auto_now_add=True)
+    closing_date = models.DateField()
+
+    def __str__(self):
+        return self.title
+    
+class JobApplication(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    resume = models.FileField(upload_to="resumes/")
+    cover_letter = models.TextField()
+    applied_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.message[:50] 
