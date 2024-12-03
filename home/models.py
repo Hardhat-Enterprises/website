@@ -219,7 +219,7 @@ class Contact(models.Model):
     def save(self, *args, **kwargs):
         self.name = nh3.clean(self.name, tags=set(), attributes={}, link_rel=None)
         self.message = nh3.clean(self.message, tags=set(), attributes={}, link_rel=None)
-        super(Contact, nh3.self).save(*args, **kwargs)
+        super(Contact, self).save(*args, **kwargs)
 
 class DDT_contact(models.Model):
     fullname=models.CharField(max_length=100)

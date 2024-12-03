@@ -276,9 +276,9 @@ class ContactForm(forms.Form):
     def clean_name(self):
         name = self.cleaned_data['name']
         name = xss_detection(name)
-        return nh3.clean(name, tags=[], attributes=[], styles=[], link_rel=[])
+        return nh3.clean(name, tags=set(), attributes={}, link_rel=None)
 
     def clean_message(self):
         message = self.cleaned_data['message']
         message = xss_detection(message)
-        return nh3.clean(message, tags=[], attributes=[], styles=[], link_rel=[])
+        return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
