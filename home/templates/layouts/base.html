@@ -50,7 +50,9 @@
     script-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline' https://buttons.github.io https://unpkg.com https://code.jquery.com https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com; 
     style-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline'  https://fonts.googleapis.com; 
     font-src 'self' https://fonts.gstatic.com; 
-    img-src 'self' data:;">
+    frame-src 'self' https://www.google.com;
+    img-src 'self' data:;"
+    >
 
     
 
