@@ -10,8 +10,10 @@ from django.utils.timezone import now
 from datetime import timedelta
 import logging
 import re
+import nh3
 
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent, JobApplication
+from .validators import xss_detection
 
 
 
@@ -297,6 +299,22 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+
+#Newly Added
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        name = xss_detection(name)
+        return nh3.clean(name, tags=set(), attributes={}, link_rel=None)
+
+    def clean_message(self):
+        message = self.cleaned_data['message']
+        message = xss_detection(message)
+        return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
         
 # class JobApplicationForm(forms.ModelForm):
     

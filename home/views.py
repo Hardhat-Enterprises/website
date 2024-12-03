@@ -66,7 +66,12 @@ from .forms import FeedbackForm
 # Create your views here.
  
 # Regular Views
- 
+
+#For Contact Form
+import nh3
+import logging
+from .validators import xss_detection
+from .models import Contact
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -553,14 +558,42 @@ def contact(request):
         messages.success(request,'The message has been received')
     return render(request,'pages/index.html')
  
+#For XSS Log
+xss_logger = logging.getLogger('xss_logger')
+xss_logger.warning("List of latest XSS attacks detection: ")
+
+def log_suspicious_input(input_data):
+    if input_data and "<script>" in input_data.lower():
+        xss_logger.warning(f"XSS Attack Detected: {input_data}")
+        print(f"XSS attempt full message: {input_data}") 
+
+#For Contact Page
 def Contact_central(request):
-    if request.method=='POST':
-        name=request.POST['name']
-        email=request.POST['email']
-        message=request.POST['message']
-        contact=Contact.objects.create(name=name, email=email, message=message)
-        messages.success(request,'The message has been received')
-    return render(request,'pages/Contactus.html')
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        message = request.POST.get('message', '')
+
+        print(f"Name: {name}, Email: {email}, Message: {message}")
+
+        # Log suspicious inputs of Contact
+        log_suspicious_input(name)
+        log_suspicious_input(email)
+        log_suspicious_input(message)
+
+        # Sanitizing and validating inputs
+        name = nh3.clean(xss_detection(name))
+        email = nh3.clean(xss_detection(email))
+        message = nh3.clean(xss_detection(message))
+
+        if name and email and message:
+            Contact.objects.create(name=name, email=email, message=message)
+            messages.success(request, 'Message has been sent successfully!')
+        else:
+            messages.error(request, 'Invalid input!')
+
+    return render(request, 'pages/Contactus.html')
+
  
  
 # Blog

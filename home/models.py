@@ -25,6 +25,8 @@ from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 from django.db import models
 
+import nh3
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     A User model with admin-compliant permissions.
@@ -208,14 +210,16 @@ class Student(AbstractBaseSet):
 
 
 
-
+#Contact Model
 class Contact(models.Model):
-    name=models.CharField(max_length=100)
-    email=models.CharField(max_length=200)
-    message=models.TextField(max_length=1000)
-    
-    def __str__(self):
-        return self.name
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    message = models.TextField(max_length=1000)
+
+    def save(self, *args, **kwargs):
+        self.name = nh3.clean(self.name, tags=set(), attributes={}, link_rel=None)
+        self.message = nh3.clean(self.message, tags=set(), attributes={}, link_rel=None)
+        super(Contact, self).save(*args, **kwargs)
 
 class DDT_contact(models.Model):
     fullname=models.CharField(max_length=100)
