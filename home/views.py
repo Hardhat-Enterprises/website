@@ -711,6 +711,11 @@ def feedback_view(request):
         'form': form,
         'feedbacks': feedbacks
     })
+    
+def delete_feedback(request, id):
+    feedback= get_object_or_404(Experience, id=id)
+    feedback.delete()
+    return redirect('feedback')
 
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
