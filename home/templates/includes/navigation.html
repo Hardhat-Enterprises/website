@@ -251,7 +251,7 @@
         {% comment %} <!--action="{% url 'pages/search-results'%}"--> {% endcomment %}
 
       </div>
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center justify-content-center">
         {% if request.user.is_authenticated %}
 
         <!-- Show Logout Button if User is Authenticated -->
@@ -326,15 +326,18 @@
             </div>
           </div>
 
-        <spam class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global"
+        <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global"
           aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </span>
+        
+           
       </div>
-      <!-- <div class="form-check form-switch dark-mode res-hide">
-        <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
-        <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
-      </div> -->
+      <div style="margin-left: 6px;">
+        <label for="darkmode-toggle" class="dark-mode-toggle" id="darkModeButton" style="margin: 0px;">
+          <ion-icon class="icon" id="darkModeIcon"  name="sunny-sharp"></ion-icon>
+        </label>
+      </div>
     </div>
     </div>
   </nav>
