@@ -66,7 +66,8 @@ from .forms import FeedbackForm
 # Create your views here.
  
 # Regular Views
- 
+def client_sign_in(request):
+    return render(request, 'accounts/client_sign-in.html') 
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
