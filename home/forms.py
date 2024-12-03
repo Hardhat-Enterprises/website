@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
@@ -10,8 +11,7 @@ from django.utils.timezone import now
 from datetime import timedelta
 import logging
 import re
-
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent, JobApplication
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 
 
 
@@ -298,6 +298,15 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['avatar', 'bio']
         
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:
