@@ -37,7 +37,15 @@ import json
 # from .models import Student, Project, Contact
 from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
-
+from django.shortcuts import render
+from django.views.generic import View
+from django.contrib.auth.views import LoginView
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
+from .forms import UserLoginForm
+from django.core.cache import cache
+from django.shortcuts import redirect
+from django.urls import reverse
  
  
 # import os
@@ -280,6 +288,29 @@ def website_form(request):
 class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
+    
+    def form_invalid(self, form):
+        # Increment the failed login attempts
+        failed_attempts = cache.get('failed_login_attempts', 0) + 1
+        cache.set('failed_login_attempts', failed_attempts, timeout=60)  # Store for 1 minute
+
+        # Check if the limit is exceeded
+        if failed_attempts >= 5:  # Set your limit here
+            # Set the global lockout
+            cache.set('global_lockout', True, timeout=60)  # Lockout for 1 minute
+            # Set the lockout start time
+            cache.set('lockout_start_time', timezone.now(), timeout=60)  # Lockout for 1 minute
+            return redirect(reverse('rate_limit_exceeded'))  # Redirect to a rate limit exceeded page
+
+        return super().form_invalid(form)
+
+def rate_limit_exceeded(request):
+    remaining_time = calculate_remaining_time()  # Use the helper function
+
+    return render(request, 'accounts/rate_limit_exceeded.html', {
+        'message': 'Too many login attempts. Please try again later.',
+        'wait_time': remaining_time,
+    })
  
 def logout_view(request):
     logout(request)

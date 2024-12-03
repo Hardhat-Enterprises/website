@@ -5,7 +5,8 @@ from .views import Index, DetailArticleView, LikeArticle, UpskillingView, Upskil
 
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django_ratelimit.decorators import ratelimit
+from .views import UserLoginView, rate_limit_exceeded
 
 from . import views
 
@@ -91,7 +92,9 @@ urlpatterns = [
     path('feedback/', views.feedback_view, name='feedback'),
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
 
-
+    path('accounts/login/', UserLoginView.as_view(), name='login'),
+    path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded')
+ 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
