@@ -82,6 +82,25 @@ MIDDLEWARE = [
     "home.ratelimit_middleware.GlobalLockoutMiddleware"
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'xss_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'xss_attempts.log',
+        },
+    },
+    'loggers': {
+        'xss_logger': {
+            'handlers': ['xss_file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
+
 ROOT_URLCONF = "core.urls"
 
 HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
@@ -89,7 +108,7 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [HOME_TEMPLATES],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -209,6 +228,7 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
@@ -227,5 +247,20 @@ RATELIMIT_SETTINGS = {
     },
 }
 
+# Prevent MIME type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Protect against clickjacking
+X_FRAME_OPTIONS = 'DENY'  # Use 'SAMEORIGIN' if the site needs to be embedded in iframes from the same origin
+
+# Enable XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Enforce HTTPS (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
