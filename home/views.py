@@ -114,6 +114,8 @@ def appattack(request):
     return render(request, 'pages/appattack/main.html')
  
 def appattack_join(request):
+   # print("Hi");
+   # print(request.POST);
     return render(request, 'pages/appattack/join.html')
  
 def products_services(request):
