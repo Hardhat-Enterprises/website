@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -51,6 +51,11 @@ urlpatterns = [
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+    
+    path("careers/", list_careers , name="career-list"),
+    path("careers/<int:id>/", career_detail , name="career-detail"),
+    path("careers/<int:id>/apply", career_application , name="career-application"),
+    
     
     # Email OTP
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
