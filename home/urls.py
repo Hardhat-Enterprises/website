@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from django.contrib import admin
 
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
@@ -69,6 +69,8 @@ urlpatterns = [
 
     # Login
     path('accounts/signup/', views.register, name='signup'),
+    path('captcha/', include('captcha.urls')), 
+    path('post-otp-captcha/', views.post_otp_login_captcha, name='post_otp_login_captcha'),
 
 
     # Email OTP

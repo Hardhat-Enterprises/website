@@ -54,6 +54,7 @@ INSTALLED_APPS = [
    'crispy_forms',
     'tinymce',
     'crispy_bootstrap5',
+    'captcha',
     "django_light",
     # "django.contrib.admin",
     "core.apps.CustomAdminConfig",

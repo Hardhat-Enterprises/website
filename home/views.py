@@ -35,6 +35,8 @@ from django.urls import reverse_lazy
 import random
 from .forms import UserUpdateForm, ProfileUpdateForm
 
+from .forms import CaptchaForm
+
 import os
 import json
 # from utils.charts import generate_color_palette
@@ -252,7 +254,7 @@ def verify_otp(request):
             del request.session['otp']  # Clear OTP from session
             del request.session['user_id']  # Clear user ID from session
             messages.success(request, "Login successful!")
-            return redirect('/')  # Redirect to the home page
+            return redirect('post_otp_login_captcha')  # Redirect
         else:
             messages.error(request, "Invalid OTP. Please try again.")
 
@@ -440,7 +442,18 @@ def register(request):
     return render(request, 'accounts/sign-up.html', {'form': form})
 
 
+def post_otp_login_captcha(request):
+    if request.method == 'POST':
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            messages.success(request, "CAPTCHA verified successfully!")
+            return redirect('/')  # Redirect to the desired page
+        else:
+            messages.error(request, "CAPTCHA verification failed. Please try again.")
+    else:
+        form = CaptchaForm()
 
+    return render(request, 'accounts/post_otp_captcha.html', {'form': form})
 
 
 # Email Verification 

@@ -3,6 +3,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
+from captcha.fields import CaptchaField
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
@@ -220,3 +221,6 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+
+class CaptchaForm(forms.Form):
+    captcha = CaptchaField()

@@ -34,3 +34,6 @@ Pillow==9.5.0
 
 # Password Hashing
 bcrypt==4.2.1
+
+# CAPTCHA
+django-simple-captcha==0.5.15
