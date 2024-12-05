@@ -18,7 +18,6 @@
           </p>
           <div class="icon-text">
             <i class="fas fa-map-marker-alt"></i>
-
             <span>221 Burwood Hwy, Burwood VIC 3125</span>
           </div>
           <div class="icon-text">
@@ -66,6 +65,18 @@
               <label for="message">Message</label>
               <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your message"></textarea>
             </div>
+            
+            <!-- Google reCAPTCHA -->
+            <div class="form-group">
+              <div class="g-recaptcha" data-sitekey="6Lc5wpIqAAAAAItxvQUvBggCoqycfLa6cESyTt_W"></div>
+            </div>
+
+            {% if error %}
+              <div class="alert alert-danger">
+                {{ error }}
+              </div>
+            {% endif %}
+
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Send Message</button>
             </div>
@@ -101,15 +112,27 @@
 
 <script>
   function handleSubmit(event) {
-    event.preventDefault(); // Prevent the default form submission
-    
-    // Hide the form container and the map
+    // Prevent the form from submitting
+    event.preventDefault();
+
+    // Check if reCAPTCHA is checked
+    var recaptchaResponse = grecaptcha.getResponse();
+    if (recaptchaResponse.length === 0) {
+      alert("Please verify that you are not a robot.");
+      return; // Stop form submission
+    }
+
+    // Hide the form and map, and show the thank you message
     document.getElementById("contact-form-container").style.display = "none";
     document.getElementById("map-container").style.display = "none";
-    
-    // Show the thank you message
     document.getElementById("thank-you-message").style.display = "block";
+
+    // Optionally, you can also submit the form after this
+    // document.getElementById("contact-form").submit();
   }
 </script>
+
+<!-- Include reCAPTCHA script -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 {% endblock content %}

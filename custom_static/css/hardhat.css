@@ -19435,7 +19435,7 @@ body, html {
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-  background-color: yellow; /* Background color set to yellow for entire page */
+  background-color: yellow; 
 }
 
 .container {
@@ -19447,27 +19447,27 @@ body, html {
 .contact-section {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start; 
+  min-height: 80vh; 
 }
 
 .contact-info {
   max-width: 500px;
   padding: 20px;
   flex: 1;
+  margin-right: 20px; 
 }
 
 .contact-info p {
   font-size: 20px;
   margin-bottom: 10px;
-  color: black; /* Text color set to black */
+  color: black; 
 }
 
 .contact-info h1 {
-  font-size: 50px;
+  font-size: 35px; 
   margin-bottom: 20px;
-  color: #174684; /* Text color set to the provided blue color */
-}
+  color: #174684; 
 
 .contact-info .icon-text {
   display: flex;
@@ -19479,7 +19479,7 @@ body, html {
 .contact-info .icon-text i {
   font-size: 28px;
   margin-right: 10px;
-  color: black; /* Icon color set to black */
+  color: black; 
 }
 
 .contact-image img {
@@ -19488,60 +19488,62 @@ body, html {
 }
 
 .contact-form-container {
-  background-color: white; /* Form background color set to white for contrast */
-  padding: 30px;
+  background-color: white; 
+  padding: 20px; 
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   flex: 1;
-  margin-top: 20px;
+  margin-top: 0; 
 }
 
 .contact-form-container h2 {
-  color: #174684; /* Heading text color set to the provided blue color */
+  color: #174684; 
+  font-size: 28px;
 }
 
 .contact-form-container .form-group label {
-  color: black; /* Label text color set to black */
+  color: black; 
 }
 
 .contact-form-container .form-group input,
 .contact-form-container .form-group textarea {
   width: 100%;
-  padding: 15px;
+  padding: 12px; 
   margin: 10px 0;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
 .contact-form-container .btn-submit {
-  background-color: #174684; /* Submit button color set to the provided blue color */
+  background-color: #174684; 
   color: white;
-  padding: 15px 20px;
+  padding: 12px 20px; 
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
+  width: 100%;
 }
 
 .contact-form-container .btn-submit:hover {
-  background-color: darkblue; /* Button hover effect */
+  background-color: darkblue; 
 }
 
 /* Thank You Message */
 .thank-you {
   text-align: center;
-  padding: 50px;
-  font-size: 24px;
-  color: black; /* Text color set to black */
+  padding: 30px; 
+  font-size: 20px;
+  color: black; 
 }
 
-/* Custom Section Header Background */
+
 .bg-yellow {
-  background-color: yellow; /* Yellow background */
+  background-color: yellow; 
 }
 
 .text-black {
-  color: black; /* Text color set to black */
+  color: black; 
 }
 
 @media (max-width: 768px) {
@@ -19552,15 +19554,30 @@ body, html {
   }
 
   .contact-info h1 {
-    font-size: 30px;
+    font-size: 28px; 
   }
 
   .contact-section {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+    min-height: auto; 
     height: auto;
   }
+}
+
+/* reCAPTCHA Styles */
+.g-recaptcha {
+  margin-top: 20px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
 }
 
 
