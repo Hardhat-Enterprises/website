@@ -9,6 +9,12 @@
 <body>
     <h1>Feedback Page</h1>
 
+    {% if success %}
+        <p class="success">Thank you for your feedback!</p>
+    {% elif error %}
+        <p class="error">There was an error submitting your feedback. Please try again.</p>
+    {% endif %}
+
     <section>
         <h2>Survey</h2>
         <form method="post">
@@ -32,6 +38,20 @@
         <form method="post">
             {% csrf_token %}
             {{ feedback_form.as_p }}
+
+            <label for="rating">Rate your experience:</label>
+            <select name="rating" id="rating" required>
+                <option value="" disabled selected>Select a rating</option>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+            </select>
+
+            <label for="comments">Additional Comments:</label>
+            <textarea name="comments" id="comments" rows="4" cols="50" placeholder="Your comments..."></textarea>
+
             <button type="submit">Submit Feedback</button>
         </form>
     </section>
