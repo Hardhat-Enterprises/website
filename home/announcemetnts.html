@@ -7,16 +7,16 @@
     <style>
         /* General Styling */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background: #f5f5f5;
+            background: #f9f9f9;
             text-align: center;
         }
 
         /* Navigation Bar Styling */
         .navbar {
-            background-color: #333; /* Dark background for navbar */
+            background-color: #2c3e50;
             overflow: hidden;
             padding: 10px 0;
             position: fixed;
@@ -34,40 +34,99 @@
         }
 
         .navbar a:hover {
-            background-color: #575757; /* Slightly lighter gray on hover */
+            background-color: #34495e;
         }
 
-        /* Flash Message Styling */
+        /* Flash Announcement Banner */
         #flash-message {
             position: fixed;
-            top: 50px; /* Positioned below the navbar */
+            top: 50px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            max-width: 800px;
+            max-width: 900px;
             padding: 15px;
-            background-color: #1a73e8; /* Muted professional blue */
-            color: white; /* White text for contrast */
+            background: linear-gradient(90deg, #007bb5, #0099e6);
+            color: white;
             font-size: 1.2rem;
-            text-align: center;
+            text-align: left;
             z-index: 999;
-            border-radius: 5px;
-            display: none; /* Initially hidden */
-            animation: fadeInOut 10s linear forwards; /* Fade-in/out animation */
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Fade-in/out animation */
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
+        /* Search and Filter Section */
+        #search-container {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+        }
+
+        #search-bar {
+            display: none;
+            width: 200px;
+            padding: 8px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        #search-button {
+            background-color: white;
+            color: #007bb5;
+            border: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #search-button:hover {
+            background-color: #e6f4ff;
+        }
+
+        #search-results {
+            display: none;
+            text-align: left;
+            margin-top: 20px;
+            padding: 10px;
+            max-width: 600px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .category-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 5px 0;
+            color: #555;
+        }
+
+        li:not(:last-child) {
+            border-bottom: 1px solid #eee;
         }
 
         /* Main Content Styling */
         .content {
             padding: 20px;
-            padding-top: 100px; /* Ensure space for navbar and flash message */
+            padding-top: 120px;
         }
     </style>
 </head>
@@ -81,7 +140,16 @@
     </div>
 
     <!-- Flash Announcement Message -->
-    <div id="flash-message"></div>
+    <div id="flash-message">
+        <div id="announcement-text"></div>
+        <div id="search-container">
+            <input type="text" id="search-bar" placeholder="Search announcements..." oninput="filterAnnouncements()">
+            <button id="search-button" onclick="toggleSearch()">🔍 Search</button>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div id="search-results"></div>
 
     <!-- Main Website Content -->
     <div class="content">
@@ -90,42 +158,78 @@
     </div>
 
     <script>
+        // Proxy announcement data
+        const announcements = [
+            { message: "Don't miss the team meeting at 5 PM!", category: "Urgent" },
+            { message: "Server maintenance scheduled for tonight.", category: "General" },
+            { message: "Company outing next Saturday.", category: "Events" },
+            { message: "New HR policies have been updated.", category: "General" },
+            { message: "Fire drill planned for Friday afternoon.", category: "Urgent" }
+        ];
+
         /**
-         * Function to check for announcements.
-         * If announcements exist, displays them and hides after 10 seconds.
+         * Displays the latest announcement and hides everything after 10 seconds.
          */
         function showAnnouncements() {
-            const announcements = getAnnouncements(); // Fetch announcements dynamically
             const flashMessageElement = document.getElementById('flash-message');
+            const announcementText = document.getElementById('announcement-text');
 
-            if (announcements) {
-                // Show the announcement message
-                flashMessageElement.textContent = announcements;
-                flashMessageElement.style.display = 'block'; // Make it visible
+            if (announcements.length > 0) {
+                // Show the latest announcement
+                announcementText.textContent = announcements[0].message;
+                flashMessageElement.style.display = 'block';
 
-                // Automatically hide after 10 seconds
+                // Hide everything after 10 seconds
                 setTimeout(() => {
                     flashMessageElement.style.display = 'none';
-                }, 10000); // 10 seconds
-            } else {
-                // Hide the announcement if none exists
-                flashMessageElement.style.display = 'none';
+                    clearSearchResults();
+                }, 10000);
             }
         }
 
         /**
-         * Simulates fetching announcements from a server or database.
-         * Replace this with actual server calls or dynamic content.
+         * Toggles the visibility of the search bar.
          */
-        function getAnnouncements() {
-            // Example: Replace with actual logic to fetch announcements
-            const announcement = "Don't miss the team meeting at 5 PM!";
-            // const announcement = null; // Uncomment to test no announcements
-
-            return announcement;
+        function toggleSearch() {
+            const searchBar = document.getElementById('search-bar');
+            searchBar.style.display = searchBar.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Initialize the announcements on page load
+        /**
+         * Filters announcements based on user input and displays the results.
+         */
+        function filterAnnouncements() {
+            const query = document.getElementById('search-bar').value.toLowerCase();
+            const searchResults = document.getElementById('search-results');
+
+            const filtered = announcements.filter(item => item.message.toLowerCase().includes(query));
+            searchResults.style.display = 'block';
+
+            if (filtered.length > 0) {
+                searchResults.innerHTML = `
+                    ${filtered.map(item => `
+                        <p class="category-label">${item.category}</p>
+                        <ul>
+                            <li>${item.message}</li>
+                        </ul>
+                    `).join('')}`;
+            } else {
+                searchResults.innerHTML = '<p>No announcements found.</p>';
+            }
+        }
+
+        /**
+         * Clears the search results.
+         */
+        function clearSearchResults() {
+            const searchResults = document.getElementById('search-results');
+            const searchBar = document.getElementById('search-bar');
+            searchResults.style.display = 'none';
+            searchBar.style.display = 'none';
+            searchBar.value = '';
+        }
+
+        // Initialize announcements on page load
         document.addEventListener('DOMContentLoaded', showAnnouncements);
     </script>
 </body>
