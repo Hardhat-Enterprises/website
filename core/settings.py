@@ -16,6 +16,9 @@ from dotenv import load_dotenv
 
 
 from django.contrib.messages import constants as messages
+# Import for CORS headers
+from corsheaders.defaults import default_headers
+
 load_dotenv()  # take environment variables from .env.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -65,10 +68,14 @@ INSTALLED_APPS = [
     "django_extensions",
 
     'home',
-    'theme_pixel'
+    'theme_pixel',
+    # CORS Headers app
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    # CORS middleware must come before commonmiddleware
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -242,4 +249,18 @@ SECURE_HSTS_PRELOAD = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8000/',  # Website localhost server url
+    'https://hardhatwebdev2024.pythonanywhere.com/',    # Frontend url
+]
+
+CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'content-type',
+    'authorization',
+]
 
