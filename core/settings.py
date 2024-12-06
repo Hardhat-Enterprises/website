@@ -66,7 +66,9 @@ INSTALLED_APPS = [
     'django_cron',
 
     'home',
-    'theme_pixel'
+    'theme_pixel',
+    'rest_framework',  
+    'drf_yasg',        
 ]
 
 MIDDLEWARE = [
