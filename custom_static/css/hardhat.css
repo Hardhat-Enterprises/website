@@ -19599,3 +19599,41 @@ blockquote {
   
   }
   
+  .recently-viewed-sidebar {
+    position: fixed;
+    top: 150px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 200px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+.recently-viewed-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#recent-pages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#recent-pages-list li {
+    margin-bottom: 5px;
+}
+
+#recent-pages-list a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+#recent-pages-list a:hover {
+    text-decoration: underline;
+}

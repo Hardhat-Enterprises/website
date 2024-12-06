@@ -69,7 +69,8 @@
     
     <!-- Pixel CSS -->
     <link type="text/css" href="{% static 'css/hardhat.css' %}?v=2" rel="stylesheet">
-    
+    <link rel="stylesheet" href="{% static 'css/hardhat.css' %}">
+
 </head>
 
 <body>
@@ -81,6 +82,13 @@
   {% endblock header %}
 
   {% block content %}{% endblock content %}
+   <!-- Recently Viewed Pages Sidebar -->
+   <div class="recently-viewed-sidebar">
+    <h5 class="recently-viewed-title">Recently Viewed Pages</h5>
+    <ul id="recent-pages-list">
+        <!-- Pages will be dynamically added here -->
+    </ul>
+</div>
 
   {% block footer %}
   
@@ -126,6 +134,8 @@ integrity="sha384-KAUcUASKfGZ0sxENVFRiH12jtpvd9SsVpgzvYdvv8ZMLqB99G3gX3DAts418wz
 crossorigin="anonymous"></script>
 <!--Internal script no SRI needed-->
 <script src="{% static 'backToTop.js' %}"></script>
+<script src="{% static 'js/last-viewed.js' %}" defer></script>
+<script src="{% static 'js/visit-counter.js' %}" defer></script>
 
 
 

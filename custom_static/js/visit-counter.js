@@ -1,23 +1,24 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const visitCounterElement = document.getElementById('visit-counter');
+document.addEventListener('DOMContentLoaded', () => {
+    // Get the page path
+    const pagePath = window.location.pathname;
 
-    // Get the current page URL as a unique identifier
-    const pageKey = `visitCount_${window.location.pathname}`;
+    // Retrieve visits data from localStorage
+    const visitsData = JSON.parse(localStorage.getItem('pageVisits')) || {};
 
-    // Retrieve the visit count for the current page
-    let visitCount = localStorage.getItem(pageKey);
-
-    if (visitCount) {
-        visitCount = parseInt(visitCount) + 1;
+    // Increment the visit count for the current page
+    if (!visitsData[pagePath]) {
+        visitsData[pagePath] = 1;
     } else {
-        visitCount = 1; // First visit
+        visitsData[pagePath] += 1;
     }
 
-    // Update localStorage with the new count
-    localStorage.setItem(pageKey, visitCount);
+    // Update localStorage with the new data
+    localStorage.setItem('pageVisits', JSON.stringify(visitsData));
 
-    // Display the visit count
+    // Display the visit count on the page
+    const visitCounterElement = document.getElementById('visit-counter');
     if (visitCounterElement) {
-        visitCounterElement.textContent = visitCount;
+        visitCounterElement.textContent = visitsData[pagePath];
     }
 });
+
