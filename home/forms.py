@@ -69,6 +69,52 @@ class RegistrationForm(UserCreationForm):
     # .......................................
 
 
+class ClientRegistrationForm(UserCreationForm):
+    # Newly added...........................
+    email = forms.EmailField(
+        label=_("Business Email"),
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+    )
+    # .......................................
+
+    business_name = forms.CharField(
+        label=_("Business Name"),
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
+    )
+
+    password1 = forms.CharField(
+        label=_("Your Password"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+    )
+    password2 = forms.CharField(
+        label=_("Confirm Password"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
+    )
+    # Newly added................................................
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        # Define the regex pattern for the required password format
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+        
+        if not re.match(pattern, password):
+            raise ValidationError(
+                _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
+            )
+    # ...........................................................
+
+    # Newly added...........................
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # Define the regex pattern for the required email format
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        
+        if not re.match(pattern, email):
+            raise ValidationError(_("Email must be match with your Deakin email."))
+        
+        return email
+    # .......................................
+
+
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', )

@@ -35,7 +35,7 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 
 from home.models import Announcement, JobApplication
@@ -347,6 +347,34 @@ def register(request):
  
     context = { 'form': form }
     return render(request, 'accounts/sign-up.html', context)
+
+def register_client(request):
+    form = ClientRegistrationForm()
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        business_name = request.POST.get('business_name')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        form = ClientRegistrationForm(request.POST)
+       
+        if form.is_valid():
+            form.save()
+            otp = random.randint(100000, 999999)
+            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
+            print("Account created successfully! An OTP was sent to your email. Check!")
+            messages.success(request, "Account created successfully!")
+            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
+            # return redirect("verify-email", username=request.POST['first_name'])
+        else:
+            print("Registration failed!")
+    else:
+        form = ClientRegistrationForm()
+ 
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up-client.html', context)
  
 @csrf_exempt
 def VerifyOTP(request):
