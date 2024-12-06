@@ -51,6 +51,9 @@ urlpatterns = [
 
 
     # path('contact-central/', views.Contact_central, name='contact-central'),
+     path('appattack/join/', views.appattack_join, name='appattack_join'),
+      path('form_success/', views.form_success, name='form_success'),
+    
     
     
     # Search result page
@@ -80,7 +83,7 @@ urlpatterns = [
 
     path('feedback/', views.feedback, name='feedback'),
 
-] 
+
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
@@ -91,8 +94,9 @@ urlpatterns = [
     path('feedback/', views.feedback_view, name='feedback'),
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
 
-
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
 

@@ -7,6 +7,7 @@ from .models import (
     Skill,
     Progress,
     Contact,
+    ContactSubmission,
 
     Webpage,
     DDT_contact,
@@ -77,6 +78,11 @@ class CyberChallengeAdmin(admin.ModelAdmin):
 @admin.register(UserChallenge)
 class UserChallengeAdmin(admin.ModelAdmin):
     list_display = ['user', 'challenge', 'completed', 'score']
+
+@admin.register(ContactSubmission)
+class ContactSubmissionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'first_name', 'last_name', 'email', 'message') 
+    
     
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):
@@ -103,6 +109,8 @@ admin.site.register(Feedback, FeedbackAdmin)
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(Projects_join_us)
+
+
 
 
 

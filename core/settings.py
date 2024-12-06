@@ -15,6 +15,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
+
+
 from django.contrib.messages import constants as messages
 load_dotenv()  # take environment variables from .env.
 
@@ -47,6 +49,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://localhost:5085']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 # Application definition
 
@@ -86,7 +89,7 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [HOME_TEMPLATES],
+        "DIRS": [BASE_DIR / HOME_TEMPLATES],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,7 +130,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 

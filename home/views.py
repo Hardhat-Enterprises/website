@@ -16,6 +16,10 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
+from .models import ContactSubmission
+from django.utils.html import strip_tags
+
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback
 from django.contrib.auth import get_user_model
@@ -58,13 +62,13 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 from django.core.paginator import Paginator
 from .models import BlogPost
 from django.template.loader import render_to_string
- 
+
 #from .models import Student, Project, Progress
  
 from .forms import FeedbackForm
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
- 
+
 # Regular Views
  
  
@@ -89,9 +93,57 @@ def blog(request):
  
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
+
+def form_success(request):
+    return render(request, 'emails/form_success.html')
  
 def appattack_join(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        if not first_name or not last_name or not email or not message:
+            messages.error(request, "All fields are required.")
+            return render(request, 'pages/appattack/join.html')
+
+        # Save the data
+        ContactSubmission.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            message=message
+        )
+
+        # Prepare and send email
+        try:
+            subject = "Thank you for contacting us!"
+            html_message = render_to_string('emails/contact_confirmation.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'message': message,
+            })
+            plain_message = strip_tags(html_message)
+
+            send_mail(
+                subject=subject,
+                message=plain_message,
+                from_email='hardhatcompanywebsite@gmail.com',
+                recipient_list=[email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            messages.success(request, "Your message has been received, and a confirmation email has been sent.")
+        except Exception as e:
+            print(f"Email sending failed: {e}")
+            messages.error(request, "Your message was received, but we couldn't send a confirmation email.")
+
+        return redirect('form_success')
+
     return render(request, 'pages/appattack/join.html')
+
+
  
 def products_services(request):
     return render(request, 'pages/malware_visualization/products_and_services.html')
@@ -521,11 +573,13 @@ def update_progress(request, progress_id):
  
 def contact(request):
     if request.method=='POST':
-        name=request.POST['name']
+        name=request.POST.g['name']
         email=request.POST['email']
         message=request.POST['message']
         contact=Contact.objects.create(name=name, email=email, message=message)
         messages.success(request,'The message has been received')
+
+        
     return render(request,'pages/index.html')
  
 def Contact_central(request):
@@ -535,7 +589,19 @@ def Contact_central(request):
         message=request.POST['message']
         contact=Contact.objects.create(name=name, email=email, message=message)
         messages.success(request,'The message has been received')
+
+        try:
+            send_mail(
+                subject=f"Thank you, {name}, for contacting us!",
+                message=f"Dear {name},\n\nThank you for your message:\n\n\"{message}\"\n\nWe will get back to you shortly.\n\nBest regards,\nYour Team",
+                from_email='hardhatcompanywebsite@gmail.com',
+                recipient_list=[email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            messages.error(request, 'Failed to send confirmation email.')
     return render(request,'pages/Contactus.html')
+
  
  
 # Blog
@@ -790,3 +856,5 @@ def blog_list(request):
     # AJAX request: send paginated posts as JSON
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
+
+
