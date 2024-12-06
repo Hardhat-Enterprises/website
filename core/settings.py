@@ -253,8 +253,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # CORS configuration
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8000/',  # Website localhost server url
-    'https://hardhatwebdev2024.pythonanywhere.com/',    # Frontend url
+    'http://127.0.0.1:8000',  # Website localhost server url
+    'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
 ]
 
 CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
