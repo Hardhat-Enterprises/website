@@ -2,14 +2,13 @@
 {% load static %}
 {% block content %}
 
-
-
 <main>
   {% include 'includes/pre-loader.html' %}
+  
   <!-- Section -->
   <section class="section-header bg-tertiary text-black">
     <div class="container">
-      <div class="row flex-lg-row-reverse align-items-center ">
+      <div class="row flex-lg-row-reverse align-items-center">
         <div class="col-10 col-sm-8 col-lg-6 contact-image">
           <img src="{% static 'assets/img/pages/home/talking.png' %}" alt="contact image" class="img-fluid">
         </div>
@@ -33,36 +32,40 @@
       </div>
     </div>
   </section>
+  
+  <!-- Contact Form Section -->
   <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/form-image.jpg' %}">
     <div class="container contact-container">
-      <div class="ustify-content-center">
-            <h1 class="text-center">Leave us a message</h1>
-            <form action="/contact-central" method="post">
-              <div class="form-row">
-                <div class="form-group col-md-12">
-                  <label for="name">Name</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required />
-              </div>
-              <div class="form-group">
-                <label for="message">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your message"></textarea>
-              </div>
-              <div class="pt-3 text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-              {% csrf_token %}
-            </form>
+      <div class="justify-content-center">
+        <h1 class="text-center">Leave us a message</h1>
+        <form action="/contact-central" method="post">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required />
+            </div>
           </div>
-       
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your message"></textarea>
+          </div>
+          <div class="pt-3 text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+          {% csrf_token %}
+        </form>
       </div>
     </div>
   </section>
-  
+
+
+  <footer class="footer bg-dark text-white text-center py-3">
+    <p>&copy; 2024 Hardhat Enterprises | All Rights Reserved</p>
+  </footer>
 </main>
 
 {% endblock content %}
