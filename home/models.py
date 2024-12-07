@@ -15,7 +15,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
-
 from django.utils.text import slugify
 
 import secrets
@@ -409,4 +408,11 @@ class JobApplication(models.Model):
     def __str__(self):
         return f"{self.name} - {self.job.title}"
 
+#Leaderboard
+class LeaderBoardTable(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=200)
+    total_points = models.IntegerField(default=0)
     
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
