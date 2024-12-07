@@ -17,3 +17,6 @@ env
 venv/
 env/
 media/
+activity.log
+django_activity.log
+
