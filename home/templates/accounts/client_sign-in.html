@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block header %}
-  {% include 'includes/navigation.html' %}
+{% include 'includes/navigation.html' %}
 {% endblock header %}
 
 {% block content %}
@@ -12,7 +12,7 @@
     {% include 'includes/pre-loader.html' %}
 
     <!-- Section -->
-    <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/login/client-bg.svg' %}">
+    <section id="client-signin-section" class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/login/client-bg.svg' %}">
         <div class="container mb mt-md-6">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
@@ -28,22 +28,22 @@
                             <!-- Form -->
                             <!-- Email Input -->
                           <div class="mb-4">
-                              <label for="email">Personal Email</label>
+                              <label for="email">Deakin email address</label>
                               <div class="input-group">
                                   <span class="input-group-text" id="basic-addon4">
                                       <span class="fas fa-user"></span>
                                   </span>
-                                  <input type="email" class="form-control" placeholder="example@company.com" id="email" name="email" required>
+                                  <input type="email" class="form-control" placeholder="example@deakin.edu.au" id="email" name="email" required>
                               </div>
                           </div>
                           <!-- passport Input -->
                           <div class="mb-4">
-                            <label for="email">Passport</label>
+                            <label for="password">Password</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon4">
                                     <span class="fas fa-unlock-alt"></span>
                                 </span>
-                                <input type="email" class="form-control" placeholder="Password" id="email" name="email" required>
+                                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required>
                             </div>
                         
                             <!-- End of Form -->
@@ -59,7 +59,7 @@
                             </div>
                         
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Sign in</button>
+                                <button type="submit" class="btn btn-warning btn-primary">Sign in</button>
                             </div>
                         </form>
 
