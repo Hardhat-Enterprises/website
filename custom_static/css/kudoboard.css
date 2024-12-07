@@ -1,0 +1,95 @@
+.whiteboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center-align the content horizontally */
+    justify-content: center; /* Center-align the content vertically */
+    height: 100vh; /* Full viewport height */
+    padding: 20px;
+    text-align: center; /* Ensure text inside elements is centered */
+  }
+  
+  .whiteboard {
+    width: 80%; /* Set a width for the whiteboard */
+    min-height: 300px; /* Set a minimum height for the whiteboard */
+    border: 2px solid #ccc; /* Border for the whiteboard */
+    background-color: #f9f9f9; /* Light background for the whiteboard */
+    margin-bottom: 20px; /* Space between whiteboard and review text area */
+    position: relative;
+    overflow-y: auto;
+  }
+  
+  textarea {
+    width: 80%; /* Set width for the textarea */
+    min-height: 50px; /* Minimum height for the text area */
+    font-size: 16px; /* Set a larger font size */
+    padding: 10px;
+    margin-bottom: 15px; /* Space below the textarea */
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px; /* Increased font size for the button */
+    border-radius: 4px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary {
+    background-color: #03a9f4;
+    color: #fff;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0288d1;
+  }
+  
+  .btn-secondary {
+    background-color: #e91e63;
+    color: #fff;
+    border: none;
+  }
+  
+  .btn-secondary:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #d81b60;
+  }
+  
+  /* Sticky Notes Styling */
+  .sticky-note {
+    display: inline-block;
+    padding: 15px;
+    margin: 10px;
+    font-size: 16px; /* Increased font size for sticky notes */
+    border-radius: 4px;
+    max-width: 200px;
+    word-wrap: break-word; /* Allow text to wrap within the sticky note */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: move; /* Add a move cursor for drag-and-drop functionality */
+  }
+
+  #submitReview, #clearReviews
+  {
+        border: none;
+        border-radius: 10px;
+        height: 50px;
+        width: 200px;
+        font-size: 20px;
+  }
+  #submitReview:hover
+  {
+        background-color: #ffc107;
+        color: black;
+  }
+  #clearReviews:hover
+  {
+        background-color: #1c243b;
+        color: white;
+  }
