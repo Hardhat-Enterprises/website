@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'django_cron',
 
     'home',
     'theme_pixel'
@@ -242,4 +243,9 @@ SECURE_HSTS_PRELOAD = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Django-cron configuration class
+CRON_CLASSES = [
+    'home.tasks.CleanStaleRecordsCronJob', 
+]
 
