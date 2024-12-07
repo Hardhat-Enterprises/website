@@ -7168,7 +7168,7 @@ textarea.form-control-lg {
   margin-right: 0.25rem !important; }
 
 .me-2 {
-  margin-right: 0.5rem !important; }
+  margin-right: 0.2rem !important; }
 
 .me-3 {
   margin-right: 1rem !important; }
@@ -19503,6 +19503,10 @@ blockquote {
   .contact-image img {
     width: 80%; 
   }
+  .section-header {
+    position: relative;
+    padding-top: 14rem;
+    padding-bottom: 3rem; }
 }
 
 
@@ -19598,4 +19602,33 @@ blockquote {
     }
 
 
-
+    .challenge-category-container {
+      background-color: #f7e041;
+      min-height: 100vh;
+      padding: 40px 20px;
+  }
+  
+  .challenge-card {
+      background-color: #ff8c00;
+      border-radius: 8px;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .challenge-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .btn-light {
+      background-color: white;
+      color: #ff8c00;
+      border: 1px solid #ff8c00;
+  }
+  
+  .btn-light:hover {
+      background-color: #ff8c00;
+      color: white;
+  }
+  
