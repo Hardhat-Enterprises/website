@@ -6,84 +6,94 @@
 {% endblock header %}
 
 {% block content %}
-    <main>
+<main>
+    {% include 'includes/pre-loader.html' %}
 
-        {% include 'includes/pre-loader.html' %}
-
-        <!-- Section -->
-        <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/form-image.jpg' %}">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
-                            {% if request.user.is_authenticated %}
-                                {% if student_exists %}
-                                    <div class="text-center text-md-center mb-4 mt-md-0">
-                                        <h1 class="mb-0 h3">You have already submitted your preferences! </h1>
-                                    </div>
-                                    <span class="fw-normal text-center">
-                                        Please wait to be allocated a project <br>
-                                        <a href="{% url 'index' %}" class="fw-bold text-underline">Go back!</a>
-                                    </span>
-                                {% else %}
-                                    <div class="text-center text-md-center mb-4 mt-md-0">
-                                        <h1 class="mb-0 h3">Join a project</h1>
-                                    </div>
-                                    <form method="post" action="{% url 'join_us' %}">
-                                        {% csrf_token %}
-                                        <!-- Form -->
-                                        {% for field in form %}
-                                            <div class="form-group mb-4">
-                                                <label>{{ field.label }}</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-text" id="basic-addon3">
-                                                        <span class="fas 
-                                                            {% if field.name == 'id' %} 
-                                                                fa-id-badge
-                                                            {% elif field.name == 'year'  %}
-                                                                fa-calendar
-                                                            {% elif field.name == 'trimester'  %}
-                                                                fa-calendar-week
-                                                            {% elif field.name == 'unit'  %}
-                                                                fa-book 
-                                                            {% elif field.name == 'course' %}
-                                                                fa-flag-checkered
-                                                            {% else %} 
-                                                                fa-tasks
-                                                            {% endif %}">
-                                                        </span>
-                                                    </span>
-                                                    {{ field }}
-                                                </div>  
-                                            </div>
-                                            <span class="text-danger"> {{ field.errors }} </span>
-                                        {% endfor %}
-                                        <!-- End of Form -->
-                                        <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary">Submit Preferences</button>
-                                        </div>
-                                    </form>
-                                {% endif %}
+    <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/form-image.jpg' %}">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 d-flex align-items-center justify-content-center">
+                    <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
+                        {% if request.user.is_authenticated %}
+                            {% if student_exists %}
+                                <div class="text-center text-md-center mb-4 mt-md-0">
+                                    <h1 class="mb-0 h3">You have already submitted your preferences!</h1>
+                                </div>
+                                <span class="fw-normal text-center">
+                                    Please wait to be allocated a project <br>
+                                    <a href="{% url 'index' %}" class="fw-bold text-underline">Go back!</a>
+                                </span>
                             {% else %}
                                 <div class="text-center text-md-center mb-4 mt-md-0">
-                                    <h1 class="mb-0 h3">Please Sign In to join a project</h1>
+                                    <h1 class="mb-0 h3">Join a project</h1>
                                 </div>
-                                <span class="fw-normal">
-                                    Already have an account?
-                                    <a href="{% url 'login' %}" class="fw-bold text-underline">Login here</a>
-                                </span>
-                                <br>
-                                <span class="fw-normal">
-                                    Not registered?
-                                    <a href="{% url 'register' %}" class="fw-bold text-underline">Create account</a>
-                                </span>
+                                {% if form_submitted %}
+                                    <div class="alert alert-success" role="alert">
+                                        Your preferences have been submitted successfully!
+                                    </div>
+                                {% endif %}
+                                <form id="joinForm" method="post" action="{% url 'join_us' %}" onsubmit="showLoader()">
+                                    {% csrf_token %}
+                                    <!-- Form -->
+                                    {% for field in form %}
+                                        <div class="form-group mb-4">
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon3">
+                                                    <span class="fas 
+                                                        {% if field.name == 'id' %} 
+                                                            fa-id-badge
+                                                        {% elif field.name == 'year'  %}
+                                                            fa-calendar
+                                                        {% elif field.name == 'trimester'  %}
+                                                            fa-calendar-week
+                                                        {% elif field.name == 'unit'  %}
+                                                            fa-book 
+                                                        {% elif field.name == 'course' %}
+                                                            fa-flag-checkered
+                                                        {% else %} 
+                                                            fa-tasks
+                                                        {% endif %}">
+                                                    </span>
+                                                </span>
+                                                {{ field }}
+                                            </div>  
+                                            <span class="text-danger"> {{ field.errors }} </span>
+                                        </div>
+                                    {% endfor %}
+                                    <!-- End of Form -->
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">Submit Preferences</button>
+                                    </div>
+                                </form>
+                                <div id="loader" style="display:none;">Loading...</div>
                             {% endif %}
-                        </div>
+                        {% else %}
+                            <div class="text-center text-md-center mb-4 mt-md-0">
+                                <h1 class="mb-0 h3">Please Sign In to join a project</h1>
+                            </div>
+                            <span class="fw-normal">
+                                Already have an account?
+                                <a href="{% url 'login' %}" class="fw-bold text-underline">Login here</a>
+                            </span>
+                            <br>
+                            <span class="fw-normal">
+                                Not registered?
+                                <a href="{% url 'register' %}" class="fw-bold text-underline">Create account</a>
+                            </span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
+
+<script>
+    function showLoader() {
+        document.getElementById('loader').style.display = 'block';
+    }
+</script>
 
 {% endblock content %}
 {% block footer %}{% endblock footer %}
