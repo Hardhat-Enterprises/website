@@ -68,6 +68,15 @@ CSRF_COOKIE_SAMESITE = 'Strict'
 DEBUG = True
 
 
+#Limit request header sizes and body lenghts
+#Limit number of form fileds
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000 
+
+# Limit max upload memory size 10 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
