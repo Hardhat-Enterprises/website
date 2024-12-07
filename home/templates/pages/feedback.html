@@ -42,6 +42,10 @@
                 {% for feedback in feedbacks %}
                 <li>
                     <strong>{{ feedback.name }}</strong>: {{ feedback.feedback }}
+                    <form method="post" action="{% url 'delete_feedback' feedback.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </li>
                 {% endfor %}
             </ul>

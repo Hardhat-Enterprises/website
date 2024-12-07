@@ -16,8 +16,6 @@ import nh3
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 from .validators import xss_detection
 
-
-
 logger = logging.getLogger(__name__)
 
 User = get_user_model()
@@ -310,6 +308,16 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+        
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
 
 #Newly Added
 class ContactForm(forms.Form):

@@ -406,7 +406,7 @@ class JobApplication(models.Model):
     applied_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.message[:50] 
+        return f"{self.name} - {self.job.title}"
 
 class Experience(models.Model):
     name = models.CharField(max_length=100)
