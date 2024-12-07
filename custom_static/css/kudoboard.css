@@ -87,7 +87,6 @@
   }
   #submitReview:hover, #clearReviews:hover
   {
-        /*background-color: #ffc107;*/
         background-color: #1c243b;
         color: white;
   }
