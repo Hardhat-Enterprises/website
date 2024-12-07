@@ -16,7 +16,7 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, #Feedback 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
 
 from django.contrib.auth import get_user_model
 from .models import User
