@@ -44,10 +44,6 @@ urlpatterns = [
 
     # path('contact-central/', views.Contact_central, name='contact-central'),
     
-    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
-    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
-    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
-    path('dashboard/', views.dashboard, name='dashboard'),
     
     # Search result page
     path('SearchResults/', views.SearchResults, name='pages/search-results'),
