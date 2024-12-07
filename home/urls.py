@@ -33,6 +33,16 @@ urlpatterns = [
     # path('contact-central/', views.Contact_central, name='contact-central'),
     path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
     path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+
+    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
+    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
+    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+
+
+
+    # path('contact-central/', views.Contact_central, name='contact-central'),
     
     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
@@ -54,6 +64,12 @@ urlpatterns = [
     path("careers/", list_careers , name="career-list"),
     path("careers/<int:id>/", career_detail , name="career-detail"),
     path("careers/<int:id>/apply", career_application , name="career-application"),
+
+    # Login
+    path('accounts/register/', views.signup, name='signup'),
+
+
+    # Email OTP
     
     
     # Email OTP
