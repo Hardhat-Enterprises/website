@@ -66,6 +66,8 @@ from .forms import FeedbackForm
 # Create your views here.
  
 # Regular Views
+def client_sign_in(request):
+    return render(request, 'accounts/client_sign-in.html') 
 
 #For Contact Form
 import nh3
