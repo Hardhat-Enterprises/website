@@ -73,6 +73,8 @@ urlpatterns = [
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
+    
     # Feedback (duplicate removed)
     path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
 ]

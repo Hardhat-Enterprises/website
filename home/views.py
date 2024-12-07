@@ -72,6 +72,11 @@ import nh3
 import logging
 from .validators import xss_detection
 from .models import Contact
+
+#For LeaderBoard
+from django.db.models import Sum
+from .models import LeaderBoardTable, UserChallenge
+from django.contrib.auth.models import User
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -892,3 +897,21 @@ def career_application(request,id):
         "complete":complete
     }
     return render(request,"careers/application-form.html",context)
+
+def leaderboard(request):
+    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
+    print(leaderboard_entry)
+    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+
+def leaderboard_update():
+    LeaderBoardTable.objects.all().delete()
+    users = User.objects.all()
+    for user in users:
+        challenges_category = (UserChallenge.objects.filter(user=user, completed=True).values('category_challenges').annotate(total_points=Sum('score')))
+
+        for categories in challenges_category:
+            category = categories['category_challenges']
+            total_points = categories['total_points'] or 0
+
+            if total_points > 0:
+                LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
