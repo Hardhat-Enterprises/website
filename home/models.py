@@ -27,6 +27,18 @@ from django.db import models
 
 import nh3
 
+class APIModel(models.Model):
+    name = models.CharField(max_length=255)
+    field_name = models.CharField(max_length=255, default="Default Value")
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+   
+    def __str__(self):
+        return self.field_name
+    
 class User(AbstractBaseUser, PermissionsMixin):
     """
     A User model with admin-compliant permissions.
