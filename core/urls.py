@@ -32,6 +32,7 @@ urlpatterns = [
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
+    path('plan/', views.package_plan, name='package_plan'),
     
     # blog
     #path('admin/', admin.site.urls),

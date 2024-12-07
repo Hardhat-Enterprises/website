@@ -100,6 +100,7 @@ class ClientRegistrationForm(UserCreationForm):
             raise ValidationError(
                 _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
             )
+        return password
     # ...........................................................
 
     # Newly added...........................
@@ -109,7 +110,7 @@ class ClientRegistrationForm(UserCreationForm):
         pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         
         if not re.match(pattern, email):
-            raise ValidationError(_("Email must be match with your Deakin email."))
+            raise ValidationError(_("Email must be valid email."))
         
         return email
     # .......................................

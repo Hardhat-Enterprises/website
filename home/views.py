@@ -361,12 +361,8 @@ def register_client(request):
        
         if form.is_valid():
             form.save()
-            otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
-            print("Account created successfully! An OTP was sent to your email. Check!")
-            messages.success(request, "Account created successfully!")
-            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
+            
+            return redirect("package_plan")
             # return redirect("verify-email", username=request.POST['first_name'])
         else:
             print("Registration failed!")
@@ -501,7 +497,8 @@ class UserPasswordChangeView(PasswordChangeView):
 def resources_view(request):
     return render(request, 'pages/resources.html.')
    
- 
+def package_plan(request):
+    return render(request, 'pages/package-plan.html')
  
 # Chart Views
  

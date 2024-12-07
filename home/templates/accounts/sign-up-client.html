@@ -135,7 +135,7 @@
       const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
 
       emailField.addEventListener("input", function() {
-          const emailPattern = /@deakin\.edu\.au$/;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           const emailValue = emailField.value;
 
           if (emailPattern.test(emailValue)) {
@@ -146,7 +146,7 @@
               emailIcon.classList.add("fa-check-circle");
               emailIcon.style.color = "green";
           } else {
-              emailErrorMessage.textContent = "Email must match your Deakin email address";
+              emailErrorMessage.textContent = "It should be valid email address";
               emailField.classList.remove("is-valid");
               emailField.classList.add("is-invalid");
               emailIcon.classList.remove("fa-check-circle");
