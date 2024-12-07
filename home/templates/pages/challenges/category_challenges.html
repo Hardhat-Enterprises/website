@@ -2,25 +2,92 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4">{{ category|title }} Challenges</h1>
-    <a href="{% url 'challenge_list' %}" class="btn btn-secondary mb-4">Back to Categories</a>
-    <div class="row">
-        {% for challenge in challenges %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ challenge.title }}</h5>
-                        <p class="card-text">{{ challenge.description|truncatewords:20 }}</p>
-                        <p>
-                            <span class="badge bg-primary">{{ challenge.get_difficulty_display }}</span>
-                            <span class="badge bg-info">{{ challenge.points }} points</span>
-                        </p>
-                        <a href="{% url 'challenge_detail' challenge.id %}" class="btn btn-primary mt-auto">Take Challenge</a>
+<p></p>
+<div style="background-color: #f7e041; min-height: 100vh; padding: 40px 20px;">
+    <div class="container py-5">
+        <h1 class="text-center mb-4" style="color: #333;">{{ category|title }} Challenges</h1>
+        <a href="{% url 'challenge_list' %}" class="btn btn-dark mb-4" 
+           style="background-color: #333; color: #fff; border: none; padding: 10px 20px; text-transform: uppercase;">
+            Back to Categories
+        </a>
+        <div class="row">
+            {% for challenge in challenges %}
+                <div class="col-md-4 mb-4">
+                    <div style="background-color: #ff8c00; border-radius: 8px; color: white; padding: 20px; 
+                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; 
+                                border: 3px solid black; min-height: 220px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h5 style="margin-bottom: 15px; font-size: 18px;">
+                                {{ challenge.title }}
+                                {% if challenge.id in completed_challenges %}
+                                    <span style="color: #28a745;">&#10004;</span>
+                                {% endif %}
+                            </h5>
+                            <p style="margin-bottom: 15px; font-size: 14px;">
+                                {{ challenge.description|truncatewords:20 }}
+                            </p>
+                        </div>
+                        <div>
+                            <span class="difficulty-badge 
+                                {% if challenge.get_difficulty_display == 'Easy' %}
+                                    easy
+                                {% elif challenge.get_difficulty_display == 'Medium' %}
+                                    medium
+                                {% elif challenge.get_difficulty_display == 'Hard' %}
+                                    hard
+                                {% else %}
+                                    default
+                                {% endif %}">
+                                {{ challenge.get_difficulty_display }}
+                            </span>
+                            <span style="background-color: #17a2b8; color: white; padding: 5px 10px; 
+                                         border-radius: 4px; font-size: 12px;">
+                                {{ challenge.points }} points
+                            </span>
+                        </div>
+                        <a href="{% url 'challenge_detail' challenge.id %}" 
+                           style="background-color: white; color: #ff8c00; border: 1px solid #ff8c00; 
+                                  padding: 10px 20px; text-transform: capitalize; display: block; text-align: center; 
+                                  border-radius: 4px; transition: background-color 0.2s, color 0.2s; margin-top: 10px;"
+                           onmouseover="this.style.backgroundColor='#ff8c00'; this.style.color='white';"
+                           onmouseout="this.style.backgroundColor='white'; this.style.color='#ff8c00';">
+                            Take Challenge
+                        </a>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 </div>
+
+<script>
+</script>
+
+<style>
+    .difficulty-badge {
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: white;
+        font-size: 12px;
+        margin-right: 8px; 
+        margin-bottom: 5px; 
+    }
+
+    .difficulty-badge.easy {
+        background-color: #28a745; 
+    }
+
+    .difficulty-badge.medium {
+        background-color: #ffc107; 
+        color: black;
+    }
+
+    .difficulty-badge.hard {
+        background-color: #dc3545;
+    }
+
+    .difficulty-badge.default {
+        background-color: #6c757d; 
+    }
+</style>
 {% endblock %}

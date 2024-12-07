@@ -108,6 +108,25 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'xss_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'xss_attempts.log',
+        },
+    },
+    'loggers': {
+        'xss_logger': {
+            'handlers': ['xss_file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
+
 ROOT_URLCONF = "core.urls"
 
 HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
@@ -115,7 +134,7 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [HOME_TEMPLATES],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
