@@ -96,7 +96,12 @@ INSTALLED_APPS = [
 
     'home',
     'theme_pixel',
+
+    "django_ratelimit"
+
+
     'corsheaders',
+
 ]
 
 MIDDLEWARE = [
@@ -110,6 +115,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "home.ratelimit_middleware.GlobalLockoutMiddleware"
 ]
 
 LOGGING = {
@@ -258,6 +264,24 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',  # Default Memcached server address
+    }
+}
+
+RATELIMIT_ENABLE = True
+RATELIMIT_VIEW = 'django_ratelimit.ratelimit_view'
+RATELIMIT_USE_CACHE = 'default'
+
+RATELIMIT_SETTINGS = {
+    'login': {
+        'rate': '5/m',  # 5 attempts per minute
+        'block_expiration': 60,  # block for 1 minute after 5 attempts
+    },
+}
 
 # Prevent MIME type sniffing
 SECURE_CONTENT_TYPE_NOSNIFF = True
