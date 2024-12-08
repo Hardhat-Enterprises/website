@@ -1,24 +1,43 @@
+{% load static %}  
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rate Limit Exceeded</title>
+    <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}"> 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif; /* Use the same font as your website */
             text-align: center;
-            background-color: #f4f4f4;
             padding: 50px;
             position: relative;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
+            margin: 0; /* Remove default margin */
+        }
+        header {
+            background-color: black; /* Black header */
+            color: white; /* White text */
+            padding: 10px;
+            display: flex;
+            flex-direction: column; /* Stack logo and button vertically */
+            align-items: center; /* Center align items */
+            width: 100%; /* Full width */
+            position: fixed; /* Fix header at the top */
+            top: 0; /* Align to the top */
+            left: 0; /* Align to the left */
+            z-index: 1000; /* Ensure it stays on top */
+            padding: 20px 0; /* Add padding to the top and bottom */
         }
         h1 {
-            color: #e44d26;
+            color: #e44d26; /* Heading color */
+            margin-top: 100px; /* Space for fixed header */
         }
         #timer {
             font-size: 24px;
             font-weight: bold;
-            color: #221d1c;
+            color: #221d1c; /* Timer color */
         }
         .message {
             margin: 20px 0;
@@ -30,8 +49,8 @@
             display: inline-block;
             padding: 10px 20px;
             margin-top: 20px;
-            background-color: #e44d26;
-            color: white;
+            background-color: #e44d26; /* Button background color */
+            color: white; /* Button text color */
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s;
@@ -48,14 +67,64 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.5); /* Overlay color */
             display: block; /* Show overlay by default */
             z-index: 999; /* On top of everything */
+        }
+        .logo {
+            margin-bottom: 10px; /* Space below the logo */
+        }
+        .theme-switch {
+            cursor: pointer;
+            color: white; /* Switch text color */
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #e44d26; /* Button background color */
+            transition: background-color 0.3s;
+        }
+        .theme-switch:hover {
+            background-color: #d43d24; /* Darker shade on hover */
+        }
+        [data-theme="dark"] {
+            background-color: #121212; /* Dark background */
+            color: white; /* Light text */
+        }
+        [data-theme="dark"] h1 {
+            color: #e44d26; /* Keep heading color consistent in dark mode */
+        }
+        [data-theme="dark"] .button {
+            background-color: #e44d26; /* Button color in dark mode */
+        }
+        [data-theme="dark"] #timer {
+            color: #e0e0e0; /* Off-white color for timer in dark mode */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px; /* Reduce padding on smaller screens */
+            }
+            header {
+                flex-direction: column; /* Stack header elements */
+                align-items: center; /* Center align items */
+            }
+            .theme-switch {
+                margin-top: 10px; /* Space between logo and switch */
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt=" Company Logo" />
+        </div>
+        <button class="theme-switch" id="themeToggle">Toggle Dark Mode</button>
+    </header>
+
     <div class="overlay" id="overlay"></div>
+    
     <h1>{{ message }}</h1>
     <div class="message">Please wait for <span id="timer">{{ wait_time|floatformat:0 }}</span> seconds before trying again.</div>
     <div class="redirect-message">
@@ -69,6 +138,27 @@
         const timerElement = document.getElementById('timer');
         const overlay = document.getElementById('overlay');
         const actionButton = document.getElementById('actionButton');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Check local storage for theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = 'Dark Mode On'; // Update button text
+        } else {
+            themeToggle.textContent = 'Dark Mode Off'; // Update button text
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light'); // Save preference
+                themeToggle.textContent = 'Dark Mode Off'; // Update button text
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark'); // Save preference
+                themeToggle.textContent = 'Dark Mode On'; // Update button text
+            }
+        });
 
         function updateTimer() {
             if (remainingTime > 0) {
