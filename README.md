@@ -15,7 +15,7 @@ Email: s222340498@deakin.edu.au;
 Password: "consult lead";
 Web app domain: hardhatwebdev2024.pythonanywhere.com
 
-Step 2: Now launch the bash console. Run the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
+Step 2: Now launch the bash console. Run the command `git clone https://github.com/Hardhat-Enterprises/website.git`.
 
 Step 3: Create a virtual environment using the command – ‘mkvirtualenv <virtual environment name>’. The name of the virtual environment can be anything. Keeping it simple and short is recommended. In this case, I have used ‘venv’ as the environment name.
 
