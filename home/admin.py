@@ -24,7 +24,10 @@ from .models import (
     Announcement,
 
     # Logging
-    SecurityEvent
+    SecurityEvent,
+
+    #LeaderBaord
+    LeaderBoardTable
 
 )
 
@@ -138,7 +141,10 @@ class JobApplicationAdmin(admin.ModelAdmin):
     @admin.display(description="Job Title")
     def job__title(self,obj):
         return obj.job.title
-        
+    
+@admin.register(LeaderBoardTable)
+class LeaderboardTableAdmin(admin.ModelAdmin):
+    list_display = ('user', 'category', 'total_points')
 
 
 
