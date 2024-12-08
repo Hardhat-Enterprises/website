@@ -1,0 +1,66 @@
+#callButton {
+    position: fixed;
+    bottom: 22px;
+    right: 43px;
+    background-color: #3a3a32;
+    color: white;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 100;
+}
+
+/* Style for the popup */
+callPopup {
+    display: none;
+    position: fixed;
+    top: -408%;
+    left: -109px;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+}
+#callPopup h2 {
+    margin-bottom: 15px;
+}
+
+#callPopup p {
+    margin-bottom: 20px;
+}
+
+#closePopup {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#closePopup:hover {
+    background-color: #c82333;
+}
+
+/* Overlay background for popup */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
+.form-card-ov{
+    padding: 20px;
+    top: 17%;
+    left: 17%;
+}

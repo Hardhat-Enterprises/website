@@ -163,17 +163,9 @@
 
   {% include 'includes/scripts.html' %}
   {% block javascripts %}{% endblock javascripts %}
-<!--Subresource Integrity-->
-  <script type="module" 
-  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" 
-  integrity="sha384-xyQ/Vpt1cq1pdPYlRaT/QkcSj2vrYyWI3WOhxGBzqnP1vgvsS2yrhWXe3/wIoCr5" 
-  crossorigin="anonymous">
-  </script>
-  <script type="module" 
-  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" 
-  integrity="sha384-KAUcUASKfGZ0sxENVFRiH12jtpvd9SsVpgzvYdvv8ZMLqB99G3gX3DAts418wzIC" 
-  crossorigin="anonymous">
-  </script>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
 </body>
 

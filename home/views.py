@@ -16,8 +16,7 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
-
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, Feedback #Feedback 
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -38,7 +37,7 @@ import json
 from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm, ExperienceForm
 
 
-from home.models import Announcement, JobApplication
+from home.models import Announcement
  
 # import os
  
@@ -66,37 +65,23 @@ from .forms import FeedbackForm
 # Create your views here.
  
 # Regular Views
-
-#For Contact Form
-import nh3
-import logging
-from .validators import xss_detection
-from .models import Contact
+ 
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
-    max_age = 3600;
     
     if recent_announcement:
-        has_cookies = request.COOKIES.get('announcement')
-        if has_cookies:
-            show_announcement = False
-            announcement_message = recent_announcement.message
-        else:
-            show_announcement = recent_announcement.isActive
-            announcement_message = recent_announcement.message   
+        show_announcement = recent_announcement.isActive
+        announcement_message = recent_announcement.message
     else:
         show_announcement = False
         announcement_message = "Welcome! Stay tuned for updates."
     
-    response = render(
+    return render(
         request, 
         'pages/index.html', 
         {'announcement_message': announcement_message, 'show_announcement': show_announcement}
     )
-
-    response.set_cookie('announcement', 'True', max_age=max_age)
-    return response
 
 
 def error_404_view(request,exception):
@@ -119,8 +104,6 @@ def appattack(request):
     return render(request, 'pages/appattack/main.html')
  
 def appattack_join(request):
-   # print("Hi");
-   # print(request.POST);
     return render(request, 'pages/appattack/join.html')
  
 def products_services(request):
@@ -606,42 +589,14 @@ def contact(request):
         messages.success(request,'The message has been received')
     return render(request,'pages/index.html')
  
-#For XSS Log
-xss_logger = logging.getLogger('xss_logger')
-xss_logger.warning("List of latest XSS attacks detection: ")
-
-def log_suspicious_input(input_data):
-    if input_data and "<script>" in input_data.lower():
-        xss_logger.warning(f"XSS Attack Detected: {input_data}")
-        print(f"XSS attempt full message: {input_data}") 
-
-#For Contact Page
 def Contact_central(request):
-    if request.method == 'POST':
-        name = request.POST.get('name', '')
-        email = request.POST.get('email', '')
-        message = request.POST.get('message', '')
-
-        print(f"Name: {name}, Email: {email}, Message: {message}")
-
-        # Log suspicious inputs of Contact
-        log_suspicious_input(name)
-        log_suspicious_input(email)
-        log_suspicious_input(message)
-
-        # Sanitizing and validating inputs
-        name = nh3.clean(xss_detection(name))
-        email = nh3.clean(xss_detection(email))
-        message = nh3.clean(xss_detection(message))
-
-        if name and email and message:
-            Contact.objects.create(name=name, email=email, message=message)
-            messages.success(request, 'Message has been sent successfully!')
-        else:
-            messages.error(request, 'Invalid input!')
-
-    return render(request, 'pages/Contactus.html')
-
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        message=request.POST['message']
+        contact=Contact.objects.create(name=name, email=email, message=message)
+        messages.success(request,'The message has been received')
+    return render(request,'pages/Contactus.html')
  
  
 # Blog

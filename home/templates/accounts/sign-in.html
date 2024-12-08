@@ -1,5 +1,4 @@
 {% extends 'layouts/base.html' %}
-{% load add_input_validation %}
 {% load static %}
 
 {% block header %}
@@ -40,7 +39,7 @@
                                         <span class="input-group-text" id="basic-addon1">
                                             <span class="fas {% if field.name == 'username' %} fa-user {% else %} fa-unlock-alt {% endif %}"></span>
                                         </span>
-                                        {{ field|add_input_validation }}
+                                        {{ field }}
                                     </div>  
                                 </div>
                                 <span class="text-danger"> {{ field.errors }} </span>

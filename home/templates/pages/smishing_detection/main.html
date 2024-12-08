@@ -3,7 +3,7 @@
 
 {% block content %}
 <main>
-    {% include 'includes/preloader-sd.html' %}
+    {% include 'includes/pre-loader.html' %}
 
     <!-- Hero -->
     <div class="section-header bg-primary-app pb-0">
@@ -93,118 +93,5 @@
         </div>
         <!-- End of Class of Action Section -->
     </section>
-    <!-- End of Social Links Section -->
-
-    <!-- FAQ Section -->
-    <section class="section section-lg bg-secondary-app py-5">
-        <div class="container">
-            <h1 class="fw-bolder display-50 text-center mb-5 mt-5">Frequently Asked Questions</h1>
-            <h2 class="fw-bolder display-5 text-center mb-5 mt-5">Explore the answers to common questions about Smishing Detection</h2>
-            <div class="row g-5">
-                <div class="col-12">
-                    <div class="accordion" id="accordionPanelsStayOpenExample">
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                            <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                <b>What is smishing?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                              Smishing is a form of phishing attack executed via SMS (Short Message Service). Attackers send malicious messages to trick recipients into revealing sensitive information such as login credentials, financial details, or personal data.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                            <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                <b>How does smishing work?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
-                              Attackers often use leaked personal data to craft convincing messages that appear legitimate. These messages may contain malicious URLs or phone numbers, enticing recipients to click on links or call numbers, leading to data breaches or financial losses.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                            <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                              <b>What is the goal of the Smishing Detection project?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                            <div class="accordion-body">
-                              The project aims to develop AI-driven models to detect and identify smishing attempts in real-time. It includes creating a mobile application that integrates with smartphones to flag potential scam or spam messages, allowing users to decide whether to discard or ignore them.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                                <b>How do AI-driven models help in detecting smishing?</b>
-                              </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
-                              <div class="accordion-body">
-                                AI-driven models, particularly those using machine learning and natural language processing, can analyze patterns and characteristics of SMS messages to determine their legitimacy. These models can identify subtle indicators of smishing attempts that may not be obvious to human users.
-                              </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingFive">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-                                <b>How does the mobile application work?</b>
-                              </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
-                              <div class="accordion-body">
-                                The mobile application integrates with smartphones to monitor incoming SMS messages. It uses the AI-driven models to analyze each message in real-time, flagging potential scam or spam messages. Users are then notified and can choose to delete or ignore the flagged messages.
-                              </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingSix">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
-                                <b>What makes Smishing Detection project unique?</b>
-                              </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
-                              <div class="accordion-body">
-                                The project combines comprehensive research, advanced AI techniques, and a user-friendly mobile application to provide a robust defense against smishing. It empowers users with real-time detection and decision-making capabilities, enhancing their security against SMS-based threats.
-                              </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingSeven">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
-                                <b>How can users benefit from this application?</b>
-                              </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSeven">
-                              <div class="accordion-body">
-                                Users benefit by having an additional layer of security against smishing attacks. The application helps them identify and avoid potential scams, protecting their sensitive information and reducing the risk of financial losses.
-                              </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="panelsStayOpen-headingEight">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
-                                <b>What are the future plans for the project?</b>
-                              </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
-                              <div class="accordion-body">
-                                Future plans include continuous improvement of the AI models, expanding the application’s capabilities, and integrating feedback from users to enhance its effectiveness. The project aims to stay ahead of evolving smishing techniques and provide ongoing protection to users.
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End of FAQ Section -->
-
     <!-- End of Social Links Section -->
     {% endblock content %}
