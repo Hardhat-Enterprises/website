@@ -19445,6 +19445,17 @@ blockquote {
   #chatForm{
     display: flex;
     flex-direction: column;
+
+  }
+
+  .chatForm{
+    color: #000000;
+  }
+
+  .dark-mode{
+    .chatForm{
+      display: block;
+    }
   }
 
   .chatInput{
