@@ -16,8 +16,8 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback,Job
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -29,13 +29,13 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, JobApplicationForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
 
 import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm, ExperienceForm
 
 
 from home.models import Announcement, JobApplication
@@ -66,12 +66,19 @@ from .forms import FeedbackForm
 # Create your views here.
  
 # Regular Views
+def client_sign_in(request):
+    return render(request, 'accounts/client_sign-in.html') 
 
 #For Contact Form
 import nh3
 import logging
 from .validators import xss_detection
 from .models import Contact
+
+#For LeaderBoard
+from django.db.models import Sum
+from .models import LeaderBoardTable, UserChallenge
+from django.contrib.auth.models import User
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -270,20 +277,21 @@ def Vr_main(request):
 # Authentication
 
 
-
-
-
-
-
 def feedback(request):
     if request.method == 'POST':
-        form = FeedbackForm(request.POST)
+        form = ExperienceForm(request.POST)
         if form.is_valid():
-            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
-            return redirect('feedback')  # Redirect to the same page
+            form.save()  # Save the feedback to the database
+            return redirect('feedback')  # Redirect to clear the form
+
     else:
-        form = FeedbackForm()
-    return render(request, 'pages/feedback.html', {'form': form})
+        form = ExperienceForm()
+
+    # Retrieve recent feedback from the database
+    feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
+
+    return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
+
 
 
 ## Web-Form 
@@ -320,31 +328,62 @@ def password_gen(request):
  
  
 def register(request):
-    form = RegistrationForm()
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        form = RegistrationForm(request.POST)
-       
-        if form.is_valid():
-            form.save()
-            otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
-            print("Account created successfully! An OTP was sent to your email. Check!")
-            messages.success(request, "Account created successfully!")
-            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
-            # return redirect("verify-email", username=request.POST['first_name'])
+    try:
+        if request.method == 'POST':
+            print(f"POST Data: {request.POST}")  # Debugging log for POST data
+            form = RegistrationForm(request.POST)
+            
+            if form.is_valid():
+                try:
+                    user = form.save(commit=False)  # Save user instance without committing
+                    user.set_password(form.cleaned_data['password1'])  # Hash the password
+                    user.save()  # Save the user
+                    print("User saved successfully.")
+
+                    # Generate OTP and send email
+                    otp = random.randint(100000, 999999)
+                    email = form.cleaned_data.get('email')
+                    send_mail(
+                        subject="User Data",
+                        message=(
+                            f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
+                            "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                            "Regards, \nHardhat Enterprises"
+                        ),
+                        from_email="deakinhardhatwebsite@gmail.com",
+                        recipient_list=[email],
+                        fail_silently=False,
+                    )
+                    print(f"OTP sent to {email}.")
+
+                    # Redirect to verify token page with context
+                    messages.success(request, "Account created successfully! Check your email for the OTP.")
+                    return render(
+                        request,
+                        'accounts/verify_token.html',
+                        {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
+                    )
+                except Exception as e:
+                    print(f"Error saving user or sending email: {e}")
+                    print(traceback.format_exc())  # Print detailed traceback
+                    messages.error(request, "An error occurred while creating the account. Please try again.")
+            else:
+                print("Form is invalid. Errors:")
+                print(form.errors)  # Debugging log for form errors
+                messages.error(request, "Please fix the errors below.")
         else:
-            print("Registration failed!")
-    else:
-        form = RegistrationForm()
- 
-    context = { 'form': form }
-    return render(request, 'accounts/sign-up.html', context)
+            print("GET request received for registration.")
+            form = RegistrationForm()
+
+        context = {'form': form}
+        return render(request, 'accounts/sign-up.html', context)
+
+    except Exception as e:
+        # Catch any unexpected errors and print to the terminal
+        print(f"Unexpected error in register view: {e}")
+        print(traceback.format_exc())
+        messages.error(request, "An unexpected error occurred. Please try again later.")
+        return render(request, 'accounts/sign-up.html', {'form': RegistrationForm()})
  
 @csrf_exempt
 def VerifyOTP(request):
@@ -363,16 +402,32 @@ def VerifyOTP(request):
         print("OTP: ", userotp)
     return JsonResponse({'data': 'Hello'}, status=200)  
    
-# def signup(request):
-#     form = RegisterForm()
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Account created successfully! An OTP was sent to your Email")
-#             return redirect("verify-email", username=request.POST['username'])
-#     context = {"form": form}
-#     return render(request, "signup.html", context)
+def signup(request):
+    if request.method == 'POST':
+        print(f"POST Data: {request.POST}")  # Log incoming POST data for debugging
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save(commit=False)
+                user.set_password(form.cleaned_data['password1'])  # Hash the password
+                user.save()  # Save the user to the database
+                print("User saved to database.")  # Success log
+                messages.success(request, "Account created successfully!")
+                return redirect('login')  # Replace 'login' with your login URL
+            except Exception as e:
+                # Log any exception that occurs while saving the user
+                print(f"Error saving user: {e}")
+                raise  # Optional: Re-raise the exception for debugging
+        else:
+            print("Form is invalid. Errors:")
+            print(form.errors.as_json())  # Log form errors for debugging
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'accounts/sign-up.html', {'form': form})
+
+
 
 
 
@@ -741,31 +796,25 @@ def projects_join_us(request, page_url, page_name):
 
 
 def feedback_view(request):
-    return render(request, 'pages/feedback.html')
-
-
-def submit_feedback(request):
     if request.method == 'POST':
-        feedback_type = request.POST.get('feedback_type')
-        content = request.POST.get('feedback_content')
+        form = ExperienceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('feedback')
+    else:
+        form = ExperienceForm()
 
-        Feedback.objects.create(
-            user=request.user if request.user.is_authenticated else None,
-            feedback_type=feedback_type,
-            content=content
-        )
-
-        messages.success(request, 'Thank you for your feedback!')
-        return redirect('feedback')
-       #return redirect('thank_you') # Redirect to the thank you page after submission
-
+    feedbacks = Experience.objects.all().order_by('-created_at')
+    return render(request, 'feedback.html', {
+        'form': form,
+        'feedbacks': feedbacks
+    })
+    
+def delete_feedback(request, id):
+    feedback= get_object_or_404(Experience, id=id)
+    feedback.delete()
     return redirect('feedback')
-#def thank_you(request):
-    #return render(request, 'feedback/thank_you.html')
-    #return render('thank_you')
 
- 
-       # return context
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
@@ -892,3 +941,21 @@ def career_application(request,id):
         "complete":complete
     }
     return render(request,"careers/application-form.html",context)
+
+def leaderboard(request):
+    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
+    print(leaderboard_entry)
+    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+
+def leaderboard_update():
+    LeaderBoardTable.objects.all().delete()
+    users = User.objects.all()
+    for user in users:
+        challenges_category = (UserChallenge.objects.filter(user=user, completed=True).values('category_challenges').annotate(total_points=Sum('score')))
+
+        for categories in challenges_category:
+            category = categories['category_challenges']
+            total_points = categories['total_points'] or 0
+
+            if total_points > 0:
+                LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
