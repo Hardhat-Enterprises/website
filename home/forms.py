@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
@@ -6,12 +7,14 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
+from datetime import timedelta
 import logging
 import re
+import nh3
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent
-
-
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
+from .validators import xss_detection
 
 logger = logging.getLogger(__name__)
 
@@ -50,18 +53,28 @@ class RegistrationForm(UserCreationForm):
             raise ValidationError(
                 _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
             )
+        return password
     # ...........................................................
 
     # Newly added...........................
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        # Define the regex pattern for the required email format
-        pattern = r'@deakin\.edu\.au$'
-        
+        email = self.cleaned_data.get('email', '').strip()  # Normalize email
+        print(f"Validating email: {email}")  # Debugging log
+
+        # Regex pattern for validating Deakin email addresses
+        pattern = r'^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$'
+
         if not re.match(pattern, email):
-            raise ValidationError(_("Email must be match with your Deakin email."))
-        
+            print(f"Validation failed for email: {email}")  # Debug log for failed validation
+            raise ValidationError(_("Email must match your Deakin email."))
+
+        print(f"Validation succeeded for email: {email}")  # Debug log for success
         return email
+
+
+
+
+
     # .......................................
 
 
@@ -90,30 +103,61 @@ class RegistrationForm(UserCreationForm):
         }
 
 class UserLoginForm(AuthenticationForm):
-    username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"}))
+    username = UsernameField(
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@deakin.edu.au"})
+    )
     password = forms.CharField(
-            label=_("Password"),
-            strip=False,
-            widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
-        )
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
+    )
+
     def __init__(self, request=None, *args, **kwargs):
         super().__init__(request, *args, **kwargs)
         self.request = request
 
     def confirm_login_allowed(self, user):
-        super().confirm_login_allowed(user)
-        # Log successful login event
-        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
-        SecurityEvent.objects.create(
-            user=user,
-            event_type='login_success',
-            ip_address=ip_address,
-            details='User logged in successfully.'
-        )
-        print(f'User {user} logged in successfully.')
+        failure_count_time = timezone.now() - timedelta(minutes=15)
+
+        login_failures_count = SecurityEvent.objects.filter(
+            event_type='login_failure',
+            timestamp__gte=failure_count_time
+        ).count()
+
+        if login_failures_count > 2:
+            raise ValidationError(
+                _("Too many login attempts. Please try again later."),
+                code='too_many_attempts',
+            )
+        else:
+            super().confirm_login_allowed(user)
+            
+            # Log successful login event
+            ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+            SecurityEvent.objects.create(
+                user=user,
+                event_type='login_success',
+                ip_address=ip_address,
+                details='User logged in successfully.'
+            )
+            print(f'User {user} logged in successfully.')
+
 
     def get_invalid_login_error(self):
         # Log failed login event
+        faliure_count_time = timezone.now() - timedelta(minutes=15)
+
+        login_failures_count = SecurityEvent.objects.filter(
+            event_type='login_failure',
+            timestamp__gte=faliure_count_time
+        ).count()
+
+        if login_failures_count > 2:
+            raise ValidationError(
+            _("Too many login attempts. Please try again later."),
+            code='too_many_attempts',
+            )
+
         ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
         SecurityEvent.objects.create(
             user=None,  # No user as login failed
@@ -264,3 +308,54 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+        
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
+
+#Newly Added
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        name = xss_detection(name)
+        return nh3.clean(name, tags=set(), attributes={}, link_rel=None)
+
+    def clean_message(self):
+        message = self.cleaned_data['message']
+        message = xss_detection(message)
+        return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
+        
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
+# class JobApplicationForm(forms.ModelForm):
+    
+#     class Meta:
+#         model = JobApplication
+#         fields = ['name', 'email', 'resume', 'cover_letter']
+    
+class JobApplicationForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
+    resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+    cover_letter = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control', 
+        'rows': 5, 
+        'placeholder': 'Write your cover letter here...'
+    }))

@@ -44,6 +44,7 @@
                         </select>
                     </div>
 
+                    <!-- Additional Comments Section -->
                     <div class="form-group mt-3">
                         <label for="comments" class="form-label">Additional Comments:</label>
                         <textarea name="comments" id="comments" rows="4" class="form-control" placeholder="Your comments..."></textarea>
@@ -59,14 +60,56 @@
             </div>
         </section>
 
+        <!-- Additional User Experience Section (from main) -->
+        {% include 'includes/pre-loader.html' %}
+        <section class="section section-lg">
+            <div class="container">
+                <h4>User Experience</h4>
+                <p>Please provide your experiences with our company.</p>
+                <form method="post" action="{% url 'feedback' %}" class="card">
+                    {% csrf_token %}
+                    <div class="card-header">How was your experience?</div>
+                    <div class="container">
+                        <div class="col">
+                            <div class="card-text form-group">
+                                <label for="id_name">Name:</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="card-text form-group">
+                                <label for="id_feedback">User Experience:</label>
+                                {{ form.feedback }}
+                            </div>
+                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Display recent feedback -->
+                <div class="feedback-list">
+                    <h5>Recent Feedback</h5>
+                    {% if feedbacks %}
+                    <ul>
+                        {% for feedback in feedbacks %}
+                        <li>
+                            <strong>{{ feedback.name }}</strong>: {{ feedback.feedback }}
+                            <form method="post" action="{% url 'delete_feedback' feedback.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No feedback yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
         <footer class="text-center mt-5">
             <p class="text-muted">&copy; {{ current_year }} Hardhat Enterprises. All rights reserved.</p>
         </footer>
     </div>
 </body>
 
-        <p>&copy; {{ current_year }} Hardhat enterprises. All rights reserved.</p>
-    </footer>
-</body>
-</html>
-</html>
