@@ -9,7 +9,7 @@ Faker==27.4.0
 python-dotenv==1.0.1
 filelock==3.13.4
 six==1.16.0
-django-cors-headers==2.0.0
+django-cors-headers==4.6.0
 
 # UI
 django-crispy-forms==2.3
