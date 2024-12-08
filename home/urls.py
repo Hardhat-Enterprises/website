@@ -54,6 +54,10 @@ urlpatterns = [
     path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
     
     # Blog URLs
+    path("careers/", list_careers , name="career-list"),
+    path("careers/<int:id>/", career_detail , name="career-detail"),
+    path("careers/<int:id>/apply", career_application , name="career-application"),
+    
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
