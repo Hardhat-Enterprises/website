@@ -337,14 +337,14 @@ def register(request):
         if request.method == 'POST':
             print(f"POST Data: {request.POST}")  # Debugging log for POST data
             form = RegistrationForm(request.POST)
-            
+           
             if form.is_valid():
                 try:
                     user = form.save(commit=False)  # Save user instance without committing
                     user.set_password(form.cleaned_data['password1'])  # Hash the password
                     user.save()  # Save the user
                     print("User saved successfully.")
-
+ 
                     # Generate OTP and send email
                     otp = random.randint(100000, 999999)
                     email = form.cleaned_data.get('email')
@@ -360,7 +360,7 @@ def register(request):
                         fail_silently=False,
                     )
                     print(f"OTP sent to {email}.")
-
+ 
                     # Redirect to verify token page with context
                     messages.success(request, "Account created successfully! Check your email for the OTP.")
                     return render(
@@ -378,7 +378,7 @@ def register(request):
                 messages.error(request, "Please fix the errors below.")
         else:
             print("Registration failed!")
-    else:
+    finally:
         form = RegistrationForm()
  
     context = { 'form': form }
