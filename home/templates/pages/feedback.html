@@ -1,75 +1,71 @@
 <body>
-    <h1>Feedback Page</h1>
+    <div class="container my-5">
+        <header class="text-center mb-4">
+            <h1 class="display-4 text-primary">Feedback Page</h1>
+        </header>
 
-    <h2>Survey</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ survey_form.as_p }}
-        <button type="submit">Submit Survey</button>
-    </form>
+        <section class="mb-5">
+            <h2 class="h4 text-secondary">Survey</h2>
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ survey_form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Submit Survey</button>
+                </form>
+            </div>
+        </section>
 
-    <h2>Poll</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ poll_form.as_p }}
-        <button type="submit">Submit Poll</button>
-    </form>
+        <section class="mb-5">
+            <h2 class="h4 text-secondary">Poll</h2>
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ poll_form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Submit Poll</button>
+                </form>
+            </div>
+        </section>
 
-    <h2>Feedback</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ feedback_form.as_p }}
-        <button type="submit">Submit Feedback</button>
-    </form>
-    {% if success %}
-        <p class="success">Thank you for your feedback!</p>
-    {% elif error %}
-        <p class="error">There was an error submitting your feedback. Please try again.</p>
-    {% endif %}
+        <section class="mb-5">
+            <h2 class="h4 text-secondary">Feedback</h2>
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ feedback_form.as_p }}
+                    <div class="form-group mt-3">
+                        <label for="rating" class="form-label">Rate your experience:</label>
+                        <select name="rating" id="rating" class="form-control" required>
+                            <option value="" disabled selected>Select a rating</option>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                    </div>
 
-    <section>
-        <h2>Survey</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ survey_form.as_p }}
-            <button type="submit">Submit Survey</button>
-        </form>
-    </section>
+                    <div class="form-group mt-3">
+                        <label for="comments" class="form-label">Additional Comments:</label>
+                        <textarea name="comments" id="comments" rows="4" class="form-control" placeholder="Your comments..."></textarea>
+                    </div>
 
-    <section>
-        <h2>Poll</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ poll_form.as_p }}
-            <button type="submit">Submit Poll</button>
-        </form>
-    </section>
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Submit Feedback</button>
+                </form>
+                {% if success %}
+                    <p class="text-success mt-3">Thank you for your feedback!</p>
+                {% elif error %}
+                    <p class="text-danger mt-3">There was an error submitting your feedback. Please try again.</p>
+                {% endif %}
+            </div>
+        </section>
 
-    <section>
-        <h2>Feedback</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ feedback_form.as_p }}
+        <footer class="text-center mt-5">
+            <p class="text-muted">&copy; {{ current_year }} Hardhat Enterprises. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
 
-            <label for="rating">Rate your experience:</label>
-            <select name="rating" id="rating" required>
-                <option value="" disabled selected>Select a rating</option>
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
-            </select>
-
-            <label for="comments">Additional Comments:</label>
-            <textarea name="comments" id="comments" rows="4" cols="50" placeholder="Your comments..."></textarea>
-
-            <button type="submit">Submit Feedback</button>
-        </form>
-    </section>
-
-    <footer>
-        <p>&copy; {{ current_year }} Your Company Name. All rights reserved.</p>
+        <p>&copy; {{ current_year }} Hardhat enterprises. All rights reserved.</p>
     </footer>
 </body>
 </html>
