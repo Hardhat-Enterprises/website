@@ -19553,4 +19553,32 @@ blockquote {
         cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
     }
 
-
+  .challenge-category-container {
+      background-color: #f7e041;
+      min-height: 100vh;
+      padding: 40px 20px;
+  }
+  
+  .challenge-card {
+      background-color: #ff8c00;
+      border-radius: 8px;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .challenge-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .btn-light {
+      background-color: white;
+      color: #ff8c00;
+      border: 1px solid #ff8c00;
+  }
+  
+  .btn-light:hover {
+      background-color: #ff8c00;
+      color: white;
+  }
