@@ -17,3 +17,5 @@ env
 venv/
 env/
 media/
+
+*.log
