@@ -1,6 +1,6 @@
 # [Hardhat Enterprises](https://hardhat.pythonanywhere.com/)
 
-Hardhat Enterprises is an organization that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company will be open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met. 
+Hardhat Enterprises is an organization that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company are open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met. 
 
 # [Hardhat Enterprises](hardhatwebdev2024.pythonanywhere.com/) T2 2024
 [Note: The Hardhat website has been deployed already. Below is the rundown of how it can be deployed from PythonAnywhere. For T1 2024, it already has been deployed. It can be accessed through this domain: hardhatwebdev2024.pythonanywhere.com ]
@@ -15,7 +15,7 @@ Email: s222340498@deakin.edu.au;
 Password: "consult lead";
 Web app domain: hardhatwebdev2024.pythonanywhere.com
 
-Step 2: Launch the bash console. Run the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
+Step 2: Now you must launch the bash console. Run the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
 
 Step 3: Create a virtual environment using the command – ‘mkvirtualenv <virtual environment name>’. The name of the virtual environment can be anything. Keeping it simple and short is recommended. In this case, I have used ‘venv’ as the environment name.
 

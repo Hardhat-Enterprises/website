@@ -73,67 +73,44 @@
 
  <!-- form -->
 
- <section class="section section-lg">
-  <div class="container">
-      <div class="row justify-content-center">
-          <div class="col-12 col-lg-8">
-              <!-- Contact Card -->
-              <div class="card border-0 p-4 shadow-lg">
-                  <div class="card-header bg-white border-0 text-center">
-                      <h2>Send Us a Message</h2>
-                      <p>We'd love to hear from you! Let's talk about your ideas.</p>
-                  </div>
-                  <div class="card-body pt-0">
-                      <form action="/appattack/join" method="POST">
-                        {% csrf_token %}
-                          <!-- Name Input -->
-                          <div class="mb-4">
-                              <label for="validationDefault01">First Name</label>
-                              <div class="input-group">
-                                  <span class="input-group-text" id="basic-addon1">
-                                      <span class="fas fa-user-circle"></span>
-                                  </span>
-                                  <input type="text" class="form-control" placeholder="e.g. John" id="validationDefault01" name="firstname" required>
-                              </div>
-                          </div>
-                          <div class="mb-4">
-                              <label for="validationDefault02">Last Name</label>
-                              <div class="input-group">
-                                  <span class="input-group-text" id="basic-addon2">
-                                      <span class="fas fa-user-circle"></span>
-                                  </span>
-                                  <input type="text" class="form-control" placeholder="e.g. Whare" id="validationDefault02" name="lastname" required>
-                              </div>
-                          </div>
-                          <!-- Email Input -->
-                          <div class="mb-4">
-                              <label for="email">Email</label>
-                              <div class="input-group">
-                                  <span class="input-group-text" id="basic-addon4">
-                                      <span class="fas fa-envelope"></span>
-                                  </span>
-                                  <input type="email" class="form-control" placeholder="example@company.com" id="email" name="email" required>
-                              </div>
-                          </div>
-                          <!-- Message Input -->
-                          <div class="mb-4">
-                              <label for="message">Drop Message</label>
-                              <textarea placeholder="Your message" class="form-control" id="message" name="message" rows="4" required></textarea>
-                          </div>
-                          <!-- Submit Button -->
-                          <div class="d-grid">
-                              <button type="submit" class="btn btn-dark text-white">Send message</button>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-              <!-- End of Contact Card -->
-          </div>
-      </div>
+ <div id="form-join" class="row justify-content-center" >
+  <div id="form-header" class="col-12 col-md-10 text-center mb-4">
+    <h2>Send Us a Message</h2>
+    </div>
+    <div id="form-body" class="col-12 col-lg-8">
+    <form class="row g-3" action="/appattack/join" method="post" onsubmit="handleFormSubmit(event)">
+      {% csrf_token %}
+  <div class="col-mb-4">
+    <label for="validationDefault01" class="form-label align-items-center">First name</label>
+    <input type="text" class="form-control align-items-center" name="firstname" id="validationDefault01" required>
   </div>
-</section>
+  <div class="col-mb-4">
+    <label for="validationDefault02" class="form-label">Last name</label>
+    <input type="text" class="form-control" name="lastname" id="validationDefault02" required>
+  </div>
+  
+  <div class="mb-4">
+      <label for="email">Email</label>
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon4">
+          <span class="fas fa-envelope"></span>
+        </span>
+        <input type="email" class="form-control" name="email" placeholder="example@company.com" id="email" required="">
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="message">Drop a Message</label>
+      <textarea placeholder="Your message" class="form-control" name="message" id="message" rows="4" required=""></textarea>
+    </div>
+ 
+  <div class="d-grid">
+    <button class="btn btn-primary" type="submit">Submit form</button>
+  </div>
+</form>
+</div>
 
 
 </main>
-
+<script src="{% static 'js/handleFormSubmit.js' %}"></script>
 {% endblock content %}

@@ -15,7 +15,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
-
 from django.utils.text import slugify
 
 import secrets
@@ -24,6 +23,8 @@ import secrets
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 from django.db import models
+
+import nh3
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
@@ -208,14 +209,16 @@ class Student(AbstractBaseSet):
 
 
 
-
+#Contact Model
 class Contact(models.Model):
-    name=models.CharField(max_length=100)
-    email=models.CharField(max_length=200)
-    message=models.TextField(max_length=1000)
-    
-    def __str__(self):
-        return self.name
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+    message = models.TextField(max_length=1000)
+
+    def save(self, *args, **kwargs):
+        self.name = nh3.clean(self.name, tags=set(), attributes={}, link_rel=None)
+        self.message = nh3.clean(self.message, tags=set(), attributes={}, link_rel=None)
+        super(Contact, self).save(*args, **kwargs)
 
 class DDT_contact(models.Model):
     fullname=models.CharField(max_length=100)
@@ -277,11 +280,10 @@ class Projects_join_us(models.Model):
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
 
-
-class Feedback(models.Model):
-    name = models.CharField(max_length=100)
-    feedback = models.TextField()
-    rating = models.CharField(max_length=20)
+#class Feedback(models.Model):
+#    name = models.CharField(max_length=100)
+#    feedback = models.TextField()
+#    rating = models.CharField(max_length=20)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -337,35 +339,35 @@ class BlogPost(models.Model):
 
     User = get_user_model()
 
-class Feedback(models.Model):
-    GENERAL_INQUIRY = 'general'
-    BUG = 'bug'
-    IMPROVEMENT = 'improvement'
-    FEATURE_REQUEST = 'feature'
+#class Feedback(models.Model):
+    #GENERAL_INQUIRY = 'general'
+    #BUG = 'bug'
+    #IMPROVEMENT = 'improvement'
+    #FEATURE_REQUEST = 'feature'
 
-    FEEDBACK_TYPES = [
-        (GENERAL_INQUIRY, 'General Inquiry'),
-        (BUG, 'Bug Report'),
-        (IMPROVEMENT, 'Improvement Suggestion'),
-        (FEATURE_REQUEST, 'Request for a Feature')
-    ]
+    #FEEDBACK_TYPES = [
+    #    (GENERAL_INQUIRY, 'General Inquiry'),
+    #    (BUG, 'Bug Report'),
+    #    (IMPROVEMENT, 'Improvement Suggestion'),
+    #    (FEATURE_REQUEST, 'Request for a Feature')
+    #]
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    feedback_type = models.CharField(
-        max_length=20,
-        choices=FEEDBACK_TYPES,
-    )
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    #user = models.ForeignKey(
+    #    User,
+    #    on_delete=models.CASCADE,
+    #    null=True,
+    #    blank=True,
+    #)
+    #feedback_type = models.CharField(
+    #    max_length=20,
+    #    choices=FEEDBACK_TYPES,
+    #)
+    #content = models.TextField()
+    #created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        feedback_type_display = self.get_feedback_type_display()
-        return f"{feedback_type_display} - {self.created_at}"
+    #def __str__(self):
+        #feedback_type_display = self.get_feedback_type_display()
+        #return f"{feedback_type_display} - {self.created_at}"
 
 class Announcement(models.Model):
     message = models.TextField()
@@ -383,3 +385,40 @@ class SecurityEvent(models.Model):
     def __str__(self):
         return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
 
+class Job(models.Model):
+    title = models.CharField(max_length=200)
+    description = HTMLField()
+    location = models.CharField(max_length=100,choices=[("Remote","Remote"),("OnSite","OnSite")])
+    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract')])
+    posted_date = models.DateField(auto_now_add=True)
+    closing_date = models.DateField()
+
+    def __str__(self):
+        return self.title
+    
+class JobApplication(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    resume = models.FileField(upload_to="resumes/")
+    cover_letter = models.TextField()
+    applied_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.job.title}"
+
+#Leaderboard
+class LeaderBoardTable(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=200)
+    total_points = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
+class Experience(models.Model):
+    name = models.CharField(max_length=100)
+    feedback = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.feedback[:50]}"
