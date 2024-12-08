@@ -80,6 +80,34 @@
   
   {% endblock header %}
 
+  <div id="chat-button">
+    <button id="chatOpenButton">💬 Chat with us</button>
+  </div>
+  
+  <div id="chat-popup" class="hidden">
+    <div class="chat-header">
+      <span>Chat with us</span>
+      <button id="chatCloseButton">✖</button>
+    </div>
+    <div class="chat-body">
+      <form id="chatForm">
+        <label for="userName">Name:</label>
+        <input type="text" class="chatInput" id="userName" name="userName" placeholder="Enter your name" required />
+  
+        <label for="userEmail">Email:</label>
+        <input type="email" class="chatInput" id="userEmail" name="userEmail" placeholder="Enter your email" required />
+  
+        <label for="userMessage">Message:</label>
+        <textarea id="userMessage" class="chatInput" name="userMessage" placeholder="Type your message..." rows="4" required></textarea>
+        <div class="buttonChat">
+         <button class="chatSubmit" type="submit">Submit</button>
+        </div>
+  
+      </form>
+    </div>
+  </div>
+  
+
   {% block content %}{% endblock content %}
 
   {% block footer %}
@@ -125,7 +153,43 @@ src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
 integrity="sha384-KAUcUASKfGZ0sxENVFRiH12jtpvd9SsVpgzvYdvv8ZMLqB99G3gX3DAts418wzIC" 
 crossorigin="anonymous"></script>
 <!--Internal script no SRI needed-->
-<script src="{% static 'backToTop.js' %}"></script>
+<script src="{% static 'backToTop.js' %}">
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const chatPopup = document.getElementById("chat-popup");
+    const chatOpenButton = document.getElementById("chatOpenButton");
+    const chatCloseButton = document.getElementById("chatCloseButton");
+    const chatForm = document.getElementById("chatForm");
+  
+    // Open the chat popup
+    chatOpenButton.addEventListener("click", function () {
+      chatPopup.classList.remove("hidden");
+    });
+  
+    // Close the chat popup
+    chatCloseButton.addEventListener("click", function () {
+      chatPopup.classList.add("hidden");
+    });
+
+    chatForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("userName").value;
+    const email = document.getElementById("userEmail").value;
+    const message = document.getElementById("userMessage").value;
+
+    // Clear form fields
+    chatForm.reset();
+
+    // Close the popup after submission
+    chatPopup.classList.add("hidden");
+
+    // You can add logic here to send the form data to a server
+  });
+  });
+</script>
 
 </body>
 
