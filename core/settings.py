@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     "django_extensions",
 
     'home',
-    'theme_pixel'
+    'theme_pixel',
     'corsheaders',
 ]
 
