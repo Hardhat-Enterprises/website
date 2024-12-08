@@ -4,6 +4,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
+from captcha.fields import CaptchaField
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -51,7 +52,7 @@ class RegistrationForm(UserCreationForm):
         
         if not re.match(pattern, password):
             raise ValidationError(
-                _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
+                _("Password must be at least 8 characters long and include uppercase, lowercase letters, numbers, and special characters.")
             )
         return password
     # ...........................................................
@@ -77,11 +78,18 @@ class RegistrationForm(UserCreationForm):
 
     # .......................................
 
+    def save(self, commit=True):
+        """
+        Overrides the save method to ensure the user instance is saved correctly.
+        """
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+        return user
 
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', )
-
         labels = {
             'first_name': _('First Name'),
             'last_name': _('Last Name'),
@@ -308,6 +316,9 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+
+class CaptchaForm(forms.Form):
+    captcha = CaptchaField()
         
 
 class ExperienceForm(ModelForm):
