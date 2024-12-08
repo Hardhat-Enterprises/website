@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -90,7 +90,8 @@ urlpatterns = [
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
     # Feedback (duplicate removed)
-    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
