@@ -93,6 +93,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'django_cron',
 
     'home',
     'theme_pixel',
@@ -276,6 +277,11 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+#cron-job-feature
+# Django-cron configuration class
+CRON_CLASSES = [
+    'home.tasks.CleanStaleRecordsCronJob', 
+
 
  
  
@@ -290,5 +296,6 @@ CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-type',
     'authorization',
+
 ]
 

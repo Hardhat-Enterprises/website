@@ -14,6 +14,8 @@ from tinymce.models import HTMLField
 from django.contrib.auth.models import User 
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
+from django.utils.timezone import now
 
 from django.utils.text import slugify
 
@@ -385,6 +387,14 @@ class SecurityEvent(models.Model):
     def __str__(self):
         return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
 
+
+class ExampleModel(models.Model):
+    name = models.CharField(max_length=255)  
+    updated_at = models.DateTimeField(auto_now=True)  # Automatically updates the timestamp on save
+
+    def __str__(self):
+        return self.name
+
 class Job(models.Model):
     title = models.CharField(max_length=200)
     description = HTMLField()
@@ -413,6 +423,8 @@ class LeaderBoardTable(models.Model):
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
     
+
+
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
 class Experience(models.Model):
@@ -422,3 +434,4 @@ class Experience(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.feedback[:50]}"
+
