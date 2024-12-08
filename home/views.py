@@ -68,6 +68,8 @@ import traceback
 # Create your views here.
  
 # Regular Views
+def client_sign_in(request):
+    return render(request, 'accounts/client_sign-in.html') 
 
 #For Contact Form
 import nh3
@@ -82,6 +84,11 @@ from .serializers import APIModelSerializer
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.viewsets import ViewSet
 
+
+#For LeaderBoard
+from django.db.models import Sum
+from .models import LeaderBoardTable, UserChallenge
+from django.contrib.auth.models import User
 
  
 def index(request):
@@ -947,7 +954,7 @@ def career_application(request,id):
     return render(request,"careers/application-form.html",context)
 
   
-#swagger-new-implementation
+#swagger-implementation
 
 class APIModelListView(APIView):
     def get(self, request):
@@ -982,3 +989,20 @@ class EmailNotificationViewSet(ViewSet):
     def create(self, request):
         return Response({"message": "Email sent successfully!"})
 
+def leaderboard(request):
+    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
+    print(leaderboard_entry)
+    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+
+def leaderboard_update():
+    LeaderBoardTable.objects.all().delete()
+    users = User.objects.all()
+    for user in users:
+        challenges_category = (UserChallenge.objects.filter(user=user, completed=True).values('category_challenges').annotate(total_points=Sum('score')))
+
+        for categories in challenges_category:
+            category = categories['category_challenges']
+            total_points = categories['total_points'] or 0
+
+            if total_points > 0:
+                LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)

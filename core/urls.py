@@ -41,6 +41,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
     path('admin/', admin.site.urls),
+    path('accounts/', include('home.urls')), 
     path('', include('home.urls')),
     # path('', include('theme_pixel.urls')),
     path('about-us/', views.about_us, name='about_us'),
