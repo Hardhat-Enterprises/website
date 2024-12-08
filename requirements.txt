@@ -16,6 +16,7 @@ django-crispy-forms==2.3
 crispy-bootstrap5==2024.2
 django-theme-pixel==1.0.3
 django-tinymce==4.1.0
+django-cors-headers==4.6.0
 
 # Deployment
 whitenoise==6.7.0
