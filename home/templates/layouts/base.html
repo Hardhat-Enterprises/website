@@ -42,6 +42,18 @@
     <meta property="twitter:title" content="Hardhat Enterprises">
     <meta property="twitter:description" content="Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations.">
     <meta property="twitter:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
+
+    <!-- Content Security Policy -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self'; 
+    script-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline' https://buttons.github.io https://unpkg.com https://code.jquery.com https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com; 
+    style-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline'  https://fonts.googleapis.com; 
+    font-src 'self' https://fonts.gstatic.com; 
+    img-src 'self' data:;">
+
+    
+
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
@@ -57,7 +69,6 @@
     
     <!-- Pixel CSS -->
     <link type="text/css" href="{% static 'css/hardhat.css' %}?v=2" rel="stylesheet">
-    <link type="text/css" href="{% static 'css/call-action.css' %}?v=2" rel="stylesheet">
     
 </head>
 
@@ -99,58 +110,22 @@
   font-size: 15px;
   transition: opacity 0.5s ease-in-out;"> 
   &#8593;
+</button>
 
-  </button>
-
-     <!-- Floating Call Button -->
-<div id="callButton">
-      📞
-  </div>
-
-  <!-- Overlay for the popup -->
-  <div id="overlay">
-    <div class="col-md-8 card form-card-ov">
-      <h2>Contact Us</h2>
-      <form id="contactForm">
-          <div class="mb-3">
-              <label for="name" class="form-label">Your Name</label>
-              <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required>
-          </div>
-          <div class="mb-3">
-              <label for="email" class="form-label">Your Email</label>
-              <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
-          </div>
-          <div class="mb-3">
-              <label for="message" class="form-label">Your Message</label>
-              <textarea id="message" name="message" class="form-control" rows="4" placeholder="Enter your message" required></textarea>
-          </div>
-          <button type="submit" id="submitForm" class="btn btn-success w-100">Submit</button>
-          <button onclick="closePopup()" id="closeForm" class="btn btn-secondary w-100 mt-3">Close</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Popup -->
-  <div id="callPopup">
- 
-  </div>
   {% include 'includes/scripts.html' %}
   {% block javascripts %}{% endblock javascripts %}
+<!--Subresource Integrity-->
+<script type="module"
+src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" 
+integrity="sha384-xyQ/Vpt1cq1pdPYlRaT/QkcSj2vrYyWI3WOhxGBzqnP1vgvsS2yrhWXe3/wIoCr5" 
+crossorigin="anonymous"></script>
 
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script type = "module"
+src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" 
+integrity="sha384-KAUcUASKfGZ0sxENVFRiH12jtpvd9SsVpgzvYdvv8ZMLqB99G3gX3DAts418wzIC" 
+crossorigin="anonymous"></script>
+<!--Internal script no SRI needed-->
 <script src="{% static 'backToTop.js' %}"></script>
-<script src="{% static 'call_action.js' %}"></script>
-<script src="{% static 'skill_navigation.js' %}"></script>
-
-<script>
-  
-  function closePopup() {
-        overlay.style.display = 'none';
-        callPopup.style.display = 'none';
-    }
-</script>
-
 
 </body>
 
