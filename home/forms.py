@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
@@ -12,10 +13,8 @@ import logging
 import re
 import nh3
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent, JobApplication
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 from .validators import xss_detection
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -54,18 +53,28 @@ class RegistrationForm(UserCreationForm):
             raise ValidationError(
                 _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
             )
+        return password
     # ...........................................................
 
     # Newly added...........................
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        # Define the regex pattern for the required email format
-        pattern = r'@deakin\.edu\.au$'
-        
+        email = self.cleaned_data.get('email', '').strip()  # Normalize email
+        print(f"Validating email: {email}")  # Debugging log
+
+        # Regex pattern for validating Deakin email addresses
+        pattern = r'^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$'
+
         if not re.match(pattern, email):
-            raise ValidationError(_("Email must be match with your Deakin email."))
-        
+            print(f"Validation failed for email: {email}")  # Debug log for failed validation
+            raise ValidationError(_("Email must match your Deakin email."))
+
+        print(f"Validation succeeded for email: {email}")  # Debug log for success
         return email
+
+
+
+
+
     # .......................................
 
 
@@ -381,6 +390,16 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+        
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
 
 #Newly Added
 class ContactForm(forms.Form):
@@ -398,6 +417,15 @@ class ContactForm(forms.Form):
         message = xss_detection(message)
         return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
         
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:
