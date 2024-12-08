@@ -3,6 +3,9 @@ from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
 from django.conf import settings
 from django.conf.urls.static import static
+from django_ratelimit.decorators import ratelimit
+from .views import UserLoginView, rate_limit_exceeded
+
 
 from . import views
 
@@ -90,8 +93,18 @@ urlpatterns = [
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
     # Feedback (duplicate removed)
+
+    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+
+
+    path('accounts/login/', UserLoginView.as_view(), name='login'),
+    path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded')
+ 
+
+
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
