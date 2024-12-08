@@ -120,7 +120,7 @@ def appattack(request):
  
 def appattack_join(request):
    # print("Hi");
-   # print(request.POST);
+    print(request.POST);
     return render(request, 'pages/appattack/join.html')
  
 def products_services(request):
