@@ -54,7 +54,7 @@
             onsubmit="handleSubmit(event)"
           >
             <div class="form-group mb-4">
-              <label for="name" >Full Name</label>
+              <label for="name">Full Name</label>
               <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required />
             </div>
             <div class="form-group mb-4">
@@ -65,7 +65,7 @@
               <label for="message">Message</label>
               <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your message"></textarea>
             </div>
-            
+
             <!-- Google reCAPTCHA -->
             <div class="form-group mb-4">
               <div class="g-recaptcha" data-sitekey="6Lc5wpIqAAAAAItxvQUvBggCoqycfLa6cESyTt_W"></div>
@@ -77,9 +77,12 @@
               </div>
             {% endif %}
 
-            <div class="text-center">
+            <!-- Button Container -->
+            <div class="button-container text-center">
               <button type="submit" class="btn btn-primary">Send Message</button>
+              <button type="reset" class="btn btn-primary">Reset</button>
             </div>
+
             {% csrf_token %}
           </form>
         </div>
@@ -126,9 +129,6 @@
     document.getElementById("contact-form-container").style.display = "none";
     document.getElementById("map-container").style.display = "none";
     document.getElementById("thank-you-message").style.display = "block";
-
-    // Optionally, you can also submit the form after this
-    // document.getElementById("contact-form").submit();
   }
 </script>
 
