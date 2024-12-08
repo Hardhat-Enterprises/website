@@ -1,7 +1,7 @@
 import logging
 from django.utils.timezone import now
 
-logger = logging.getLogger('custom_logger')
+logger = logging.getLogger('page_access_logger')
 
 class LogRequestMiddleware:
     """
@@ -22,20 +22,9 @@ class LogRequestMiddleware:
 
     def log_request(self, request):
         # Get the IP address from the request
-        ip = self.get_client_ip(request)
+        ip = request.get_host()
         # Get the accessed page
         path = request.path
 
         # Log the information
         logger.info(f"IP: {ip} accessed {path}")
-
-    def get_client_ip(self, request):
-        """
-        Retrieve the IP address from the request object.
-        """
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR', 'Unknown')
-        return ip

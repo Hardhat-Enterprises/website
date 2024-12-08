@@ -282,7 +282,7 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'custom_logger': {
+        'page_access_logger': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': False,
