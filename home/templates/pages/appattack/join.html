@@ -27,7 +27,7 @@
 <section class="section-header bg-tertiary text-black">
     <div class="container">
 
-        <h1 class="fw-bolder display-2 text-center mb-lg-4">Want to work with us?</h1>
+        <h1 class="fw-bolder display-2 text-center mb-lg-2">Want to Work with us</h1>
       <div class="row mb-5">
         <div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-7 mb-lg-0">
           <div class="card border-0 overflow-hidden">
@@ -35,7 +35,7 @@
                 <img src="{% static 'assets/img/pages/appattack/icon.1.svg' %}" class="card-img-top" alt="Neil Portrait">
             </div>  
             <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
-              <h5 class="card-title" style="min-height: auto;">Carrer</h3>
+              <h3 class="h5 card-title">Carrer</h3>
               <p class="mt-3">If you're looking for a reliable place to grow, there's nowhere better than Hardhat. Our teams face some of the toughest technical challenges out there. Every day is a learning opportunity and you'll never get bored</p>
              
             </div>
@@ -47,7 +47,7 @@
                 <img src="{% static 'assets/img/pages/appattack/icon.7.png' %}" class="card-img-top" alt="Neil Portrait">
               </div>  
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
-                <h5 class="card-title" style="min-height: auto;">Our Missons</h3>
+                <h3 class="h5 card-title">Our Missons</h3>
                 <p class="mt-3">At HardHat, everyone works together to create cyber security for the world around us. The work we do has a real impact and you could be part of the team trusted to educate, protect, and defend organisations around the world</p>
              
             
@@ -60,7 +60,7 @@
                 <img src="{% static 'assets/img/pages/appattack/icon.8.png' %}" class="card-img-top" alt="Neil Portrait">
               </div>  
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded">
-                <h5 class="card-title" style="min-height: auto;">Support</h3>
+                <h3 class="h5 card-title">Support</h3>
                 <p class="mt-3">At Hardhat you are surrounded by the brightest minds. And, working across different specialist teams, you’ll gain exposure to the latest thinking as you solve our customers’ complex challenges.</p>
                 
               </div>
@@ -73,12 +73,12 @@
 
  <!-- form -->
 
- <div id="form-join" class="row justify-content-center" >
-  <div id="form-header" class="col-12 col-md-10 text-center mb-4">
+ <div class="row justify-content-center" id="form-join">
+  <div class="col-12 col-md-10 text-center mb-4">
     <h2>Send Us a Message</h2>
     </div>
-    <div id="form-body" class="col-12 col-lg-8">
-    <form class="row g-3" action="/appattack/join" method="post" onsubmit="handleFormSubmit(event)">
+    <div class="col-12 col-lg-8">
+    <form class="row g-3" action="/appattack/join" method="post">
       {% csrf_token %}
   <div class="col-mb-4">
     <label for="validationDefault01" class="form-label align-items-center">First name</label>
@@ -112,5 +112,5 @@
 
 
 </main>
-<script src="{% static 'js/handleFormSubmit.js' %}"></script>
+
 {% endblock content %}

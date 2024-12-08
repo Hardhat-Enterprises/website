@@ -259,14 +259,12 @@
         <div class="col-12 col-lg-8">
           <!-- Contact Card -->
           <div class="card border-0 p-2 p-md-3 p-lg-5">
-            <div id="form-header" class="card-header bg-white border-0 text-center">
+            <div class="card-header bg-white border-0 text-center">
               <h2>Want to work with us?</h2>
               <p>Awesome! Tell us about yourself</p>
             </div>
-            <div id="form-body" class="card-body pt-0">
-              <form id="contactForm" action="/contact" method="post" onsubmit="handleFormSubmit(event)">
-                {% csrf_token %}
-
+            <div class="card-body pt-0">
+              <form action="/contact" method="post">
                 <!-- Form -->
                 <div class="mb-4">
                   <label for="name">Your Name</label>
@@ -296,47 +294,42 @@
                       type="email"
                       class="form-control"
                       placeholder="example@company.com"
-                      pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"
-                      name="email"
+                      pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+                      size="30"
                       id="email"
+                      name="email"
                       required
                     />
                   </div>
                 </div>
                 <!-- End of Form -->
-                <!-- Form -->
                 <div class="mb-4">
                   <label for="message">Your Message</label>
                   <textarea
+                    placeholder="Your message"
                     class="form-control"
-                    placeholder="How can we help you?"
-                    name="message"
                     id="message"
+                    name="message"
                     rows="4"
                     required
                   ></textarea>
                 </div>
                 <!-- End of Form -->
                 <div class="d-grid">
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                  >
-                    Send Message
+                  <button type="submit" class="btn btn-secondary">
+                    Send message
                   </button>
                 </div>
+                {% csrf_token %}
               </form>
             </div>
           </div>
+          <!-- End of Contact Card -->
         </div>
       </div>
     </div>
   </section>
-  
   <!-- End of section -->
 </main>
-<script src="{% static 'js/handleFormSubmit.js' %}"></script>
-
-
 
 {% endblock content %}
