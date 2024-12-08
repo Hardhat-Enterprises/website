@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -8,6 +8,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('client_sign-in/', views.client_sign_in, name='client_sign_in'),
     path('profile/', views.profile, name='profile'),
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
@@ -44,10 +45,6 @@ urlpatterns = [
 
     # path('contact-central/', views.Contact_central, name='contact-central'),
     
-    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
-    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
-    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
-    path('dashboard/', views.dashboard, name='dashboard'),
     
     # Search result page
     path('SearchResults/', views.SearchResults, name='pages/search-results'),
@@ -89,8 +86,11 @@ urlpatterns = [
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
+    
     # Feedback (duplicate removed)
-    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
