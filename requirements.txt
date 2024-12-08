@@ -8,6 +8,7 @@ Faker==27.4.0
 python-dotenv==1.0.1
 filelock==3.13.4
 six==1.16.0
+django-cors-headers==4.6.0
 
 # UI
 django-crispy-forms==2.3
@@ -28,6 +29,8 @@ setuptools==73.0.1
 sqlparse==0.5.1
 virtualenv==20.25.1
 wheel==0.44.0
+nh3==0.2.18
+
 
 # Image Processing
 Pillow==9.5.0

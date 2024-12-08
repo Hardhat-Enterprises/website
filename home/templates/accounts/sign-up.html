@@ -129,31 +129,34 @@
     }
   }
   document.addEventListener("DOMContentLoaded", function() {
-      // Email Validation
-      const emailField = document.getElementById("id_email");
-      const emailErrorMessage = document.getElementById("email-error");
-      const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
+    // Email Validation
+    const emailField = document.getElementById("id_email");
+    const emailErrorMessage = document.getElementById("email-error");
+    const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
 
-      emailField.addEventListener("input", function() {
-          const emailPattern = /@deakin\.edu\.au$/;
-          const emailValue = emailField.value;
+    emailField.addEventListener("input", function() {
+        const emailValue = emailField.value.trim(); // Ensure value is trimmed before validation
+        console.log("Email being checked:", emailValue); // Log for debugging
+        const emailPattern = /@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$/;
 
-          if (emailPattern.test(emailValue)) {
-              emailErrorMessage.textContent = "";
-              emailField.classList.remove("is-invalid");
-              emailField.classList.add("is-valid");
-              emailIcon.classList.remove("fa-envelope");
-              emailIcon.classList.add("fa-check-circle");
-              emailIcon.style.color = "green";
-          } else {
-              emailErrorMessage.textContent = "Email must match your Deakin email address";
-              emailField.classList.remove("is-valid");
-              emailField.classList.add("is-invalid");
-              emailIcon.classList.remove("fa-check-circle");
-              emailIcon.classList.add("fa-envelope");
-              emailIcon.style.color = "red";
-          }
-      });
+        if (emailPattern.test(emailValue)) {
+            emailErrorMessage.textContent = "";
+            emailField.classList.remove("is-invalid");
+            emailField.classList.add("is-valid");
+            emailIcon.classList.remove("fa-envelope");
+            emailIcon.classList.add("fa-check-circle");
+            emailIcon.style.color = "green";
+        } else {
+            emailErrorMessage.textContent = "Email must match your Deakin email address";
+            emailField.classList.remove("is-valid");
+            emailField.classList.add("is-invalid");
+            emailIcon.classList.remove("fa-check-circle");
+            emailIcon.classList.add("fa-envelope");
+            emailIcon.style.color = "red";
+        }
+    });
+
+
 
       // Password Validation
       const passwordField = document.getElementById("id_password1");
