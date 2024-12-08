@@ -94,9 +94,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
 
+
+ 
+    'rest_framework',  
+    'drf_yasg', 
+
     'home',
     'theme_pixel',
     'corsheaders',
+
 ]
 
 MIDDLEWARE = [
