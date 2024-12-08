@@ -33,6 +33,7 @@ urlpatterns = [
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
+    path('plan/', views.package_plan, name='package_plan'),
     
     # blog
     #path('admin/', admin.site.urls),
@@ -46,8 +47,10 @@ urlpatterns = [
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
+    path('accounts/clientlogin/', views.client_login, name='client_login'),
     path('accounts/logout/', views.logout_view, name='logout'),
     path('accounts/register/', views.register, name='register'),
+    path('accounts/registerclient/', views.register_client, name='register_client'),
     path('accounts/password-gen/', views.password_gen, name='password_gen'),
     path('accounts/password-change/', views.UserPasswordChangeView.as_view(), name='password_change'),
     path('accounts/password-change-done/', auth_views.PasswordChangeDoneView.as_view(

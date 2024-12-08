@@ -35,7 +35,8 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm, ExperienceForm
+from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+
 
 
 from home.models import Announcement, JobApplication
@@ -276,6 +277,10 @@ def Vr_main(request):
 
 # Authentication
 
+def client_login(request):
+    form = ClientLoginForm
+    return render(request, 'accounts/sign-in-client.html',{'form': form})
+
 
 def feedback(request):
     if request.method == 'POST':
@@ -332,14 +337,14 @@ def register(request):
         if request.method == 'POST':
             print(f"POST Data: {request.POST}")  # Debugging log for POST data
             form = RegistrationForm(request.POST)
-            
+           
             if form.is_valid():
                 try:
                     user = form.save(commit=False)  # Save user instance without committing
                     user.set_password(form.cleaned_data['password1'])  # Hash the password
                     user.save()  # Save the user
                     print("User saved successfully.")
-
+ 
                     # Generate OTP and send email
                     otp = random.randint(100000, 999999)
                     email = form.cleaned_data.get('email')
@@ -355,7 +360,7 @@ def register(request):
                         fail_silently=False,
                     )
                     print(f"OTP sent to {email}.")
-
+ 
                     # Redirect to verify token page with context
                     messages.success(request, "Account created successfully! Check your email for the OTP.")
                     return render(
@@ -372,18 +377,37 @@ def register(request):
                 print(form.errors)  # Debugging log for form errors
                 messages.error(request, "Please fix the errors below.")
         else:
-            print("GET request received for registration.")
-            form = RegistrationForm()
+            print("Registration failed!")
+    finally:
+        form = RegistrationForm()
+ 
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up.html', context)
 
-        context = {'form': form}
-        return render(request, 'accounts/sign-up.html', context)
+def register_client(request):
+    form = ClientRegistrationForm()
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        business_name = request.POST.get('business_name')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        form = ClientRegistrationForm(request.POST)
+       
+        if form.is_valid():
+            form.save()
+            
+            return redirect("package_plan")
+            # return redirect("verify-email", username=request.POST['first_name'])
+        else:
+            print("Registration failed!")
+    else:
+        form = ClientRegistrationForm()
+ 
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up-client.html', context)
 
-    except Exception as e:
-        # Catch any unexpected errors and print to the terminal
-        print(f"Unexpected error in register view: {e}")
-        print(traceback.format_exc())
-        messages.error(request, "An unexpected error occurred. Please try again later.")
-        return render(request, 'accounts/sign-up.html', {'form': RegistrationForm()})
  
 @csrf_exempt
 def VerifyOTP(request):
@@ -526,7 +550,8 @@ class UserPasswordChangeView(PasswordChangeView):
 def resources_view(request):
     return render(request, 'pages/resources.html.')
    
- 
+def package_plan(request):
+    return render(request, 'pages/package-plan.html')
  
 # Chart Views
  
