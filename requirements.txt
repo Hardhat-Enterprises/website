@@ -9,6 +9,7 @@ Faker==27.4.0
 python-dotenv==1.0.1
 filelock==3.13.4
 six==1.16.0
+django-ratelimit==4.1.0
 
 # UI
 django-crispy-forms==2.3
