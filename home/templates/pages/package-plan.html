@@ -1,0 +1,49 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="container my-5 h1-100 section-header">
+
+    <h1 class="text-center my-5 mb-5">Choose Your Plan</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    1 Month Plan
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Perfect for short-term needs.</p>
+                    <p class="fw-bold">$10 / month</p>
+                    <a href="{% url 'appattack' %}" class="btn btn-primary w-100">Choose Plan</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    6 Month Plan
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Best value for half a year!</p>
+                    <p class="fw-bold">$50 / 6 months</p>
+                    <a href="{% url 'appattack' %}" class="btn btn-primary w-100">Choose Plan</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    12 Month Plan
+                </div>
+                <div class="card-body text-center">
+                    <p class="card-text">Save more with our annual plan.</p>
+                    <p class="fw-bold">$90 / year</p>
+                    <a href="{% url 'appattack' %}" class="btn btn-primary w-100">Choose Plan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}

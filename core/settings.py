@@ -94,10 +94,17 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'django_cron',
+
+
+ 
+    'rest_framework',  
+    'drf_yasg', 
 
     'home',
     'theme_pixel',
     'corsheaders',
+
 ]
 
 MIDDLEWARE = [
@@ -111,6 +118,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "core.middleware.LogRequestMiddleware"
 ]
 
 LOGGING = {
@@ -286,6 +294,57 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+#cron-job-feature
+# Django-cron configuration class
+CRON_CLASSES = [
+    'home.tasks.CleanStaleRecordsCronJob', 
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file_django': {  # Handler specifically for Django logs
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_activity.log'),  # Separate file for Django logs
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'activity.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'page_access_logger': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
  
  
@@ -300,5 +359,6 @@ CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-type',
     'authorization',
+
 ]
 

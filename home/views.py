@@ -41,7 +41,8 @@ import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm, ExperienceForm
+from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+
 
 
 from home.models import Announcement, JobApplication
@@ -68,6 +69,8 @@ from django.template.loader import render_to_string
 #from .models import Student, Project, Progress
  
 from .forms import FeedbackForm
+import traceback
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
@@ -81,10 +84,19 @@ import logging
 from .validators import xss_detection
 from .models import Contact
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import APIModel
+from .serializers import APIModelSerializer
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.viewsets import ViewSet
+
+
 #For LeaderBoard
 from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
+
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -133,7 +145,7 @@ def appattack(request):
  
 def appattack_join(request):
    # print("Hi");
-   # print(request.POST);
+    print(request.POST);
     return render(request, 'pages/appattack/join.html')
  
 def products_services(request):
@@ -340,6 +352,10 @@ def Vr_main(request):
 
 # Authentication
 
+def client_login(request):
+    form = ClientLoginForm
+    return render(request, 'accounts/sign-in-client.html',{'form': form})
+
 
 def feedback(request):
     if request.method == 'POST':
@@ -390,6 +406,7 @@ def logout_view(request):
 def password_gen(request):
     return JsonResponse({'data': gen_password()}, status=200)
  
+
 @csrf_exempt
 def VerifyOTP(request):
     """
@@ -421,6 +438,101 @@ def VerifyOTP(request):
             messages.error(request, "Invalid OTP. Please try again.")
 
     return render(request, 'accounts/verify_token.html')
+
+ 
+def register(request):
+    try:
+        if request.method == 'POST':
+            print(f"POST Data: {request.POST}")  # Debugging log for POST data
+            form = RegistrationForm(request.POST)
+           
+            if form.is_valid():
+                try:
+                    user = form.save(commit=False)  # Save user instance without committing
+                    user.set_password(form.cleaned_data['password1'])  # Hash the password
+                    user.save()  # Save the user
+                    print("User saved successfully.")
+ 
+                    # Generate OTP and send email
+                    otp = random.randint(100000, 999999)
+                    email = form.cleaned_data.get('email')
+                    send_mail(
+                        subject="User Data",
+                        message=(
+                            f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
+                            "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                            "Regards, \nHardhat Enterprises"
+                        ),
+                        from_email="deakinhardhatwebsite@gmail.com",
+                        recipient_list=[email],
+                        fail_silently=False,
+                    )
+                    print(f"OTP sent to {email}.")
+ 
+                    # Redirect to verify token page with context
+                    messages.success(request, "Account created successfully! Check your email for the OTP.")
+                    return render(
+                        request,
+                        'accounts/verify_token.html',
+                        {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
+                    )
+                except Exception as e:
+                    print(f"Error saving user or sending email: {e}")
+                    print(traceback.format_exc())  # Print detailed traceback
+                    messages.error(request, "An error occurred while creating the account. Please try again.")
+            else:
+                print("Form is invalid. Errors:")
+                print(form.errors)  # Debugging log for form errors
+                messages.error(request, "Please fix the errors below.")
+        else:
+            print("Registration failed!")
+    finally:
+        form = RegistrationForm()
+ 
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up.html', context)
+
+def register_client(request):
+    form = ClientRegistrationForm()
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        business_name = request.POST.get('business_name')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        form = ClientRegistrationForm(request.POST)
+       
+        if form.is_valid():
+            form.save()
+            
+            return redirect("package_plan")
+            # return redirect("verify-email", username=request.POST['first_name'])
+        else:
+            print("Registration failed!")
+    else:
+        form = ClientRegistrationForm()
+ 
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up-client.html', context)
+
+ 
+@csrf_exempt
+def VerifyOTP(request):
+    if request.method == "POST":
+        userotp = request.POST.get('otp')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+       
+        if password1 == password2:
+            form = User(first_name=first_name, last_name=last_name, email=email, password=password1)
+            form.save()
+           
+        print("OTP: ", userotp)
+    return JsonResponse({'data': 'Hello'}, status=200)  
 
    
 def register(request):
@@ -589,7 +701,8 @@ class UserPasswordChangeView(PasswordChangeView):
 def resources_view(request):
     return render(request, 'pages/resources.html.')
    
- 
+def package_plan(request):
+    return render(request, 'pages/package-plan.html')
  
 # Chart Views
  
@@ -1004,6 +1117,42 @@ def career_application(request,id):
         "complete":complete
     }
     return render(request,"careers/application-form.html",context)
+
+  
+#swagger-implementation
+
+class APIModelListView(APIView):
+    def get(self, request):
+        data = APIModel.objects.all()
+        serializer = APIModelSerializer(data, many=True)
+        return Response(serializer.data)
+    
+class AnalyticsAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Fetch analytics data",
+        operation_description="Returns basic analytics data for testing purposes.",
+        tags=["Analytics"]  
+    )
+    def get(self, request):
+        return Response({"message": "Analytics data fetched successfully!"})  
+    
+class UserManagementAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Get User Details",
+        operation_description="Retrieve detailed information of a specific user.",
+        tags=["User Management"]  
+    )
+    def get(self, request):
+        return Response({"message": "User details here."})    
+    
+class EmailNotificationViewSet(ViewSet):
+    @swagger_auto_schema(
+        operation_summary="Send Email Notification",
+        operation_description="Send a notification email to a user.",
+        tags=["Email Notifications"]  
+    )
+    def create(self, request):
+        return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
     leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
