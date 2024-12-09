@@ -1,4 +1,7 @@
 {% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/kudoboard.css' %}">
+</head>
 <main>
   {% include 'includes/pre-loader.html' %}
 
@@ -30,6 +33,96 @@
     </div>
   </section>
   <!-- End of Hero section -->
+  <!-- Kudoboard Section Starts Here -->
+<div class="whiteboard-container">
+  <h2>Kudoboard</h2>
+  <div id="whiteboard" class="whiteboard"></div>
+  <textarea id="reviewText" rows="3" placeholder="Type your review here..."></textarea>
+  <div>
+    <button id="submitReview">Submit</button>
+    <button id="clearReviews" disabled>Clear</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const whiteboard = document.getElementById('whiteboard');
+  const reviewText = document.getElementById('reviewText');
+  const submitReview = document.getElementById('submitReview');
+  const clearReviews = document.getElementById('clearReviews');
+  const stickyColors = ['#ffc107', '#ff5722', '#8bc34a', '#03a9f4', '#e91e63']; // Different colors
+  let usedColors = []; // Track used colors
+
+  // Load saved reviews from localStorage
+  const loadReviews = () => {
+    const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+    savedReviews.forEach((review) => createStickyNote(review.text, review.color));
+    toggleClearButton();
+  };
+
+  // Save reviews to localStorage
+  const saveReviews = () => {
+    const reviews = Array.from(whiteboard.children).map((note) => ({
+      text: note.textContent,
+      color: note.style.backgroundColor,
+    }));
+    localStorage.setItem('reviews', JSON.stringify(reviews));
+  };
+
+  // Create a sticky note
+  const createStickyNote = (text, color = null) => {
+    const stickyNote = document.createElement('div');
+    stickyNote.classList.add('sticky-note');
+    stickyNote.textContent = text;
+    stickyNote.style.backgroundColor = color || getUniqueColor();
+    whiteboard.appendChild(stickyNote);
+    toggleClearButton();
+  };
+
+  // Get a unique color that hasn't been used yet
+  const getUniqueColor = () => {
+    if (usedColors.length === stickyColors.length) {
+      // All colors have been used, reset the usedColors array
+      usedColors = [];
+    }
+
+    // Pick a random color that hasn't been used
+    let randomColor;
+    do {
+      randomColor = stickyColors[Math.floor(Math.random() * stickyColors.length)];
+    } while (usedColors.includes(randomColor));
+
+    // Mark the color as used
+    usedColors.push(randomColor);
+    return randomColor;
+  };
+
+  submitReview.addEventListener('click', function () {
+    const text = reviewText.value.trim();
+    if (text) {
+      createStickyNote(text);
+      reviewText.value = '';
+      saveReviews();
+    } else {
+      alert('Please enter a review.');
+    }
+  });
+
+  clearReviews.addEventListener('click', function () {
+    whiteboard.innerHTML = '';
+    usedColors = []; // Reset used colors
+    localStorage.removeItem('reviews');
+    toggleClearButton();
+  });
+
+  const toggleClearButton = () => {
+    clearReviews.disabled = whiteboard.children.length === 0;
+  };
+
+  loadReviews();
+});
+</script>
+<!-- Kudoboard Section Ends Here -->
  <!-- Section -->
   <section class="section section-md">
     <div class="container">
@@ -259,12 +352,14 @@
         <div class="col-12 col-lg-8">
           <!-- Contact Card -->
           <div class="card border-0 p-2 p-md-3 p-lg-5">
-            <div class="card-header bg-white border-0 text-center">
+            <div id="form-header" class="card-header bg-white border-0 text-center">
               <h2>Want to work with us?</h2>
               <p>Awesome! Tell us about yourself</p>
             </div>
-            <div class="card-body pt-0">
-              <form action="/contact" method="post">
+            <div id="form-body" class="card-body pt-0">
+              <form id="contactForm" action="/contact" method="post" onsubmit="handleFormSubmit(event)">
+                {% csrf_token %}
+
                 <!-- Form -->
                 <div class="mb-4">
                   <label for="name">Your Name</label>
@@ -294,42 +389,47 @@
                       type="email"
                       class="form-control"
                       placeholder="example@company.com"
-                      pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
-                      size="30"
-                      id="email"
+                      pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"
                       name="email"
+                      id="email"
                       required
                     />
                   </div>
                 </div>
                 <!-- End of Form -->
+                <!-- Form -->
                 <div class="mb-4">
                   <label for="message">Your Message</label>
                   <textarea
-                    placeholder="Your message"
                     class="form-control"
-                    id="message"
+                    placeholder="How can we help you?"
                     name="message"
+                    id="message"
                     rows="4"
                     required
                   ></textarea>
                 </div>
                 <!-- End of Form -->
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-secondary">
-                    Send message
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                  >
+                    Send Message
                   </button>
                 </div>
-                {% csrf_token %}
               </form>
             </div>
           </div>
-          <!-- End of Contact Card -->
         </div>
       </div>
     </div>
   </section>
+  
   <!-- End of section -->
 </main>
+<script src="{% static 'js/handleFormSubmit.js' %}"></script>
+
+
 
 {% endblock content %}

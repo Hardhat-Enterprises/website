@@ -7,11 +7,13 @@ from .models import (
     Skill,
     Progress,
     Contact,
+    Experience,
 
     Webpage,
     DDT_contact,
-    Feedback,
-    
+    #Feedback,
+    Job,
+    JobApplication,
     
     # Contact_central,
     Article,
@@ -22,7 +24,10 @@ from .models import (
     Announcement,
 
     # Logging
-    SecurityEvent
+    SecurityEvent,
+
+    #LeaderBaord
+    LeaderBoardTable
 
 )
 
@@ -90,6 +95,12 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = ['message']
     readonly_fields = ['created_at']
     
+@admin.register(Experience)
+class ExperienceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'feedback', 'created_at']
+    search_fields = ['name', 'feedback']
+    readonly_fields = ['created_at']  # Make created_at read-only
+    
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):
 #     list_display = [field.name for field in Contact_central._meta.fields]
@@ -107,7 +118,7 @@ class FeedbackAdmin(admin.ModelAdmin):
             return ['user', 'feedback_type', 'content'] + self.readonly_fields
         return self.readonly_fields
 
-admin.site.register(Feedback, FeedbackAdmin)
+#admin.site.register(Feedback, FeedbackAdmin)
 
 
 # class OtpTokenAdmin(admin.ModelAdmin):
@@ -115,6 +126,26 @@ admin.site.register(Feedback, FeedbackAdmin)
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(Projects_join_us)
+
+@admin.register(Job)
+class JobAdmin(admin.ModelAdmin):
+    list_display = ['title', 'location', 'job_type', 'posted_date', 'closing_date']
+    list_filter=['location','job_type']
+
+@admin.register(JobApplication)
+class JobApplicationAdmin(admin.ModelAdmin):
+    list_display=['name', 'email','job__title','applied_date']
+    list_filter = ['job__title']
+    readonly_fields =['job','name','email','resume','cover_letter','applied_date']
+    
+    @admin.display(description="Job Title")
+    def job__title(self,obj):
+        return obj.job.title
+    
+@admin.register(LeaderBoardTable)
+class LeaderboardTableAdmin(admin.ModelAdmin):
+    list_display = ('user', 'category', 'total_points')
+
 
 
 

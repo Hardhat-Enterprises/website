@@ -2,37 +2,69 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>{{ challenge.title }}</h1>
-    <p>{{ challenge.description }}</p>
-    <p>
-        <span class="badge bg-primary">{{ challenge.get_difficulty_display }}</span>
-        <span class="badge bg-secondary">{{ challenge.get_category_display }}</span>
-        <span class="badge bg-info">{{ challenge.points }} points</span>
-    </p>
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Question:</h5>
-            <p class="card-text">{{ challenge.question }}</p>
+<p></p>
+<p></p>
+<p></p>
+<div style="display: flex; flex-direction: column; min-height: 100vh; background-color: #e09019; color: #000;">
+    <!-- Content -->
+    <div style="flex: 1; padding: 20px;">
+        <!-- White Box -->
+        <div style="position: relative; background-color: #fffacd; border: 2px solid black; border-radius: 10px; padding: 15px; max-width: 500px; margin: 100px auto 0;">
+            <div style="text-align: center;">
+                <h1 style="font-size: 2.5rem; color: #000;">{{ challenge.title }}</h1>
+                <p style="font-size: 1.2rem; color: #333;">{{ challenge.description }}</p>
+                <div style="margin-bottom: 20px;">
+                    <a href="{% url 'category_challenges' challenge.category %}" class="btn btn-danger" style="background-color: #dc3545; color: #fff; margin-right: 10px;">Exit</a>
+                    <span class="difficulty-badge 
+                        {% if challenge.get_difficulty_display == 'Easy' %} difficulty-easy
+                        {% elif challenge.get_difficulty_display == 'Medium' %} difficulty-medium
+                        {% elif challenge.get_difficulty_display == 'Hard' %} difficulty-hard
+                        {% else %} difficulty-default {% endif %}" 
+                        style="margin-right: 10px;">
+                        {{ challenge.get_difficulty_display }}
+                    </span>
+                    <span style="background-color: #17a2b8; color: #fff; padding: 5px 10px; border-radius: 5px; margin-right: 10px;">{{ challenge.get_category_display }}</span>
+                    <span style="background-color: #28a745; color: #fff; padding: 5px 10px; border-radius: 5px;">{{ challenge.points }} points</span>
+                </div>
+                <div id="timer" style="text-align: center; font-size: 1.2rem; color: #dc3545; margin-bottom: 5px;">
+                    Time Remaining: 60s
+                </div>
+            </div>
+        </div>
+        <!-- Question Section -->
+        <div style="position: relative; background-color: #fffacd; padding: 20px; border-radius: 10px; max-width: 600px; margin: 10px auto;">
+            <div class="correct-animation" id="correct-animation">
+                <div class="tick-circle">
+                    <div class="tick-mark"></div>
+                </div>
+            </div>
+            <h5 style="font-size: 1.5rem; color: #003366;">Question:</h5>
+            <p style="font-size: 1rem; color: #333;">{{ challenge.question }}</p>
             <form id="challenge-form">
                 {% csrf_token %}
-                {% for choice in challenge.choices %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="answer" id="choice{{ forloop.counter }}" value="{{ choice }}">
-                        <label class="form-check-label" for="choice{{ forloop.counter }}">
-                            {{ choice }}
-                        </label>
-                    </div>
+                {% for key, value in challenge.choices.items %}
+                <div style="margin-bottom: 10px;">
+                    <input type="radio" name="answer" id="choice{{ forloop.counter }}" value="{{ key }}" style="margin-right: 10px;">
+                    <label for="choice{{ forloop.counter }}" style="font-size: 1rem; color: #333;">{{ value }}</label>
+                </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-primary mt-3">Submit Answer</button>
+                <button type="submit" class="btn btn-primary" style="background-color: #0056b3; color: #fff; border: none; margin-top: 20px;">Submit Answer</button>
             </form>
         </div>
+        <div id="result" style="display: none; padding: 15px; margin-top: 20px; border-radius: 5px; max-width: 600px; margin: 20px auto;"></div>
+
+        {% if next_challenge %}
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'challenge_detail' next_challenge.id %}" class="btn btn-secondary" style="background-color: #6c757d; color: #fff; border: none;">Next Challenge</a>
+        </div>
+        {% else %}
+        <p style="text-align: center; color: #666; margin-top: 20px;">No more challenges in this category.</p>
+        {% endif %}
     </div>
-    <div id="result" class="alert" style="display: none;"></div>
 </div>
 
 <script>
-document.getElementById('challenge-form').addEventListener('submit', function(e) {
+document.getElementById('challenge-form').addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
     fetch('{% url "submit_answer" challenge.id %}', {
@@ -42,18 +74,172 @@ document.getElementById('challenge-form').addEventListener('submit', function(e)
             'X-CSRFToken': '{{ csrf_token }}'
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        const resultDiv = document.getElementById('result');
-        resultDiv.style.display = 'block';
-        if (data.is_correct) {
-            resultDiv.className = 'alert alert-success';
-            resultDiv.innerHTML = `Correct! You earned ${data.score} points. ${data.explanation}`;
-        } else {
-            resultDiv.className = 'alert alert-danger';
-            resultDiv.innerHTML = `Incorrect. ${data.explanation}`;
-        }
-    });
+        .then(response => response.json())
+        .then(data => {
+            const resultDiv = document.getElementById('result');
+            const animationDiv = document.getElementById('correct-animation');
+            resultDiv.style.display = 'block';
+
+            if (data.is_correct) {
+                resultDiv.className = 'alert alert-success';
+                resultDiv.innerHTML = `Correct! You earned ${data.score} points. ${data.explanation}`;
+                
+                // Show the tick animation
+                animationDiv.style.display = 'block';
+
+                // Fade out the animation after 2 seconds
+                setTimeout(() => {
+                    animationDiv.classList.add('fade-out');
+                }, 2000);
+
+                // Hide the animation completely after the fade-out
+                setTimeout(() => {
+                    animationDiv.style.display = 'none';
+                    animationDiv.classList.remove('fade-out');
+                }, 3000);
+            } else {
+                resultDiv.className = 'alert alert-danger';
+                resultDiv.innerHTML = `Incorrect. ${data.explanation}`;
+            }
+        });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+        let timeLeft = 60; // Timer starts at 1 minute (60 seconds)
+        const timerElement = document.getElementById('timer');
+        const resultDiv = document.getElementById('result');
+        const form = document.getElementById('challenge-form');
+
+        function updateTimer() {
+            timeLeft--;
+            timerElement.textContent = `Time Remaining: ${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                handleTimeout();
+            }
+        }
+
+        function handleTimeout() {
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'alert alert-danger';
+            resultDiv.innerHTML = `Time's up! The challenge is marked as incorrect.`;
+            disableForm();
+        }
+
+        function disableForm() {
+            const inputs = document.querySelectorAll('input[name="answer"]');
+            inputs.forEach(input => (input.disabled = true));
+            const submitButton = document.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+        }
+
+        // Start the timer
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Handle form submission
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            clearInterval(timerInterval); // Stop the timer upon submission
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+
+            if (selectedAnswer) {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'alert alert-success';
+                resultDiv.innerHTML = `Correct! You earned points.`;
+            } else {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'alert alert-danger';
+                resultDiv.innerHTML = `Incorrect. Please try again.`;
+            }
+
+            disableForm();
+        });
+    });
+
 </script>
+
+<style>
+    .difficulty-easy {
+        background-color: #28a745;
+        color: #fff;
+    }
+    .difficulty-medium {
+        background-color: #ffc107;
+        color: #000;
+    }
+    .difficulty-hard {
+        background-color: #dc3545;
+        color: #fff;
+    }
+    .difficulty-default {
+        background-color: #6c757d;
+        color: #fff;
+    }
+    .difficulty-badge {
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .correct-animation {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+.correct-animation.fade-out {
+    opacity: 0;
+}
+
+.tick-circle {
+    width: 100px;
+    height: 100px;
+    border: 5px solid #32cd32;
+    border-radius: 50%;
+    position: relative;
+    animation: circleAppear 1s ease-in-out forwards;
+    opacity: 0;
+}
+
+.tick-mark {
+    width: 20px;
+    height: 50px;
+    border: solid #32cd32;
+    border-width: 0 7px 7px 0;
+    position: absolute;
+    top: 25%;
+    left: 40%;
+    transform: rotate(45deg);
+    animation: tickFadeIn 1s ease-in-out forwards 1s;
+    opacity: 0;
+}
+
+@keyframes circleAppear {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes tickFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+</style>
 {% endblock %}

@@ -1,13 +1,22 @@
 from django.urls import path
+from django.urls import include
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
 from django.conf import settings
 from django.conf.urls.static import static
-
+#from home.views import register
+from rest_framework.routers import DefaultRouter
+from .views import APIModelListView
+from .views import AnalyticsAPI
+from .views import UserManagementAPI, EmailNotificationViewSet
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('client_sign-in/', views.client_sign_in, name='client_sign_in'),
     path('profile/', views.profile, name='profile'),
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
@@ -33,11 +42,17 @@ urlpatterns = [
     # path('contact-central/', views.Contact_central, name='contact-central'),
     path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
     path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    
+
+
     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
     path('dashboard/', views.dashboard, name='dashboard'),
+
+
+
+    # path('contact-central/', views.Contact_central, name='contact-central'),
+    
     
     # Search result page
     path('SearchResults/', views.SearchResults, name='pages/search-results'),
@@ -50,6 +65,17 @@ urlpatterns = [
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
+    
+    path("careers/", list_careers , name="career-list"),
+    path("careers/<int:id>/", career_detail , name="career-detail"),
+    path("careers/<int:id>/apply", career_application , name="career-application"),
+
+    # Login
+    path('accounts/register/', views.signup, name='signup'),
+
+
+    # Email OTP
+    
     
     # Email OTP
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
@@ -68,8 +94,17 @@ urlpatterns = [
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
+    
     # Feedback (duplicate removed)
-    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    #swagger-new-implementation
+    path('api-models/', APIModelListView.as_view(), name='api-models'),
+    path('api-analytics/', AnalyticsAPI.as_view(), name='api-analytics'),
+    path('user-management/', UserManagementAPI.as_view(), name='user-management'),
+    path('', include(router.urls)), 
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

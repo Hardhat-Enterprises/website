@@ -1,0 +1,95 @@
+{% extends 'layouts/base.html' %}
+{% load add_input_validation %}
+{% load static %}
+
+{% block header %}
+{% include 'includes/navigation.html' %}
+{% endblock header %}
+
+{% block content %}
+<main>
+
+    {% include 'includes/pre-loader.html' %}
+
+    <!-- Section -->
+    <section id="client-signin-section" class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/login/client-bg.svg' %}">
+        <div class="container mb mt-md-6">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                    <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
+                        <div class="text-center text-md-center mb-4 mt-md-0">
+                            <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt="Logo" class="mb-3">
+                            <h1 class="mb-0 h3">Client Sign in</h1>
+                            <p class="text-muted">Welcome! Please log in to continue enjoying our services.</p>
+                        </div>
+
+                        <form method="post" class="mt-4">
+                            {% csrf_token %}
+                            <!-- Form -->
+                            <!-- Email Input -->
+                          <div class="mb-4">
+                              <label for="email">Personal Email</label>
+                              <div class="input-group">
+                                  <span class="input-group-text" id="basic-addon4">
+                                      <span class="fas fa-user"></span>
+                                  </span>
+                                  <input type="email" class="form-control" placeholder="example@company.com" id="email" name="email" required>
+                              </div>
+                          </div>
+                          <!-- passport Input -->
+                          <div class="mb-4">
+                            <label for="password">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon4">
+                                    <span class="fas fa-unlock-alt"></span>
+                                </span>
+                                <input type="password" class="form-control" placeholder="Password" id="password" name="password" required>
+                            </div>
+                        
+                            <!-- End of Form -->
+                        
+                            <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+                                <div class="form-check mb-0">
+                                    <input class="form-check-input" type="checkbox" value="" id="remember">
+                                    <label class="form-check-label mb-0" for="remember">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <div><a href="{% url 'password_reset' %}" class="small text-right lost-password">Lost password?</a></div>
+                            </div>
+                        
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-warning btn-primary">Sign in</button>
+                            </div>
+                        </form>
+
+                        <div class="d-flex justify-content-center align-items-center mt-4">
+                            <span class="fw-normal">
+                                New to our platform?
+                                <a href="{% url 'register_client' %}" class="fw-bold text-underline create-account">Create account</a>
+                            </span>
+                        </div>
+
+                        <!-- Social Login Options -->
+                        
+
+                        <div class="d-flex justify-content-center align-items-center mt-4">
+                            <p style="margin: 16px 10px;">Or log in with:</p>
+                            <div class="d-flex">
+                                <a href="#" class="btn btn-outline-warning me-2">Google</a>
+                                <a href="#" class="btn btn-outline-info">Facebook</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'includes/footer.html' %}
+</main>
+
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}
