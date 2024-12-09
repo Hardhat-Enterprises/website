@@ -81,7 +81,7 @@ class UserChallengeAdmin(admin.ModelAdmin):
 
 @admin.register(ContactSubmission)
 class ContactSubmissionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'first_name', 'last_name', 'email', 'message') 
+    list_display = ('id', 'first_name', 'last_name', 'email', 'message', 'created_at') 
     
     
 # @admin.register(Contact_central)
