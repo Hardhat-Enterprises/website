@@ -71,7 +71,29 @@ class RegistrationForm(UserCreationForm):
         print(f"Validation succeeded for email: {email}")  # Debug log for success
         return email
 
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', )
 
+        labels = {
+            'first_name': _('First Name'),
+            'last_name': _('Last Name'),
+            'email': _('Deakin Email Address'),
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First Name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last Name'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'example@deakin.edu.au'
+            })
+        }
 
 
 
@@ -123,31 +145,6 @@ class ClientRegistrationForm(UserCreationForm):
         
         return email
     # .......................................
-
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email', )
-
-        labels = {
-            'first_name': _('First Name'),
-            'last_name': _('Last Name'),
-            'email': _('Deakin Email Address'),
-        }
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'First Name'
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Last Name'
-            }),
-            'email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'example@deakin.edu.au'
-            })
-        }
 
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(
