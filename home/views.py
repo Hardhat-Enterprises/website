@@ -415,7 +415,7 @@ def password_gen(request):
 @csrf_exempt
 def VerifyOTP(request):
     """
-    For Account verification OTP verification.
+    For account verification via OTP.
     """
     if request.method == 'POST':
         entered_otp = request.POST.get('otp')
@@ -423,19 +423,22 @@ def VerifyOTP(request):
         user_id = request.session.get('user_id')
 
         if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
+            User = get_user_model()  # Dynamically fetch the custom User model
             try:
                 user = User.objects.get(id=user_id)
                 user.is_verified = True  # Mark the user as verified
                 user.is_active = True   # Ensure the account is active
                 user.save()             # Save changes
-                del request.session['otp']  # Clear OTP from session
-                del request.session['user_id']  # Clear user ID from session
+
+                # Clear session data
+                request.session.pop('otp', None)
+                request.session.pop('user_id', None)
 
                 # Print confirmation to terminal
                 print(f"OTP matched. Account for {user.email} has been activated and verified.")
 
                 messages.success(request, "Your account has been successfully verified and activated!")
-                #return redirect('/accounts/login/') 
+                return redirect('/')
             except User.DoesNotExist:
                 messages.error(request, "User does not exist. Please register again.")
                 return redirect('/accounts/signup/')
@@ -476,11 +479,7 @@ def register(request):
  
                     # Redirect to verify token page with context
                     messages.success(request, "Account created successfully! Check your email for the OTP.")
-                    return render(
-                        request,
-                        'accounts/verify_token.html',
-                        {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
-                    )
+                    return redirect('verifyEmail')  # Redirect to Email verification page
                 except Exception as e:
                     print(f"Error saving user or sending email: {e}")
                     print(traceback.format_exc())  # Print detailed traceback
