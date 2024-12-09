@@ -63,6 +63,8 @@ from django.template.loader import render_to_string
 #from .models import Student, Project, Progress
  
 from .forms import FeedbackForm
+import traceback
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
@@ -76,10 +78,19 @@ import logging
 from .validators import xss_detection
 from .models import Contact
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import APIModel
+from .serializers import APIModelSerializer
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.viewsets import ViewSet
+
+
 #For LeaderBoard
 from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
+
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -966,6 +977,42 @@ def career_application(request,id):
         "complete":complete
     }
     return render(request,"careers/application-form.html",context)
+
+  
+#swagger-implementation
+
+class APIModelListView(APIView):
+    def get(self, request):
+        data = APIModel.objects.all()
+        serializer = APIModelSerializer(data, many=True)
+        return Response(serializer.data)
+    
+class AnalyticsAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Fetch analytics data",
+        operation_description="Returns basic analytics data for testing purposes.",
+        tags=["Analytics"]  
+    )
+    def get(self, request):
+        return Response({"message": "Analytics data fetched successfully!"})  
+    
+class UserManagementAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Get User Details",
+        operation_description="Retrieve detailed information of a specific user.",
+        tags=["User Management"]  
+    )
+    def get(self, request):
+        return Response({"message": "User details here."})    
+    
+class EmailNotificationViewSet(ViewSet):
+    @swagger_auto_schema(
+        operation_summary="Send Email Notification",
+        operation_description="Send a notification email to a user.",
+        tags=["Email Notifications"]  
+    )
+    def create(self, request):
+        return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
     leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]

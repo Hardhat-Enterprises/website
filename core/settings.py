@@ -95,9 +95,15 @@ INSTALLED_APPS = [
     "django_extensions",
     'django_cron',
 
+
+ 
+    'rest_framework',  
+    'drf_yasg', 
+
     'home',
     'theme_pixel',
     'corsheaders',
+
 ]
 
 MIDDLEWARE = [

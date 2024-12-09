@@ -36,3 +36,6 @@ nh3==0.2.18
 
 # Image Processing
 Pillow==9.5.0
+djangorestframework==3.15.2
+drf-yasg==1.21.8
+
