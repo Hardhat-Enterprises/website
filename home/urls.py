@@ -98,7 +98,6 @@ urlpatterns = [
     
     # Feedback (duplicate removed)
     #swagger-new-implementation
-    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
     path('api-models/', APIModelListView.as_view(), name='api-models'),
     path('api-analytics/', AnalyticsAPI.as_view(), name='api-analytics'),
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
