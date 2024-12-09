@@ -281,7 +281,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Django-cron configuration class
 CRON_CLASSES = [
     'home.tasks.CleanStaleRecordsCronJob', 
-
+]
 
  
  
