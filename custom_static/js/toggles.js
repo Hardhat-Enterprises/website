@@ -29,3 +29,40 @@ document.addEventListener('DOMContentLoaded', function () {
     toggle1.addEventListener('change', handleToggle);
     toggle2.addEventListener('change', handleToggle);
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Get all dropdown toggles
+    const dropdownToggles = document.querySelectorAll(".nav-item.dropdown1 > .nav-link");
+  
+    dropdownToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (event) => {
+        event.preventDefault();
+  
+        const dropdownMenu = toggle.nextElementSibling;
+  
+        // Toggle the visibility of the dropdown menu
+        if (dropdownMenu.style.display === "block") {
+          dropdownMenu.style.display = "none";
+        } else {
+          dropdownMenu.style.display = "block";
+        }
+  
+        // Close other open dropdowns
+        document.querySelectorAll(".dropdown-menu1").forEach((menu) => {
+          if (menu !== dropdownMenu) {
+            menu.style.display = "none";
+          }
+        });
+      });
+    });
+  
+    // Close dropdowns when clicking outside
+    document.addEventListener("click", (event) => {
+      const isDropdown = event.target.closest(".nav-item.dropdown1");
+      if (!isDropdown) {
+        document.querySelectorAll(".dropdown-menu1").forEach((menu) => {
+          menu.style.display = "none";
+        });
+      }
+    });
+  });
