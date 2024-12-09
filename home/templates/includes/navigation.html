@@ -4,7 +4,8 @@
 
 
 
-  {% comment %} <nav id="navbar-main" aria-label="Primary navigation"
+  {% comment %}
+  <nav id="navbar-main" aria-label="Primary navigation"
     class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
     <div class="container position-relative">
       <a class="navbar-brand me-lg-5" href="/">
@@ -95,7 +96,8 @@
           aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-  </nav> {% endcomment %}
+  </nav>
+  {% endcomment %}
 
 
 
@@ -130,7 +132,8 @@
           action="{% url 'pages/search-results'%}">
           {% csrf_token %}
           <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-          <button class="search-btn" type="submit"><ion-icon class="search-icon" name="search-sharp"></ion-icon></button>
+          <button class="search-btn" type="submit"><ion-icon class="search-icon"
+              name="search-sharp"></ion-icon></button>
 
 
           <div id="suggestions" class="dropdown-content"></div>
@@ -175,9 +178,7 @@
               Projects
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" style=" @media (max-width: 1280px) {
-              border: 1px solid #ffcd11;
-            }" aria-labelledby="frontPagesDropdown">
+            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
 
 
               <ul class="list-style-none">
@@ -223,9 +224,7 @@
               Blog
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" style=" @media (max-width: 1280px) {
-              border: 1px solid #ffcd11;
-            }" aria-labelledby="frontPagesDropdown">
+            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
 
 
               <ul class="list-style-none">
@@ -267,16 +266,17 @@
         {% else %}
         <div class="sign-up-button-container">
 
-        
-        <form class="position-relative Search-container desktop-search-bar" method=POST
-          action="{% url 'pages/search-results'%}">
-          {% csrf_token %}
-          <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-          <button class="search-btn" type="submit"><ion-icon class="search-icon" name="search-sharp"></ion-icon></button>
 
-          <div id="suggestions" class="dropdown-content"></div>
-        </form>
-        {% endif %}
+          <form class="position-relative Search-container desktop-search-bar" method=POST
+            action="{% url 'pages/search-results'%}">
+            {% csrf_token %}
+            <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
+            <button class="search-btn" type="submit"><ion-icon class="search-icon"
+                name="search-sharp"></ion-icon></button>
+
+            <div id="suggestions" class="dropdown-content"></div>
+          </form>
+          {% endif %}
 
           <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
           <div class="position-relative sign-up-button-inner-container">
@@ -326,19 +326,20 @@
             </div>
           </div>
 
-        <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-          aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </span>
-        
-           
+          <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </span>
+
+
+        </div>
+        <div style="margin-left: 6px;">
+          <label for="darkmode-toggle" class="dark-mode-toggle" id="darkModeButton" style="margin: 0px;">
+            <ion-icon class="icon" id="darkModeIcon" name="sunny-sharp"></ion-icon>
+          </label>
+        </div>
       </div>
-      <div style="margin-left: 6px;">
-        <label for="darkmode-toggle" class="dark-mode-toggle" id="darkModeButton" style="margin: 0px;">
-          <ion-icon class="icon" id="darkModeIcon"  name="sunny-sharp"></ion-icon>
-        </label>
-      </div>
-    </div>
     </div>
   </nav>
 </header>

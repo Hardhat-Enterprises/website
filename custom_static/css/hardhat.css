@@ -307,6 +307,10 @@
 }
 
 :root {
+  --navbar-light: #ffffff;
+  --navbar-dark: #333333;
+  --dropdown-bg-light: #ffffff;
+  --dropdown-bg-dark: #333333;
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
@@ -386,7 +390,7 @@ body.dark-mode {
   background-color: #ffc107;
   color: #ffffff;
 
-  --section-bs: #1c2540;
+  --section-bs: #333333;
   --darkmode-text: #ffffff;
   --darkmode-secondary-button: #ffc107;
   --dm-bg-gray: #ffc107;
@@ -5650,13 +5654,17 @@ fieldset:disabled .btn {
   color: #1f2937;
   text-align: left;
   list-style: none;
-  background-color: black;
+  background-color: var(--navbar-light);
   background-clip: padding-box;
   border: 0.0625rem solid #e5e7eb;
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
     rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 }
+.dark-mode .dropdown-menu {
+  background-color: var(--navbar-dark);
+}
+
 .dropdown-menu[data-bs-popper] {
   top: 100%;
   margin-top: 0.125rem;
@@ -5744,9 +5752,7 @@ fieldset:disabled .btn {
     right: 0 /* rtl:ignore */;
     left: auto /* rtl:ignore */;
   }
-  .dropdown-menu{
-    background-color: white;
-  }
+ 
 }
 
 @media (min-width: 1400px) {
@@ -5908,37 +5914,9 @@ fieldset:disabled .btn {
   color: #1f2937;
 }
 
-.dropdown-menu-dark {
-  color: #e5e7eb;
-  background-color: #374151;
-  border-color: #e5e7eb;
-}
-.dropdown-menu-dark .dropdown-item {
-  color: #e5e7eb;
-}
-.dropdown-menu-dark .dropdown-item:hover,
-.dropdown-menu-dark .dropdown-item:focus {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.15);
-}
-.dropdown-menu-dark .dropdown-item.active,
-.dropdown-menu-dark .dropdown-item:active {
-  color: #1f2937;
-  background-color: #d1d5db;
-}
-.dropdown-menu-dark .dropdown-item.disabled,
-.dropdown-menu-dark .dropdown-item:disabled {
-  color: #9ca3af;
-}
-.dropdown-menu-dark .dropdown-divider {
-  border-color: #f3f4f6;
-}
-.dropdown-menu-dark .dropdown-item-text {
-  color: #e5e7eb;
-}
-.dropdown-menu-dark .dropdown-header {
-  color: #9ca3af;
-}
+
+
+
 
 .btn-group,
 .btn-group-vertical {
@@ -6071,7 +6049,7 @@ fieldset:disabled .btn {
 }
 .nav-link:hover,
 .nav-link:focus {
-  color: #1c2540;
+  color: #333333;
 }
 .nav-link.disabled {
   color: #6b7280;
@@ -6089,7 +6067,7 @@ fieldset:disabled .btn {
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
-.nav-tabs .nav-link:hover,
+.nav-tabs,
 .nav-tabs .nav-link:focus {
   border-color: #f3f4f6 #f3f4f6 #e5e7eb;
   isolation: isolate;
@@ -6157,6 +6135,7 @@ fieldset:disabled .btn {
   justify-content: center;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  background-color: #fff;
 }
 .navbar > .container-fluid,
 .navbar > .container-sm,
@@ -6432,7 +6411,12 @@ fieldset:disabled .btn {
 }
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link:focus {
-  color: white;
+  color: var(--nav-link-hover-light);
+}
+
+.dark-mode .navbar-light .navbar-nav .nav-link:hover,
+.dark-mode .navbar-light .navbar-nav .nav-link:focus {
+  color: var(--nav-link-hover-dark);
 }
 .nav-mobile-link {
   display: none;
@@ -21859,8 +21843,13 @@ fieldset:disabled .btn {
 /**
  * = Navigation bars
  */
+
+.dark-mode .navbar-main {
+  background-color: var(--navbar-dark);
+}
+
 .navbar-main {
-  background-color: #000000;
+  background-color: var(--navbar-light);
   justify-content: center;
   align-items: center;
   position: absolute;
@@ -21868,7 +21857,6 @@ fieldset:disabled .btn {
   width: 100%;
   z-index: 100;
   padding: 12px 16px;
-
 }
 
 @media (min-width: 768px) {
@@ -21883,9 +21871,6 @@ fieldset:disabled .btn {
   }
 }
 
-.navbar-main .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='rgba(255, 205, 17, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
-}
 
 .navbar .navbar-nav .nav-link {
   -webkit-transition: all 0.8s all 0.2s ease;
@@ -21942,6 +21927,7 @@ fieldset:disabled .btn {
 .navbar .navbar-nav .dropdown .dropdown-menu {
   top: 100%;
   border: 0;
+  border: 1px solid #ffcd11;
 }
 
 .navbar .navbar-nav .dropdown .dropdown-item {
