@@ -290,7 +290,7 @@ def login_with_otp(request):
 
 def verify_otp(request):
     """
-    OTP verification while login
+    OTP verification during login.
     """
     if request.method == 'POST':
         entered_otp = request.POST.get('otp')
@@ -298,12 +298,17 @@ def verify_otp(request):
         user_id = request.session.get('user_id')
 
         if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
-            user = User.objects.get(id=user_id)
-            login(request, user)  # Log the user in
-            del request.session['otp']  # Clear OTP from session
-            del request.session['user_id']  # Clear user ID from session
-            messages.success(request, "Login successful!")
-            return redirect('post_otp_login_captcha')  # Redirect
+            User = get_user_model()  # Dynamically get the User model
+            try:
+                user = User.objects.get(id=user_id)
+                login(request, user)  # Log the user in
+                # Clear session data
+                request.session.pop('otp', None)
+                request.session.pop('user_id', None)
+                messages.success(request, "Login successful!")
+                return redirect('post_otp_login_captcha')  # Redirect after successful login
+            except User.DoesNotExist:
+                messages.error(request, "User does not exist.")
         else:
             messages.error(request, "Invalid OTP. Please try again.")
 
