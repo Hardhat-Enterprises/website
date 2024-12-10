@@ -16,8 +16,8 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -29,16 +29,17 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
 
 import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 
-from home.models import Announcement
+
+from home.models import Announcement, JobApplication
  
 # import os
  
@@ -62,27 +63,59 @@ from django.template.loader import render_to_string
 #from .models import Student, Project, Progress
  
 from .forms import FeedbackForm
+import traceback
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
  
 # Regular Views
- 
+def client_sign_in(request):
+    return render(request, 'accounts/client_sign-in.html') 
+
+#For Contact Form
+import nh3
+import logging
+from .validators import xss_detection
+from .models import Contact
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import APIModel
+from .serializers import APIModelSerializer
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.viewsets import ViewSet
+
+
+#For LeaderBoard
+from django.db.models import Sum
+from .models import LeaderBoardTable, UserChallenge
+from django.contrib.auth.models import User
+
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
+    max_age = 3600;
     
     if recent_announcement:
-        show_announcement = recent_announcement.isActive
-        announcement_message = recent_announcement.message
+        has_cookies = request.COOKIES.get('announcement')
+        if has_cookies:
+            show_announcement = False
+            announcement_message = recent_announcement.message
+        else:
+            show_announcement = recent_announcement.isActive
+            announcement_message = recent_announcement.message   
     else:
         show_announcement = False
         announcement_message = "Welcome! Stay tuned for updates."
     
-    return render(
+    response = render(
         request, 
         'pages/index.html', 
         {'announcement_message': announcement_message, 'show_announcement': show_announcement}
     )
+
+    response.set_cookie('announcement', 'True', max_age=max_age)
+    return response
 
 
 def error_404_view(request,exception):
@@ -105,6 +138,8 @@ def appattack(request):
     return render(request, 'pages/appattack/main.html')
  
 def appattack_join(request):
+   # print("Hi");
+    print(request.POST);
     return render(request, 'pages/appattack/join.html')
  
 def products_services(request):
@@ -253,21 +288,26 @@ def Vr_main(request):
 
 # Authentication
 
-
-
-
-
+def client_login(request):
+    form = ClientLoginForm
+    return render(request, 'accounts/sign-in-client.html',{'form': form})
 
 
 def feedback(request):
     if request.method == 'POST':
-        form = FeedbackForm(request.POST)
+        form = ExperienceForm(request.POST)
         if form.is_valid():
-            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
-            return redirect('feedback')  # Redirect to the same page
+            form.save()  # Save the feedback to the database
+            return redirect('feedback')  # Redirect to clear the form
+
     else:
-        form = FeedbackForm()
-    return render(request, 'pages/feedback.html', {'form': form})
+        form = ExperienceForm()
+
+    # Retrieve recent feedback from the database
+    feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
+
+    return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
+
 
 
 ## Web-Form 
@@ -304,31 +344,81 @@ def password_gen(request):
  
  
 def register(request):
-    form = RegistrationForm()
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        form = RegistrationForm(request.POST)
-       
-        if form.is_valid():
-            form.save()
-            otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
-            print("Account created successfully! An OTP was sent to your email. Check!")
-            messages.success(request, "Account created successfully!")
-            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
-            # return redirect("verify-email", username=request.POST['first_name'])
+    try:
+        if request.method == 'POST':
+            print(f"POST Data: {request.POST}")  # Debugging log for POST data
+            form = RegistrationForm(request.POST)
+           
+            if form.is_valid():
+                try:
+                    user = form.save(commit=False)  # Save user instance without committing
+                    user.set_password(form.cleaned_data['password1'])  # Hash the password
+                    user.save()  # Save the user
+                    print("User saved successfully.")
+ 
+                    # Generate OTP and send email
+                    otp = random.randint(100000, 999999)
+                    email = form.cleaned_data.get('email')
+                    send_mail(
+                        subject="User Data",
+                        message=(
+                            f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
+                            "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                            "Regards, \nHardhat Enterprises"
+                        ),
+                        from_email="deakinhardhatwebsite@gmail.com",
+                        recipient_list=[email],
+                        fail_silently=False,
+                    )
+                    print(f"OTP sent to {email}.")
+ 
+                    # Redirect to verify token page with context
+                    messages.success(request, "Account created successfully! Check your email for the OTP.")
+                    return render(
+                        request,
+                        'accounts/verify_token.html',
+                        {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
+                    )
+                except Exception as e:
+                    print(f"Error saving user or sending email: {e}")
+                    print(traceback.format_exc())  # Print detailed traceback
+                    messages.error(request, "An error occurred while creating the account. Please try again.")
+            else:
+                print("Form is invalid. Errors:")
+                print(form.errors)  # Debugging log for form errors
+                messages.error(request, "Please fix the errors below.")
         else:
             print("Registration failed!")
-    else:
+    finally:
         form = RegistrationForm()
  
     context = { 'form': form }
     return render(request, 'accounts/sign-up.html', context)
+
+def register_client(request):
+    form = ClientRegistrationForm()
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        business_name = request.POST.get('business_name')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        form = ClientRegistrationForm(request.POST)
+       
+        if form.is_valid():
+            form.save()
+            
+            return redirect("package_plan")
+            # return redirect("verify-email", username=request.POST['first_name'])
+        else:
+            print("Registration failed!")
+    else:
+        form = ClientRegistrationForm()
+ 
+    context = { 'form': form }
+    return render(request, 'accounts/sign-up-client.html', context)
+
  
 @csrf_exempt
 def VerifyOTP(request):
@@ -347,16 +437,32 @@ def VerifyOTP(request):
         print("OTP: ", userotp)
     return JsonResponse({'data': 'Hello'}, status=200)  
    
-# def signup(request):
-#     form = RegisterForm()
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Account created successfully! An OTP was sent to your Email")
-#             return redirect("verify-email", username=request.POST['username'])
-#     context = {"form": form}
-#     return render(request, "signup.html", context)
+def signup(request):
+    if request.method == 'POST':
+        print(f"POST Data: {request.POST}")  # Log incoming POST data for debugging
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save(commit=False)
+                user.set_password(form.cleaned_data['password1'])  # Hash the password
+                user.save()  # Save the user to the database
+                print("User saved to database.")  # Success log
+                messages.success(request, "Account created successfully!")
+                return redirect('login')  # Replace 'login' with your login URL
+            except Exception as e:
+                # Log any exception that occurs while saving the user
+                print(f"Error saving user: {e}")
+                raise  # Optional: Re-raise the exception for debugging
+        else:
+            print("Form is invalid. Errors:")
+            print(form.errors.as_json())  # Log form errors for debugging
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'accounts/sign-up.html', {'form': form})
+
+
 
 
 
@@ -455,7 +561,8 @@ class UserPasswordChangeView(PasswordChangeView):
 def resources_view(request):
     return render(request, 'pages/resources.html.')
    
- 
+def package_plan(request):
+    return render(request, 'pages/package-plan.html')
  
 # Chart Views
  
@@ -542,14 +649,42 @@ def contact(request):
         messages.success(request,'The message has been received')
     return render(request,'pages/index.html')
  
+#For XSS Log
+xss_logger = logging.getLogger('xss_logger')
+xss_logger.warning("List of latest XSS attacks detection: ")
+
+def log_suspicious_input(input_data):
+    if input_data and "<script>" in input_data.lower():
+        xss_logger.warning(f"XSS Attack Detected: {input_data}")
+        print(f"XSS attempt full message: {input_data}") 
+
+#For Contact Page
 def Contact_central(request):
-    if request.method=='POST':
-        name=request.POST['name']
-        email=request.POST['email']
-        message=request.POST['message']
-        contact=Contact.objects.create(name=name, email=email, message=message)
-        messages.success(request,'The message has been received')
-    return render(request,'pages/Contactus.html')
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        message = request.POST.get('message', '')
+
+        print(f"Name: {name}, Email: {email}, Message: {message}")
+
+        # Log suspicious inputs of Contact
+        log_suspicious_input(name)
+        log_suspicious_input(email)
+        log_suspicious_input(message)
+
+        # Sanitizing and validating inputs
+        name = nh3.clean(xss_detection(name))
+        email = nh3.clean(xss_detection(email))
+        message = nh3.clean(xss_detection(message))
+
+        if name and email and message:
+            Contact.objects.create(name=name, email=email, message=message)
+            messages.success(request, 'Message has been sent successfully!')
+        else:
+            messages.error(request, 'Invalid input!')
+
+    return render(request, 'pages/Contactus.html')
+
  
  
 # Blog
@@ -697,31 +832,25 @@ def projects_join_us(request, page_url, page_name):
 
 
 def feedback_view(request):
-    return render(request, 'pages/feedback.html')
-
-
-def submit_feedback(request):
     if request.method == 'POST':
-        feedback_type = request.POST.get('feedback_type')
-        content = request.POST.get('feedback_content')
+        form = ExperienceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('feedback')
+    else:
+        form = ExperienceForm()
 
-        Feedback.objects.create(
-            user=request.user if request.user.is_authenticated else None,
-            feedback_type=feedback_type,
-            content=content
-        )
-
-        messages.success(request, 'Thank you for your feedback!')
-        return redirect('feedback')
-       #return redirect('thank_you') # Redirect to the thank you page after submission
-
+    feedbacks = Experience.objects.all().order_by('-created_at')
+    return render(request, 'feedback.html', {
+        'form': form,
+        'feedbacks': feedbacks
+    })
+    
+def delete_feedback(request, id):
+    feedback= get_object_or_404(Experience, id=id)
+    feedback.delete()
     return redirect('feedback')
-#def thank_you(request):
-    #return render(request, 'feedback/thank_you.html')
-    #return render('thank_you')
 
- 
-       # return context
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
@@ -759,15 +888,20 @@ def profile(request):
 
     return render(request, 'pages/profile.html', context)
 
+@login_required
 def category_challenges(request, category):
     challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
-    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges})
+    completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
+    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges, 'completed_challenges': completed_challenges})
 
 @login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(CyberChallenge, id=challenge_id)
+    next_challenge = CyberChallenge.objects.filter(category=challenge.category, id__gt=challenge.id).order_by('id').first()
     user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge})
+    completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
+
+    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge,'next_challenge': next_challenge,'completed_challenges': completed_challenges,})
 
 @login_required
 def submit_answer(request, challenge_id):
@@ -782,6 +916,7 @@ def submit_answer(request, challenge_id):
             user_challenge.save()
         return JsonResponse({
             'is_correct': is_correct,
+            'message': 'Great job!' if is_correct else 'Try again!',
             'explanation': challenge.explanation,
             'score': user_challenge.score if is_correct else 0
         })
@@ -804,3 +939,95 @@ def blog_list(request):
     # AJAX request: send paginated posts as JSON
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
+
+def list_careers(request):
+    jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
+    context = {
+        "jobs":jobs
+    }
+    return render(request,"careers/career-list.html",context)
+
+def career_detail(request,id):
+    job = get_object_or_404(Job, id=id)
+    context = {
+        "job":job
+    }
+    return render(request,"careers/career-detail.html",context)
+
+def career_application(request,id):
+    job = get_object_or_404(Job, id=id)
+    complete =False
+    if request.method == 'POST':
+        form = JobApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            JobApplication.objects.create(
+                job_id=job.id,
+                name=form.cleaned_data['name'],
+                email=form.cleaned_data['email'],
+                resume=form.cleaned_data['resume'],
+                cover_letter=form.cleaned_data['cover_letter']
+            )
+            complete=True
+            # return redirect('career_list')
+    else:
+        form = JobApplicationForm()
+    context = {
+        "form":form,
+        "job":job,
+        "complete":complete
+    }
+    return render(request,"careers/application-form.html",context)
+
+  
+#swagger-implementation
+
+class APIModelListView(APIView):
+    def get(self, request):
+        data = APIModel.objects.all()
+        serializer = APIModelSerializer(data, many=True)
+        return Response(serializer.data)
+    
+class AnalyticsAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Fetch analytics data",
+        operation_description="Returns basic analytics data for testing purposes.",
+        tags=["Analytics"]  
+    )
+    def get(self, request):
+        return Response({"message": "Analytics data fetched successfully!"})  
+    
+class UserManagementAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Get User Details",
+        operation_description="Retrieve detailed information of a specific user.",
+        tags=["User Management"]  
+    )
+    def get(self, request):
+        return Response({"message": "User details here."})    
+    
+class EmailNotificationViewSet(ViewSet):
+    @swagger_auto_schema(
+        operation_summary="Send Email Notification",
+        operation_description="Send a notification email to a user.",
+        tags=["Email Notifications"]  
+    )
+    def create(self, request):
+        return Response({"message": "Email sent successfully!"})
+
+def leaderboard(request):
+    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
+    print(leaderboard_entry)
+    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+
+def leaderboard_update():
+    LeaderBoardTable.objects.all().delete()
+    users = User.objects.all()
+    for user in users:
+        challenges_category = (UserChallenge.objects.filter(user=user, completed=True).values('category_challenges').annotate(total_points=Sum('score')))
+
+        for categories in challenges_category:
+            category = categories['category_challenges']
+            total_points = categories['total_points'] or 0
+
+            if total_points > 0:
+                LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)

@@ -1,0 +1,37 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <br>
+    <br>
+    <br>
+    <h1 class="text-center" style="color: black">Leaderboard</h1>
+    <p class="text-center" style="color: black"><b>Here are the top 10 users who are currently on this table</b></p>
+    <table class="table table-bordered table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Category</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ entry.user.first_name }}</td>
+                <td>{{ entry.user.last_name }}</td>
+                <td>{{ entry.category }}</td>
+                <td>{{ entry.total_points }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <p class="text-center">
+    <a href="{% url 'challenge_list' %}" class="btn btn-primary">Back to Categories</a>
+    </P>
+</div>
+{% endblock content%}
