@@ -13,9 +13,8 @@ from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 from django.utils.timezone import now
-
-
 from django.utils.text import slugify
 
 import secrets
