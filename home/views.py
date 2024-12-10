@@ -447,54 +447,6 @@ def VerifyOTP(request):
 
     return render(request, 'accounts/verify_token.html')
 
- 
-def register(request):
-    try:
-        if request.method == 'POST':
-            print(f"POST Data: {request.POST}")  # Debugging log for POST data
-            form = RegistrationForm(request.POST)
-           
-            if form.is_valid():
-                try:
-                    user = form.save(commit=False)  # Save user instance without committing
-                    user.set_password(form.cleaned_data['password1'])  # Hash the password
-                    user.save()  # Save the user
-                    print("User saved successfully.")
- 
-                    # Generate OTP and send email
-                    otp = random.randint(100000, 999999)
-                    email = form.cleaned_data.get('email')
-                    send_mail(
-                        subject="User Data",
-                        message=(
-                            f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
-                            "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                            "Regards, \nHardhat Enterprises"
-                        ),
-                        from_email="deakinhardhatwebsite@gmail.com",
-                        recipient_list=[email],
-                        fail_silently=False,
-                    )
-                    print(f"OTP sent to {email}.")
- 
-                    # Redirect to verify token page with context
-                    messages.success(request, "Account created successfully! Check your email for the OTP.")
-                    return redirect('verifyEmail')  # Redirect to Email verification page
-                except Exception as e:
-                    print(f"Error saving user or sending email: {e}")
-                    print(traceback.format_exc())  # Print detailed traceback
-                    messages.error(request, "An error occurred while creating the account. Please try again.")
-            else:
-                print("Form is invalid. Errors:")
-                print(form.errors)  # Debugging log for form errors
-                messages.error(request, "Please fix the errors below.")
-        else:
-            print("Registration failed!")
-    finally:
-        form = RegistrationForm()
- 
-    context = { 'form': form }
-    return render(request, 'accounts/sign-up.html', context)
 
 def register_client(request):
     form = ClientRegistrationForm()
@@ -519,24 +471,6 @@ def register_client(request):
  
     context = { 'form': form }
     return render(request, 'accounts/sign-up-client.html', context)
-
- 
-@csrf_exempt
-def VerifyOTP(request):
-    if request.method == "POST":
-        userotp = request.POST.get('otp')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-       
-        if password1 == password2:
-            form = User(first_name=first_name, last_name=last_name, email=email, password=password1)
-            form.save()
-           
-        print("OTP: ", userotp)
-    return JsonResponse({'data': 'Hello'}, status=200)  
 
    
 def register(request):
@@ -578,11 +512,8 @@ def register(request):
 
                 # Redirect to verify token page with context
                 messages.success(request, "Account created successfully! Check your email for the OTP.")
-                return render(
-                    request,
-                    'accounts/verify_token.html',
-                    {'otp': otp, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}
-                )
+                return redirect('verifyEmail')
+                
             except Exception as e:
                 print(f"Error saving user or sending email: {e}")
                 messages.error(request, "An error occurred while creating the account. Please try again.")

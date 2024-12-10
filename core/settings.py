@@ -49,15 +49,15 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-#Secure Cookies
-#Ensure cookies are only sent over HTTPS
-SESSION_COOKIE_SECURE = True
+#Secure Cookies Can be implemented but it affects OTP Functionality.
+#Ensure cookies are only sent over HTTPS when set True
+SESSION_COOKIE_SECURE = False
 
-# Prevents JavaScript from accessing session cookies
-SESSION_COOKIE_HTTPONLY = True
+# Prevents JavaScript from accessing session cookies when set True
+SESSION_COOKIE_HTTPONLY = False
 
-#Mitigate CSRF attacks by restricting cross-origin cookie sharing
-SESSION_COOKIE_SAMESITE = 'Strict'
+#Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 #Ensure CSRF cookies are sent over HTTPS only
 CSRF_COOKIE_SECURE = True
