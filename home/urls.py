@@ -33,7 +33,6 @@ urlpatterns = [
     # path('contact-central/', views.Contact_central, name='contact-central'),
     path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
     path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-
     
     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
