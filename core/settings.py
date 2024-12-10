@@ -14,7 +14,7 @@ import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
 
-
+from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 load_dotenv()  # take environment variables from .env.
 
@@ -248,5 +248,71 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
+#cron-job-feature
+# Django-cron configuration class
+CRON_CLASSES = [
+    'home.tasks.CleanStaleRecordsCronJob', 
+]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file_django': {  # Handler specifically for Django logs
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_activity.log'),  # Separate file for Django logs
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'activity.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'page_access_logger': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+ 
+ 
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8000',  # Website localhost server url
+    'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
+]
+
+CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'content-type',
+    'authorization',
+
+]
 
