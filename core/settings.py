@@ -104,7 +104,7 @@ INSTALLED_APPS = [
 
     'home',
     'theme_pixel',
-    'django_ratelimit',
+
     'corsheaders',
 
 

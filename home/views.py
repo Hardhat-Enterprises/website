@@ -360,7 +360,7 @@ class UserLoginView(LoginView):
         return super().form_invalid(form)
 
 def rate_limit_exceeded(request):
-    remaining_time = calculate_remaining_time()  # Use the helper function
+    remaining_time = 60  # Use the helper function
 
     return render(request, 'accounts/rate_limit_exceeded.html', {
         'message': 'Too many login attempts. Please try again later.',
