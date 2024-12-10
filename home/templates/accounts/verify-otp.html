@@ -1,0 +1,105 @@
+{% extends "layouts/base.html" %} {% load static %} {% block header %} 
+{% include 'includes/navigation.html' %} {% endblock header %} {% block content %}
+
+<main>
+  {% include 'includes/pre-loader.html' %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  {% comment %}
+  <style>
+    form {
+      width: 500px;
+      height: 100px;
+      padding: 100px 20px 20px 20px;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      margin: 50px auto;
+      border-radius: 10px;
+    }
+    form p {
+      text-align: center;
+    }
+
+    form h3 {
+      text-align: center;
+    }
+  </style>
+  {% endcomment %}
+
+  <section
+    class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+    data-background="{% static 'assets/img/pages/login/login-bg.svg' %}"
+  >
+    <div class="container mb mt-md-6">
+      <div class="row justify-content-center">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+          <div
+            class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
+          >
+            <div class="text-center text-md-center mb-4 mt-md-0">
+              <img
+                src="{% static 'assets/img/pages/login/favicon.ico' %}"
+                alt="Logo"
+                class="mb-3"
+              />
+              <h3 class="mb-0 h3">Verify OTP</h3>
+              <p>Please enter the OTP sent to your email.</p>
+            </div>
+
+            <form action="" method="POST">
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="otp"
+                  id="otp"
+                  placeholder="Enter OTP"
+                />
+              </div>
+
+              <button class="btn btn-primary" style="width: 100%">
+                Verify OTP
+              </button>
+              <script>
+                $("#otp").change(function () {
+                  let otp = $("#otp").val();
+                  console.log("OTP: ", otp);
+
+                  if (otp == "{{otp}}") {
+                    console.log("OTP Matched!");
+
+                    $.ajax({
+                      type: "POST",
+                      url: "{% url 'verifyEmail' %}",
+                      data: {
+                        otp: otp,
+                        first_name: "{{first_name}}",
+                        last_name: "{{last_name}}",
+                        email: "{{email}}",
+                        password1: "{{password1}}",
+                        password2: "{{password2}}",
+                      },
+                      success: function (data) {
+                        console.log("OTP works fine");
+                        window.location.href = "/";
+                      },
+                    });
+                  }
+                });
+              </script>
+
+              {% comment %}
+              <p>
+                Need a new OTP? <a href="{% url 'resend-otp' %}">Resend OTP</a>
+              </p>
+              {% endcomment %}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock content %} {% block footer %} {% include 'includes/footer.html' %}
+{% endblock footer %}

@@ -1,5 +1,5 @@
-from django.urls import path
-from django.urls import include
+from django.urls import include, path
+
 from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
 from django.conf import settings
@@ -44,10 +44,10 @@ urlpatterns = [
     path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 
 
-    path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
-    path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
-    path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+     path('upskill/repository', views.upskill_repository, name='pages/upskilling/repository.html'),
+     path('upskill/roadmap', views.upskill_repository, name='pages/upskilling/roadmap.html'),
+     path('upskill/progress', views.upskill_repository, name='pages/upskilling/progress.html'),
+     path('dashboard/', views.dashboard, name='dashboard'),
 
 
 
@@ -62,16 +62,19 @@ urlpatterns = [
     path('search/suggestions/', views.SearchSuggestions, name='SearchSuggestions'),
     
     # Blog URLs
+    path("careers/", list_careers , name="career-list"),
+    path("careers/<int:id>/", career_detail , name="career-detail"),
+    path("careers/<int:id>/apply", career_application , name="career-application"),
+    
     path('blog/', Index.as_view(), name = 'blog'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
     
-    path("careers/", list_careers , name="career-list"),
-    path("careers/<int:id>/", career_detail , name="career-detail"),
-    path("careers/<int:id>/apply", career_application , name="career-application"),
 
     # Login
-    path('accounts/register/', views.signup, name='signup'),
+    path('accounts/signup/', views.register, name='signup'),
+    path('captcha/', include('captcha.urls')), 
+    path('post-otp-captcha/', views.post_otp_login_captcha, name='post_otp_login_captcha'),
 
 
     # Email OTP
@@ -79,7 +82,8 @@ urlpatterns = [
     
     # Email OTP
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
-    
+    path('accounts/login/', views.login_with_otp, name='login_with_otp'),
+    path('accounts/verify-otp/', views.verify_otp, name='verify_otp'),
     # Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
@@ -87,6 +91,7 @@ urlpatterns = [
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
     
     path('feedback/', views.feedback, name='feedback'),
+
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),

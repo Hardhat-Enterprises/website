@@ -49,15 +49,15 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-#Secure Cookies
-#Ensure cookies are only sent over HTTPS
-SESSION_COOKIE_SECURE = True
+#Secure Cookies Can be implemented but it affects OTP Functionality.
+#Ensure cookies are only sent over HTTPS when set True
+SESSION_COOKIE_SECURE = False
 
-# Prevents JavaScript from accessing session cookies
-SESSION_COOKIE_HTTPONLY = True
+# Prevents JavaScript from accessing session cookies when set True
+SESSION_COOKIE_HTTPONLY = False
 
-#Mitigate CSRF attacks by restricting cross-origin cookie sharing
-SESSION_COOKIE_SAMESITE = 'Strict'
+#Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 #Ensure CSRF cookies are sent over HTTPS only
 CSRF_COOKIE_SECURE = True
@@ -84,6 +84,7 @@ INSTALLED_APPS = [
    'crispy_forms',
     'tinymce',
     'crispy_bootstrap5',
+    'captcha',
     "django_light",
     # "django.contrib.admin",
     "core.apps.CustomAdminConfig",
@@ -196,6 +197,15 @@ AUTH_USER_MODEL = "home.User"
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
+# Password hashing using bcrypt
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',  # Built-in bcrypt with SHA256
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+]
+
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
