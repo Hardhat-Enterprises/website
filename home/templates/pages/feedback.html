@@ -1,75 +1,115 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
+<body>
+    <div class="container my-5">
+        <header class="text-center mb-4">
+            <h1 class="display-4 text-primary">Feedback Page</h1>
+        </header>
 
-{% block content %}
-
-<main>
-
-  {% include 'includes/pre-loader.html' %}
-<section class="section section-lg">
-    <div class="container">
-        <h4>User Experience</h4>
-        <br>
-        <p>Please provide your experiences with our company..</p>
-        <form method="post" action="{% url 'feedback' %}" class="card">
-            {% csrf_token %}
-            <div class="card-header">How was your experience?</div>
-            <br>
-            <div class="container">
-                <div class="col">
-                <div class="card-text form-group">
-                    <label for="id_name">Name:</label>
-                    {{ form.name }}
-                </div>
-                <br>
-                <div class="card-text form-group">
-                    <label for="id_feedback">User Experience:</label>
-                    {{ form.feedback }}
-                </div>
-                <br>
-                <button type="reset" class="btn btn-primary">Reset</button> 
-                <button type="submit" class="btn btn-primary">Submit</button> 
-                </div>
-                <br>
+        <section class="mb-5">
+            <h2 class="h4 text-secondary">Survey</h2>
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ survey_form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Submit Survey</button>
+                </form>
             </div>
-        </form>
-        <br>
+        </section>
 
-        <div class="feedback-list">
-            <h5>Recent Feedback</h5>
-            {% if feedbacks %}
-            <ul>
-                {% for feedback in feedbacks %}
-                <li>
-                    <strong>{{ feedback.name }}</strong>: {{ feedback.feedback }}
-                    <form method="post" action="{% url 'delete_feedback' feedback.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No feedback yet</p>
-        {%  endif %}
-        </div>
+        <section class="mb-5">
+            <h2 class="h4 text-secondary">Poll</h2>
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ poll_form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Submit Poll</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="h4 text-secondary">Feedback</h2>
+            <div class="card p-4 shadow-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ feedback_form.as_p }}
+                    <div class="form-group mt-3">
+                        <label for="rating" class="form-label">Rate your experience:</label>
+                        <select name="rating" id="rating" class="form-control" required>
+                            <option value="" disabled selected>Select a rating</option>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                    </div>
+
+                    <!-- Additional Comments Section -->
+                    <div class="form-group mt-3">
+                        <label for="comments" class="form-label">Additional Comments:</label>
+                        <textarea name="comments" id="comments" rows="4" class="form-control" placeholder="Your comments..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Submit Feedback</button>
+                </form>
+                {% if success %}
+                    <p class="text-success mt-3">Thank you for your feedback!</p>
+                {% elif error %}
+                    <p class="text-danger mt-3">There was an error submitting your feedback. Please try again.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Additional User Experience Section (from main) -->
+        {% include 'includes/pre-loader.html' %}
+        <section class="section section-lg">
+            <div class="container">
+                <h4>User Experience</h4>
+                <p>Please provide your experiences with our company.</p>
+                <form method="post" action="{% url 'feedback' %}" class="card">
+                    {% csrf_token %}
+                    <div class="card-header">How was your experience?</div>
+                    <div class="container">
+                        <div class="col">
+                            <div class="card-text form-group">
+                                <label for="id_name">Name:</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="card-text form-group">
+                                <label for="id_feedback">User Experience:</label>
+                                {{ form.feedback }}
+                            </div>
+                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Display recent feedback -->
+                <div class="feedback-list">
+                    <h5>Recent Feedback</h5>
+                    {% if feedbacks %}
+                    <ul>
+                        {% for feedback in feedbacks %}
+                        <li>
+                            <strong>{{ feedback.name }}</strong>: {{ feedback.feedback }}
+                            <form method="post" action="{% url 'delete_feedback' feedback.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No feedback yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-5">
+            <p class="text-muted">&copy; {{ current_year }} Hardhat Enterprises. All rights reserved.</p>
+        </footer>
     </div>
-    <!-- Subresource Integrity -->       
-    <script type="module"
-    src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
-    crossorigin="anonymous"></script>
-    <!-- Popper.js -->
-    <script type="module"
-    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" 
-    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" 
-    crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script type="module" 
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
-    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" 
-    crossorigin="anonymous"></script>
-</section>
-</main>
+</body>
 
-{% endblock content %}
