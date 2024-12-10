@@ -51,15 +51,15 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-#Secure Cookies
-#Ensure cookies are only sent over HTTPS
-SESSION_COOKIE_SECURE = True
-
-# Prevents JavaScript from accessing session cookies
-SESSION_COOKIE_HTTPONLY = True
-
-#Mitigate CSRF attacks by restricting cross-origin cookie sharing
-SESSION_COOKIE_SAMESITE = 'Strict'
+#Secure Cookies Can be implemented but it affects OTP Functionality.
+#Ensure cookies are only sent over HTTPS when set True
+SESSION_COOKIE_SECURE = False
+ 
+# Prevents JavaScript from accessing session cookies when set True
+SESSION_COOKIE_HTTPONLY = False
+ 
+#Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 #Ensure CSRF cookies are sent over HTTPS only
 CSRF_COOKIE_SECURE = True
@@ -95,11 +95,18 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'django_cron',
+
+
+ 
+    'rest_framework',  
+    'drf_yasg', 
 
     'home',
     'theme_pixel',
     'django_ratelimit',
     'corsheaders',
+
 
 ]
 
@@ -114,7 +121,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "home.ratelimit_middleware.GlobalLockoutMiddleware"
+    "home.ratelimit_middleware.GlobalLockoutMiddleware",
+    "core.middleware.LogRequestMiddleware",
 ]
 
 LOGGING = {
@@ -311,6 +319,57 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+#cron-job-feature
+# Django-cron configuration class
+CRON_CLASSES = [
+    'home.tasks.CleanStaleRecordsCronJob', 
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file_django': {  # Handler specifically for Django logs
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_activity.log'),  # Separate file for Django logs
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'activity.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'page_access_logger': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
  
  
@@ -325,5 +384,6 @@ CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-type',
     'authorization',
+
 ]
 

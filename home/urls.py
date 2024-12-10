@@ -1,4 +1,5 @@
 from django.urls import path
+from django.urls import include
 from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
 from django.conf import settings
@@ -6,7 +7,14 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, rate_limit_exceeded
 
-
+#from home.views import register
+from rest_framework.routers import DefaultRouter
+from .views import APIModelListView
+from .views import AnalyticsAPI
+from .views import UserManagementAPI, EmailNotificationViewSet
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
 
 urlpatterns = [
@@ -101,6 +109,11 @@ urlpatterns = [
  
 
 
+    #swagger-new-implementation
+    path('api-models/', APIModelListView.as_view(), name='api-models'),
+    path('api-analytics/', AnalyticsAPI.as_view(), name='api-analytics'),
+    path('user-management/', UserManagementAPI.as_view(), name='user-management'),
+    path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
 

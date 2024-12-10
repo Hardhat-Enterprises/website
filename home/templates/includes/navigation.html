@@ -189,72 +189,55 @@
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
           </li>
-          
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown1">
             <a
               href="#"
               class="nav-link dropdown-toggle"
-              id="frontPagesDropdown"
+              id="projectsDropdown"
               aria-expanded="false"
-              data-bs-toggle="dropdown"
             >
               Projects
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div
-              class="dropdown-menu px-0 py-2 p-lg-4"
-              aria-labelledby="frontPagesDropdown"
-            >
+            <div class="dropdown-menu1 px-0 py-2 p-lg-4" aria-labelledby="projectsDropdown">
               <div class="row">
                 <div class="col">
                   <ul class="list-style-none mb-4">
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'appattack' %}"
-                        >AppAttack</a
-                      >
+                      <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'malware_viz_main' %}"
-                        >Malware (On Hold)</a
-                      >
+                      <a class="menu-link" href="{% url 'malware_viz_main' %}">Malware (On Hold)</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'ptgui_viz_main' %}"
-                        >PT-GUI</a
-                      >
+                      <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
                     </li>
-
-
                     <li class="mb-2 menu-item">
-                      <a
-                        class="menu-link"
-                        href="{% url 'smishing_detection_main' %}"
-                        >Smishing Detection</a
-                      >
+                      <a class="menu-link" href="{% url 'smishing_detection_main' %}">Smishing Detection</a>
                     </li>
-
-                
-                  <li class="mb-2 menu-item">
+                    <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'Vr_main' %}">Deakin CyberSafe VR</a>
-                  </li>
-                  <li class="mb-2 menu-item">
+                    </li>
+                    <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Deakin Threat mirror (On Hold)</a>
-                  </li> 
-
+                    </li>
                   </ul>
                 </div>
               </div>
             </div>
           </li>
-
-
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
+          
+          <li class="nav-item dropdown1">
+            <a
+              href="#"
+              class="nav-link dropdown-toggle"
+              id="blogDropdown"
+              aria-expanded="false"
+            >
               Blog
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
+            <div class="dropdown-menu1 px-0 py-2 p-lg-4" aria-labelledby="blogDropdown">
               <div class="row">
                 <div class="col">
                   <ul class="list-style-none mb-4">
@@ -266,7 +249,7 @@
               </div>
             </div>
           </li>
-
+          
           <li class="nav-item">
             <a href="{% url 'career-list' %}" class="nav-link"> Careers </a>
           </li>
@@ -322,6 +305,7 @@
                       <a class="menu-link" href="{% url 'login' %}">Team Sign In</a>
                     </li>
                     <li class="mb-2 menu-item">
+
                       <a href="{% url 'client_sign_in' %}" class="menu-link" href="#">Client Sign In</a>
                     </li>
                   </ul>
@@ -344,7 +328,7 @@
                       <a class="menu-link" href="{% url 'register' %}">Team Sign Up</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="#">Client Sign Up</a>
+                      <a class="menu-link" href="{% url 'register_client' %}">Client Sign Up</a>
                     </li>
                   </ul>
                 </div>

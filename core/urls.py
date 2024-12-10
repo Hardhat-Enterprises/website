@@ -17,10 +17,26 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from home import views
+from django.urls import path, re_path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from .admin import admin_statistics_view
 
 handler404 = 'home.views.error_404_view'
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Hardhat Website API",
+        default_version="v1",
+        description="API documentation for the Hardhat Website",
+        terms_of_service="https://www.hardhatenterprises.com/terms/",
+        contact=openapi.Contact(email="support@hardhatenterprises.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
@@ -33,6 +49,7 @@ urlpatterns = [
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
+    path('plan/', views.package_plan, name='package_plan'),
     
     # blog
     #path('admin/', admin.site.urls),
@@ -46,8 +63,10 @@ urlpatterns = [
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
+    path('accounts/clientlogin/', views.client_login, name='client_login'),
     path('accounts/logout/', views.logout_view, name='logout'),
     path('accounts/register/', views.register, name='register'),
+    path('accounts/registerclient/', views.register_client, name='register_client'),
     path('accounts/password-gen/', views.password_gen, name='password_gen'),
     path('accounts/password-change/', views.UserPasswordChangeView.as_view(), name='password_change'),
     path('accounts/password-change-done/', auth_views.PasswordChangeDoneView.as_view(
@@ -67,6 +86,10 @@ urlpatterns = [
     path('secure-code-review', views.secure_code_review, name='secure-code-review'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('update_progress/<int:progress_id>/', views.update_progress, name='update_progress'),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('', include('home.urls')),
 
 ]
 
