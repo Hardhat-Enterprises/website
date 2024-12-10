@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
+from django.core.cache.backends.base import InvalidCacheBackendError
+from pymemcache.client.base import Client
 
 # Import for CORS headers
 from corsheaders.defaults import default_headers
@@ -96,10 +98,7 @@ INSTALLED_APPS = [
 
     'home',
     'theme_pixel',
-
-    "django_ratelimit"
-
-
+    'django_ratelimit',
     'corsheaders',
 
 ]
@@ -268,9 +267,21 @@ MESSAGE_TAGS = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',  # Default Memcached server address
+        'LOCATION': os.getenv('CACHE_LOCATION', '127.0.0.1:11211'),  # Default local if not specified
     }
 }
+
+try:
+    from pymemcache.client import Client
+    client = Client(os.getenv('CACHE_LOCATION', '127.0.0.1:11211'))
+    client.version()
+except (ImportError, InvalidCacheBackendError, ConnectionRefusedError):
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
 
 RATELIMIT_ENABLE = True
 RATELIMIT_VIEW = 'django_ratelimit.ratelimit_view'

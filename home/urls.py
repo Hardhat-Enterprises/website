@@ -93,11 +93,11 @@ urlpatterns = [
     
     # Feedback (duplicate removed)
 
-    path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    # path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
 
 
     path('accounts/login/', UserLoginView.as_view(), name='login'),
-    path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded')
+    path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
  
 
 
