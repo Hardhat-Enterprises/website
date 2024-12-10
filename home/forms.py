@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
@@ -12,10 +13,8 @@ import logging
 import re
 import nh3
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile,  SecurityEvent, JobApplication
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 from .validators import xss_detection
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -54,20 +53,23 @@ class RegistrationForm(UserCreationForm):
             raise ValidationError(
                 _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
             )
+        return password
     # ...........................................................
 
     # Newly added...........................
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        # Define the regex pattern for the required email format
-        pattern = r'@deakin\.edu\.au$'
-        
-        if not re.match(pattern, email):
-            raise ValidationError(_("Email must be match with your Deakin email."))
-        
-        return email
-    # .......................................
+        email = self.cleaned_data.get('email', '').strip()  # Normalize email
+        print(f"Validating email: {email}")  # Debugging log
 
+        # Regex pattern for validating Deakin email addresses
+        pattern = r'^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$'
+
+        if not re.match(pattern, email):
+            print(f"Validation failed for email: {email}")  # Debug log for failed validation
+            raise ValidationError(_("Email must match your Deakin email."))
+
+        print(f"Validation succeeded for email: {email}")  # Debug log for success
+        return email
 
     class Meta:
         model = User
@@ -92,6 +94,57 @@ class RegistrationForm(UserCreationForm):
                 'placeholder': 'example@deakin.edu.au'
             })
         }
+
+
+
+    # .......................................
+
+
+class ClientRegistrationForm(UserCreationForm):
+    # Newly added...........................
+    email = forms.EmailField(
+        label=_("Business Email"),
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+    )
+    # .......................................
+
+    business_name = forms.CharField(
+        label=_("Business Name"),
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
+    )
+
+    password1 = forms.CharField(
+        label=_("Your Password"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+    )
+    password2 = forms.CharField(
+        label=_("Confirm Password"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
+    )
+    # Newly added................................................
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        # Define the regex pattern for the required password format
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+        
+        if not re.match(pattern, password):
+            raise ValidationError(
+                _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
+            )
+        return password
+    # ...........................................................
+
+    # Newly added...........................
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # Define the regex pattern for the required email format
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        
+        if not re.match(pattern, email):
+            raise ValidationError(_("Email must be valid email."))
+        
+        return email
+    # .......................................
 
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(
@@ -149,6 +202,41 @@ class UserLoginForm(AuthenticationForm):
             code='too_many_attempts',
             )
 
+        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+        SecurityEvent.objects.create(
+            user=None,  # No user as login failed
+            event_type='login_failure',
+            ip_address=ip_address,
+            details=f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}'
+        )
+        print(f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}')
+        return super().get_invalid_login_error()
+
+class ClientLoginForm(AuthenticationForm):
+    username = UsernameField(label='Client Email Address',widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@gmail.com"}))
+    password = forms.CharField(
+            label=_("Password"),
+            strip=False,
+            widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
+        )
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request, *args, **kwargs)
+        self.request = request
+
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+        # Log successful login event
+        ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
+        SecurityEvent.objects.create(
+            user=user,
+            event_type='login_success',
+            ip_address=ip_address,
+            details='User logged in successfully.'
+        )
+        print(f'User {user} logged in successfully.')
+
+    def get_invalid_login_error(self):
+        # Log failed login event
         ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
         SecurityEvent.objects.create(
             user=None,  # No user as login failed
@@ -299,6 +387,16 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+        
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
 
 #Newly Added
 class ContactForm(forms.Form):
@@ -316,6 +414,15 @@ class ContactForm(forms.Form):
         message = xss_detection(message)
         return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
         
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:

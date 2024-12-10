@@ -14,6 +14,7 @@ import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Import for CORS headers
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 load_dotenv()  # take environment variables from .env.
@@ -48,6 +49,35 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+#Secure Cookies
+#Ensure cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+
+# Prevents JavaScript from accessing session cookies
+SESSION_COOKIE_HTTPONLY = True
+
+#Mitigate CSRF attacks by restricting cross-origin cookie sharing
+SESSION_COOKIE_SAMESITE = 'Strict'
+
+#Ensure CSRF cookies are sent over HTTPS only
+CSRF_COOKIE_SECURE = True
+
+#Enhance CSRF protection
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+#Ensure DEBUG is set to False in production to avoid sensitive information exposure
+DEBUG = True
+
+
+#Limit request header sizes and body lenghts
+#Limit number of form fileds
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000 
+
+# Limit max upload memory size 10 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -63,12 +93,22 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'django_cron',
+
+
+ 
+    'rest_framework',  
+    'drf_yasg', 
 
     'home',
-    'theme_pixel'
+    'theme_pixel',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
+    # CORS middleware must come before commonmiddleware
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -77,6 +117,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "home.idle.IdleTimeoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "core.middleware.LogRequestMiddleware"
 ]
 
 LOGGING = {

@@ -26,6 +26,18 @@ from django.db import models
 
 import nh3
 
+class APIModel(models.Model):
+    name = models.CharField(max_length=255)
+    field_name = models.CharField(max_length=255, default="Default Value")
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+   
+    def __str__(self):
+        return self.field_name
+    
 class User(AbstractBaseUser, PermissionsMixin):
     """
     A User model with admin-compliant permissions.
@@ -282,11 +294,10 @@ class Projects_join_us(models.Model):
     message = models.TextField(max_length=1000)
     page_name = models.CharField(max_length=100)
 
-
-class Feedback(models.Model):
-    name = models.CharField(max_length=100)
-    feedback = models.TextField()
-    rating = models.CharField(max_length=20)
+#class Feedback(models.Model):
+#    name = models.CharField(max_length=100)
+#    feedback = models.TextField()
+#    rating = models.CharField(max_length=20)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -342,35 +353,35 @@ class BlogPost(models.Model):
 
     User = get_user_model()
 
-class Feedback(models.Model):
-    GENERAL_INQUIRY = 'general'
-    BUG = 'bug'
-    IMPROVEMENT = 'improvement'
-    FEATURE_REQUEST = 'feature'
+#class Feedback(models.Model):
+    #GENERAL_INQUIRY = 'general'
+    #BUG = 'bug'
+    #IMPROVEMENT = 'improvement'
+    #FEATURE_REQUEST = 'feature'
 
-    FEEDBACK_TYPES = [
-        (GENERAL_INQUIRY, 'General Inquiry'),
-        (BUG, 'Bug Report'),
-        (IMPROVEMENT, 'Improvement Suggestion'),
-        (FEATURE_REQUEST, 'Request for a Feature')
-    ]
+    #FEEDBACK_TYPES = [
+    #    (GENERAL_INQUIRY, 'General Inquiry'),
+    #    (BUG, 'Bug Report'),
+    #    (IMPROVEMENT, 'Improvement Suggestion'),
+    #    (FEATURE_REQUEST, 'Request for a Feature')
+    #]
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    feedback_type = models.CharField(
-        max_length=20,
-        choices=FEEDBACK_TYPES,
-    )
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    #user = models.ForeignKey(
+    #    User,
+    #    on_delete=models.CASCADE,
+    #    null=True,
+    #    blank=True,
+    #)
+    #feedback_type = models.CharField(
+    #    max_length=20,
+    #    choices=FEEDBACK_TYPES,
+    #)
+    #content = models.TextField()
+    #created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        feedback_type_display = self.get_feedback_type_display()
-        return f"{feedback_type_display} - {self.created_at}"
+    #def __str__(self):
+        #feedback_type_display = self.get_feedback_type_display()
+        #return f"{feedback_type_display} - {self.created_at}"
 
 class Announcement(models.Model):
     message = models.TextField()
@@ -387,6 +398,14 @@ class SecurityEvent(models.Model):
 
     def __str__(self):
         return f"{self.event_type} - {self.user or 'Unknown user'} - {self.timestamp}"
+
+
+class ExampleModel(models.Model):
+    name = models.CharField(max_length=255)  
+    updated_at = models.DateTimeField(auto_now=True)  # Automatically updates the timestamp on save
+
+    def __str__(self):
+        return self.name
 
 class Job(models.Model):
     title = models.CharField(max_length=200)
@@ -410,4 +429,21 @@ class JobApplication(models.Model):
     def __str__(self):
         return f"{self.name} - {self.job.title}"
 
+#Leaderboard
+class LeaderBoardTable(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=200)
+    total_points = models.IntegerField(default=0)
     
+
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
+class Experience(models.Model):
+    name = models.CharField(max_length=100)
+    feedback = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.feedback[:50]}"
+
