@@ -14,9 +14,8 @@ import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
 
-
-
-
+# Import for CORS headers
+from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 load_dotenv()  # take environment variables from .env.
 
@@ -50,6 +49,33 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+#Secure Cookies
+#Ensure cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+
+# Prevents JavaScript from accessing session cookies
+SESSION_COOKIE_HTTPONLY = True
+
+#Mitigate CSRF attacks by restricting cross-origin cookie sharing
+SESSION_COOKIE_SAMESITE = 'Strict'
+
+#Ensure CSRF cookies are sent over HTTPS only
+CSRF_COOKIE_SECURE = True
+
+#Enhance CSRF protection
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+#Ensure DEBUG is set to False in production to avoid sensitive information exposure
+DEBUG = True
+
+
+#Limit request header sizes and body lenghts
+#Limit number of form fileds
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000 
+
+# Limit max upload memory size 10 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
+
 
 # Application definition
 
@@ -66,12 +92,22 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'django_cron',
+
+
+ 
+    'rest_framework',  
+    'drf_yasg', 
 
     'home',
-    'theme_pixel'
+    'theme_pixel',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
+    # CORS middleware must come before commonmiddleware
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -80,7 +116,27 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "core.middleware.LogRequestMiddleware"
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'xss_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'xss_attempts.log',
+        },
+    },
+    'loggers': {
+        'xss_logger': {
+            'handlers': ['xss_file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
 
 ROOT_URLCONF = "core.urls"
 
@@ -89,7 +145,11 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+
         "DIRS": [BASE_DIR / HOME_TEMPLATES],
+
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+      
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -209,5 +269,90 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
+# Prevent MIME type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Protect against clickjacking
+X_FRAME_OPTIONS = 'DENY'  # Use 'SAMEORIGIN' if the site needs to be embedded in iframes from the same origin
+
+# Enable XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Enforce HTTPS (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#cron-job-feature
+# Django-cron configuration class
+CRON_CLASSES = [
+    'home.tasks.CleanStaleRecordsCronJob', 
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file_django': {  # Handler specifically for Django logs
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_activity.log'),  # Separate file for Django logs
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'activity.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'page_access_logger': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+ 
+ 
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8000',  # Website localhost server url
+    'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
+]
+
+CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'content-type',
+    'authorization',
+
+]
+
+
