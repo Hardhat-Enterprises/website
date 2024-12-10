@@ -19601,39 +19601,64 @@ blockquote {
   
   .recently-viewed-sidebar {
     position: fixed;
-    top: 150px;
-    right: 10px;
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 10px;
-    width: 200px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    top: 150px; /* Adjust based on where you want it */
+    right: 20px;
     z-index: 1000;
+    background-color: #1c2540;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.recently-viewed-title {
-    font-size: 16px;
+  .recently-viewed-sidebar .dropdown-toggle {
+    background-color: #1c2540; /* Matches the site's dark theme */
+    color: #ffc107; /* Gold text color */
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
     font-weight: bold;
-    margin-bottom: 10px;
-    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-#recent-pages-list {
-    list-style: none;
+.recently-viewed-sidebar .dropdown-menu {
+    background-color: #1c2540; /* Dropdown background matches theme */
+    color: #ffc107; /* Gold text */
+    border: 1px solid #ffc107; /* Gold border */
+    border-radius: 5px;
     padding: 0;
-    margin: 0;
+    min-width: 200px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-#recent-pages-list li {
-    margin-bottom: 5px;
+.recently-viewed-sidebar .dropdown-item {
+    color: #ffc107; /* Gold text for items */
+    padding: 10px;
+    font-size: 14px;
 }
 
-#recent-pages-list a {
-    text-decoration: none;
-    color: #007bff;
+.recently-viewed-sidebar .dropdown-item:hover {
+    background-color: #ffc107; /* Highlighted background */
+    color: #1c2540; /* Text turns dark */
+}
+/* General styling for the arrow */
+.arrow-icon, .fa-chevron-down {
+  font-size: 12px; /* Adjust the size to match your design */
+  color: #f9c74f; /* Match the site's theme color */
+  margin-left: 5px; /* Add spacing between the text and the arrow */
+  vertical-align: middle; /* Aligns the arrow with the text */
 }
 
-#recent-pages-list a:hover {
-    text-decoration: underline;
+/* Optional: Add hover effect */
+.recently-viewed-sidebar h5:hover .arrow-icon,
+.recently-viewed-sidebar h5:hover .fa-chevron-down {
+  color: #e5a629; /* Slightly darker yellow on hover */
 }
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon.rotate {
+  transform: rotate(180deg);
+}
+

@@ -1,0 +1,14 @@
+INFO 2024-12-10 20:09:28,912 middleware IP: 127.0.0.1:8000 accessed /
+INFO 2024-12-10 20:09:39,098 middleware IP: 127.0.0.1:8000 accessed /
+INFO 2024-12-10 20:09:59,569 middleware IP: 127.0.0.1:8000 accessed /
+INFO 2024-12-10 20:10:09,064 middleware IP: 127.0.0.1:8000 accessed /careers/
+INFO 2024-12-10 20:10:15,796 middleware IP: 127.0.0.1:8000 accessed /careers/
+INFO 2024-12-10 20:10:17,564 middleware IP: 127.0.0.1:8000 accessed /careers/
+INFO 2024-12-10 20:10:18,277 middleware IP: 127.0.0.1:8000 accessed /careers/
+INFO 2024-12-10 20:10:28,695 middleware IP: 127.0.0.1:8000 accessed /about-us/
+INFO 2024-12-10 20:10:42,345 middleware IP: 127.0.0.1:8000 accessed /about-us/
+INFO 2024-12-10 20:11:06,711 middleware IP: 127.0.0.1:8000 accessed /accounts/register/
+INFO 2024-12-10 20:11:15,442 middleware IP: 127.0.0.1:8000 accessed /accounts/register/
+INFO 2024-12-10 20:20:10,011 middleware IP: 127.0.0.1:8000 accessed /accounts/register/
+INFO 2024-12-10 20:20:17,007 middleware IP: 127.0.0.1:8000 accessed /
+INFO 2024-12-10 20:20:26,182 middleware IP: 127.0.0.1:8000 accessed /about-us/

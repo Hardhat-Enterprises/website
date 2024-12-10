@@ -20,6 +20,8 @@
 <html lang="en">
 
 <head>
+  <title>{{ dynamic_title }}</title>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Primary Meta Tags -->
     <title>Hardhat Enterprises</title>
@@ -70,10 +72,27 @@
     <!-- Pixel CSS -->
     <link type="text/css" href="{% static 'css/hardhat.css' %}?v=2" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/hardhat.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRP6y3b0BYU7QjZh3p79Dww0EWwrckaBtdvzwfxn5" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGFf6EErR3vvDQT1bII5Q1YXEfzY51T3bhQXA3+0hruQ" crossorigin="anonymous"></script>
+    <link type="text/css" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
 
 </head>
 
 <body>
+  <div class="recently-viewed-sidebar">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="recentlyViewedDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Recently Viewed Pages
+            <i class="fas fa-chevron-down"></i> <!-- FontAwesome icon -->
+        </button>
+        <ul id="recently-viewed-list" class="dropdown-menu" aria-labelledby="recentlyViewedDropdown">
+            <!-- Pages dynamically added here -->
+        </ul>
+    </div>
+</div>
+
+
 
   {% block header %}
   
@@ -82,13 +101,7 @@
   {% endblock header %}
 
   {% block content %}{% endblock content %}
-   <!-- Recently Viewed Pages Sidebar -->
-   <div class="recently-viewed-sidebar">
-    <h5 class="recently-viewed-title">Recently Viewed Pages</h5>
-    <ul id="recent-pages-list">
-        <!-- Pages will be dynamically added here -->
-    </ul>
-</div>
+
 
   {% block footer %}
   
