@@ -22222,9 +22222,13 @@ fieldset:disabled .btn {
   .navbar-collapse.collapsing,
   .navbar-collapse.show {
     padding: 1.5rem;
-    background-color: black;
+    background-color: var(--navbar-light);
     animation: show-navbar-collapse 0.2s ease forwards;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark-mode .navbar-collapse.show {
+    background-color: var(--navbar-light);
   }
   .navbar-collapse.collapsing-out {
     animation: hide-navbar-collapse 0.2s ease forwards;

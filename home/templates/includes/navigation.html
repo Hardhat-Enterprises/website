@@ -124,7 +124,6 @@
               <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
                 aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
             </div>
-
           </div>
         </div>
 
@@ -132,8 +131,9 @@
           action="{% url 'pages/search-results'%}">
           {% csrf_token %}
           <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-          <button class="search-btn" type="submit"><ion-icon class="search-icon"
-              name="search-sharp"></ion-icon></button>
+          <button class="search-btn" type="submit">
+            <i class="fas fa-search search-icon"></i>
+          </button>
 
 
           <div id="suggestions" class="dropdown-content"></div>
@@ -142,7 +142,7 @@
           <li class="nav-item">
             <a href="{% url 'index' %}" class="nav-link"> Home </a>
           </li>
-         
+
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
@@ -240,11 +240,11 @@
 
             </div>
           </li>
-          
+
           <li class="nav-item">
             <a href="{% url 'career-list' %}" class="nav-link"> Careers </a>
           </li>
-          
+
           <li class="nav-item">
             <a class="nav-link" href="{% url 'challenge_list' %}">Cyber Challenges</a>
           </li>
@@ -276,10 +276,11 @@
             action="{% url 'pages/search-results'%}">
             {% csrf_token %}
             <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-            <button class="search-btn" type="submit"><div>
-              <i class="fas fa-search search-icon"></i>
-          </div>
-          </button>
+            <button class="search-btn" type="submit">
+              <div>
+                <i class="fas fa-search search-icon"></i>
+              </div>
+            </button>
 
             <div id="suggestions" class="dropdown-content"></div>
           </form>
@@ -343,9 +344,9 @@
         </div>
         <div style="margin-left: 6px;">
           <label id="darkModeButton" class="dark-mode-toggle" style="margin: 0px;">
-              <i class="fas fa-sun icon" id="darkModeIcon"></i>
+            <i class="fas fa-sun icon" id="darkModeIcon"></i>
           </label>
-      </div>
+        </div>
       </div>
     </div>
   </nav>
