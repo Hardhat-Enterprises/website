@@ -27,6 +27,29 @@ def possible_years(first_year_in_scroll, last_year_in_scroll):
         p_year_tuple = str(i), i
         p_year.append(p_year_tuple)
     return p_year
+class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', )
+
+        labels = {
+            'first_name': _('First Name'),
+            'last_name': _('Last Name'),
+            'email': _('Deakin Email Address'),
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First Name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last Name'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'example@deakin.edu.au'
+            })
+        }
 
 class RegistrationForm(UserCreationForm):
     # Newly added...........................

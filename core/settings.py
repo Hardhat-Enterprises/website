@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
+from django.core.cache.backends.base import InvalidCacheBackendError
+from pymemcache.client.base import Client
 
 # Import for CORS headers
 from corsheaders.defaults import default_headers
@@ -52,10 +54,10 @@ if RENDER_EXTERNAL_HOSTNAME:
 #Secure Cookies Can be implemented but it affects OTP Functionality.
 #Ensure cookies are only sent over HTTPS when set True
 SESSION_COOKIE_SECURE = False
-
+ 
 # Prevents JavaScript from accessing session cookies when set True
 SESSION_COOKIE_HTTPONLY = False
-
+ 
 #Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
 SESSION_COOKIE_SAMESITE = 'Lax'
 
@@ -103,7 +105,9 @@ INSTALLED_APPS = [
 
     'home',
     'theme_pixel',
+
     'corsheaders',
+
 
 ]
 
@@ -118,7 +122,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "core.middleware.LogRequestMiddleware"
+    "home.ratelimit_middleware.GlobalLockoutMiddleware",
+    "core.middleware.LogRequestMiddleware",
 ]
 
 LOGGING = {
@@ -276,6 +281,36 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': os.getenv('CACHE_LOCATION', '127.0.0.1:11211'),  # Default local if not specified
+    }
+}
+
+try:
+    from pymemcache.client import Client
+    client = Client(os.getenv('CACHE_LOCATION', '127.0.0.1:11211'))
+    client.version()
+except (ImportError, InvalidCacheBackendError, ConnectionRefusedError):
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
+
+RATELIMIT_ENABLE = True
+RATELIMIT_VIEW = 'django_ratelimit.ratelimit_view'
+RATELIMIT_USE_CACHE = 'default'
+
+RATELIMIT_SETTINGS = {
+    'login': {
+        'rate': '5/m',  # 5 attempts per minute
+        'block_expiration': 60,  # block for 1 minute after 5 attempts
+    },
+}
 
 # Prevent MIME type sniffing
 SECURE_CONTENT_TYPE_NOSNIFF = True

@@ -4,6 +4,9 @@ from django.contrib import admin
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
 from django.conf import settings
 from django.conf.urls.static import static
+from django_ratelimit.decorators import ratelimit
+from .views import UserLoginView, rate_limit_exceeded
+
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
@@ -102,6 +105,15 @@ urlpatterns = [
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)
+
+    # path('submit-feedback/', views.submit_feedback, name='submit_feedback'),
+
+
+    path('accounts/login/', UserLoginView.as_view(), name='login'),
+    path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
+ 
+
+
     #swagger-new-implementation
     path('api-models/', APIModelListView.as_view(), name='api-models'),
     path('api-analytics/', AnalyticsAPI.as_view(), name='api-analytics'),
