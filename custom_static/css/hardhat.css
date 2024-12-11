@@ -19509,6 +19509,63 @@ body, html {
 .contact-image img {
   width: 100%;
   height: auto;
+
+}
+
+.contact-form-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  margin-top: 0;
+}
+
+.contact-form-container h2 {
+  color: #174684;
+  font-size: 28px;
+}
+
+.contact-form-container .form-group label {
+  color: black;
+}
+
+.contact-form-container .form-group input,
+.contact-form-container .form-group textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.contact-form-container .btn-submit,
+.contact-form-container .btn-reset {
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.contact-form-container .btn-submit {
+  background-color: #174684;
+  color: white;
+  width: 48%;
+  display: inline-block;
+}
+
+.contact-form-container .btn-reset {
+  background-color: #174684; 
+  color: white;
+  width: 48%;
+  display: inline-block;
+}
+
+.contact-form-container .btn:hover {
+  opacity: 0.8;
+}
+
+
 }
 
 .contact-form-container {
@@ -19605,6 +19662,7 @@ body, html {
     min-height: auto;
     height: auto;
   }
+
 }
 
 /* reCAPTCHA Styles */
@@ -19619,7 +19677,13 @@ body, html {
   padding: 15px;
   border-radius: 5px;
   margin-top: 20px;
+
 }
+
+
+
+
+
 
 
 
@@ -19721,3 +19785,21 @@ body, html {
       background-color: #ff8c00;
       color: white;
   }
+
+ 
+  .page-visit-counter {
+    background-color: transparent !important; /* Remove unwanted background */
+    color: #f9c74f; /* Text color */
+    padding: 10px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: none; /* Remove shadow */
+}
+
+.page-visit-counter span {
+    color: #4caf50; 
+}
+
