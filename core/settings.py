@@ -79,7 +79,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -152,7 +151,11 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+
+        "DIRS": [BASE_DIR / HOME_TEMPLATES],
+
         "DIRS": [os.path.join(BASE_DIR, "templates")],
+      
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -193,7 +196,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
@@ -401,4 +404,5 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'authorization',
 
 ]
+
 

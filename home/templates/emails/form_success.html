@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        /* General Styles */
+        body {
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .thank-you-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #0d6efd;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #333333;
+            margin-bottom: 30px;
+        }
+
+        .btn-home {
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            background: #0d6efd;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-home:hover {
+            background: #084298;
+            transform: scale(1.1);
+        }
+
+        /* Icon Styling */
+        .icon {
+            font-size: 5rem;
+            color: #0d6efd;
+            margin-bottom: 20px;
+            animation: bounce 1.5s infinite;
+        }
+
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bounce Animation */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-15px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <div class="icon">🎉</div>
+        <h1>Thank You!</h1>
+        <p>Your message has been successfully submitted. We’ll contact you soon!</p> 
+
+        <a href="/" class="btn-home">Go Back to Home</a>
+    </div>
+</body>
+</html>

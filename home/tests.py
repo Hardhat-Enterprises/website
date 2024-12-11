@@ -30,3 +30,4 @@ class LeaderboardTestCase(TestCase):
         self.assertEqual(entries.count(), 1)
         self.assertEqual(entries.first().user.first_name, "Hardhat")
         print(entries)
+

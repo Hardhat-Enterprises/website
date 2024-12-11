@@ -7,6 +7,7 @@ from .models import (
     Skill,
     Progress,
     Contact,
+    ContactSubmission,
     Experience,
 
     Webpage,
@@ -88,6 +89,11 @@ class CyberChallengeAdmin(admin.ModelAdmin):
 class UserChallengeAdmin(admin.ModelAdmin):
     list_display = ['user', 'challenge', 'completed', 'score']
 
+
+@admin.register(ContactSubmission)
+class ContactSubmissionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'first_name', 'last_name', 'email', 'message', 'created_at') 
+    
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ['message', 'isActive', 'created_at']
@@ -145,6 +151,8 @@ class JobApplicationAdmin(admin.ModelAdmin):
 @admin.register(LeaderBoardTable)
 class LeaderboardTableAdmin(admin.ModelAdmin):
     list_display = ('user', 'category', 'total_points')
+
+
 
 
 

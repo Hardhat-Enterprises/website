@@ -11,6 +11,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
+
+
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
@@ -417,6 +419,21 @@ class ExampleModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)  # Automatically updates the timestamp on save
 
     def __str__(self):
+      
+        feedback_type_display = self.get_feedback_type_display()
+        return f"{feedback_type_display} - {self.created_at}"
+    
+
+class ContactSubmission(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.email})"
+
         return self.name
 
 class Job(models.Model):
@@ -437,6 +454,7 @@ class JobApplication(models.Model):
     resume = models.FileField(upload_to="resumes/")
     cover_letter = models.TextField()
     applied_date = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return f"{self.name} - {self.job.title}"

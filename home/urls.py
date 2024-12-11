@@ -55,6 +55,9 @@ urlpatterns = [
 
 
     # path('contact-central/', views.Contact_central, name='contact-central'),
+     path('appattack/join/', views.appattack_join, name='appattack_join'),
+      path('form_success/', views.form_success, name='form_success'),
+    
     
     
     # Search result page
@@ -121,6 +124,7 @@ urlpatterns = [
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
+
 
 ]
 
