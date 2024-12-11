@@ -19755,6 +19755,80 @@ body, html {
     }
 
 
+    .page-visit-counter {
+      font-size: 0.9rem;
+      margin-top: 15px;
+      padding-top: 10px;
+  }
+  .page-visit-counter span {
+      font-size: 1rem;
+  
+  }
+  
+  .recently-viewed-sidebar {
+    position: fixed;
+    top: 150px; /* Adjust based on where you want it */
+    right: 20px;
+    z-index: 1000;
+    background-color: #1c2540;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+  .recently-viewed-sidebar .dropdown-toggle {
+    background-color: #1c2540; /* Matches the site's dark theme */
+    color: #ffc107; /* Gold text color */
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.recently-viewed-sidebar .dropdown-menu {
+    background-color: #1c2540; /* Dropdown background matches theme */
+    color: #ffc107; /* Gold text */
+    border: 1px solid #ffc107; /* Gold border */
+    border-radius: 5px;
+    padding: 0;
+    min-width: 200px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.recently-viewed-sidebar .dropdown-item {
+    color: #ffc107; /* Gold text for items */
+    padding: 10px;
+    font-size: 14px;
+}
+
+.recently-viewed-sidebar .dropdown-item:hover {
+    background-color: #ffc107; /* Highlighted background */
+    color: #1c2540; /* Text turns dark */
+}
+/* General styling for the arrow */
+.arrow-icon, .fa-chevron-down {
+  font-size: 12px; /* Adjust the size to match your design */
+  color: #f9c74f; /* Match the site's theme color */
+  margin-left: 5px; /* Add spacing between the text and the arrow */
+  vertical-align: middle; /* Aligns the arrow with the text */
+}
+
+/* Optional: Add hover effect */
+.recently-viewed-sidebar h5:hover .arrow-icon,
+.recently-viewed-sidebar h5:hover .fa-chevron-down {
+  color: #e5a629; /* Slightly darker yellow on hover */
+}
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon.rotate {
+  transform: rotate(180deg);
+}
+
+
 
     .challenge-category-container {
       background-color: #f7e041;
