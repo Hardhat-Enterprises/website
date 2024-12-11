@@ -83,7 +83,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
 # Application definition
 
 INSTALLED_APPS = [
-   'crispy_forms',
+    'crispy_forms',
     'tinymce',
     'crispy_bootstrap5',
     'captcha',
@@ -115,12 +115,12 @@ MIDDLEWARE = [
     # CORS middleware must come before commonmiddleware
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "home.idle.IdleTimeoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
     "core.middleware.LogRequestMiddleware",
@@ -328,6 +328,11 @@ SECURE_HSTS_PRELOAD = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SESSION_COOKIE_AGE = 600 #10 minutes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 #cron-job-feature
 # Django-cron configuration class
