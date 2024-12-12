@@ -39,7 +39,8 @@
                                         <span class="input-group-text" id="basic-addon3"><span
                                                 class="fas fa-user-circle"></span></span>
                                         <input type="text" class="form-control" placeholder="e.g. Bonnie Green"
-                                            id="name" name="name">
+                                            id="name" name="name" required inputmode="text" oninput="validateName(this)">
+                                        <small id="nameError" style="color: red; display: none;">Only alphabets are allowed.</small>
                                     </div>
                                 </div>
                                 <!-- End of Form -->
