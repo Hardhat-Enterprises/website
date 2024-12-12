@@ -26842,7 +26842,6 @@ blockquote {
 .contact-info .icon-text i {
   font-size: 28px;
   margin-right: 10px;
-<<<<<<< HEAD
   color: black;
 }
 
@@ -26903,9 +26902,6 @@ blockquote {
 
 .contact-form-container .btn:hover {
   opacity: 0.8;
-}
-
-
 }
 
 .contact-form-container {
@@ -26982,8 +26978,6 @@ blockquote {
 
 .text-black {
   color: black;
-=======
->>>>>>> upstream/pr/185
 }
 
 @media (max-width: 768px) {
@@ -27001,7 +26995,6 @@ blockquote {
 
 }
 
-<<<<<<< HEAD
 /* reCAPTCHA Styles */
 .g-recaptcha {
   margin-top: 20px;
@@ -27017,18 +27010,6 @@ blockquote {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> upstream/pr/185
 .dark-mode {
   .form-check-input:checked {
     background-color: #ffcd11;
