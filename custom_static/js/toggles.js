@@ -1,68 +1,36 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const toggle1 = document.getElementById('darkmode-toggle-1');
-    const toggle2 = document.getElementById('darkmode-toggle-2');
-
-    function syncToggles(isDarkMode) {
-        toggle1.checked = isDarkMode;
-        toggle2.checked = isDarkMode;
-    }
+    const toggleButton = document.getElementById('darkModeButton');
+    const icon = document.getElementById('darkModeIcon');
+    const navbar = document.querySelector('.navbar-main');
+    const dropdownMenus = document.querySelectorAll('.dropdown-menu');
 
     const darkMode = localStorage.getItem('darkMode') === 'true';
-    syncToggles(darkMode);
+    applyDarkMode(darkMode);
 
-    if (darkMode) {
-        document.body.classList.add('dark-mode');
-    }
+    function applyDarkMode(isDark) {
+        document.body.classList.toggle('dark-mode', isDark);
+        toggleButton.style.backgroundColor = isDark ? '#333333' : '#f0f0f0';
 
-    function handleToggle(event) {
-        const isDarkMode = event.target.checked; // Get the current toggle's state
-        syncToggles(isDarkMode); // Update both toggles to match
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('darkMode', 'true');
+        if (isDark) {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
         } else {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('darkMode', 'false');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
         }
+
+        icon.style.color = '#ffcd11';
+        navbar.style.backgroundColor = isDark ? '#333333' : '#ffffff';
+
+        dropdownMenus.forEach(menu => {
+            menu.style.backgroundColor = isDark ? '#333333' : '#ffffff';
+            menu.style.color = isDark ? '#ffffff' : '#333333';
+        });
     }
 
-    toggle1.addEventListener('change', handleToggle);
-    toggle2.addEventListener('change', handleToggle);
+    toggleButton.addEventListener('click', function () {
+        const isDark = !document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark.toString());
+        applyDarkMode(isDark);
+    });
 });
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Get all dropdown toggles
-    const dropdownToggles = document.querySelectorAll(".nav-item.dropdown1 > .nav-link");
-  
-    dropdownToggles.forEach((toggle) => {
-      toggle.addEventListener("click", (event) => {
-        event.preventDefault();
-  
-        const dropdownMenu = toggle.nextElementSibling;
-  
-        // Toggle the visibility of the dropdown menu
-        if (dropdownMenu.style.display === "block") {
-          dropdownMenu.style.display = "none";
-        } else {
-          dropdownMenu.style.display = "block";
-        }
-  
-        // Close other open dropdowns
-        document.querySelectorAll(".dropdown-menu1").forEach((menu) => {
-          if (menu !== dropdownMenu) {
-            menu.style.display = "none";
-          }
-        });
-      });
-    });
-  
-    // Close dropdowns when clicking outside
-    document.addEventListener("click", (event) => {
-      const isDropdown = event.target.closest(".nav-item.dropdown1");
-      if (!isDropdown) {
-        document.querySelectorAll(".dropdown-menu1").forEach((menu) => {
-          menu.style.display = "none";
-        });
-      }
-    });
-  });
