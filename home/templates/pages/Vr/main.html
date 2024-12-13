@@ -246,6 +246,123 @@
         </div>
     </section>
     <!-- End of FAQ Section -->
+
+    <!-- Review Section -->
+    <section class="review-section bg-light py-5">
+        <style>
+            /* Star Rating Styles */
+            .star-rating {
+                display: flex;
+                justify-content: center;
+                gap: 5px;
+                cursor: pointer;
+            }
+    
+            .rating-star {
+                font-size: 2rem;
+                color: grey; /* Default color for unselected stars */
+                transition: color 0.3s ease; /* Smooth transition effect */
+            }
+    
+            .rating-star.selected {
+                color: gold; /* Gold color for selected stars */
+            }
+    
+            .rating-star:hover,
+            .rating-star:hover ~ .rating-star {
+                color: grey; /* Keep hover effect isolated */
+            }
+        </style>
+    
+        <div class="container">
+            <h3 class="text-center mb-4">Rate and Review {{ project.title }}</h3>
+    
+            <form id="review-form" data-project-id="{{ project.id }}">
+                {% csrf_token %}
+                <div class="text-center">
+                    <div class="star-rating">
+                        {% for i in "12345" %}
+                        <i class="fas fa-star rating-star" data-rating="{{ forloop.counter }}"></i>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="rating" id="rating" value="0">
+                </div>
+                <div class="form-group mt-3">
+                    <textarea name="review_text" id="review_text" class="form-control" rows="4" placeholder="Write your feedback here..."></textarea>
+                </div>
+                <div class="text-center mt-3">
+                    <button type="button" id="submit-review" class="btn btn-primary">Submit Review</button>
+                </div>
+            </form>
+    
+            <div class="mt-5">
+                <h4>Recent Reviews</h4>
+                {% for review in project.reviews.all %}
+                <div class="review-item mb-3">
+                    <strong>{{ review.user.username|default:"Anonymous" }}</strong>
+                    <span class="text-warning">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="fas fa-star text-muted"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                    <p>{{ review.review_text }}</p>
+                    <small class="text-muted">{{ review.created_at|date:"F j, Y, g:i a" }}</small>
+                </div>
+                {% empty %}
+                <p>No reviews yet. Be the first to review!</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- End Review Section -->
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const stars = document.querySelectorAll(".rating-star");
+            const ratingInput = document.getElementById("rating");
+    
+            stars.forEach((star, index) => {
+                // Highlight stars on hover
+                star.addEventListener("mouseover", () => {
+                    highlightStars(index);
+                });
+    
+                // Reset stars when hover ends
+                star.addEventListener("mouseout", () => {
+                    highlightStars(parseInt(ratingInput.value) - 1); // Maintain selected stars
+                });
+    
+                // Handle click event
+                star.addEventListener("click", () => {
+                    ratingInput.value = index + 1; // Update the hidden input
+                    setSelectedStars(index);
+                });
+            });
+    
+            function highlightStars(index) {
+                stars.forEach((star, i) => {
+                    star.style.color = i <= index ? "gold" : "grey";
+                });
+            }
+    
+            function setSelectedStars(index) {
+                stars.forEach((star, i) => {
+                    if (i <= index) {
+                        star.classList.add("selected");
+                        star.style.color = "gold";
+                    } else {
+                        star.classList.remove("selected");
+                        star.style.color = "grey";
+                    }
+                });
+            }
+        });
+    </script>
+
 </main>
 {% endblock content %}
 
