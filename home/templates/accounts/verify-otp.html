@@ -95,6 +95,17 @@
               </p>
               {% endcomment %}
             </form>
+
+            <!-- "Use Passkey Instead" Button -->
+            <div class="text-center mt-3">
+              <p>OR</p>
+              <a href="{% url 'passkey_login' %}">
+                <button class="btn btn-secondary" style="width: 100%">
+                  Use Passkey Instead
+                </button>
+              </a>
+            </div>
+
           </div>
         </div>
       </div>
