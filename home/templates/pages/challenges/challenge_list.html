@@ -2,13 +2,19 @@
 {% load static %}
 
 {% block content %}
-<div class="content-container container mt-5">
+
+{% include 'includes/pre-loader.html' %}
+<div class="content-container container mt-10">
     <h1 class="mb-4 text-center">Cyber Challenges</h1>
     <p class="text-center mb-5">
         Test your cybersecurity knowledge and skills across various domains. Choose a category to begin!
     </p>
 
-
+    <p class="text-center mb-5">
+        Here's the leaderboard table
+        <br>
+        <a href="{% url 'leaderboard' %}" class="btn btn-primary">View Leaderboard</a>
+    </p>
         {% for category in categories %}
             <div class="col-md-6 mb-4">
                 <div class="card h-100 shadow-sm">
@@ -33,4 +39,5 @@
         {% endfor %}
     </div>
 </div>
-{% endblock %}
+
+{% endblock content %}

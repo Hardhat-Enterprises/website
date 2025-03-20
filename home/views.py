@@ -2,10 +2,14 @@
  
 # views.py
  
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+
+
+from django.contrib.auth import authenticate, login
 
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,8 +20,14 @@ from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
+from .models import ContactSubmission
+from django.utils.html import strip_tags
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Feedback,Job
+
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
+
+
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
@@ -29,16 +39,28 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, JobApplicationForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
+
+from .forms import CaptchaForm
 
 import os
 import json
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
-from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
+from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 
+from django.shortcuts import render
+from django.views.generic import View
+from django.contrib.auth.views import LoginView
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
+from .forms import UserLoginForm
+from django.core.cache import cache
+from django.shortcuts import redirect
+from django.urls import reverse
 from home.models import Announcement, JobApplication
+
  
 # import os
  
@@ -58,20 +80,38 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 from django.core.paginator import Paginator
 from .models import BlogPost
 from django.template.loader import render_to_string
- 
+
 #from .models import Student, Project, Progress
  
 from .forms import FeedbackForm
+import traceback
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
- 
+
 # Regular Views
+def client_sign_in(request):
+    return render(request, 'accounts/client_sign-in.html') 
 
 #For Contact Form
 import nh3
 import logging
 from .validators import xss_detection
 from .models import Contact
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import APIModel
+from .serializers import APIModelSerializer
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.viewsets import ViewSet
+
+
+#For LeaderBoard
+from django.db.models import Sum
+from .models import LeaderBoardTable, UserChallenge
+from django.contrib.auth.models import User
+
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -117,11 +157,62 @@ def blog(request):
  
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
+
+def form_success(request):
+    return render(request, 'emails/form_success.html')
  
 def appattack_join(request):
+
+    if request.method == 'POST':
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        if not first_name or not last_name or not email or not message:
+            messages.error(request, "All fields are required.")
+            return render(request, 'pages/appattack/join.html')
+
+        # Save the data
+        ContactSubmission.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            message=message
+        )
+
+        # Prepare and send email
+        try:
+            subject = "Thank you for contacting us!"
+            html_message = render_to_string('emails/contact_confirmation.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'message': message,
+            })
+            plain_message = strip_tags(html_message)
+
+            send_mail(
+                subject=subject,
+                message=plain_message,
+                from_email='hardhatcompanywebsite@gmail.com',
+                recipient_list=[email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            messages.success(request, "Your message has been received, and a confirmation email has been sent.")
+        except Exception as e:
+            print(f"Email sending failed: {e}")
+            messages.error(request, "Your message was received, but we couldn't send a confirmation email.")
+
+        return redirect('form_success')
+
+
    # print("Hi");
-   # print(request.POST);
+    print(request.POST);
+
     return render(request, 'pages/appattack/join.html')
+
+
  
 def products_services(request):
     return render(request, 'pages/malware_visualization/products_and_services.html')
@@ -225,7 +316,70 @@ def UpskillingJoinProjectView(request):
         form = Upskilling_JoinProjectForm()
 
     return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
- 
+
+# OTP-Based Login
+
+def login_with_otp(request):
+    """
+    For Login
+    """
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user:
+            # Generate OTP
+            otp = random.randint(100000, 999999)
+            request.session['otp'] = otp
+            request.session['user_id'] = user.id
+
+            # Send OTP via email
+            send_mail(
+                subject="Your OTP Code",
+                message=f"Your OTP code is {otp}. Use it to verify your login.",
+                from_email="deakinhardhatwebsite@gmail.com",
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+            if settings.DEBUG:
+                print(f"DEBUG MODE: OTP for {user.email} is {otp}")
+
+            messages.success(request, "An OTP has been sent to your email. Please enter it below to continue.")
+            return redirect('verify_otp')
+        else:
+            messages.error(request, "Invalid username or password.")
+    return render(request, 'accounts/sign-in.html')
+
+
+
+def verify_otp(request):
+    """
+    OTP verification during login.
+    """
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        saved_otp = request.session.get('otp')
+        user_id = request.session.get('user_id')
+
+        if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
+            User = get_user_model()  # Dynamically get the User model
+            try:
+                user = User.objects.get(id=user_id)
+                login(request, user)  # Log the user in
+                # Clear session data
+                request.session.pop('otp', None)
+                request.session.pop('user_id', None)
+                messages.success(request, "Login successful!")
+                return redirect('post_otp_login_captcha')  # Redirect after successful login
+            except User.DoesNotExist:
+                messages.error(request, "User does not exist.")
+        else:
+            messages.error(request, "Invalid OTP. Please try again.")
+
+    return render(request, 'accounts/verify-otp.html')
+
 # Search Suggestions
 def SearchSuggestions(request):
     query = request.GET.get('query', '')
@@ -269,21 +423,26 @@ def Vr_main(request):
 
 # Authentication
 
-
-
-
-
+def client_login(request):
+    form = ClientLoginForm
+    return render(request, 'accounts/sign-in-client.html',{'form': form})
 
 
 def feedback(request):
     if request.method == 'POST':
-        form = FeedbackForm(request.POST)
+        form = ExperienceForm(request.POST)
         if form.is_valid():
-            # feedback_list.append(form.cleaned_data)  # Store feedback in the global list
-            return redirect('feedback')  # Redirect to the same page
+            form.save()  # Save the feedback to the database
+            return redirect('feedback')  # Redirect to clear the form
+
     else:
-        form = FeedbackForm()
-    return render(request, 'pages/feedback.html', {'form': form})
+        form = ExperienceForm()
+
+    # Retrieve recent feedback from the database
+    feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
+
+    return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
+
 
 
 ## Web-Form 
@@ -310,6 +469,29 @@ def website_form(request):
 class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
+    
+    def form_invalid(self, form):
+        # Increment the failed login attempts
+        failed_attempts = cache.get('failed_login_attempts', 0) + 1
+        cache.set('failed_login_attempts', failed_attempts, timeout=60)  # Store for 1 minute
+
+        # Check if the limit is exceeded
+        if failed_attempts >= 5:  # Set your limit here
+            # Set the global lockout
+            cache.set('global_lockout', True, timeout=60)  # Lockout for 1 minute
+            # Set the lockout start time
+            cache.set('lockout_start_time', timezone.now(), timeout=60)  # Lockout for 1 minute
+            return redirect(reverse('rate_limit_exceeded'))  # Redirect to a rate limit exceeded page
+
+        return super().form_invalid(form)
+
+def rate_limit_exceeded(request):
+    remaining_time = 60  # Use the helper function
+
+    return render(request, 'accounts/rate_limit_exceeded.html', {
+        'message': 'Too many login attempts. Please try again later.',
+        'wait_time': remaining_time,
+    })
  
 def logout_view(request):
     logout(request)
@@ -318,62 +500,134 @@ def logout_view(request):
 def password_gen(request):
     return JsonResponse({'data': gen_password()}, status=200)
  
- 
-def register(request):
-    form = RegistrationForm()
+
+@csrf_exempt
+def VerifyOTP(request):
+    """
+    For account verification via OTP.
+    """
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        saved_otp = request.session.get('otp')
+        user_id = request.session.get('user_id')
+
+        if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
+            User = get_user_model()  # Dynamically fetch the custom User model
+            try:
+                user = User.objects.get(id=user_id)
+                user.is_verified = True  # Mark the user as verified
+                user.is_active = True   # Ensure the account is active
+                user.save()             # Save changes
+
+                # Clear session data
+                request.session.pop('otp', None)
+                request.session.pop('user_id', None)
+
+                # Print confirmation to terminal
+                print(f"OTP matched. Account for {user.email} has been activated and verified.")
+
+                messages.success(request, "Your account has been successfully verified and activated!")
+                return redirect('/')
+            except User.DoesNotExist:
+                messages.error(request, "User does not exist. Please register again.")
+                return redirect('/accounts/signup/')
+        else:
+            messages.error(request, "Invalid OTP. Please try again.")
+
+    return render(request, 'accounts/verify_token.html')
+
+
+def register_client(request):
+    form = ClientRegistrationForm()
     if request.method == 'POST':
         email = request.POST.get('email')
+        business_name = request.POST.get('business_name')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        form = RegistrationForm(request.POST)
+        form = ClientRegistrationForm(request.POST)
        
         if form.is_valid():
             form.save()
-            otp = random.randint(100000, 999999)
-            send_mail("User Data:", f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n {otp}\n" f"If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
-                    "Regards, \nHardhat Enterprises", "deakinhardhatwebsite@gmail.com", [email], fail_silently=False)
-            print("Account created successfully! An OTP was sent to your email. Check!")
-            messages.success(request, "Account created successfully!")
-            return render(request, 'accounts/verify_token.html', {'otp': otp, 'first_name': first_name, 'last_name': last_name, 'email': email, 'password1': password1, 'password2': password2})
+            
+            return redirect("package_plan")
             # return redirect("verify-email", username=request.POST['first_name'])
         else:
             print("Registration failed!")
     else:
-        form = RegistrationForm()
+        form = ClientRegistrationForm()
  
     context = { 'form': form }
-    return render(request, 'accounts/sign-up.html', context)
- 
-@csrf_exempt
-def VerifyOTP(request):
-    if request.method == "POST":
-        userotp = request.POST.get('otp')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-       
-        if password1 == password2:
-            form = User(first_name=first_name, last_name=last_name, email=email, password=password1)
-            form.save()
-           
-        print("OTP: ", userotp)
-    return JsonResponse({'data': 'Hello'}, status=200)  
-   
-# def signup(request):
-#     form = RegisterForm()
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Account created successfully! An OTP was sent to your Email")
-#             return redirect("verify-email", username=request.POST['username'])
-#     context = {"form": form}
-#     return render(request, "signup.html", context)
+    return render(request, 'accounts/sign-up-client.html', context)
 
+   
+def register(request):
+    """
+    Handles user registration and OTP verification.
+    """
+    if request.method == 'POST':
+        print(f"POST Data: {request.POST}")  # Log incoming POST data for debugging
+        form = RegistrationForm(request.POST)
+
+        if form.is_valid():
+            try:
+                user = form.save(commit=False)  # Save user instance without committing
+                user.set_password(form.cleaned_data['password1'])  # Hash the password
+                user.save()  # Save the user to the database
+                print("User saved to database.")  # Success log
+
+                # Generate OTP and send email
+                otp = random.randint(100000, 999999)
+                email = form.cleaned_data.get('email')
+                send_mail(
+                    subject="User Data",
+                    message=(
+                        f"Hello from HardHat Enterprise! Verify Your Mail with the OTP: \n{otp}\n"
+                        "If you didn't request an OTP or open an account with us, please contact us at your earliest convenience.\n\n"
+                        "Regards, \nHardhat Enterprises"
+                    ),
+                    from_email="deakinhardhatwebsite@gmail.com",
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+
+                request.session['otp'] = otp
+                request.session['user_id'] = user.id
+
+                # Print OTP to terminal if DEBUG is True
+                if settings.DEBUG:
+                    print(f"DEBUG MODE: OTP for {user.email} is {otp}")
+
+                # Redirect to verify token page with context
+                messages.success(request, "Account created successfully! Check your email for the OTP.")
+                return redirect('verifyEmail')
+                
+            except Exception as e:
+                print(f"Error saving user or sending email: {e}")
+                messages.error(request, "An error occurred while creating the account. Please try again.")
+        else:
+            print("Form is invalid. Errors:")
+            print(form.errors)  # Debugging log for form errors
+            messages.error(request, "Please fix the errors below.")
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'accounts/sign-up.html', {'form': form})
+
+
+def post_otp_login_captcha(request):
+    if request.method == 'POST':
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            messages.success(request, "CAPTCHA verified successfully!")
+            return redirect('/')  # Redirect to the desired page
+        else:
+            messages.error(request, "CAPTCHA verification failed. Please try again.")
+    else:
+        form = CaptchaForm()
+
+    return render(request, 'accounts/post_otp_captcha.html', {'form': form})
 
 
 # Email Verification 
@@ -471,7 +725,8 @@ class UserPasswordChangeView(PasswordChangeView):
 def resources_view(request):
     return render(request, 'pages/resources.html.')
    
- 
+def package_plan(request):
+    return render(request, 'pages/package-plan.html')
  
 # Chart Views
  
@@ -551,11 +806,13 @@ def update_progress(request, progress_id):
  
 def contact(request):
     if request.method=='POST':
-        name=request.POST['name']
+        name=request.POST.g['name']
         email=request.POST['email']
         message=request.POST['message']
         contact=Contact.objects.create(name=name, email=email, message=message)
         messages.success(request,'The message has been received')
+
+        
     return render(request,'pages/index.html')
  
 #For XSS Log
@@ -569,6 +826,26 @@ def log_suspicious_input(input_data):
 
 #For Contact Page
 def Contact_central(request):
+
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        message=request.POST['message']
+        contact=Contact.objects.create(name=name, email=email, message=message)
+        messages.success(request,'The message has been received')
+
+        try:
+            send_mail(
+                subject=f"Thank you, {name}, for contacting us!",
+                message=f"Dear {name},\n\nThank you for your message:\n\n\"{message}\"\n\nWe will get back to you shortly.\n\nBest regards,\nYour Team",
+                from_email='hardhatcompanywebsite@gmail.com',
+                recipient_list=[email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            messages.error(request, 'Failed to send confirmation email.')
+    return render(request,'pages/Contactus.html')
+
     if request.method == 'POST':
         name = request.POST.get('name', '')
         email = request.POST.get('email', '')
@@ -593,6 +870,7 @@ def Contact_central(request):
             messages.error(request, 'Invalid input!')
 
     return render(request, 'pages/Contactus.html')
+
 
  
  
@@ -741,31 +1019,25 @@ def projects_join_us(request, page_url, page_name):
 
 
 def feedback_view(request):
-    return render(request, 'pages/feedback.html')
-
-
-def submit_feedback(request):
     if request.method == 'POST':
-        feedback_type = request.POST.get('feedback_type')
-        content = request.POST.get('feedback_content')
+        form = ExperienceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('feedback')
+    else:
+        form = ExperienceForm()
 
-        Feedback.objects.create(
-            user=request.user if request.user.is_authenticated else None,
-            feedback_type=feedback_type,
-            content=content
-        )
-
-        messages.success(request, 'Thank you for your feedback!')
-        return redirect('feedback')
-       #return redirect('thank_you') # Redirect to the thank you page after submission
-
+    feedbacks = Experience.objects.all().order_by('-created_at')
+    return render(request, 'feedback.html', {
+        'form': form,
+        'feedbacks': feedbacks
+    })
+    
+def delete_feedback(request, id):
+    feedback= get_object_or_404(Experience, id=id)
+    feedback.delete()
     return redirect('feedback')
-#def thank_you(request):
-    #return render(request, 'feedback/thank_you.html')
-    #return render('thank_you')
 
- 
-       # return context
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
@@ -855,6 +1127,7 @@ def blog_list(request):
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
 
+
 def list_careers(request):
     jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
     context = {
@@ -892,3 +1165,58 @@ def career_application(request,id):
         "complete":complete
     }
     return render(request,"careers/application-form.html",context)
+
+  
+#swagger-implementation
+
+class APIModelListView(APIView):
+    def get(self, request):
+        data = APIModel.objects.all()
+        serializer = APIModelSerializer(data, many=True)
+        return Response(serializer.data)
+    
+class AnalyticsAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Fetch analytics data",
+        operation_description="Returns basic analytics data for testing purposes.",
+        tags=["Analytics"]  
+    )
+    def get(self, request):
+        return Response({"message": "Analytics data fetched successfully!"})  
+    
+class UserManagementAPI(APIView):
+    @swagger_auto_schema(
+        operation_summary="Get User Details",
+        operation_description="Retrieve detailed information of a specific user.",
+        tags=["User Management"]  
+    )
+    def get(self, request):
+        return Response({"message": "User details here."})    
+    
+class EmailNotificationViewSet(ViewSet):
+    @swagger_auto_schema(
+        operation_summary="Send Email Notification",
+        operation_description="Send a notification email to a user.",
+        tags=["Email Notifications"]  
+    )
+    def create(self, request):
+        return Response({"message": "Email sent successfully!"})
+
+def leaderboard(request):
+    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
+    print(leaderboard_entry)
+    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+
+def leaderboard_update():
+    LeaderBoardTable.objects.all().delete()
+    users = User.objects.all()
+    for user in users:
+        challenges_category = (UserChallenge.objects.filter(user=user, completed=True).values('category_challenges').annotate(total_points=Sum('score')))
+
+        for categories in challenges_category:
+            category = categories['category_challenges']
+            total_points = categories['total_points'] or 0
+
+            if total_points > 0:
+                LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+

@@ -7,10 +7,12 @@ from .models import (
     Skill,
     Progress,
     Contact,
+    ContactSubmission,
+    Experience,
 
     Webpage,
     DDT_contact,
-    Feedback,
+    #Feedback,
     Job,
     JobApplication,
     
@@ -23,7 +25,10 @@ from .models import (
     Announcement,
 
     # Logging
-    SecurityEvent
+    SecurityEvent,
+
+    #LeaderBaord
+    LeaderBoardTable
 
 )
 
@@ -84,12 +89,23 @@ class CyberChallengeAdmin(admin.ModelAdmin):
 class UserChallengeAdmin(admin.ModelAdmin):
     list_display = ['user', 'challenge', 'completed', 'score']
 
+
+@admin.register(ContactSubmission)
+class ContactSubmissionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'first_name', 'last_name', 'email', 'message', 'created_at') 
+    
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ['message', 'isActive', 'created_at']
     list_filter = ['isActive', 'created_at']
     search_fields = ['message']
     readonly_fields = ['created_at']
+    
+@admin.register(Experience)
+class ExperienceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'feedback', 'created_at']
+    search_fields = ['name', 'feedback']
+    readonly_fields = ['created_at']  # Make created_at read-only
     
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):
@@ -108,7 +124,7 @@ class FeedbackAdmin(admin.ModelAdmin):
             return ['user', 'feedback_type', 'content'] + self.readonly_fields
         return self.readonly_fields
 
-admin.site.register(Feedback, FeedbackAdmin)
+#admin.site.register(Feedback, FeedbackAdmin)
 
 
 # class OtpTokenAdmin(admin.ModelAdmin):
@@ -131,7 +147,12 @@ class JobApplicationAdmin(admin.ModelAdmin):
     @admin.display(description="Job Title")
     def job__title(self,obj):
         return obj.job.title
-        
+    
+@admin.register(LeaderBoardTable)
+class LeaderboardTableAdmin(admin.ModelAdmin):
+    list_display = ('user', 'category', 'total_points')
+
+
 
 
 

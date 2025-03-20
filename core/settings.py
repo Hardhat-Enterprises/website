@@ -13,8 +13,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os, random, string
 from pathlib import Path
 from dotenv import load_dotenv
+from django.core.cache.backends.base import InvalidCacheBackendError
+from pymemcache.client.base import Client
 
-
+# Import for CORS headers
+from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 load_dotenv()  # take environment variables from .env.
 
@@ -48,12 +51,41 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+#Secure Cookies Can be implemented but it affects OTP Functionality.
+#Ensure cookies are only sent over HTTPS when set True
+SESSION_COOKIE_SECURE = False
+ 
+# Prevents JavaScript from accessing session cookies when set True
+SESSION_COOKIE_HTTPONLY = False
+ 
+#Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+#Ensure CSRF cookies are sent over HTTPS only
+CSRF_COOKIE_SECURE = True
+
+#Enhance CSRF protection
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+#Ensure DEBUG is set to False in production to avoid sensitive information exposure
+DEBUG = True
+
+
+#Limit request header sizes and body lenghts
+#Limit number of form fileds
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000 
+
+# Limit max upload memory size 10 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
+
+
 # Application definition
 
 INSTALLED_APPS = [
-   'crispy_forms',
+    'crispy_forms',
     'tinymce',
     'crispy_bootstrap5',
+    'captcha',
     "django_light",
     # "django.contrib.admin",
     "core.apps.CustomAdminConfig",
@@ -63,20 +95,34 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    'django_cron',
+
+
+ 
+    'rest_framework',  
+    'drf_yasg', 
 
     'home',
-    'theme_pixel'
+    'theme_pixel',
+
+    'corsheaders',
+
+
 ]
 
 MIDDLEWARE = [
+    # CORS middleware must come before commonmiddleware
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "home.idle.IdleTimeoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "home.ratelimit_middleware.GlobalLockoutMiddleware",
+    "core.middleware.LogRequestMiddleware",
 ]
 
 LOGGING = {
@@ -105,7 +151,11 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+
+        "DIRS": [BASE_DIR / HOME_TEMPLATES],
+
         "DIRS": [os.path.join(BASE_DIR, "templates")],
+      
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -113,6 +163,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'home.context_processors.dynamic_page_title',
+
+
             ],
         },
     },
@@ -146,7 +199,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
@@ -155,6 +208,15 @@ AUTH_USER_MODEL = "home.User"
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
+# Password hashing using bcrypt
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',  # Built-in bcrypt with SHA256
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+]
+
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -226,6 +288,36 @@ MESSAGE_TAGS = {
 }
 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': os.getenv('CACHE_LOCATION', '127.0.0.1:11211'),  # Default local if not specified
+    }
+}
+
+try:
+    from pymemcache.client import Client
+    client = Client(os.getenv('CACHE_LOCATION', '127.0.0.1:11211'))
+    client.version()
+except (ImportError, InvalidCacheBackendError, ConnectionRefusedError):
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        }
+    }
+
+RATELIMIT_ENABLE = True
+RATELIMIT_VIEW = 'django_ratelimit.ratelimit_view'
+RATELIMIT_USE_CACHE = 'default'
+
+RATELIMIT_SETTINGS = {
+    'login': {
+        'rate': '5/m',  # 5 attempts per minute
+        'block_expiration': 60,  # block for 1 minute after 5 attempts
+    },
+}
+
 # Prevent MIME type sniffing
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
@@ -242,4 +334,78 @@ SECURE_HSTS_PRELOAD = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SESSION_COOKIE_AGE = 600 #10 minutes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+#cron-job-feature
+# Django-cron configuration class
+CRON_CLASSES = [
+    'home.tasks.CleanStaleRecordsCronJob', 
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file_django': {  # Handler specifically for Django logs
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_activity.log'),  # Separate file for Django logs
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'activity.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file_django', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'page_access_logger': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+ 
+ 
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8000',  # Website localhost server url
+    'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
+]
+
+CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'content-type',
+    'authorization',
+
+]
+
 

@@ -19,8 +19,13 @@ function handleFormSubmit(event) {
   // Get the form data
   const form = event.target; // This is the form element
   const formData = new FormData(form); // Create FormData object
-  //console.log(form.method);
-  //console.log(formData);
+
+  // Check if reCAPTCHA is checked
+  var recaptchaResponse = grecaptcha.getResponse();
+  if (recaptchaResponse.length === 0) {
+    alert("Please verify that you are not a robot.");
+    return; // Stop form submission
+  }
   // Send data to the server using Fetch API
   fetch(form.action, {
     method: form.method, // POST in this case
@@ -29,7 +34,7 @@ function handleFormSubmit(event) {
       "X-CSRFToken": formData.get("csrfmiddlewaretoken"), // Pass CSRF token for Django
     },
   })
-    .then((response) => {
+    .then(response => {
       if (response.ok) {
         // Show thank-you message on success
         document.getElementById("form-header").innerHTML = `
@@ -43,7 +48,7 @@ function handleFormSubmit(event) {
         alert("There was an error submitting the form. Please try again.");
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error("Error:", error);
       alert("Something went wrong. Please try again later.");
     });
