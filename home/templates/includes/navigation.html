@@ -107,6 +107,8 @@
         <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light" />
         <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark" />
       </a>
+      <span id="liveClock" style="color: #fff; font-weight: bold; margin-left: 15px;"></span>
+
       <div class="navbar-collapse collapse me-auto dark-mode" id="navbar_global">
         <div class="navbar-collapse-header">
           <div class="row">
@@ -134,6 +136,11 @@
           <button class="search-btn" type="submit">
             <i class="fas fa-search search-icon"></i>
           </button>
+          <input type="text" id="search-box" name="q" placeholder="Search here...">
+          <button type="button" id="voice-search-btn">
+              <i class="fas fa-microphone"></i>
+          </button>
+
 
 
           <div id="suggestions" class="dropdown-content"></div>
