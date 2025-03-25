@@ -15,6 +15,7 @@ env
 .env
 .vscode/
 venv/
+
 env/
 media/
 *.log
