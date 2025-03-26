@@ -6,11 +6,12 @@
 @file: test_get_requests.py
 @time: 2025/3/25 15:21
 @desc: This code automatically discovers and tests all URLs that use the GET method
+@usage: python manage.py test home.tests.test_get_requests
 """
 
 import logging
 from django.test import TestCase
-from django.urls import get_resolver
+from django.urls import get_resolver, reverse, NoReverseMatch
 from django.shortcuts import resolve_url
 from home.tests.setup_test_logger import setup_test_logger
 
@@ -20,11 +21,23 @@ class GetUrlAutoDiscoverTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         # Instantiate logger
-        cls.logger = setup_test_logger()
+        cls.logger = setup_test_logger('auto_discover_test_GET.log')
 
         # Add test start information
         cls.logger.info("Starting URL auto-discovery tests")
+        cls.logger.info("HTTP method: GET")
         cls.logger.info("=" * 50)
+
+
+    def _url_requires_args(self, url_name: str):
+        """
+        Check if any argument is required for <url_name>
+        """
+        try:
+            reverse(url_name)
+            return False
+        except NoReverseMatch:
+            return True
 
     def test_get_requests(self):
         resolver = get_resolver()
@@ -48,12 +61,18 @@ class GetUrlAutoDiscoverTests(TestCase):
             'total': len(test_urls),
             'passed': 0,
             'failed': 0,
-            'errors': 0
+            'errors': 0,
+            'skipped': 0,
         }
 
         for url_name in test_urls:
             with self.subTest(url_name=url_name):
                 try:
+                    if self._url_requires_args(url_name):
+                        self.logger.warning(f"SKIP: {url_name} - Arguments required")
+                        test_results['skipped'] += 1
+                        continue
+
                     # url = reversed(url_name)
                     response = self.client.get(resolve_url(url_name))
 
@@ -89,7 +108,7 @@ class GetUrlAutoDiscoverTests(TestCase):
                 url_names.extend(self._get_all_url_names(pattern, new_namespace))
             elif hasattr(pattern, 'name') and pattern.name:
                 full_name = f"{namespace}:{pattern.name}" if namespace else pattern.name
-                print(full_name)
+                # print(full_name)
                 url_names.append(full_name)
         return url_names
 
@@ -102,6 +121,7 @@ class GetUrlAutoDiscoverTests(TestCase):
         self.logger.info("=" * 50)
         self.logger.info(f"Total URLs tested: {results['total']}")
         self.logger.info(f"Passed: {results['passed']} ({(results['passed'] / results['total']) * 100:.1f}%)")
-        self.logger.info(f"Failed: {results['failed']}")
-        self.logger.info(f"Errors: {results['errors']}")
+        self.logger.info(f"Failed: {results['failed']} ({(results['failed'] / results['total']) * 100:.1f}%)")
+        self.logger.info(f"Errors: {results['errors']} ({(results['errors'] / results['total']) * 100:.1f}%)")
+        self.logger.info(f"Skipped: {results['skipped']} ({(results['skipped'] / results['total']) * 100:.1f}%)")
         self.logger.info("=" * 50)
