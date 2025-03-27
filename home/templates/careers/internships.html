@@ -1,0 +1,18 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Internship Opportunities</h2>
+  {% if internships %}
+    {% for job in internships %}
+      <div class="card mb-3 p-3 shadow-sm">
+        <h4>{{ job.title }}</h4>
+        <p><strong>Location:</strong> {{ job.location }}</p>
+        <p><strong>Salary:</strong> {{ job.salary }}</p>
+        <a href="{% url 'career-detail' job.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No internships currently open.</p>
+  {% endif %}
+</div>
+{% endblock %}

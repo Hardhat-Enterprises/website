@@ -1,0 +1,13 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Job Alerts</h2>
+  <p>Subscribe to our job alerts to stay updated!</p>
+
+  <form id="jobAlertForm" class="mt-4">
+    <input type="email" id="jobAlertEmail" class="form-control mb-2" placeholder="Enter your email" required />
+    <button type="submit" class="btn btn-primary">Subscribe</button>
+    <div id="jobAlertMessage" class="text-success mt-2" style="display: none;">Subscribed successfully!</div>
+  </form>
+</div>
+{% endblock %}
