@@ -83,6 +83,9 @@ urlpatterns = [
     path('post-otp-captcha/', views.post_otp_login_captcha, name='post_otp_login_captcha'),
     path('accounts/passkey-login/', views.login_with_passkey, name='passkey_login'),
 
+    path("passkeys/reset/", views.reset_passkeys_request, name="reset_passkeys_request"),
+    path("passkeys/reset/verify/", views.reset_passkeys_verify, name="reset_passkeys_verify"),
+
     # Email OTP
     
     

@@ -87,6 +87,9 @@ from django.template.loader import render_to_string
 from .forms import FeedbackForm
 import traceback
 
+import string
+import random
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
@@ -544,7 +547,7 @@ def VerifyOTP(request):
                 )
 
                 print(f"OTP matched. Account for {user.email} has been activated and verified.")
-                print(f"Passkeys sent to {user.email}: {passkeys}")  # Log passkeys for debugging (optional)
+                print(f"Passkeys sent to {user.email}: {passkeys}") 
 
                 messages.success(request, "Your account has been successfully verified! Your passkeys have been sent via email.")
                 return redirect('/')
@@ -570,15 +573,109 @@ def login_with_passkey(request):
 
             if Passkey.objects.filter(user=user, key=passkey).exists():
                 request.session['pending_user_id'] = user.id  # Store user ID temporarily
+                login(request, user)
                 messages.success(request, "Passkey verified! Please complete CAPTCHA verification.")
                 request.session['is_otp_verified'] = True  # Mark OTP as verified
-                return redirect("post_otp_login_captcha")  # Redirect to CAPTCHA
+                return redirect("/")
             else:
                 messages.error(request, "Invalid passkey. Please try again.")
         except get_user_model().DoesNotExist:
             messages.error(request, "No user found with this email.")
 
     return render(request, "accounts/passkey_login.html")
+
+
+def reset_passkeys_request(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        last_name = request.POST.get("last_name")
+        password = request.POST.get("password")
+
+        try:
+            user = User.objects.get(email=email, last_name=last_name)
+        except User.DoesNotExist:
+            messages.error(request, "Invalid details. Please try again.")
+            return redirect("reset_passkeys_request")
+
+        authenticated_user = authenticate(email=email, password=password)
+        if authenticated_user is None:
+            messages.error(request, "Incorrect password.")
+            return redirect("reset_passkeys_request")
+
+        # Generate and send OTP
+        otp = random.randint(100000, 999999)
+        request.session["reset_passkeys_otp"] = otp
+        request.session["reset_passkeys_user_id"] = user.id
+
+        send_mail(
+            subject="Reset Your Passkeys - HardHat",
+            message=f"Your OTP for resetting passkeys is: {otp}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+        messages.success(request, "OTP sent to your email.")
+        return redirect("reset_passkeys_verify")
+
+    return render(request, "accounts/reset_passkeys_request.html")
+
+def reset_passkeys_verify(request):
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp")
+        saved_otp = request.session.get("reset_passkeys_otp")
+        user_id = request.session.get("reset_passkeys_user_id")
+
+        if not (entered_otp and saved_otp and user_id):
+            messages.error(request, "Session expired. Please try again.")
+            return redirect("reset_passkeys_request")
+
+        if int(entered_otp) != int(saved_otp):
+            messages.error(request, "Invalid OTP. Please try again.")
+            return redirect("reset_passkeys_verify")
+
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            messages.error(request, "User not found.")
+            return redirect("reset_passkeys_request")
+
+        # Remove old passkeys
+        Passkey.objects.filter(user=user).delete()
+
+        # Generate 5 new passkeys
+        new_passkeys = ["".join(random.choices(string.ascii_letters + string.digits, k=12)) for _ in range(5)]
+        for key in new_passkeys:
+            Passkey.objects.create(user=user, key=key)
+
+        # Send new passkeys via email
+        send_mail(
+            subject="Your New Passkeys - HardHat",
+            message=(
+                f"Hello {user.first_name},\n\n"
+                "Your passkeys have been successfully reset! 🔄\n\n"
+                "Here are your new lifetime passkeys:\n\n"
+                f"{chr(10).join(new_passkeys)}\n\n"
+                "You can use these passkeys instead of OTP during login.\n\n"
+                "🔹 Keep them safe, as they are your permanent authentication keys.\n"
+                "🔹 If you ever need to reset them again, you can do so from the login page.\n\n"
+                "If you did not request this reset, please contact support immediately.\n\n"
+                "Regards,\nHardHat Enterprises"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+
+        # Clear session data
+        del request.session["reset_passkeys_otp"]
+        del request.session["reset_passkeys_user_id"]
+
+        messages.success(request, "Your passkeys have been reset and emailed to you.")
+        return redirect("passkey_login")
+
+    return render(request, "accounts/reset_passkeys_verify.html")
 
 def register_client(request):
     form = ClientRegistrationForm()
