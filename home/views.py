@@ -1127,13 +1127,22 @@ def blog_list(request):
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
 
-
 def list_careers(request):
     jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
-    context = {
-        "jobs":jobs
-    }
-    return render(request,"careers/career-list.html",context)
+
+    search = request.GET.get('search')
+    job_type = request.GET.get('job_type')
+    location = request.GET.get('location')
+
+    if search:
+        jobs = jobs.filter(title__icontains=search) | jobs.filter(description__icontains=search)
+    if job_type:
+        jobs = jobs.filter(job_type=job_type)
+    if location:
+        jobs = jobs.filter(location=location)
+
+    return render(request, "careers/career-list.html", {"jobs": jobs})
+
 
 def career_detail(request,id):
     job = get_object_or_404(Job, id=id)

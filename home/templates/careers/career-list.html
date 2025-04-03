@@ -1,92 +1,100 @@
-{% extends 'layouts/base.html' %} {% block content %} {% include
-'includes/pre-loader.html' %}
-{% load static %}
-<div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
-    <h1 class="fw-bolder">Hardhat Enterprise Careers</h1>
-    <h5 class="text-muted">
-      It's a careers page for Hardhat Enterprise students
-    </h5>
-  </div>
-</div>
-{% if jobs.count < 1%}
-<div class="col-md-6 mx-md-auto col-12">
-  <h5 class="p-3 fw-bold">There are no open positions at the moment</h5>
-  <div class="job-alert-signup">
-    <h3>Want to be notified when we post new jobs?</h3>
-    <form id="jobAlertForm">
-        <input type="email" id="jobAlertEmail" placeholder="Enter your email" required>
-        <button type="submit" class="btn btn-primary">🔔 Notify Me</button>
-    </form>
-    <p id="jobAlertMessage" style="display:none; color: green;">You're subscribed!</p>
-</div>
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<style>
+  .card-title, .card-text, label, h2, h5, p {
+    color: #f8f9fa;
+  }
+
+  .badge-jobtype {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  .badge-location {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .career-card {
+    background-color: #343a40;
+    border-radius: 10px;
+  }
+
+  .btn-view {
+    background-color: #ffffff;
+    color: #212529;
+    border: none;
+  }
+
+  .btn-view:hover {
+    background-color: #e2e6ea;
+    color: #212529;
+  }
+
+  .closing-text {
+    color: #adb5bd; /* soft grey */
+  }
+
+  body {
+    background-color: #212529;
+  }
+</style>
+
 
 <div class="container mt-5">
-    <h2 class="text-center fw-bold">Perks & Benefits</h2>
-    <div class="row text-center mt-4">
-        <div class="col-md-4">
-            <i class="fas fa-heart fa-3x text-primary"></i>
-            <h4>Health Benefits</h4>
-            <p>Comprehensive medical, dental, and vision plans.</p>
-        </div>
-        <div class="col-md-4">
-            <i class="fas fa-laptop fa-3x text-primary"></i>
-            <h4>Remote Work</h4>
-            <p>Flexible work-from-home options.</p>
-        </div>
-        <div class="col-md-4">
-            <i class="fas fa-chart-line fa-3x text-primary"></i>
-            <h4>Career Growth</h4>
-            <p>Opportunities for learning and development.</p>
-        </div>
+  <h2 class="fw-bold text-center mb-4">Explore Job Opportunities</h2>
+
+  <!-- 🔍 Search & Filter -->
+  <form method="GET" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <input type="text" name="search" class="form-control" placeholder="Search by title or description..." value="{{ request.GET.search }}">
     </div>
+    <div class="col-md-3">
+      <select name="job_type" class="form-select">
+        <option value="">All Job Types</option>
+        <option value="FT">Full-Time</option>
+        <option value="PT">Part-Time</option>
+        <option value="CT">Contract</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select name="location" class="form-select">
+        <option value="">All Locations</option>
+        <option value="Remote">Remote</option>
+        <option value="OnSite">OnSite</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-warning w-100">Filter</button>
+    </div>
+  </form>
+
+  <!-- 🧾 Job Listings -->
+  <div class="row">
+    {% if jobs %}
+      {% for job in jobs %}
+        <div class="col-md-6 mb-4">
+          <div class="card career-card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ job.title }}</h5>
+              <p>
+                <span class="badge badge-jobtype">{{ job.get_job_type_display }}</span>
+                <span class="badge badge-location">{{ job.location }}</span>
+              </p>
+              <p class="closing-text mb-1">Closing: {{ job.closing_date }}</p>
+              <a href="{% url 'career-detail' job.id %}" class="btn btn-view btn-sm mt-2">View Details</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}    
+      <div class="col-12 text-center py-5">
+        <h4 class="text-warning">😕 No jobs found.</h4>
+        <p class="text-light">Try adjusting the filters or check back later.</p>
+      </div>
+    {% endif %}
   </div>
 </div>
 
-<div class="container mt-5">
-  <h2 class="text-center fw-bold">What Our Employees Say</h2>
-  <div class="row text-center mt-4">
-      <div class="col-md-4">
-          <div class="card shadow p-3">
-              <p>"Working at Hardhat Enterprises has been an amazing experience. The work-life balance and career growth opportunities are unmatched!"</p>
-              <h5>- Alex J.</h5>
-              <small>Senior Developer</small>
-          </div>
-      </div>
-      <div class="col-md-4">
-          <div class="card shadow p-3">
-              <p>"A truly innovative place! The team is supportive, and the projects are exciting. I love the flexibility and learning culture."</p>
-              <h5>- Maria K.</h5>
-              <small>Cybersecurity Analyst</small>
-          </div>
-      </div>
-      <div class="col-md-4">
-          <div class="card shadow p-3">
-              <p>"I've had amazing career growth here. The management really cares about employees, and the benefits are great!"</p>
-              <h5>- John D.</h5>
-              <small>Project Manager</small>
-          </div>
-      </div>
-  </div>
-</div>
-
-
-  
-</div>
-{% endif %} {% for job in jobs %}
-<div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-2 mb-5">
-    <a href="{% url 'career-detail' job.id %}">
-      <h3 class="fw-bold">{{ job.title }}</h3>
-    </a>
-    <p class="text-muted">Type: {{ job.posted_date }}</p>
-    <p class="text-muted">Posted: {{ job.posted_date }}</p>
-    <p class="text-muted">Closing Date: {{ job.posted_date }}</p>
-
-    
-  </div>
-
-  
-
-<script src="{% static 'js/career.js' %}"></script>
-{% endfor %} {% endblock content %}
+{% endblock %}
