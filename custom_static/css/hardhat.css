@@ -26685,6 +26685,14 @@ blockquote {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    background: #fff;
+    border-radius: 18px;
+  }
+
+  .chat-text{
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
   }
   
   #chat-popup.hidden {
@@ -26693,18 +26701,17 @@ blockquote {
   
   .chat-header {
     padding: 10px;
-    background-color: #FFCD11;
+    background: linear-gradient(to right, #896d17, #FFCD11);
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 10px 10px 0 0;
+    border-radius: 18px 18px 0 0;
   }
 
   #chatForm{
     display: flex;
     flex-direction: column;
-
   }
 
   .chatForm{
@@ -26716,32 +26723,54 @@ blockquote {
       display: block;
     }
   }
+.chat-title{
+  padding-left: 14px;
+}
 
+.chat-div {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
   .chatInput{
-    padding-top: 5px;
-    padding-bottom: 5px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    font-size: 14px;
   }
-  
+  .chat-textarea {
+    resize: none;
+  }
   .chat-body {
     padding: 10px;
-    height: 350px;
-    overflow-y: auto;
-
+    height: 430px;
+    overflow: hidden;
+    padding: 20px;
   }
 
   .chatSubmit{
-    width: 200px;
-    height: 40px;
-    margin-top: 10px;
-    background-color: #FFCD11;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    margin-left: auto;
-    margin-right: auto;
+    background: linear-gradient(to right, #896d17, #FFCD11);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
   }
-  
+
+  .CloseButton{
+    border: bold;
+    border: #93a1b8;
+    color : #fff;
+    background-color: transparent;
+    border-radius: 15px;
+  }
   .chat-footer {
     display: flex;
     border-top: 1px solid #ccc;
@@ -26763,7 +26792,6 @@ blockquote {
     margin-left: 5px;
     border-radius: 5px;
   }
-  
 
 .chartist-tooltip:before {
   content: "";
