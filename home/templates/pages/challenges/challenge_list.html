@@ -10,11 +10,52 @@
         Test your cybersecurity knowledge and skills across various domains. Choose a category to begin!
     </p>
 
+    <!-- Quiz Section -->
+    <div class="quiz-container mb-5">
+        <div class="card shadow-lg cyber-card">
+            <div class="card-header bg-primary text-white cyber-header">
+                <h3 class="mb-0">Quick Cybersecurity Quiz</h3>
+                <div class="cyber-particles"></div>
+            </div>
+            <div class="card-body cyber-body">
+                <div class="quiz-progress mb-3">
+                    <div class="progress">
+                        <div class="progress-bar cyber-progress" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text">Question <span id="current-question">1</span> of <span id="total-questions">5</span></div>
+                </div>
+                
+                <div class="score-display mb-3">
+                    <span class="badge bg-success cyber-score">Score: <span id="score">0</span></span>
+                </div>
+
+                <div id="question-container">
+                    <h4 id="question-text" class="mb-4 cyber-text"></h4>
+                    <div id="options-container" class="mb-4"></div>
+                    <button id="next-btn" class="btn btn-primary cyber-btn" disabled>Next Question</button>
+                </div>
+
+                <div id="result-container" class="text-center" style="display: none;">
+                    <div class="cyber-trophy">
+                        <div class="trophy-cup"></div>
+                        <div class="trophy-base"></div>
+                    </div>
+                    <h3 class="mb-4 cyber-text">Quiz Complete!</h3>
+                    <p class="cyber-text">Your final score: <span id="final-score" class="h4">0</span>/<span id="max-score">25</span></p>
+                    <div id="feedback" class="mb-4 cyber-text"></div>
+                    <button id="restart-btn" class="btn btn-primary cyber-btn">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <p class="text-center mb-5">
         Here's the leaderboard table
         <br>
         <a href="{% url 'leaderboard' %}" class="btn btn-primary">View Leaderboard</a>
     </p>
+
+    <div class="row">
         {% for category in categories %}
             <div class="col-md-6 mb-4">
                 <div class="card h-100 shadow-sm">
@@ -39,5 +80,374 @@
         {% endfor %}
     </div>
 </div>
+
+<style>
+.quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.cyber-header {
+    position: relative;
+    background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+    border-bottom: 2px solid #00ff00;
+}
+
+.cyber-body {
+    background: rgba(26, 26, 46, 0.9);
+    color: #fff;
+}
+
+.cyber-text {
+    color: #fff;
+    text-shadow: 0 0 5px #00ff00;
+}
+
+.cyber-btn {
+    background: linear-gradient(45deg, #00ff00, #00b300);
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.cyber-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+.cyber-progress {
+    background: linear-gradient(90deg, #00ff00, #00b300);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.cyber-score {
+    background: linear-gradient(45deg, #00ff00, #00b300);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.option-btn {
+    background: rgba(0, 255, 0, 0.1);
+    border: 2px solid #00ff00;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover {
+    background: rgba(0, 255, 0, 0.2);
+    transform: translateX(5px);
+}
+
+.option-btn.correct {
+    background: linear-gradient(45deg, #00ff00, #00b300);
+    animation: correct-answer 0.5s ease;
+}
+
+.option-btn.incorrect {
+    background: linear-gradient(45deg, #ff0000, #b30000);
+    animation: incorrect-answer 0.5s ease;
+}
+
+.cyber-trophy {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+}
+
+.trophy-cup {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #ffd700, #ffa500);
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.trophy-base {
+    width: 30px;
+    height: 20px;
+    background: linear-gradient(45deg, #ffd700, #ffa500);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+}
+
+@keyframes correct-answer {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes incorrect-answer {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes cyber-pulse {
+    0% { box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(0, 255, 0, 0.5); }
+}
+
+.cyber-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #00ff00;
+    border-radius: 50%;
+    animation: particle-fall 3s linear infinite;
+}
+
+@keyframes particle-fall {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+</style>
+
+<script>
+const quizData = [
+    {
+        question: "What is the most common type of cyber attack?",
+        options: {
+            a: "Phishing",
+            b: "DDoS",
+            c: "SQL Injection",
+            d: "Zero-day Exploit"
+        },
+        correct: "a",
+        explanation: "Phishing is the most common type of cyber attack, where attackers trick users into revealing sensitive information."
+    },
+    {
+        question: "What does VPN stand for?",
+        options: {
+            a: "Virtual Private Network",
+            b: "Very Private Network",
+            c: "Virtual Public Network",
+            d: "Verified Private Network"
+        },
+        correct: "a",
+        explanation: "VPN stands for Virtual Private Network, which creates a secure connection over the internet."
+    },
+    {
+        question: "What is the purpose of a firewall?",
+        options: {
+            a: "To prevent unauthorized access",
+            b: "To increase internet speed",
+            c: "To store files securely",
+            d: "To encrypt data"
+        },
+        correct: "a",
+        explanation: "A firewall's main purpose is to prevent unauthorized access to or from a private network."
+    },
+    {
+        question: "What is two-factor authentication?",
+        options: {
+            a: "Using two different passwords",
+            b: "A security process requiring two forms of identification",
+            c: "Having two security questions",
+            d: "Using two different devices"
+        },
+        correct: "b",
+        explanation: "Two-factor authentication requires two different forms of identification to verify a user's identity."
+    },
+    {
+        question: "What is the best practice for creating strong passwords?",
+        options: {
+            a: "Using personal information",
+            b: "Using the same password for all accounts",
+            c: "Using a combination of letters, numbers, and symbols",
+            d: "Writing passwords down"
+        },
+        correct: "c",
+        explanation: "Strong passwords should include a combination of uppercase and lowercase letters, numbers, and special symbols."
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let selectedOption = null;
+
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+const nextButton = document.getElementById('next-btn');
+const progressBar = document.querySelector('.progress-bar');
+const currentQuestionSpan = document.getElementById('current-question');
+const totalQuestionsSpan = document.getElementById('total-questions');
+const scoreSpan = document.getElementById('score');
+const resultContainer = document.getElementById('result-container');
+const finalScoreSpan = document.getElementById('final-score');
+const maxScoreSpan = document.getElementById('max-score');
+const feedbackDiv = document.getElementById('feedback');
+const restartButton = document.getElementById('restart-btn');
+
+function loadQuestion() {
+    const question = quizData[currentQuestion];
+    questionText.textContent = question.question;
+    
+    optionsContainer.innerHTML = '';
+    Object.entries(question.options).forEach(([key, value]) => {
+        const button = document.createElement('button');
+        button.className = 'option-btn';
+        button.textContent = value;
+        button.dataset.option = key;
+        button.addEventListener('click', selectOption);
+        optionsContainer.appendChild(button);
+    });
+
+    nextButton.disabled = true;
+    selectedOption = null;
+    updateProgress();
+}
+
+function selectOption(e) {
+    const selectedButton = e.target;
+    const option = selectedButton.dataset.option;
+    
+    // Remove selected class from all options
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked option
+    selectedButton.classList.add('selected');
+    selectedOption = option;
+    nextButton.disabled = false;
+}
+
+function checkAnswer() {
+    const question = quizData[currentQuestion];
+    const isCorrect = selectedOption === question.correct;
+    
+    if (isCorrect) {
+        score += 5;
+        scoreSpan.textContent = score;
+        document.querySelector(`[data-option="${selectedOption}"]`).classList.add('correct');
+        document.querySelector(`[data-option="${selectedOption}"]`).style.animation = 'correct-answer 0.5s';
+        
+        // Add celebration effect
+        const celebration = document.createElement('div');
+        celebration.className = 'celebration';
+        celebration.innerHTML = '🎉';
+        document.querySelector('.card-body').appendChild(celebration);
+        setTimeout(() => celebration.remove(), 1000);
+    } else {
+        document.querySelector(`[data-option="${selectedOption}"]`).classList.add('incorrect');
+        document.querySelector(`[data-option="${question.correct}"]`).classList.add('correct');
+        document.querySelector(`[data-option="${selectedOption}"]`).style.animation = 'incorrect-answer 0.5s';
+    }
+    
+    // Disable all options
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.disabled = true;
+    });
+}
+
+function showResult() {
+    questionText.style.display = 'none';
+    optionsContainer.style.display = 'none';
+    nextButton.style.display = 'none';
+    
+    resultContainer.style.display = 'block';
+    finalScoreSpan.textContent = score;
+    maxScoreSpan.textContent = quizData.length * 5;
+    
+    let feedback = '';
+    if (score >= 20) {
+        feedback = 'Excellent! You have a strong understanding of cybersecurity basics.';
+        document.querySelector('.cyber-trophy').style.animation = 'trophy-spin 2s ease';
+    } else if (score >= 15) {
+        feedback = 'Good job! You have a solid foundation in cybersecurity.';
+    } else if (score >= 10) {
+        feedback = 'Not bad! Keep learning to improve your cybersecurity knowledge.';
+    } else {
+        feedback = 'Keep practicing! Cybersecurity is an important skill to develop.';
+    }
+    
+    feedbackDiv.textContent = feedback;
+}
+
+function updateProgress() {
+    const progress = ((currentQuestion + 1) / quizData.length) * 100;
+    progressBar.style.width = `${progress}%`;
+    currentQuestionSpan.textContent = currentQuestion + 1;
+    totalQuestionsSpan.textContent = quizData.length;
+}
+
+nextButton.addEventListener('click', () => {
+    checkAnswer();
+    
+    if (currentQuestion < quizData.length - 1) {
+        currentQuestion++;
+        setTimeout(loadQuestion, 1000);
+    } else {
+        setTimeout(showResult, 1000);
+    }
+});
+
+restartButton.addEventListener('click', () => {
+    currentQuestion = 0;
+    score = 0;
+    scoreSpan.textContent = score;
+    selectedOption = null;
+    
+    questionText.style.display = 'block';
+    optionsContainer.style.display = 'grid';
+    nextButton.style.display = 'block';
+    resultContainer.style.display = 'none';
+    
+    loadQuestion();
+});
+
+// Add particle effect
+function createParticles() {
+    const particlesContainer = document.querySelector('.cyber-particles');
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 3}s`;
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Initialize quiz with particles
+document.addEventListener('DOMContentLoaded', () => {
+    createParticles();
+    loadQuestion();
+});
+</script>
 
 {% endblock content %}

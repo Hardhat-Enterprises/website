@@ -1,0 +1,530 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/pre-loader.html' %}
+
+<div class="cyber-challenge-container">
+    <!-- Hero Section -->
+    <div class="challenge-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto text-center">
+                    <h1 class="challenge-title">Cyber Security Challenge</h1>
+                    <p class="challenge-subtitle">Test your knowledge and earn your security badge!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="quiz-container">
+                    <!-- Progress Bar -->
+                    <div class="quiz-progress">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text">Question <span id="current-question">1</span> of <span id="total-questions">5</span></div>
+                    </div>
+
+                    <!-- Score Display -->
+                    <div class="score-container">
+                        <div class="score-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span id="score">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Container -->
+                    <div class="question-container">
+                        <h2 class="question-text" id="question-text">Loading question...</h2>
+                        <div class="options-container" id="options-container">
+                            <!-- Options will be dynamically added here -->
+                        </div>
+                    </div>
+
+                    <!-- Feedback Message -->
+                    <div class="feedback-message" id="feedback-message"></div>
+
+                    <!-- Next Button -->
+                    <button class="next-btn" id="next-btn" disabled>Next Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Section -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="leaderboard-container">
+                    <h2 class="leaderboard-title">Top Performers</h2>
+                    <div class="leaderboard-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Score</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <!-- Leaderboard entries will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cyber-challenge-container {
+        padding: 4rem 0;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .challenge-hero {
+        background: linear-gradient(135deg, #ffcd11 0%, #ff8c00 100%);
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        color: white;
+    }
+
+    .challenge-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .challenge-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .quiz-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-progress {
+        margin-bottom: 2rem;
+    }
+
+    .progress {
+        height: 10px;
+        background-color: #e9ecef;
+        border-radius: 5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .progress-bar {
+        background-color: #ffcd11;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        text-align: right;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .score-container {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .score-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #f8f9fa;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .score-badge i {
+        color: #ffcd11;
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .score-badge span {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .question-text {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .options-container {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .option {
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+    }
+
+    .option:hover {
+        background-color: #f8f9fa;
+        border-color: #ffcd11;
+    }
+
+    .option.correct {
+        background-color: #d4edda;
+        border-color: #28a745;
+    }
+
+    .option.incorrect {
+        background-color: #f8d7da;
+        border-color: #dc3545;
+    }
+
+    .feedback-message {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        min-height: 2rem;
+        font-weight: 500;
+    }
+
+    .feedback-message.correct {
+        color: #28a745;
+    }
+
+    .feedback-message.incorrect {
+        color: #dc3545;
+    }
+
+    .next-btn {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background-color: #ffcd11;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .next-btn:hover {
+        background-color: #ff8c00;
+    }
+
+    .next-btn:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .challenge-title {
+            font-size: 2rem;
+        }
+
+        .challenge-subtitle {
+            font-size: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+        }
+    }
+
+    /* Leaderboard Styles */
+    .leaderboard-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-top: 3rem;
+    }
+
+    .leaderboard-title {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    .leaderboard-title:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 2px;
+        background: #ffcd11;
+    }
+
+    .leaderboard-table {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        color: #333;
+        font-weight: 600;
+        padding: 1rem;
+    }
+
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    .table tr:hover {
+        background-color: #fff9e6;
+    }
+
+    .rank-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #ffcd11;
+        color: white;
+        font-weight: 600;
+    }
+
+    .rank-badge.gold {
+        background-color: #ffd700;
+    }
+
+    .rank-badge.silver {
+        background-color: #c0c0c0;
+    }
+
+    .rank-badge.bronze {
+        background-color: #cd7f32;
+    }
+</style>
+
+<script>
+    const questions = [
+        {
+            question: "What is the most common type of cyber attack?",
+            options: [
+                "Phishing",
+                "DDoS",
+                "SQL Injection",
+                "Zero-day Exploit"
+            ],
+            correct: 0
+        },
+        {
+            question: "What does '2FA' stand for in cybersecurity?",
+            options: [
+                "Two-Factor Authentication",
+                "Two-File Access",
+                "Two-Function Authorization",
+                "Two-Factor Authorization"
+            ],
+            correct: 0
+        },
+        {
+            question: "Which of these is NOT a good password practice?",
+            options: [
+                "Using a password manager",
+                "Using the same password for multiple accounts",
+                "Creating long, complex passwords",
+                "Regularly updating passwords"
+            ],
+            correct: 1
+        },
+        {
+            question: "What is a VPN used for?",
+            options: [
+                "To increase internet speed",
+                "To encrypt internet traffic",
+                "To block all websites",
+                "To create a local network"
+            ],
+            correct: 1
+        },
+        {
+            question: "What is the purpose of a firewall?",
+            options: [
+                "To prevent physical theft",
+                "To block unauthorized access",
+                "To increase internet speed",
+                "To store passwords"
+            ],
+            correct: 1
+        }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let selectedOption = null;
+
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const nextButton = document.getElementById('next-btn');
+    const feedbackMessage = document.getElementById('feedback-message');
+    const progressBar = document.querySelector('.progress-bar');
+    const currentQuestionSpan = document.getElementById('current-question');
+    const totalQuestionsSpan = document.getElementById('total-questions');
+    const scoreSpan = document.getElementById('score');
+
+    function loadQuestion() {
+        const question = questions[currentQuestion];
+        questionText.textContent = question.question;
+        optionsContainer.innerHTML = '';
+        
+        question.options.forEach((option, index) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+            optionElement.textContent = option;
+            optionElement.addEventListener('click', () => selectOption(index));
+            optionsContainer.appendChild(optionElement);
+        });
+
+        updateProgress();
+        nextButton.disabled = true;
+        feedbackMessage.textContent = '';
+        feedbackMessage.className = 'feedback-message';
+    }
+
+    function selectOption(index) {
+        if (selectedOption !== null) return;
+        
+        selectedOption = index;
+        const options = document.querySelectorAll('.option');
+        const correctIndex = questions[currentQuestion].correct;
+
+        options.forEach((option, i) => {
+            if (i === correctIndex) {
+                option.classList.add('correct');
+            } else if (i === index && i !== correctIndex) {
+                option.classList.add('incorrect');
+            }
+            option.style.pointerEvents = 'none';
+        });
+
+        if (index === correctIndex) {
+            score += 20;
+            scoreSpan.textContent = score;
+            feedbackMessage.textContent = 'Correct! Well done!';
+            feedbackMessage.classList.add('correct');
+        } else {
+            feedbackMessage.textContent = 'Incorrect. Try again next time!';
+            feedbackMessage.classList.add('incorrect');
+        }
+
+        nextButton.disabled = false;
+    }
+
+    function updateProgress() {
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        currentQuestionSpan.textContent = currentQuestion + 1;
+        totalQuestionsSpan.textContent = questions.length;
+    }
+
+    // Leaderboard functionality
+    const leaderboardBody = document.getElementById('leaderboard-body');
+    let leaderboard = JSON.parse(localStorage.getItem('cyberChallengeLeaderboard')) || [];
+
+    function updateLeaderboard(score) {
+        const playerName = prompt('Congratulations! Enter your name to be added to the leaderboard:');
+        if (!playerName) return;
+
+        const newEntry = {
+            name: playerName,
+            score: score,
+            date: new Date().toLocaleDateString()
+        };
+
+        leaderboard.push(newEntry);
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard = leaderboard.slice(0, 10); // Keep only top 10
+
+        localStorage.setItem('cyberChallengeLeaderboard', JSON.stringify(leaderboard));
+        displayLeaderboard();
+    }
+
+    function displayLeaderboard() {
+        leaderboardBody.innerHTML = '';
+        leaderboard.forEach((entry, index) => {
+            const row = document.createElement('tr');
+            let rankClass = '';
+            if (index === 0) rankClass = 'gold';
+            else if (index === 1) rankClass = 'silver';
+            else if (index === 2) rankClass = 'bronze';
+
+            row.innerHTML = `
+                <td><span class="rank-badge ${rankClass}">${index + 1}</span></td>
+                <td>${entry.name}</td>
+                <td>${entry.score}</td>
+                <td>${entry.date}</td>
+            `;
+            leaderboardBody.appendChild(row);
+        });
+    }
+
+    // Update the quiz completion handler to include leaderboard update
+    nextButton.addEventListener('click', () => {
+        currentQuestion++;
+        selectedOption = null;
+        
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            // Quiz completed
+            questionText.textContent = `Quiz Completed! Your Score: ${score}`;
+            optionsContainer.innerHTML = '';
+            nextButton.textContent = 'Restart Quiz';
+            updateLeaderboard(score);
+            nextButton.addEventListener('click', () => {
+                currentQuestion = 0;
+                score = 0;
+                scoreSpan.textContent = '0';
+                loadQuestion();
+                nextButton.textContent = 'Next Question';
+            }, { once: true });
+        }
+    });
+
+    // Display initial leaderboard
+    displayLeaderboard();
+
+    // Start the quiz
+    loadQuestion();
+</script>
+{% endblock content %} 
