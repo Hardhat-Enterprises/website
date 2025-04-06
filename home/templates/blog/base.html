@@ -1,18 +1,28 @@
-{% comment %} <!DOCTYPE html> {% endcomment %}
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://bootswatch.com/5/simplex/bootstrap.min.css"
-    />
-
-    <title>Hardhat Blog</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-
-  <body>
-    {% include 'blog/nav.html' %} {% block content %} {% endblock content %}
-  </body>
-</html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- SEO Meta Tags -->
+  <title>{% block title %}Hardhat Enterprises - Open-Source Cybersecurity Tools{% endblock %}</title>
+  <meta name="description" content="{% block description %}Explore Hardhat Enterprises’ free, open-source tools for white-hat cybersecurity and penetration testing.{% endblock %}">
+  <meta name="keywords" content="{% block keywords %}open-source cybersecurity, white-hat tools, penetration testing, Hardhat Enterprises{% endblock %}">
+  <!-- Open Graph (Social Media) Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://127.0.0.1:8000{% block og_url %}{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}Hardhat Enterprises{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Explore Hardhat Enterprises’ open-source tools.{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}/custom_static/assets/img/brand/logo.svg{% endblock %}">
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Hardhat Enterprises",
+    "url": "http://127.0.0.1:8000/",
+    "description": "Hardhat Enterprises creates open-source cyber tools to empower white-hat operations.",
+    "logo": "/custom_static/assets/img/brand/logo.svg"
+  }
+  </script>
+  <!-- Existing Styles -->
+  <link rel="stylesheet" href="https://bootswatch.com/5/simplex/bootstrap.min.css" />
+  <link rel="stylesheet" href="{% static 'styles.css' %}" />
+</head>
