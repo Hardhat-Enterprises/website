@@ -1,3 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+@author: CHUNYI WANG
+@file: get_post_urls.py
+@time: 2025/4/3 10:11
+@desc: A script to filter urls that support post method
+@usage: python manage.py get_post_urls
+@filter: jq '[.[] | select(.supports_post == true)]' url_support_method.json >> new_file_name.json
+"""
+
 import subprocess
 import json
 from django.urls import get_resolver, reverse, NoReverseMatch
