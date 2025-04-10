@@ -34,6 +34,17 @@
             {% for field in form %}
             <div class="form-group mb-4">
               <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {% if field.name == 'password1' or field.name == 'password2' %}
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon3">
+                  <span class="fas fa-unlock-alt"></span>
+                </span>
+                {{ field }}
+                <span class="input-group-text password-toggle-icon" onclick="toggleSinglePasswordVisibility('{{ field.name }}')">
+                  <i class="fas fa-eye" id="{{ field.name }}-eye"></i>
+                </span>
+              </div>
+              {% else %}
               <div class="input-group">
                 <span class="input-group-text" id="basic-addon3">
                   <span
@@ -43,26 +54,17 @@
                 </span>
                 {{ field }}
               </div>
+              {% endif %}
               <span class="text-danger"> {{ field.errors }}</span>
             </div>
             {% endfor %}
-            <div class="d-flex mb-4" style="margin-left: 31%">
+            <div class="d-flex mb-4">
               <span class="fw-normal" style="margin-right: 0.4rem">
                 <a
                   onclick="get_rand_pass()"
                   href="javascript:;"
                   class="fw-bold text-underline"
                   >Generate password</a
-                >
-              </span>
-              <br />
-              <span>
-                <a
-                  id="togglePasswordLink"
-                  onclick="togglePasswordVisibility()"
-                  href="javascript:;"
-                  class="fw-bold text-underline"
-                  >Show password</a
                 >
               </span>
             </div>
@@ -110,9 +112,28 @@
       .then((j) => {
         document.getElementsByName("password1")[0].value = j.data;
         document.getElementsByName("password2")[0].value = j.data;
+        // Validate password requirements after generation
+        validatePasswordRequirements(j.data);
       });
   }
 
+  // New function to toggle visibility for a single password field
+  function toggleSinglePasswordVisibility(fieldName) {
+    var passwordField = document.getElementsByName(fieldName)[0];
+    var eyeIcon = document.getElementById(fieldName + "-eye");
+    
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      eyeIcon.classList.remove("fa-eye");
+      eyeIcon.classList.add("fa-eye-slash");
+    } else {
+      passwordField.type = "password";
+      eyeIcon.classList.remove("fa-eye-slash");
+      eyeIcon.classList.add("fa-eye");
+    }
+  }
+
+  // Keep the original function for backward compatibility
   function togglePasswordVisibility() {
     var passwordField1 = document.getElementsByName("password1")[0];
     var passwordField2 = document.getElementsByName("password2")[0];
@@ -128,137 +149,155 @@
       toggleLink.innerText = "Show password";
     }
   }
+
   document.addEventListener("DOMContentLoaded", function() {
     // Email Validation
     const emailField = document.getElementById("id_email");
-    const emailErrorMessage = document.getElementById("email-error");
-    const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
+    if (emailField) {
+      const emailErrorMessage = document.getElementById("email-error");
+      const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
 
-    emailField.addEventListener("input", function() {
-        const emailValue = emailField.value.trim(); // Ensure value is trimmed before validation
-        console.log("Email being checked:", emailValue); // Log for debugging
-        const emailPattern = /@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$/;
+      emailField.addEventListener("input", function() {
+          const emailValue = emailField.value.trim(); // Ensure value is trimmed before validation
+          console.log("Email being checked:", emailValue); // Log for debugging
+          const emailPattern = /@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$/;
 
-        if (emailPattern.test(emailValue)) {
-            emailErrorMessage.textContent = "";
-            emailField.classList.remove("is-invalid");
-            emailField.classList.add("is-valid");
-            emailIcon.classList.remove("fa-envelope");
-            emailIcon.classList.add("fa-check-circle");
-            emailIcon.style.color = "green";
-        } else {
-            emailErrorMessage.textContent = "Email must match your Deakin email address";
-            emailField.classList.remove("is-valid");
-            emailField.classList.add("is-invalid");
-            emailIcon.classList.remove("fa-check-circle");
-            emailIcon.classList.add("fa-envelope");
-            emailIcon.style.color = "red";
-        }
-    });
-
-
-
-      // Password Validation
-      const passwordField = document.getElementById("id_password1");
-      const confirmPasswordField = document.getElementById("id_password2");
-      const confirmIcon = document.querySelector("#confirm-addon .fa-unlock-alt");
-
-      passwordField.addEventListener("input", validatePasswordMatch);
-      confirmPasswordField.addEventListener("input", validatePasswordMatch);
-
-      function validatePasswordMatch() {
-          const passwordValue = passwordField.value;
-          const confirmPasswordValue = confirmPasswordField.value;
-
-          if (confirmPasswordValue === passwordValue) {
-              confirmPasswordField.classList.remove("is-invalid");
-              confirmPasswordField.classList.add("is-valid");
-              confirmIcon.classList.remove("fa-unlock-alt");
-              confirmIcon.classList.add("fa-check-circle");
-              confirmIcon.style.color = "green";
-              document.getElementById("confirm-password-error").textContent = "";
+          if (emailPattern.test(emailValue)) {
+              if (emailErrorMessage) emailErrorMessage.textContent = "";
+              emailField.classList.remove("is-invalid");
+              emailField.classList.add("is-valid");
+              if (emailIcon) {
+                emailIcon.classList.remove("fa-envelope");
+                emailIcon.classList.add("fa-check-circle");
+                emailIcon.style.color = "green";
+              }
           } else {
-              confirmPasswordField.classList.remove("is-valid");
-              confirmPasswordField.classList.add("is-invalid");
-              confirmIcon.classList.remove("fa-check-circle");
-              confirmIcon.classList.add("fa-unlock-alt");
-              confirmIcon.style.color = "red";
-              document.getElementById("confirm-password-error").textContent = "Passwords do not match.";
-          }
-      }
-
-      // Existing password checks (length, lowercase, etc.)
-      const lengthCheck = document.getElementById("length-check");
-      const lowercaseCheck = document.getElementById("lowercase-check");
-      const uppercaseCheck = document.getElementById("uppercase-check");
-      const numberCheck = document.getElementById("number-check");
-      const symbolCheck = document.getElementById("symbol-check");
-
-      passwordField.addEventListener("input", function() {
-          const passwordValue = passwordField.value;
-
-          // Check password length
-          if (passwordValue.length >= 8) {
-              lengthCheck.classList.remove("text-danger");
-              lengthCheck.classList.add("text-success");
-              lengthCheck.innerHTML = '<i class="fas fa-check"></i> At least 8 characters';
-          } else {
-              lengthCheck.classList.remove("text-success");
-              lengthCheck.classList.add("text-danger");
-              lengthCheck.innerHTML = '<i class="fas fa-times"></i> At least 8 characters';
-          }
-
-          // Check for lowercase letter
-          if (/[a-z]/.test(passwordValue)) {
-              lowercaseCheck.classList.remove("text-danger");
-              lowercaseCheck.classList.add("text-success");
-              lowercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one lowercase letter';
-          } else {
-              lowercaseCheck.classList.remove("text-success");
-              lowercaseCheck.classList.add("text-danger");
-              lowercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one lowercase letter';
-          }
-
-          // Check for uppercase letter
-          if (/[A-Z]/.test(passwordValue)) {
-              uppercaseCheck.classList.remove("text-danger");
-              uppercaseCheck.classList.add("text-success");
-              uppercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one uppercase letter';
-          } else {
-              uppercaseCheck.classList.remove("text-success");
-              uppercaseCheck.classList.add("text-danger");
-              uppercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one uppercase letter';
-          }
-
-          // Check for number
-          if (/\d/.test(passwordValue)) {
-              numberCheck.classList.remove("text-danger");
-              numberCheck.classList.add("text-success");
-              numberCheck.innerHTML = '<i class="fas fa-check"></i> At least one number';
-          } else {
-              numberCheck.classList.remove("text-success");
-              numberCheck.classList.add("text-danger");
-              numberCheck.innerHTML = '<i class="fas fa-times"></i> At least one number';
-          }
-
-          // Check for special symbol
-          if (/[@$!%*?&]/.test(passwordValue)) {
-              symbolCheck.classList.remove("text-danger");
-              symbolCheck.classList.add("text-success");
-              symbolCheck.innerHTML = '<i class="fas fa-check"></i> At least one special symbol (@, $, !, %, *, ?, &)';
-          } else {
-              symbolCheck.classList.remove("text-success");
-              symbolCheck.classList.add("text-danger");
-              symbolCheck.innerHTML = '<i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)';
+              if (emailErrorMessage) emailErrorMessage.textContent = "Email must match your Deakin email address";
+              emailField.classList.remove("is-valid");
+              emailField.classList.add("is-invalid");
+              if (emailIcon) {
+                emailIcon.classList.remove("fa-check-circle");
+                emailIcon.classList.add("fa-envelope");
+                emailIcon.style.color = "red";
+              }
           }
       });
+    }
+
+    // Password Validation
+    const passwordField = document.getElementById("id_password1");
+    const confirmPasswordField = document.getElementById("id_password2");
+    
+    if (passwordField && confirmPasswordField) {
+      passwordField.addEventListener("input", function() {
+        validatePasswordRequirements(this.value);
+        validatePasswordMatch();
+      });
+      confirmPasswordField.addEventListener("input", validatePasswordMatch);
+    }
+
+    function validatePasswordMatch() {
+      if (!passwordField || !confirmPasswordField) return;
+      
+      const passwordValue = passwordField.value;
+      const confirmPasswordValue = confirmPasswordField.value;
+      const confirmIcon = document.querySelector("#confirm-addon .fa-unlock-alt");
+      const confirmError = document.getElementById("confirm-password-error");
+
+      if (confirmPasswordValue === passwordValue && confirmPasswordValue !== "") {
+        confirmPasswordField.classList.remove("is-invalid");
+        confirmPasswordField.classList.add("is-valid");
+        if (confirmIcon) {
+          confirmIcon.classList.remove("fa-unlock-alt");
+          confirmIcon.classList.add("fa-check-circle");
+          confirmIcon.style.color = "green";
+        }
+        if (confirmError) confirmError.textContent = "";
+      } else if (confirmPasswordValue !== "") {
+        confirmPasswordField.classList.remove("is-valid");
+        confirmPasswordField.classList.add("is-invalid");
+        if (confirmIcon) {
+          confirmIcon.classList.remove("fa-check-circle");
+          confirmIcon.classList.add("fa-unlock-alt");
+          confirmIcon.style.color = "red";
+        }
+        if (confirmError) confirmError.textContent = "Passwords do not match.";
+      }
+    }
   });
 
-  function get_rand_pass() {
-      fetch("/accounts/password-gen").then(d => d.json()).then(j => {
-          document.getElementsByName("password1")[0].value = j.data; 
-          document.getElementsByName("password2")[0].value = j.data;
-      })
+  function validatePasswordRequirements(passwordValue) {
+    // Existing password checks (length, lowercase, etc.)
+    const lengthCheck = document.getElementById("length-check");
+    const lowercaseCheck = document.getElementById("lowercase-check");
+    const uppercaseCheck = document.getElementById("uppercase-check");
+    const numberCheck = document.getElementById("number-check");
+    const symbolCheck = document.getElementById("symbol-check");
+
+    // Check password length
+    if (lengthCheck) {
+      if (passwordValue.length >= 8) {
+        lengthCheck.classList.remove("text-danger");
+        lengthCheck.classList.add("text-success");
+        lengthCheck.innerHTML = '<i class="fas fa-check"></i> At least 8 characters';
+      } else {
+        lengthCheck.classList.remove("text-success");
+        lengthCheck.classList.add("text-danger");
+        lengthCheck.innerHTML = '<i class="fas fa-times"></i> At least 8 characters';
+      }
+    }
+
+    // Check for lowercase letter
+    if (lowercaseCheck) {
+      if (/[a-z]/.test(passwordValue)) {
+        lowercaseCheck.classList.remove("text-danger");
+        lowercaseCheck.classList.add("text-success");
+        lowercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one lowercase letter';
+      } else {
+        lowercaseCheck.classList.remove("text-success");
+        lowercaseCheck.classList.add("text-danger");
+        lowercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one lowercase letter';
+      }
+    }
+
+    // Check for uppercase letter
+    if (uppercaseCheck) {
+      if (/[A-Z]/.test(passwordValue)) {
+        uppercaseCheck.classList.remove("text-danger");
+        uppercaseCheck.classList.add("text-success");
+        uppercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one uppercase letter';
+      } else {
+        uppercaseCheck.classList.remove("text-success");
+        uppercaseCheck.classList.add("text-danger");
+        uppercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one uppercase letter';
+      }
+    }
+
+    // Check for number
+    if (numberCheck) {
+      if (/\d/.test(passwordValue)) {
+        numberCheck.classList.remove("text-danger");
+        numberCheck.classList.add("text-success");
+        numberCheck.innerHTML = '<i class="fas fa-check"></i> At least one number';
+      } else {
+        numberCheck.classList.remove("text-success");
+        numberCheck.classList.add("text-danger");
+        numberCheck.innerHTML = '<i class="fas fa-times"></i> At least one number';
+      }
+    }
+
+    // Check for special symbol
+    if (symbolCheck) {
+      if (/[@$!%*?&]/.test(passwordValue)) {
+        symbolCheck.classList.remove("text-danger");
+        symbolCheck.classList.add("text-success");
+        symbolCheck.innerHTML = '<i class="fas fa-check"></i> At least one special symbol (@, $, !, %, *, ?, &)';
+      } else {
+        symbolCheck.classList.remove("text-success");
+        symbolCheck.classList.add("text-danger");
+        symbolCheck.innerHTML = '<i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)';
+      }
+    }
   }
 
   function show_rand_pass() {
@@ -267,21 +306,7 @@
   }
 </script>
 
-<!-- Optional CSS for Invalid Input Styling -->
-<style>
-  .is-invalid {
-      border-color: red;
-  }
-  .is-valid {
-      border-color: green;
-  }
-  .text-success {
-      color: green !important;
-  }
-  .text-danger {
-      color: red !important;
-  }
-</style>
+
 
 {% endblock content %}
 {% block footer %}{% endblock footer %}
