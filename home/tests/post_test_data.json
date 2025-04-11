@@ -1,0 +1,13 @@
+[
+    {
+      "url": "http://localhost:8000/accounts/signup/",
+      "data": {
+        "first_name": "Chunyi",
+        "last_name": "Wang",
+        "email": "s219339693@deakin.edu.au",
+        "password1": "Wcy199545@",
+        "password2": "Wcy199545@"
+      },
+      "content_type": "application/json"
+    }
+  ]

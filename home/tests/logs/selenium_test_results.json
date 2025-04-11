@@ -1,0 +1,1466 @@
+[
+  {
+    "url": "http://localhost:8000/accounts/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/client_sign-in/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/profile/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/malware_viz/joinus",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/appattack/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/appattack/join",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/malware_viz/products_and_services",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/malware_viz/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/ptgui_viz/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/ptgui_viz/contact-us/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/maintenance",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/ptgui_viz/faq/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/smishing_detection",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/upskilling/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/upskilling/<slug:slug>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/update-progress/<int:progress_id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/join-us/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/success/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/smishing_detection/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/deakinThreatmirror/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/deakinThreatmirror/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/vr/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/vr/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/accounts/password-reset/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/accounts/password-reset-confirm/<uidb64>/<token>/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/upskill/repository",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/accounts/upskill/roadmap",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/accounts/upskill/progress",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/accounts/dashboard/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/appattack/join/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/form_success/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/SearchResults/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/website_form/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/search/suggestions/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/careers/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/careers/<int:id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/careers/<int:id>/apply",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/blog/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/accounts/<int:pk>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/<int:pk>/like",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/accounts/signup/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/captcha/image/(?P<key>\\w+)/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/captcha/image/(?P<key>\\w+)@2/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/captcha/audio/(?P<key>\\w+).wav$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/captcha/refresh/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/post-otp-captcha/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/verifyEmail/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/accounts/login/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/accounts/verify-otp/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/chart/filter-options",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/chart/project-priority/<str:priority>",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/stats",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/ptgui_viz/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/feedback/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/challenges/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/challenges/<str:category>/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/challenges/detail/<int:challenge_id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/challenges/<int:challenge_id>/submit/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/leaderboard/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/accounts/login/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/rate_limit_exceeded/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/api-models/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/accounts/api-analytics/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/accounts/user-management/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/accounts/^email-notifications/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/^email-notifications\\.(?P<format>[a-z0-9]+)/?$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/<drf_format_suffix:format>",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/feedback/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/feedback/delete/<int:id>",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/^media/(?P<path>.*)$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/client_sign-in/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/profile/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/malware_viz/joinus",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/appattack/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/appattack/join",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/malware_viz/products_and_services",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/malware_viz/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/contact-us/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/maintenance",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/faq/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/smishing_detection",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/upskilling/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/upskilling/<slug:slug>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/update-progress/<int:progress_id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/join-us/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/success/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/smishing_detection/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/deakinThreatmirror/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/deakinThreatmirror/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/vr/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/vr/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset-confirm/<uidb64>/<token>/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/upskill/repository",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/upskill/roadmap",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/upskill/progress",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/dashboard/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/appattack/join/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/form_success/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/SearchResults/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/website_form/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/search/suggestions/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/careers/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/careers/<int:id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/careers/<int:id>/apply",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/blog/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/<int:pk>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/<int:pk>/like",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/signup/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/captcha/image/(?P<key>\\w+)/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/captcha/image/(?P<key>\\w+)@2/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/captcha/audio/(?P<key>\\w+).wav$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/captcha/refresh/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/post-otp-captcha/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/verifyEmail/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/login/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/verify-otp/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/chart/filter-options",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/chart/project-priority/<str:priority>",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/stats",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/feedback/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/challenges/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/challenges/<str:category>/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/challenges/detail/<int:challenge_id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/challenges/<int:challenge_id>/submit/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/leaderboard/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/login/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/rate_limit_exceeded/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/api-models/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/api-analytics/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/user-management/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/^email-notifications/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/^email-notifications\\.(?P<format>[a-z0-9]+)/?$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/<drf_format_suffix:format>",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/feedback/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/feedback/delete/<int:id>",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/^media/(?P<path>.*)$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/about-us/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/contact",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/contact-central",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/joinus/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/what-we-do/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/plan/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/blog/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/tinymce/flatpages_link_list/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/tinymce/compressor/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/tinymce/filebrowser/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/verifyEmail/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/login/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/clientlogin/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/logout/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/register/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/registerclient/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-gen/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-change/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-change-done/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset-done/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset-confirm/<uidb64>/<token>/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset-complete/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/comphrensive-report",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/pen-testing",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/secure-code-review",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/dashboard/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/update_progress/<int:progress_id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/^swagger(?P<format>\\.json|\\.yaml)$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/swagger/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/redoc/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/client_sign-in/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/profile/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/malware_viz/joinus",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/appattack/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/appattack/join",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/malware_viz/products_and_services",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/malware_viz/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/contact-us/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/maintenance",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/faq/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/smishing_detection",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/upskilling/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/upskilling/<slug:slug>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/update-progress/<int:progress_id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/join-us/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/success/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/smishing_detection/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/deakinThreatmirror/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/deakinThreatmirror/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/vr/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/vr/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/password-reset-confirm/<uidb64>/<token>/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/upskill/repository",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/upskill/roadmap",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/upskill/progress",
+    "supports_post": false,
+    "error": null,
+    "status_code": 500
+  },
+  {
+    "url": "http://localhost:8000/dashboard/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/appattack/join/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/form_success/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/SearchResults/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/website_form/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/search/suggestions/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/careers/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/careers/<int:id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/careers/<int:id>/apply",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/blog/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/<int:pk>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/<int:pk>/like",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/accounts/signup/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/captcha/image/(?P<key>\\w+)/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/captcha/image/(?P<key>\\w+)@2/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/captcha/audio/(?P<key>\\w+).wav$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/captcha/refresh/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/post-otp-captcha/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/verifyEmail/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/login/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/verify-otp/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/chart/filter-options",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/chart/project-priority/<str:priority>",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/stats",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/ptgui_viz/join_us",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/feedback/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/challenges/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/challenges/<str:category>/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/challenges/detail/<int:challenge_id>/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/challenges/<int:challenge_id>/submit/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/leaderboard/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/accounts/login/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/rate_limit_exceeded/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/api-models/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/api-analytics/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/user-management/",
+    "supports_post": false,
+    "error": null,
+    "status_code": 405
+  },
+  {
+    "url": "http://localhost:8000/^email-notifications/$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/^email-notifications\\.(?P<format>[a-z0-9]+)/?$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/<drf_format_suffix:format>",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/feedback/",
+    "supports_post": true,
+    "error": null,
+    "status_code": 200
+  },
+  {
+    "url": "http://localhost:8000/feedback/delete/<int:id>",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  },
+  {
+    "url": "http://localhost:8000/^media/(?P<path>.*)$",
+    "supports_post": false,
+    "error": null,
+    "status_code": 404
+  }
+]

@@ -1,0 +1,21 @@
+[
+  {
+    "url": "http://localhost:8000/accounts/signup/",
+    "passed": true,
+    "response": {
+      "headers": {
+        "content-length": "38692",
+        "content-type": "text/html; charset=utf-8",
+        "cross-origin-opener-policy": "same-origin",
+        "date": "Fri, 11 Apr 2025 05:09:41 GMT",
+        "referrer-policy": "same-origin",
+        "server": "WSGIServer/0.2 CPython/3.12.9",
+        "vary": "Cookie, origin",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY"
+      },
+      "ok": true,
+      "status": 200
+    }
+  }
+]
