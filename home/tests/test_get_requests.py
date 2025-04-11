@@ -9,7 +9,6 @@
 @usage: python manage.py test home.tests.test_get_requests
 """
 
-import logging
 from django.test import TestCase
 from django.urls import get_resolver, reverse, NoReverseMatch
 from django.shortcuts import resolve_url

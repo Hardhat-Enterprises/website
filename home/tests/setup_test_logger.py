@@ -42,3 +42,4 @@ def setup_test_logger(filename: str):
         logger.addHandler(console_handler)
 
         return logger
+

@@ -7,17 +7,27 @@
 @time: 2025/4/3 10:11
 @desc: A script to filter urls that support post method
 @usage: python manage.py get_post_urls
-@filter: jq '[.[] | select(.supports_post == true)]' url_support_method.json >> new_file_name.json
+@filter: jq '[.[] | select(.supports_post == true)]' url_support_method.json > new_file_name.json
 """
 
 import subprocess
 import json
 from django.urls import get_resolver, reverse, NoReverseMatch
 from django.core.management.base import BaseCommand
+from django.test import override_settings
+from django.conf import settings
 
 class Command(BaseCommand):
     help = "Test POST support for all URLs using CURL"
 
+    # 关键修改1：添加装饰器临时覆盖设置
+    @override_settings(
+        CSRF_COOKIE_SECURE=False,
+        CSRF_COOKIE_HTTPONLY=False,
+        CSRF_USE_SESSIONS=False,
+        MIDDLEWARE=[m for m in settings.MIDDLEWARE 
+                   if m != 'django.middleware.csrf.CsrfViewMiddleware']
+    )
     def handle(self, *args, **options):
         resolver = get_resolver()
         url_names = self._get_all_urls(resolver)
@@ -35,9 +45,7 @@ class Command(BaseCommand):
             json.dump(results, f, indent=2)
 
     def _get_all_urls(self, resolver, namespace=None):
-        """
-        Recursive retrieval of all URL names
-        """
+        """保持不变"""
         url_names = []
         for pattern in resolver.url_patterns:
             if str(pattern.pattern).startswith('admin/'):
@@ -53,10 +61,8 @@ class Command(BaseCommand):
                 url_names.append(full_name)
         return url_names
 
+    # 关键修改2：在请求中添加CSRF豁免头
     def _test_post_support(self, url_name):
-        """
-        Test if the URL support POST method
-        """
         result = {
             'url_name': url_name,
             'full_url': None,
@@ -65,31 +71,29 @@ class Command(BaseCommand):
         }
         
         try:
+            url_path = reverse(url_name)
+            result['full_url'] = f"http://localhost:8000{url_path}"
+            
+            # 尝试发送真实POST请求（带豁免头）
+            cmd = [
+                'curl', '-X', 'POST',
+                '-H', 'X-CSRFToken: exempt',
+                '-H', 'Content-Type: application/json',
+                '-d', '{}',  # 空JSON数据
+                '-s', '-o', '/dev/null', '-w', '%{http_code}',
+                result['full_url']
+            ]
+            
             try:
-                url_path = reverse(url_name)
-                if not url_path.startswith('/'):
-                    url_path = '/' + url_path
-                result['full_url'] = f"http://localhost:8000{url_path}"
-            except NoReverseMatch as e:
-                result['error'] = f"Reverse parsing failed: {str(e)}"
-                return result
-
-            # send OPTIONS request
-            cmd = ['curl', '-X', 'OPTIONS', '-I', '-s', result['full_url']]
-            try:
-                output = subprocess.check_output(cmd).decode()
-                allow_header = next(
-                    (line.split(':', 1)[1].strip() 
-                     for line in output.splitlines() 
-                     if line.startswith('Allow:')),
-                    ""
-                )
-                result['supports_post'] = 'POST' in allow_header.upper()
-                result['allowed_methods'] = allow_header
+                # 获取HTTP状态码
+                status_code = int(subprocess.check_output(cmd).decode())
+                # 2xx/3xx状态码视为支持POST
+                result['supports_post'] = 200 <= status_code < 400
+                result['status_code'] = status_code
             except subprocess.CalledProcessError as e:
-                result['error'] = f"Request failed: {str(e)}"
-
+                result['error'] = f"POST failed: {str(e)}"
+        
         except Exception as e:
-            result['error'] = f"Unknown error: {str(e)}"
-
+            result['error'] = str(e)
+        
         return result
