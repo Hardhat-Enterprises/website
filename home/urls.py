@@ -106,6 +106,8 @@ urlpatterns = [
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
     path('leaderboard/', views.leaderboard, name='leaderboard'),
+
+    path('news/', views.news_list, name='news_list'),
     
     # Feedback (duplicate removed)
 
