@@ -1,0 +1,155 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #ffc107;
+    transition: background-color 0.3s ease;
+  }
+
+  .code-puzzle-container {
+    max-width: 600px;
+    margin: 100px auto 60px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #212529;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .code-puzzle-container h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .form-control, textarea.form-control {
+    background-color: #f1f1f1;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+    resize: vertical;
+  }
+
+  .btn-submit {
+    background-color: #ffc107;
+    color: black;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+  }
+
+  .btn-submit:hover {
+    background-color: #e0a800;
+  }
+
+  .btn-secondary {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: #444;
+    color: white;
+    border: 1px solid #ccc;
+  }
+
+  .result-box {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .correct {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .incorrect {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  /* Dark mode support */
+  body.dark-mode {
+    background-color: #ffc107;
+  }
+
+  body.dark-mode .code-puzzle-container {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+  }
+
+  body.dark-mode .form-control,
+  body.dark-mode textarea.form-control {
+    background-color: #2c2c2c;
+    color: #f1f1f1;
+  }
+
+  body.dark-mode .btn-submit {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  body.dark-mode .btn-submit:hover {
+    background-color: #e0a800;
+  }
+
+  body.dark-mode .btn-secondary {
+    background-color: #444;
+    color: white;
+  }
+
+  body.dark-mode .correct {
+    background-color: #3ddc97;
+    color: #000;
+  }
+
+  body.dark-mode .incorrect {
+    background-color: #ff6b6b;
+    color: #000;
+  }
+</style>
+
+<div class="code-puzzle-container">
+  <h2>{{ puzzle.title }}</h2>
+
+  <p><strong>Description:</strong><br>{{ puzzle.description }}</p>
+
+  <p><strong>Input Description:</strong><br>{{ puzzle.input_description }}</p>
+
+  <p><strong>Sample Input:</strong><br>
+    <input type="text" class="form-control" value="{{ puzzle.sample_input }}" readonly>
+  </p>
+
+  <p><strong>Sample Output:</strong><br>
+    <input type="text" class="form-control" value="{{ puzzle.expected_output }}" readonly>
+  </p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <p><strong>Fix the broken code below:</strong></p>
+    <textarea name="code_submitted" rows="10" class="form-control">{{ puzzle.starter_code }}</textarea>
+
+    <div class="d-flex justify-content-start mt-3">
+      <button type="submit" class="btn btn-submit">Submit</button>
+      <a href="{% url 'code_puzzles_list' %}" class="btn btn-secondary">Give Up & Return</a>
+    </div>
+  </form>
+
+  {% if result %}
+    <div class="result-box {% if result == 'Correct!' %}correct{% else %}incorrect{% endif %}">
+      {% if result == 'Correct!' %}
+        ✔ {{ result }}
+      {% else %}
+        ✖ {{ result }}
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

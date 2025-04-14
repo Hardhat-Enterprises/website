@@ -15,29 +15,61 @@
         <br>
         <a href="{% url 'leaderboard' %}" class="btn btn-primary">View Leaderboard</a>
     </p>
-        {% for category in categories %}
-            <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ category.category|title }}</h5>
-                        <p class="card-text flex-grow-1">
-                            {% if category.category == 'network' %}
-                                Explore challenges related to network security, including firewalls, intrusion detection, and secure protocols.
-                            {% elif category.category == 'web' %}
-                                Test your knowledge of web application security, including SQL injection, XSS, and CSRF attacks.
-                            {% elif category.category == 'crypto' %}
-                                Dive into cryptography challenges, covering encryption, hashing, and secure communication.
-                            {% elif category.category == 'general' %}
-                                General cybersecurity knowledge questions covering a wide range of topics.
-                            {% endif %}
-                        </p>
-                        <p class="mb-2"><strong>{{ category.count }}</strong> challenge{{ category.count|pluralize }}</p>
-                        <a href="{% url 'category_challenges' category.category %}" class="btn btn-primary mt-auto">View Challenges</a>
-                    </div>
+
+    <div class="row justify-content-center">
+        <!-- ✅ CODE GAME CARD ONLY -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column align-items-center text-center">
+                    <h5 class="card-title">🧠 Code Game</h5>
+                    <p class="card-text flex-grow-1">
+                        Solve small coding puzzles to practice logic and problem solving.
+                    </p>
+                    <p class="mb-3">
+                        <strong>{{ code_puzzle_count|default:0 }}</strong> challenge{{ code_puzzle_count|default:0|pluralize }}
+                    </p>
+                    <a href="{% url 'code_puzzles_list' %}" class="btn btn-primary mt-auto">Let’s Play</a>
                 </div>
             </div>
-        {% endfor %}
+        </div>
     </div>
 </div>
+
+<style>
+  body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Light mode: yellow border */
+  .card.shadow-sm {
+    border: 2px solid #ffc107;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  /* Dark mode */
+  body.dark-mode .card.shadow-sm {
+    background-color: #2c2c2c !important;
+    color: #f1f1f1;
+    border-color: #ffc107;
+  }
+
+  body.dark-mode .card-title,
+  body.dark-mode .card-text,
+  body.dark-mode .mb-3 {
+    color: #f1f1f1;
+  }
+
+  body.dark-mode .btn.btn-primary {
+    background-color: #ffc107;
+    color: #212529;
+    border: none;
+  }
+
+  body.dark-mode .btn.btn-primary:hover {
+    background-color: #fff;
+    color: #000;
+  }
+</style>
 
 {% endblock content %}

@@ -6,6 +6,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, rate_limit_exceeded
+from .views import CodePuzzleListView
+from .views import CodeSubmissionView
+from .views import SubmissionListView
+from . import views
+
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
@@ -57,6 +62,13 @@ urlpatterns = [
     # path('contact-central/', views.Contact_central, name='contact-central'),
      path('appattack/join/', views.appattack_join, name='appattack_join'),
       path('form_success/', views.form_success, name='form_success'),
+      
+    # code game puzzle
+    path('api/code-puzzles/', CodePuzzleListView.as_view(), name='code-puzzle-list'),
+    path('api/submit/', CodeSubmissionView.as_view(), name='code-submit'),
+    path('api/submissions/', SubmissionListView.as_view(), name='submission-list'),
+    path('code-puzzles/', views.code_puzzles_list, name='code_puzzles_list'),
+    path('code-puzzles/<int:puzzle_id>/', views.solve_puzzle, name='solve_puzzle'),
     
     
     

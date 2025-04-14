@@ -1,4 +1,3 @@
-# from django.shortcuts import render, get_object_or_404
  
 # views.py
  
@@ -37,7 +36,6 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
-# from Website.settings import EMAIL_HOST_USER
 import random
 from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
 
@@ -45,8 +43,6 @@ from .forms import CaptchaForm
 
 import os
 import json
-# from utils.charts import generate_color_palette
-# from .models import Student, Project, Contact
 from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
 
 
@@ -62,15 +58,10 @@ from django.urls import reverse
 from home.models import Announcement, JobApplication
 
  
-# import os
  
 from .models import Smishingdetection_join_us, DDT_contact
-# import json
  
  
-# from utils.charts import generate_color_palette
-# from .models import Student, Project, Contact
-# from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, NewWebURL
  
  
 
@@ -86,7 +77,6 @@ from django.template.loader import render_to_string
 from .forms import FeedbackForm
 import traceback
 
-# from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
 # Regular Views
@@ -1038,10 +1028,25 @@ def delete_feedback(request, id):
     feedback.delete()
     return redirect('feedback')
 
-def challenge_list(request):
-    categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
-    return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
+def challenge_list(request):
+    code_puzzle_count = CodePuzzle.objects.filter(
+        Q(challenge_type='fix') | Q(challenge_type='write')
+    ).count()
+
+    return render(request, 'pages/challenges/challenge_list.html', {
+        'code_puzzle_count': code_puzzle_count
+    })
+
+    # Count total Code Game challenges (write + fix)
+    code_game_count = CodePuzzle.objects.filter(
+        Q(challenge_type='write') | Q(challenge_type='fix')
+    ).count()
+
+    return render(request, 'pages/challenges/challenge_list.html', {
+        'categories': categories,
+        'code_game_count': code_game_count
+    })  
 
 
 @login_required
@@ -1076,10 +1081,21 @@ def profile(request):
     return render(request, 'pages/profile.html', context)
 
 @login_required
-def category_challenges(request, category):
-    challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
-    completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
-    return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges, 'completed_challenges': completed_challenges})
+def category_challenges(request):
+    code_game_count = CodePuzzle.objects.filter(
+        Q(challenge_type='fix') | Q(challenge_type='write')
+    ).count()
+
+    challenges = CodePuzzle.objects.filter(
+        Q(challenge_type='fix') | Q(challenge_type='write')
+    ).order_by('difficulty')
+
+    return render(request, 'pages/challenges/category_challenges.html', {
+        'code_game_count': code_game_count,
+        'challenges': challenges,
+        'category': 'Code Game',  # or whatever your category is
+        'completed_challenges': [],  # pass your real data if needed
+    })
 
 @login_required
 def challenge_detail(request, challenge_id):
@@ -1091,6 +1107,8 @@ def challenge_detail(request, challenge_id):
     return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge,'next_challenge': next_challenge,'completed_challenges': completed_challenges,})
 
 @login_required
+
+# ─── Code Puzzle Submission Handler (Ehsen) ───
 def submit_answer(request, challenge_id):
     if request.method == 'POST':
         challenge = get_object_or_404(CyberChallenge, id=challenge_id)
@@ -1220,3 +1238,138 @@ def leaderboard_update():
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
 
+
+#Code puzzle
+from rest_framework import generics
+from .models import CodePuzzle
+from .serializers import CodePuzzleSerializer
+
+class CodePuzzleListView(generics.ListAPIView):
+    queryset = CodePuzzle.objects.all()
+    serializer_class = CodePuzzleSerializer
+
+
+from .serializers import SubmissionSerializer
+from .models import Submission
+
+class CodeSubmissionView(APIView):
+    def post(self, request):
+        serializer = SubmissionSerializer(data=request.data)
+        if serializer.is_valid():
+            puzzle = serializer.validated_data['puzzle']
+            code_submitted = serializer.validated_data['code_submitted']
+
+            # Simple output match check
+            is_correct = code_submitted.strip() == puzzle.expected_output.strip()
+
+            # Create and save submission
+            Submission.objects.create(
+                user=request.user,
+                puzzle=puzzle,
+                code_submitted=code_submitted,
+                is_correct=is_correct
+            )
+
+            return Response({
+                'message': 'Submission received.',
+                'is_correct': is_correct
+            }, status=201)
+        
+        return Response(serializer.errors, status=400)
+
+
+from rest_framework.permissions import IsAuthenticated
+
+class SubmissionListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        submissions = Submission.objects.filter(user=request.user)
+        serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)
+
+from django.db.models import Q
+
+@login_required
+@login_required
+
+# ─── Code Puzzle Feature (Ehsen) ───
+def code_puzzles_list(request):
+    puzzles = CodePuzzle.objects.filter(
+        Q(challenge_type='write') | Q(challenge_type='fix')
+    ).order_by('difficulty')
+
+    difficulty_levels = ['Easy', 'Medium', 'Hard']
+
+    return render(request, 'pages/challenges/code_puzzles.html', {
+        'puzzles': puzzles,
+        'difficulty_levels': difficulty_levels
+    })
+
+from django.shortcuts import render, get_object_or_404
+from .models import CodePuzzle, Submission
+
+from contextlib import redirect_stdout
+import io
+import sys
+
+@login_required
+
+# ─── Code Puzzle Solving Logic (Ehsen) ───
+def solve_puzzle(request, puzzle_id):
+    puzzle = get_object_or_404(CodePuzzle, id=puzzle_id)
+    result = None
+
+    if request.method == "POST":
+        submitted = request.POST.get("code_submitted", "").strip()
+
+        # Execute submitted code safely
+        try:
+            f = io.StringIO()
+            with redirect_stdout(f):
+                input_lines = puzzle.sample_input.strip().split('\n')
+                input_iter = iter(input_lines)
+                exec(submitted, {"input": lambda: next(input_iter)})
+            output = f.getvalue().strip()
+            is_correct = output == puzzle.expected_output.strip()
+        except Exception as e:
+            output = f"Error: {str(e)}"
+            is_correct = False
+
+        # Save the submission
+        print("User is:", request.user, "| Authenticated:", request.user.is_authenticated)
+
+        Submission.objects.create(
+            user=request.user,
+            puzzle=puzzle,
+            code_submitted=submitted,
+            is_correct=is_correct
+        )
+
+        result = "Correct!" if is_correct else "Incorrect."
+
+    return render(request, 'pages/challenges/code_puzzle_detail.html', {
+        'puzzle': puzzle,
+        'result': result
+    })
+
+
+
+
+
+# ─── Code Puzzle View Page (Ehsen) ───
+def code_puzzle_view(request, puzzle_id):
+    puzzle = get_object_or_404(CodePuzzle, id=puzzle_id)
+    result = None
+
+    if request.method == 'POST':
+        submitted_code = request.POST.get('code_submitted')
+        if submitted_code.strip() == puzzle.expected_output.strip():
+            result = "✅ Correct!"
+        else:
+            result = "❌ Incorrect, try again."
+
+    return render(request, 'pages/challenges/code_puzzles.html', {
+        'puzzle': puzzle,
+        'result': result
+    })

@@ -1,0 +1,13 @@
+<div class="card text-center">
+  <div class="card-body">
+    <h3 class="difficulty-heading">{{ difficulty }}</h3>
+
+    {% for puzzle in puzzles %}
+      {% if puzzle.difficulty == difficulty %}
+        <h5 class="card-title">{{ puzzle.title }}</h5>
+        <p class="card-text text-muted">{{ puzzle.description }}</p>
+        <a href="{% url 'solve_puzzle' puzzle.id %}" class="btn solve-btn w-100 mt-2">Solve</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

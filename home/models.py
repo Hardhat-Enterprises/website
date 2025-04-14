@@ -1,3 +1,4 @@
+
 import uuid
 
 from django.db.models.deletion import PROTECT
@@ -477,3 +478,47 @@ class Experience(models.Model):
     def __str__(self):
         return f"{self.name} - {self.feedback[:50]}"
 
+
+
+from django.db import models
+
+class CodePuzzle(models.Model):
+    DIFFICULTY_CHOICES = [
+        ('Easy', 'Easy'),
+        ('Medium', 'Medium'),
+        ('Hard', 'Hard'),
+    ]
+
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
+    input_description = models.TextField()
+    sample_input = models.TextField()
+    sample_output = models.TextField()
+    expected_output = models.TextField()
+    correct_answer = models.CharField(max_length=255, default="placeholder")
+
+    # Add these two lines
+    starter_code = models.TextField(blank=True, null=True)
+    challenge_type = models.CharField(
+        max_length=10,
+        choices=[('write', 'Write'), ('fix', 'Fix')],
+        default='write'
+    )
+
+    def __str__(self):
+        return self.title
+
+
+
+from django.conf import settings
+
+class Submission(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    puzzle = models.ForeignKey(CodePuzzle, on_delete=models.CASCADE)
+    code_submitted = models.TextField()
+    is_correct = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.puzzle.title} - {'Correct' if self.is_correct else 'Incorrect'}"

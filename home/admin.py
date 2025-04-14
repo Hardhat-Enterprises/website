@@ -153,9 +153,27 @@ class LeaderboardTableAdmin(admin.ModelAdmin):
     list_display = ('user', 'category', 'total_points')
 
 
+from .models import CodePuzzle 
+
+@admin.register(CodePuzzle)
+class CodePuzzleAdmin(admin.ModelAdmin):
+    list_display = ['title', 'difficulty', 'challenge_type']
+    search_fields = ['title', 'description']
+    list_filter = ['difficulty', 'challenge_type']
+    fields = [
+        'title', 'description', 'difficulty',
+        'input_description', 'sample_input', 'sample_output',
+        'expected_output', 'correct_answer',
+        'starter_code', 'challenge_type'  # newly added fields
+    ]
 
 
+from .models import Submission
 
-
+@admin.register(Submission)
+class SubmissionAdmin(admin.ModelAdmin):
+    list_display = ['user', 'puzzle', 'is_correct', 'submitted_at']
+    list_filter = ['is_correct', 'submitted_at']
+    search_fields = ['user__username', 'puzzle__title']
 
 

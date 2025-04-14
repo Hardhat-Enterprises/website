@@ -1,0 +1,162 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .code-puzzle-wrapper {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 20px;
+  }
+
+  .difficulty-column {
+    flex: 0 0 300px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .difficulty-column h3 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #212529;
+  }
+
+  .puzzle-card {
+    margin-bottom: 20px;
+    border: 2px solid #ffc107;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    background-color: #fff;
+    position: relative;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+
+  .puzzle-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  .solve-button {
+    background-color: #343a40;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .solve-button:hover {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  .hidden-description {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+
+  .puzzle-card:hover .hidden-description {
+    max-height: 300px;
+    opacity: 1;
+  }
+
+  h2 {
+    text-align: center;
+    margin-top: 40px;
+    font-weight: 700;
+    color: #212529;
+  }
+
+  p.text-center {
+    text-align: center;
+    color: #666;
+  }
+
+  /* Dark Mode Compatibility */
+  body.dark-mode .difficulty-column {
+    background-color: #2c2c2c;
+    color: #f1f1f1;
+  }
+
+  body.dark-mode .puzzle-card {
+    background-color: #1e1e1e;
+    border-color: #ffc107;
+    color: #f1f1f1;
+  }
+
+  body.dark-mode .solve-button {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  body.dark-mode .solve-button:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  body.dark-mode h2,
+  body.dark-mode .difficulty-column h3 {
+    color: #ffc107;
+  }
+
+  body.dark-mode p.text-center {
+    color: #aaa;
+  }
+</style>
+
+<h2>Code Puzzles</h2>
+<p class="text-center">Choose a puzzle to test your coding skills!</p>
+
+<div class="code-puzzle-wrapper">
+  {% for difficulty in difficulty_levels %}
+    <div class="difficulty-column">
+      <h3>{{ difficulty }}</h3>
+      {% for puzzle in puzzles %}
+        {% if puzzle.difficulty == difficulty %}
+          <div class="puzzle-card">
+            <strong>{{ puzzle.title }}</strong><br>
+            <a href="{% url 'solve_puzzle' puzzle.id %}">
+              <button class="solve-button">Solve</button>
+            </a>
+            <div class="hidden-description">
+              {{ puzzle.description }}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  // Optional: Automatically apply dark mode if user has OS preference
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.body.classList.add('dark-mode');
+  }
+
+  // If you have a toggle button somewhere, use this:
+  // document.getElementById('darkToggle').onclick = () => {
+  //   document.body.classList.toggle('dark-mode');
+  // }
+</script>
+
+{% endblock %}
