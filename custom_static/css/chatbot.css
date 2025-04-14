@@ -1,0 +1,148 @@
+.chat-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 350px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.hidden {
+  display: none;
+}
+
+.chat-header {
+  background: #3a3a32;
+  color: rgb(236, 232, 2);
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-body {
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-box {
+  height: 300px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  overflow-y: auto;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  max-width: 80%;
+  word-wrap: break-word;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.user-message {
+  background-color: #e3f2fd;
+  margin-left: 20%;
+  align-self: flex-end;
+}
+
+.bot-message {
+  background-color: #f5f5f5;
+  margin-right: 20%;
+  align-self: flex-start;
+}
+
+.typing-indicator {
+  background-color: #f5f5f5;
+  margin-right: 20%;
+  align-self: flex-start;
+  animation: typing 1s infinite;
+}
+
+@keyframes typing {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+#message-input {
+  flex-grow: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+#message-input:focus {
+  border-color: #3a3a32;
+}
+
+#chatOpenButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #3a3a32;
+  color: rgb(236, 232, 2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.2s;
+}
+
+#chatOpenButton:hover {
+  transform: scale(1.05);
+}
+
+#chatCloseButton {
+  background: none;
+  border: none;
+  color: rgb(236, 232, 2);
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.2s;
+}
+
+#chatCloseButton:hover {
+  transform: scale(1.1);
+}
+
+.chat-button {
+  padding: 8px 16px;
+  background-color: #3a3a32;
+  color: rgb(236, 232, 2);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.chat-button:hover {
+  opacity: 0.9;
+} 

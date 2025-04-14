@@ -51,6 +51,9 @@ urlpatterns = [
     path('what-we-do/', views.what_we_do, name='what_we_do'),
     path('plan/', views.package_plan, name='package_plan'),
     
+    # chatbot
+    path('chatbot/', include('chatbot_app.urls')),
+    
     # blog
     #path('admin/', admin.site.urls),
     # path('blog/', include('blogs.urls')),

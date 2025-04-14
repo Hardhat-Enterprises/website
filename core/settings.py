@@ -104,6 +104,7 @@ INSTALLED_APPS = [
 
     'home',
     'theme_pixel',
+    'chatbot_app',
 
     'corsheaders',
 
