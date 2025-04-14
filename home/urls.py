@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_blogpage, delete_feedback
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
@@ -97,6 +97,8 @@ urlpatterns = [
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
     
     path('feedback/', views.feedback, name='feedback'),
+    path('blogpage/', views.blogpage, name='blogpage'),
+    path('blogpage/delete/<int:id>', delete_blogpage, name='delete_blogpage'),
 
 
 
@@ -124,7 +126,6 @@ urlpatterns = [
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
-
 
 ]
 

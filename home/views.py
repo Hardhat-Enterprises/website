@@ -25,7 +25,7 @@ from .models import ContactSubmission
 from django.utils.html import strip_tags
 
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, UserBlogPage #Feedback 
 
 
 from django.contrib.auth import get_user_model
@@ -39,7 +39,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm
 
 from .forms import CaptchaForm
 
@@ -444,6 +444,21 @@ def feedback(request):
     return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
 
 
+# def user_blog_page(request):
+#     if request.method == 'POST':
+#         form = UserBlogPageForm(request.POST)
+#         if form.is_valid():
+#             form.save()  # Save the feedback to the database
+#             return redirect('userblogpage')  # Redirect to clear the form
+
+#     else:
+#         form = UserBlogPageForm()
+
+#     # Retrieve recent feedback from the database
+#     userblogpages = Experience.objects.all().order_by('-created_at')[:10]  
+
+#     return render(request, 'pages/blogpage.html', {'form': form, 'userblogpages': userblogpages})
+
 
 ## Web-Form 
 
@@ -755,7 +770,42 @@ def get_priority_breakdown(request, priority):
             }]
         }
     })
+
+def blogpage(request):
+    if request.method == 'POST':
+        form = UserBlogPageForm(request.POST)
+        if form.is_valid():
+            form.save()  
+            return redirect('blogpage') 
+
+    else:
+        form = UserBlogPageForm()
+
+    # Retrieve recent feedback from the database
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')[:10]  
+
+    return render(request, 'pages/blogpage.html', {'form': form, 'blogpages': blogpages})
  
+def blogpage_view(request):
+    if request.method == 'POST':
+        form = UserBlogPageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blogpage')
+    else:
+        form = UserBlogPageForm()
+
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')
+    return render(request, 'blogpage.html', {
+        'form': form,
+        'blogpages': blogpages
+    })
+
+def delete_blogpage(request, id):
+    blogpage= get_object_or_404(UserBlogPage, id=id)
+    blogpage.delete()
+    return redirect('blogpage')
+    
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
  
