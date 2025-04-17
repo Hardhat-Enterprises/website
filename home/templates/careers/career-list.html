@@ -46,32 +46,33 @@
   <h2 class="fw-bold text-center mb-4">Explore Job Opportunities</h2>
 
   <!-- 🔍 Search & Filter -->
-  <form method="GET" class="row g-3 mb-4">
+  <form method="GET" id="filterForm" class="row g-3 mb-4">
+    <!-- Search bar -->
     <div class="col-md-4">
-      <input type="text" name="search" class="form-control" placeholder="Search by title or description..." value="{{ request.GET.search }}">
+      <input type="text" name="search" class="form-control" placeholder="Search by title or description..." value="{{ request.GET.search }}" oninput="submitFilterForm()">
     </div>
+  
+    <!-- Job Type dropdown -->
     <div class="col-md-3">
-      <select name="job_type" class="form-select">
-        <option value="">All Job Types</option>
-        <option value="FT">Full-Time</option>
-        <option value="PT">Part-Time</option>
-        <option value="CT">Contract</option>
+      <select name="job_type" class="form-select" onchange="submitFilterForm()">
+        <option value="" {% if not request.GET.job_type %}selected{% endif %}>All Job Types</option>
+        <option value="FT" {% if request.GET.job_type == 'FT' %}selected{% endif %}>Full-Time</option>
+        <option value="PT" {% if request.GET.job_type == 'PT' %}selected{% endif %}>Part-Time</option>
+        <option value="CT" {% if request.GET.job_type == 'CT' %}selected{% endif %}>Contract</option>
       </select>
     </div>
+  
+    <!-- Location dropdown -->
     <div class="col-md-3">
-      <select name="location" class="form-select">
-        <option value="">All Locations</option>
-        <option value="Remote">Remote</option>
-        <option value="OnSite">OnSite</option>
+      <select name="location" class="form-select" onchange="submitFilterForm()">
+        <option value="" {% if not request.GET.location %}selected{% endif %}>All Locations</option>
+        <option value="Remote" {% if request.GET.location == 'Remote' %}selected{% endif %}>Remote</option>
+        <option value="OnSite" {% if request.GET.location == 'OnSite' %}selected{% endif %}>OnSite</option>
       </select>
-    </div>
-    <div class="col-md-2">
-      <button type="submit" class="btn btn-warning w-100">Filter</button>
     </div>
   </form>
-
   <!-- 🧾 Job Listings -->
-  <div class="row">
+  <div id="job-listings" class="row">
     {% if jobs %}
       {% for job in jobs %}
         <div class="col-md-6 mb-4">
@@ -97,4 +98,27 @@
   </div>
 </div>
 
+<script>
+  function submitFilterForm() {
+    const form = document.getElementById("filterForm");
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData).toString();
+
+    fetch(`/careers/?${params}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.text())
+    .then(data => {
+      // Parse response and update only the job listing section
+      const parser = new DOMParser();
+      const html = parser.parseFromString(data, 'text/html');
+      const updatedListings = html.querySelector("#job-listings");
+      document.getElementById("job-listings").innerHTML = updatedListings.innerHTML;
+    });
+  }
+</script>
+
 {% endblock %}
+
+
+

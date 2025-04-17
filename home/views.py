@@ -1130,18 +1130,25 @@ def blog_list(request):
 def list_careers(request):
     jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
 
-    search = request.GET.get('search')
-    job_type = request.GET.get('job_type')
-    location = request.GET.get('location')
+    search = request.GET.get('search', '')
+    job_type = request.GET.get('job_type', '')
+    location = request.GET.get('location', '')
 
     if search:
-        jobs = jobs.filter(title__icontains=search) | jobs.filter(description__icontains=search)
+        jobs = jobs.filter(Q(title__icontains=search) | Q(description__icontains=search))
     if job_type:
         jobs = jobs.filter(job_type=job_type)
     if location:
         jobs = jobs.filter(location=location)
 
-    return render(request, "careers/career-list.html", {"jobs": jobs})
+    context = {
+        "jobs": jobs,
+    }
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "careers/partials/job-listings.html", context)
+    else:
+        return render(request, "careers/career-list.html", context)
 
 
 def career_detail(request,id):
