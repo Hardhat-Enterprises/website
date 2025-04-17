@@ -20,7 +20,8 @@ from django.utils.timezone import now
 from django.utils.text import slugify
 
 import secrets
-
+import random
+import string
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
@@ -111,6 +112,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.is_active = True
         self.save()
         print(f"User {self.email} has been activated and verified.")
+    
+    def generate_passkeys(self):
+        """Generate 5 unique passkeys for the user after email verification."""
+        from home.models import Passkey 
+
+        if self.passkeys.count() < 5:
+            for _ in range(5):
+                new_key = Passkey.generate_passkey()
+                Passkey.objects.create(user=self, key=new_key)
+
 
 
 #Search Bar Models:
@@ -480,3 +491,15 @@ class Experience(models.Model):
     def __str__(self):
         return f"{self.name} - {self.feedback[:50]}"
 
+class Passkey(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="passkeys")
+    key = models.CharField(max_length=12, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True) 
+
+    def __str__(self):
+        return f"Passkey for {self.user.email}"
+
+    @staticmethod
+    def generate_passkey():
+        """Generate a new passkey"""
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=12))
