@@ -1095,12 +1095,27 @@ def submit_answer(request, challenge_id):
     if request.method == 'POST':
         challenge = get_object_or_404(CyberChallenge, id=challenge_id)
         user_answer = request.POST.get('answer')
-        is_correct = user_answer == challenge.correct_answer
+        is_correct = challenge.choices.get(user_answer) == challenge.correct_answer
         user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
+        user_challenge.completed= False 
         if is_correct and not user_challenge.completed:
             user_challenge.completed = True
             user_challenge.score = challenge.points
             user_challenge.save()
+            # Calculate total points
+            total_points = UserChallenge.objects.filter(
+                user=request.user,
+                challenge__category=challenge.category
+            ).aggregate(Sum('score'))['score__sum'] or 0
+
+            # Update leaderboard
+            leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+                user=request.user,
+                category=challenge.category
+            )
+            leaderboard_entry.total_points = total_points
+            leaderboard_entry.save()
+
         return JsonResponse({
             'is_correct': is_correct,
             'message': 'Great job!' if is_correct else 'Try again!',
