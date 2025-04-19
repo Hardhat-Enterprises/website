@@ -5,6 +5,7 @@
   justify-content: center; /* Center-align the content vertically */
   height: 100vh; /* Full viewport height */
   padding: 20px;
+  border-radius: 4px;
   text-align: center; /* Ensure text inside elements is centered */
 }
 
@@ -12,6 +13,7 @@
   width: 80%; /* Set a width for the whiteboard */
   min-height: 300px; /* Set a minimum height for the whiteboard */
   border: 2px solid #ccc; /* Border for the whiteboard */
+  border-radius: 4px;
   background-color: #f9f9f9; /* Light background for the whiteboard */
   margin-bottom: 20px; /* Space between whiteboard and review text area */
   position: relative;
