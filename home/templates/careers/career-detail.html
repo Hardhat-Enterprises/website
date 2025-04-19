@@ -1,24 +1,98 @@
-{% extends 'layouts/base.html' %} {% block content %} {% include
-'includes/pre-loader.html' %}
-<div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
-    <h1 class="fw-bolder">Hardhat Enterprise Careers</h1>
-    <h5 class="text-muted">
-      It's a careers page for Hardhat Enterprise students
-    </h5>
-  </div>
-</div>
+{% extends 'layouts/base.html' %}
+{% block content %}
 
-<div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-2 mb-5">
-    <h3 class="fw-bold">{{ job.title }}</h3>
-    <h4>Type: {{ job.get_job_type_display }}</h4>
-    <hr />
-    {{job.description |safe}}
-    <hr />
-    <p class="text-muted">Posted: {{ job.posted_date }}</p>
-    <p class="text-muted">Closing Date: {{ job.closing_date }}</p>
-    <a href="{% url "career-application" job.id %}" class="btn btn-tertiary border-0 px-5">Apply</a>
+<style>
+  .career-detail-container {
+    background-color: #343a40;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
+    color: #f8f9fa;
+    margin-top: 8rem;
+    margin-bottom: 4rem; /* 💥 more spacing at the bottom */
+  }
+
+  .badge-jobtype {
+    background-color: #ffc107;
+    color: #212529;
+    margin-right: 8px;
+  }
+
+  .badge-location {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+
+  .detail-label {
+    font-weight: 500;
+    color: #adb5bd;
+  }
+
+  .detail-dates {
+    color: #ced4da;
+  }
+
+  .apply-btn {
+    background: linear-gradient(to right, #f9d423, #ff4e50);
+    border: none;
+    color: black;
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 30px;
+  }
+
+  .apply-btn:hover {
+    opacity: 0.9;
+  }
+
+  body {
+    background-color: #212529;
+  }
+
+  .text-white {
+  color: #fff !important;
+}
+
+.text-white h1,
+.text-white h2,
+.text-white p,
+.text-white label,
+.text-white span {
+  color:  #fff !important;
+}
+
+</style>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="career-detail-container text-white">
+        <h1 class="fw-bold">{{ job.title }}</h1>
+
+        <div class="mb-3">
+          <span class="badge badge-jobtype">{{ job.get_job_type_display }}</span>
+          <span class="badge badge-location">{{ job.location }}</span>
+        </div>
+
+        <hr class="bg-secondary" />
+
+        <div class="mb-4">
+          {{ job.description|safe }}
+        </div>
+
+        <div class="mb-2">
+          <span class="detail-label">Posted:</span>
+          <span class="detail-dates">{{ job.posted_date }}</span>
+        </div>
+        <div class="mb-4">
+          <span class="detail-label">Closing Date:</span>
+          <span class="detail-dates">{{ job.closing_date }}</span>
+        </div>
+
+        <a href="{% url 'career-application' job.id %}" class="btn apply-btn">Apply</a>
+      </div>
+    </div>
   </div>
 </div>
-{% endblock content %}
+{% endblock %}
