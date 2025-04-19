@@ -14,7 +14,6 @@
 
     {% include 'includes/pre-loader.html' %} 
 
-    <!-- Section -->
     <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/login/login-bg.svg' %}">
         <div class="container mb mt-md-6">
             <div class="row justify-content-center">
@@ -27,7 +26,6 @@
 
                         <form method="post" class="mt-4" action="{% url 'login_with_otp' %}">
                             {% csrf_token %}
-                            <!-- Form -->
                             <div class="form-group mb-4">
                                 <label for="username">Username</label>
                                 <div class="input-group">
@@ -53,7 +51,6 @@
                                 </div>  
                                 <span class="text-danger"> {{ form.password.errors|default_if_none:"" }} </span>
                             </div>
-                            <!-- End of Form -->
 
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div class="form-check mb-0">
@@ -68,6 +65,10 @@
                                 <button type="submit" class="btn btn-warning btn-primary">Sign in</button>
                             </div>
                         </form>
+
+                        <div class="text-center mt-3">
+                            <a href="{% url 'passkey_login' %}" class="btn btn-secondary">Login with Passkey</a>
+                        </div>
 
                         <div class="d-flex justify-content-center align-items-center mt-4">
                             <span class="fw-normal">
