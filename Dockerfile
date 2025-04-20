@@ -1,30 +1,30 @@
 FROM python:3.9
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y git gcc
-
-# Set the working directory
+# Set work directory
 WORKDIR /app
 
-# Copy dependency list and install Python dependencies
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy application files
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project
 COPY . .
 
-# Make entrypoint script executable
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Create necessary directories
+RUN mkdir -p /app/static /app/media
 
-# Set entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+# Run migrations
+RUN python manage.py migrate
 
-EXPOSE 8000
-
-# Default command
-CMD ["gunicorn", "--config", "gunicorn-cfg.py", "core.wsgi"]
+# Run gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi"]
