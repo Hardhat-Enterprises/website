@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
 @author: CHUNYI WANG
 @file: test_url_with_selenium.py

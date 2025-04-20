@@ -873,7 +873,6 @@ def Contact_central(request):
 
 
  
- 
 # Blog
 class Index(ListView):
     model = Article

@@ -45,7 +45,7 @@ DEBUG = not PRODUCTION
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 # Add here your deployment HOSTS
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://localhost:5085']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://localhost:5085', 'http://172.31.208.1', "http://0.0.0.0",]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
@@ -62,7 +62,7 @@ SESSION_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SAMESITE = 'Lax'
 
 #Ensure CSRF cookies are sent over HTTPS only
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 #Enhance CSRF protection
 CSRF_COOKIE_SAMESITE = 'Strict'
@@ -398,6 +398,8 @@ LOGGING = {
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',  # Website localhost server url
     'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
+    'http://172.31.208.1',
+    "http://0.0.0.0",
 ]
 
 CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials

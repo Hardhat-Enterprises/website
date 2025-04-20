@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
 @author: CHUNYI WANG
 @file: test_post_requests.py
@@ -74,6 +71,7 @@ def main():
                 )
                 result["response"] = response
                 result["passed"] = response["ok"]
+                result["comment"] = case["comment"]
             except Exception as e:
                 result["error"] = str(e)
             results.append(result)
