@@ -8,6 +8,11 @@ from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from textblob import TextBlob
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import ExperienceForm
+from .models import Experience
 
 
 from django.contrib.auth import authenticate, login
@@ -1213,17 +1218,41 @@ def projects_join_us(request, page_url, page_name):
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
 
+
 def feedback_view(request):
+    sentiment = None
+    name = None
+
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('feedback')
+            feedback_text = form.cleaned_data.get('feedback')
+            name = form.cleaned_data.get('name')
+
+            # Sentiment analysis using TextBlob
+            blob = TextBlob(feedback_text)
+            polarity = blob.sentiment.polarity
+
+            if polarity >= 0.1:
+                sentiment = "positive"
+            elif polarity <= -0.1:
+                sentiment = "negative"
+            else:
+                sentiment = "neutral"
+
+            form.save()  # Save feedback to database
+
+            # ✅ Render separate thank you page
+            return render(request, 'feedback/thank_you.html', {
+                'name': name,
+                'sentiment': sentiment
+            })
     else:
         form = ExperienceForm()
 
     feedbacks = Experience.objects.all().order_by('-created_at')
-    return render(request, 'feedback.html', {
+
+    return render(request, 'pages/feedback.html', {
         'form': form,
         'feedbacks': feedbacks
     })

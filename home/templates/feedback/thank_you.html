@@ -1,12 +1,75 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You</title>
+    <title>Thank You!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff8e1;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .thank-you-card {
+            background-color: #ffffff;
+            border: 3px solid #ffd700;
+            border-radius: 20px;
+            padding: 50px 60px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            width: 520px;
+        }
+
+        .thank-you-card img {
+            height: 100px;
+            margin-bottom: 30px;
+        }
+
+        .thank-you-card h2 {
+            font-size: 26px;
+            color: #183153;
+            margin-bottom: 18px;
+        }
+
+        .thank-you-card p {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .btn-back {
+            background-color: #183153;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #2c3e50;
+        }
+    </style>
 </head>
 <body>
-    <h1>Thank You!</h1>
-    <p>Thank you for your feedback. We appreciate your input.</p>
+    <div class="thank-you-card">
+        <img src="{% static 'assets/img/brand/logo.svg' %}" alt="Hardhat Logo">
+        <h2>Thank You, {{ name }}!</h2>
+        {% if sentiment == 'positive' %}
+            <p>😊 We're thrilled to hear you had a great experience!</p>
+        {% elif sentiment == 'negative' %}
+            <p>😔 We're sorry to hear that. We’ll use your feedback to improve.</p>
+        {% else %}
+            <p>😐 Thanks for your honest feedback. We appreciate your input.</p>
+        {% endif %}
+        <a href="{% url 'feedback' %}" class="btn-back">Back to Feedback</a>
+    </div>
 </body>
 </html>
