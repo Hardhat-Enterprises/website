@@ -344,23 +344,50 @@ class CyberChallenge(models.Model):
         ('web', 'Web Application Security'),
         ('crypto', 'Cryptography'),
         ('general', 'General Knowledge'),
+        ('python', 'Python'),
+        ('javascript', 'JavaScript'),
+        ('html_css', 'HTML & CSS'),
+        ('web_security', 'Web Security'),
+        ('reverse_engineering', 'Reverse Engineering'),
+        ('forensics', 'Forensics'),
+        ('binary_exploitation', 'Binary Exploitation'),
+        ('linux', 'Linux'),
+        ('algorithms', 'Algorithms'),
+        ('data_structures', 'Data Structures'),
+        ('databases', 'Databases'),
+        ('regex', 'Regex'),
+        ('secure_coding', 'Secure Coding'),
+        ('logic_reasoning', 'Logic & Reasoning'),
+        ('misc', 'Miscellaneous'),
     ]
     
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
     description = models.TextField()
-    question = models.TextField()
-    choices = models.JSONField()  # For multiple choice questions
-    correct_answer = models.CharField(max_length=200)
-    explanation = models.TextField()
+    question = models.TextField(blank=True, null=True, default="")
+    choices = models.JSONField(blank=True, null=True)  # For MCQ challenges
+    correct_answer = models.CharField(max_length=200, blank=True, null=True)  # Correct answer for MCQs or expected output for code challenges
+    starter_code = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    sample_input = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    expected_output = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    explanation = models.TextField(blank=True, null=True, default="")
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     points = models.IntegerField(default=10)
+    challenge_type = models.CharField(max_length=20, choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')])
+    time_limit = models.IntegerField(default=60)  
+
+    def __str__(self):
+        return self.title
+
 
 class UserChallenge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.challenge.title}"
 
 
 
