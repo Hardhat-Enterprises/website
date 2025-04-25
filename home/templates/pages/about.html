@@ -34,96 +34,76 @@
   </section>
   <!-- End of Hero section -->
   <!-- Kudoboard Section Starts Here -->
-<div class="whiteboard-container">
-  <h2>Kudoboard</h2>
-  <div id="whiteboard" class="whiteboard"></div>
-  <textarea id="reviewText" rows="3" placeholder="Type your review here..."></textarea>
-  <div>
-    <button id="submitReview">Submit</button>
-    <button id="clearReviews" disabled>Clear</button>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="whiteboard-container">
+          <h2 class="text-center mb-4" style="color: #1f2937;">Kudoboard</h2>
+          <div id="whiteboard" class="whiteboard mb-4"></div>
+          <textarea id="reviewText" class="form-control mb-4" rows="3" placeholder="Type your review here..."></textarea>
+          <div class="text-center">
+            <button id="submitReview" class="mx-2">Submit</button>
+            <button id="clearReviews" class="mx-2" disabled>Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const whiteboard = document.getElementById('whiteboard');
-  const reviewText = document.getElementById('reviewText');
-  const submitReview = document.getElementById('submitReview');
-  const clearReviews = document.getElementById('clearReviews');
-  const stickyColors = ['#ffc107', '#ff5722', '#8bc34a', '#03a9f4', '#e91e63']; // Different colors
-  let usedColors = []; // Track used colors
+  <style>
+  .whiteboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 0;
+  }
 
-  // Load saved reviews from localStorage
-  const loadReviews = () => {
-    const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
-    savedReviews.forEach((review) => createStickyNote(review.text, review.color));
-    toggleClearButton();
-  };
+  .whiteboard {
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      min-height: 250px;
+      background-color: #fff;
+      width: 100%;
+  }
 
-  // Save reviews to localStorage
-  const saveReviews = () => {
-    const reviews = Array.from(whiteboard.children).map((note) => ({
-      text: note.textContent,
-      color: note.style.backgroundColor,
-    }));
-    localStorage.setItem('reviews', JSON.stringify(reviews));
-  };
+  #reviewText {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 16px;
+      resize: vertical;
+  }
 
-  // Create a sticky note
-  const createStickyNote = (text, color = null) => {
-    const stickyNote = document.createElement('div');
-    stickyNote.classList.add('sticky-note');
-    stickyNote.textContent = text;
-    stickyNote.style.backgroundColor = color || getUniqueColor();
-    whiteboard.appendChild(stickyNote);
-    toggleClearButton();
-  };
+  #reviewText::placeholder {
+      color: #9ca3af;
+  }
 
-  // Get a unique color that hasn't been used yet
-  const getUniqueColor = () => {
-    if (usedColors.length === stickyColors.length) {
-      // All colors have been used, reset the usedColors array
-      usedColors = [];
-    }
+  .whiteboard-container button {
+      color: #ffffff !important;
+      background-color: #1c2540 !important;
+      border: none;
+      padding: 8px 40px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+  }
 
-    // Pick a random color that hasn't been used
-    let randomColor;
-    do {
-      randomColor = stickyColors[Math.floor(Math.random() * stickyColors.length)];
-    } while (usedColors.includes(randomColor));
+  .whiteboard-container button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(28, 37, 64, 0.2);
+      background-color: #2a3a5f !important;
+  }
 
-    // Mark the color as used
-    usedColors.push(randomColor);
-    return randomColor;
-  };
-
-  submitReview.addEventListener('click', function () {
-    const text = reviewText.value.trim();
-    if (text) {
-      createStickyNote(text);
-      reviewText.value = '';
-      saveReviews();
-    } else {
-      alert('Please enter a review.');
-    }
-  });
-
-  clearReviews.addEventListener('click', function () {
-    whiteboard.innerHTML = '';
-    usedColors = []; // Reset used colors
-    localStorage.removeItem('reviews');
-    toggleClearButton();
-  });
-
-  const toggleClearButton = () => {
-    clearReviews.disabled = whiteboard.children.length === 0;
-  };
-
-  loadReviews();
-});
-</script>
-<!-- Kudoboard Section Ends Here -->
- <!-- Section -->
+  .whiteboard-container button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+  }
+  </style>
+  <!-- Kudoboard Section Ends Here -->
+  <!-- Section -->
   <section class="section section-md">
     <div class="container">
       <div class="row align-items-center justify-content-around">
@@ -145,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <p class="lead">
             With a culture of collaboration and a roster of talent, the Hardhat
             team is active in the creative community, endlessly interested in
-            what’s next, and generally pleasant to be around.
+            what's next, and generally pleasant to be around.
           </p>
         </div>
       </div>
@@ -411,10 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <!-- End of Form -->
                 <div class="d-grid">
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                  >
+                  <button type="submit" class="btn btn-warning btn-primary">
                     Send Message
                   </button>
                 </div>
@@ -430,6 +407,90 @@ document.addEventListener('DOMContentLoaded', function () {
 </main>
 <script src="{% static 'js/handleFormSubmit.js' %}"></script>
 
+<style>
+.btn-warning.btn-primary {
+    color: #1c2540;
+    background-color: #ffc107;
+    border-color: #ffc107;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(23, 31, 56, 0.075);
+}
 
+.btn-warning.btn-primary:hover {
+    color: #1c2540;
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.btn-secondary {
+    color: #1c2540;
+    background-color: #ffc107;
+    border-color: #ffc107;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(23, 31, 56, 0.075);
+}
+
+.btn-secondary:hover {
+    color: #1c2540;
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.whiteboard-container button {
+    color: #ffffff !important;
+    background-color: #1c2540 !important;
+    border-color: #1c2540;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    margin: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.whiteboard-container button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(28, 37, 64, 0.2);
+    background-color: #2a3a5f !important;
+}
+
+.whiteboard-container button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.whiteboard {
+    min-height: 300px;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e9ecef;
+}
+
+.sticky-note {
+    display: inline-block;
+    padding: 1rem;
+    margin: 0.5rem;
+    min-width: 150px;
+    min-height: 150px;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    word-wrap: break-word;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.sticky-note:hover {
+    transform: scale(1.05);
+}
+
+#reviewText {
+    resize: vertical;
+    min-height: 100px;
+}
+</style>
+
+<a href="https://owasp.org/www-project-top-ten/" target="_blank" class="btn btn-secondary">OWASP Top 10</a>
 
 {% endblock content %}
