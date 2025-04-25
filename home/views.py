@@ -431,7 +431,10 @@ def feedback(request):
         form = ExperienceForm(request.POST)
         if form.is_valid():
             form.save()  # Save the feedback to the database
+            messages.success(request, "Thank you for your feedback!")
             return redirect('feedback')  # Redirect to clear the form
+        else:
+            messages.error(request, "There was an error. Please try again.")
 
     else:
         form = ExperienceForm()

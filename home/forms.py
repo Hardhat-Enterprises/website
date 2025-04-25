@@ -447,14 +447,6 @@ class CaptchaForm(forms.Form):
     captcha = CaptchaField()
         
 
-class ExperienceForm(ModelForm):
-    class Meta:
-        model = Experience
-        fields = ['name', 'feedback']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
-            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
-        }
 
 #Newly Added
 class ContactForm(forms.Form):
@@ -472,8 +464,7 @@ class ContactForm(forms.Form):
         message = xss_detection(message)
         return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
         
-
-class ExperienceForm(ModelForm):
+class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
         fields = ['name', 'feedback']
