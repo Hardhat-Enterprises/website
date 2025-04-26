@@ -771,20 +771,40 @@ def get_priority_breakdown(request, priority):
         }
     })
 
+import base64
+
 def blogpage(request):
     if request.method == 'POST':
-        form = UserBlogPageForm(request.POST)
+        form = UserBlogPageForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()  
-            return redirect('blogpage') 
+            blog = form.save(commit=False)
 
+            uploaded_file = request.FILES.get('file')
+            if uploaded_file:
+                blog.file = base64.b64encode(uploaded_file.read()).decode('utf-8')
+
+            blog.save()
+            return redirect('blogpage')
     else:
         form = UserBlogPageForm()
 
-    # Retrieve recent feedback from the database
-    blogpages = UserBlogPage.objects.all().order_by('-created_at')[:10]  
-
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')[:10]
     return render(request, 'pages/blogpage.html', {'form': form, 'blogpages': blogpages})
+
+def edit_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+
+    if request.method == 'POST':
+        blog.name = request.POST.get('name')
+        blog.title = request.POST.get('title')
+        blog.description = request.POST.get('description')
+        uploaded_file = request.FILES.get('file')
+        if uploaded_file:
+         blog.file = base64.b64encode(uploaded_file.read()).decode('utf-8')
+        blog.save()
+        return redirect('blogpage')
+
+    return render(request, 'pages/blogpage.html', {'blog': blog})
  
 def blogpage_view(request):
     if request.method == 'POST':

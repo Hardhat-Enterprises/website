@@ -457,9 +457,11 @@ class ExperienceForm(ModelForm):
         }
 
 class UserBlogPageForm(ModelForm):
+    file = forms.FileField(required=False)
+
     class Meta:
         model = UserBlogPage
-        fields = ['name', 'title', 'description']
+        fields = ['name', 'title', 'description', 'file']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
             'title': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your title'}),

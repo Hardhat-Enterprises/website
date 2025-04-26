@@ -99,6 +99,8 @@ urlpatterns = [
     path('feedback/', views.feedback, name='feedback'),
     path('blogpage/', views.blogpage, name='blogpage'),
     path('blogpage/delete/<int:id>', delete_blogpage, name='delete_blogpage'),
+    path('edit_blogpage/<int:id>/', views.edit_blogpage, name='edit_blogpage'),
+
 
 
 
