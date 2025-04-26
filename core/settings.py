@@ -28,9 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# This draws the SECRET KEY from the .env file. Previously the secret key rotated as it was not defined therefore sessions would corrupt.
+SECRET_KEY = os.environ['SECRET_KEY']
 if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choice( string.ascii_lowercase  ) for i in range( 32 ))
+    raise Exception("SECRET_KEY environment variable not set")
+# Raises error is secret key not found / .env file not correctly setup. 
 
 # Render Deployment Code
 #DEBUG = False
@@ -65,7 +67,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = True
 
 #Enhance CSRF protection
-CSRF_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 #Ensure DEBUG is set to False in production to avoid sensitive information exposure
 DEBUG = True
@@ -119,7 +121,8 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "home.idle.IdleTimeoutMiddleware",  
+    # "home.idle.IdleTimeoutMiddleware",
+    "home.idle.LogoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
     "core.middleware.LogRequestMiddleware",
@@ -335,7 +338,7 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SESSION_COOKIE_AGE = 600 #10 minutes
+SESSION_COOKIE_AGE = 1209600 #2 weeks 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'

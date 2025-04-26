@@ -18,3 +18,4 @@ venv/
 env/
 media/
 *.log
+.env
