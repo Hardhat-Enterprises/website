@@ -73,6 +73,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     last_activity = models.DateTimeField(null=True, blank=True, default=now)
 
+
+    current_session_key = models.CharField(max_length=40, null=True, blank=True)
+
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
 
