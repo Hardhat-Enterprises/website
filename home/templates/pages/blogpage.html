@@ -2,98 +2,159 @@
 {% load static %}
 
 {% block content %}
-
 <main>
 
-  {% include 'includes/pre-loader.html' %}
-<section class="section section-lg">
-    <div class="container">
-        <h4>User Blogs</h4>
-        <br>
-        <p>Please provide your blog details with our company..</p>
-        <br>
-        <form method="post" action="{% url 'blogpage' %}" class="card">
-            {% csrf_token %}
-            <div class="card-header">How was your blog?</div>
-            <br>
-            <div class="container">
-                <div class="col">
-                <div class="card-text form-group">
-                    <label for="id_name">Name:</label>
-                    {{ form.name }}
-                </div>
-                <br>
-                <div class="card-text form-group">
-                    <label for="id_title">Blog Title:</label>
-                    {{ form.title }}
-                </div>
-                <br>
-                <div class="card-text form-group">
-                    <label for="id_description">Blog Description:</label>
-                    {{ form.description }}
-                </div>
-                <br>
-                <button type="reset" class="btn btn-primary">Reset</button> 
-                <button type="submit" class="btn btn-primary">Submit</button> 
-                </div>
-                <br>
-            </div>
-        </form>
-        <br/>
-        <br/>
-        <div class="feedback-list">
-            <h5><u>Recent Blog Pages</u></h5>        
-            <br/>
-            {% if blogpages %}
-            <ul>
-                {% for blogpage in blogpages %}
-                <div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <div>
-                            <span
-                            style="font-size: 18px; font-weight: bolder;"
-                            >User Name : </span>{{ blogpage.name }}
-                        </div>
-                        <div>
-                            <form method="post" action="{% url 'delete_blogpage' blogpage.id %}" style="">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>     
-                       </div>  
-                    </div>
-                    <span
-                    style="font-size: 18px; font-weight: bolder;"
-                    >Title : </span>{{ blogpage.title }}
-                </div>                                  
-                    <div>
-                        <span
-                        style="font-size: 16px; font-weight: bolder;"
-                        >Description : </span>{{ blogpage.description }} 
-            </div>  
-            <br/>                                            
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No Blog Yet</p>
-        {%  endif %}
-        </div>
-    </div>
-    <!-- Subresource Integrity -->       
-    <script type="module"
-    src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
-    crossorigin="anonymous"></script>
-    <!-- Popper.js -->
-    <script type="module"
-    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" 
-    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" 
-    crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script type="module" 
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
-    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" 
-    crossorigin="anonymous"></script>
-</section>
-</main>
+{% include 'includes/pre-loader.html' %}
 
-{% endblock content %}
+<section class="section section-lg">
+  <div class="container">
+    <h4>User Blogs</h4>
+    <br>
+    <p>Please provide your blog details with our company.</p>
+    <br>
+
+    <!-- Blog Submission Form -->
+    <form method="post" action="{% url 'blogpage' %}" class="card" enctype="multipart/form-data" style="padding: 20px;">
+      {% csrf_token %}
+      <div class="card-header">Share Your Blog</div>
+      <div class="form-group">
+        <br/>
+        <label for="id_name">Name:</label>
+        {{ form.name }}
+        <br/>
+      </div>
+      <br/>
+      <div class="form-group">
+        <label for="id_title">Blog Title:</label>
+        {{ form.title }}
+      </div>
+      <br/>
+      <div class="form-group">
+        <label for="id_description">Blog Description:</label>
+        {{ form.description }}
+      </div>
+      <br/>
+      <div class="form-group">
+        <label for="id_file">Image Upload (optional):</label>
+        {{ form.file }}
+      </div>
+      <br/>
+      <button type="reset" class="btn btn-secondary">Reset</button>
+      <br/>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <br><br>
+
+    <!-- Blog Cards -->
+    <div class="feedback-list">
+      <h5><u>Recent Blog Pages</u></h5>
+      <br>
+      <div class="row">
+        {% if blogpages %}
+          {% for blogpage in blogpages %}
+            <div class="col-md-4 mb-4">
+              <div class="card" style="width: 100%; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 15px;">
+                <img src="data:image/jpeg;base64,{{ blogpage.file }}" class="card-img-top" style="border-top-left-radius: 15px; border-top-right-radius: 15px; height: 200px; object-fit: cover;" alt="Blog Image">
+                <div class="card-body">
+                  <h5 class="card-title">{{ blogpage.title }}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">By {{ blogpage.name }}</h6>
+                  <p class="card-text">{{ blogpage.description|truncatewords:20 }}</p>
+
+                  <div style="display: flex; justify-content: space-between;">
+                    <!-- Edit Button -->
+                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal"
+                      onclick="openEditModal('{{ blogpage.id }}', '{{ blogpage.name }}', '{{ blogpage.title }}', `{{ blogpage.description|escapejs }}`)">
+                      Edit
+                    </button>
+
+                    <!-- Delete Form -->
+                    <form method="post" action="{% url 'delete_blogpage' blogpage.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No Blogs Yet</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Edit Blog Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <form id="editForm" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editModalLabel">Edit Blog</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetEditForm()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id" id="editBlogId">
+              <div class="form-group">
+                <label for="editName">Name</label>
+                <input type="text" class="form-control" id="editName" name="name" required>
+              </div>
+              <br/>
+              <div class="form-group">
+                <label for="editTitle">Blog Title</label>
+                <input type="text" class="form-control" id="editTitle" name="title" required>
+              </div>
+              <br/>
+              <div class="form-group">
+                <label for="editDescription">Blog Description</label>
+                <textarea class="form-control" id="editDescription" name="description" rows="4" required></textarea>
+              </div>
+              <br/>
+              <div class="form-group">
+                <label for="editFile">Change Image (optional)</label>
+                <input type="file" class="form-control-file" id="editFile" name="file">
+              </div>
+            </div>           
+            <br/>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetEditForm()">Cancel</button>
+              <button type="submit" class="btn btn-success">Save Changes</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- jQuery, Popper, Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Script to open modal with blog data -->
+  <script>
+    function openEditModal(id, name, title, description) {
+      document.getElementById('editBlogId').value = id;
+      document.getElementById('editName').value = name;
+      document.getElementById('editTitle').value = title;
+      document.getElementById('editDescription').value = description;
+
+      // Update form action dynamically
+      document.getElementById('editForm').action = `/edit_blogpage/${id}/`;
+    }
+
+    // Optional: Reset form fields when closing modal
+    function resetEditForm() {
+      document.getElementById('editForm').reset();
+    }
+  </script>
+
+</section>
+
+</main>
+{% endblock %}

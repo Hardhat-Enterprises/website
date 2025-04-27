@@ -482,8 +482,9 @@ class UserBlogPage(models.Model):
     name = models.CharField(max_length=100)
     title = models.TextField()
     description = models.TextField()
+    file = models.TextField(blank=True, null=True)  # <-- Base64 Image field
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name} - {self.title[:50]} - {self.description[:50]}"
-
+    
