@@ -82,13 +82,34 @@ class SecurityEventAdmin(admin.ModelAdmin):
 class Webpage(admin.ModelAdmin):
     list_display = [field.name for field in Webpage._meta.fields]
 
+
 @admin.register(CyberChallenge)
 class CyberChallengeAdmin(admin.ModelAdmin):
-    list_display = ['title', 'difficulty', 'category', 'points']
+    list_display = ('title', 'category', 'difficulty', 'challenge_type', 'points')
+    list_filter = ('category', 'difficulty', 'challenge_type')
+    search_fields = ('title', 'description', 'question')
+
+    def get_fields(self, request, obj=None):
+        fields = [
+            'title', 'description', 'question', 'explanation', 'difficulty',
+            'category', 'points', 'challenge_type', 'time_limit'
+        ]
+
+        if obj:
+            if obj.challenge_type == 'mcq':
+                fields += ['choices', 'correct_answer']
+            elif obj.challenge_type == 'fix_code':
+                fields += ['starter_code', 'sample_input', 'expected_output', 'correct_answer']
+        else:
+            fields += ['choices', 'correct_answer', 'starter_code', 'sample_input', 'expected_output']
+
+        return fields
+
+
 
 @admin.register(UserChallenge)
 class UserChallengeAdmin(admin.ModelAdmin):
-    list_display = ['user', 'challenge', 'completed', 'score']
+    list_display = ('user', 'challenge', 'completed', 'score')
 
 
 @admin.register(ContactSubmission)
@@ -106,8 +127,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 class ExperienceAdmin(admin.ModelAdmin):
     list_display = ['name', 'feedback', 'created_at']
     search_fields = ['name', 'feedback']
-    readonly_fields = ['created_at']  # Make created_at read-only
-
+    
 @admin.register(UserBlogPage)
 class UserBlogPageAdmin(admin.ModelAdmin):
     list_display = ['name', 'title', 'description', 'created_at']

@@ -65,6 +65,9 @@
                     <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
                     </li>
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="/">The Policy Deployment Engine</a>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -146,7 +149,7 @@
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
               data-bs-toggle="dropdown">
               Upskilling
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
@@ -195,7 +198,7 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
               data-bs-toggle="dropdown">
               Projects
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
@@ -236,12 +239,18 @@
                   </li>
                 </a>
 
+                <a class="menu-link" href="\">
+                  <li class="mb-2 menu ps-3 py-1">
+                    The Policy Deployment Engine
+                  </li>
+                </a>
+
               </ul>
             </div>
           </li>
 
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
               data-bs-toggle="dropdown">
               Blog
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>

@@ -447,14 +447,6 @@ class CaptchaForm(forms.Form):
     captcha = CaptchaField()
         
 
-class ExperienceForm(ModelForm):
-    class Meta:
-        model = Experience
-        fields = ['name', 'feedback']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
-            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
-        }
 
 class UserBlogPageForm(ModelForm):
     file = forms.FileField(required=False)
@@ -484,15 +476,16 @@ class ContactForm(forms.Form):
         message = xss_detection(message)
         return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
         
-
-# class ExperienceForm(ModelForm):
-#     class Meta:
-#         model = Experience
-#         fields = ['name', 'feedback']
-#         widgets = {
-#             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
-#             'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
-#         }
+# Experience Form
+class ExperienceForm(forms.ModelForm):
+    class Meta:
+        model = Experience
+        fields = ['name', 'feedback']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
+        }
+        
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:
