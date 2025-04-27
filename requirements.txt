@@ -51,3 +51,4 @@ drf-yasg==1.21.8
 #Cron Jobs
 django-cron==0.6.0 
 
+django-cron==0.6.0
