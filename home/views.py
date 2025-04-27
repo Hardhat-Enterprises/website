@@ -779,6 +779,9 @@ def blogpage(request):
         if form.is_valid():
             blog = form.save(commit=False)
 
+            # Ensure 'isShow' is set to False by default
+            blog.isShow = False  # Default value is False, no need to check
+
             uploaded_file = request.FILES.get('file')
             if uploaded_file:
                 blog.file = base64.b64encode(uploaded_file.read()).decode('utf-8')
@@ -790,6 +793,7 @@ def blogpage(request):
 
     blogpages = UserBlogPage.objects.all().order_by('-created_at')[:10]
     return render(request, 'pages/blogpage.html', {'form': form, 'blogpages': blogpages})
+
 
 def edit_blogpage(request, id):
     blog = get_object_or_404(UserBlogPage, id=id)
@@ -825,6 +829,25 @@ def delete_blogpage(request, id):
     blogpage= get_object_or_404(UserBlogPage, id=id)
     blogpage.delete()
     return redirect('blogpage')
+
+def adminblogpage(request):
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')
+    return render(request, 'pages/adminblogpage.html', {'blogpages': blogpages})
+
+def approve_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+    blog.isShow = True
+    blog.save()
+    return redirect('adminblogpage')
+
+def reject_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+    blog.delete()
+    return redirect('adminblogpage')
+
+def publishedblog(request):
+    blogpages = UserBlogPage.objects.filter(isShow=True).order_by('-created_at')
+    return render(request, 'pages/publishedblog.html', {'blogpages': blogpages})
     
 def statistics_view(request):
     return render(request, 'charts/statistics.html')

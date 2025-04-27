@@ -168,6 +168,27 @@
           </li>
           {% endif %}
 
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdownA" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Admin Blogs
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdownA">
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none mb-4">
+                    <li class="mb-2 menu-item">
+                      <a class="menu-link" href="{% url 'adminblogpage' %}">Blog Dashboard</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endif %}
+
 
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
@@ -238,6 +259,13 @@
                   <li class="mb-2 menu ps-3 py-1">
                     <li class="mb-2 menu ps-3 py-1">
                       Blog Page
+                    </li>
+                  </li>                 
+                </a> 
+                <a class="menu-link" href="{% url 'publishedblog' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    <li class="mb-2 menu ps-3 py-1">
+                      Published Blog Page
                     </li>
                   </li>                 
                 </a>

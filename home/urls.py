@@ -100,8 +100,10 @@ urlpatterns = [
     path('blogpage/', views.blogpage, name='blogpage'),
     path('blogpage/delete/<int:id>', delete_blogpage, name='delete_blogpage'),
     path('edit_blogpage/<int:id>/', views.edit_blogpage, name='edit_blogpage'),
-
-
+    path('adminblogpage/', views.adminblogpage, name='adminblogpage'),
+    path('adminblogpage/approve/<int:id>/', views.approve_blogpage, name='approve_blogpage'),
+    path('adminblogpage/reject/<int:id>/', views.reject_blogpage, name='reject_blogpage'),
+    path('publishedblog/', views.publishedblog, name='publishedblog'),
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),
