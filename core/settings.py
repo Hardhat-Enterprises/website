@@ -19,13 +19,20 @@ from pymemcache.client.base import Client
 # Import for CORS headers
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
-load_dotenv()  # take environment variables from .env.
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+env_path = BASE_DIR / '.env'
+
+if not env_path.exists():
+    secret_key = ''.join(random.choice(string.ascii_lowercase) for i in range(50))
+    with open(env_path, 'w') as f:
+        f.write(f'SECRET_KEY={secret_key}\n')
+
+load_dotenv()  # take environment variables from .env.
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # This draws the SECRET KEY from the .env file. Previously the secret key rotated as it was not defined therefore sessions would corrupt.
