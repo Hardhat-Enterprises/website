@@ -31,8 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # This draws the SECRET KEY from the .env file. Previously the secret key rotated as it was not defined therefore sessions would corrupt.
 SECRET_KEY = os.environ['SECRET_KEY']
 if not SECRET_KEY:
-    raise Exception("SECRET_KEY environment variable not set")
-# Raises error is secret key not found / .env file not correctly setup. 
+    SECRET_KEY = ''.join(random.choice(string.ascii_lowercase) for i in range(32))
+    # Save it into the .env file
+    set_key('.env', 'SECRET_KEY', SECRET_KEY)
 
 # Render Deployment Code
 #DEBUG = False
