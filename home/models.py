@@ -131,7 +131,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             request.session.save()
         self.last_activity = now()
         self.current_session_key = request.session.session_key
-        self.save(update_fields=['last_activity', 'current_second_key'])
+        self.save(update_fields=['last_activity', 'current_session_key'])
 
 #Search Bar Models:
 
