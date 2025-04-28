@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os, random, string
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
 from django.core.cache.backends.base import InvalidCacheBackendError
 from pymemcache.client.base import Client
 
