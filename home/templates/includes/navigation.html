@@ -262,11 +262,12 @@
         <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
             class="fas fa-sign-out-alt me-2"></span> Logout</a>
 
-        <!-- <a class="profile-container" href="{% url 'profile' %}"> -->
-        <img
-          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-        <span>Profile</span>
+        <a class="profile-container" href="{% url 'profile' %}">
+          <img
+            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+          <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
+        </a>
 
         {% else %}
         <div class="sign-up-button-container">
