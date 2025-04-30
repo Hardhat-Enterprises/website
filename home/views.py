@@ -1220,3 +1220,9 @@ def leaderboard_update():
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
 
+def cyber_quiz(request):
+    """
+    View for the cybersecurity quiz page.
+    """
+    return render(request, 'pages/challenges/quiz.html')
+

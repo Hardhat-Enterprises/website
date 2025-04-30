@@ -244,8 +244,26 @@
             <a href="{% url 'career-list' %}" class="nav-link"> Careers </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'challenge_list' %}">Cyber Challenges</a>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Cyber Challenges
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'challenge_list' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    All Challenges
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'cyber_quiz' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Quiz
+                  </li>
+                </a>
+              </ul>
+            </div>
           </li>
 
         </ul>
