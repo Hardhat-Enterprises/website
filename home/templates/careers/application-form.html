@@ -4,13 +4,40 @@
 
 <style>
   .form-container {
-    background-color: #343a40;
+    background-color: #212529;
     color: #f8f9fa;
     padding: 3rem;
     border-radius: 20px;
     box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
     margin-top: 8rem;
     margin-bottom: 4rem;
+  }
+
+  .form-container h4,
+  .form-container p {
+    color: #f8f9fa !important;
+  }
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+    color: #28a745; /* Bootstrap success green */
+  }
+
+  .continue-btn {
+    margin-top: 1rem;
+    border-radius: 20px;
+    background-color: #ffc107;
+    border: none;
+    color: #212529;
+    padding: 10px 30px;
+    font-weight: bold;
+  }
+
+  .continue-btn:hover {
+    background-color: #e0a800;
+    color: white;
   }
 
   .form-container label {
@@ -24,6 +51,8 @@
     border-radius: 12px;
     padding: 0.75rem 1rem;
     font-size: 1rem;
+    background-color: #343a40;
+    color: #fff;
   }
 
   .form-control::placeholder {
@@ -43,37 +72,6 @@
   .submit-btn:hover {
     opacity: 0.9;
   }
-
-  .success-icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 1rem;
-  }
-
-  .continue-btn {
-    margin-top: 1rem;
-    border-radius: 20px;
-    background-color: #212529;
-    border: none;
-    color: #ffc107;
-    padding: 10px 30px;
-  }
-
-  .continue-btn:hover {
-    background-color: #343a40;
-    color: white;
-  }
-  .text-white {
-  color: #fff !important;
-}
-
-.text-white h1,
-.text-white h2,
-.text-white p,
-.text-white label,
-.text-white span {
-  color:  #fff !important;
-}
 </style>
 
 {% if complete %}

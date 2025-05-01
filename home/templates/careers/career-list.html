@@ -70,7 +70,12 @@
         <option value="OnSite" {% if request.GET.location == 'OnSite' %}selected{% endif %}>OnSite</option>
       </select>
     </div>
+    <!-- 🧹 Clear Button -->
+    <div class="col-md-2">
+      <button type="button" class="btn btn-secondary w-100" onclick="clearFilters()">Clear Filters</button>
+    </div>
   </form>
+  
   <!-- 🧾 Job Listings -->
   <div id="job-listings" class="row">
     {% if jobs %}
@@ -115,6 +120,12 @@
       const updatedListings = html.querySelector("#job-listings");
       document.getElementById("job-listings").innerHTML = updatedListings.innerHTML;
     });
+  }
+  function clearFilters() {
+    document.querySelector('input[name="search"]').value = '';
+    document.querySelector('select[name="job_type"]').value = '';
+    document.querySelector('select[name="location"]').value = '';
+    submitFilterForm();
   }
 </script>
 
