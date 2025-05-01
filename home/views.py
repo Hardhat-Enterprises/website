@@ -24,7 +24,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from .models import ContactSubmission
 from django.utils.html import strip_tags
-
+from .models import Report
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, UserBlogPage #Feedback 
 
@@ -1023,6 +1023,34 @@ def reject_blogpage(request, id):
 def publishedblog(request):
     blogpages = UserBlogPage.objects.filter(isShow=True).order_by('-created_at')
     return render(request, 'pages/publishedblog.html', {'blogpages': blogpages})
+
+def report_blog(request):
+    if request.method == 'POST':
+        blog_id = request.POST.get('blog_id')
+        blog_name = request.POST.get('blog_name')
+        reason = request.POST.get('reason')
+
+        print(f"Blog ID: {blog_id}")
+        print(f"Blog Name: {blog_name}")
+        print(f"Report Reason: {reason}")
+
+        # Save the report to the database
+        Report.objects.create(
+            blog_id=blog_id,
+            blog_name=blog_name,
+            reason=reason
+        )
+
+        messages.success(request, "Thanks for reporting the blog.")
+        return redirect('publishedblog')
+
+    # Optional fallback for non-POST requests
+    messages.warning(request, "Invalid request.")
+    return redirect('publishedblog')
+
+def adminblogreports(request):
+    reports = Report.objects.all().order_by('-created_at')
+    return render(request, 'pages/reports.html', {'reports': reports})
     
 def statistics_view(request):
     return render(request, 'charts/statistics.html')

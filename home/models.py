@@ -530,6 +530,16 @@ class UserBlogPage(models.Model):
     def __str__(self):
         return f"{self.name} - {self.title[:50]} - {self.description[:50]}"
 
+class Report(models.Model):
+    blog_id = models.IntegerField()
+    blog_name = models.CharField(max_length=255)
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.blog_name} - {self.reason[:50]}"
+
+
 
 # Passkey Model
 class Passkey(models.Model):

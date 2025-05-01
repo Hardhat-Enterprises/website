@@ -29,8 +29,8 @@
 
               <div style="display: flex; justify-content: space-between;">
                 {% if not blog.isShow %}
-                  <a href="{% url 'approve_blogpage' blog.id %}" class="btn btn-success btn-sm">Accept</a>
-                  <a href="{% url 'reject_blogpage' blog.id %}" class="btn btn-danger btn-sm">Reject</a>
+                  <a href="{% url 'approve_blogpage' blog.id %}" class="btn btn-success btn-sm">Publish</a>
+                  <a href="{% url 'reject_blogpage' blog.id %}" class="btn btn-danger btn-sm">Remove</a>
                 {% else %}
                   <form method="post" action="{% url 'reject_blogpage' blog.id %}">
                     {% csrf_token %}

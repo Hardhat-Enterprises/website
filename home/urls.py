@@ -107,6 +107,9 @@ urlpatterns = [
     path('adminblogpage/approve/<int:id>/', views.approve_blogpage, name='approve_blogpage'),
     path('adminblogpage/reject/<int:id>/', views.reject_blogpage, name='reject_blogpage'),
     path('publishedblog/', views.publishedblog, name='publishedblog'),
+    path('report-blog/', views.report_blog, name='report_blog'),
+    path('reports/', views.adminblogreports, name='reports'),
+
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),
