@@ -133,112 +133,166 @@
   <!-- Projects -->
   <section id="projects" class="section section-lg bg-tertiary">
     <div class="container">
-    <h1 class="fw-bolder display-2 text-center mb-lg-2">Projects</h1>
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
-            <div class="position-relative">
-              <img src="{% static 'assets/img/pages/home/appattack-card.svg' %}" class="card-img-top" alt="Neil Portrait">
-            </div>  
-            <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
-              <h3 class="h5 card-title">AppAttack</h3>
-              <p class="mt-3">We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets</p>
-              <a href="{% url 'appattack' %}">
-                <div class="btn btn-secondary mt-auto">
-                  Learn More
-                </div>
-              </a>
+      <h1 class="fw-bolder display-2 text-center mb-lg-2">Projects</h1>
+      <div class="project-slider overflow-hidden position-relative">
+        <div class="project-track d-flex transition">
+          <!-- Begin Project Cards -->
+          <div class="project-card flex-shrink-0">
+            <div class="card border-0 overflow-hidden h-100">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/appattack-card.svg' %}" class="card-img-top" alt="AppAttack">
+              </div>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">AppAttack</h3>
+                <p class="mt-3">We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets</p>
+                <a href="{% url 'appattack' %}">
+                  <div class="btn btn-secondary mt-auto">Learn More</div>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
+
+          <div class="project-card flex-shrink-0">
+            <div class="card border-0 overflow-hidden h-100">
               <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/pt-gui-card-2.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
+                <img src="{% static 'assets/img/pages/home/pt-gui-card-2.svg' %}" class="card-img-top" alt="PT-GUI">
+              </div>
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
                 <h3 class="h5 card-title">PT-GUI</h3>
                 <p class="mt-3">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a revolution in cybersecurity practice.</p>
                 <a href="{% url 'ptgui_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
+                  <div class="btn btn-secondary mt-auto">Learn More</div>
                 </a>
               </div>
+            </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
+
+          <div class="project-card flex-shrink-0">
+            <div class="card border-0 overflow-hidden h-100">
               <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
+                <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="CyberSafe VR">
+              </div>
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
                 <h3 class="h5 card-title">CyberSafe VR</h3>
                 <p class="mt-3">Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using interactive VR technology to blend theory with practical application for owners and employees taking cybersecurity measures.</p>
                 <a href="{% url 'Vr_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
+                  <div class="btn btn-secondary mt-auto">Learn More</div>
                 </a>
               </div>
+            </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
+
+          <div class="project-card flex-shrink-0">
+            <div class="card border-0 overflow-hidden h-100">
               <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/cards/icon2.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
+                <img src="{% static 'assets/img/pages/home/cards/icon2.svg' %}" class="card-img-top" alt="Smishing Detection">
+              </div>
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
                 <h3 class="h5 card-title">Smishing Detection</h3>
-                <p class="mt-3">Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to
-                  moderate the risks associated with SMS phishing attacks.</p>
+                <p class="mt-3">Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to moderate the risks associated with SMS phishing attacks.</p>
                 <a href="{% url 'smishing_detection_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
+                  <div class="btn btn-secondary mt-auto">Learn More</div>
                 </a>
               </div>
+            </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
+
+          <div class="project-card flex-shrink-0">
+            <div class="card border-0 overflow-hidden h-100">
               <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
+                <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Threat Mirror">
+              </div>
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
                 <h3 class="h5 card-title">Threat Mirror <br>(Project Paused)</h3>
-                <p class="mt-3">Threat Mirror aims to investigate open-source threat intelligence platforms,
-                  assessing their suitability and adaptability for SMEs and developing economies.</p>
+                <p class="mt-3">Threat Mirror aims to investigate open-source threat intelligence platforms, assessing their suitability and adaptability for SMEs and developing economies.</p>
                 <a href="{% url 'Deakin_Threat_mirror_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
+                  <div class="btn btn-secondary mt-auto">Learn More</div>
                 </a>
               </div>
+            </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="card border-0 overflow-hidden h-100">
+
+          <div class="project-card flex-shrink-0">
+            <div class="card border-0 overflow-hidden h-100">
               <div class="position-relative">
-                <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Neil Portrait">
-              </div>  
+                <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Malware Visualization">
+              </div>
               <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
                 <h3 class="h5 card-title">Malware Visualization</h3>
                 <p class="mt-3">The Malware Visualisation project creates a user-friendly tool that simplifies malware analysis by integrating with existing visual analytics applications.</p>
                 <a href="{% url 'malware_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">
-                    Learn More
-                  </div>
+                  <div class="btn btn-secondary mt-auto">Learn More</div>
                 </a>
               </div>
+            </div>
           </div>
+          <!-- End Project Cards -->
         </div>
+        <button class="slider-btn prev">&#10094;</button>
+        <button class="slider-btn next">&#10095;</button>
       </div>
     </div>
-    <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"><svg class="fill-white"
-      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
-      <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
-    </svg></figure>
+    <style>
+      .project-slider {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+      }
+      .project-track {
+        display: flex;
+        gap: 20px;
+        transition: transform 0.5s ease;
+      }
+      .project-card {
+        width: calc(100% / 3);
+      }
+      .slider-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        z-index: 99;
+      }
+      .prev {
+        left: 0;
+      }
+      .next {
+        right: 0;
+      }
+      @media(max-width: 768px) {
+        .project-card {
+          width: calc(100% / 1.1);
+        }
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const track = document.querySelector('.project-track');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        const cardWidth = document.querySelector('.project-card').offsetWidth + 20;
+        let currentPosition = 0;
+
+        nextBtn.addEventListener('click', () => {
+          const maxScroll = track.scrollWidth - track.clientWidth;
+          if (currentPosition + cardWidth <= maxScroll) {
+            currentPosition += cardWidth;
+            track.style.transform = `translateX(-${currentPosition}px)`;
+          }
+        });
+
+        prevBtn.addEventListener('click', () => {
+          if (currentPosition - cardWidth >= 0) {
+            currentPosition -= cardWidth;
+            track.style.transform = `translateX(-${currentPosition}px)`;
+          }
+        });
+      });
+    </script>
   </section>
 
     <!-- News Section -->
@@ -248,9 +302,9 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
           <!-- News Card 1 -->
           <div class="col">
-            <div class="card h-100 border-0 shadow-sm">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
               <img src="{% static 'assets/img/pages/News/img.jpg' %}" class="card-img-top img-fluid rounded-top" alt="TROX Stealer Malware">
-              <div class="card-body d-flex flex-column">
+              <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">TROX Stealer Malware Spreads via Fake Updates</h5>
                 <p class="card-text">A new wave of cyberattacks spreads malware through fake software update alerts targeting unsuspecting users globally.</p>
                 <a href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
@@ -259,9 +313,9 @@
           </div>
           <!-- News Card 2 -->
           <div class="col">
-            <div class="card h-100 border-0 shadow-sm">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
               <img src="{% static 'assets/img/pages/News/imgg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="AI in Cybersecurity">
-              <div class="card-body d-flex flex-column">
+              <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">AI Shaping the Future of Cyber Defense</h5>
                 <p class="card-text">Experts explore how artificial intelligence is transforming threat detection and proactive cybersecurity measures worldwide.</p>
                 <a href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
@@ -270,9 +324,9 @@
           </div>
           <!-- News Card 3 -->
           <div class="col">
-            <div class="card h-100 border-0 shadow-sm">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
               <img src="{% static 'assets/img/pages/News/imggg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="Zero Trust Model">
-              <div class="card-body d-flex flex-column">
+              <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">Zero Trust Security: Why It Matters in 2025</h5>
                 <p class="card-text">With rising remote work trends, the zero-trust model becomes essential in securing networks beyond traditional perimeters.</p>
                 <a href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
@@ -281,7 +335,13 @@
           </div>
         </div>
       </div>
+      <style>
+        #news .card-body {
+          background-color: #ffcd11;
+        }
+      </style>
     </section>
+    
   
 
   {% if show_announcement %}
@@ -305,14 +365,35 @@
   {% endif %}
   
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM fully loaded");
-    setTimeout(function() {
-        console.log("Showing announcement modal");
-        var announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
-        announcementModal.show();
-    }, 3000);
-});
+  document.addEventListener('DOMContentLoaded', function () {
+    const track = document.querySelector('.project-track');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    const cardWidth = document.querySelector('.project-card').offsetWidth + 20;
+    let currentPosition = 0;
+
+    function moveNext() {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (currentPosition + cardWidth <= maxScroll) {
+        currentPosition += cardWidth;
+      } else {
+        currentPosition = 0;
+      }
+      track.style.transform = `translateX(-${currentPosition}px)`;
+    }
+
+    nextBtn.addEventListener('click', moveNext);
+
+    prevBtn.addEventListener('click', () => {
+      if (currentPosition - cardWidth >= 0) {
+        currentPosition -= cardWidth;
+        track.style.transform = `translateX(-${currentPosition}px)`;
+      }
+    });
+
+    // Auto slide every 2 seconds
+    setInterval(moveNext, 2000);
+  });
 </script>
 
 </main>
