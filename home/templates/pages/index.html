@@ -233,6 +233,29 @@
               </div>
           </div>
         </div>
+        <div class="col">
+          <div class="card border-0 overflow-hidden h-100">
+              <div class="position-relative">
+                <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Neil Portrait">
+              </div>  
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">The Policy Deployment</h3>
+                <p class="mt-3">An advanced security policy management system that streamlines the deployment and enforcement of cybersecurity policies across organizations. Automates policy implementation, monitors compliance, and provides real-time updates for maintaining robust security standards.</p>
+                <a href="/">
+                  <div class="btn btn-secondary mt-auto">
+                    Learn More
+                  </div>
+                </a>
+              </div>
+          </div>
+        </div>
+      </div>
+      <!-- View More Button Container -->
+      <div class="text-center mt-4">
+        <button id="viewMoreBtn" class="btn btn-primary d-flex align-items-center justify-content-center gap-2" style="margin: 0 auto; background-color: #ffc107; border: none; padding: 15px 30px; border-radius: 25px;">
+          <span style="color: #2d2d2d; font-weight: 600; font-size: 16px;">Show More</span>
+          <i class="fas fa-chevron-down" style="color: #2d2d2d;"></i>
+        </button>
       </div>
     </div>
     <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"><svg class="fill-white"
@@ -269,6 +292,92 @@
         var announcementModal = new bootstrap.Modal(document.getElementById('announcementModal'));
         announcementModal.show();
     }, 3000);
+});
+</script>
+
+<style>
+.hidden-project {
+    display: none;
+}
+
+.visible {
+    display: block;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#viewMoreBtn {
+    transition: all 0.3s ease;
+    background-color: #ffc107;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#viewMoreBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    background-color: #ffca28;
+}
+
+#viewMoreBtn.rotated .fas {
+    transform: rotate(180deg);
+}
+
+#viewMoreBtn .fas {
+    transition: transform 0.3s ease;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const viewMoreBtn = document.getElementById('viewMoreBtn');
+    const buttonText = viewMoreBtn.querySelector('span');
+    const projectCards = document.querySelectorAll('.col');
+    const initialVisibleCount = 6;
+    
+    // Hide projects beyond the initial count
+    projectCards.forEach((card, index) => {
+        if (index >= initialVisibleCount) {
+            card.classList.add('hidden-project');
+        }
+    });
+
+    viewMoreBtn.addEventListener('click', function() {
+        const hiddenProjects = document.querySelectorAll('.hidden-project');
+        
+        if (hiddenProjects.length > 0) {
+            // Show hidden projects
+            hiddenProjects.forEach(project => {
+                project.classList.remove('hidden-project');
+                project.classList.add('visible');
+            });
+            viewMoreBtn.classList.add('rotated');
+            buttonText.textContent = 'Show Less';
+        } else {
+            // Hide projects beyond initial count
+            projectCards.forEach((card, index) => {
+                if (index >= initialVisibleCount) {
+                    card.classList.remove('visible');
+                    card.classList.add('hidden-project');
+                }
+            });
+            viewMoreBtn.classList.remove('rotated');
+            buttonText.textContent = 'Show More';
+        }
+    });
 });
 </script>
 
