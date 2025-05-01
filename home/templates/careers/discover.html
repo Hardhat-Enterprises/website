@@ -1,0 +1,145 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+{% load static %}
+<!-- Add dark-mode-safe styles -->
+<style>
+  @media (prefers-color-scheme: dark) {
+    .dark-text {
+      color: white !important;
+    }
+
+    .dark-heading {
+      color: white !important;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .dark-btn-outline {
+      border-color: white !important;
+      color: white !important;
+    }
+
+    .dark-btn-outline:hover {
+      background-color: white !important;
+      color: black !important;
+    }
+
+    .dark-card {
+      background-color: #333 !important;
+      color: white !important;
+    }
+  }
+</style>
+
+<!-- Hero Section 
+<section class="text-center pt-5 pb-5 mt-5 bg-white" style="background-color: var(--bs-body-bg, #121212);">
+  <div class="container">
+    <h1 style="font-size: 3.5rem; font-weight: 800;" class="text-center mb-5 text-warning">Careers at Hardhat</h1>
+    <p class="lead mb-4 dark-text">
+      Join a culture of innovation, teamwork, and growth. At Hardhat, we empower you
+      to build your own path and make an impact that matters.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="#why-join" class="btn btn-primary px-4">Why Join Us</a>
+      <a href="{% url 'career-list' %}" class="btn btn-primary px-4">Search Jobs</a>
+    </div>
+  </div>
+</section> -->
+
+{% load static %}
+
+<!-- Hero Section with Background Image -->
+<section class="text-center d-flex align-items-center justify-content-center text-white"
+         style="min-height: 100vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url({% static 'assets/img/pages/careers/careers_page.jpg' %}) center/cover no-repeat;">
+  <div class="container">
+    <h1 style="font-size: 4rem; font-weight: 800; color: #ffc107;">Careers at Hardhat</h1>
+    <p class="lead mb-4">
+      Join a culture of innovation, teamwork, and growth. At Hardhat, we empower you
+      to build your own path and make an impact that matters.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="#why-join" class="btn btn-primary px-4">Why Join Us</a>
+        <a href="{% url 'career-list' %}" class="btn btn-primary px-4">Search Jobs</a>
+      </div>
+  </div>
+</section>
+
+
+<!-- Why Join Section -->
+<section id="why-join" class="py-5 bg-light" style="background-color: var(--bs-light-bg-subtle, );">
+  <div class="container">
+    <h2 class="text-center mb-5 text-dark dark-text">Why Join Hardhat</h2>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm dark-card">
+          <div class="card-body">
+            <h5 class="card-title">Career Growth</h5>
+            <p class="card-text">
+              We invest in your future through mentoring, training, and career development programs.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm dark-card">
+          <div class="card-body">
+            <h5 class="card-title">Inclusive Culture</h5>
+            <p class="card-text">
+              Be part of a diverse and supportive team that values every voice and idea.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm dark-card">
+          <div class="card-body">
+            <h5 class="card-title">Flexible Work</h5>
+            <p class="card-text">
+              Enjoy hybrid work options and a healthy work-life balance that suits your lifestyle.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Career Pathways -->
+<section class="py-5 bg-white" style="background-color: var(--bs-body-bg, #ffc107);">
+  <div class="container">
+    <h2 class="text-center mb-5 text-warning">Career Pathways</h2>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm dark-card">
+          <div class="card-body">
+            <h5 class="card-title">Internships & Graduates</h5>
+            <p class="card-text">
+              Start strong with structured programs and mentorship from day one.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm dark-card">
+          <div class="card-body">
+            <h5 class="card-title">Professional Roles</h5>
+            <p class="card-text">
+              Advance your skills with opportunities in tech, consulting, marketing, and more.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm dark-card">
+          <div class="card-body">
+            <h5 class="card-title">Leadership Development</h5>
+            <p class="card-text">
+              Grow into a leader with coaching, training, and high-impact roles.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

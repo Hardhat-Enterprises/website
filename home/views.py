@@ -1158,6 +1158,9 @@ def career_detail(request,id):
     }
     return render(request,"careers/career-detail.html",context)
 
+def career_discover(request):
+    return render(request, "careers/discover.html")
+
 def internships(request):
     internships = Job.objects.filter(job_type='internship', closing_date__gte=timezone.now()).order_by('closing_date')
     context = {
