@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
 {% load static %}
-<!-- Add dark-mode-safe styles -->
+
 <style>
   @media (prefers-color-scheme: dark) {
     .dark-text {
@@ -30,24 +30,7 @@
   }
 </style>
 
-<!-- Hero Section 
-<section class="text-center pt-5 pb-5 mt-5 bg-white" style="background-color: var(--bs-body-bg, #121212);">
-  <div class="container">
-    <h1 style="font-size: 3.5rem; font-weight: 800;" class="text-center mb-5 text-warning">Careers at Hardhat</h1>
-    <p class="lead mb-4 dark-text">
-      Join a culture of innovation, teamwork, and growth. At Hardhat, we empower you
-      to build your own path and make an impact that matters.
-    </p>
-    <div class="d-flex justify-content-center gap-3">
-      <a href="#why-join" class="btn btn-primary px-4">Why Join Us</a>
-      <a href="{% url 'career-list' %}" class="btn btn-primary px-4">Search Jobs</a>
-    </div>
-  </div>
-</section> -->
 
-{% load static %}
-
-<!-- Hero Section with Background Image -->
 <section class="text-center d-flex align-items-center justify-content-center text-white"
          style="min-height: 100vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url({% static 'assets/img/pages/careers/careers_page.jpg' %}) center/cover no-repeat;">
   <div class="container">
