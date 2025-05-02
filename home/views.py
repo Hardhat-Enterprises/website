@@ -117,6 +117,9 @@ from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
 from .models import Passkey
+
+from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
+from .models import AppAttackReport
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -1500,4 +1503,53 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+
+
+def comphrehensive_reports(request):
+    reports = AppAttackReport.objects.all().order_by('-year')
+    return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
+
+def pen_testing(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('pen-testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
+
+def secure_code_review(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('secure-code-review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
+
+def pen_testing_form_view(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('pen_testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
+
+def secure_code_review_form_view(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('secure_code_review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
 
