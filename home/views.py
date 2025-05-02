@@ -122,6 +122,9 @@ from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
 from .models import Passkey
+
+from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
+from .models import AppAttackReport
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -436,7 +439,10 @@ def feedback(request):
         form = ExperienceForm(request.POST)
         if form.is_valid():
             form.save()  # Save the feedback to the database
+            messages.success(request, "Thank you for your feedback!")
             return redirect('feedback')  # Redirect to clear the form
+        else:
+            messages.error(request, "There was an error. Please try again.")
 
     else:
         form = ExperienceForm()
@@ -1321,33 +1327,116 @@ def category_challenges(request, category):
     completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
     return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges, 'completed_challenges': completed_challenges})
 
+import sys
+import io
+import contextlib
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import CyberChallenge, UserChallenge
+
 @login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(CyberChallenge, id=challenge_id)
     next_challenge = CyberChallenge.objects.filter(category=challenge.category, id__gt=challenge.id).order_by('id').first()
     user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-    completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
 
-    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge,'next_challenge': next_challenge,'completed_challenges': completed_challenges,})
+    if request.method == 'POST':
+        # For MCQ (Multiple Choice Question) challenges
+        if challenge.challenge_type == 'mcq':
+            selected = request.POST.get("selected_choice", "").strip()
+            correct_answer = challenge.correct_answer.strip()
+
+            # Check if the answer is correct
+            is_correct = selected == correct_answer
+            user_challenge.completed = is_correct
+            user_challenge.score = challenge.points if is_correct else 0
+            output = correct_answer  # just to include something in response
+
+        # For Fix the Code challenges
+        elif challenge.challenge_type == 'fix_code':
+            user_code = request.POST.get("code_input", "").strip()
+            expected_output = challenge.expected_output.strip()
+
+            f = io.StringIO()
+            with contextlib.redirect_stdout(f):
+                try:
+                    exec(user_code, {"input": lambda: next(iter(challenge.sample_input.split('\n')))})
+                    output = f.getvalue().strip()
+                    is_correct = output == expected_output
+                    user_challenge.completed = is_correct
+                    user_challenge.score = challenge.points if is_correct else 0
+                except Exception as e:
+                    output = str(e)
+                    user_challenge.completed = False
+                    user_challenge.score = 0
+
+        user_challenge.save()
+
+        return JsonResponse({
+            'is_correct': user_challenge.completed,
+            'message': 'Correct!' if user_challenge.completed else 'Incorrect.',
+            'explanation': challenge.explanation,
+            'output': output,
+            'score': user_challenge.score
+        })
+
+    return render(request, 'pages/challenges/challenge_detail.html', {
+        'challenge': challenge,
+        'next_challenge': next_challenge,
+        'user_challenge': user_challenge,
+    })
+
 
 @login_required
 def submit_answer(request, challenge_id):
     if request.method == 'POST':
         challenge = get_object_or_404(CyberChallenge, id=challenge_id)
-        user_answer = request.POST.get('answer')
-        is_correct = user_answer == challenge.correct_answer
+        user_answer = request.POST.get('selected_choice', '')  
+        user_code = request.POST.get('code_input', '')  
+        output = ""
+        is_correct = False
+        explanation = challenge.explanation or ""
+
+        if challenge.challenge_type == 'mcq':
+            correct_answer = challenge.correct_answer.strip()
+            if user_answer.strip() == correct_answer:
+                is_correct = True
+                output = "Correct!"
+            else:
+                output = "Incorrect. The correct answer is: " + correct_answer
+
+        elif challenge.challenge_type == 'fix_code':
+            f = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(f):
+                    inputs = challenge.sample_input.strip().split('\n')
+                    input_iter = iter(inputs)
+                    exec(user_code, {"input": lambda: next(input_iter)})
+
+                result_output = f.getvalue().strip()
+                is_correct = result_output == challenge.expected_output.strip()
+                output = result_output
+            except Exception as e:
+                output = str(e)
+                is_correct = False
+
         user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-        if is_correct and not user_challenge.completed:
-            user_challenge.completed = True
-            user_challenge.score = challenge.points
-            user_challenge.save()
+
+        user_challenge.completed = is_correct
+        user_challenge.score = challenge.points if is_correct else 0
+        user_challenge.save()
+
         return JsonResponse({
             'is_correct': is_correct,
-            'message': 'Great job!' if is_correct else 'Try again!',
-            'explanation': challenge.explanation,
-            'score': user_challenge.score if is_correct else 0
+            'message': "Correct!" if is_correct else "Try again",
+            'explanation': explanation,
+            'output': output,
+            'score': challenge.points if is_correct else 0
         })
+
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 #
 def blog_list(request):
@@ -1459,4 +1548,53 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+
+
+def comphrehensive_reports(request):
+    reports = AppAttackReport.objects.all().order_by('-year')
+    return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
+
+def pen_testing(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('pen-testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
+
+def secure_code_review(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('secure-code-review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
+
+def pen_testing_form_view(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('pen_testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
+
+def secure_code_review_form_view(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('secure_code_review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
 

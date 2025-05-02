@@ -9,9 +9,19 @@
     <div class="container">
         <h4>User Experience</h4>
         <br>
+
         <p>Please provide your experiences with our company.</p>
 
         <form method="post" action="{% url 'feedback' %}" class="card" id="feedback-form">
+
+        <p>Please provide your experiences with our company..</p>
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: green;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <form method="post" action="{% url 'feedback' %}" class="card">
+
             {% csrf_token %}
             <div class="card-header">How was your experience?</div>
             <br>
