@@ -295,7 +295,7 @@
           </form>
           {% endif %}
 
-          <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks are commented out to remove. -->
+          <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
 
           <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
           {% if not user.is_authenticated %}
