@@ -8,6 +8,10 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser  
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.sessions.models import Session
+
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
@@ -73,7 +77,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     last_activity = models.DateTimeField(null=True, blank=True, default=now)
 
-
     current_session_key = models.CharField(max_length=40, null=True, blank=True)
 
     EMAIL_FIELD = "email"
@@ -122,7 +125,13 @@ class User(AbstractBaseUser, PermissionsMixin):
                 new_key = Passkey.generate_passkey()
                 Passkey.objects.create(user=self, key=new_key)
 
-
+    def update_last_activity(self, request):
+        #Updates user last activity with timestamp
+        if not request.session.session_key:
+            request.session.save()
+        self.last_activity = now()
+        self.current_session_key = request.session.session_key
+        self.save(update_fields=['last_activity', 'current_session_key'])
 
 #Search Bar Models:
 
