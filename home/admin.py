@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.html import format_html
+
 from .models import (
     User,
     Student,
@@ -28,7 +30,11 @@ from .models import (
     SecurityEvent,
 
     #LeaderBaord
-    LeaderBoardTable
+    LeaderBoardTable,
+
+    AppAttackReport, 
+    PenTestingRequest, 
+    SecureCodeReviewRequest
 
 )
 
@@ -175,6 +181,30 @@ class LeaderboardTableAdmin(admin.ModelAdmin):
 
 
 
+
+@admin.register(AppAttackReport)
+class AppAttackReportAdmin(admin.ModelAdmin):
+    list_display = ('year', 'title', 'pdf_link')
+
+    def pdf_link(self, obj):
+        return format_html("<a href='{}' target='_blank'>View PDF</a>", obj.pdf.url)
+    pdf_link.short_description = "PDF"
+
+
+@admin.register(PenTestingRequest)
+class PenTestingRequestAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'github_repo_link', 'submitted_at']
+    list_filter = ['submitted_at']
+    search_fields = ['name', 'email', 'github_repo_link']
+    readonly_fields = ['submitted_at']
+
+
+@admin.register(SecureCodeReviewRequest)
+class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'github_repo_link', 'submitted_at']
+    list_filter = ['submitted_at']
+    search_fields = ['name', 'email', 'github_repo_link']
+    readonly_fields = ['submitted_at']
 
 
 

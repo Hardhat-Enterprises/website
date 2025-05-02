@@ -539,3 +539,36 @@ class Passkey(models.Model):
     def generate_passkey():
         """Generate a new passkey"""
         return ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+
+class AppAttackReport(models.Model):
+    year = models.PositiveIntegerField()
+    title = models.CharField(max_length=255)
+    pdf = models.FileField(upload_to='appattack/reports/')
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
+
+
+class PenTestingRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - PenTesting Request"
+
+
+class SecureCodeReviewRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - Secure Code Review Request"
+
