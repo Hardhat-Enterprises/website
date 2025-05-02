@@ -24,9 +24,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from .models import ContactSubmission
 from django.utils.html import strip_tags
+from .models import Report
 
-
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, UserBlogPage #Feedback 
 
 
 from django.contrib.auth import get_user_model
@@ -40,7 +40,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm
 
 from .forms import CaptchaForm
 
@@ -444,6 +444,21 @@ def feedback(request):
 
     return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
 
+
+# def user_blog_page(request):
+#     if request.method == 'POST':
+#         form = UserBlogPageForm(request.POST)
+#         if form.is_valid():
+#             form.save()  # Save the feedback to the database
+#             return redirect('userblogpage')  # Redirect to clear the form
+
+#     else:
+#         form = UserBlogPageForm()
+
+#     # Retrieve recent feedback from the database
+#     userblogpages = Experience.objects.all().order_by('-created_at')[:10]  
+
+#     return render(request, 'pages/blogpage.html', {'form': form, 'userblogpages': userblogpages})
 
 
 ## Web-Form 
@@ -930,7 +945,113 @@ def get_priority_breakdown(request, priority):
             }]
         }
     })
+
+import base64
+
+def blogpage(request):
+    if request.method == 'POST':
+        form = UserBlogPageForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+
+            # Ensure 'isShow' is set to False by default
+            blog.isShow = False  # Default value is False, no need to check
+
+            uploaded_file = request.FILES.get('file')
+            if uploaded_file:
+                blog.file = base64.b64encode(uploaded_file.read()).decode('utf-8')
+
+            blog.save()
+            return redirect('blogpage')
+    else:
+        form = UserBlogPageForm()
+
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')[:10]
+    return render(request, 'pages/blogpage.html', {'form': form, 'blogpages': blogpages})
+
+
+def edit_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+
+    if request.method == 'POST':
+        blog.name = request.POST.get('name')
+        blog.title = request.POST.get('title')
+        blog.description = request.POST.get('description')
+        uploaded_file = request.FILES.get('file')
+        if uploaded_file:
+         blog.file = base64.b64encode(uploaded_file.read()).decode('utf-8')
+        blog.save()
+        return redirect('blogpage')
+
+    return render(request, 'pages/blogpage.html', {'blog': blog})
  
+def blogpage_view(request):
+    if request.method == 'POST':
+        form = UserBlogPageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blogpage')
+    else:
+        form = UserBlogPageForm()
+
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')
+    return render(request, 'blogpage.html', {
+        'form': form,
+        'blogpages': blogpages
+    })
+
+def delete_blogpage(request, id):
+    blogpage= get_object_or_404(UserBlogPage, id=id)
+    blogpage.delete()
+    return redirect('blogpage')
+
+def adminblogpage(request):
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')
+    return render(request, 'pages/adminblogpage.html', {'blogpages': blogpages})
+
+def approve_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+    blog.isShow = True
+    blog.save()
+    return redirect('adminblogpage')
+
+def reject_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+    blog.delete()
+    return redirect('adminblogpage')
+
+def publishedblog(request):
+    blogpages = UserBlogPage.objects.filter(isShow=True).order_by('-created_at')
+    return render(request, 'pages/publishedblog.html', {'blogpages': blogpages})
+
+def report_blog(request):
+    if request.method == 'POST':
+        blog_id = request.POST.get('blog_id')
+        blog_name = request.POST.get('blog_name')
+        reason = request.POST.get('reason')
+
+        print(f"Blog ID: {blog_id}")
+        print(f"Blog Name: {blog_name}")
+        print(f"Report Reason: {reason}")
+
+        # Save the report to the database
+        Report.objects.create(
+            blog_id=blog_id,
+            blog_name=blog_name,
+            reason=reason
+        )
+
+        messages.success(request, "Thanks for reporting the blog.")
+        return redirect('publishedblog')
+
+    # Optional fallback for non-POST requests
+    messages.warning(request, "Invalid request.")
+    return redirect('publishedblog')
+
+def adminblogreports(request):
+    reports = Report.objects.all().order_by('-created_at')
+    return render(request, 'pages/reports.html', {'reports': reports})
+    
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
  
@@ -1500,4 +1621,4 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
-
+                

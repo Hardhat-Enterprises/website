@@ -9,6 +9,7 @@ from .models import (
     Contact,
     ContactSubmission,
     Experience,
+    UserBlogPage,
 
     Webpage,
     DDT_contact,
@@ -126,7 +127,12 @@ class AnnouncementAdmin(admin.ModelAdmin):
 class ExperienceAdmin(admin.ModelAdmin):
     list_display = ['name', 'feedback', 'created_at']
     search_fields = ['name', 'feedback']
-    readonly_fields = ['created_at'] 
+    
+@admin.register(UserBlogPage)
+class UserBlogPageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title', 'description', 'created_at']
+    search_fields = ['name', 'title', 'description']
+    readonly_fields = ['created_at']  # Make created_at read-only
     
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):

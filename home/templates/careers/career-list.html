@@ -1,10 +1,16 @@
-{% extends 'layouts/base.html' %} {% block content %} {% include
-'includes/pre-loader.html' %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+  {% include 'includes/pre-loader.html' %}
 <div class="row">
   <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
     <h1 class="fw-bolder">Hardhat Enterprise Careers</h1>
     <h5 class="text-muted">
       It's a careers page for Hardhat Enterprise students
+      
     </h5>
   </div>
 </div>
@@ -23,4 +29,5 @@
     <p class="text-muted">Closing Date: {{ job.posted_date }}</p>
   </div>
 </div>
+</main>
 {% endfor %} {% endblock content %}

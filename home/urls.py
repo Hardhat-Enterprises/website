@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_blogpage, delete_feedback
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
@@ -100,6 +100,15 @@ urlpatterns = [
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
     
     path('feedback/', views.feedback, name='feedback'),
+    path('blogpage/', views.blogpage, name='blogpage'),
+    path('blogpage/delete/<int:id>', delete_blogpage, name='delete_blogpage'),
+    path('edit_blogpage/<int:id>/', views.edit_blogpage, name='edit_blogpage'),
+    path('adminblogpage/', views.adminblogpage, name='adminblogpage'),
+    path('adminblogpage/approve/<int:id>/', views.approve_blogpage, name='approve_blogpage'),
+    path('adminblogpage/reject/<int:id>/', views.reject_blogpage, name='reject_blogpage'),
+    path('publishedblog/', views.publishedblog, name='publishedblog'),
+    path('report-blog/', views.report_blog, name='report_blog'),
+    path('reports/', views.adminblogreports, name='reports'),
 
 
 
@@ -128,9 +137,6 @@ urlpatterns = [
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
 
-
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
