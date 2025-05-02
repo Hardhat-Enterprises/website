@@ -297,13 +297,16 @@
 
           <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks are commented out to remove. -->
 
-          <!-- Sign In Dropdown for Team/Client when User is Not Logged In
+          <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
+          {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
             <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
-              class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
-                Sign In
+              class="sign-up-button">
+              <span href="#" class="fas fa-sign-in-alt me-2">
+              Sign In
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </span></button>
+              </span>
+            </button>
             <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
               <ul class="list-style-none">
                 <a class="menu-link" href="{% url 'login' %}">
@@ -311,17 +314,19 @@
                     Team Sign In
                   </li>
                 </a>
-                <a class="menu-link " href="#">
+                <a class="menu-link" href="#">
                   <li class="mb-2 menu ps-3 py-1">
                     Client Sign In
                   </li>
                 </a>
-
               </ul>
             </div>
-          </div> -->
+          </div>
+          {% endif %}
 
-          <!-- Sign Up Dropdown for Team/Client
+
+          <!-- Sign Up Dropdown for Team/Client -->
+          {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
             <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
               class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
@@ -343,7 +348,8 @@
 
               </ul>
             </div>
-          </div> -->
+          </div>
+          {% endif %}
 
           <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
