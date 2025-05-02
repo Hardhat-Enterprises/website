@@ -1241,6 +1241,9 @@ def challenge_list(request):
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
 
+def news_list(request):
+    return render(request, 'pages/news.html')
+
 
 @login_required
 def profile(request):
