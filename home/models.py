@@ -483,6 +483,7 @@ class LeaderBoardTable(models.Model):
 class Experience(models.Model):
     name = models.CharField(max_length=100)
     feedback = models.TextField()
+    rating = models.IntegerField(null=True, blank=True)  # ⭐ ADDED THIS LINE
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

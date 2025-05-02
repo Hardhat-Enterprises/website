@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import ExperienceForm
 from .models import Experience
-
+from django.db.models import Avg, Count
 
 from django.contrib.auth import authenticate, login
 
@@ -1217,19 +1217,20 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
-
-
 def feedback_view(request):
     sentiment = None
     name = None
+    rating = None
 
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
+            feedback_obj = form.save(commit=False)
             feedback_text = form.cleaned_data.get('feedback')
             name = form.cleaned_data.get('name')
+            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
 
-            # Sentiment analysis using TextBlob
+            # 🧠 Sentiment analysis
             blob = TextBlob(feedback_text)
             polarity = blob.sentiment.polarity
 
@@ -1240,16 +1241,31 @@ def feedback_view(request):
             else:
                 sentiment = "neutral"
 
-            form.save()  # Save feedback to database
+            # ⭐️ Save rating if present
+            if rating:
+                feedback_obj.rating = int(rating)
 
-            # ✅ Render separate thank you page
+            feedback_obj.save()
+
+            # 📊 Calculate average rating and total number of ratings
+            aggregate = Experience.objects.aggregate(
+                avg=Avg('rating'),
+                count=Count('rating')
+            )
+            average_rating = round(aggregate['avg'] or 0, 1)
+            rating_count = aggregate['count']
+
             return render(request, 'feedback/thank_you.html', {
                 'name': name,
-                'sentiment': sentiment
+                'sentiment': sentiment,
+                'rating': int(rating) if rating else None,
+                'average_rating': average_rating,
+                'rating_count': rating_count
             })
     else:
         form = ExperienceForm()
 
+    # 📥 Fetch all past feedback
     feedbacks = Experience.objects.all().order_by('-created_at')
 
     return render(request, 'pages/feedback.html', {
