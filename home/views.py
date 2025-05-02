@@ -390,12 +390,52 @@ def SearchSuggestions(request):
 
 #Search-Results page
 def SearchResults(request):
-    query = request.POST.get('q', '')  # Get search query from request
+    User = get_user_model()
+    query = request.POST.get('q', '').strip()  # Get search query from request
+    
+    if not query:
+        return render(request, 'pages/search-results.html', {
+            'searched': '',
+            'webpages': [],
+            'projects': [],
+            'courses': [],
+            'skills': [],
+            'articles': [],
+            'users': [],
+            'students': [],
+            'contacts': []
+    })
+
+    # Projects logic
+    if query.lower() == "projects":
+        project_results = Project.objects.all()
+    else:
+        project_results = Project.objects.filter(title__icontains=query)
+
+    # Courses logic
+    if query.lower() == "courses":
+        course_results = Course.objects.all()
+    else:
+        course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
+
+    # Users logic
+    if query.lower() == "user":
+        users = User.objects.filter(id=request.user.id)
+    else:
+        users = User.objects.filter(
+            first_name__icontains=query
+        ) | User.objects.filter(
+            last_name__icontains=query
+        ) | User.objects.filter(
+            email__icontains=query
+        )
+
     results = {
         'searched': query,
         'webpages': Webpage.objects.filter(title__icontains=query),
-        'projects': Project.objects.filter(title__icontains=query),
-        'courses': Course.objects.filter(title__icontains=query),
+        'projects': project_results,
+        'users': users,
+        'courses': course_results,
         'skills': Skill.objects.filter(name__icontains=query),
         'articles': Article.objects.filter(title__icontains=query),
     }
