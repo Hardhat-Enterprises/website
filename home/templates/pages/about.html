@@ -101,6 +101,22 @@
       transform: none;
       box-shadow: none;
   }
+
+  .dark-mode .btn-generate-password,
+  .dark-mode .generate-password {
+      background-color: #ffc107 !important; /* bright yellow */
+      color: #1c2540 !important;           /* dark text */
+      border: none;
+      box-shadow: none;
+      opacity: 1 !important;
+  }
+
+  .dark-mode .btn-generate-password:disabled,
+  .dark-mode .generate-password:disabled {
+      background-color: #ffe082 !important;
+      color: #1c2540 !important;
+      opacity: 0.7 !important;
+  }
   </style>
   <!-- Kudoboard Section Ends Here -->
   <!-- Section -->
@@ -406,6 +422,7 @@
   <!-- End of section -->
 </main>
 <script src="{% static 'js/handleFormSubmit.js' %}"></script>
+<script src="{% static 'js/kudoboard.js' %}"></script>
 
 <style>
 .btn-warning.btn-primary {
