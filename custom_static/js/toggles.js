@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const icon = document.getElementById('darkModeIcon');
     const navbar = document.querySelector('.navbar-main');
     const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+    const whiteboardContainers = document.querySelectorAll('.whiteboard-container');
 
     const darkMode = localStorage.getItem('darkMode') === 'true';
     applyDarkMode(darkMode);
@@ -26,6 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
             menu.style.backgroundColor = isDark ? '#333333' : '#ffffff';
             menu.style.color = isDark ? '#ffffff' : '#333333';
         });
+
+        whiteboardContainers.forEach(container => {
+            container.style.backgroundColor = isDark ? '#222222' : '#ffffff';
+            container.style.color = isDark ? '#ffffff' : '#000000';
+        });
+
     }
 
     toggleButton.addEventListener('click', function () {
