@@ -14,6 +14,8 @@ import logging
 import re
 import nh3
 
+from .models import PenTestingRequest, SecureCodeReviewRequest
+
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 from .validators import xss_detection
 
@@ -509,3 +511,18 @@ class JobApplicationForm(forms.Form):
         'rows': 5, 
         'placeholder': 'Write your cover letter here...'
     }))
+
+
+class PenTestingRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = PenTestingRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+
+class SecureCodeReviewRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = SecureCodeReviewRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']

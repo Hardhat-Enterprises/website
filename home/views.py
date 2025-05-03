@@ -8,7 +8,12 @@ from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-
+from textblob import TextBlob
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import ExperienceForm
+from .models import Experience
+from django.db.models import Avg, Count
 
 from django.contrib.auth import authenticate, login
 
@@ -117,6 +122,9 @@ from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
 from .models import Passkey
+
+from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
+from .models import AppAttackReport
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -1280,18 +1288,58 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
-
 def feedback_view(request):
+    sentiment = None
+    name = None
+    rating = None
+
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('feedback')
+            feedback_obj = form.save(commit=False)
+            feedback_text = form.cleaned_data.get('feedback')
+            name = form.cleaned_data.get('name')
+            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+
+            # 🧠 Sentiment analysis
+            blob = TextBlob(feedback_text)
+            polarity = blob.sentiment.polarity
+
+            if polarity >= 0.1:
+                sentiment = "positive"
+            elif polarity <= -0.1:
+                sentiment = "negative"
+            else:
+                sentiment = "neutral"
+
+            # ⭐️ Save rating if present
+            if rating:
+                feedback_obj.rating = int(rating)
+
+            feedback_obj.save()
+
+            # 📊 Calculate average rating and total number of ratings
+            aggregate = Experience.objects.aggregate(
+                avg=Avg('rating'),
+                count=Count('rating')
+            )
+            average_rating = round(aggregate['avg'] or 0, 1)
+            rating_count = aggregate['count']
+
+            return render(request, 'feedback/thank_you.html', {
+                'name': name,
+                'sentiment': sentiment,
+                'rating': int(rating) if rating else None,
+                'average_rating': average_rating,
+                'rating_count': rating_count
+            })
     else:
         form = ExperienceForm()
 
+    # 📥 Fetch all past feedback
     feedbacks = Experience.objects.all().order_by('-created_at')
-    return render(request, 'feedback.html', {
+
+    return render(request, 'pages/feedback.html', {
         'form': form,
         'feedbacks': feedbacks
     })
@@ -1534,4 +1582,53 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+
+
+def comphrehensive_reports(request):
+    reports = AppAttackReport.objects.all().order_by('-year')
+    return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
+
+def pen_testing(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('pen-testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
+
+def secure_code_review(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('secure-code-review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
+
+def pen_testing_form_view(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('pen_testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
+
+def secure_code_review_form_view(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('secure_code_review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
 
