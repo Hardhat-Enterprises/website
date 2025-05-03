@@ -1218,9 +1218,21 @@ class EmailNotificationViewSet(ViewSet):
         return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
-    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
-    print(leaderboard_entry)
-    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+    #Select category to display leaderboard table
+    selected_category = request.GET.get('category', '')
+    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    if selected_category:
+        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
+    else:
+        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
+
+    context = {
+        'entries': leaderboard_entry,
+        'categories': categories,
+        'selected_category': selected_category,
+
+    }
+    return render(request, 'pages/leaderboard.html', context)
 
 def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
