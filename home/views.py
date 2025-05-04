@@ -993,6 +993,15 @@ class UserPasswordResetView(PasswordResetView):
 def vr_join_us(request):
     return projects_join_us(request, 'pages/Vr/join_us.html', 'cybersafe_vr_join_us')
 
+def cyber_threat_simulation(request):
+    return render(request, 'pages/Vr/cyber_threat_simulation.html')
+
+def secure_digital_practices(request):
+    return render(request, 'pages/Vr/secure_digital_practices.html')
+
+def cybersecurity_awareness_reports(request):
+    return render(request, 'pages/Vr/cybersecurity_awareness_reports.html')
+
 def Deakin_Threat_mirror_joinus(request):
     return projects_join_us(request, 'pages/DeakinThreatmirror/join_us.html', 'threat_mirror_join_us')
 
