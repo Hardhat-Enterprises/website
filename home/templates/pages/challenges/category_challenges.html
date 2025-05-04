@@ -2,92 +2,175 @@
 {% load static %}
 
 {% block content %}
-<p></p>
-<div style="background-color: #f7e041; min-height: 100vh; padding: 40px 20px;">
-    <div class="container py-5">
-        <h1 class="text-center mb-4" style="color: #333;">{{ category|title }} Challenges</h1>
-        <a href="{% url 'challenge_list' %}" class="btn btn-dark mb-4" 
-           style="background-color: #333; color: #fff; border: none; padding: 10px 20px; text-transform: uppercase;">
-            Back to Categories
-        </a>
-        <div class="row">
-            {% for challenge in challenges %}
-                <div class="col-md-4 mb-4">
-                    <div style="background-color: #ff8c00; border-radius: 8px; color: white; padding: 20px; 
-                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; 
-                                border: 3px solid black; min-height: 220px; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h5 style="margin-bottom: 15px; font-size: 18px;">
-                                {{ challenge.title }}
-                                {% if challenge.id in completed_challenges %}
-                                    <span style="color: #28a745;">&#10004;</span>
-                                {% endif %}
-                            </h5>
-                            <p style="margin-bottom: 15px; font-size: 14px;">
-                                {{ challenge.description|truncatewords:20 }}
-                            </p>
-                        </div>
-                        <div>
-                            <span class="difficulty-badge 
-                                {% if challenge.get_difficulty_display == 'Easy' %}
-                                    easy
-                                {% elif challenge.get_difficulty_display == 'Medium' %}
-                                    medium
-                                {% elif challenge.get_difficulty_display == 'Hard' %}
-                                    hard
-                                {% else %}
-                                    default
-                                {% endif %}">
-                                {{ challenge.get_difficulty_display }}
-                            </span>
-                            <span style="background-color: #17a2b8; color: white; padding: 5px 10px; 
-                                         border-radius: 4px; font-size: 12px;">
-                                {{ challenge.points }} points
-                            </span>
-                        </div>
-                        <a href="{% url 'challenge_detail' challenge.id %}" 
-                           style="background-color: white; color: #ff8c00; border: 1px solid #ff8c00; 
-                                  padding: 10px 20px; text-transform: capitalize; display: block; text-align: center; 
-                                  border-radius: 4px; transition: background-color 0.2s, color 0.2s; margin-top: 10px;"
-                           onmouseover="this.style.backgroundColor='#ff8c00'; this.style.color='white';"
-                           onmouseout="this.style.backgroundColor='white'; this.style.color='#ff8c00';">
-                            Take Challenge
-                        </a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
-<script>
-</script>
-
 <style>
-    .difficulty-badge {
-        padding: 5px 10px;
-        border-radius: 4px;
-        color: white;
-        font-size: 12px;
-        margin-right: 8px; 
-        margin-bottom: 5px; 
-    }
+  body.light-mode .navbar {
+    background-color: #000 !important;
+  }
 
-    .difficulty-badge.easy {
-        background-color: #28a745; 
-    }
+  body.light-mode {
+    background-color: #f1b100de !important; /* darker yellow */
+  }
 
-    .difficulty-badge.medium {
-        background-color: #ffc107; 
-        color: black;
-    }
+  body.dark-mode {
+    background-color: #f1b100de !important;
+  }
 
-    .difficulty-badge.hard {
-        background-color: #dc3545;
-    }
+  .dark-mode .category-heading {
+    color: #ffffff !important;
+  }
 
-    .difficulty-badge.default {
-        background-color: #6c757d; 
-    }
+  .challenge-card {
+    background-color: #f1b100de;
+    border: 2px solid #000;
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .challenge-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  }
+
+  .dark-mode .challenge-card {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .dark-mode .challenge-card p {
+    color: #ccc;
+  }
+
+  .back-button {
+    display: inline-block;
+    margin: 0 auto 30px;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 30px;
+    background-color: #34344a;
+    color: white;
+    border: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .back-button:hover {
+    background-color: #1e1e2f;
+    transform: scale(1.05);
+    text-decoration: none;
+    color: white;
+  }
+
+  .take-btn {
+    background-color: white;
+    color: #ffa500;
+    border: 2px solid #ffa500;
+    padding: 10px 15px;
+    width: 100%;
+    font-weight: 500;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+  }
+
+  .take-btn:hover {
+    background-color: #ffa500;
+    color: white;
+  }
+
+  .category-heading {
+    font-weight: 800;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .badge-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .difficulty-badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .difficulty-badge.easy {
+    background-color: #28a745;
+  }
+
+  .difficulty-badge.medium {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  .difficulty-badge.hard {
+    background-color: #dc3545;
+  }
+
+  .points-badge {
+    background-color: #17a2b8;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+  }
+
+  .top-offset {
+    margin-top: 130px;
+  }
+
+  footer,
+  .footer,
+  #footer,
+  .site-footer {
+    display: none !important;
+  }
 </style>
+
+<div class="container top-offset">
+  <h2 class="category-heading">{{ category|title }} Challenges</h2>
+
+  <div class="text-center mb-4">
+    <a href="{% url 'challenge_list' %}" class="back-button">← Back to Categories</a>
+  </div>
+
+  <div class="row mt-4">
+    {% for challenge in challenges %}
+      <div class="col-md-6 col-lg-4 mb-4 d-flex">
+        <div class="challenge-card w-100 d-flex flex-column justify-content-between">
+          <div>
+            <h5 class="fw-semibold">
+              {{ challenge.title }}
+              {% if challenge.id in completed_challenges %}
+                <span style="color: #28a745;">&#10004;</span>
+              {% endif %}
+            </h5>
+            <p>{{ challenge.description|truncatewords:20 }}</p>
+          </div>
+
+          <div>
+            <div class="badge-container">
+              <span class="difficulty-badge {% if challenge.get_difficulty_display == 'Easy' %}easy{% elif challenge.get_difficulty_display == 'Medium' %}medium{% else %}hard{% endif %}">
+                {{ challenge.get_difficulty_display }}
+              </span>
+              <span class="points-badge">{{ challenge.points }} points</span>
+            </div>
+            <a href="{% url 'challenge_detail' challenge.id %}" class="take-btn">Take Challenge</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
