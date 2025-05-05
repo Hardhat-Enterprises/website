@@ -335,7 +335,7 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SESSION_COOKIE_AGE = 600 #10 minutes
+SESSION_COOKIE_AGE = 300 #10 minutes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
