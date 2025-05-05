@@ -110,26 +110,25 @@
   
   <div id="chat-popup" class="hidden">
     <div class="chat-header">
-      <span>Chat with us</span>
-      <button id="chatCloseButton">✖</button>
+      <span class="chat-title">Let's chat?</span>
+      <button id="chatCloseButton" class="CloseButton">x</button>
     </div>
     <div class="chat-body">
       <form id="chatForm">
-        <label for="userName" class="chatForm">Name:</label>
-        <input type="text" class="chatInput" id="userName" name="userName" placeholder="Enter your name" required />
-  
-        <label for="userEmail" class="chatForm">Email:</label>
+        <div class="chat-text">Please fill out the form below to start chatting with the next available agent.</div>
+      <div class="chat-div">
+        <input type="text" class="chatInput" id="userName" name="userName" placeholder="Enter your name" required /> 
         <input type="email" class="chatInput" id="userEmail" name="userEmail" placeholder="Enter your email" required />
-  
-        <label for="userMessage" class="chatForm">Message:</label>
-        <textarea id="userMessage" class="chatInput" name="userMessage" placeholder="Type your message..." rows="4" required></textarea>
+        <textarea id="userMessage" class="chatInput chat-textarea" name="userMessage" placeholder="Type your message..." rows="4" required></textarea>
         <div class="buttonChat">
          <button class="chatSubmit" type="submit">Submit</button>
         </div>
+      </div>
   
       </form>
     </div>
   </div>
+
   
 
   {% block content %}{% endblock content %}
