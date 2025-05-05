@@ -1,17 +1,10 @@
-"""
-@author: CHUNYI WANG
-@file: test_get_requests.py
-@time: 2025/3/25 15:21
-@desc: This code automatically discovers and tests all URLs that use the GET method
-@usage: python manage.py test home.tests.test_get_requests
-"""
-
 from django.test import TestCase
 from django.urls import get_resolver, reverse, NoReverseMatch
 from django.shortcuts import resolve_url
 from home.tests.setup_test_logger import setup_test_logger
 
-
+# This code automatically discovers and tests all URLs that use the GET method
+# usage: python manage.py test home.tests.test_get_requests
 class GetUrlAutoDiscoverTests(TestCase):
     @classmethod
     def setUpClass(cls):

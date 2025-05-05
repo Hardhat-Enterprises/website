@@ -7,7 +7,7 @@
         "content-length": "38692",
         "content-type": "text/html; charset=utf-8",
         "cross-origin-opener-policy": "same-origin",
-        "date": "Mon, 14 Apr 2025 05:03:56 GMT",
+        "date": "Thu, 01 May 2025 01:03:54 GMT",
         "referrer-policy": "same-origin",
         "server": "WSGIServer/0.2 CPython/3.12.9",
         "vary": "Cookie, origin",
@@ -24,10 +24,10 @@
     "passed": true,
     "response": {
       "headers": {
-        "content-length": "28659",
+        "content-length": "28746",
         "content-type": "text/html; charset=utf-8",
         "cross-origin-opener-policy": "same-origin",
-        "date": "Mon, 14 Apr 2025 05:03:56 GMT",
+        "date": "Thu, 01 May 2025 01:03:54 GMT",
         "referrer-policy": "same-origin",
         "server": "WSGIServer/0.2 CPython/3.12.9",
         "vary": "Cookie, origin",
@@ -44,10 +44,10 @@
     "passed": true,
     "response": {
       "headers": {
-        "content-length": "28659",
+        "content-length": "28746",
         "content-type": "text/html; charset=utf-8",
         "cross-origin-opener-policy": "same-origin",
-        "date": "Mon, 14 Apr 2025 05:03:57 GMT",
+        "date": "Thu, 01 May 2025 01:03:54 GMT",
         "referrer-policy": "same-origin",
         "server": "WSGIServer/0.2 CPython/3.12.9",
         "vary": "Cookie, origin",
@@ -67,7 +67,7 @@
         "content-length": "35000",
         "content-type": "text/html; charset=utf-8",
         "cross-origin-opener-policy": "same-origin",
-        "date": "Mon, 14 Apr 2025 05:03:57 GMT",
+        "date": "Thu, 01 May 2025 01:03:55 GMT",
         "referrer-policy": "same-origin",
         "server": "WSGIServer/0.2 CPython/3.12.9",
         "vary": "Cookie, origin",

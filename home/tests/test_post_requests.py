@@ -1,15 +1,10 @@
-"""
-@author: CHUNYI WANG
-@file: test_post_requests.py
-@time: 2025/4/11 14:57
-@desc: This code automatically test urls by using HTTP POST method
-@usage: python manage.py test_post_requests.py
-@required files: post_test_data.json - sample test data
-"""
-
 import json
 
 from utils.init_chrome_driver import init_driver
+
+# This code automatically test urls by using HTTP POST method
+# usage: python test_post_requests.py
+# required files: post_test_data.json - sample test data
 
 TEST_DATA_FILE = "post_test_data.json"
 RESULTS_FILE = "post_test_results.json"

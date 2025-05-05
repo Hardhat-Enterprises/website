@@ -1,20 +1,15 @@
-"""
-@author: CHUNYI WANG
-@file: test_url_with_selenium.py
-@time: 2025/4/9 14:17
-@desc: Test each url and check whether it support HTTP POST method
-"""
-
 import json
 import time
 
 from utils.init_chrome_driver import init_driver
 
+# Test each url and check whether it support HTTP POST method
 # URL list
-with open ("home/tests/logs/url_list.txt", "r", encoding="utf-8") as f:
+# To get the latest url list, execute this command under the root directory: python manage.py show_urls | awk '{print "http://localhost:8000" $1}' | cut -d' ' -f1 > home/tests/logs/url_list.txt
+with open ("logs/url_list.txt", "r", encoding="utf-8") as f:
     TEST_URLS = [line.strip() for line in f if line.strip()]
     
-OUTPUT_FILE = "home/tests/logs/selenium_test_results.json"
+OUTPUT_FILE = "logs/selenium_test_results.json"
 
 
 def test_post_support():

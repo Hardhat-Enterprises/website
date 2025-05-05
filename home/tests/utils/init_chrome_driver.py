@@ -1,10 +1,3 @@
-"""
-@author: CHUNYI WANG
-@file: init_chrome_driver
-@time: 2025/4/9 14:17
-@desc: Initialize a chromium driver to post data to urls
-"""
-
 import os
 import time
 
@@ -13,6 +6,10 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 def init_driver():
+    """
+    Initialize a chromium driver to post data to urls
+    """
+    
     # kill exists processess
     os.system("pkill -f chrome")
     os.system("pkill -f chromedriver")

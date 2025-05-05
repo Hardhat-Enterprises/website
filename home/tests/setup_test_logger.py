@@ -1,15 +1,8 @@
-"""
-@author: CHUNYI WANG
-@file: setup_test_logger.py
-@time: 2025/3/25 14:17
-@desc: Setup a logger for the test results and write them to a file
-"""
-
 import logging
 import os
 from datetime import datetime
 
-
+# Setup a logger for the test results and write them to a file
 def setup_test_logger(filename: str):
     # Create log dir
     log_dir = os.path.join(os.path.dirname(__file__), 'logs')
