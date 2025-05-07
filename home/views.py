@@ -1079,7 +1079,6 @@ def generate_and_send_passkeys(user):
 
     print(f"DEBUG MODE: Lifetime Passkeys for {user.email}: {passkeys}")  # Debugging
  
- 
 # Blog
 class Index(ListView):
     model = Article
