@@ -443,11 +443,19 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):  
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio', 'phone', 'location']
+        fields = ['avatar', 'bio', 'linkedin', 'github', 'phone', 'location']
         widgets = {
             'bio': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Tell us about yourself'
+            }),
+            'linkedin': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'LinkedIn Profile URL'
+            }),
+            'github': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'GitHub Profile URL'
             }),
             'phone': forms.TextInput(attrs={
                 'class': 'form-control',

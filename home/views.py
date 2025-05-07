@@ -200,7 +200,7 @@ def profile(request):
                 # Save all fields except avatar
                 profile.bio = p_form.cleaned_data['bio']
                 profile.linkedin = p_form.cleaned_data['linkedin']
-                # profile.github = p_form.cleaned_data['github']
+                profile.github = p_form.cleaned_data['github']
                 profile.phone = p_form.cleaned_data['phone']
                 profile.location = p_form.cleaned_data['location']
                 profile.save()
