@@ -1426,6 +1426,25 @@ def submit_answer(request, challenge_id):
         user_challenge.completed = is_correct
         user_challenge.score = challenge.points if is_correct else 0
         user_challenge.save()
+        
+        # If challenge is correct, update the leaderboard
+        if is_correct:
+            user_challenge.completed = True
+            user_challenge.score = challenge.points
+            user_challenge.save()
+            # Calculate total points
+            total_points = UserChallenge.objects.filter(
+                user=request.user,
+                challenge__category=challenge.category
+            ).aggregate(Sum('score'))['score__sum'] or 0
+
+            # Update leaderboard
+            leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+                user=request.user,
+                category=challenge.category
+            )
+            leaderboard_entry.total_points = total_points
+            leaderboard_entry.save()
 
         return JsonResponse({
             'is_correct': is_correct,
@@ -1532,9 +1551,21 @@ class EmailNotificationViewSet(ViewSet):
         return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
-    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
-    print(leaderboard_entry)
-    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+    #Select category to display leaderboard table
+    selected_category = request.GET.get('category', '')
+    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    if selected_category:
+        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
+    else:
+        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
+
+    context = {
+        'entries': leaderboard_entry,
+        'categories': categories,
+        'selected_category': selected_category,
+
+    }
+    return render(request, 'pages/leaderboard.html', context)
 
 def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
