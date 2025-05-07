@@ -163,8 +163,72 @@ def what_we_do(request):
 
 @login_required
 def profile(request):
-    return render(request, 'pages/profile.html')
- 
+    # Ensure the user has a profile, create it if not
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    # Get student object if exists
+    try:
+        student = Student.objects.get(user=request.user)
+        skill_count = Progress.objects.filter(student=student, completed=True).count()
+    except Student.DoesNotExist:
+        skill_count = 0
+
+    achievement_count = UserChallenge.objects.filter(user=request.user, completed=True).count()
+
+    if request.method == 'POST':
+        if 'save_photo' in request.POST:
+            # Only handle avatar upload
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            u_form = UserUpdateForm(instance=request.user)  # Don't update user fields
+            if p_form.is_valid():
+                # Only save the avatar field
+                profile.avatar = p_form.cleaned_data['avatar']
+                profile.save()
+                messages.success(request, 'Your profile picture has been updated!')
+            else:
+                messages.error(request, 'Failed to update profile picture.')
+            return redirect('profile')
+        else:
+            # Handle profile details update
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            if u_form.is_valid() and p_form.is_valid():
+                u_form.save()
+                # Save all fields except avatar
+                profile.bio = p_form.cleaned_data['bio']
+                profile.linkedin = p_form.cleaned_data['linkedin']
+                profile.github = p_form.cleaned_data['github']
+                profile.location = p_form.cleaned_data['location']
+                profile.save()
+                messages.success(request, 'Your profile has been updated successfully.')
+            else:
+                messages.error(request, 'Failed to update profile details.')
+            return redirect('profile_details')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+        'skill_count': skill_count,
+        'achievement_count': achievement_count,
+    }
+
+    return render(request, 'pages/profile.html', context)
+
+@login_required
+def profile_details(request):
+    profile = request.user.profile
+    return render(request, 'pages/profile_details.html', {
+        'user': request.user,
+        'profile': profile,
+    })
+
 def blog(request):
     return render(request, 'blog/index.html')
  
@@ -1288,37 +1352,6 @@ def challenge_list(request):
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
 
-
-@login_required
-def profile(request):
-    # Ensure the user has a profile, create it if not
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=request.user)
-
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, 'Your profile has been updated successfully.')
-            # Fetch the updated profile object to ensure it's refreshed
-            profile = request.user.profile
-            return redirect('profile')
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form,
-        'profile': profile,
-    }
-
-    return render(request, 'pages/profile.html', context)
 
 @login_required
 def category_challenges(request, category):
