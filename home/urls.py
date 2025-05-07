@@ -126,7 +126,9 @@ urlpatterns = [
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
-
+    path('create-blog/', views.create_blog, name='create-blog'),
+    path('view-blog/', views.view_blog, name='view-blog'),
+    path('post-page/', views.post_page, name='post-page'),
     path("appattack/reports/", views.comphrehensive_reports, name="comphrehensive_reports"),
     path("appattack/pen-testing/", views.pen_testing, name="pen-testing"),
     path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
@@ -135,6 +137,8 @@ urlpatterns = [
 
 
 
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 

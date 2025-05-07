@@ -1,0 +1,60 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+
+  {% include 'includes/pre-loader.html' %}
+<section class="section section-lg">
+    <div class="container">
+        <h4>Blog & News</h4>
+        <div class="container my-5">
+            <div class="row d-flex justify-content-between blog">
+                <!-- Card 1 -->
+                <div class="blog-card" style="width: 20rem;">
+                    <img src="{% static 'assets/img/blog/blog-cover.jpg' %}" alt="" />
+                    <div class="card-body">
+                        <h5 class="card-title">BLog Name 01</h5>
+                        <p class="card-text">This is a short description of the first card.</p>
+                        <a href="{% url 'post-page' %}" class="btn btn-primary">View More</a>
+                    </div>
+                </div>
+                <div class="blog-card" style="width: 20rem;">
+                    <img src="{% static 'assets/img/blog/blog-cover.jpg' %}" alt="" />
+                    <div class="card-body">
+                        <h5 class="card-title">BLog Name 01</h5>
+                        <p class="card-text">This is a short description of the first card.</p>
+                        <a href="{% url 'post-page' %}" class="btn btn-primary">View More</a>
+                    </div>
+                </div>
+                <div class="blog-card" style="width: 20rem;">
+                    <img src="{% static 'assets/img/blog/blog-cover.jpg' %}" alt="" />
+                    <div class="card-body">
+                        <h5 class="card-title">BLog Name 01</h5>
+                        <p class="card-text">This is a short description of the first card.</p>
+                        <a href="{% url 'post-page' %}" class="btn btn-primary">View More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Subresource Integrity -->       
+    <script type="module"
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+    crossorigin="anonymous"></script>
+    <!-- Popper.js -->
+    <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" 
+    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" 
+    crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script type="module" 
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" 
+    crossorigin="anonymous"></script>
+</section>
+</main>
+
+{% endblock content %}
