@@ -81,7 +81,10 @@ urlpatterns = [
     path('accounts/signup/', views.register, name='signup'),
     path('captcha/', include('captcha.urls')), 
     path('post-otp-captcha/', views.post_otp_login_captcha, name='post_otp_login_captcha'),
+    path('accounts/passkey-login/', views.login_with_passkey, name='passkey_login'),
 
+    path("passkeys/reset/", views.reset_passkeys_request, name="reset_passkeys_request"),
+    path("passkeys/reset/verify/", views.reset_passkeys_verify, name="reset_passkeys_verify"),
 
     # Email OTP
     
@@ -96,8 +99,7 @@ urlpatterns = [
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
     
-    path('feedback/', views.feedback, name='feedback'),
-
+ 
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),
@@ -124,15 +126,19 @@ urlpatterns = [
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
-
     path('create-blog/', views.create_blog, name='create-blog'),
     path('view-blog/', views.view_blog, name='view-blog'),
     path('post-page/', views.post_page, name='post-page'),
+    path("appattack/reports/", views.comphrehensive_reports, name="comphrehensive_reports"),
+    path("appattack/pen-testing/", views.pen_testing, name="pen-testing"),
+    path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
+    path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
+    path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form')
 
 
-]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 

@@ -1,0 +1,123 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block header %}
+  {% include 'includes/navigation.html' %}
+{% endblock header %}
+
+{% block content %}
+<main>
+    {% include 'includes/pre-loader.html' %}
+
+    <style>
+        @media (prefers-color-scheme: dark) {
+            .btn-reset-dark {
+                background-color: #343a40 !important;
+                border-color: #6c757d !important;
+                color: #f8f9fa !important;
+            }
+
+            .btn-reset-dark:hover {
+                background-color: #495057 !important;
+            }
+        }
+    </style>
+
+    <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+             data-background="{% static 'assets/img/pages/login/login-bg.svg' %}">
+        <div class="container mb mt-md-6">
+            <div class="row justify-content-center">
+                <div class="col-12 d-flex align-items-center justify-content-center">
+                    <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
+
+                        <!-- Header -->
+                        <div class="text-center text-md-center mb-4 mt-md-0">
+                            <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt="Logo" class="mb-3">
+                            <h1 class="mb-0 h3">Pen Testing Request</h1>
+                            <p class="text-muted small mt-2">Please fill in the form below to request a pen testing service.</p>
+                        </div>
+
+                        <!-- Messages -->
+                        {% if messages %}
+                          {% for message in messages %}
+                            <div class="alert alert-success text-center">{{ message }}</div>
+                          {% endfor %}
+                        {% endif %}
+
+                        <!-- Form -->
+                        <form method="post" class="mt-4">
+                            {% csrf_token %}
+
+                            <!-- Name -->
+                            <div class="form-group mb-4">
+                                <label for="{{ form.name.id_for_label }}">Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><span class="fas fa-user"></span></span>
+                                    <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}"
+                                           value="{{ form.name.value|default_if_none:'' }}"
+                                           class="form-control" placeholder="Enter your name">
+                                </div>
+                                {% if form.name.errors %}
+                                  <div class="text-danger small">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group mb-4">
+                                <label for="{{ form.email.id_for_label }}">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><span class="fas fa-envelope"></span></span>
+                                    <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}"
+                                           value="{{ form.email.value|default_if_none:'' }}"
+                                           class="form-control" placeholder="Enter your email">
+                                </div>
+                                {% if form.email.errors %}
+                                  <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- GitHub Repo -->
+                            <div class="form-group mb-4">
+                                <label for="{{ form.github_repo_link.id_for_label }}">GitHub Repository Link</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><span class="fab fa-github"></span></span>
+                                    <input type="url" name="{{ form.github_repo_link.name }}" id="{{ form.github_repo_link.id_for_label }}"
+                                           value="{{ form.github_repo_link.value|default_if_none:'' }}"
+                                           class="form-control" placeholder="https://github.com/your/repo">
+                                </div>
+                                {% if form.github_repo_link.errors %}
+                                  <div class="text-danger small">{{ form.github_repo_link.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Terms Checkbox -->
+                            <div class="form-check mb-4">
+                                <input type="checkbox" class="form-check-input" name="{{ form.terms_agreed.name }}"
+                                       id="{{ form.terms_agreed.id_for_label }}"
+                                       {% if form.terms_agreed.value %}checked{% endif %}>
+                                <label class="form-check-label" for="{{ form.terms_agreed.id_for_label }}">
+                                    I agree to the terms and conditions
+                                </label>
+                                {% if form.terms_agreed.errors %}
+                                  <div class="text-danger small">{{ form.terms_agreed.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="reset" class="btn btn-outline-secondary btn-reset-dark">Reset</button>
+                                <button type="submit" class="btn btn-warning">Submit Request</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'includes/footer.html' %}
+</main>
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}
