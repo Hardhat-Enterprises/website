@@ -201,7 +201,6 @@ def profile(request):
                 profile.bio = p_form.cleaned_data['bio']
                 profile.linkedin = p_form.cleaned_data['linkedin']
                 profile.github = p_form.cleaned_data['github']
-                profile.phone = p_form.cleaned_data['phone']
                 profile.location = p_form.cleaned_data['location']
                 profile.save()
                 messages.success(request, 'Your profile has been updated successfully.')
