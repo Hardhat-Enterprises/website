@@ -1654,7 +1654,7 @@ def pen_testing_form_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Request submitted successfully!")
-            return redirect('pen_testing')
+            return redirect('/appattack')
     else:
         form = PenTestingRequestForm()
     return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
@@ -1665,7 +1665,7 @@ def secure_code_review_form_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Request submitted successfully!")
-            return redirect('secure_code_review')
+            return redirect('/appattack')
     else:
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
