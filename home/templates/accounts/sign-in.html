@@ -45,6 +45,9 @@
                                         <span class="fas fa-unlock-alt"></span>
                                     </span>
                                     <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password">
+                                    <span class="input-group-text toggle-password" id="togglePassword">
+                                        <span class="fas fa-eye"></span>
+                                    </span>
                                 </div>  
                                 <span class="text-danger"> {{ form.password.errors|default_if_none:"" }} </span>
                             </div>
@@ -82,7 +85,24 @@
     {% include 'includes/footer.html' %}
 </main>
 
+<!-- Add JavaScript for password toggle -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    
+    togglePassword.addEventListener('click', function() {
+        // Toggle the password field type
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        
+        // Toggle the eye icon
+        this.querySelector('span').classList.toggle('fa-eye');
+        this.querySelector('span').classList.toggle('fa-eye-slash');
+    });
+});
+</script>
+
 {% endblock content %}
 
 {% block footer %}{% endblock footer %}
-
