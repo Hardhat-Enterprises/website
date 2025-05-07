@@ -1,0 +1,79 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+
+    {% include 'includes/pre-loader.html' %}
+    <section class="section section-lg">
+        <div class="container">
+            <div class="container my-5">
+                <!-- blog_post.html -->
+
+                <div class="blog-post">
+                    <!-- Blog Post Title -->
+                    <h1>Sample Blog Post Title</h1>
+            
+                    <!-- Blog Post Date -->
+                    <p class="created-at">Posted on March 30, 2025</p>
+                    
+                    <!-- Blog Post Image -->
+                    <div class="blog-image">
+                        <img src="{% static 'assets/img/blog/blog-cover.jpg' %}" alt="Sample Blog Post" class="blog-image-post">
+                    </div>
+            
+                    <!-- Blog Post Content (with paragraphs) -->
+                    <div class="blog-content">
+                        <p>This is a sample blog post content. Here, you can provide any detailed information you wish to share. This could include text, images, links, or even embedded media. It will be displayed as formatted content, preserving line breaks and spacing.</p>
+            
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec nisi euismod, cursus odio in, volutpat velit. Suspendisse potenti. Fusce id suscipit nisi, at consequat nisi. Sed vel elit purus. Integer euismod turpis vitae elit fermentum, sit amet euismod metus volutpat.</p>
+            
+                        <p>Quisque finibus lorem vitae mi vulputate, sed luctus enim aliquam. Morbi a dolor non neque varius luctus. Aenean mollis, mi nec interdum gravida, nisi erat faucibus sapien, a porttitor odio mi ac eros.</p>
+                    </div>
+            
+                    <hr>
+            
+                    <!-- Comments Section -->
+                    <h3>Comments</h3>
+                    <div class="comments-section">
+                        <ul>
+                            <li class="comment-item">
+                                <strong>John Doe</strong> says:
+                                <p>This is a great post! Thanks for sharing.</p>
+                                <span class="comment-date">March 30, 2025</span>
+                            </li>
+                            <li class="comment-item">
+                                <strong>Jane Smith</strong> says:
+                                <p>I completely agree with the points you made. Very insightful!</p>
+                                <span class="comment-date">March 31, 2025</span>
+                            </li>
+                        </ul>
+                        <p>No comments yet? Be the first to comment!</p>
+                    </div>
+            
+                    <!-- Comment Form for Logged-in Users -->
+                    <form method="POST" action="/add_comment/1/">
+                        <textarea class="blog-comments" name="content" rows="4" placeholder="Leave a comment..." required></textarea>
+                        <button class="btn btn-primary btn-lg px-5 me-md-2 mb-4" type="submit">Post Comment</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <!-- Subresource Integrity -->
+        <script type="module" src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <!-- Popper.js -->
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+            integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
+            crossorigin="anonymous"></script>
+        <!-- Bootstrap JS -->
+        <script type="module" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    </section>
+</main>
+
+{% endblock content %}

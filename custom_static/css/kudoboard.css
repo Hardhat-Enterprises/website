@@ -28,6 +28,14 @@ textarea {
   border: 1px solid #ccc;
 }
 
+.blog-image{
+  height: 450px !important;
+}
+
+.blog-image-post{
+  height: 450px;
+  margin: 40px 0px;
+}
 button {
   padding: 10px 20px;
   font-size: 16px; /* Increased font size for the button */

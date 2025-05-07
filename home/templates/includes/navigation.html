@@ -228,14 +228,23 @@
             <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
 
 
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'feedback' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    User Experience
-                  </li>
-                </a>
-
-              </ul>
+                <ul class="list-style-none">
+                    <a class="menu-link" href="{% url 'feedback' %}">
+                        <li class="mb-2 menu ps-3 py-1">
+                            User Experience
+                        </li>
+                    </a>
+                    <a class="menu-link" href="{% url 'create-blog' %}">
+                        <li class="mb-2 menu ps-3 py-1">
+                            Create blog
+                        </li>
+                    </a>
+                    <a class="menu-link" href="{% url 'view-blog' %}">
+                      <li class="mb-2 menu ps-3 py-1">
+                          View Blogs
+                      </li>
+                  </a>
+                </ul>
 
 
             </div>

@@ -123,11 +123,16 @@ urlpatterns = [
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
-    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
+    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
+
+    path('create-blog/', views.create_blog, name='create-blog'),
+    path('view-blog/', views.view_blog, name='view-blog'),
+    path('post-page/', views.post_page, name='post-page'),
 
 
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 

@@ -1045,6 +1045,16 @@ def challenge_list(request):
 
 
 @login_required
+
+def create_blog(request):
+    return render(request, 'pages/create-blog.html')
+    
+def view_blog(request):
+    return render(request, 'pages/view-blog.html')
+
+def post_page(request):
+    return render(request, 'pages/blogs-page.html')   
+
 def profile(request):
     # Ensure the user has a profile, create it if not
     try:
