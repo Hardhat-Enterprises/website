@@ -1,0 +1,77 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main>
+    {% include 'includes/preloader-vr.html' %}
+
+    <section style="background-color: #ffc107; padding: 6rem 0 4rem;">
+        <div class="container text-center">
+            <h2 class="text-light fw-bold display-2">Core CyberSafe VR Skills</h2>
+            <div class="row justify-content-center g-4">
+
+                <!-- VR Development Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+                        background: #1e1f3f;
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                        text-align: left;
+                        height: 100%;
+                    ">
+                        <h4 style="color: #ffc107;">🎮 Virtual Reality Development</h4>
+                        <p>
+                            Created immersive simulations using Unity and Unreal Engine to simulate cybersecurity environments. These VR experiences help users interactively learn about threats and responses.
+                        </p>
+                        <p><strong>Tools Used:</strong> Unity, Unreal Engine, Blender</p>
+                    </div>
+                </div>
+
+                <!-- Cybersecurity Awareness Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+                        background: #1e1f3f;
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                        text-align: left;
+                        height: 100%;
+                    ">
+                        <h4 style="color: #ffc107;">🛡️ Cybersecurity Awareness Training</h4>
+                        <p>
+                            Developed engaging VR-based training to teach users about phishing, malware, and secure online behavior. Training focused on real-life scenarios and best practices.
+                        </p>
+                        <p><strong>Deliverables:</strong> Training Modules, Interactive Lessons, Gamified Challenges</p>
+                    </div>
+                </div>
+
+                <!-- UX Design Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+                        background: #1e1f3f;
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                        text-align: left;
+                        height: 100%;
+                    ">
+                        <h4 style="color: #ffc107;">🎯 User Experience (UX) Design</h4>
+                        <p>
+                            Applied UX design to enhance usability within VR, ensuring accessibility and ease of use for participants. Iterative feedback and testing improved interface clarity and engagement.
+                        </p>
+                        <p><strong>Tools Used:</strong> Figma, Adobe XD, Unity UI Toolkit</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-5">
+                <a href="{% url 'Vr_main' %}" class="btn btn-dark">
+                    ⬅️ Back to Project
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

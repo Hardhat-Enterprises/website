@@ -1,0 +1,68 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main>
+    {% include 'includes/preloader-appattack.html' %}
+
+    <section class="section bg-primary-app py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder text-warning">⚡ Core Skills Explained</h1>
+                <h2 class="text-light fw-bold display-2">Core AppAttack Skills</h2>
+            </div>
+
+            <div class="row g-5">
+                <!-- Penetration Testing -->
+                <div class="col-md-4">
+                    <div class="card shadow-lg border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h4 class="card-title text-warning">💥 Penetration Testing</h4>
+                            <p class="card-text text-white">
+                                Penetration Testing involves simulating cyberattacks on systems to identify security weaknesses before real attackers do. We test for vulnerabilities in networks, applications, and configurations using both manual and automated techniques.
+                                <br><br>
+                                <b>Tools Used:</b> Nmap, Burp Suite, OWASP ZAP.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secure Code Review -->
+                <div class="col-md-4">
+                    <div class="card shadow-lg border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h4 class="card-title text-warning">🔐 Secure Code Review</h4>
+                            <p class="card-text text-white">
+                                Secure Code Review is the practice of analyzing source code to identify and fix security flaws such as injection points, broken authentication, or misconfigurations. We ensure the application follows secure coding best practices.
+                                <br><br>
+                                <b>Tools Used:</b> Coverity, Checkmarx, Veracode.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reporting -->
+                <div class="col-md-4">
+                    <div class="card shadow-lg border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h4 class="card-title text-warning">📝 Security Reporting & Documentation</h4>
+                            <p class="card-text text-white">
+                                This involves creating professional reports for identified vulnerabilities including severity levels, proof-of-concept screenshots, and recommended fixes. Clear documentation helps development teams quickly understand and resolve issues.
+                                <br><br>
+                                <b>Deliverables:</b> Risk Reports, Executive Summaries, Remediation Plans.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center my-5">
+                <a href="{% url 'appattack' %}" class="btn btn-dark"> ⬅️ Back to Project</a>
+
+
+
+            </div>
+
+
+
+        </div>
+    </section>
+</main>
+{% endblock content %}

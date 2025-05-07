@@ -1,0 +1,77 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main>
+    {% include 'includes/preloader-sd.html' %}
+
+    <section style="background-color: #ffc107; padding: 6rem 0 4rem;">
+        <div class="container text-center">
+            <h2 class="text-light fw-bold display-2"> Core Smishing Detection Skills</h2>
+            <div class="row justify-content-center g-4">
+
+                <!-- NLP Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+                        background: #1e1f3f;
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                        text-align: left;
+                        height: 100%;
+                    ">
+                        <h4 style="color: #ffc107;">🧠 Natural Language Processing (NLP)</h4>
+                        <p>
+                            Used natural language processing techniques to analyze SMS content and detect suspicious language patterns. This enabled the system to interpret context and flag smishing threats.
+                        </p>
+                        <p><strong>Tools Used:</strong> TextBlob, NLTK, SpaCy</p>
+                    </div>
+                </div>
+
+                <!-- ML Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+                        background: #1e1f3f;
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                        text-align: left;
+                        height: 100%;
+                    ">
+                        <h4 style="color: #ffc107;">🤖 ML for SMS Classification</h4>
+                        <p>
+                            Trained machine learning models to classify SMS messages as safe or malicious based on labeled data. This improved the system’s ability to detect and block smishing attacks in real time.
+                        </p>
+                        <p><strong>Tools Used:</strong> Scikit-learn, Pandas, Jupyter</p>
+                    </div>
+                </div>
+
+                <!-- Data Preprocessing Card -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+                        background: #1e1f3f;
+                        color: white;
+                        padding: 2rem;
+                        border-radius: 20px;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                        text-align: left;
+                        height: 100%;
+                    ">
+                        <h4 style="color: #ffc107;">🧹 Data Preprocessing</h4>
+                        <p>
+                            Cleaned and formatted raw SMS data by removing noise, tokenizing text, and applying vectorization techniques like TF-IDF to prepare the data for training ML models.
+                        </p>
+                        <p><strong>Deliverables:</strong> Clean Datasets, Feature Vectors</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-5">
+                <a href="{% url 'smishing_detection_main' %}" class="btn btn-dark">
+                    ⬅️ Back to Home
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}
