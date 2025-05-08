@@ -59,3 +59,6 @@ textblob==0.18.0
 
 django-cron==0.6.0
 
+# tests
+webdriver-manager==4.0.2
+selenium==4.31.0
