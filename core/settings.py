@@ -433,5 +433,3 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-

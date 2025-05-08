@@ -21,6 +21,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('client_sign-in/', views.client_sign_in, name='client_sign_in'),
     path('profile/', views.profile, name='profile'),
+    path('profile/details/', views.profile_details, name='profile_details'),
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
     path('appattack/join', views.appattack_join, name='appattack_join'),
