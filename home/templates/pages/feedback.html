@@ -2,39 +2,64 @@
 {% load static %}
 
 {% block content %}
-
 <main>
-
   {% include 'includes/pre-loader.html' %}
+
 <section class="section section-lg">
     <div class="container">
         <h4>User Experience</h4>
         <br>
+
+        <p>Please provide your experiences with our company.</p>
+
+        <form method="post" action="{% url 'feedback' %}" class="card" id="feedback-form">
+
         <p>Please provide your experiences with our company..</p>
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: green;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
         <form method="post" action="{% url 'feedback' %}" class="card">
+
             {% csrf_token %}
             <div class="card-header">How was your experience?</div>
             <br>
             <div class="container">
                 <div class="col">
-                <div class="card-text form-group">
-                    <label for="id_name">Name:</label>
-                    {{ form.name }}
-                </div>
-                <br>
-                <div class="card-text form-group">
-                    <label for="id_feedback">User Experience:</label>
-                    {{ form.feedback }}
-                </div>
-                <br>
-                <button type="reset" class="btn btn-primary">Reset</button> 
-                <button type="submit" class="btn btn-primary">Submit</button> 
+                    <div class="card-text form-group">
+                        <label for="id_name">Name:</label>
+                        {{ form.name }}
+                    </div>
+                    <br>
+                    <div class="card-text form-group">
+                        <label for="id_feedback">User Experience:</label>
+                        {{ form.feedback }}
+                    </div>
+                    <br>
+
+                    <!-- ⭐️ 5-Star Rating -->
+                    <div class="card-text form-group">
+                        <label for="rating">Rate your experience:</label><br>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="Excellent">★</label>
+                            <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="Very Good">★</label>
+                            <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="Good">★</label>
+                            <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="Fair">★</label>
+                            <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="Poor">★</label>
+                        </div>
+                        <div id="selected-rating" class="text-muted mt-1" style="font-size: 14px;"></div>
+                    </div>
+
+                    <br>
+                    <button type="reset" class="btn btn-secondary">Reset</button> 
+                    <button type="submit" class="btn btn-primary">Submit</button> 
                 </div>
                 <br>
             </div>
         </form>
-        <br>
 
+        <br>
         <div class="feedback-list">
             <h5>Recent Feedback</h5>
             {% if feedbacks %}
@@ -49,25 +74,76 @@
                 </li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <p>No feedback yet</p>
-        {%  endif %}
+            {% else %}
+                <p>No feedback yet</p>
+            {% endif %}
         </div>
     </div>
-    <!-- Subresource Integrity -->       
+
+    <!-- ⭐ Custom CSS -->
+    <style>
+        .star-rating {
+            direction: rtl;
+            display: inline-flex;
+            gap: 5px;
+            font-size: 28px;
+            margin-top: 5px;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+            font-size: 32px;
+            transition: color 0.2s ease;
+        }
+
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc107;
+        }
+    </style>
+
+    <!-- ⭐ Script: Rating Selection Text & Required Validation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const stars = document.querySelectorAll('.star-rating input');
+            const ratingLabel = document.getElementById('selected-rating');
+            const form = document.getElementById('feedback-form');
+
+            stars.forEach(star => {
+                star.addEventListener('change', () => {
+                    ratingLabel.textContent = `You selected ${star.value} out of 5`;
+                });
+            });
+
+            form.addEventListener('submit', function (e) {
+                if (!document.querySelector('input[name="rating"]:checked')) {
+                    alert("Please select a star rating before submitting.");
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+
+    <!-- Bootstrap Scripts -->
     <script type="module"
-    src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
-    <!-- Popper.js -->
+
     <script type="module"
-    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" 
-    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" 
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+    integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
     crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script type="module" 
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" 
-    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" 
+
+    <script type="module"
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
     crossorigin="anonymous"></script>
 </section>
 </main>

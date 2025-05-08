@@ -8,6 +8,10 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser  
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.sessions.models import Session
+
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
@@ -122,7 +126,13 @@ class User(AbstractBaseUser, PermissionsMixin):
                 new_key = Passkey.generate_passkey()
                 Passkey.objects.create(user=self, key=new_key)
 
-
+    def update_last_activity(self, request):
+        #Updates user last activity with timestamp
+        if not request.session.session_key:
+            request.session.save()
+        self.last_activity = now()
+        self.current_session_key = request.session.session_key
+        self.save(update_fields=['last_activity', 'current_session_key'])
 
 #Search Bar Models:
 
@@ -347,23 +357,50 @@ class CyberChallenge(models.Model):
         ('web', 'Web Application Security'),
         ('crypto', 'Cryptography'),
         ('general', 'General Knowledge'),
+        ('python', 'Python'),
+        ('javascript', 'JavaScript'),
+        ('html_css', 'HTML & CSS'),
+        ('web_security', 'Web Security'),
+        ('reverse_engineering', 'Reverse Engineering'),
+        ('forensics', 'Forensics'),
+        ('binary_exploitation', 'Binary Exploitation'),
+        ('linux', 'Linux'),
+        ('algorithms', 'Algorithms'),
+        ('data_structures', 'Data Structures'),
+        ('databases', 'Databases'),
+        ('regex', 'Regex'),
+        ('secure_coding', 'Secure Coding'),
+        ('logic_reasoning', 'Logic & Reasoning'),
+        ('misc', 'Miscellaneous'),
     ]
     
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
     description = models.TextField()
-    question = models.TextField()
-    choices = models.JSONField()  # For multiple choice questions
-    correct_answer = models.CharField(max_length=200)
-    explanation = models.TextField()
+    question = models.TextField(blank=True, null=True, default="")
+    choices = models.JSONField(blank=True, null=True)  # For MCQ challenges
+    correct_answer = models.CharField(max_length=200, blank=True, null=True)  # Correct answer for MCQs or expected output for code challenges
+    starter_code = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    sample_input = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    expected_output = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    explanation = models.TextField(blank=True, null=True, default="")
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     points = models.IntegerField(default=10)
+    challenge_type = models.CharField(max_length=20, choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')])
+    time_limit = models.IntegerField(default=60)  
+
+    def __str__(self):
+        return self.title
+
 
 class UserChallenge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.challenge.title}"
 
 
 
@@ -486,6 +523,7 @@ class LeaderBoardTable(models.Model):
 class Experience(models.Model):
     name = models.CharField(max_length=100)
     feedback = models.TextField()
+    rating = models.IntegerField(null=True, blank=True)  # ⭐ ADDED THIS LINE
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -503,3 +541,36 @@ class Passkey(models.Model):
     def generate_passkey():
         """Generate a new passkey"""
         return ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+
+class AppAttackReport(models.Model):
+    year = models.PositiveIntegerField()
+    title = models.CharField(max_length=255)
+    pdf = models.FileField(upload_to='appattack/reports/')
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
+
+
+class PenTestingRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - PenTesting Request"
+
+
+class SecureCodeReviewRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - Secure Code Review Request"
+
