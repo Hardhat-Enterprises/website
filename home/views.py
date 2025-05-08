@@ -958,7 +958,7 @@ def secure_code_review(request):
 def dashboard(request):
     user = request.user
     try:
-        student = Student.objects.get(user=user)
+        student = Student.objects.filter(user=user).first()
     except Student.DoesNotExist:
         return redirect('/joinus')
     progress = Progress.objects.filter(student=student)
@@ -1119,7 +1119,7 @@ class UpskillingView(LoginRequiredMixin, ListView):
  
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
+            student = Student.objects.filter(user=self.request.user).first()
             # Get the progress objects for the student
             progress = Progress.objects.filter(student=student)
             # Return the associated skills
@@ -1157,7 +1157,7 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
  
         if self.request.user.is_authenticated:
             # Get the student
-            student = Student.objects.get(user=self.request.user)
+            student = Student.objects.filter(user=self.request.user).first()
  
             # Get the progress associated with the student and the current skill
             progress = Progress.objects.get(student=student, skill=self.object)
@@ -1563,7 +1563,7 @@ def pen_testing(request):
             return redirect('pen-testing')
     else:
         form = PenTestingRequestForm()
-    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
+    return render(request, '/pen_testing.html', {'form': form})
 
 def secure_code_review(request):
     if request.method == 'POST':
