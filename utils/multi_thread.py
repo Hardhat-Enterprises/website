@@ -33,7 +33,6 @@ class ThreadWithResult(threading.Thread):
 # Run function in a sperate thread with returned result:
 # t = run_func_in_thread(exectued_function, args, wait=True)
 # t.start()
-# t.join()
 # result = t.result
 def run_func_in_thread(func, args, wait=False):
     """
