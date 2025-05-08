@@ -5,10 +5,10 @@
 <main class="pt-6 px-3 mt-3">
   <h1 class="text-light">Upskilling Dashboard</h1>
 
-  <div class="row mt-4">
+  <div class="row mt-4 pb-5"> <!-- Added padding to prevent overlap -->
     {% for skill in skills %}
     <div class="col-md-4 mb-4">
-      <div class="card bg-dark text-white h-100 shadow-sm border-warning border-1">
+      <div class="card bg-dark text-white h-100 shadow-sm border-warning border-1 rounded-4">
         <div class="card-body">
           <h5 class="card-title text-warning">{{ skill.title }}</h5>
           <p class="card-text">
@@ -20,11 +20,23 @@
             <br>
             <strong>Status:</strong> {{ skill.status }}
           </p>
-          <a href="#" class="btn btn-warning btn-sm mt-2">Start</a>
+
+          {% if skill.status == "Completed" %}
+            <button class="btn btn-secondary btn-sm mt-2" disabled>Completed</button>
+          {% elif skill.status == "In Progress" %}
+            <a href="#" class="btn btn-warning btn-sm mt-2">Continue</a>
+          {% else %}
+            <a href="#" class="btn btn-success btn-sm mt-2">Start</a>
+          {% endif %}
+          
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
+
+  <!-- Spacer to prevent overlap with floating box -->
+<div style="height: 150px;"></div>
+
 </main>
 {% endblock %}
