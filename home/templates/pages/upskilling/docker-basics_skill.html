@@ -1,0 +1,74 @@
+{% extends 'pages/upskilling/skill_base.html' %}
+{% load static %}
+
+{% block skill_content %}
+<div class="container">
+  <div id="sections" class="my-5">
+    <!-- SECTION 1 -->
+    <section class="section card mb-3 p-3">
+      <h2 class="card-title">Why Learn Docker?</h2>
+      <p class="card-text">
+        Docker is used to containerize applications — including the Hardhat website. It ensures consistent development environments and easier deployment. You’ll use Docker for spinning up Django apps, managing services, and container orchestration.
+        <br><br>
+        Reference: <a href="https://docs.docker.com/get-started/" target="_blank">Docker Official Getting Started Guide</a>
+      </p>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Basic Concepts</h2>
+      <ul>
+        <li>📦 Images: The blueprint of your container</li>
+        <li>🚢 Containers: The actual running app</li>
+        <li>📂 Dockerfile: Instructions to build your image</li>
+        <li>📜 `docker-compose.yml`: Manage multi-container apps (e.g., Django + DB)</li>
+        <li>⚙️ Commands: `build`, `run`, `exec`, `logs`, `ps`, `stop`</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Docker Resources</h2>
+      <ul>
+        <li><a href="https://www.docker.com/resources/what-container/" target="_blank">🔍 What is a Container?</a></li>
+        <li><a href="https://docs.docker.com/get-started/" target="_blank">📘 Docker Getting Started Guide</a></li>
+        <li><a href="https://www.youtube.com/watch?v=fqMOX6JJhGo" target="_blank">🎥 Docker Tutorial for Beginners (TechWorld with Nana)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=3c-iBn73dDE" target="_blank">🎥 Docker Crash Course (Traversy Media)</a></li>
+        <li><a href="https://github.com/docker/awesome-compose" target="_blank">💡 Docker Compose Example Projects</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="d-flex justify-content-between mb-4">
+    <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
+    <button id="next-button" class="btn btn-primary">Next</button>
+    <button id="finishButton" class="btn btn-warning" style="display: none">Finish</button>
+  </div>
+
+  <!-- Section Navigation Logic -->
+  <script>
+    let currentIndex = 0;
+    const sections = document.querySelectorAll("#sections .section");
+    const totalCards = sections.length;
+
+    function toggleButtons(index, total) {
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishButton").style.display = index === total - 1 ? "block" : "none";
+    }
+
+    function showSection(index) {
+      sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
+      toggleButtons(index, totalCards);
+    }
+
+    showSection(currentIndex);
+
+    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
+    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+  </script>
+
+  <script src="{% static 'skill_navigation.js' %}"></script>
+</div>
+{% endblock %}

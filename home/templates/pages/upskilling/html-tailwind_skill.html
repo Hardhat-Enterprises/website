@@ -1,0 +1,77 @@
+{% extends 'pages/upskilling/skill_base.html' %}
+{% load static %}
+
+{% block skill_content %}
+<div class="container">
+  <div id="sections" class="my-5">
+    <!-- SECTION 1 -->
+    <section class="section card mb-3 p-3">
+      <h2 class="card-title">Why HTML & Tailwind Matter</h2>
+      <p class="card-text">
+        HTML provides the structural foundation of all web pages. Tailwind CSS allows developers to build modern UIs quickly using utility classes — especially useful for maintaining consistent design on the Hardhat site.
+        <br><br>
+        Reference: <a href="https://tailwindcss.com/docs/utility-first" target="_blank">Tailwind CSS Official Docs</a>
+      </p>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">HTML Basics</h2>
+      <ul>
+        <li>💠 Tags, Elements, and Attributes</li>
+        <li>📁 Structure: `<head>`, `<body>`, `<div>`, etc.</li>
+        <li>🔗 Links, Images, Forms</li>
+        <li>🧱 Semantic HTML: `<section>`, `<article>`, `<nav>`</li>
+        <li>📐 Layout techniques: flexbox, grid (used via Tailwind)</li>
+      </ul>
+      <p>
+        Reference: <a href="https://www.w3schools.com/html/" target="_blank">HTML by W3Schools</a>
+      </p>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Tailwind in Practice</h2>
+      <ul>
+        <li><a href="https://tailwindcss.com/docs/installation" target="_blank">📘 Tailwind Installation Guide</a></li>
+        <li><a href="https://tailwindcss.com/docs/flex" target="_blank">💡 Flexbox in Tailwind</a></li>
+        <li><a href="https://tailwindcss.com/docs/grid-template-columns" target="_blank">💡 Grid Layout in Tailwind</a></li>
+        <li><a href="https://www.youtube.com/watch?v=lCxcTsOHrjo" target="_blank">🎥 Tailwind Crash Course (Traversy Media)</a></li>
+        <li><a href="https://tailwindcomponents.com/" target="_blank">🎨 Free Tailwind UI Components</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="d-flex justify-content-between mb-4">
+    <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
+    <button id="next-button" class="btn btn-primary">Next</button>
+    <button id="finishButton" class="btn btn-warning" style="display: none">Finish</button>
+  </div>
+
+  <!-- Section Navigation Logic -->
+  <script>
+    let currentIndex = 0;
+    const sections = document.querySelectorAll("#sections .section");
+    const totalCards = sections.length;
+
+    function toggleButtons(index, total) {
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishButton").style.display = index === total - 1 ? "block" : "none";
+    }
+
+    function showSection(index) {
+      sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
+      toggleButtons(index, totalCards);
+    }
+
+    showSection(currentIndex);
+
+    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
+    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+  </script>
+
+  <script src="{% static 'skill_navigation.js' %}"></script>
+</div>
+{% endblock %}

@@ -26,7 +26,7 @@
           {% elif skill.status == "In Progress" %}
             <a href="#" class="btn btn-warning btn-sm mt-2">Continue</a>
           {% else %}
-            <a href="#" class="btn btn-success btn-sm mt-2">Start</a>
+          <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-success btn-sm mt-2">Start</a>
           {% endif %}
           
         </div>

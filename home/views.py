@@ -1118,30 +1118,45 @@ class UpskillingView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Dummy skills data (used only for layout and testing)
         context['skills'] = [
             {
                 'title': 'Docker Basics',
+                'slug': 'docker-basics',
                 'difficulty': 'Beginner',
                 'tags': ['DevOps', 'Containers'],
                 'status': 'Not Started'
             },
             {
                 'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
                 'difficulty': 'Advanced',
                 'tags': ['Security', 'Code Quality'],
                 'status': 'In Progress'
             },
             {
                 'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
                 'difficulty': 'Intermediate',
                 'tags': ['Collaboration', 'Version Control'],
                 'status': 'Completed'
             },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': 'Not Started'
+            }
         ]
 
         return context
-
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -1159,17 +1174,17 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'slug'
 
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            student = Student.objects.filter(user=self.request.user).first()
-            if not student:
-                return redirect('/')
+        # if self.request.user.is_authenticated:
+        #     student = Student.objects.filter(user=self.request.user).first()
+        #     if not student:
+        #         return redirect('/')
 
-            if not Progress.objects.filter(student=student).exists():
-                return redirect('/')
+        #     if not Progress.objects.filter(student=student).exists():
+        #         return redirect('/')
 
-            progress = Progress.objects.filter(student=student, skill=self.get_object()).first()
-            if not progress:
-                return redirect('/')
+        #     progress = Progress.objects.filter(student=student, skill=self.get_object()).first()
+        #     if not progress:
+        #         return redirect('/')
 
         return super().get(request, *args, **kwargs)
 
@@ -1188,6 +1203,45 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
 
         return context
 
+    def get_object(self):
+        
+        dummy_skills = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': 'In Progress'
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': 'Completed'
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': 'Not Started'
+            },
+        ]
+
+        
+        for skill in dummy_skills:
+            if skill['slug'] == self.kwargs['slug']:
+                return skill
+
+        raise Http404("Skill not found")
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
