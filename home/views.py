@@ -1135,18 +1135,18 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
  
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
+            student = Student.objects.filter(user=self.request.user).first()
+            if not student:
+                return redirect('/')
+
             # Check if the progress objects for the student exist
             if not Progress.objects.filter(student=student).exists():
-                # If not, redirect to the home page
                 return redirect('/')
-            try:
-                # Get the progress associated with the student and the current skill
-                progress = Progress.objects.get(student=student, skill=self.get_object())
-                # If progress does not exist, redirect to home page
-            except Progress.DoesNotExist:
+
+            progress = Progress.objects.filter(student=student, skill=self.get_object()).first()
+            if not progress:
                 return redirect('/')
-        # Otherwise, proceed as usual
+        
         return super().get(request, *args, **kwargs)
  
     def get_template_names(self):
@@ -1154,16 +1154,36 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
  
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
- 
-        if self.request.user.is_authenticated:
-            # Get the student
-            student = Student.objects.filter(user=self.request.user).first()
- 
-            # Get the progress associated with the student and the current skill
-            progress = Progress.objects.get(student=student, skill=self.object)
-            # Add the progress_id to the context
-            context['progress_id'] = progress.id
 
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+
+            if student:
+                progress = Progress.objects.filter(student=student, skill=self.object).first()
+                if progress:
+                    context['progress_id'] = progress.id
+
+        # Dummy skills data (you can remove this later when using real model data)
+        context['skills'] = [
+            {
+                'title': 'Docker Basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Secure Code Review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': 'In Progress'
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': 'Completed'
+            },
+        ]
 
         return context
 
