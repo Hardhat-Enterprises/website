@@ -21,6 +21,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('client_sign-in/', views.client_sign_in, name='client_sign_in'),
     path('profile/', views.profile, name='profile'),
+    path('profile/details/', views.profile_details, name='profile_details'),
     path('malware_viz/joinus', views.malware_joinus, name='malware_viz_joinus'),
     path('appattack/', views.appattack, name='appattack'),
     path('appattack/join', views.appattack_join, name='appattack_join'),
@@ -100,8 +101,7 @@ urlpatterns = [
     path('stats', views.statistics_view, name='project-stats'),
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
     
-    path('feedback/', views.feedback, name='feedback'),
-
+ 
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),
@@ -128,11 +128,16 @@ urlpatterns = [
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
-    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
+    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
+
+    path("appattack/reports/", views.comphrehensive_reports, name="comphrehensive_reports"),
+    path("appattack/pen-testing/", views.pen_testing, name="pen-testing"),
+    path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
+    path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
+    path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form')
 
 
-]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
