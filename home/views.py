@@ -1110,8 +1110,6 @@ class LikeArticle(View):
         return redirect('detail_article', pk)
  
  
- 
- 
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
@@ -1143,6 +1141,7 @@ class UpskillingView(LoginRequiredMixin, ListView):
         ]
 
         return context
+
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
