@@ -1115,55 +1115,12 @@ class LikeArticle(View):
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
-    template_name = 'pages/upskilling.html'  
- 
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            student = Student.objects.filter(user=self.request.user).first()
-            # Get the progress objects for the student
-            progress = Progress.objects.filter(student=student)
-            # Return the associated skills
-            return [p.skill for p in progress]
-        else:
-            return self.model.objects.none()
- 
-class UpskillingSkillView(LoginRequiredMixin, DetailView):
-    login_url = '/accounts/login/'  
-    model = Skill
-    slug_field = 'slug'
-    slug_url_kwarg = 'slug'
- 
-    def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            student = Student.objects.filter(user=self.request.user).first()
-            if not student:
-                return redirect('/')
+    template_name = 'pages/upskilling.html'
 
-            # Check if the progress objects for the student exist
-            if not Progress.objects.filter(student=student).exists():
-                return redirect('/')
-
-            progress = Progress.objects.filter(student=student, skill=self.get_object()).first()
-            if not progress:
-                return redirect('/')
-        
-        return super().get(request, *args, **kwargs)
- 
-    def get_template_names(self):
-        return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
- 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if self.request.user.is_authenticated:
-            student = Student.objects.filter(user=self.request.user).first()
-
-            if student:
-                progress = Progress.objects.filter(student=student, skill=self.object).first()
-                if progress:
-                    context['progress_id'] = progress.id
-
-        # Dummy skills data (you can remove this later when using real model data)
+        # Dummy skills data (used only for layout and testing)
         context['skills'] = [
             {
                 'title': 'Docker Basics',
@@ -1184,6 +1141,51 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
                 'status': 'Completed'
             },
         ]
+
+        return context
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            progress = Progress.objects.filter(student=student)
+            return [p.skill for p in progress]
+        else:
+            return self.model.objects.none()
+
+
+class UpskillingSkillView(LoginRequiredMixin, DetailView):
+    login_url = '/accounts/login/'  
+    model = Skill
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            if not student:
+                return redirect('/')
+
+            if not Progress.objects.filter(student=student).exists():
+                return redirect('/')
+
+            progress = Progress.objects.filter(student=student, skill=self.get_object()).first()
+            if not progress:
+                return redirect('/')
+
+        return super().get(request, *args, **kwargs)
+
+    def get_template_names(self):
+        return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            if student:
+                progress = Progress.objects.filter(student=student, skill=self.object).first()
+                if progress:
+                    context['progress_id'] = progress.id
 
         return context
 
