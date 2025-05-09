@@ -53,13 +53,13 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 #Secure Cookies Can be implemented but it affects OTP Functionality.
 #Ensure cookies are only sent over HTTPS when set True
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
  
 # Prevents JavaScript from accessing session cookies when set True
-SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
  
 #Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Strict'
 
 #Ensure CSRF cookies are sent over HTTPS only
 CSRF_COOKIE_SECURE = True
@@ -335,7 +335,7 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SESSION_COOKIE_AGE = 300 #10 minutes
+SESSION_COOKIE_AGE = 120 #2 minutes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
