@@ -4,7 +4,9 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
+import django.utils.timezone
 import home.validators
+import tinymce.models
 import tinymce.models
 import uuid
 
@@ -28,8 +30,10 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
                 ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
                 ('email', models.EmailField(max_length=254, unique=True, verbose_name='deakin email address')),
+                ('email', models.EmailField(max_length=254, unique=True, verbose_name='deakin email address')),
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
+                ('is_verified', models.BooleanField(default=False, help_text='Designates whether the user has verified their account.', verbose_name='verified')),
                 ('is_verified', models.BooleanField(default=False, help_text='Designates whether the user has verified their account.', verbose_name='verified')),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created_at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated_at')),
@@ -98,6 +102,9 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated_at')),
                 ('is_active', models.BooleanField(default=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False, unique=True)),
+                ('title', models.CharField(blank=True, max_length=150, verbose_name='course title')),
+                ('code', models.CharField(blank=True, max_length=150, verbose_name='course code')),
+                ('is_postgraduate', models.BooleanField(default=False, verbose_name='postgraduate status')),
                 ('title', models.CharField(blank=True, max_length=150, verbose_name='course title')),
                 ('code', models.CharField(blank=True, max_length=150, verbose_name='course code')),
                 ('is_postgraduate', models.BooleanField(default=False, verbose_name='postgraduate status')),

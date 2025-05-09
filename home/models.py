@@ -8,6 +8,10 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser  
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.sessions.models import Session
+
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
@@ -73,7 +77,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     last_activity = models.DateTimeField(null=True, blank=True, default=now)
 
-
     current_session_key = models.CharField(max_length=40, null=True, blank=True)
 
     EMAIL_FIELD = "email"
@@ -122,7 +125,13 @@ class User(AbstractBaseUser, PermissionsMixin):
                 new_key = Passkey.generate_passkey()
                 Passkey.objects.create(user=self, key=new_key)
 
-
+    def update_last_activity(self, request):
+        #Updates user last activity with timestamp
+        if not request.session.session_key:
+            request.session.save()
+        self.last_activity = now()
+        self.current_session_key = request.session.session_key
+        self.save(update_fields=['last_activity', 'current_session_key'])
 
 #Search Bar Models:
 
@@ -331,6 +340,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     bio = models.TextField(max_length=500, blank=True, null=True)
+    linkedin = models.URLField(max_length=200, blank=True, null=True)
+    github = models.URLField(max_length=200, blank=True, null=True)
+    # phone = models.CharField(max_length=20, blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -506,13 +519,15 @@ class LeaderBoardTable(models.Model):
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
     
-
+    class Meta:
+        ordering = ['-total_points']  
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
 class Experience(models.Model):
     name = models.CharField(max_length=100)
     feedback = models.TextField()
+    rating = models.IntegerField(null=True, blank=True)  # ⭐ ADDED THIS LINE
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -530,3 +545,36 @@ class Passkey(models.Model):
     def generate_passkey():
         """Generate a new passkey"""
         return ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+
+class AppAttackReport(models.Model):
+    year = models.PositiveIntegerField()
+    title = models.CharField(max_length=255)
+    pdf = models.FileField(upload_to='appattack/reports/')
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
+
+
+class PenTestingRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - PenTesting Request"
+
+
+class SecureCodeReviewRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - Secure Code Review Request"
+

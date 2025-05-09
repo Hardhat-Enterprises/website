@@ -8,7 +8,12 @@ from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-
+from textblob import TextBlob
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import ExperienceForm
+from .models import Experience
+from django.db.models import Avg, Count
 
 from django.contrib.auth import authenticate, login
 
@@ -117,6 +122,9 @@ from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
 from .models import Passkey
+
+from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
+from .models import AppAttackReport
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -155,8 +163,72 @@ def what_we_do(request):
 
 @login_required
 def profile(request):
-    return render(request, 'pages/profile.html')
- 
+    # Ensure the user has a profile, create it if not
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    # Get student object if exists
+    try:
+        student = Student.objects.get(user=request.user)
+        skill_count = Progress.objects.filter(student=student, completed=True).count()
+    except Student.DoesNotExist:
+        skill_count = 0
+
+    achievement_count = UserChallenge.objects.filter(user=request.user, completed=True).count()
+
+    if request.method == 'POST':
+        if 'save_photo' in request.POST:
+            # Only handle avatar upload
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            u_form = UserUpdateForm(instance=request.user)  # Don't update user fields
+            if p_form.is_valid():
+                # Only save the avatar field
+                profile.avatar = p_form.cleaned_data['avatar']
+                profile.save()
+                messages.success(request, 'Your profile picture has been updated!')
+            else:
+                messages.error(request, 'Failed to update profile picture.')
+            return redirect('profile')
+        else:
+            # Handle profile details update
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            if u_form.is_valid() and p_form.is_valid():
+                u_form.save()
+                # Save all fields except avatar
+                profile.bio = p_form.cleaned_data['bio']
+                profile.linkedin = p_form.cleaned_data['linkedin']
+                profile.github = p_form.cleaned_data['github']
+                profile.location = p_form.cleaned_data['location']
+                profile.save()
+                messages.success(request, 'Your profile has been updated successfully.')
+            else:
+                messages.error(request, 'Failed to update profile details.')
+            return redirect('profile_details')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+        'skill_count': skill_count,
+        'achievement_count': achievement_count,
+    }
+
+    return render(request, 'pages/profile.html', context)
+
+@login_required
+def profile_details(request):
+    profile = request.user.profile
+    return render(request, 'pages/profile_details.html', {
+        'user': request.user,
+        'profile': profile,
+    })
+
 def blog(request):
     return render(request, 'blog/index.html')
  
@@ -1071,7 +1143,6 @@ def generate_and_send_passkeys(user):
 
     print(f"DEBUG MODE: Lifetime Passkeys for {user.email}: {passkeys}")  # Debugging
  
- 
 # Blog
 class Index(ListView):
     model = Article
@@ -1191,6 +1262,15 @@ class UserPasswordResetView(PasswordResetView):
 def vr_join_us(request):
     return projects_join_us(request, 'pages/Vr/join_us.html', 'cybersafe_vr_join_us')
 
+def cyber_threat_simulation(request):
+    return render(request, 'pages/Vr/cyber_threat_simulation.html')
+
+def secure_digital_practices(request):
+    return render(request, 'pages/Vr/secure_digital_practices.html')
+
+def cybersecurity_awareness_reports(request):
+    return render(request, 'pages/Vr/cybersecurity_awareness_reports.html')
+
 def Deakin_Threat_mirror_joinus(request):
     return projects_join_us(request, 'pages/DeakinThreatmirror/join_us.html', 'threat_mirror_join_us')
 
@@ -1215,18 +1295,58 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
-
 def feedback_view(request):
+    sentiment = None
+    name = None
+    rating = None
+
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('feedback')
+            feedback_obj = form.save(commit=False)
+            feedback_text = form.cleaned_data.get('feedback')
+            name = form.cleaned_data.get('name')
+            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+
+            # 🧠 Sentiment analysis
+            blob = TextBlob(feedback_text)
+            polarity = blob.sentiment.polarity
+
+            if polarity >= 0.1:
+                sentiment = "positive"
+            elif polarity <= -0.1:
+                sentiment = "negative"
+            else:
+                sentiment = "neutral"
+
+            # ⭐️ Save rating if present
+            if rating:
+                feedback_obj.rating = int(rating)
+
+            feedback_obj.save()
+
+            # 📊 Calculate average rating and total number of ratings
+            aggregate = Experience.objects.aggregate(
+                avg=Avg('rating'),
+                count=Count('rating')
+            )
+            average_rating = round(aggregate['avg'] or 0, 1)
+            rating_count = aggregate['count']
+
+            return render(request, 'feedback/thank_you.html', {
+                'name': name,
+                'sentiment': sentiment,
+                'rating': int(rating) if rating else None,
+                'average_rating': average_rating,
+                'rating_count': rating_count
+            })
     else:
         form = ExperienceForm()
 
+    # 📥 Fetch all past feedback
     feedbacks = Experience.objects.all().order_by('-created_at')
-    return render(request, 'feedback.html', {
+
+    return render(request, 'pages/feedback.html', {
         'form': form,
         'feedbacks': feedbacks
     })
@@ -1241,37 +1361,6 @@ def challenge_list(request):
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
 
-
-@login_required
-def profile(request):
-    # Ensure the user has a profile, create it if not
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=request.user)
-
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, 'Your profile has been updated successfully.')
-            # Fetch the updated profile object to ensure it's refreshed
-            profile = request.user.profile
-            return redirect('profile')
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form,
-        'profile': profile,
-    }
-
-    return render(request, 'pages/profile.html', context)
 
 @login_required
 def category_challenges(request, category):
@@ -1378,6 +1467,25 @@ def submit_answer(request, challenge_id):
         user_challenge.completed = is_correct
         user_challenge.score = challenge.points if is_correct else 0
         user_challenge.save()
+        
+        # If challenge is correct, update the leaderboard
+        if is_correct:
+            user_challenge.completed = True
+            user_challenge.score = challenge.points
+            user_challenge.save()
+            # Calculate total points
+            total_points = UserChallenge.objects.filter(
+                user=request.user,
+                challenge__category=challenge.category
+            ).aggregate(Sum('score'))['score__sum'] or 0
+
+            # Update leaderboard
+            leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+                user=request.user,
+                category=challenge.category
+            )
+            leaderboard_entry.total_points = total_points
+            leaderboard_entry.save()
 
         return JsonResponse({
             'is_correct': is_correct,
@@ -1514,9 +1622,21 @@ class EmailNotificationViewSet(ViewSet):
         return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
-    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
-    print(leaderboard_entry)
-    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+    #Select category to display leaderboard table
+    selected_category = request.GET.get('category', '')
+    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    if selected_category:
+        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
+    else:
+        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
+
+    context = {
+        'entries': leaderboard_entry,
+        'categories': categories,
+        'selected_category': selected_category,
+
+    }
+    return render(request, 'pages/leaderboard.html', context)
 
 def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
@@ -1530,4 +1650,53 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+
+
+def comphrehensive_reports(request):
+    reports = AppAttackReport.objects.all().order_by('-year')
+    return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
+
+def pen_testing(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('pen-testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
+
+def secure_code_review(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('secure-code-review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
+
+def pen_testing_form_view(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('/appattack')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
+
+def secure_code_review_form_view(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('/appattack')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
 
