@@ -125,4 +125,81 @@
   </div>
 </section>
 
+<!-- Life at Hardhat - Employee Testimonials -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5 text-dark">Life at Hardhat</h2>
+
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner text-center">
+
+        <!-- Testimonial 1 -->
+        <div class="carousel-item active">
+          <img src="{% static 'assets/img/team/priya.jpg' %}" class="rounded-circle mb-3" width="150" height="150" alt="Priya">
+          <blockquote class="blockquote">
+            <p class="mb-3 fst-italic px-3 text-dark dark:text-white">“Hardhat gave me the platform to grow and lead projects that matter.”</p>
+            <footer class="blockquote-footer">Priya, <cite title="Source Title">Data Engineer</cite></footer>
+          </blockquote>
+        </div>
+
+       <!-- Testimonial 2 -->
+       <div class="carousel-item">
+        <img src="{% static 'assets/img/team/james.jpg' %}" class="rounded-circle mb-3" width="150" height="150" alt="James">
+        <blockquote class="blockquote">
+          <p class="mb-3 fst-italic px-3 text-dark dark:text-white">“The culture at Hardhat is inclusive and collaborative. I’ve never felt more supported.”</p>
+          <footer class="blockquote-footer">James, <cite>UX Designer</cite></footer>
+        </blockquote>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="carousel-item">
+        <img src="{% static 'assets/img/team/sophia.jpg' %}" class="rounded-circle mb-3" width="150" height="150" alt="Sophia">
+        <blockquote class="blockquote">
+          <p class="mb-3 fst-italic px-3 text-dark dark:text-white">
+            “I joined as a graduate and within a year was managing key client relationships.”
+          </p>
+          <footer class="blockquote-footer">Sophia, <cite>Project Manager</cite></footer>
+        </blockquote>
+      </div>
+
+      </div>
+
+      <!-- Carousel controls -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- By the Numbers Section -->
+<section class="py-5 bg-dark text-center text-white">
+  <div class="container">
+    <h2 class="mb-5" style="color: #ffc107;">Hardhat by the Numbers</h2>
+    <div class="row">
+      <div class="col-md-3 mb-4">
+        <h3 class="fw-bold text-warning">150+</h3>
+        <p class="text-light">Team Members</p>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h3 class="fw-bold text-warning">5</h3>
+        <p class="text-light">Global Offices</p>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h3 class="fw-bold text-warning">98%</h3>
+        <p class="text-light">Employee Retention</p>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h3 class="fw-bold text-warning">200+</h3>
+        <p class="text-light">Projects Delivered</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}
