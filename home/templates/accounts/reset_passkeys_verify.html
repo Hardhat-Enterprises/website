@@ -1,0 +1,53 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block header %}
+{% include 'includes/navigation.html' %}
+{% endblock header %}
+
+{% block content %}
+<main>
+    {% include 'includes/pre-loader.html' %}
+
+    <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+        data-background="{% static 'assets/img/pages/login/login-bg.svg' %}">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 d-flex align-items-center justify-content-center">
+                    <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
+                        <div class="text-center text-md-center mb-4 mt-md-6">
+                            <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt="Logo" class="mb-3">
+                            <h3 class="mb-0 h3">Verify OTP</h3>
+                            <p>Please enter the OTP sent to your email.</p>
+                        </div>
+
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group mb-4">
+                                <label for="otp">OTP</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <span class="fas fa-key"></span>
+                                    </span>
+                                    <input type="text" class="form-control" name="otp" id="otp" placeholder="Enter OTP" required>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary w-100">
+                                Verify OTP
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <a href="{% url 'reset_passkeys_request' %}" class="btn btn-link">Back</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}
+
+{% block footer %}{% include 'includes/footer.html' %}{% endblock footer %}

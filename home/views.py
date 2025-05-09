@@ -2,12 +2,18 @@
  
 # views.py
  
+from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-
+from textblob import TextBlob
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import ExperienceForm
+from .models import Experience
+from django.db.models import Avg, Count
 
 from django.contrib.auth import authenticate, login
 
@@ -86,6 +92,9 @@ from django.template.loader import render_to_string
 from .forms import FeedbackForm
 import traceback
 
+import string
+import random
+
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
@@ -112,6 +121,10 @@ from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
+from .models import Passkey
+
+from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
+from .models import AppAttackReport
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -150,8 +163,72 @@ def what_we_do(request):
 
 @login_required
 def profile(request):
-    return render(request, 'pages/profile.html')
- 
+    # Ensure the user has a profile, create it if not
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    # Get student object if exists
+    try:
+        student = Student.objects.get(user=request.user)
+        skill_count = Progress.objects.filter(student=student, completed=True).count()
+    except Student.DoesNotExist:
+        skill_count = 0
+
+    achievement_count = UserChallenge.objects.filter(user=request.user, completed=True).count()
+
+    if request.method == 'POST':
+        if 'save_photo' in request.POST:
+            # Only handle avatar upload
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            u_form = UserUpdateForm(instance=request.user)  # Don't update user fields
+            if p_form.is_valid():
+                # Only save the avatar field
+                profile.avatar = p_form.cleaned_data['avatar']
+                profile.save()
+                messages.success(request, 'Your profile picture has been updated!')
+            else:
+                messages.error(request, 'Failed to update profile picture.')
+            return redirect('profile')
+        else:
+            # Handle profile details update
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            if u_form.is_valid() and p_form.is_valid():
+                u_form.save()
+                # Save all fields except avatar
+                profile.bio = p_form.cleaned_data['bio']
+                profile.linkedin = p_form.cleaned_data['linkedin']
+                profile.github = p_form.cleaned_data['github']
+                profile.location = p_form.cleaned_data['location']
+                profile.save()
+                messages.success(request, 'Your profile has been updated successfully.')
+            else:
+                messages.error(request, 'Failed to update profile details.')
+            return redirect('profile_details')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+        'skill_count': skill_count,
+        'achievement_count': achievement_count,
+    }
+
+    return render(request, 'pages/profile.html', context)
+
+@login_required
+def profile_details(request):
+    profile = request.user.profile
+    return render(request, 'pages/profile_details.html', {
+        'user': request.user,
+        'profile': profile,
+    })
+
 def blog(request):
     return render(request, 'blog/index.html')
  
@@ -363,18 +440,11 @@ def verify_otp(request):
         saved_otp = request.session.get('otp')
         user_id = request.session.get('user_id')
 
+        print(f"[DEBUG] Entered OTP: {entered_otp}, Saved OTP: {saved_otp}, User ID: {user_id}")
+
         if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
-            User = get_user_model()  # Dynamically get the User model
-            try:
-                user = User.objects.get(id=user_id)
-                login(request, user)  # Log the user in
-                # Clear session data
-                request.session.pop('otp', None)
-                request.session.pop('user_id', None)
-                messages.success(request, "Login successful!")
-                return redirect('post_otp_login_captcha')  # Redirect after successful login
-            except User.DoesNotExist:
-                messages.error(request, "User does not exist.")
+            request.session['is_otp_verified'] = True  # Mark OTP as verified
+            return redirect('post_otp_login_captcha')  # Go to captcha page before login
         else:
             messages.error(request, "Invalid OTP. Please try again.")
 
@@ -436,7 +506,10 @@ def feedback(request):
             if 'anonymous' in request.POST:
                 feedback.name = 'Anonymous'
             feedback.save() # Save the feedback to the database
-            return redirect('feedback') # Redirect to clear the form
+            messages.success(request, "Thank you for your feedback!")
+            return redirect('feedback')  # Redirect to clear the form
+        else:
+            messages.error(request, "There was an error. Please try again.")
 
     else:
         form = ExperienceForm()
@@ -515,7 +588,7 @@ def VerifyOTP(request):
         user_id = request.session.get('user_id')
 
         if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
-            User = get_user_model()  # Dynamically fetch the custom User model
+            User = get_user_model()  # Fetch the custom User model
             try:
                 user = User.objects.get(id=user_id)
                 user.is_verified = True  # Mark the user as verified
@@ -526,11 +599,37 @@ def VerifyOTP(request):
                 request.session.pop('otp', None)
                 request.session.pop('user_id', None)
 
-                # Print confirmation to terminal
-                print(f"OTP matched. Account for {user.email} has been activated and verified.")
+                # Generate and store passkeys (5 passkeys)
+                passkeys = []
+                for _ in range(5):
+                    new_key = Passkey.generate_passkey()
+                    Passkey.objects.create(user=user, key=new_key)
+                    passkeys.append(new_key)
 
-                messages.success(request, "Your account has been successfully verified and activated!")
+                # Send email with passkeys
+                send_mail(
+                    subject="Your Lifetime Passkeys for HardHat Login",
+                    message=(
+                        f"Hello {user.first_name},\n\n"
+                        "Your email has been successfully verified! 🎉\n\n"
+                        "Here are your lifetime passkeys:\n\n"
+                        f"{chr(10).join(passkeys)}\n\n"
+                        "You can use these passkeys instead of OTP during login.\n\n"
+                        "🔹 Keep them safe, as they are your permanent authentication keys.\n"
+                        "🔹 If you ever need new passkeys, contact support.\n\n"
+                        "Regards,\nHardHat Enterprises"
+                    ),
+                    from_email="deakinhardhatwebsite@gmail.com",
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+
+                print(f"OTP matched. Account for {user.email} has been activated and verified.")
+                print(f"Passkeys sent to {user.email}: {passkeys}") 
+
+                messages.success(request, "Your account has been successfully verified! Your passkeys have been sent via email.")
                 return redirect('/')
+
             except User.DoesNotExist:
                 messages.error(request, "User does not exist. Please register again.")
                 return redirect('/accounts/signup/')
@@ -539,6 +638,122 @@ def VerifyOTP(request):
 
     return render(request, 'accounts/verify_token.html')
 
+def login_with_passkey(request):
+    """
+    Login using passkey instead of OTP, then redirect to CAPTCHA verification.
+    """
+    if request.method == "POST":
+        email = request.POST.get("email")
+        passkey = request.POST.get("passkey")
+
+        try:
+            user = get_user_model().objects.get(email=email)
+
+            if Passkey.objects.filter(user=user, key=passkey).exists():
+                request.session['pending_user_id'] = user.id  # Store user ID temporarily
+                login(request, user)
+                messages.success(request, "Passkey verified! Please complete CAPTCHA verification.")
+                request.session['is_otp_verified'] = True  # Mark OTP as verified
+                return redirect("/")
+            else:
+                messages.error(request, "Invalid passkey. Please try again.")
+        except get_user_model().DoesNotExist:
+            messages.error(request, "No user found with this email.")
+
+    return render(request, "accounts/passkey_login.html")
+
+
+def reset_passkeys_request(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        last_name = request.POST.get("last_name")
+        password = request.POST.get("password")
+
+        try:
+            user = User.objects.get(email=email, last_name=last_name)
+        except User.DoesNotExist:
+            messages.error(request, "Invalid details. Please try again.")
+            return redirect("reset_passkeys_request")
+
+        authenticated_user = authenticate(email=email, password=password)
+        if authenticated_user is None:
+            messages.error(request, "Incorrect password.")
+            return redirect("reset_passkeys_request")
+
+        # Generate and send OTP
+        otp = random.randint(100000, 999999)
+        request.session["reset_passkeys_otp"] = otp
+        request.session["reset_passkeys_user_id"] = user.id
+
+        send_mail(
+            subject="Reset Your Passkeys - HardHat",
+            message=f"Your OTP for resetting passkeys is: {otp}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+        messages.success(request, "OTP sent to your email.")
+        return redirect("reset_passkeys_verify")
+
+    return render(request, "accounts/reset_passkeys_request.html")
+
+def reset_passkeys_verify(request):
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp")
+        saved_otp = request.session.get("reset_passkeys_otp")
+        user_id = request.session.get("reset_passkeys_user_id")
+
+        if not (entered_otp and saved_otp and user_id):
+            messages.error(request, "Session expired. Please try again.")
+            return redirect("reset_passkeys_request")
+
+        if int(entered_otp) != int(saved_otp):
+            messages.error(request, "Invalid OTP. Please try again.")
+            return redirect("reset_passkeys_verify")
+
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            messages.error(request, "User not found.")
+            return redirect("reset_passkeys_request")
+
+        # Remove old passkeys
+        Passkey.objects.filter(user=user).delete()
+
+        # Generate 5 new passkeys
+        new_passkeys = ["".join(random.choices(string.ascii_letters + string.digits, k=12)) for _ in range(5)]
+        for key in new_passkeys:
+            Passkey.objects.create(user=user, key=key)
+
+        # Send new passkeys via email
+        send_mail(
+            subject="Your New Passkeys - HardHat",
+            message=(
+                f"Hello {user.first_name},\n\n"
+                "Your passkeys have been successfully reset! 🔄\n\n"
+                "Here are your new lifetime passkeys:\n\n"
+                f"{chr(10).join(new_passkeys)}\n\n"
+                "You can use these passkeys instead of OTP during login.\n\n"
+                "🔹 Keep them safe, as they are your permanent authentication keys.\n"
+                "🔹 If you ever need to reset them again, you can do so from the login page.\n\n"
+                "If you did not request this reset, please contact support immediately.\n\n"
+                "Regards,\nHardHat Enterprises"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+
+        # Clear session data
+        del request.session["reset_passkeys_otp"]
+        del request.session["reset_passkeys_user_id"]
+
+        messages.success(request, "Your passkeys have been reset and emailed to you.")
+        return redirect("passkey_login")
+
+    return render(request, "accounts/reset_passkeys_verify.html")
 
 def register_client(request):
     form = ClientRegistrationForm()
@@ -564,13 +779,25 @@ def register_client(request):
     context = { 'form': form }
     return render(request, 'accounts/sign-up-client.html', context)
 
-   
+logger = logging.getLogger(__name__)  # Initialize logger
+
 def register(request):
     """
     Handles user registration and OTP verification.
     """
     if request.method == 'POST':
-        print(f"POST Data: {request.POST}")  # Log incoming POST data for debugging
+        post_data = request.POST.copy()  # Copy POST data
+        post_data['password1'] = "HIDDEN FOR SAFETY"  # Hide passwords
+        post_data['password2'] = "HIDDEN FOR SAFETY"
+        
+        logger.info(f"POST Data (Sanitized): {post_data}")  # Log without passwords
+
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+
+        print(f"Received Registration Request: First Name: {first_name}, Last Name: {last_name}, Email: {email}, Password: HIDDEN FOR SAFETY")
+
         form = RegistrationForm(request.POST)
 
         if form.is_valid():
@@ -607,11 +834,10 @@ def register(request):
                 return redirect('verifyEmail')
                 
             except Exception as e:
-                print(f"Error saving user or sending email: {e}")
+                logger.error(f"Error saving user or sending email: {e}")
                 messages.error(request, "An error occurred while creating the account. Please try again.")
         else:
-            print("Form is invalid. Errors:")
-            print(form.errors)  # Debugging log for form errors
+            logger.error(f"Form is invalid. Errors: {form.errors}")
             messages.error(request, "Please fix the errors below.")
     else:
         form = RegistrationForm()
@@ -619,12 +845,33 @@ def register(request):
     return render(request, 'accounts/sign-up.html', {'form': form})
 
 
+User = get_user_model()
+
 def post_otp_login_captcha(request):
+    """
+    Handles CAPTCHA verification after OTP verification before logging in the user.
+    """
+    user_id = request.session.get('user_id')
+    is_otp_verified = request.session.get('is_otp_verified', False)  # Ensure OTP was verified first
+
+    if not is_otp_verified or not user_id:
+        messages.error(request, "OTP verification required before CAPTCHA.")
+        return redirect('login_with_otp')
+
     if request.method == 'POST':
         form = CaptchaForm(request.POST)
         if form.is_valid():
-            messages.success(request, "CAPTCHA verified successfully!")
-            return redirect('/')  # Redirect to the desired page
+            try:
+                user = User.objects.get(id=user_id)  # Get the user based on session ID
+                login(request, user)  # Log in the user after CAPTCHA verification
+                del request.session['otp']
+                del request.session['user_id']
+                del request.session['is_otp_verified']  # Clean up session data
+                messages.success(request, "Login successful!")
+                return redirect('dashboard')  # Redirect to the user's dashboard
+            except User.DoesNotExist:
+                messages.error(request, "User not found. Please log in again.")
+                return redirect('login_with_otp')
         else:
             messages.error(request, "CAPTCHA verification failed. Please try again.")
     else:
@@ -874,8 +1121,30 @@ def Contact_central(request):
 
     return render(request, 'pages/Contactus.html')
 
+def generate_and_send_passkeys(user):
+    # Generate 5 permanent passkeys
+    passkeys = [Passkey.generate_passkey() for _ in range(5)]
 
- 
+    # Save to database (without expiration)
+    for key in passkeys:
+        Passkey.objects.create(user=user, key=key)
+
+    # Email the passkeys to the user
+    send_mail(
+        subject="Your Permanent HardHat Enterprise Passkeys",
+        message=(
+            f"Hello {user.first_name},\n\n"
+            "Here are your permanent login passkeys:\n"
+            f"{', '.join(passkeys)}\n\n"
+            "Each passkey can be used at any time instead of OTP during login.\n"
+            "Keep them safe!\n\nRegards,\nHardHat Enterprises"
+        ),
+        from_email="deakinhardhatwebsite@gmail.com",
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+    print(f"DEBUG MODE: Lifetime Passkeys for {user.email}: {passkeys}")  # Debugging
  
 # Blog
 class Index(ListView):
@@ -1029,18 +1298,58 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
-
 def feedback_view(request):
+    sentiment = None
+    name = None
+    rating = None
+
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('feedback')
+            feedback_obj = form.save(commit=False)
+            feedback_text = form.cleaned_data.get('feedback')
+            name = form.cleaned_data.get('name')
+            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+
+            # 🧠 Sentiment analysis
+            blob = TextBlob(feedback_text)
+            polarity = blob.sentiment.polarity
+
+            if polarity >= 0.1:
+                sentiment = "positive"
+            elif polarity <= -0.1:
+                sentiment = "negative"
+            else:
+                sentiment = "neutral"
+
+            # ⭐️ Save rating if present
+            if rating:
+                feedback_obj.rating = int(rating)
+
+            feedback_obj.save()
+
+            # 📊 Calculate average rating and total number of ratings
+            aggregate = Experience.objects.aggregate(
+                avg=Avg('rating'),
+                count=Count('rating')
+            )
+            average_rating = round(aggregate['avg'] or 0, 1)
+            rating_count = aggregate['count']
+
+            return render(request, 'feedback/thank_you.html', {
+                'name': name,
+                'sentiment': sentiment,
+                'rating': int(rating) if rating else None,
+                'average_rating': average_rating,
+                'rating_count': rating_count
+            })
     else:
         form = ExperienceForm()
 
+    # 📥 Fetch all past feedback
     feedbacks = Experience.objects.all().order_by('-created_at')
-    return render(request, 'feedback.html', {
+
+    return render(request, 'pages/feedback.html', {
         'form': form,
         'feedbacks': feedbacks
     })
@@ -1057,69 +1366,140 @@ def challenge_list(request):
 
 
 @login_required
-def profile(request):
-    # Ensure the user has a profile, create it if not
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=request.user)
-
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, 'Your profile has been updated successfully.')
-            # Fetch the updated profile object to ensure it's refreshed
-            profile = request.user.profile
-            return redirect('profile')
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form,
-        'profile': profile,
-    }
-
-    return render(request, 'pages/profile.html', context)
-
-@login_required
 def category_challenges(request, category):
     challenges = CyberChallenge.objects.filter(category=category).order_by('difficulty')
     completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
     return render(request, 'pages/challenges/category_challenges.html', {'category': category, 'challenges': challenges, 'completed_challenges': completed_challenges})
+
+import sys
+import io
+import contextlib
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import CyberChallenge, UserChallenge
 
 @login_required
 def challenge_detail(request, challenge_id):
     challenge = get_object_or_404(CyberChallenge, id=challenge_id)
     next_challenge = CyberChallenge.objects.filter(category=challenge.category, id__gt=challenge.id).order_by('id').first()
     user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-    completed_challenges = UserChallenge.objects.filter(user=request.user, completed=True).values_list('challenge_id', flat=True)
 
-    return render(request, 'pages/challenges/challenge_detail.html', {'challenge': challenge, 'user_challenge': user_challenge,'next_challenge': next_challenge,'completed_challenges': completed_challenges,})
+    if request.method == 'POST':
+        # For MCQ (Multiple Choice Question) challenges
+        if challenge.challenge_type == 'mcq':
+            selected = request.POST.get("selected_choice", "").strip()
+            correct_answer = challenge.correct_answer.strip()
+
+            # Check if the answer is correct
+            is_correct = selected == correct_answer
+            user_challenge.completed = is_correct
+            user_challenge.score = challenge.points if is_correct else 0
+            output = correct_answer  # just to include something in response
+
+        # For Fix the Code challenges
+        elif challenge.challenge_type == 'fix_code':
+            user_code = request.POST.get("code_input", "").strip()
+            expected_output = challenge.expected_output.strip()
+
+            f = io.StringIO()
+            with contextlib.redirect_stdout(f):
+                try:
+                    exec(user_code, {"input": lambda: next(iter(challenge.sample_input.split('\n')))})
+                    output = f.getvalue().strip()
+                    is_correct = output == expected_output
+                    user_challenge.completed = is_correct
+                    user_challenge.score = challenge.points if is_correct else 0
+                except Exception as e:
+                    output = str(e)
+                    user_challenge.completed = False
+                    user_challenge.score = 0
+
+        user_challenge.save()
+
+        return JsonResponse({
+            'is_correct': user_challenge.completed,
+            'message': 'Correct!' if user_challenge.completed else 'Incorrect.',
+            'explanation': challenge.explanation,
+            'output': output,
+            'score': user_challenge.score
+        })
+
+    return render(request, 'pages/challenges/challenge_detail.html', {
+        'challenge': challenge,
+        'next_challenge': next_challenge,
+        'user_challenge': user_challenge,
+    })
+
 
 @login_required
 def submit_answer(request, challenge_id):
     if request.method == 'POST':
         challenge = get_object_or_404(CyberChallenge, id=challenge_id)
-        user_answer = request.POST.get('answer')
-        is_correct = user_answer == challenge.correct_answer
+        user_answer = request.POST.get('selected_choice', '')  
+        user_code = request.POST.get('code_input', '')  
+        output = ""
+        is_correct = False
+        explanation = challenge.explanation or ""
+
+        if challenge.challenge_type == 'mcq':
+            correct_answer = challenge.correct_answer.strip()
+            if user_answer.strip() == correct_answer:
+                is_correct = True
+                output = "Correct!"
+            else:
+                output = "Incorrect. The correct answer is: " + correct_answer
+
+        elif challenge.challenge_type == 'fix_code':
+            f = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(f):
+                    inputs = challenge.sample_input.strip().split('\n')
+                    input_iter = iter(inputs)
+                    exec(user_code, {"input": lambda: next(input_iter)})
+
+                result_output = f.getvalue().strip()
+                is_correct = result_output == challenge.expected_output.strip()
+                output = result_output
+            except Exception as e:
+                output = str(e)
+                is_correct = False
+
         user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
-        if is_correct and not user_challenge.completed:
+
+        user_challenge.completed = is_correct
+        user_challenge.score = challenge.points if is_correct else 0
+        user_challenge.save()
+        
+        # If challenge is correct, update the leaderboard
+        if is_correct:
             user_challenge.completed = True
             user_challenge.score = challenge.points
             user_challenge.save()
+            # Calculate total points
+            total_points = UserChallenge.objects.filter(
+                user=request.user,
+                challenge__category=challenge.category
+            ).aggregate(Sum('score'))['score__sum'] or 0
+
+            # Update leaderboard
+            leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+                user=request.user,
+                category=challenge.category
+            )
+            leaderboard_entry.total_points = total_points
+            leaderboard_entry.save()
+
         return JsonResponse({
             'is_correct': is_correct,
-            'message': 'Great job!' if is_correct else 'Try again!',
-            'explanation': challenge.explanation,
-            'score': user_challenge.score if is_correct else 0
+            'message': "Correct!" if is_correct else "Try again",
+            'explanation': explanation,
+            'output': output,
+            'score': challenge.points if is_correct else 0
         })
+
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 #
 def blog_list(request):
@@ -1215,9 +1595,21 @@ class EmailNotificationViewSet(ViewSet):
         return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
-    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
-    print(leaderboard_entry)
-    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+    #Select category to display leaderboard table
+    selected_category = request.GET.get('category', '')
+    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    if selected_category:
+        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
+    else:
+        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
+
+    context = {
+        'entries': leaderboard_entry,
+        'categories': categories,
+        'selected_category': selected_category,
+
+    }
+    return render(request, 'pages/leaderboard.html', context)
 
 def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
@@ -1231,4 +1623,53 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+
+
+def comphrehensive_reports(request):
+    reports = AppAttackReport.objects.all().order_by('-year')
+    return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
+
+def pen_testing(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('pen-testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
+
+def secure_code_review(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('secure-code-review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
+
+def pen_testing_form_view(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('/appattack')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
+
+def secure_code_review_form_view(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('/appattack')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
 
