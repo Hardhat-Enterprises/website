@@ -506,3 +506,17 @@ class JobApplicationForm(forms.Form):
         required=False,
         label='Cover Letter (optional)',
         widget=forms.ClearableFileInput(attrs={'accept': '.pdf,.doc,.docx'}))
+
+class PenTestingRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = PenTestingRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+
+class SecureCodeReviewRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = SecureCodeReviewRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
