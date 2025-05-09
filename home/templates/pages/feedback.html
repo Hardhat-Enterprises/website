@@ -10,31 +10,42 @@
     <div class="container">
         <h4>User Experience</h4>
         <br>
-        <p>Please provide your experiences with our company..</p>
+        <p>Please provide your experiences with our company.</p>
         <form method="post" action="{% url 'feedback' %}" class="card">
             {% csrf_token %}
             <div class="card-header">How was your experience?</div>
             <br>
             <div class="container">
                 <div class="col">
-                <div class="card-text form-group">
-                    <label for="id_name">Name:</label>
-                    {{ form.name }}
-                </div>
-                <br>
-                <div class="card-text form-group">
-                    <label for="id_feedback">User Experience:</label>
-                    {{ form.feedback }}
-                </div>
-                <br>
-                <button type="reset" class="btn btn-primary">Reset</button> 
-                <button type="submit" class="btn btn-primary">Submit</button> 
+    
+                    <!-- Anonymous checkbox -->
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="anonymousCheck" name="anonymous" onchange="toggleNameField()">
+                        <label class="form-check-label" for="anonymousCheck">Make it anonymous</label>
+                    </div>
+    
+                    <!-- Name Field -->
+                    <div class="card-text form-group" id="nameField">
+                        <label for="id_name">Name:</label>
+                        {{ form.name }}
+                    </div>
+                    <br>
+    
+                    <!-- Feedback Field -->
+                    <div class="card-text form-group">
+                        <label for="id_feedback">User Experience:</label>
+                        {{ form.feedback }}
+                    </div>
+                    <br>
+    
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
                 <br>
             </div>
         </form>
         <br>
-
+    
         <div class="feedback-list">
             <h5>Recent Feedback</h5>
             {% if feedbacks %}
@@ -42,18 +53,28 @@
                 {% for feedback in feedbacks %}
                 <li>
                     <strong>{{ feedback.name }}</strong>: {{ feedback.feedback }}
-                    <form method="post" action="{% url 'delete_feedback' feedback.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
                 </li>
                 {% endfor %}
             </ul>
-        {% else %}
+            {% else %}
             <p>No feedback yet</p>
-        {%  endif %}
+            {% endif %}
         </div>
     </div>
+    
+    <!-- JavaScript to hide/show name field -->
+    <script>
+        function toggleNameField() {
+            const checkbox = document.getElementById('anonymousCheck');
+            const nameField = document.getElementById('nameField');
+            if (checkbox.checked) {
+                nameField.style.display = 'none';
+            } else {
+                nameField.style.display = 'block';
+            }
+        }
+    </script>
+    
     <!-- Subresource Integrity -->       
     <script type="module"
     src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 

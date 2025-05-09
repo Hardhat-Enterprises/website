@@ -432,8 +432,11 @@ def feedback(request):
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the feedback to the database
-            return redirect('feedback')  # Redirect to clear the form
+            feedback = form.save(commit=False) # Create a feedback instance without saving it to the database
+            if 'anonymous' in request.POST:
+                feedback.name = 'Anonymous'
+            feedback.save() # Save the feedback to the database
+            return redirect('feedback') # Redirect to clear the form
 
     else:
         form = ExperienceForm()
