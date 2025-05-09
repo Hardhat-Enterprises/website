@@ -2,244 +2,308 @@
 {% load static %}
 
 {% block content %}
-<p></p>
-<p></p>
-<p></p>
-<div style="display: flex; flex-direction: column; min-height: 100vh; background-color: #e09019; color: #000;">
-    <!-- Content -->
-    <div style="flex: 1; padding: 20px;">
-        <!-- White Box -->
-        <div style="position: relative; background-color: #fffacd; border: 2px solid black; border-radius: 10px; padding: 15px; max-width: 500px; margin: 100px auto 0;">
-            <div style="text-align: center;">
-                <h1 style="font-size: 2.5rem; color: #000;">{{ challenge.title }}</h1>
-                <p style="font-size: 1.2rem; color: #333;">{{ challenge.description }}</p>
-                <div style="margin-bottom: 20px;">
-                    <a href="{% url 'category_challenges' challenge.category %}" class="btn btn-danger" style="background-color: #dc3545; color: #fff; margin-right: 10px;">Exit</a>
-                    <span class="difficulty-badge 
-                        {% if challenge.get_difficulty_display == 'Easy' %} difficulty-easy
-                        {% elif challenge.get_difficulty_display == 'Medium' %} difficulty-medium
-                        {% elif challenge.get_difficulty_display == 'Hard' %} difficulty-hard
-                        {% else %} difficulty-default {% endif %}" 
-                        style="margin-right: 10px;">
-                        {{ challenge.get_difficulty_display }}
-                    </span>
-                    <span style="background-color: #17a2b8; color: #fff; padding: 5px 10px; border-radius: 5px; margin-right: 10px;">{{ challenge.get_category_display }}</span>
-                    <span style="background-color: #28a745; color: #fff; padding: 5px 10px; border-radius: 5px;">{{ challenge.points }} points</span>
+<div class="challenge-container">
+    <div class="challenge-content">
+        <!-- Header Block -->
+        <div class="challenge-card" style="margin-top: 140px;">
+            <div class="text-center">
+                <h1 class="challenge-title">{{ challenge.title }}</h1>
+                <p class="challenge-description">{{ challenge.description }}</p>
+                <div class="tag-bar">
+                    <span class="difficulty-badge {% if challenge.get_difficulty_display == 'Easy' %} difficulty-easy {% elif challenge.get_difficulty_display == 'Medium' %} difficulty-medium {% elif challenge.get_difficulty_display == 'Hard' %} difficulty-hard {% else %} difficulty-default {% endif %}">{{ challenge.get_difficulty_display }}</span>
+                    <span class="category-badge">{{ challenge.get_category_display }}</span>
+                    <span class="points-badge">{{ challenge.points }} points</span>
                 </div>
-                <div id="timer" style="text-align: center; font-size: 1.2rem; color: #dc3545; margin-bottom: 5px;">
-                    Time Remaining: 60s
+                <div id="timer" class="challenge-timer">
+                    Time Remaining: <span id="timer-seconds">{{ challenge.time_limit }}</span>s
                 </div>
             </div>
         </div>
-        <!-- Question Section -->
-        <div style="position: relative; background-color: #fffacd; padding: 20px; border-radius: 10px; max-width: 600px; margin: 10px auto;">
-            <div class="correct-animation" id="correct-animation">
-                <div class="tick-circle">
-                    <div class="tick-mark"></div>
-                </div>
-            </div>
-            <h5 style="font-size: 1.5rem; color: #003366;">Question:</h5>
-            <p style="font-size: 1rem; color: #333;">{{ challenge.question }}</p>
-            <form id="challenge-form">
-                {% csrf_token %}
-                {% for key, value in challenge.choices.items %}
-                <div style="margin-bottom: 10px;">
-                    <input type="radio" name="answer" id="choice{{ forloop.counter }}" value="{{ key }}" style="margin-right: 10px;">
-                    <label for="choice{{ forloop.counter }}" style="font-size: 1rem; color: #333;">{{ value }}</label>
-                </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary" style="background-color: #0056b3; color: #fff; border: none; margin-top: 20px;">Submit Answer</button>
-            </form>
+
+        <!-- Body Block -->
+        <div class="challenge-card question-box">
+            {% if challenge.challenge_type == 'mcq' %}
+                <h5 class="question-title">Question:</h5>
+                <p class="question-text">{{ challenge.question }}</p>
+
+                <form id="challenge-form" method="post">
+                    {% csrf_token %}
+                    <div class="choices-container">
+                        {% for choice in challenge.choices %}
+                            <label class="choice-option">
+                                <input type="radio" name="selected_choice" value="{{ choice }}">
+                                <div class="choice-box">{{ choice }}</div>
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <div class="form-actions">
+                        <div style="display: flex; gap: 10px;">
+                            <a href="{% url 'category_challenges' challenge.category %}" class="btn btn-danger">Exit</a>
+                            <button type="button" class="btn btn-retry" id="retry-btn" style="display: none;">Retry</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Answer</button>
+                    </div>
+                </form>
+
+            {% elif challenge.challenge_type == 'fix_code' %}
+                <h5 class="question-title">Fix the Code:</h5>
+                <p class="question-text">Below is the broken code. Fix it so that it produces the correct output.</p>
+
+                <form id="challenge-form" method="post">
+                    {% csrf_token %}
+                    <textarea name="code_input" id="code_input" rows="12" style="width:100%; font-family: monospace; font-size: 0.95rem; padding: 10px; border-radius: 8px;">{{ challenge.starter_code|safe }}</textarea>
+                    <div class="form-actions">
+                        <div style="display: flex; gap: 10px;">
+                            <a href="{% url 'category_challenges' challenge.category %}" class="btn btn-danger">Exit</a>
+                            <button type="button" class="btn btn-retry" id="retry-btn" style="display: none;">Retry</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Code</button>
+                    </div>
+                </form>
+            {% endif %}
         </div>
-        <div id="result" style="display: none; padding: 15px; margin-top: 20px; border-radius: 5px; max-width: 600px; margin: 20px auto;"></div>
+
+        <!-- Slide-Up Feedback -->
+        <div id="slide-result" class="slide-result hidden"></div>
 
         {% if next_challenge %}
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="{% url 'challenge_detail' next_challenge.id %}" class="btn btn-secondary" style="background-color: #6c757d; color: #fff; border: none;">Next Challenge</a>
-        </div>
-        {% else %}
-        <p style="text-align: center; color: #666; margin-top: 20px;">No more challenges in this category.</p>
+            <div class="text-center" style="margin-top: 40px;">
+                <a href="{% url 'challenge_detail' next_challenge.id %}" class="btn btn-secondary">Next Challenge</a>
+            </div>
         {% endif %}
     </div>
 </div>
 
 <script>
-document.getElementById('challenge-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    fetch('{% url "submit_answer" challenge.id %}', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            const resultDiv = document.getElementById('result');
-            const animationDiv = document.getElementById('correct-animation');
-            resultDiv.style.display = 'block';
-
-            if (data.is_correct) {
-                resultDiv.className = 'alert alert-success';
-                resultDiv.innerHTML = `Correct! You earned ${data.score} points. ${data.explanation}`;
-                
-                // Show the tick animation
-                animationDiv.style.display = 'block';
-
-                // Fade out the animation after 2 seconds
-                setTimeout(() => {
-                    animationDiv.classList.add('fade-out');
-                }, 2000);
-
-                // Hide the animation completely after the fade-out
-                setTimeout(() => {
-                    animationDiv.style.display = 'none';
-                    animationDiv.classList.remove('fade-out');
-                }, 3000);
-            } else {
-                resultDiv.className = 'alert alert-danger';
-                resultDiv.innerHTML = `Incorrect. ${data.explanation}`;
-            }
-        });
-});
-
 document.addEventListener('DOMContentLoaded', function () {
-        let timeLeft = 60; // Timer starts at 1 minute (60 seconds)
-        const timerElement = document.getElementById('timer');
-        const resultDiv = document.getElementById('result');
-        const form = document.getElementById('challenge-form');
+    let timeLeft = parseInt("{{ challenge.time_limit|default:60 }}");
+    const timerSpan = document.getElementById('timer-seconds');
+    const form = document.getElementById('challenge-form');
+    const slideResult = document.getElementById('slide-result');
+    const retryBtn = document.getElementById('retry-btn');
+    const timerBox = document.getElementById('timer');
+    let timerStopped = false;
+    let timerInterval = setInterval(updateTimer, 1000);
 
-        function updateTimer() {
-            timeLeft--;
-            timerElement.textContent = `Time Remaining: ${timeLeft}s`;
-
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                handleTimeout();
-            }
-        }
-
-        function handleTimeout() {
-            resultDiv.style.display = 'block';
-            resultDiv.className = 'alert alert-danger';
-            resultDiv.innerHTML = `Time's up! The challenge is marked as incorrect.`;
+    function updateTimer() {
+        if (timerStopped) return;
+        timeLeft--;
+        timerSpan.textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showSlideResult("⏱ Time's up! Challenge marked as incorrect.", false);
             disableForm();
         }
+    }
 
-        function disableForm() {
-            const inputs = document.querySelectorAll('input[name="answer"]');
-            inputs.forEach(input => (input.disabled = true));
-            const submitButton = document.querySelector('button[type="submit"]');
-            if (submitButton) {
-                submitButton.disabled = true;
-            }
+    function showSlideResult(message, isCorrect) {
+        slideResult.textContent = message;
+        slideResult.className = 'slide-result show ' + (isCorrect ? 'correct' : 'incorrect');
+        setTimeout(() => slideResult.classList.remove('show'), 4000);
+    }
+
+    function disableForm() {
+        const inputs = form.querySelectorAll('input, button, textarea');
+        inputs.forEach(input => {
+            if (input.id !== "retry-btn") input.disabled = true;
+        });
+    }
+
+    function resetForm() {
+        const inputs = form.querySelectorAll('input, button, textarea');
+        inputs.forEach(input => {
+            input.disabled = false;
+            if (input.type === "radio") input.checked = false;
+        });
+
+        const codeInput = document.getElementById("code_input");
+        if (codeInput) {
+            codeInput.value = `{{ challenge.starter_code|escapejs }}`;
         }
 
-        // Start the timer
-        const timerInterval = setInterval(updateTimer, 1000);
+        slideResult.classList.remove("show", "correct", "incorrect");
 
-        // Handle form submission
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            clearInterval(timerInterval); // Stop the timer upon submission
-            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+        timeLeft = parseInt("{{ challenge.time_limit|default:60 }}");
+        timerSpan.textContent = timeLeft;
+        timerStopped = false;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimer, 1000);
 
-            if (selectedAnswer) {
-                resultDiv.style.display = 'block';
-                resultDiv.className = 'alert alert-success';
-                resultDiv.innerHTML = `Correct! You earned points.`;
-            } else {
-                resultDiv.style.display = 'block';
-                resultDiv.className = 'alert alert-danger';
-                resultDiv.innerHTML = `Incorrect. Please try again.`;
+        timerBox.classList.remove("stop-pulse", "correct");
+        retryBtn.style.display = "none";
+    }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const selected = document.querySelector('input[name="selected_choice"]:checked');
+        if (selected) formData.set('selected_choice', selected.value);
+
+        fetch('{% url "submit_answer" challenge.id %}', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            clearInterval(timerInterval);
+            timerStopped = true;
+
+            timerBox.classList.add("stop-pulse");
+            timerBox.classList.remove("correct");
+            if (data.is_correct) {
+                timerBox.classList.add("correct");
             }
 
+            showSlideResult(
+                data.is_correct ? `✅ Correct! You earned ${data.score} points.` : `❌ Incorrect. ${data.explanation || "Try again."}`,
+                data.is_correct
+            );
+
             disableForm();
+            retryBtn.style.display = "inline-block";
+        })
+        .catch(err => {
+            console.error("Error submitting:", err);
+            showSlideResult("❌ There was an error processing your submission. Please try again.", false);
         });
     });
 
+    retryBtn.addEventListener("click", resetForm);
+});
 </script>
 
 <style>
-    .difficulty-easy {
-        background-color: #28a745;
-        color: #fff;
-    }
-    .difficulty-medium {
-        background-color: #ffc107;
-        color: #000;
-    }
-    .difficulty-hard {
-        background-color: #dc3545;
-        color: #fff;
-    }
-    .difficulty-default {
-        background-color: #6c757d;
-        color: #fff;
-    }
-    .difficulty-badge {
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-
-    .correct-animation {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    opacity: 1;
-    transition: opacity 1s ease-in-out;
-}
-
-.correct-animation.fade-out {
-    opacity: 0;
-}
-
-.tick-circle {
-    width: 100px;
-    height: 100px;
-    border: 5px solid #32cd32;
-    border-radius: 50%;
+.challenge-container { display: flex; flex-direction: column; min-height: 100vh; background-color: #f1b100de; color: #000; }
+.challenge-content { flex: 1; padding: 20px; }
+.challenge-card {
     position: relative;
-    animation: circleAppear 1s ease-in-out forwards;
+    background-color: #f0f0f0;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 15px;
+    max-width: 600px;
+    margin: 30px auto 0;
+}
+.dark-mode .challenge-card {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+    border-color: #555;
+}
+
+.challenge-title { font-size: 2.5rem; }
+.challenge-description { font-size: 1.2rem; color: #333; }
+.dark-mode .challenge-description { color: #ccc; }
+
+.challenge-timer {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #dc3545;
+    margin-top: 10px;
+    animation: pulse 1s infinite ease-in-out;
+}
+.challenge-timer.correct {
+    color: #28a745 !important;
+}
+.challenge-timer.stop-pulse {
+    animation: none !important;
+}
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.85; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.difficulty-badge, .category-badge, .points-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.difficulty-easy { background-color: #28a745; color: #fff; }
+.difficulty-medium { background-color: #ffc107; color: #000; }
+.difficulty-hard { background-color: #dc3545; color: #fff; }
+.difficulty-default { background-color: #6c757d; color: #fff; }
+.category-badge { background-color: #17a2b8; color: #fff; }
+.points-badge { background-color: #28a745; color: #fff; }
+
+.question-title { font-size: 1.5rem; color: #003366; }
+.question-text { font-size: 1rem; margin-bottom: 15px; }
+
+.choices-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.choice-option input[type="radio"] { display: none; }
+.choice-box {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f0f8ff;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    color: #333;
+}
+.choice-option:hover .choice-box {
+    border-color: #007bff;
+    background-color: #e1f0ff;
+}
+.choice-option input[type="radio"]:checked + .choice-box {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+textarea[name="code_input"] {
+    background-color: #fff;
+    border: 2px solid #ccc;
+}
+.dark-mode textarea[name="code_input"] {
+    background-color: #1e1e1e;
+    color: #eee;
+    border-color: #444;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    align-items: center;
+}
+.btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+.btn-danger { background-color: #dc3545; color: white; }
+.btn-primary { background-color: #0056b3; color: white; }
+.btn-secondary { background-color: #6c757d; color: white; }
+
+.btn-retry {
+    background-color: #17a2b8;
+    color: white;
+}
+.btn-retry:hover {
+    background-color: #138496;
+}
+
+.slide-result {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 30px auto 0;
     opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.5s ease;
 }
-
-.tick-mark {
-    width: 20px;
-    height: 50px;
-    border: solid #32cd32;
-    border-width: 0 7px 7px 0;
-    position: absolute;
-    top: 25%;
-    left: 40%;
-    transform: rotate(45deg);
-    animation: tickFadeIn 1s ease-in-out forwards 1s;
-    opacity: 0;
-}
-
-@keyframes circleAppear {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-@keyframes tickFadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
+.slide-result.show { opacity: 1; transform: translateY(0); }
+.slide-result.correct { background-color: #d4edda; color: #155724; }
+.slide-result.incorrect { background-color: #f8d7da; color: #721c24; }
 </style>
 {% endblock %}
