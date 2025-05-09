@@ -1,13 +1,93 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-<div class="container mt-5">
-  <h2>Job Alerts</h2>
-  <p>Subscribe to our job alerts to stay updated!</p>
 
-  <form id="jobAlertForm" class="mt-4">
-    <input type="email" id="jobAlertEmail" class="form-control mb-2" placeholder="Enter your email" required />
-    <button type="submit" class="btn btn-primary">Subscribe</button>
-    <div id="jobAlertMessage" class="text-success mt-2" style="display: none;">Subscribed successfully!</div>
-  </form>
-</div>
+
+<style>
+  .job-alerts-wrapper {
+    padding: 10rem 1rem 6rem 1rem;
+    background-color: #ffc107;
+    text-align: center;
+  }
+
+  .job-alerts-wrapper h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  .job-alerts-wrapper p {
+    color: #495057;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .job-alerts-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .job-alerts-form input[type="email"] {
+    width: 100%;
+    max-width: 480px;
+    padding: 14px 20px;
+    border: 2px solid #ffc107;
+    border-radius: 30px;
+    font-size: 1rem;
+    color: #212529;
+    background-color: white;
+  }
+
+  .job-alerts-form button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    background-color: #212529;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .job-alerts-form button:hover {
+    opacity: 0.9;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .job-alerts-wrapper {
+      background-color: #ffc107;
+    }
+
+    .job-alerts-wrapper h2,
+    .job-alerts-wrapper p {
+      color: #212529;
+    }
+
+    .job-alerts-form input[type="email"] {
+      background-color: #fff;
+      color: #212529;
+      border: 2px solid #212529;
+    }
+
+    .job-alerts-form button {
+      background-color: #212529;
+      color: #fff;
+    }
+  }
+</style>
+
+<section class="job-alerts-wrapper">
+  <div class="container">
+    <h2>Subscribe to Job Alerts</h2>
+    <p>Be the first to know about new job openings at Hardhat.</p>
+    <form method="post" class="job-alerts-form">
+      {% csrf_token %}
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
 {% endblock %}
+
