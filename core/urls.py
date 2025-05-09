@@ -23,6 +23,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from .admin import admin_statistics_view
+from .admin import admin_dashboard
 
 handler404 = 'home.views.error_404_view'
 schema_view = get_schema_view(
@@ -40,6 +41,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
+    path("admin/dashboard/", admin.site.admin_view(admin_dashboard), name="admin-dashboard"),
     path('admin/', admin.site.urls),
     path('accounts/', include('home.urls')), 
     path('', include('home.urls')),
