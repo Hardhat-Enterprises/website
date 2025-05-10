@@ -1,10 +1,35 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+{% block seo %}
+    <title>Join Us - VR Cybersecurity Training Project by Hardhat Enterprises</title>
+    <meta name="description" content="Join Hardhat Enterprises’ VR cybersecurity training project to collaborate on innovative cybersecurity solutions and enhance your skills with ethical hacking tools.">
+    <meta name="keywords" content="VR cybersecurity training, cybersecurity collaboration, join cybersecurity project, ethical hacking tools, cybersecurity services, Hardhat Enterprises">
+    <meta property="og:title" content="Join Us - VR Cybersecurity Training Project by Hardhat Enterprises">
+    <meta property="og:description" content="Collaborate with Hardhat Enterprises on our VR cybersecurity training project to develop innovative cybersecurity solutions.">
+    <meta property="og:image" content="{% static 'assets/img/pages/vr/vr-join-us.jpg' %}">
+{% endblock %}
+
 {% block content %}
 <main>
     {% include 'includes/pre-loader.html' %}
 
+    <!-- Introduction Section -->
+    <section class="section-header bg-tertiary text-black">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-12 col-lg-8">
+                    <h1 class="display-2 mb-4">Join Our VR Cybersecurity Training Project</h1>
+                    <p class="lead mb-4 text-muted">
+                        Hardhat Enterprises is seeking collaborators for our VR cybersecurity training project, an innovative initiative to provide hands-on cybersecurity education using virtual reality. Join us to contribute to cutting-edge cybersecurity solutions and enhance your skills with ethical hacking tools.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Introduction Section -->
+
+    <!-- Form Section -->
     <section class="section section-lg">
         <div class="container">
             <div class="row justify-content-center">
@@ -12,34 +37,32 @@
                     <!-- Contact Card -->
                     <div class="card border-0 p-md-3 p-lg-5 p-4 shadow-lg">
                         <div class="card-header bg-white border-0 text-center">
-                            <h2>Want to work with us?</h2>
-                            <p>Cool! Let's talk about your project</p>
+                            <h2>Collaborate With Us on VR Cybersecurity</h2>
+                            <p>Let’s discuss your interest in our VR cybersecurity training project!</p>
                         </div>
 
                         {% if messages %}
                         {% for message in messages %}
                         {% if message.tags == "error" %}
                         <div class="alert alert-danger" role="alert">
-                           
-                            <strong>Message : </strong> {{ message }}
+                            <strong>Message: </strong> {{ message }}
                         </div> 
                         {% else %}
                         <div class="alert alert-success" role="alert">
-                            <strong>Message : </strong> {{ message }}
+                            <strong>Message: </strong> {{ message }}
                         </div>
                         {% endif %}
                         {% endfor %}
                         {% endif %}
+
                         <div class="card-body pt-0">
                             <form action="#" method="POST">{% csrf_token %}
                                 <!-- Form -->
                                 <div class="mb-4">
                                     <label for="name">Your Name</label>
                                     <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon3"><span
-                                                class="fas fa-user-circle"></span></span>
-                                        <input type="text" class="form-control" placeholder="e.g. Bonnie Green"
-                                            id="name" name="name">
+                                        <span class="input-group-text" id="basic-addon3"><span class="fas fa-user-circle"></span></span>
+                                        <input type="text" class="form-control" placeholder="e.g. Bonnie Green" id="name" name="name">
                                     </div>
                                 </div>
                                 <!-- End of Form -->
@@ -47,22 +70,18 @@
                                 <div class="mb-4">
                                     <label for="email">Your Email</label>
                                     <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon4"><span
-                                                class="fas fa-envelope"></span></span>
-                                        <input type="email" class="form-control" placeholder="example@company.com"
-                                            pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
-                                            size="30" id="email" name="email">
+                                        <span class="input-group-text" id="basic-addon4"><span class="fas fa-envelope"></span></span>
+                                        <input type="email" class="form-control" placeholder="example@company.com" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" size="30" id="email" name="email">
                                     </div>
                                 </div>
                                 <!-- End of Form -->
                                 <div class="mb-4">
                                     <label for="message">Your Message</label>
-                                    <textarea placeholder="Your message" class="form-control" id="message" rows="4"
-                                        name="message"></textarea>
+                                    <textarea placeholder="Tell us how you’d like to contribute to our VR cybersecurity training project" class="form-control" id="message" rows="4" name="message"></textarea>
                                 </div>         
                                 <!-- End of Form -->
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-secondary">Send message</button>
+                                    <button type="submit" class="btn btn-secondary">Send Message</button>
                                 </div>
                             </form>
                         </div>
@@ -72,5 +91,6 @@
             </div>
         </div>
     </section>
-
-    {% endblock content %}
+    <!-- End of Form Section -->
+</main>
+{% endblock content %}

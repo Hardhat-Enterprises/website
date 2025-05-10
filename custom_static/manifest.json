@@ -1,9 +1,0 @@
-{
-    "name": "Hardhat Enterprises",
-    "short_name": "Hardhat",
-    "description": "Free, open-source cybersecurity tools for white-hat operations.",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#007bff"
-  }
