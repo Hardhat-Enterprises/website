@@ -50,6 +50,9 @@ urlpatterns = [
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
     path('plan/', views.package_plan, name='package_plan'),
+    path('cyber_threat_simulation/', views.cyber_threat_simulation, name='cyber_threat_simulation'),
+    path('secure_digital_practices/', views.secure_digital_practices, name='secure_digital_practices'),
+    path('cybersecurity_awareness_reports/', views.cybersecurity_awareness_reports, name='cybersecurity_awareness_reports'),
     
     # blog
     #path('admin/', admin.site.urls),

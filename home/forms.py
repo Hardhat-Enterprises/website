@@ -14,6 +14,8 @@ import logging
 import re
 import nh3
 
+from .models import PenTestingRequest, SecureCodeReviewRequest
+
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 from .validators import xss_detection
 
@@ -441,20 +443,30 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):  
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio']
+        fields = ['avatar', 'bio', 'linkedin', 'github', 'location']
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tell us about yourself'
+            }),
+            'linkedin': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'LinkedIn Profile URL'
+            }),
+            'github': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'GitHub Profile URL'
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'City, Country'
+            })
+        }
 
 class CaptchaForm(forms.Form):
     captcha = CaptchaField()
         
 
-class ExperienceForm(ModelForm):
-    class Meta:
-        model = Experience
-        fields = ['name', 'feedback']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
-            'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
-        }
 
 #Newly Added
 class ContactForm(forms.Form):
@@ -472,8 +484,7 @@ class ContactForm(forms.Form):
         message = xss_detection(message)
         return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
         
-
-class ExperienceForm(ModelForm):
+class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
         fields = ['name', 'feedback']
@@ -496,3 +507,18 @@ class JobApplicationForm(forms.Form):
         'rows': 5, 
         'placeholder': 'Write your cover letter here...'
     }))
+
+
+class PenTestingRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = PenTestingRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+
+class SecureCodeReviewRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = SecureCodeReviewRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']

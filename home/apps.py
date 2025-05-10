@@ -7,6 +7,7 @@ class HomeConfig(AppConfig):
 
     def ready(self):
         import home.signals
+        import home.audit_signals
         if 'runserver' in sys.argv:
                 try:
                     print("[App Ready] Triggering inserts...")

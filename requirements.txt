@@ -48,4 +48,18 @@ django-simple-captcha==0.6.0
 djangorestframework==3.15.2
 drf-yasg==1.21.8
 
+#Cron Jobs
+django-cron==0.6.0
 
+
+
+# Sentiment Analysis
+textblob==0.18.0
+
+
+
+django-cron==0.6.0
+
+# tests
+webdriver-manager==4.0.2
+selenium==4.31.0
