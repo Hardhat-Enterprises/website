@@ -1,0 +1,41 @@
+[
+    {
+      "url": "http://localhost:8000/accounts/signup/",
+      "data": {
+        "first_name": "foo",
+        "last_name": "bar",
+        "email": "s123456789@deakin.edu.au",
+        "password1": "Abc123456@",
+        "password2": "Abc123456@"
+      },
+      "content_type": "application/json",
+      "comment": "Account register"
+    },
+    {
+      "url": "http://localhost:8000/accounts/login/",
+      "data": {
+        "username": "s123456789@deakin.edu.au",
+        "password": "Abc123456@"
+      },
+      "content_type": "application/json",
+      "comment": "Login - username and password matched"
+    },
+    {
+      "url": "http://localhost:8000/accounts/login/",
+      "data": {
+        "username": "s123456789@deakin.edu.au",
+        "password": "Qw1234fcs@"
+      },
+      "content_type": "application/json",
+      "comment": "Login - username and password unmatched"
+    },
+    {
+      "url": "http://localhost:8000/accounts/malware_viz/joinus",
+      "data": {
+        "name": "foo bar",
+        "email": "s123456789@deakin.edu.au",
+        "message": "Test Message for url http://localhost:8000/accounts/malware_viz/joinus"
+      },
+      "comment": "Form submit"
+    }
+  ]
