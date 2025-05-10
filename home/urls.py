@@ -109,6 +109,7 @@ urlpatterns = [
     path('publishedblog/', views.publishedblog, name='publishedblog'),
     path('report-blog/', views.report_blog, name='report_blog'),
     path('reports/', views.adminblogreports, name='reports'),
+    path('reported/download/', views.download_reported_blogs, name='download_reported_blogs'),
 
 
 

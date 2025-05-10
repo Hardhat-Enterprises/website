@@ -255,17 +255,8 @@
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="blogDropdown">
-              <li class="dropdown-submenu position-relative">
-                <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" id="blogPagePlus">
-                  Blog Page
-                  <span class="fas fa-angle-right"></span>
-                </a>
-                <ul class="dropdown-menu submenu position-absolute start-100 top-0">
-                  <li><a class="dropdown-item" href="{% url 'blogpage' %}">Create a Blog</a></li>
-                  <li><a class="dropdown-item" href="{% url 'publishedblog' %}">Published Blogs</a></li>
-                </ul>
-              </li>
-              <li><a class="dropdown-item" href="{% url 'feedback' %}">User Experience</a></li>
+              <li><a class="dropdown-item" href="{% url 'blogpage' %}">Create a Blog</a></li>
+              <li><a class="dropdown-item" href="{% url 'publishedblog' %}">Published Blogs</a></li>
             </ul>
           </li>
           

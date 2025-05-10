@@ -1051,6 +1051,29 @@ def report_blog(request):
 def adminblogreports(request):
     reports = Report.objects.all().order_by('-created_at')
     return render(request, 'pages/reports.html', {'reports': reports})
+
+import csv
+from django.http import HttpResponse
+
+def download_reported_blogs(request):
+    reports = Report.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="reported_blogs.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Blog ID', 'Blog Name', 'Reason', 'Date'])
+
+    for idx, report in enumerate(reports, start=1):
+        writer.writerow([
+            idx,
+            report.blog_id,
+            report.blog_name,
+            report.reason,
+            report.created_at.strftime('%Y-%m-%d %H:%M')
+        ])
+
+    return response
     
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
