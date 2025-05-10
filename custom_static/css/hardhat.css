@@ -27231,3 +27231,53 @@ blockquote {
 }
 
 }
+
+.faq-item {
+    margin-bottom: 15px;
+}
+
+.faq-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #333333;
+    color: white;
+    font-size: 18px;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px 4px 0px 0px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+
+
+.faq-button .icon {
+    margin-right: 15px;
+    font-size: 20px;
+    transition: transform 0.3s;
+}
+
+.faq-content {
+    display: none;
+    padding: 10px 15px;
+    background-color: #333333;
+    border-radius: 0px 0px 4px 4px;
+    transition: max-height 0.5s ease-out, opacity 0.3s ease;
+}
+.faq-sub-header{
+  color: #000000 !important;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.faq-button.open .icon {
+    transform: rotate(90deg);
+}
+.d-flexf{
+  display: flex;
+} 
+.space-betweenf{
+  justify-content: space-between;
+}
