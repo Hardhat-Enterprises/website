@@ -14,7 +14,7 @@
 
         <form method="post" action="{% url 'feedback' %}" class="card" id="feedback-form">
 
-        <p>Please provide your experiences with our company..</p>
+        
         {% if messages %}
             {% for message in messages %}
                 <p style="color: green;">{{ message }}</p>

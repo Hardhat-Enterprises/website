@@ -3,13 +3,44 @@
 
 {% block content %}
 {% include 'includes/pre-loader.html' %}
+<div class="content-container container mt-10">
+  <h1 class="mb-4 text-center">Cyber Challenges</h1>
+  <p class="text-center mb-5">
+    Test your cybersecurity knowledge and skills across various domains. Choose a category to begin!
+  </p>
+
+  <div class="row">
+    {% for category in categories %}
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ category.category|title }}</h5>
+            <p class="card-text flex-grow-1">
+              {% if category.category == 'network' %}
+                Explore challenges related to network security, including firewalls, intrusion detection, and secure protocols.
+              {% elif category.category == 'web' %}
+                Test your knowledge of web application security, including SQL injection, XSS, and CSRF attacks.
+              {% elif category.category == 'crypto' %}
+                Dive into cryptography challenges, covering encryption, hashing, and secure communication.
+              {% elif category.category == 'general' %}
+                General cybersecurity knowledge questions covering a wide range of topics.
+              {% endif %}
+            </p>
+            <p class="mb-2"><strong>{{ category.count }}</strong> challenge{{ category.count|pluralize }}</p>
+            <a href="{% url 'category_challenges' category.category %}" class="btn btn-primary mt-auto">View Challenges</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 
 <style>
   .scroll-wrapper {
     position: relative;
     display: inline-block;
   }
-
+  
   .scroll-line-track {
     position: absolute;
     top: 0;
@@ -69,6 +100,13 @@
   }
 
   @keyframes fadeInBounce {
+    0% { opacity: 0; transform: translateY(60px) scale(0.95); }
+    60% { opacity: 1; transform: translateY(-10px) scale(1.02); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .dark-mode .category-card { background-color: #1e1e1e !important; color: #fff !important; }
+  /* … and so on … */
+@keyframes fadeInBounce {
     0% {
       opacity: 0;
       transform: translateY(60px) scale(0.95);
@@ -120,63 +158,23 @@
   .sticky-wrapper {
     padding-top: 120px;
   }
-</style>
+  </style>
 
 <div class="container sticky-wrapper">
-  <!-- Header -->
-  <div class="text-center mb-5">
-    <h2 class="fw-bold">Cyber Challenges</h2>
-    <p>Test your cybersecurity knowledge and skills across various domains. Choose a category to begin!</p>
-    <a href="{% url 'leaderboard' %}" class="btn btn-dark mt-2">View Leaderboard</a>
-  </div>
+  
 
-  <!-- Code Game Section -->
-  <div class="d-flex justify-content-start">
-    <div>
-      <h3 class="codegame-title">🧠 Code Game</h3>
-
-      <div class="scroll-wrapper mt-3" style="width: 350px;">
-        <div id="scrollContainer" class="scroll-container">
-          {% for category in categories %}
-            <div class="card category-card {% if forloop.last %}last-card{% endif %}"
-                 style="animation-delay: 0.5s;">
-              <div class="card-body">
-                <h6 class="card-title fw-semibold">{{ category.category|title }}</h6>
-                <p class="card-subtitle text-muted small mb-2">
-                  {{ category.count }} challenge{{ category.count|pluralize }}
-                </p>
-                <a href="{% url 'category_challenges' category.category %}" class="btn btn-sm btn-dark mb-2">
-                  View Challenges
-                </a>
-                <p class="card-text small text-muted">
-                  {% if category.category == 'general' %}
-                    
-                  {% elif category.category == 'logic' %}
-                    
-                  {% elif category.category == 'loops' %}
-                    
-                  {% elif category.category == 'strings' %}
-                
-                  {% endif %}
-                </p>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-
-        <!-- Scroll Progress Line -->
-        <div class="scroll-line-track">
-          <div class="scroll-line-fill" id="scrollLineFill"></div>
-        </div>
-      </div>
-    </div>
+    <p class="text-center mt-5 mb-5">
+      Here's the leaderboard table
+      <br>
+      <a href="{% url 'leaderboard' %}" class="btn btn-primary">View Leaderboard</a>
+    </p>
   </div>
 </div>
 
 <script>
   const scrollContainer = document.getElementById('scrollContainer');
   const scrollLineFill = document.getElementById('scrollLineFill');
-
+  
   scrollContainer.addEventListener('scroll', () => {
     const scrollTop = scrollContainer.scrollTop;
     const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;

@@ -36,7 +36,13 @@
                     >
                     </span>
                   </span>
-                  {{ field }}
+                  {% if field.name == 'password1' or field.name == 'password2' %}
+                  <div class="password-input-container">
+                    {{ field }}
+                  </div>
+                  {% else %}
+                    {{ field }}
+                  {% endif %}
                 </div>
                 {% if field.name == 'email' %}
                 <span id="email-error" class="text-danger"></span>
