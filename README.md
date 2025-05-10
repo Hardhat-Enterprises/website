@@ -30,5 +30,10 @@ Step 7: We have to open the ‘settings.py’ config file from the ‘Files’ t
 Step 8: After reloading the website using the green reload button on the Web configuration page, the URL can be used to check the deployed website.
 
 
+Deploying HardHat Website from Docker Platform
+ Prerequisites
+    Install Docker on your machine
 
+Step 1: clone the github project to your machine by running the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
 
+Step 2: Run command 'docker-compose up build' and it will run the application on your machine using docker and You can access the application on localhost:80.
