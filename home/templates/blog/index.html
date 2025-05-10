@@ -1,419 +1,70 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
+{% extends 'layouts/base.html' %} {% block content %}
 
-{% block content %}
 {% include 'includes/pre-loader.html' %}
 
-<div class="blog-container">
-    <!-- Hero Section -->
-    <div class="blog-hero">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 mx-auto text-center">
-                    <h1 class="blog-title">Hardhat Enterprise Blog</h1>
-                    <p class="blog-subtitle">Explore the latest insights, updates, and stories from our team</p>
-                </div>
-            </div>
-        </div>
+<div class="row">
+  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+    <h1 class="fw-bolder">Hardhat Enterprise Blog</h1>
+    <h5 class="text-muted">It's a blog page for Hardhat Enterprise students</h5>
+  </div>
+
+  {% for object in object_list %}
+
+  <div class="row">
+    <div class="col-md-6 col-12 mx-md-auto mx-3 mt-2 mb-5">
+      <h3 class="fw-bold">{{ object.title }}</h3>
+      <p class="text-muted">{{ object.date }}</p>
+      <p class="text-muted">Posted by {{ object.author.username }}</p>
+      {% if object.likes.count == 1 %}
+      <p class="text-muted">{{ object.likes.count}} person likes this post</p>
+      {% else %}
+      <p class="text-muted">{{ object.likes.count}} people like this post</p>
+      {% endif %}
+
+      <div class="my-3">{{ object.content|truncatewords_html:50|safe }}</div>
+      <a href="{% url 'detail_article' object.id %}">Read More</a>
     </div>
+  </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="row">
-            <!-- Blog Posts Section -->
-            <div class="col-lg-8">
-                <div class="blog-posts">
-                    <!-- Technology Posts -->
-                    <div class="blog-post">
-                        <div class="blog-post-header">
-                            <h2 class="blog-post-title">The Future of AI in Cybersecurity</h2>
-                            <div class="blog-post-meta">
-                                <span class="blog-post-date">October 15, 2023</span>
-                                <span class="blog-post-author">by John Smith</span>
-                            </div>
-                        </div>
-                        <div class="blog-post-content">
-                            <p>Artificial Intelligence is revolutionizing the way we approach cybersecurity. From automated threat detection to predictive analytics, AI is becoming an essential tool in the fight against cyber threats. In this post, we explore the latest advancements and what they mean for the future of digital security.</p>
-                        </div>
-                        <div class="blog-post-footer">
-                            <div class="blog-post-likes">
-                                <span class="like-count">24 likes</span>
-                            </div>
-                            <a href="#" class="read-more-btn">
-                                Continue Reading <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
+  {% endfor %}
 
-                    <!-- Cybersecurity Posts -->
-                    <div class="blog-post">
-                        <div class="blog-post-header">
-                            <h2 class="blog-post-title">Zero Trust Architecture: A New Security Paradigm</h2>
-                            <div class="blog-post-meta">
-                                <span class="blog-post-date">October 10, 2023</span>
-                                <span class="blog-post-author">by Sarah Johnson</span>
-                            </div>
-                        </div>
-                        <div class="blog-post-content">
-                            <p>In today's evolving threat landscape, traditional security models are no longer sufficient. Zero Trust Architecture represents a fundamental shift in how we approach network security. Learn about the principles, implementation strategies, and benefits of this modern security approach.</p>
-                        </div>
-                        <div class="blog-post-footer">
-                            <div class="blog-post-likes">
-                                <span class="like-count">18 likes</span>
-                            </div>
-                            <a href="#" class="read-more-btn">
-                                Continue Reading <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
+  <nav>
+    <ul class="pagination">
+      <div class="mx-auto d-flex flex-row mt-5">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">&laquo; First </a>
+        </li>
 
-                    <!-- Development Posts -->
-                    <div class="blog-post">
-                        <div class="blog-post-header">
-                            <h2 class="blog-post-title">Building Secure Web Applications: Best Practices</h2>
-                            <div class="blog-post-meta">
-                                <span class="blog-post-date">October 5, 2023</span>
-                                <span class="blog-post-author">by Michael Chen</span>
-                            </div>
-                        </div>
-                        <div class="blog-post-content">
-                            <p>Security should be a fundamental consideration in every stage of web application development. This comprehensive guide covers essential security practices, from secure coding principles to implementing proper authentication and authorization mechanisms.</p>
-                        </div>
-                        <div class="blog-post-footer">
-                            <div class="blog-post-likes">
-                                <span class="like-count">15 likes</span>
-                            </div>
-                            <a href="#" class="read-more-btn">
-                                Continue Reading <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.previous_page_number}}">
+            Previous
+          </a>
+        </li>
+        {% endif %}
 
-                    <!-- Projects Posts -->
-                    <div class="blog-post">
-                        <div class="blog-post-header">
-                            <h2 class="blog-post-title">AppAttack: Revolutionizing Mobile Security Testing</h2>
-                            <div class="blog-post-meta">
-                                <span class="blog-post-date">October 1, 2023</span>
-                                <span class="blog-post-author">by Emily Davis</span>
-                            </div>
-                        </div>
-                        <div class="blog-post-content">
-                            <p>Our latest project, AppAttack, is setting new standards in mobile application security testing. Discover how this innovative tool is helping developers identify and fix security vulnerabilities before they become critical issues.</p>
-                        </div>
-                        <div class="blog-post-footer">
-                            <div class="blog-post-likes">
-                                <span class="like-count">32 likes</span>
-                            </div>
-                            <a href="#" class="read-more-btn">
-                                Continue Reading <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
+        <li class="page-item">
+          <a class="page-link" href="#"
+            >Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+          </a>
+        </li>
 
-                    <!-- Additional Technology Post -->
-                    <div class="blog-post">
-                        <div class="blog-post-header">
-                            <h2 class="blog-post-title">Blockchain Technology in Cybersecurity</h2>
-                            <div class="blog-post-meta">
-                                <span class="blog-post-date">September 28, 2023</span>
-                                <span class="blog-post-author">by David Wilson</span>
-                            </div>
-                        </div>
-                        <div class="blog-post-content">
-                            <p>Blockchain technology is not just for cryptocurrencies. Its decentralized nature and cryptographic security features make it an ideal solution for various cybersecurity applications. Explore how blockchain is being used to enhance security in different industries.</p>
-                        </div>
-                        <div class="blog-post-footer">
-                            <div class="blog-post-likes">
-                                <span class="like-count">21 likes</span>
-                            </div>
-                            <a href="#" class="read-more-btn">
-                                Continue Reading <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.next_page_number}}">
+            Next
+          </a>
+        </li>
 
-                    <!-- Additional Cybersecurity Post -->
-                    <div class="blog-post">
-                        <div class="blog-post-header">
-                            <h2 class="blog-post-title">The Rise of Ransomware: Prevention and Response</h2>
-                            <div class="blog-post-meta">
-                                <span class="blog-post-date">September 25, 2023</span>
-                                <span class="blog-post-author">by Lisa Thompson</span>
-                            </div>
-                        </div>
-                        <div class="blog-post-content">
-                            <p>Ransomware attacks are becoming increasingly sophisticated and damaging. This post provides a comprehensive guide to understanding ransomware threats, implementing effective prevention strategies, and developing a robust incident response plan.</p>
-                        </div>
-                        <div class="blog-post-footer">
-                            <div class="blog-post-likes">
-                                <span class="like-count">27 likes</span>
-                            </div>
-                            <a href="#" class="read-more-btn">
-                                Continue Reading <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+            Last &raquo;
+          </a>
+        </li>
+        {% endif %}
+      </div>
+    </ul>
+  </nav>
 
-                <!-- Pagination -->
-                <nav class="blog-pagination">
-                    <ul class="pagination justify-content-center">
-                        {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page=1" aria-label="First">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                                <span aria-hidden="true">&lsaquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-
-                        <li class="page-item active">
-                            <span class="page-link">
-                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                            </span>
-                        </li>
-
-                        {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                                <span aria-hidden="true">&rsaquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <div class="blog-sidebar">
-                    <!-- Categories -->
-                    <div class="sidebar-widget">
-                        <h3 class="sidebar-title">Categories</h3>
-                        <ul class="category-list">
-                            <li><a href="#">Technology <span>(6)</span></a></li>
-                            <li><a href="#">Cybersecurity <span>(8)</span></a></li>
-                            <li><a href="#">Development <span>(2)</span></a></li>
-                            <li><a href="#">Projects <span>(2)</span></a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Archives -->
-                    <div class="sidebar-widget">
-                        <h3 class="sidebar-title">Archives</h3>
-                        <ul class="archive-list">
-                            <li><a href="#">October 2023 <span>(6)</span></a></li>
-                            <li><a href="#">September 2023 <span>(6)</span></a></li>
-                            <li><a href="#">August 2023 <span>(8)</span></a></li>
-                            <li><a href="#">July 2023 <span>(2)</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  {% endblock content %}
 </div>
-
-<style>
-    .blog-container {
-        padding: 4rem 0;
-        background-color: #f8f9fa;
-    }
-
-    .blog-hero {
-        background: linear-gradient(135deg, #ffcd11 0%, #ff8c00 100%);
-        padding: 6rem 0;
-        margin-bottom: 4rem;
-        color: white;
-    }
-
-    .blog-title {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
-
-    .blog-subtitle {
-        font-size: 1.2rem;
-        opacity: 0.9;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    .blog-post {
-        background: white;
-        padding: 2rem;
-        margin-bottom: 3rem;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .blog-post-title {
-        font-size: 1.8rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: #333;
-    }
-
-    .blog-post-meta {
-        display: flex;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
-
-    .blog-post-content {
-        color: #666;
-        line-height: 1.8;
-        margin-bottom: 1.5rem;
-    }
-
-    .blog-post-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 1.5rem;
-        border-top: 1px solid #eee;
-    }
-
-    .like-count {
-        color: #ffcd11;
-        font-weight: 500;
-    }
-
-    .read-more-btn {
-        color: #ffcd11;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s ease;
-    }
-
-    .read-more-btn:hover {
-        color: #ff8c00;
-    }
-
-    /* Sidebar Styles */
-    .blog-sidebar {
-        padding-left: 2rem;
-    }
-
-    .sidebar-widget {
-        background: white;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .sidebar-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-        color: #333;
-        position: relative;
-        padding-bottom: 0.5rem;
-    }
-
-    .sidebar-title:after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 50px;
-        height: 2px;
-        background: #ffcd11;
-    }
-
-    .category-list, .archive-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .category-list li, .archive-list li {
-        margin-bottom: 0.8rem;
-    }
-
-    .category-list a, .archive-list a {
-        color: #666;
-        text-decoration: none;
-        display: flex;
-        justify-content: space-between;
-        transition: color 0.3s ease;
-    }
-
-    .category-list a:hover, .archive-list a:hover {
-        color: #ffcd11;
-    }
-
-    .category-list span, .archive-list span {
-        color: #ffcd11;
-    }
-
-    /* Pagination Styles */
-    .blog-pagination {
-        margin-top: 3rem;
-    }
-
-    .page-link {
-        color: #ffcd11;
-        border: none;
-        padding: 0.5rem 1rem;
-        margin: 0 0.25rem;
-        border-radius: 5px;
-    }
-
-    .page-item.active .page-link {
-        background-color: #ffcd11;
-        border-color: #ffcd11;
-        color: white;
-    }
-
-    .page-link:hover {
-        background-color: #ffcd11;
-        color: white;
-    }
-
-    @media (max-width: 991px) {
-        .blog-sidebar {
-            padding-left: 0;
-            margin-top: 3rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .blog-hero {
-            padding: 4rem 0;
-        }
-
-        .blog-title {
-            font-size: 2rem;
-        }
-
-        .blog-subtitle {
-            font-size: 1rem;
-        }
-
-        .blog-post {
-            padding: 1.5rem;
-        }
-
-        .blog-post-title {
-            font-size: 1.5rem;
-        }
-    }
-</style>
-{% endblock content %}

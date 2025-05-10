@@ -74,7 +74,7 @@ urlpatterns = [
     path("careers/<int:id>/apply", career_application , name="career-application"),
     
     path('blog/', Index.as_view(), name = 'blog'),
-    path('blog/<int:pk>/', DetailArticleView.as_view(), name='blog_post'),
+    # path('blog/<int:pk>/', DetaswilArticleView.as_view(), name='blog_post'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
     

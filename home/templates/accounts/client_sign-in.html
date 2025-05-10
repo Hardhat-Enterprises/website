@@ -45,12 +45,9 @@
                                 </span>
                                 <div class="password-input-container">
                                     <input type="password" class="form-control" placeholder="Password" id="password" name="password" required>
-                                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password')">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
                                 </div>
                             </div>
-                          </div>
+                        </div>
                         
                             <!-- End of Form -->
                         
@@ -99,21 +96,3 @@
 {% endblock content %}
 
 {% block footer %}{% endblock footer %}
-
-{% block extra_js %}
-<script>
-function togglePasswordVisibility(inputId) {
-    var passwordField = document.getElementById(inputId);
-    var toggleButton = passwordField.nextElementSibling;
-    var icon = toggleButton.querySelector('i');
-    
-    if (passwordField.type === "password") {
-        passwordField.type = "text";
-        icon.className = "fas fa-eye-slash";
-    } else {
-        passwordField.type = "password";
-        icon.className = "fas fa-eye";
-    }
-}
-</script>
-{% endblock %}

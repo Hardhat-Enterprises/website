@@ -39,9 +39,6 @@
                   {% if field.name == 'password1' or field.name == 'password2' %}
                   <div class="password-input-container">
                     {{ field }}
-                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('{{ field.id_for_label }}')">
-                      <i class="fas fa-eye"></i>
-                    </button>
                   </div>
                   {% else %}
                     {{ field }}
@@ -122,17 +119,19 @@
       });
   }
 
-  function togglePasswordVisibility(inputId) {
-    var passwordField = document.getElementById(inputId);
-    var toggleButton = passwordField.nextElementSibling;
-    var icon = toggleButton.querySelector('i');
-    
-    if (passwordField.type === "password") {
-        passwordField.type = "text";
-        icon.className = "fas fa-eye-slash";
+  function togglePasswordVisibility() {
+    var passwordField1 = document.getElementsByName("password1")[0];
+    var passwordField2 = document.getElementsByName("password2")[0];
+    var toggleLink = document.getElementById("togglePasswordLink");
+  
+    if (passwordField1.type === "password") {
+      passwordField1.type = "text";
+      passwordField2.type = "text";
+      toggleLink.innerText = "Hide password";
     } else {
-        passwordField.type = "password";
-        icon.className = "fas fa-eye";
+      passwordField1.type = "password";
+      passwordField2.type = "password";
+      toggleLink.innerText = "Show password";
     }
   }
   document.addEventListener("DOMContentLoaded", function() {

@@ -45,7 +45,7 @@
             </a>
             <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
               <div class="row">
-                <div class="col"> 
+                <div class="col">
                   <ul class="list-style-none mb-4">
                     <li class="mb-2 menu-item">
                       <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
@@ -238,11 +238,12 @@
 
 
               <ul class="list-style-none">
-                <li class="mb-2 menu-item">
-                  <a href="{% url 'blog' %}" class="menu-link">
+                <a class="menu-link" href="{% url 'feedback' %}">
+                  <li class="mb-2 menu ps-3 py-1">
                     User Experience
-                  </a>
-                </li>
+                  </li>
+                </a>
+
               </ul>
 
 
@@ -254,7 +255,7 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
               data-bs-toggle="dropdown">
               Cyber Challenges
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
@@ -289,11 +290,11 @@
             class="fas fa-sign-out-alt me-2"></span> Logout</a>
 
         <a class="profile-container" href="{% url 'profile' %}">
-          <img
-            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-          <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
-        </a>
+        <img
+          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+        <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
+      </a>
 
         {% else %}
         <div class="sign-up-button-container">
