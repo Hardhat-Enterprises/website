@@ -52,6 +52,7 @@ drf-yasg==1.21.8
 django-cron==0.6.0
 
 
+
 # Sentiment Analysis
 textblob==0.18.0
 
