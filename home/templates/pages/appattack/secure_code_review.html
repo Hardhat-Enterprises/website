@@ -101,12 +101,53 @@
                 Back
             </button>
         </div>
-    </section>
-</main>
+        <div class="col-lg-6 d-flex justify-content-end">
+          <img
+            src="{% static 'assets/img/pages/appattack/report.svg' %}"
+            class="img-fluid"
+            alt="Two people examining code for bugs"
+            width="300"
+            height="300"
+          />
+        </div>
+      </div>
+    </div>
 
-<!-- Move JavaScript to the end of the content block for better performance -->
-<script>
-    document.getElementById("penTesting").addEventListener("click", function() {
+    <div class="text-center mt-5">
+      <a href="{% url 'secure_code_review_form' %}" class="btn btn-primary btn-lg">Request Secure Code Review</a>
+    </div>
+    
+    <!-- Buttons -->
+    <div
+      class="container d-flex justify-content-center align-items-center mb-3 mt-5"
+    >
+      <button
+        type="button"
+        class="btn btn-primary btn-lg px-4 mx-2 gap-3"
+        id="penTesting"
+      >
+        Pen Testing Services
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg px-4 mx-2 gap-3"
+        id="comprehensiveReports"
+      >
+        Comprehensive Reports
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-lg px-4 mx-2 gap-3"
+        id="backButton"
+      >
+        Back
+      </button>
+    </div>
+  </section>
+  <script>
+    document
+      .getElementById("penTesting")
+      .addEventListener("click", function () {
         window.location.href = "{% url 'pen-testing' %}";
     });
     document.getElementById("comprehensiveReports").addEventListener("click", function() {

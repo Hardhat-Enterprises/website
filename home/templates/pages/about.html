@@ -55,102 +55,132 @@
         </div>
     </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const whiteboard = document.getElementById('whiteboard');
-        const reviewText = document.getElementById('reviewText');
-        const submitReview = document.getElementById('submitReview');
-        const clearReviews = document.getElementById('clearReviews');
-        const stickyColors = ['#ffc107', '#ff5722', '#8bc34a', '#03a9f4', '#e91e63']; // Different colors
-        let usedColors = []; // Track used colors
+      </section>
+      <!-- End of Hero section -->
+      <!-- Kudoboard Section Starts Here -->
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="whiteboard-container">
+          <h2 class="text-center mb-4" style="color: #1f2937;">Kudoboard</h2>
+          <div id="whiteboard" class="whiteboard mb-4"></div>
+          <textarea id="reviewText" class="form-control mb-4" rows="3" placeholder="Type your review here..."></textarea>
+          <div class="text-center">
+            <button id="submitReview" class="mx-2">Submit</button>
+            <button id="clearReviews" class="mx-2" disabled>Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        // Load saved reviews from localStorage
-        const loadReviews = () => {
-            const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
-            savedReviews.forEach((review) => createStickyNote(review.text, review.color));
-            toggleClearButton();
-        };
+  <style>
+  .whiteboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 0;
+  }
 
-        // Save reviews to localStorage
-        const saveReviews = () => {
-            const reviews = Array.from(whiteboard.children).map((note) => ({
-                text: note.textContent,
-                color: note.style.backgroundColor,
-            }));
-            localStorage.setItem('reviews', JSON.stringify(reviews));
-        };
+  .whiteboard {
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      min-height: 250px;
+      background-color: #fff;
+      width: 100%;
+  }
 
-        // Create a sticky note
-        const createStickyNote = (text, color = null) => {
-            const stickyNote = document.createElement('div');
-            stickyNote.classList.add('sticky-note');
-            stickyNote.textContent = text;
-            stickyNote.style.backgroundColor = color || getUniqueColor();
-            whiteboard.appendChild(stickyNote);
-            toggleClearButton();
-        };
+  #reviewText {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 16px;
+      resize: vertical;
+  }
 
-        // Get a unique color that hasn't been used yet
-        const getUniqueColor = () => {
-            if (usedColors.length === stickyColors.length) {
-                // All colors have been used, reset the usedColors array
-                usedColors = [];
-            }
+  #reviewText::placeholder {
+      color: #9ca3af;
+  }
 
-            // Pick a random color that hasn't been used
-            let randomColor;
-            do {
-                randomColor = stickyColors[Math.floor(Math.random() * stickyColors.length)];
-            } while (usedColors.includes(randomColor));
+  .whiteboard-container button {
+      color: #ffffff !important;
+      background-color: #1c2540 !important;
+      border: none;
+      padding: 8px 40px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+  }
 
-            // Mark the color as used
-            usedColors.push(randomColor);
-            return randomColor;
-        };
+  .whiteboard-container button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(28, 37, 64, 0.2);
+      background-color: #2a3a5f !important;
+  }
 
-        submitReview.addEventListener('click', function () {
-            const text = reviewText.value.trim();
-            if (text) {
-                createStickyNote(text);
-                reviewText.value = '';
-                saveReviews();
-            } else {
-                alert('Please enter a review.');
-            }
-        });
+  .whiteboard-container button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+  }
 
-        clearReviews.addEventListener('click', function () {
-            whiteboard.innerHTML = '';
-            usedColors = []; // Reset used colors
-            localStorage.removeItem('reviews');
-            toggleClearButton();
-        });
+  .dark-mode .btn-generate-password,
+  .dark-mode .generate-password {
+      background-color: #ffc107 !important; /* bright yellow */
+      color: #1c2540 !important;           /* dark text */
+      border: none;
+      box-shadow: none;
+      opacity: 1 !important;
+  }
 
-        const toggleClearButton = () => {
-            clearReviews.disabled = whiteboard.children.length === 0;
-        };
-
-        loadReviews();
-    });
-    </script>
-    <!-- Kudoboard Section Ends Here -->
-
-    <!-- Section -->
-    <section class="section section-md">
-        <div class="container">
-            <div class="row align-items-center justify-content-around">
-                <div class="col-md-6 col-xl-6 mb-5">
-                    <img class="img-fluid" src="{% static 'assets/img/pages/about/challenges.svg' %}" alt="Hardhat Enterprises team tackling cybersecurity challenges" loading="lazy">
-                </div>
-                <div class="col-md-6 col-xl-5 text-center text-md-left">
-                    <h2 class="h1 mb-5">All Cybersecurity Challenges Accepted</h2>
-                    <p class="lead">
-                        Hardhat Enterprises is a passionate team of cybersecurity specialists and developers. We collaborate closely with clients to tackle cybersecurity challenges and celebrate victories together.
-                    </p>
-                    <p class="lead">
-                        With a culture of collaboration and a talented roster, Hardhat is active in the cybersecurity community, always exploring the latest threat detection solutions and innovations.
-                    </p>
-                </div>
+  .dark-mode .btn-generate-password:disabled,
+  .dark-mode .generate-password:disabled {
+      background-color: #ffe082 !important;
+      color: #1c2540 !important;
+      opacity: 0.7 !important;
+  }
+  </style>
+  <!-- Kudoboard Section Ends Here -->
+  <!-- Section -->
+  <section class="section section-md">
+    <div class="container">
+      <div class="row align-items-center justify-content-around">
+        <div class="col-md-6 col-xl-6 mb-5">
+          <img
+            class="img-fluid"
+            src="{% static 'assets/img/pages/about/challenges.svg' %}"
+            alt="Office Desk"
+          />
+        </div>
+        <div class="col-md-6 col-xl-5 text-center text-md-left">
+          <h2 class="h1 mb-5">All challenges accepted.</h2>
+          <p class="lead">
+            Hardhat is an experienced and passionate group of cybersecurity
+            specialists and developers. Every client we work with becomes a part
+            of the team. Together we face the challenges and celebrate the
+            victories.
+          </p>
+          <p class="lead">
+            With a culture of collaboration and a roster of talent, the Hardhat
+            team is active in the creative community, endlessly interested in
+            what's next, and generally pleasant to be around.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End of section -->
+  <!-- Section -->
+  <section class="section section-lg pt-0">
+    <div class="container">
+      <div class="row">
+        {% comment %} <div class="col-md-4 col-lg-4 text-center">
+          <!-- Visit Box -->
+          <div class="icon-box mb-4">
+            <div class="icon icon-primary mb-4">
+              <span class="fas fa-user"></span>
             </div>
         </div>
     </section>
@@ -258,58 +288,60 @@
     </section>
     <!-- Section -->
 
-    <!-- Section -->
-    <section class="section section-lg">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-lg-8">
-                    <!-- Contact Card -->
-                    <div class="card border-0 p-2 p-md-3 p-lg-5">
-                        <div id="form-header" class="card-header bg-white border-0 text-center">
-                            <h2>Work With Our Cybersecurity Agency</h2>
-                            <p>Tell us about your cybersecurity needs!</p>
-                        </div>
-                        <div id="form-body" class="card-body pt-0">
-                            <form id="contactForm" action="/contact" method="post" onsubmit="handleFormSubmit(event)">
-                                {% csrf_token %}
-
-                                <!-- Form -->
-                                <div class="mb-4">
-                                    <label for="name">Your Name</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon3">
-                                            <span class="fas fa-user-circle"></span>
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="e.g. Bonnie Green" name="name" id="name" required>
-                                    </div>
-                                </div>
-                                <!-- End of Form -->
-
-                                <!-- Form -->
-                                <div class="mb-4">
-                                    <label for="email">Your Email</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon4">
-                                            <span class="fas fa-envelope"></span>
-                                        </span>
-                                        <input type="email" class="form-control" placeholder="example@company.com" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$" name="email" id="email" required>
-                                    </div>
-                                </div>
-                                <!-- End of Form -->
-
-                                <!-- Form -->
-                                <div class="mb-4">
-                                    <label for="message">Your Message</label>
-                                    <textarea class="form-control" placeholder="How can our cybersecurity services help you?" name="message" id="message" rows="4" required></textarea>
-                                </div>
-                                <!-- End of Form -->
-
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">Send Message</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                <!-- Form -->
+                <div class="mb-4">
+                  <label for="name">Your Name</label>
+                  <div class="input-group">
+                    <span class="input-group-text" id="basic-addon3"
+                      ><span class="fas fa-user-circle"></span
+                    ></span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="e.g. Bonnie Green"
+                      name="name"
+                      id="name"
+                      required
+                    />
+                  </div>
+                </div>
+                <!-- End of Form -->
+                <!-- Form -->
+                <div class="mb-4">
+                  <label for="email">Your Email</label>
+                  <div class="input-group">
+                    <span class="input-group-text" id="basic-addon4"
+                      ><span class="fas fa-envelope"></span
+                    ></span>
+                    <input
+                      type="email"
+                      class="form-control"
+                      placeholder="example@company.com"
+                      pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"
+                      name="email"
+                      id="email"
+                      required
+                    />
+                  </div>
+                </div>
+                <!-- End of Form -->
+                <!-- Form -->
+                <div class="mb-4">
+                  <label for="message">Your Message</label>
+                  <textarea
+                    class="form-control"
+                    placeholder="How can we help you?"
+                    name="message"
+                    id="message"
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
+                <!-- End of Form -->
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-warning btn-primary">
+                    Send Message
+                  </button>
                 </div>
             </div>
         </div>
@@ -317,4 +349,122 @@
     <!-- End of section -->
 </main>
 <script src="{% static 'js/handleFormSubmit.js' %}"></script>
+<script src="{% static 'js/kudoboard.js' %}"></script>
+
+<style>
+.btn-warning.btn-primary {
+    color: #1c2540;
+    background-color: #ffc107;
+    border-color: #ffc107;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(23, 31, 56, 0.075);
+}
+
+.btn-warning.btn-primary:hover {
+    color: #1c2540;
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.btn-secondary {
+    color: #1c2540;
+    background-color: #ffc107;
+    border-color: #ffc107;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(23, 31, 56, 0.075);
+}
+
+.btn-secondary:hover {
+    color: #1c2540;
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.whiteboard-container button {
+    color: #ffffff !important;
+    background-color: #1c2540 !important;
+    border-color: #1c2540;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    margin: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.whiteboard-container button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(28, 37, 64, 0.2);
+    background-color: #2a3a5f !important;
+}
+
+.whiteboard-container button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.whiteboard {
+    min-height: 300px;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e9ecef;
+}
+
+.sticky-note {
+    display: inline-block;
+    padding: 1rem;
+    margin: 0.5rem;
+    min-width: 150px;
+    min-height: 150px;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    word-wrap: break-word;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.sticky-note:hover {
+    transform: scale(1.05);
+}
+
+#reviewText {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Registration form input styling */
+.form-control {
+    background-color: white !important;
+    border: 2px solid #dee2e6;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out;
+}
+
+/* Style for invalid inputs */
+.form-control.is-invalid {
+    background-color: white !important;
+    border-color: #dc3545;
+}
+
+/* Style for valid inputs */
+.form-control.is-valid {
+    background-color: white !important;
+    border-color: #198754;
+}
+
+/* Focus state */
+.form-control:focus {
+    background-color: white !important;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Password input specific styling */
+input[type="password"] {
+    background-color: white !important;
+}
+</style>
+
 {% endblock content %}
