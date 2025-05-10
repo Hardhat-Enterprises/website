@@ -3706,6 +3706,18 @@ fieldset:disabled .btn {
     display: block;
   }
 }
+
+/* When user is NOT logged in */
+.search-bar-guest {
+  margin-left: 20px;
+  max-width: 320px;
+}
+
+/* When user IS logged in */
+.search-bar-authenticated {
+  max-width: 200px;
+}
+
 .btn-primary {
   color: #ffffff;
   background-color: #242e4c;
