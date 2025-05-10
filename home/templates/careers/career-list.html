@@ -1,26 +1,136 @@
-{% extends 'layouts/base.html' %} {% block content %} {% include
-'includes/pre-loader.html' %}
-<div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
-    <h1 class="fw-bolder">Hardhat Enterprise Careers</h1>
-    <h5 class="text-muted">
-      It's a careers page for Hardhat Enterprise students
-    </h5>
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<style>
+  .card-title, .card-text, label, h2, h5, p {
+    color: #f8f9fa;
+  }
+
+  .badge-jobtype {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  .badge-location {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .career-card {
+    background-color: #343a40;
+    border-radius: 10px;
+  }
+
+  .btn-view {
+    background-color: #ffffff;
+    color: #212529;
+    border: none;
+  }
+
+  .btn-view:hover {
+    background-color: #e2e6ea;
+    color: #212529;
+  }
+
+  .closing-text {
+    color: #adb5bd; /* soft grey */
+  }
+
+  body {
+    background-color: #212529;
+  }
+</style>
+
+
+<div class="container mt-5">
+  <h2 class="fw-bold text-center mb-4">Explore Job Opportunities</h2>
+
+  <!-- 🔍 Search & Filter -->
+  <form method="GET" id="filterForm" class="row g-3 mb-4">
+    <!-- Search bar -->
+    <div class="col-md-4">
+      <input type="text" name="search" class="form-control" placeholder="Search by title or description..." value="{{ request.GET.search }}" oninput="submitFilterForm()">
+    </div>
+  
+    <!-- Job Type dropdown -->
+    <div class="col-md-3">
+      <select name="job_type" class="form-select" onchange="submitFilterForm()">
+        <option value="" {% if not request.GET.job_type %}selected{% endif %}>All Job Types</option>
+        <option value="FT" {% if request.GET.job_type == 'FT' %}selected{% endif %}>Full-Time</option>
+        <option value="PT" {% if request.GET.job_type == 'PT' %}selected{% endif %}>Part-Time</option>
+        <option value="CT" {% if request.GET.job_type == 'CT' %}selected{% endif %}>Contract</option>
+      </select>
+    </div>
+  
+    <!-- Location dropdown -->
+    <div class="col-md-3">
+      <select name="location" class="form-select" onchange="submitFilterForm()">
+        <option value="" {% if not request.GET.location %}selected{% endif %}>All Locations</option>
+        <option value="Remote" {% if request.GET.location == 'Remote' %}selected{% endif %}>Remote</option>
+        <option value="OnSite" {% if request.GET.location == 'OnSite' %}selected{% endif %}>OnSite</option>
+      </select>
+    </div>
+    <!-- 🧹 Clear Button -->
+    <div class="col-md-2">
+      <button type="button" class="btn btn-secondary w-100" onclick="clearFilters()">Clear Filters</button>
+    </div>
+  </form>
+  
+  <!-- 🧾 Job Listings -->
+  <div id="job-listings" class="row">
+    {% if jobs %}
+      {% for job in jobs %}
+        <div class="col-md-6 mb-4">
+          <div class="card career-card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ job.title }}</h5>
+              <p>
+                <span class="badge badge-jobtype">{{ job.get_job_type_display }}</span>
+                <span class="badge badge-location">{{ job.location }}</span>
+              </p>
+              <p class="closing-text mb-1">Closing: {{ job.closing_date }}</p>
+              <a href="{% url 'career-detail' job.id %}" class="btn btn-view btn-sm mt-2">View Details</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}    
+    <div class="text-center my-5">
+      <div style="font-size: 2rem;">🥺</div>
+      <h5 class="mt-2" style="color: var(--text-color, #ffffff);">No jobs found.</h5>
+      <p style="color: var(--text-color, #ffffff);">Try adjusting the filters or check back later.</p>
+    </div>
+    {% endif %}
   </div>
 </div>
-{% if jobs.count < 1%}
-<div class="col-md-6 mx-md-auto col-12">
-  <h5 class="p-3 fw-bold">There are no open positions at the moment</h5>
-</div>
-{% endif %} {% for job in jobs %}
-<div class="row">
-  <div class="col-md-6 col-12 mx-md-auto mx-3 mt-2 mb-5">
-    <a href="{% url 'career-detail' job.id %}">
-      <h3 class="fw-bold">{{ job.title }}</h3>
-    </a>
-    <p class="text-muted">Type: {{ job.posted_date }}</p>
-    <p class="text-muted">Posted: {{ job.posted_date }}</p>
-    <p class="text-muted">Closing Date: {{ job.posted_date }}</p>
-  </div>
-</div>
-{% endfor %} {% endblock content %}
+
+<script>
+  function submitFilterForm() {
+    const form = document.getElementById("filterForm");
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData).toString();
+
+    fetch(`/careers/?${params}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.text())
+    .then(data => {
+      // Parse response and update only the job listing section
+      const parser = new DOMParser();
+      const html = parser.parseFromString(data, 'text/html');
+      const updatedListings = html.querySelector("#job-listings");
+      document.getElementById("job-listings").innerHTML = updatedListings.innerHTML;
+    });
+  }
+  function clearFilters() {
+    document.querySelector('input[name="search"]').value = '';
+    document.querySelector('select[name="job_type"]').value = '';
+    document.querySelector('select[name="location"]').value = '';
+    submitFilterForm();
+  }
+</script>
+
+{% endblock %}
+
+
+
