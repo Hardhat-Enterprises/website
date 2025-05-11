@@ -21852,7 +21852,7 @@ fieldset:disabled .btn {
   background-color: var(--navbar-light);
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 100;
@@ -27230,4 +27230,24 @@ blockquote {
     color: #4caf50; 
 }
 
+}
+
+
+/* Force dark mode background on mobile navbar when collapsed */
+body.dark-mode .navbar-collapse.show {
+  background-color: #333333 !important;
+}
+
+body.dark-mode .navbar-collapse.show a,
+body.dark-mode .navbar-collapse.show label,
+body.dark-mode .navbar-collapse.show .nav-link {
+  color: #ffffff !important;
+}
+
+/* Immediate dark background for collapsed navbar in dark mode */
+@media (max-width: 991.98px) {
+  body.dark-mode .navbar-collapse {
+    background-color: #222 !important;
+    transition: none !important;
+  }
 }

@@ -271,11 +271,12 @@
         <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
             class="fas fa-sign-out-alt me-2"></span> Logout</a>
 
-        <!-- <a class="profile-container" href="{% url 'profile' %}"> -->
-        <img
-          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-        <span>Profile</span>
+        <a class="profile-container" href="{% url 'profile' %}">
+          <img
+            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+          <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
+        </a>
 
         {% else %}
         <div class="sign-up-button-container">
@@ -295,13 +296,18 @@
           </form>
           {% endif %}
 
+          <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
+
           <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
+          {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
             <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
-              class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
-                Sign In
+              class="sign-up-button">
+              <span href="#" class="fas fa-sign-in-alt me-2">
+              Sign In
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </span></button>
+              </span>
+            </button>
             <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
               <ul class="list-style-none">
                 <a class="menu-link" href="{% url 'login' %}">
@@ -309,17 +315,19 @@
                     Team Sign In
                   </li>
                 </a>
-                <a class="menu-link " href="#">
+                <a class="menu-link" href="#">
                   <li class="mb-2 menu ps-3 py-1">
                     Client Sign In
                   </li>
                 </a>
-
               </ul>
             </div>
           </div>
+          {% endif %}
+
 
           <!-- Sign Up Dropdown for Team/Client -->
+          {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
             <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
               class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
@@ -342,6 +350,7 @@
               </ul>
             </div>
           </div>
+          {% endif %}
 
           <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
