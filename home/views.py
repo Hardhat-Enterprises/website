@@ -1624,7 +1624,6 @@ def leaderboard_update():
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
 
-
 def comphrehensive_reports(request):
     reports = AppAttackReport.objects.all().order_by('-year')
     return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
@@ -1672,4 +1671,5 @@ def secure_code_review_form_view(request):
     else:
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
+
 
