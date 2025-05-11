@@ -1,12 +1,183 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You</title>
+  <meta charset="UTF-8">
+  <title>Thank You!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --gold: #ffc107;
+      --deep-blue: #183153;
+      --bg: #fff8e1;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .thank-you-card {
+      background-color: #fff;
+      border: 3px solid var(--gold);
+      border-radius: 25px;
+      padding: 60px 70px;
+      text-align: center;
+      max-width: 650px;
+      width: 90%;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .thank-you-card img {
+      height: 120px;
+      margin-bottom: 30px;
+    }
+
+    .thank-you-card h2 {
+      font-size: 28px;
+      color: var(--deep-blue);
+      margin-bottom: 20px;
+    }
+
+    .sentiment {
+      margin: 15px auto;
+      padding: 12px 18px;
+      border-radius: 6px;
+      display: inline-block;
+      font-size: 17px;
+      font-weight: 500;
+    }
+
+    .positive { background: #e7fbe8; color: #2e7d32; }
+    .negative { background: #fdecea; color: #c62828; }
+    .neutral  { background: #f3f4f6; color: #555; }
+
+    .stars {
+      font-size: 30px;
+      color: var(--gold);
+      margin: 18px 0;
+      letter-spacing: 6px;
+    }
+
+    .rating-note {
+      color: #333;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 25px;
+    }
+
+    .avg-summary {
+      font-size: 15px;
+      color: #666;
+      margin-top: 20px;
+    }
+
+    .btn {
+      background-color: var(--deep-blue);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background-color: #2c3e50;
+    }
+
+    @media (max-width: 600px) {
+      .thank-you-card {
+        padding: 40px 20px;
+      }
+
+      .thank-you-card img {
+        height: 90px;
+      }
+
+      .thank-you-card h2 {
+        font-size: 22px;
+      }
+
+      .stars {
+        font-size: 26px;
+      }
+
+      .rating-note {
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  {% if rating == 5 %}
+  <!-- 🎉 Confetti Script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    window.onload = function () {
+      confetti({
+        particleCount: 160,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#ffc107', '#66ccff', '#ff69b4']
+      });
+    };
+  </script>
+  {% endif %}
 </head>
 <body>
-    <h1>Thank You!</h1>
-    <p>Thank you for your feedback. We appreciate your input.</p>
+  <div class="thank-you-card">
+    <img src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo">
+    <h2>Thank You, {{ name }}!</h2>
+
+    {% if sentiment == 'positive' %}
+      <p class="sentiment positive">😊 We're thrilled to hear you had a great experience!</p>
+    {% elif sentiment == 'negative' %}
+      <p class="sentiment negative">😔 We're sorry to hear that. We'll use your feedback to improve.</p>
+    {% else %}
+      <p class="sentiment neutral">😐 Thanks for your honest feedback. We appreciate your input.</p>
+    {% endif %}
+
+   {% if rating %}
+  <div class="stars">
+    {% for i in "12345"|make_list %}
+      {% if forloop.counter <= rating %}
+        ★
+      {% else %}
+        ☆
+      {% endif %}
+    {% endfor %}
+  </div>
+
+
+      <div class="rating-note">
+        {% if rating == 5 %}
+          🌟 Excellent!
+        {% elif rating == 4 %}
+          🔥 Very Good
+        {% elif rating == 3 %}
+          🙂 Satisfactory
+        {% elif rating == 2 %}
+          😕 Needs Improvement
+        {% else %}
+          😞 Poor
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if average_rating and rating_count %}
+      <div class="avg-summary">
+        ⭐ Current average rating: {{ average_rating }}/5 (based on {{ rating_count }} reviews)
+      </div>
+    {% endif %}
+
+    <a href="{% url 'feedback' %}" class="btn">⬅ Back to Feedback</a>
+  </div>
 </body>
 </html>
