@@ -6,3 +6,4 @@ class HomeConfig(AppConfig):
 
     def ready(self):
         import home.signals
+        import home.audit_signals
