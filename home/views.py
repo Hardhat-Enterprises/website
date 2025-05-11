@@ -1028,9 +1028,29 @@ def dashboard(request):
         student = Student.objects.filter(user=user).first()
     except Student.DoesNotExist:
         return redirect('/joinus')
-    progress = Progress.objects.filter(student=student)
-    context = {'user': user, 'student': student, 'progress': progress}
+
+    # Dummy skills list
+    skills = [
+        {'title': 'Docker Basics', 'slug': 'docker-basics'},
+        {'title': 'HTML & Tailwind Styling', 'slug': 'html-tailwind'},
+        {'title': 'Git & GitHub Workflows', 'slug': 'git-github-workflows'},
+        {'title': 'Django', 'slug': 'django'},
+        {'title': 'Secure Code Review', 'slug': 'secure-code-review'},
+    ]
+
+    progress_data = request.user.upskilling_progress or {}
+
+    # Add status to each skill based on the user's progress
+    for skill in skills:
+        skill['status'] = progress_data.get(skill['slug'], 'Not Started')
+
+    context = {
+        'user': user,
+        'student': student,
+        'skills': skills,
+    }
     return render(request, 'pages/dashboard.html', context)
+
  
 def update_progress(request, progress_id):
     progress = get_object_or_404(Progress, id=progress_id)

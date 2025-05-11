@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% block content %}
+
 <main class="pt-6">
   {% include 'includes/pre-loader.html' %}
 
@@ -13,45 +14,50 @@
 
   <div class="container">
     <div class="row">
-      <!-- Project Preferences Section -->
+      <!-- Project Preferences -->
       <div class="col-md-6">
         <section class="pt-5">
-          <h2>Project Preferences</h2>
-          <table class="table table-bordered">
+          <h2 class="text-light">Project Preferences</h2>
+          <table class="table table-bordered text-light">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col" style="font-size: 25px;">Your Project Preferences</th>
+                <th>#</th>
+                <th>Your Project Preferences</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th scope="row">1</th>
-                <td>Preference 1: {{ student.p1 }}</td>
+                <th>1</th>
+                <td>{{ student.p1 }}</td>
               </tr>
               <tr>
-                <th scope="row">2</th>
-                <td>Preference 2: {{ student.p2 }}</td>
+                <th>2</th>
+                <td>{{ student.p2 }}</td>
               </tr>
               <tr>
-                <th scope="row">3</th>
-                <td>Preference 3: {{ student.p3 }}</td>
+                <th>3</th>
+                <td>{{ student.p3 }}</td>
               </tr>
             </tbody>
           </table>
         </section>
       </div>
 
-      <!-- Upskilling Progress Tracker -->
+      <!-- Upskilling Progress -->
       <div class="col-md-6">
-        <section class="text-left pt-5">
-          <h2>Your Upskilling Progress</h2>
-          {% for p in progress %}
+        <section class="pt-5">
+          <h2 class="text-light">Your Upskilling Progress</h2>
+          {% for skill in skills %}
           <div class="mb-3">
-            <label for="progress">{{ p.skill.name }}:</label>
-            <span>{{ p.progress }}%</span>
+            <label class="text-light">{{ skill.title }}: {{ skill.status }}</label>
             <div class="progress" style="height: 10px;">
-              <div class="progress-bar bg-warning" role="progressbar" style="width: {{ p.progress }}%;" aria-valuenow="{{ p.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+              {% if skill.status == "Completed" %}
+              <div class="progress-bar bg-success" style="width: 100%;"></div>
+              {% elif skill.status == "In Progress" %}
+              <div class="progress-bar bg-warning" style="width: 50%;"></div>
+              {% else %}
+              <div class="progress-bar bg-secondary" style="width: 10%;"></div>
+              {% endif %}
             </div>
           </div>
           {% endfor %}
@@ -59,13 +65,14 @@
       </div>
     </div>
 
-    <!-- Allocation -->
-    <section class="text-left pb-5">
+    <!-- Allocation Status -->
+    <section class="pt-4 text-light">
       <h2>Your Allocation</h2>
       <p>Status: {{ student.allocated }}</p>
     </section>
   </div>
 
-  <!-- End of section -->
+  <div style="height: 150px;"></div>
 </main>
-{% endblock content %}
+
+{% endblock %}
