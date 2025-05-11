@@ -1,12 +1,14 @@
 {
   "ExpandedNodes": [
     "",
+    "\\core",
     "\\home",
     "\\home\\templates",
     "\\home\\templates\\admin",
     "\\home\\templates\\admin\\home",
-    "\\home\\templates\\layouts"
+    "\\home\\templates\\layouts",
+    "\\home\\templates\\pages"
   ],
-  "SelectedNode": "\\core\\no_admin_cache.py",
+  "SelectedNode": "\\core\\settings.py",
   "PreviewInSolutionExplorer": false
 }
