@@ -1175,7 +1175,6 @@ class LikeArticle(View):
         article.save()
         return redirect('detail_article', pk)
  
- 
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
@@ -1245,7 +1244,6 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'slug'
 
     def get(self, request, *args, **kwargs):
-        # ✅ New logic: mark skill as "In Progress" if not already completed
         slug = kwargs.get('slug')
         progress = request.user.upskilling_progress or {}
 
