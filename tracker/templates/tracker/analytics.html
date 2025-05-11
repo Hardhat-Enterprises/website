@@ -1,0 +1,58 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">📊 User Analytics Dashboard</h2>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h5>🔘 Top Clicked Elements</h5>
+            <canvas id="clicksChart"></canvas>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5>📄 Top Visited Pages</h5>
+            <canvas id="pagesChart"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>📏 Avg. Scroll Depth</h5>
+            <p class="lead">{{ avg_scroll }}%</p>
+        </div>
+        <div class="col-md-6">
+            <h5>⏱️ Avg. Session Duration</h5>
+            <p class="lead">{{ avg_duration }} seconds</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const clicksChart = new Chart(document.getElementById('clicksChart'), {
+        type: 'bar',
+        data: {
+            labels: [{% for item in top_clicks %}"{{ item.element_id }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Click Count',
+                data: [{% for item in top_clicks %}{{ item.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderWidth: 1
+            }]
+        }
+    });
+
+    const pagesChart = new Chart(document.getElementById('pagesChart'), {
+        type: 'bar',
+        data: {
+            labels: [{% for item in top_pages %}"{{ item.page_url }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Page Visits',
+                data: [{% for item in top_pages %}{{ item.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+{% endblock %}

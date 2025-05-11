@@ -128,11 +128,16 @@ urlpatterns = [
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
 
+# ✅ Add this line at the bottom (before static files)
+    path("tracker/", include("tracker.urls")),
+
+
     path("appattack/reports/", views.comphrehensive_reports, name="comphrehensive_reports"),
     path("appattack/pen-testing/", views.pen_testing, name="pen-testing"),
     path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form')
+
 
 
 
