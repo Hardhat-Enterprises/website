@@ -14,16 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path  # Add re_path here
 from django.contrib.auth import views as auth_views
 from home import views
-from django.urls import path, re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from .admin import admin_statistics_view
-
 handler404 = 'home.views.error_404_view'
 schema_view = get_schema_view(
     openapi.Info(
@@ -43,7 +41,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('home.urls')), 
     path('', include('home.urls')),
-    # path('', include('theme_pixel.urls')),
     path('about-us/', views.about_us, name='about_us'),
     path('contact', views.contact, name='contact'),
     path('contact-central', views.Contact_central, name='contact-central'),
@@ -52,10 +49,6 @@ urlpatterns = [
     path('plan/', views.package_plan, name='package_plan'),
     
     # blog
-    #path('admin/', admin.site.urls),
-    # path('blog/', include('blogs.urls')),
-    #path('', include('blogs.urls')),
-    #path('accounts/', include('users.urls')),
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
     
@@ -91,6 +84,4 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('', include('home.urls')),
 
-]
-
-
+   ]

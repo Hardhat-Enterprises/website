@@ -3,7 +3,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.urls import path
 
-
 @staff_member_required
 def admin_statistics_view(request):
     return render(request, "admin/statistics.html", {

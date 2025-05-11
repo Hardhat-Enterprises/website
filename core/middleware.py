@@ -1,7 +1,27 @@
 import logging
 from django.utils.timezone import now
 
-logger = logging.getLogger('page_access_logger')
+from django.contrib.auth import logout
+from django.utils.deprecation import MiddlewareMixin
+from django.urls import reverse
+logger = logging.getLogger('admin_logout_logger')
+
+class AutoLogoutMiddleware(MiddlewareMixin):
+    """
+    Middleware to log out the user as soon as they leave the admin page.
+    """
+    def process_request(self, request):
+        user = request.user
+        # Only process if the user is logged in
+        if user.is_authenticated:
+            # Check if the user is currently on the admin page
+            is_admin_page = request.path.startswith(reverse('admin:index'))
+
+            # If the user is no longer on the admin page, log them out immediately
+            if not is_admin_page:
+                logout(request)
+                logger.info(f"User {user.username} has been logged out as they left the admin site.")
+
 
 class LogRequestMiddleware:
     """

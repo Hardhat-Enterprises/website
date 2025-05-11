@@ -97,8 +97,6 @@ INSTALLED_APPS = [
     "django_extensions",
     'django_cron',
 
-
- 
     'rest_framework',  
     'drf_yasg', 
 
@@ -122,7 +120,7 @@ MIDDLEWARE = [
     "home.idle.IdleTimeoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    "core.middleware.LogRequestMiddleware",
+    'core.middleware.AutoLogoutMiddleware'
 ]
 
 LOGGING = {
@@ -407,5 +405,6 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'authorization',
 
 ]
+
 
 
