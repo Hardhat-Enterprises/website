@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'theme_pixel',
 
     'corsheaders',
+    'tracker',
 
 
 ]
@@ -151,11 +152,10 @@ HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-
-        "DIRS": [BASE_DIR / HOME_TEMPLATES],
-
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
-      
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+            os.path.join(BASE_DIR, "home", "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -163,7 +163,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'home.context_processors.dynamic_page_title',
+                "home.context_processors.dynamic_page_title",
 
 
             ],

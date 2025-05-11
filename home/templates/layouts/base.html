@@ -217,6 +217,63 @@ crossorigin="anonymous"></script>
   });
 </script>
 
+<script>
+  // Get CSRF token from cookie
+  function getCSRFToken() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        return decodeURIComponent(cookie.substring(name.length + 1));
+      }
+    }
+    return '';
+  }
+
+  function logEvent(eventType, elementId = '', extraData = {}) {
+    const data = new URLSearchParams();
+    data.append('event_type', eventType);
+    data.append('element_id', elementId);
+    data.append('page_url', window.location.pathname);
+
+    // Optional extras
+    if (extraData.scroll_depth !== undefined) {
+      data.append('scroll_depth', extraData.scroll_depth);
+    }
+    if (extraData.duration !== undefined) {
+      data.append('duration', extraData.duration);
+    }
+
+    fetch('/tracker/log/', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': getCSRFToken(),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: data
+    });
+  }
+
+  // 🔹 Track clicks on buttons and links
+  document.addEventListener('click', function (e) {
+    const tag = e.target.tagName.toLowerCase();
+    if (tag === 'button' || tag === 'a') {
+      logEvent('click', e.target.id || e.target.className);
+    }
+  });
+
+  // 🔹 Track scroll depth and duration on page unload
+  window.addEventListener('beforeunload', function () {
+    const scrollDepth = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+    const duration = Math.round(performance.now() / 1000);
+    logEvent('session_end', '', {
+      scroll_depth: scrollDepth,
+      duration: duration
+    });
+  });
+</script>
+
 </body>
 
 </html>

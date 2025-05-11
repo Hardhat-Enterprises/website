@@ -125,7 +125,9 @@ urlpatterns = [
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
-    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
+    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
+# ✅ Add this line at the bottom (before static files)
+    path("tracker/", include("tracker.urls")),
 
 
 ]
