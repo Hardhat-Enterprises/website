@@ -102,5 +102,5 @@ def clear_old_log_entries():
         old_logs = CronJobLog.objects.filter(end_time__lt=get_current_time() - delta)
         count = old_logs.count()
         old_logs.delete()
-        print(f"Cleared {count} cron job logs older than {delta.days} days..")
+        print("Cleared {count} cron job logs older than {delta.days} days..")
 

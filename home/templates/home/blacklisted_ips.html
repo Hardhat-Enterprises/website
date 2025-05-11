@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blacklisted IPs</title>
+</head>
+<body>
+    <h1>Blacklisted IPs</h1>
+    <table border="1">
+        <tr>
+            <th>IP Address</th>
+            <th>Date</th>
+        </tr>
+        {% for ip in blacklisted_ips %}
+        <tr>
+            <td>{{ ip.ip_address }}</td>
+            <td>{{ ip.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

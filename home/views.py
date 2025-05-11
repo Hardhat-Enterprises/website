@@ -60,6 +60,12 @@ from django.core.cache import cache
 from django.shortcuts import redirect
 from django.urls import reverse
 from home.models import Announcement, JobApplication
+from home.models import FailedLoginAttempt
+from home.utils import check_ip_blacklist
+from django.http import HttpResponse
+from django.contrib.auth.decorators import user_passes_test
+
+
 
  
 # import os
@@ -1220,3 +1226,37 @@ def leaderboard_update():
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
 
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Check if the IP is blacklisted before authentication
+        ip_address = request.META.get('REMOTE_ADDR')
+        if check_ip_blacklist(ip_address):
+            # Block the login attempt
+            return JsonResponse({'error': 'Your IP is blacklisted.'}, status=403)
+        
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            # Add failed login attempt logging
+            messages.error(request, "Invalid username or password.")
+            return redirect('login')  # Redirect back to login page
+
+    return render(request, 'login.html')
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def show_blacklisted_ips(request):
+    blacklisted_ips = FailedLoginAttempt.objects.filter(is_blacklisted=True)
+    return render(request, 'home/blacklisted_ips.html', {'blacklisted_ips': blacklisted_ips})
+
+def home_page(request):
+    return render(request, 'home/index.html')
+
+def some_view(request):
+    return HttpResponse("This is a placeholder view.")

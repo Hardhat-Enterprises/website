@@ -477,3 +477,13 @@ class Experience(models.Model):
     def __str__(self):
         return f"{self.name} - {self.feedback[:50]}"
 
+
+class FailedLoginAttempt(models.Model):
+    ip_address = models.GenericIPAddressField()
+    attempt_time = models.DateTimeField(auto_now_add=True)
+    # Other fields you may want to track
+    
+    def __str__(self):
+        return "Failed login attempt from {self.ip_address}"
+
+
