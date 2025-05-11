@@ -66,7 +66,7 @@
                       <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="/">The Policy Deployment Engine</a>
+                      <a class="menu-link" href="{% url 'policy_deployment' %}">The Policy Deployment Engine</a>
                     </li>
                   </ul>
                 </div>
@@ -201,6 +201,11 @@
                     PT-GUI
                   </li>
                 </a>
+                <a class="menu-link" href="{% url 'policy_deployment' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Policy Deployment
+                  </li>
+                </a>
                 <a class="menu-link" href="{% url 'smishing_detection_main' %}">
                   <li class="mb-2 menu ps-3 py-1">
                     Smishing Detection
@@ -218,7 +223,7 @@
                   </li>
                 </a>
 
-                <a class="menu-link" href="\">
+                <a class="menu-link" href="{% url 'policy_deployment' %}">
                   <li class="mb-2 menu ps-3 py-1">
                     The Policy Deployment Engine
                   </li>

@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback, policy_deployment
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
@@ -57,6 +57,7 @@ urlpatterns = [
     # path('contact-central/', views.Contact_central, name='contact-central'),
      path('appattack/join/', views.appattack_join, name='appattack_join'),
       path('form_success/', views.form_success, name='form_success'),
+      path('policy-deployment/', views.policy_deployment, name='policy_deployment'),
     
     
     
@@ -126,8 +127,8 @@ urlpatterns = [
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
-    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback')
-
+    path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
+    
 
 ]
 

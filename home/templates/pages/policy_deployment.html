@@ -1,0 +1,131 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Policy Deployment {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Policy Deployment Engine</h1>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">Overview</h2>
+                    <p class="card-text">
+                        The Policy Deployment Engine is a sophisticated solution designed to automate and streamline security policy enforcement across cloud environments. Starting with Google Cloud Platform (GCP) and expanding to AWS and Azure, our engine provides a centralized system for efficient policy deployment, management, and updates. This comprehensive approach ensures compliance while significantly reducing manual effort and operational complexity.
+                    </p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h3>Key Features</h3>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Multi-Cloud Support (GCP, AWS, Azure)
+                                </li>
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Automated Policy Enforcement
+                                </li>
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Centralized Policy Management
+                                </li>
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Real-time Policy Updates
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Our Approach</h3>
+                            <p class="card-text">
+                                We implement a structured methodology for policy deployment that ensures consistency and effectiveness across your cloud infrastructure:
+                            </p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    Cloud Environment Assessment
+                                </li>
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    Policy Template Development
+                                </li>
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    Automated Deployment Strategy
+                                </li>
+                                <li class="list-group-item dark-mode-text">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    Continuous Monitoring & Updates
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h3>Benefits</h3>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title dark-mode-text">
+                                                <i class="fas fa-shield-alt text-primary me-2"></i>
+                                                Enhanced Security
+                                            </h5>
+                                            <p class="card-text dark-mode-text">Strengthen your cloud security posture through automated policy enforcement and consistent implementation across multiple cloud platforms.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title dark-mode-text">
+                                                <i class="fas fa-tachometer-alt text-success me-2"></i>
+                                                Operational Efficiency
+                                            </h5>
+                                            <p class="card-text dark-mode-text">Reduce manual effort and streamline policy management through automation and centralized control.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title dark-mode-text">
+                                                <i class="fas fa-expand-arrows-alt text-info me-2"></i>
+                                                Scalable Solution
+                                            </h5>
+                                            <p class="card-text dark-mode-text">Easily scale your policy management across multiple cloud providers and growing infrastructure needs.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-envelope me-2"></i>
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dark-mode-text {
+        color: inherit;
+    }
+    
+    [data-bs-theme="dark"] .dark-mode-text {
+        color: #fff;
+    }
+    
+    [data-bs-theme="light"] .dark-mode-text {
+        color: #000;
+    }
+</style>
+{% endblock %} 

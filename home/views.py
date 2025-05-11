@@ -165,6 +165,9 @@ def appattack(request):
 
 def form_success(request):
     return render(request, 'emails/form_success.html')
+
+def policy_deployment(request):
+    return render(request, 'pages/policy_deployment.html')
  
 def appattack_join(request):
 
@@ -1417,4 +1420,6 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+
+
 
