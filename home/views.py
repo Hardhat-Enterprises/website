@@ -317,14 +317,6 @@ def UpskillingJoinProjectView(request):
 
     return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
 
-import requests
-from django.conf import settings
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate
-import random
-from django.core.mail import send_mail
-
 def login_with_otp(request):
     """
     For Login
