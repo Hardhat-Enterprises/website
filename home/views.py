@@ -1710,3 +1710,12 @@ def secure_code_review_form_view(request):
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
 
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        logout(request)
+        messages.success(request, "Your account has been deleted.")
+        return redirect('login') 
+    return HttpResponseNotAllowed(['POST'])
