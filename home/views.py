@@ -1024,12 +1024,8 @@ def secure_code_review(request):
 @login_required
 def dashboard(request):
     user = request.user
-    try:
-        student = Student.objects.filter(user=user).first()
-    except Student.DoesNotExist:
-        return redirect('/joinus')
+    student = Student.objects.filter(user=user).first()
 
-    # Dummy skills list
     skills = [
         {'title': 'Docker Basics', 'slug': 'docker-basics'},
         {'title': 'HTML & Tailwind Styling', 'slug': 'html-tailwind'},
@@ -1038,18 +1034,33 @@ def dashboard(request):
         {'title': 'Secure Code Review', 'slug': 'secure-code-review'},
     ]
 
-    progress_data = request.user.upskilling_progress or {}
+    progress_data = user.upskilling_progress or {}
 
-    # Add status to each skill based on the user's progress
+    completed = in_progress = not_started = 0
+
     for skill in skills:
-        skill['status'] = progress_data.get(skill['slug'], 'Not Started')
+        status = progress_data.get(skill['slug'], 'Not Started')
+        skill['status'] = status
+        if status == 'Completed':
+            completed += 1
+        elif status == 'In Progress':
+            in_progress += 1
+        else:
+            not_started += 1
 
-    context = {
+    total = len(skills)
+    percent = round((completed / total) * 100) if total > 0 else 0
+
+    return render(request, 'pages/dashboard.html', {
         'user': user,
         'student': student,
         'skills': skills,
-    }
-    return render(request, 'pages/dashboard.html', context)
+        'completed_count': completed,
+        'in_progress_count': in_progress,
+        'not_started_count': not_started,
+        'percent': percent,
+        'total': total,
+    })
 
  
 def update_progress(request, progress_id):

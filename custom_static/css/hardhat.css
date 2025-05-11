@@ -27231,3 +27231,11 @@ blockquote {
 }
 
 }
+
+/* Custom progress color for In Progress status */
+.progress-in-progress {
+  background-color: #f1c40f !important; /* vivid yellow */
+  color: black;
+}
+
+
