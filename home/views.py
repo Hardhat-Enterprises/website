@@ -317,6 +317,7 @@ def UpskillingJoinProjectView(request):
 
     return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
 
+# OTP-Based Login
 def login_with_otp(request):
     """
     For Login
@@ -374,9 +375,7 @@ def login_with_otp(request):
 
     return render(request, 'accounts/sign-in.html')
 
-
-
-
+# OTP Verification
 def verify_otp(request):
     """
     OTP verification during login.
