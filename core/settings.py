@@ -76,6 +76,8 @@ DEBUG = True
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000 
 
 # Limit max upload memory size 10 MB
+
+# Limit max upload memory size 10 MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
 
 
@@ -96,6 +98,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
+    'two_factor.plugins.phonenumber',  # Optional: if you want SMS
+    'two_factor.plugins.email',        # Optional: for email 2FA
+]
+
 
 
  
@@ -106,6 +115,7 @@ INSTALLED_APPS = [
     'theme_pixel',
 
     'corsheaders',
+
 
 
 ]
@@ -123,6 +133,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
     "core.middleware.LogRequestMiddleware",
+    'django_otp.middleware.OTPMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 LOGGING = {
