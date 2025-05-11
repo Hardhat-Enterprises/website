@@ -27230,4 +27230,8 @@ blockquote {
     color: #4caf50; 
 }
 
+.grecaptcha-badge {
+  bottom: 100px !important;
+}
+
 }

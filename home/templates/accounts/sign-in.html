@@ -25,7 +25,7 @@
                             <h1 class="mb-0 h3">Sign in to our platform</h1>
                         </div>
 
-                        <form method="post" class="mt-4" action="{% url 'login_with_otp' %}">
+                        <form id="login-form" method="post" class="mt-4" action="{% url 'login_with_otp' %}">
                             {% csrf_token %}
                             <!-- Form -->
                             <div class="form-group mb-4">
@@ -50,6 +50,8 @@
                                 </div>  
                                 <span class="text-danger"> {{ form.password.errors|default_if_none:"" }} </span>
                             </div>
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+
                             <!-- End of Form -->
 
                             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -80,6 +82,19 @@
     
     {% include 'includes/footer.html' %}
 </main>
+
+<script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_SITE_KEY }}"></script>
+<script>
+    grecaptcha.ready(function () {
+        grecaptcha.execute('{{ RECAPTCHA_SITE_KEY }}', {action: 'submit'})
+        .then(function (token) {
+            console.log("reCAPTCHA token generated onload:", token);
+            document.getElementById('g-recaptcha-response').value = token;
+        });
+    });
+</script>
+  
+    
 
 {% endblock content %}
 

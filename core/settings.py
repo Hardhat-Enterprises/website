@@ -70,6 +70,9 @@ CSRF_COOKIE_SAMESITE = 'Strict'
 #Ensure DEBUG is set to False in production to avoid sensitive information exposure
 DEBUG = True
 
+#Ensure v3 Google ReCAPTCHA keys are set
+RECAPTCHA_SITE_KEY = '6LftM_4qAAAAAPLLi31_4GMvkerassybVYocrbJj'
+RECAPTCHA_SECRET_KEY = '6LftM_4qAAAAAKurjw7VyLBeABE0QwAZsxgUemxw'
 
 #Limit request header sizes and body lenghts
 #Limit number of form fileds
@@ -164,7 +167,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
-
+                'home.context_processors.recaptcha_site_key',
 
             ],
         },

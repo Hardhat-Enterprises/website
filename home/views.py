@@ -317,24 +317,49 @@ def UpskillingJoinProjectView(request):
 
     return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
 
-# OTP-Based Login
+import requests
+from django.conf import settings
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.contrib.auth import authenticate
+import random
+from django.core.mail import send_mail
 
 def login_with_otp(request):
     """
     For Login
     """
     if request.method == 'POST':
+        # First, verify reCAPTCHA
+        token = request.POST.get('g-recaptcha-response')
+        secret_key = settings.RECAPTCHA_SECRET_KEY
+
+        recaptcha_response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={'secret': secret_key, 'response': token}
+        )
+
+        result = recaptcha_response.json()
+
+        if settings.DEBUG:
+            print("DEBUG MODE: reCAPTCHA result:", result)
+
+        if not result.get('success') or result.get('score', 0) < 0.5:
+            messages.error(request, "reCAPTCHA verification failed. Please try again.")
+            if settings.DEBUG:
+                print("DEBUG MODE: reCAPTCHA failed with response:", result)
+            return render(request, 'accounts/sign-in.html')
+
+        # reCAPTCHA passed — continue login logic
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
         if user:
-            # Generate OTP
             otp = random.randint(100000, 999999)
             request.session['otp'] = otp
             request.session['user_id'] = user.id
 
-            # Send OTP via email
             send_mail(
                 subject="Your OTP Code",
                 message=f"Your OTP code is {otp}. Use it to verify your login.",
@@ -350,7 +375,13 @@ def login_with_otp(request):
             return redirect('verify_otp')
         else:
             messages.error(request, "Invalid username or password.")
+
+            if settings.DEBUG:
+                print(f"DEBUG MODE: Invalid login attempt for username: {username}")
+                print(f"DEBUG MODE: Password entered: {password}")
+
     return render(request, 'accounts/sign-in.html')
+
 
 
 
@@ -372,7 +403,8 @@ def verify_otp(request):
                 request.session.pop('otp', None)
                 request.session.pop('user_id', None)
                 messages.success(request, "Login successful!")
-                return redirect('post_otp_login_captcha')  # Redirect after successful login
+                # return redirect('post_otp_login_captcha')  # Redirect after successful login
+                return redirect('/')  # Redirect to the desired page
             except User.DoesNotExist:
                 messages.error(request, "User does not exist.")
         else:
