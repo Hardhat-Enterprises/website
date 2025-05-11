@@ -67,6 +67,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from home.models import Announcement, JobApplication
 from django.http import Http404
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
 
  
 # import os
@@ -1182,7 +1184,95 @@ class UpskillingView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Retrieve the user's saved upskilling progress from the database
+        progress_data = self.request.user.upskilling_progress or {}
+
+        # Define the list of skills
         context['skills'] = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': progress_data.get('docker-basics', 'Not Started')
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': progress_data.get('html-tailwind', 'Not Started')
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': progress_data.get('git-github-workflows', 'Not Started')
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': progress_data.get('django', 'Not Started')
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': progress_data.get('secure-code-review', 'Not Started')
+            }
+        ]
+
+        return context
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            progress = Progress.objects.filter(student=student)
+            return [p.skill for p in progress]
+        else:
+            return self.model.objects.none()
+
+
+
+class UpskillingSkillView(LoginRequiredMixin, DetailView):
+    login_url = '/accounts/login/'  
+    model = Skill
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get(self, request, *args, **kwargs):
+        # ✅ New logic: mark skill as "In Progress" if not already completed
+        slug = kwargs.get('slug')
+        progress = request.user.upskilling_progress or {}
+
+        if progress.get(slug) != "Completed":
+            progress[slug] = "In Progress"
+            request.user.upskilling_progress = progress
+            request.user.save()
+
+        return super().get(request, *args, **kwargs)
+
+    def get_template_names(self):
+        return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            if student:
+                progress = Progress.objects.filter(student=student, skill=self.object).first()
+                if progress:
+                    context['progress_id'] = progress.id
+
+        return context
+
+    def get_object(self):
+        dummy_skills = [
             {
                 'title': 'Docker Basics',
                 'slug': 'docker-basics',
@@ -1220,99 +1310,24 @@ class UpskillingView(LoginRequiredMixin, ListView):
             }
         ]
 
-        return context
-
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            student = Student.objects.filter(user=self.request.user).first()
-            progress = Progress.objects.filter(student=student)
-            return [p.skill for p in progress]
-        else:
-            return self.model.objects.none()
-
-
-class UpskillingSkillView(LoginRequiredMixin, DetailView):
-    login_url = '/accounts/login/'  
-    model = Skill
-    slug_field = 'slug'
-    slug_url_kwarg = 'slug'
-
-    def get(self, request, *args, **kwargs):
-        # if self.request.user.is_authenticated:
-        #     student = Student.objects.filter(user=self.request.user).first()
-        #     if not student:
-        #         return redirect('/')
-
-        #     if not Progress.objects.filter(student=student).exists():
-        #         return redirect('/')
-
-        #     progress = Progress.objects.filter(student=student, skill=self.get_object()).first()
-        #     if not progress:
-        #         return redirect('/')
-
-        return super().get(request, *args, **kwargs)
-
-    def get_template_names(self):
-        return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        if self.request.user.is_authenticated:
-            student = Student.objects.filter(user=self.request.user).first()
-            if student:
-                progress = Progress.objects.filter(student=student, skill=self.object).first()
-                if progress:
-                    context['progress_id'] = progress.id
-
-        return context
-
-    def get_object(self):
-        
-        dummy_skills = [
-            {
-                'title': 'Docker Basics',
-                'slug': 'docker-basics',
-                'difficulty': 'Beginner',
-                'tags': ['DevOps', 'Containers'],
-                'status': 'Not Started'
-            },
-            {
-            'title': 'HTML & Tailwind Styling',
-            'slug': 'html-tailwind',
-            'difficulty': 'Beginner',
-            'tags': ['Frontend', 'UI', 'CSS'],
-            'status': 'Not Started'
-            },
-            {
-                'title': 'Git & GitHub Workflows',
-                'slug': 'git-github-workflows',
-                'difficulty': 'Intermediate',
-                'tags': ['Collaboration', 'Version Control'],
-                'status': 'Completed'
-            },
-            {
-                'title': 'Django',
-                'slug': 'django',
-                'difficulty': 'Intermediate',
-                'tags': ['Python', 'Web Dev'],
-                'status': 'Not Started'
-            },
-            {
-                'title': 'Secure Code Review',
-                'slug': 'secure-code-review',
-                'difficulty': 'Advanced',
-                'tags': ['Security', 'Code Quality'],
-                'status': 'In Progress'
-            }
-        ]
-
-        
         for skill in dummy_skills:
             if skill['slug'] == self.kwargs['slug']:
                 return skill
 
         raise Http404("Skill not found")
+
+
+class MarkSkillCompletedView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        user = request.user
+        progress = user.upskilling_progress or {}
+
+        # Mark the skill as completed
+        progress[slug] = "Completed"
+        user.upskilling_progress = progress
+        user.save()
+
+        return redirect('upskilling')  # send them back to dashboard
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'

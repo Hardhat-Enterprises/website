@@ -49,7 +49,11 @@
   <div class="d-flex justify-content-between mb-4">
     <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
     <button id="next-button" class="btn btn-primary">Next</button>
-    <button id="finishButton" class="btn btn-warning" style="display: none">Finish</button>
+    <form id="finishForm" method="post" action="{% url 'complete_skill' slug='django' %}" style="display: none;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-warning">Finish</button>
+    </form>
+    
   </div>
 
   <!-- Progress Data -->
@@ -57,11 +61,12 @@
     window.progressId = "{{ progress_id }}";
     window.csrfToken = "{{ csrf_token }}";
 
-    function toggleButtons(currentIndex, totalCards) {
-      document.getElementById("back-button").style.display = currentIndex === 0 ? "none" : "block";
-      document.getElementById("next-button").style.display = currentIndex === totalCards - 1 ? "none" : "block";
-      document.getElementById("finishButton").style.display = currentIndex === totalCards - 1 ? "block" : "none";
+    function toggleButtons(index, total) {
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
     }
+
 
     let currentIndex = 0;
     const sections = document.querySelectorAll("#sections .section");
@@ -89,17 +94,6 @@
         showSection(currentIndex);
       }
     });
-
-    document.getElementById("finishButton").addEventListener("click", function () {
-    // Extract slug from URL
-    const slug = window.location.pathname.split("/").filter(Boolean).pop();
-    
-    // Save progress as completed
-    sessionStorage.setItem(`skill-status-${slug}`, "completed");
-    
-    // Redirect to dashboard
-    window.location.href = "/upskilling/";
-  });
 
   </script>
 

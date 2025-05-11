@@ -43,7 +43,11 @@
   <div class="d-flex justify-content-between mb-4">
     <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
     <button id="next-button" class="btn btn-primary">Next</button>
-    <button id="finishButton" class="btn btn-warning" style="display: none">Finish</button>
+    <form id="finishForm" method="post" action="{% url 'complete_skill' slug='docker-basics' %}" style="display: none;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">Finish</button>
+    </form>
+      
   </div>
 
   <!-- Section Navigation Logic -->
@@ -53,10 +57,11 @@
     const totalCards = sections.length;
 
     function toggleButtons(index, total) {
-      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
-      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
-      document.getElementById("finishButton").style.display = index === total - 1 ? "block" : "none";
+        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
     }
+
 
     function showSection(index) {
       sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
@@ -68,16 +73,6 @@
     document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
     document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
 
-    document.getElementById("finishButton").addEventListener("click", function () {
-    // Extract slug from URL
-    const slug = window.location.pathname.split("/").filter(Boolean).pop();
-    
-    // Save progress as completed
-    sessionStorage.setItem(`skill-status-${slug}`, "completed");
-    
-    // Redirect to dashboard
-    window.location.href = "/upskilling/";
-    });
 
   </script>
 

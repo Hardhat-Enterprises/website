@@ -3,9 +3,9 @@
 
 {% block content %}
 <main class="pt-6 px-3 mt-3">
-  <h1 class="text-light">Upskilling Dashboard</h1>
+  <h1 class="text-light">Upskilling Skills</h1>
 
-  <div class="row mt-4 pb-5" id="skill-cards"> <!-- Added padding to prevent overlap -->
+  <div class="row mt-4 pb-5" id="skill-cards">
     {% for skill in skills %}
     <div class="col-md-4 mb-4">
       <div class="card bg-dark text-white h-100 shadow-sm border-warning border-1 rounded-4">
@@ -18,56 +18,22 @@
               <span class="badge bg-secondary">{{ tag }}</span>
             {% endfor %}
             <br>
-            <strong>Status:</strong>
-            <span id="status-{{ skill.slug }}">Loading...</span>
+            <strong>Status:</strong> {{ skill.status }}
           </p>
 
-          <div id="button-{{ skill.slug }}"></div>
+          {% if skill.status == "Completed" %}
+            <button class="btn btn-secondary btn-sm mt-2" disabled>Completed</button>
+          {% elif skill.status == "In Progress" %}
+            <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-warning btn-sm mt-2">Continue</a>
+          {% else %}
+            <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-success btn-sm mt-2">Start</a>
+          {% endif %}
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
 
-  <!-- Spacer to prevent overlap with floating box -->
   <div style="height: 150px;"></div>
 </main>
-
-
-{{ skills|json_script:"skills-data" }}
-
-<script>
-  const skills = JSON.parse(document.getElementById('skills-data').textContent);
-
-  skills.forEach(skill => {
-    const slug = skill.slug;
-    const statusKey = `skill-status-${slug}`;
-    let status = sessionStorage.getItem(statusKey) || 'not-started';
-
-    const statusSpan = document.getElementById(`status-${slug}`);
-    const buttonDiv = document.getElementById(`button-${slug}`);
-
-    function renderButton() {
-      if (status === 'completed') {
-        statusSpan.innerText = 'Completed';
-        buttonDiv.innerHTML = `<button class="btn btn-secondary btn-sm mt-2" disabled>Completed</button>`;
-      } else if (status === 'in-progress') {
-        statusSpan.innerText = 'In Progress';
-        buttonDiv.innerHTML = `<a href="/upskilling/${slug}/" class="btn btn-warning btn-sm mt-2">Continue</a>`;
-      } else {
-        statusSpan.innerText = 'Not Started';
-        buttonDiv.innerHTML = `<a href="/upskilling/${slug}/" class="btn btn-success btn-sm mt-2 start-btn" data-slug="${slug}">Start</a>`;
-      }
-    }
-
-    renderButton();
-  });
-
-  document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("start-btn")) {
-      const slug = e.target.getAttribute("data-slug");
-      sessionStorage.setItem(`skill-status-${slug}`, "in-progress");
-    }
-  });
-</script>
 {% endblock %}
