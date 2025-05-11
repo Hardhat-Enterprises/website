@@ -66,6 +66,7 @@ from django.core.cache import cache
 from django.shortcuts import redirect
 from django.urls import reverse
 from home.models import Announcement, JobApplication
+from django.http import Http404
 
  
 # import os
@@ -1190,11 +1191,11 @@ class UpskillingView(LoginRequiredMixin, ListView):
                 'status': 'Not Started'
             },
             {
-                'title': 'Secure Code Review',
-                'slug': 'secure-code-review',
-                'difficulty': 'Advanced',
-                'tags': ['Security', 'Code Quality'],
-                'status': 'In Progress'
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': 'Not Started'
             },
             {
                 'title': 'Git & GitHub Workflows',
@@ -1211,11 +1212,11 @@ class UpskillingView(LoginRequiredMixin, ListView):
                 'status': 'Not Started'
             },
             {
-                'title': 'HTML & Tailwind Styling',
-                'slug': 'html-tailwind',
-                'difficulty': 'Beginner',
-                'tags': ['Frontend', 'UI', 'CSS'],
-                'status': 'Not Started'
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': 'In Progress'
             }
         ]
 
@@ -1277,11 +1278,11 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
                 'status': 'Not Started'
             },
             {
-                'title': 'Secure Code Review',
-                'slug': 'secure-code-review',
-                'difficulty': 'Advanced',
-                'tags': ['Security', 'Code Quality'],
-                'status': 'In Progress'
+            'title': 'HTML & Tailwind Styling',
+            'slug': 'html-tailwind',
+            'difficulty': 'Beginner',
+            'tags': ['Frontend', 'UI', 'CSS'],
+            'status': 'Not Started'
             },
             {
                 'title': 'Git & GitHub Workflows',
@@ -1297,6 +1298,13 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
                 'tags': ['Python', 'Web Dev'],
                 'status': 'Not Started'
             },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': 'In Progress'
+            }
         ]
 
         

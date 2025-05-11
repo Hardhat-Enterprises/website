@@ -30,8 +30,8 @@
       <ul>
         <li><a href="https://www.w3schools.com/git/" target="_blank">Git Tutorial by W3Schools</a></li>
         <li><a href="https://learngitbranching.js.org/" target="_blank">Interactive Git Branching Visualizer</a></li>
-        <li><a href="https://www.youtube.com/watch?v=RGOj5yH7evk" target="_blank">Git & GitHub Crash Course (freeCodeCamp)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=hr9ZGtK3GzI" target="_blank">Working on Teams with GitHub (Traversy Media)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=LxJpwYzoO9A" target="_blank">🎥 GitHub Workflow Tutorial | Git Flow vs GitHub Flow (Edureka)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=ylEy4eLdhFs" target="_blank">🎥 GitHub Actions Step by Step for Beginners</a></li>
       </ul>
     </section>
   </div>
@@ -62,6 +62,12 @@
 
     document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
     document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+
+    document.getElementById("finishButton").addEventListener("click", function () {
+      const slug = window.location.pathname.split("/").filter(Boolean).pop();
+      sessionStorage.setItem(`skill-status-${slug}`, "completed");
+      window.location.href = "/upskilling/";
+    });
   </script>
 
   <script src="{% static 'skill_navigation.js' %}"></script>

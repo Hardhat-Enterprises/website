@@ -34,9 +34,9 @@
       <ul>
         <li><a href="https://owasp.org/www-project-code-review-guide/" target="_blank">📘 OWASP Code Review Guide</a></li>
         <li><a href="https://cheatsheetseries.owasp.org/" target="_blank">📘 OWASP Cheat Sheet Series</a></li>
-        <li><a href="https://www.youtube.com/watch?v=jzhlpJ1XrL8" target="_blank">🎥 Secure Code Review (OWASP Official)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=-ckX0Y0d5-s" target="_blank">🎥 Secure Coding Best Practices (Simplilearn)</a></li>
-        <li><a href="https://www.synopsys.com/blogs/software-security/what-is-code-review/" target="_blank">📘 Intro to Code Review (Synopsys)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=UimqLp5xc98" target="_blank">🎥 Secure Code Review for Beginners (Security Zone)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=eltB_dBSyFA" target="_blank">🎥 Secure Code Review with Semgrep (Live Walkthrough)</a></li>
+        <li><a href="https://www.veracode.com/security/secure-code-review" target="_blank">📘 Intro to Secure Code Review (Veracode)</a></li>
       </ul>
     </section>
   </div>
@@ -69,6 +69,15 @@
 
     document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
     document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+
+    document.getElementById("finishButton").addEventListener("click", function () {
+      // Extract slug from URL
+      const slug = window.location.pathname.split("/").filter(Boolean).pop();
+      // Save progress as completed
+      sessionStorage.setItem(`skill-status-${slug}`, "completed");
+      // Redirect to dashboard
+      window.location.href = "/upskilling/";
+    });
   </script>
 
   <script src="{% static 'skill_navigation.js' %}"></script>

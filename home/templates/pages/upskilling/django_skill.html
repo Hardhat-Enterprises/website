@@ -89,6 +89,18 @@
         showSection(currentIndex);
       }
     });
+
+    document.getElementById("finishButton").addEventListener("click", function () {
+    // Extract slug from URL
+    const slug = window.location.pathname.split("/").filter(Boolean).pop();
+    
+    // Save progress as completed
+    sessionStorage.setItem(`skill-status-${slug}`, "completed");
+    
+    // Redirect to dashboard
+    window.location.href = "/upskilling/";
+  });
+
   </script>
 
   <script src="{% static 'skill_navigation.js' %}"></script>
