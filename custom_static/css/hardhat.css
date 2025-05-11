@@ -27238,4 +27238,19 @@ blockquote {
   color: black;
 }
 
+/* Light/dark mode safe styling for Not Started card */
+.not-started-card {
+  background-color: #f8f9fa; /* Light gray */
+  color: #111;
+  transition: all 0.3s ease-in-out;
+}
+
+html[data-theme="dark"] .not-started-card {
+  background-color: #000; /* Black in dark mode */
+  color: #fff;
+}
+
+.not-started-text {
+  font-weight: bold;
+}
 
