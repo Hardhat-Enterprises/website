@@ -35,90 +35,185 @@
   <!-- End of Hero section -->
   <!-- Kudoboard Section Starts Here -->
 <div class="whiteboard-container">
-  <h2>Kudoboard</h2>
+  <h2>Our Team's Kudoboard</h2>
   <div id="whiteboard" class="whiteboard"></div>
-  <textarea id="reviewText" rows="3" placeholder="Type your review here..."></textarea>
-  <div>
-    <button id="submitReview">Submit</button>
-    <button id="clearReviews" disabled>Clear</button>
+  <textarea id="reviewText" rows="3" placeholder="Share your appreciation for our team..."></textarea>
+  <div class="color-picker-container">
+    <label for="noteColor">Choose note color: </label>
+    <input type="color" id="noteColor" value="#fff9c4" list="presetColors">
+    <datalist id="presetColors">
+      <option value="#fff9c4"></option>
+      <option value="#f8bbd0"></option>
+      <option value="#c8e6c9"></option>
+      <option value="#bbdefb"></option>
+      <option value="#e1bee7"></option>
+      <option value="#ffccbc"></option>
+      <!-- Dark colors -->
+      <option value="#1a1a1a"></option>
+      <option value="#2d2d2d"></option>
+      <option value="#374151"></option>
+      <option value="#4b5563"></option>
+      <option value="#22223b"></option>
+      <option value="#0f172a"></option>
+      <!-- Vibrant colors -->
+      <option value="#ff4b5c"></option>
+      <option value="#ffb347"></option>
+      <option value="#ffe066"></option>
+      <option value="#4ade80"></option>
+      <option value="#2dd4bf"></option>
+      <option value="#60a5fa"></option>
+      <option value="#a78bfa"></option>
+      <option value="#f472b6"></option>
+      <option value="#e11d48"></option>
+      <option value="#a3e635"></option>
+      <option value="#22d3ee"></option>
+      <option value="#ffd700"></option>
+    </datalist>
+  </div>
+  <div class="button-container">
+    <button id="submitReview">Add Note</button>
+    <button id="clearReviews" disabled>Clear Board</button>
   </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   const whiteboard = document.getElementById('whiteboard');
   const reviewText = document.getElementById('reviewText');
   const submitReview = document.getElementById('submitReview');
   const clearReviews = document.getElementById('clearReviews');
-  const stickyColors = ['#ffc107', '#ff5722', '#8bc34a', '#03a9f4', '#e91e63']; // Different colors
-  let usedColors = []; // Track used colors
+  const noteColor = document.getElementById('noteColor');
 
-  // Load saved reviews from localStorage
-  const loadReviews = () => {
-    const savedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
-    savedReviews.forEach((review) => createStickyNote(review.text, review.color));
-    toggleClearButton();
-  };
-
-  // Save reviews to localStorage
-  const saveReviews = () => {
-    const reviews = Array.from(whiteboard.children).map((note) => ({
-      text: note.textContent,
-      color: note.style.backgroundColor,
-    }));
-    localStorage.setItem('reviews', JSON.stringify(reviews));
-  };
-
-  // Create a sticky note
-  const createStickyNote = (text, color = null) => {
-    const stickyNote = document.createElement('div');
-    stickyNote.classList.add('sticky-note');
-    stickyNote.textContent = text;
-    stickyNote.style.backgroundColor = color || getUniqueColor();
-    whiteboard.appendChild(stickyNote);
-    toggleClearButton();
-  };
-
-  // Get a unique color that hasn't been used yet
-  const getUniqueColor = () => {
-    if (usedColors.length === stickyColors.length) {
-      // All colors have been used, reset the usedColors array
-      usedColors = [];
+  function createStickyNote(text, color, rotation, skipSave, pinned) {
+    const note = document.createElement('div');
+    note.className = 'sticky-note fade-in';
+    note.style.backgroundColor = color || getRandomColor();
+    note.style.transform = rotation || `rotate(${Math.random() * 10 - 5}deg)`;
+    note.setAttribute('data-pinned', pinned ? 'true' : 'false');
+    note.innerHTML = `
+      <span class="note-text">${text}</span>
+      <div class="note-actions">
+        <button class="edit-note" title="Edit">✏️</button>
+        <button class="pin-note" title="Pin">${pinned ? '📌' : '📍'}</button>
+      </div>
+    `;
+    // Pin logic
+    if (pinned) {
+      whiteboard.insertBefore(note, whiteboard.firstChild);
+    } else {
+      whiteboard.appendChild(note);
     }
+    toggleClearButton();
 
-    // Pick a random color that hasn't been used
-    let randomColor;
-    do {
-      randomColor = stickyColors[Math.floor(Math.random() * stickyColors.length)];
-    } while (usedColors.includes(randomColor));
+    // Edit handler
+    note.querySelector('.edit-note').onclick = function(e) {
+      e.stopPropagation();
+      const noteText = note.querySelector('.note-text');
+      const originalText = noteText.textContent;
+      noteText.innerHTML = `<textarea class='edit-area'>${originalText}</textarea><div class='edit-actions'><button class='save-edit'>Save</button><button class='cancel-edit'>Cancel</button></div>`;
+      const editArea = noteText.querySelector('.edit-area');
+      editArea.focus();
+      // Save edit
+      noteText.querySelector('.save-edit').onclick = function(ev) {
+        ev.stopPropagation();
+        const newText = editArea.value.trim();
+        if (newText) {
+          noteText.textContent = newText;
+          saveReviews();
+        }
+      };
+      // Cancel edit
+      noteText.querySelector('.cancel-edit').onclick = function(ev) {
+        ev.stopPropagation();
+        noteText.textContent = originalText;
+      };
+    };
+    // Pin handler
+    note.querySelector('.pin-note').onclick = function(e) {
+      e.stopPropagation();
+      const isPinned = note.getAttribute('data-pinned') === 'true';
+      note.setAttribute('data-pinned', !isPinned);
+      this.textContent = !isPinned ? '📌' : '📍';
+      saveReviews();
+      renderAllNotes();
+    };
+    // Double-click to delete
+    note.ondblclick = function(e) {
+      if (e.target.classList.contains('edit-area') || e.target.classList.contains('save-edit') || e.target.classList.contains('cancel-edit')) return;
+      e.stopPropagation();
+      note.classList.remove('fade-in');
+      note.classList.add('fade-out');
+      setTimeout(() => {
+        note.remove();
+        saveReviews();
+        toggleClearButton();
+      }, 300);
+    };
+    if (!skipSave) saveReviews();
+  }
 
-    // Mark the color as used
-    usedColors.push(randomColor);
-    return randomColor;
-  };
+  function getRandomColor() {
+    const colors = [
+      '#fff9c4', '#f8bbd0', '#c8e6c9', '#bbdefb', '#e1bee7', '#ffccbc',
+      '#1a1a1a', '#2d2d2d', '#374151', '#4b5563', '#22223b', '#0f172a',
+      '#ff4b5c', '#ffb347', '#ffe066', '#4ade80', '#2dd4bf', '#60a5fa',
+      '#a78bfa', '#f472b6', '#e11d48', '#a3e635', '#22d3ee', '#ffd700'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
 
-  submitReview.addEventListener('click', function () {
+  function saveReviews() {
+    const notes = Array.from(whiteboard.children).map(note => ({
+      text: note.querySelector('.note-text').textContent,
+      color: note.style.backgroundColor,
+      rotation: note.style.transform,
+      pinned: note.getAttribute('data-pinned') === 'true'
+    }));
+    localStorage.setItem('reviews', JSON.stringify(notes));
+  }
+
+  function renderAllNotes() {
+    // Clear board
+    whiteboard.innerHTML = '';
+    // Load and sort notes (pinned first)
+    const savedReviews = localStorage.getItem('reviews');
+    if (savedReviews) {
+      const notes = JSON.parse(savedReviews);
+      notes.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+      notes.forEach(note => {
+        createStickyNote(note.text, note.color, note.rotation, true, note.pinned);
+      });
+    }
+    toggleClearButton();
+  }
+
+  function loadReviews() {
+    renderAllNotes();
+  }
+
+  submitReview.addEventListener('click', function() {
     const text = reviewText.value.trim();
     if (text) {
-      createStickyNote(text);
+      createStickyNote(text, noteColor.value, undefined, false, false);
       reviewText.value = '';
-      saveReviews();
     } else {
-      alert('Please enter a review.');
+      alert('Please enter a message before submitting.');
     }
   });
 
-  clearReviews.addEventListener('click', function () {
-    whiteboard.innerHTML = '';
-    usedColors = []; // Reset used colors
-    localStorage.removeItem('reviews');
-    toggleClearButton();
+  clearReviews.addEventListener('click', function() {
+    if (confirm('Are you sure you want to clear all notes?')) {
+      whiteboard.innerHTML = '';
+      localStorage.removeItem('reviews');
+      toggleClearButton();
+    }
   });
 
   const toggleClearButton = () => {
     clearReviews.disabled = whiteboard.children.length === 0;
   };
 
+  // Load saved reviews when page loads
   loadReviews();
 });
 </script>
@@ -145,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <p class="lead">
             With a culture of collaboration and a roster of talent, the Hardhat
             team is active in the creative community, endlessly interested in
-            what’s next, and generally pleasant to be around.
+            what's next, and generally pleasant to be around.
           </p>
         </div>
       </div>
