@@ -77,6 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     last_activity = models.DateTimeField(null=True, blank=True, default=now)
 
+
     current_session_key = models.CharField(max_length=40, null=True, blank=True)
 
     EMAIL_FIELD = "email"
@@ -519,7 +520,8 @@ class LeaderBoardTable(models.Model):
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
     
-
+    class Meta:
+        ordering = ['-total_points']  
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"

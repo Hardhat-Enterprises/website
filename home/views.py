@@ -1143,7 +1143,6 @@ def generate_and_send_passkeys(user):
 
     print(f"DEBUG MODE: Lifetime Passkeys for {user.email}: {passkeys}")  # Debugging
  
- 
 # Blog
 class Index(ListView):
     model = Article
@@ -1262,6 +1261,15 @@ class UserPasswordResetView(PasswordResetView):
 
 def vr_join_us(request):
     return projects_join_us(request, 'pages/Vr/join_us.html', 'cybersafe_vr_join_us')
+
+def cyber_threat_simulation(request):
+    return render(request, 'pages/Vr/cyber_threat_simulation.html')
+
+def secure_digital_practices(request):
+    return render(request, 'pages/Vr/secure_digital_practices.html')
+
+def cybersecurity_awareness_reports(request):
+    return render(request, 'pages/Vr/cybersecurity_awareness_reports.html')
 
 def Deakin_Threat_mirror_joinus(request):
     return projects_join_us(request, 'pages/DeakinThreatmirror/join_us.html', 'threat_mirror_join_us')
@@ -1459,6 +1467,25 @@ def submit_answer(request, challenge_id):
         user_challenge.completed = is_correct
         user_challenge.score = challenge.points if is_correct else 0
         user_challenge.save()
+        
+        # If challenge is correct, update the leaderboard
+        if is_correct:
+            user_challenge.completed = True
+            user_challenge.score = challenge.points
+            user_challenge.save()
+            # Calculate total points
+            total_points = UserChallenge.objects.filter(
+                user=request.user,
+                challenge__category=challenge.category
+            ).aggregate(Sum('score'))['score__sum'] or 0
+
+            # Update leaderboard
+            leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+                user=request.user,
+                category=challenge.category
+            )
+            leaderboard_entry.total_points = total_points
+            leaderboard_entry.save()
 
         return JsonResponse({
             'is_correct': is_correct,
@@ -1565,9 +1592,21 @@ class EmailNotificationViewSet(ViewSet):
         return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
-    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
-    print(leaderboard_entry)
-    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+    #Select category to display leaderboard table
+    selected_category = request.GET.get('category', '')
+    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    if selected_category:
+        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
+    else:
+        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
+
+    context = {
+        'entries': leaderboard_entry,
+        'categories': categories,
+        'selected_category': selected_category,
+
+    }
+    return render(request, 'pages/leaderboard.html', context)
 
 def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
@@ -1615,7 +1654,7 @@ def pen_testing_form_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Request submitted successfully!")
-            return redirect('pen_testing')
+            return redirect('/appattack')
     else:
         form = PenTestingRequestForm()
     return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
@@ -1626,7 +1665,7 @@ def secure_code_review_form_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Request submitted successfully!")
-            return redirect('secure_code_review')
+            return redirect('/appattack')
     else:
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
