@@ -28,11 +28,11 @@
             <h1 class="fw-bold display-1">Deakin Cybersafe VR</h1>
             <img width="500" height="500" src="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}" alt="Hero image">
             <div class="col-lg-6 mx-auto">
-                <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
+                <p class="lead mb-4">Click on one of the buttons below to explore how Cybersafe VR empowers organizations to proactively safeguard their digital assets</p>
                 <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
-                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
-                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
+                  <a href="{% url 'cyber_threat_simulation' %}" class="btn btn-primary btn-lg px-4 gap-3">Cyber Threat Simulation</a>
+                  <a href="{% url 'secure_digital_practices' %}" class="btn btn-primary btn-lg px-4 gap-3">Secure Digital Practices</a>
+                  <a href="{% url 'cybersecurity_awareness_reports' %}" class="btn btn-primary btn-lg px-4 gap-3">Cybersecurity Awareness Reports</a>
                 </div>
             </div>
         </div>
@@ -40,14 +40,49 @@
     <!-- End of Hero Section -->
 
     <!-- Tools -->
-    <section class="section section-lg bg-tertiary">
-        <div class="container">
-            <h2 class="fw-bolder display-2 text-center">Tools</h2>
-            <div class="row">
-                <!-- Tools content here -->
+<section class="section section-lg bg-light py-5">
+    <div class="container">
+        <h2 class="fw-bolder display-3 text-center mb-5">Tools for Effective Cybersecurity</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col">
+                <div class="card shadow-sm border-0 rounded-4 overflow-hidden h-100">
+                    <div class="card-body d-flex flex-column align-items-center text-center p-5">
+                        <div class="icon-container mb-4">
+                            <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Intrusion Detection System (IDS) Monitor</h5>
+                        <p class="card-text mb-4">Detect and respond to cybersecurity threats in real time, ensuring the safety of your organization's network and data.</p>
+                        <a href="https://info.connectwise.com/cybersecurity/mdr-demo?utm_campaign=PAI8015&utm_medium=paidsearch&utm_source=google&utm_content=demo&loc=apac&utm_term=cyber%20intrusion%20detection%20system&_bt=746923465181&_bk=cyber%20intrusion%20detection%20system&_bm=e&_bn=g&_bg=170121420913&cq_cmp=21797821199&cq_plac=&cq_net=g&gad_source=1&gbraid=0AAAAAD0G_qhH1CGCLQGVwEkwRRZvP3IgB&gclid=EAIaIQobChMI_pCy-YCHjQMVsalmAh0gOzKzEAAYASAAEgKFgPD_BwE" class="btn btn-primary btn-sm mt-auto">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm border-0 rounded-4 overflow-hidden h-100">
+                    <div class="card-body d-flex flex-column align-items-center text-center p-5">
+                        <div class="icon-container mb-4">
+                            <i class="fas fa-lock fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Data Encryption Station</h5>
+                        <p class="card-text mb-4">Secure sensitive data with encryption protocols and configure policies for encryption across all digital assets.</p>
+                        <a href="https://cloudian.com/guides/data-protection/data-encryption-the-ultimate-guide/" class="btn btn-primary btn-sm mt-auto">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm border-0 rounded-4 overflow-hidden h-100">
+                    <div class="card-body d-flex flex-column align-items-center text-center p-5">
+                        <div class="icon-container mb-4">
+                            <i class="fas fa-chart-line fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Risk Assessment Tool</h5>
+                        <p class="card-text mb-4">Identify system vulnerabilities and prioritize mitigations to safeguard your organization against potential risks.</p>
+                        <a href="https://safetyculture.com/topics/risk-assessment/" class="btn btn-primary btn-sm mt-auto">Learn More</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
     <!-- End Tools -->
 
     <!-- Join Us -->

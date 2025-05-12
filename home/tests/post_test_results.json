@@ -1,0 +1,82 @@
+[
+  {
+    "url": "http://localhost:8000/accounts/signup/",
+    "passed": true,
+    "response": {
+      "headers": {
+        "content-length": "38692",
+        "content-type": "text/html; charset=utf-8",
+        "cross-origin-opener-policy": "same-origin",
+        "date": "Thu, 01 May 2025 01:03:54 GMT",
+        "referrer-policy": "same-origin",
+        "server": "WSGIServer/0.2 CPython/3.12.9",
+        "vary": "Cookie, origin",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY"
+      },
+      "ok": true,
+      "status": 200
+    },
+    "comment": "Account register"
+  },
+  {
+    "url": "http://localhost:8000/accounts/login/",
+    "passed": true,
+    "response": {
+      "headers": {
+        "content-length": "28746",
+        "content-type": "text/html; charset=utf-8",
+        "cross-origin-opener-policy": "same-origin",
+        "date": "Thu, 01 May 2025 01:03:54 GMT",
+        "referrer-policy": "same-origin",
+        "server": "WSGIServer/0.2 CPython/3.12.9",
+        "vary": "Cookie, origin",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY"
+      },
+      "ok": true,
+      "status": 200
+    },
+    "comment": "Login - username and password matched"
+  },
+  {
+    "url": "http://localhost:8000/accounts/login/",
+    "passed": true,
+    "response": {
+      "headers": {
+        "content-length": "28746",
+        "content-type": "text/html; charset=utf-8",
+        "cross-origin-opener-policy": "same-origin",
+        "date": "Thu, 01 May 2025 01:03:54 GMT",
+        "referrer-policy": "same-origin",
+        "server": "WSGIServer/0.2 CPython/3.12.9",
+        "vary": "Cookie, origin",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY"
+      },
+      "ok": true,
+      "status": 200
+    },
+    "comment": "Login - username and password unmatched"
+  },
+  {
+    "url": "http://localhost:8000/accounts/malware_viz/joinus",
+    "passed": true,
+    "response": {
+      "headers": {
+        "content-length": "35000",
+        "content-type": "text/html; charset=utf-8",
+        "cross-origin-opener-policy": "same-origin",
+        "date": "Thu, 01 May 2025 01:03:55 GMT",
+        "referrer-policy": "same-origin",
+        "server": "WSGIServer/0.2 CPython/3.12.9",
+        "vary": "Cookie, origin",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY"
+      },
+      "ok": true,
+      "status": 200
+    },
+    "comment": "Form submit"
+  }
+]
