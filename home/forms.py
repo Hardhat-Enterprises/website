@@ -502,12 +502,7 @@ class JobApplicationForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
     resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
-    cover_letter = forms.CharField(widget=forms.Textarea(attrs={
-        'class': 'form-control', 
-        'rows': 5, 
-        'placeholder': 'Write your cover letter here...'
-    }))
-
+    cover_letter = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
 class PenTestingRequestForm(forms.ModelForm):
     terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")

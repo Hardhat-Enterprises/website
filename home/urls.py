@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 from django.contrib import admin
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts,career_detail,career_application, feedback_view, delete_feedback, career_discover
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
@@ -82,8 +82,12 @@ urlpatterns = [
     path("careers/", list_careers , name="career-list"),
     path("careers/<int:id>/", career_detail , name="career-detail"),
     path("careers/<int:id>/apply", career_application , name="career-application"),
+    path("careers/internships/", internships, name="internships"),
+    path("careers/job-alerts/", job_alerts, name="job-alerts"),
+    path("careers/discover/", career_discover, name="career-discover"),
     
     path('blog/', Index.as_view(), name = 'blog'),
+    # path('blog/<int:pk>/', DetaswilArticleView.as_view(), name='blog_post'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
     
@@ -114,6 +118,7 @@ urlpatterns = [
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),
+    path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
