@@ -1,5 +1,227 @@
 {% extends 'layouts/base.html' %} {% load static %} {% block header %} {%include 'includes/navigation.html'%} {% endblock header %} {% block content %}
 
+<style>
+/* Form Control Styling */
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.375rem !important;
+    transition: all 0.2s ease-in-out !important;
+    outline: none !important;
+}
+
+/* Remove default focus outline and add custom styling */
+.form-control:focus {
+    border-color: #ced4da !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Invalid state styling */
+.form-control.is-invalid,
+#id_password1.is-invalid,
+#id_password2.is-invalid {
+    background-color: #ffffff !important;
+    border-color: #dc3545 !important;
+    border-width: 1px !important;
+    box-shadow: none !important;
+}
+
+/* Valid state styling */
+.form-control.is-valid,
+#id_password1.is-valid,
+#id_password2.is-valid {
+    background-color: #ffffff !important;
+    border-color: #198754 !important;
+    border-width: 1px !important;
+    box-shadow: none !important;
+}
+
+/* Input group styling */
+.input-group-text {
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+    border-right: none !important;
+    padding: 0.5rem 0.75rem !important;
+}
+
+.input-group .form-control {
+    border-left: none !important;
+}
+
+.input-group .password-toggle-icon {
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+    border-left: none !important;
+    cursor: pointer !important;
+}
+
+.password-toggle-icon:hover {
+    background-color: #f8f9fa !important;
+}
+
+.input-group .form-control.is-valid + .input-group-text .fas,
+.input-group .form-control.is-valid ~ .password-toggle-icon .fas {
+    color: #198754 !important;
+}
+
+.input-group .form-control.is-valid + .input-group-text,
+.input-group .form-control.is-valid ~ .password-toggle-icon {
+    border-color: #198754 !important;
+}
+
+/* Invalid state icon styling */
+.input-group .form-control.is-invalid + .input-group-text .fas,
+.input-group .form-control.is-invalid ~ .password-toggle-icon .fas {
+    color: #dc3545 !important;
+}
+
+.input-group .form-control.is-invalid + .input-group-text,
+.input-group .form-control.is-invalid ~ .password-toggle-icon {
+    border-color: #dc3545 !important;
+}
+
+/* Hover effect for password toggle */
+.password-toggle-icon:hover .fas {
+    color: #495057 !important;
+}
+
+/* Override any Bootstrap validation backgrounds */
+.was-validated .form-control:valid,
+.was-validated .form-control:invalid {
+    background-image: none !important;
+}
+
+/* Remove default browser focus outline */
+input:focus,
+button:focus {
+    outline: none !important;
+}
+
+/* Lock icon base styling - with transition */
+.input-group-text .fa-unlock-alt {
+    color: #6c757d !important;
+    transition: color 0.2s ease-in-out !important;
+    font-size: 1rem !important;
+}
+
+/* Eye icon styling - always gray */
+.password-toggle-icon .fas,
+#password1-eye,
+#password2-eye {
+    color: #6c757d !important;
+    font-size: 1rem !important;
+}
+
+/* Valid state icon styling */
+.is-valid ~ .input-group-text .fa-unlock-alt {
+    color: #198754 !important;
+}
+
+.is-valid ~ .input-group-text,
+.is-valid ~ .password-toggle-icon {
+    border-color: #198754 !important;
+}
+
+/* Invalid state icon styling */
+.is-invalid ~ .input-group-text .fa-unlock-alt {
+    color: #dc3545 !important;
+}
+
+.is-invalid ~ .input-group-text,
+.is-invalid ~ .password-toggle-icon {
+    border-color: #dc3545 !important;
+}
+
+/* Lock icon base styling */
+.input-group-text .fas {
+    color: #6c757d !important;
+    transition: color 0.2s ease-in-out !important;
+    font-size: 1rem !important;
+}
+
+/* Eye icon styling */
+.password-toggle-icon .fas {
+    color: #6c757d !important;
+    font-size: 1rem !important;
+}
+
+/* Password toggle icon container */
+.password-toggle-icon {
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+    border-left: none !important;
+    cursor: pointer !important;
+}
+
+.password-toggle-icon:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Valid state styling */
+.input-group:has(.is-valid) .input-group-text .fas {
+    color: #198754 !important;
+}
+
+.input-group:has(.is-valid) .input-group-text {
+    border-color: #198754 !important;
+}
+
+/* Invalid state styling */
+.input-group:has(.is-invalid) .input-group-text .fas {
+    color: #dc3545 !important;
+}
+
+.input-group:has(.is-invalid) .input-group-text {
+    border-color: #dc3545 !important;
+}
+
+/* Remove background images from validation states */
+.form-control.is-valid,
+.form-control.is-invalid {
+    background-image: none !important;
+}
+
+/* Ensure eye icons stay consistent color */
+.password-toggle-icon .fas,
+.input-group:has(.is-valid) .password-toggle-icon .fas,
+.input-group:has(.is-invalid) .password-toggle-icon .fas,
+.fa-eye,
+.fa-eye-slash {
+    color: #6c757d !important;
+    transition: none !important;
+}
+
+/* Only change border color for password toggle container */
+.input-group:has(.is-valid) .password-toggle-icon {
+    border-color: #198754 !important;
+}
+
+.input-group:has(.is-invalid) .password-toggle-icon {
+    border-color: #dc3545 !important;
+}
+
+/* Dark mode styles for generate password button */
+.dark-mode .btn-generate-password,
+.dark-mode .generate-password {
+    background-color: #ffc107 !important;
+    color: #1c2540 !important;
+    border: none;
+    box-shadow: none;
+    opacity: 1 !important;
+}
+
+.dark-mode .btn-generate-password:disabled,
+.dark-mode .generate-password:disabled {
+    background-color: #ffe082 !important;
+    color: #1c2540 !important;
+    opacity: 0.7 !important;
+}
+</style>
+
 <main>
   {% include 'includes/pre-loader.html' %}
   
@@ -34,43 +256,31 @@
             {% for field in form %}
             <div class="form-group mb-4">
               <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {% if field.name == 'password1' or field.name == 'password2' %}
               <div class="input-group">
                 <span class="input-group-text" id="basic-addon3">
-                  <span
-                    class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"
-                  >
-                  </span>
+                  <span class="fas fa-unlock-alt"></span>
                 </span>
-                {% if field.name == 'password1' or field.name == 'password2' %}
-                <div class="password-input-container">
-                  {{ field }}
-                </div>
-                {% else %}
-                  {{ field }}
-                {% endif %}
+                {{ field }}
+                <span class="input-group-text password-toggle-icon" onclick="toggleSinglePasswordVisibility('{{ field.name }}')">
+                  <i class="fas fa-eye" id="{{ field.name }}-eye"></i>
+                </span>
               </div>
+              {% else %}
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon3">
+                  <span class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"></span>
+                </span>
+                {{ field }}
+              </div>
+              {% endif %}
               <span class="text-danger"> {{ field.errors }}</span>
             </div>
             {% endfor %}
-            <div class="d-flex mb-4" style="margin-left: 31%">
-              <span class="fw-normal" style="margin-right: 0.4rem">
-                <a
-                  onclick="get_rand_pass()"
-                  href="javascript:;"
-                  class="fw-bold text-underline"
-                  >Generate password</a
-                >
-              </span>
-              <br />
-              <span>
-                <a
-                  id="togglePasswordLink"
-                  onclick="togglePasswordVisibility()"
-                  href="javascript:;"
-                  class="fw-bold text-underline"
-                  >Show password</a
-                >
-              </span>
+            <div class="d-flex justify-content-center mb-4">
+              <button onclick="get_rand_pass()" class="btn btn-outline-primary btn-generate-password">
+                <i class="fas fa-key me-2"></i>Generate Password
+              </button>
             </div>
   
             <!-- Real-Time Password Requirements Checklist -->
@@ -116,177 +326,208 @@
       .then((j) => {
         document.getElementsByName("password1")[0].value = j.data;
         document.getElementsByName("password2")[0].value = j.data;
+        // Validate password requirements after generation
+        validatePasswordRequirements(j.data);
       });
   }
 
-  function togglePasswordVisibility() {
-    var passwordField1 = document.getElementsByName("password1")[0];
-    var passwordField2 = document.getElementsByName("password2")[0];
-    var toggleLink = document.getElementById("togglePasswordLink");
-  
-    if (passwordField1.type === "password") {
-      passwordField1.type = "text";
-      passwordField2.type = "text";
-      toggleLink.innerText = "Hide password";
+  function toggleSinglePasswordVisibility(fieldName) {
+    var passwordField = document.getElementsByName(fieldName)[0];
+    var eyeIcon = document.getElementById(fieldName + "-eye");
+    
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
     } else {
-      passwordField1.type = "password";
-      passwordField2.type = "password";
-      toggleLink.innerText = "Show password";
+        passwordField.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
     }
   }
+
   document.addEventListener("DOMContentLoaded", function() {
     // Email Validation
     const emailField = document.getElementById("id_email");
-    const emailErrorMessage = document.getElementById("email-error");
-    const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
+    if (emailField) {
+      const emailErrorMessage = document.getElementById("email-error");
+      const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
 
-    emailField.addEventListener("input", function() {
-        const emailValue = emailField.value.trim(); // Ensure value is trimmed before validation
-        console.log("Email being checked:", emailValue); // Log for debugging
-        const emailPattern = /@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$/;
+      emailField.addEventListener("input", function() {
+          const emailValue = emailField.value.trim();
+          const emailPattern = /@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$/;
 
-        if (emailPattern.test(emailValue)) {
-            emailErrorMessage.textContent = "";
-            emailField.classList.remove("is-invalid");
-            emailField.classList.add("is-valid");
-            emailIcon.classList.remove("fa-envelope");
-            emailIcon.classList.add("fa-check-circle");
-            emailIcon.style.color = "green";
-        } else {
-            emailErrorMessage.textContent = "Email must match your Deakin email address";
-            emailField.classList.remove("is-valid");
-            emailField.classList.add("is-invalid");
-            emailIcon.classList.remove("fa-check-circle");
-            emailIcon.classList.add("fa-envelope");
-            emailIcon.style.color = "red";
-        }
-    });
-
-
-
-      // Password Validation
-      const passwordField = document.getElementById("id_password1");
-      const confirmPasswordField = document.getElementById("id_password2");
-      const confirmIcon = document.querySelector("#confirm-addon .fa-unlock-alt");
-
-      passwordField.addEventListener("input", validatePasswordMatch);
-      confirmPasswordField.addEventListener("input", validatePasswordMatch);
-
-      function validatePasswordMatch() {
-          const passwordValue = passwordField.value;
-          const confirmPasswordValue = confirmPasswordField.value;
-
-          if (confirmPasswordValue === passwordValue) {
-              confirmPasswordField.classList.remove("is-invalid");
-              confirmPasswordField.classList.add("is-valid");
-              confirmIcon.classList.remove("fa-unlock-alt");
-              confirmIcon.classList.add("fa-check-circle");
-              confirmIcon.style.color = "green";
-              document.getElementById("confirm-password-error").textContent = "";
+          if (emailPattern.test(emailValue)) {
+              if (emailErrorMessage) emailErrorMessage.textContent = "";
+              emailField.classList.remove("is-invalid");
+              emailField.classList.add("is-valid");
+              if (emailIcon) {
+                emailIcon.classList.remove("fa-envelope");
+                emailIcon.classList.add("fa-check-circle");
+                emailIcon.style.color = "green";
+              }
           } else {
-              confirmPasswordField.classList.remove("is-valid");
-              confirmPasswordField.classList.add("is-invalid");
-              confirmIcon.classList.remove("fa-check-circle");
-              confirmIcon.classList.add("fa-unlock-alt");
-              confirmIcon.style.color = "red";
-              document.getElementById("confirm-password-error").textContent = "Passwords do not match.";
-          }
-      }
-
-      // Existing password checks (length, lowercase, etc.)
-      const lengthCheck = document.getElementById("length-check");
-      const lowercaseCheck = document.getElementById("lowercase-check");
-      const uppercaseCheck = document.getElementById("uppercase-check");
-      const numberCheck = document.getElementById("number-check");
-      const symbolCheck = document.getElementById("symbol-check");
-
-      passwordField.addEventListener("input", function() {
-          const passwordValue = passwordField.value;
-
-          // Check password length
-          if (passwordValue.length >= 8) {
-              lengthCheck.classList.remove("text-danger");
-              lengthCheck.classList.add("text-success");
-              lengthCheck.innerHTML = '<i class="fas fa-check"></i> At least 8 characters';
-          } else {
-              lengthCheck.classList.remove("text-success");
-              lengthCheck.classList.add("text-danger");
-              lengthCheck.innerHTML = '<i class="fas fa-times"></i> At least 8 characters';
-          }
-
-          // Check for lowercase letter
-          if (/[a-z]/.test(passwordValue)) {
-              lowercaseCheck.classList.remove("text-danger");
-              lowercaseCheck.classList.add("text-success");
-              lowercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one lowercase letter';
-          } else {
-              lowercaseCheck.classList.remove("text-success");
-              lowercaseCheck.classList.add("text-danger");
-              lowercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one lowercase letter';
-          }
-
-          // Check for uppercase letter
-          if (/[A-Z]/.test(passwordValue)) {
-              uppercaseCheck.classList.remove("text-danger");
-              uppercaseCheck.classList.add("text-success");
-              uppercaseCheck.innerHTML = '<i class="fas fa-check"></i> At least one uppercase letter';
-          } else {
-              uppercaseCheck.classList.remove("text-success");
-              uppercaseCheck.classList.add("text-danger");
-              uppercaseCheck.innerHTML = '<i class="fas fa-times"></i> At least one uppercase letter';
-          }
-
-          // Check for number
-          if (/\d/.test(passwordValue)) {
-              numberCheck.classList.remove("text-danger");
-              numberCheck.classList.add("text-success");
-              numberCheck.innerHTML = '<i class="fas fa-check"></i> At least one number';
-          } else {
-              numberCheck.classList.remove("text-success");
-              numberCheck.classList.add("text-danger");
-              numberCheck.innerHTML = '<i class="fas fa-times"></i> At least one number';
-          }
-
-          // Check for special symbol
-          if (/[@$!%*?&]/.test(passwordValue)) {
-              symbolCheck.classList.remove("text-danger");
-              symbolCheck.classList.add("text-success");
-              symbolCheck.innerHTML = '<i class="fas fa-check"></i> At least one special symbol (@, $, !, %, *, ?, &)';
-          } else {
-              symbolCheck.classList.remove("text-success");
-              symbolCheck.classList.add("text-danger");
-              symbolCheck.innerHTML = '<i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)';
+              if (emailErrorMessage) emailErrorMessage.textContent = "Email must match your Deakin email address";
+              emailField.classList.remove("is-valid");
+              emailField.classList.add("is-invalid");
+              if (emailIcon) {
+                emailIcon.classList.remove("fa-check-circle");
+                emailIcon.classList.add("fa-envelope");
+                emailIcon.style.color = "red";
+              }
           }
       });
+    }
+
+    // Password Validation
+    const passwordField = document.getElementById("id_password1");
+    const confirmPasswordField = document.getElementById("id_password2");
+    
+    if (passwordField && confirmPasswordField) {
+      // Add input event listeners to both password fields
+      passwordField.addEventListener("input", function() {
+        const passwordValue = this.value;
+        validatePasswordRequirements(passwordValue);
+        validatePasswordMatch();
+      });
+
+      confirmPasswordField.addEventListener("input", function() {
+        validatePasswordMatch();
+      });
+    }
+
+    function validatePasswordMatch() {
+      const passwordField = document.getElementById("id_password1");
+      const confirmPasswordField = document.getElementById("id_password2");
+      
+      if (!passwordField || !confirmPasswordField) return;
+      
+      const passwordValue = passwordField.value;
+      const confirmPasswordValue = confirmPasswordField.value;
+
+      if (confirmPasswordValue === passwordValue && confirmPasswordValue !== "") {
+        confirmPasswordField.classList.remove("is-invalid");
+        confirmPasswordField.classList.add("is-valid");
+      } else if (confirmPasswordValue !== "") {
+        confirmPasswordField.classList.remove("is-valid");
+        confirmPasswordField.classList.add("is-invalid");
+      } else {
+        confirmPasswordField.classList.remove("is-valid", "is-invalid");
+      }
+    }
   });
 
-  function get_rand_pass() {
-      fetch("/accounts/password-gen").then(d => d.json()).then(j => {
-          document.getElementsByName("password1")[0].value = j.data; 
-          document.getElementsByName("password2")[0].value = j.data;
-      })
+  function validatePasswordRequirements(passwordValue) {
+    const passwordField = document.getElementById("id_password1");
+    const confirmPasswordField = document.getElementById("id_password2");
+    
+    // Check if all requirements are met
+    const hasLength = passwordValue.length >= 8;
+    const hasLowercase = /[a-z]/.test(passwordValue);
+    const hasUppercase = /[A-Z]/.test(passwordValue);
+    const hasNumber = /\d/.test(passwordValue);
+    const hasSymbol = /[@$!%*?&]/.test(passwordValue);
+    
+    const allRequirementsMet = hasLength && hasLowercase && hasUppercase && hasNumber && hasSymbol;
+    
+    // Update password field styling
+    if (allRequirementsMet) {
+        passwordField.classList.remove("is-invalid");
+        passwordField.classList.add("is-valid");
+    } else {
+        passwordField.classList.remove("is-valid");
+        passwordField.classList.add("is-invalid");
+    }
+
+    // Update requirement checks
+    updateRequirementCheck("length-check", hasLength);
+    updateRequirementCheck("lowercase-check", hasLowercase);
+    updateRequirementCheck("uppercase-check", hasUppercase);
+    updateRequirementCheck("number-check", hasNumber);
+    updateRequirementCheck("symbol-check", hasSymbol);
+
+    // If confirm password has a value, validate it
+    if (confirmPasswordField && confirmPasswordField.value) {
+        validatePasswordMatch();
+    }
+  }
+
+  function updateRequirementCheck(elementId, condition) {
+    const element = document.getElementById(elementId);
+    if (condition) {
+        element.classList.remove("text-danger");
+        element.classList.add("text-success");
+        element.innerHTML = '<i class="fas fa-check"></i> ' + element.textContent.replace(/^[^a-zA-Z]+/, '');
+    } else {
+        element.classList.remove("text-success");
+        element.classList.add("text-danger");
+        element.innerHTML = '<i class="fas fa-times"></i> ' + element.textContent.replace(/^[^a-zA-Z]+/, '');
+    }
   }
 
   function show_rand_pass() {
       document.getElementsByName("password1")[0].type = "text";
       document.getElementsByName("password2")[0].type = "text";
   }
+
+  // Ensure eye icons stay gray on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const eyeIcons = document.querySelectorAll('.password-toggle-icon .fas');
+    eyeIcons.forEach(icon => {
+        icon.style.color = '#6c757d';
+    });
+  });
 </script>
 
-<!-- Optional CSS for Invalid Input Styling -->
 <style>
-  .is-invalid {
-      border-color: red;
-  }
-  .is-valid {
-      border-color: green;
-  }
-  .text-success {
-      color: green !important;
-  }
-  .text-danger {
-      color: red !important;
-  }
+.is-valid {
+    border-color: #28a745 !important;
+    background-color: rgba(40, 167, 69, 0.1) !important;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+    background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+.password-requirements {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.password-requirements li {
+    margin-bottom: 0.5rem;
+}
+
+.password-requirements i {
+    margin-right: 0.5rem;
+}
+
+.btn-outline-primary {
+    border-color: #3a3a32;
+    color: #3a3a32;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3a3a32;
+    color: white;
+}
+
+/* Add these new styles to ensure the input fields show the validation state */
+.form-control.is-valid,
+.form-control.is-invalid {
+    background-image: none !important;
+    padding-right: 0.75rem !important;
+}
+
+.input-group .form-control.is-valid,
+.input-group .form-control.is-invalid {
+    border-right: none !important;
+}
+
+.input-group-text {
+    border-left: none !important;
+}
 </style>
 
 {% endblock content %}
