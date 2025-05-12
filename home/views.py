@@ -493,7 +493,22 @@ class UserLoginView(LoginView):
             return redirect(reverse('rate_limit_exceeded'))  # Redirect to a rate limit exceeded page
 
         return super().form_invalid(form)
+    
+#custom loginview to regenreate session id to prevent session fixation
+class CustomLoginView(LoginView):
+    def form_valid(self, form):
+        # Regenerate session ID after successful login
+        response = super().form_valid(form)
+        
+        # Manually set session data for preventing session hijacking
+        self.request.session['ip_address'] = self.request.META.get('REMOTE_ADDR')
+        self.request.session['user_agent'] = self.request.META.get('HTTP_USER_AGENT')
+        
+        # It's a good idea to explicitly reset the session token
+        self.request.session['session_token'] = self.request.session.session_key
 
+        return response
+    
 def rate_limit_exceeded(request):
     remaining_time = 60  # Use the helper function
 
