@@ -1648,6 +1648,7 @@ def secure_code_review(request):
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
 
+@login_required
 def pen_testing_form_view(request):
     if request.method == 'POST':
         form = PenTestingRequestForm(request.POST)
@@ -1659,6 +1660,7 @@ def pen_testing_form_view(request):
         form = PenTestingRequestForm()
     return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
 
+@login_required
 def secure_code_review_form_view(request):
     if request.method == 'POST':
         form = SecureCodeReviewRequestForm(request.POST)
@@ -1669,4 +1671,28 @@ def secure_code_review_form_view(request):
     else:
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
+
+def tools_home(request):
+    return render(request, 'pages/pt_gui/tools/index.html')
+
+def aircrack_view(request):
+    return render(request, 'pages/pt_gui/tools/aircrack/index.html')
+
+def arjun_view(request):
+    return render(request, 'pages/pt_gui/tools/arjun/index.html')
+
+def rainbow_view(request):
+    return render(request, 'pages/pt_gui/tools/rainbowcrack/index.html')
+
+def airbase_view(request):
+    return render(request, 'pages/pt_gui/tools/airbase/index.html')
+
+def amap_view(request):
+    return render(request, 'pages/pt_gui/tools/amap/index.html')
+
+def amass_view(request):
+    return render(request, 'pages/pt_gui/tools/amass/index.html')
+
+def arpaname_view(request):
+    return render(request, 'pages/pt_gui/tools/arpaname/index.html')
 

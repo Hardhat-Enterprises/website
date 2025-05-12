@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RainbowCrack</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #2e2e2e;
+      border-bottom: 2px solid #444;
+    }
+
+    .tab {
+      cursor: pointer;
+      color: #ccc;
+      padding: 0.5rem 1rem;
+      text-align: center;
+    }
+
+    .tab:hover {
+      color: #fff;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    .container {
+      display: none;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #2e2e2e;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    input#tab-guide-rainbow:checked ~ #guide-rainbow,
+    input#tab-configuration-rainbow:checked ~ #configuration-rainbow,
+    input#tab-output-rainbow:checked ~ #output-rainbow {
+      display: block;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 4px;
+      border: none;
+      background-color: #444;
+      color: #fff;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    .btn {
+      margin-top: 1rem;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      background-color: #007acc;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #005fa3;
+    }
+
+    .output-console {
+      margin-top: 2rem;
+      background-color: #1a1a1a;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 1rem;
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .console-text {
+      background-color: #1a1a1a;
+      color: #00ff00;
+      font-family: monospace;
+      font-size: 0.9rem;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 0.5rem;
+      border: 1px solid #333;
+    }
+
+    .clear-btn {
+      background: none;
+      color: #ccc;
+      border: 1px solid #555;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<div style="padding: 20px; text-align: center;">
+  <a href="/" style="
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+  " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+    Redirect to Website
+  </a>
+</div>
+
+<body>
+
+  <!-- Tabs -->
+  <div class="navbar">
+    <label for="tab-guide-rainbow" class="tab">User Guide</label>
+    <label for="tab-configuration-rainbow" class="tab">Configuration</label>
+    <label for="tab-output-rainbow" class="tab">Output</label>
+  </div>
+
+  <!-- Tab Switches -->
+  <input type="radio" id="tab-guide-rainbow" name="tab-rainbow" checked />
+  <input type="radio" id="tab-configuration-rainbow" name="tab-rainbow" />
+  <input type="radio" id="tab-output-rainbow" name="tab-rainbow" />
+
+  <!-- Guide -->
+  <div class="container" id="guide-rainbow">
+    <h1>What is RainbowCrack?</h1>
+    <p>RainbowCrack is a command-line password hash cracking tool that uses precomputed rainbow tables to reverse cryptographic hashes.</p>
+    <pre>
+Usage Instructions:
+1. Ensure rainbow tables (*.rt, *.rtc) are available.
+2. Enter a single hash OR upload a hash file.
+3. Example command:
+   ./rcrack ./tables -h [your_hash]
+4. To crack a file:
+   ./rcrack ./tables -l hashes.txt
+5. Click the Crack button and check the Output tab.
+    </pre>
+  </div>
+
+  <!-- Configuration -->
+  <div class="container" id="configuration-rainbow">
+    <h1>Configure RainbowCrack</h1>
+    <form onsubmit="simulateCrack(event)">
+      <label for="hashValue-rainbow">Hash Value</label>
+      <input type="text" id="hashValue-rainbow" placeholder="Enter hash value..." />
+
+      <label for="hashFile-rainbow">Hash File (optional)</label>
+      <input type="file" id="hashFile-rainbow" />
+
+      <button type="submit" class="btn">Crack</button>
+    </form>
+  </div>
+
+  <!-- Output -->
+  <div class="container" id="output-rainbow">
+    <h2>Output Console</h2>
+    <div class="output-console">
+      <div class="console-header">
+        <span>Results</span>
+        <button class="clear-btn" onclick="clearOutput()">Clear</button>
+      </div>
+      <pre class="console-text" id="rainbow-output">[RainbowCrack] Starting hash crack...
+Loading tables from ./tables...
+Reading hash input...
+
+[✓] Table 1 loaded: sha1_loweralpha_numeric#1-6.rt
+[✓] Table 2 loaded: sha1_loweralpha_numeric#7-9.rt
+
+[~] Cracking hash: e99a18c428cb38d5f260853678922e03
+Searching...
+Match found!
+Hash type: SHA1
+Plaintext password: abc123
+
+[✓] Crack complete.
+</pre>
+    </div>
+  </div>
+
+  <script>
+    function simulateCrack(event) {
+      event.preventDefault();
+      const hash = document.getElementById("hashValue-rainbow").value.trim();
+      const fileInput = document.getElementById("hashFile-rainbow");
+
+      let output = "[RainbowCrack] Starting hash crack...\n";
+
+      if (hash) {
+        output += `Hash: ${hash}\nTable Path: ./tables\n...\nSearching...\nMATCH FOUND!\nPassword: password123\n`;
+      } else if (fileInput.files.length > 0) {
+        output += `File: ${fileInput.files[0].name}\nTable Path: ./tables\n...\nReading hashes...\n2 matches found:\n- admin: admin@123\n- user: passw0rd\n`;
+      } else {
+        output += "⚠️ No input provided. Please enter a hash or upload a file.\n";
+      }
+
+      document.getElementById("tab-output-rainbow").checked = true;
+      document.getElementById("rainbow-output").textContent = output;
+    }
+
+    function clearOutput() {
+      document.getElementById("rainbow-output").textContent = "Waiting for results...";
+    }
+  </script>
+
+</body>
+</html>
