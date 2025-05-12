@@ -12,6 +12,7 @@ from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
 from .views import AnalyticsAPI
 from .views import UserManagementAPI, EmailNotificationViewSet
+from .views import MarkSkillCompletedView
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
@@ -31,6 +32,14 @@ urlpatterns = [
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
     path('ptgui_viz/faq/', views.faq, name='faq'),
+    path('ptgui_viz/tools/', views.tools_home, name='ptgui_tools_home'),
+    path('ptgui_viz/tools/aircrack/', views.aircrack_view, name='tool_aircrack'),
+    path('ptgui_viz/tools/arjun/', views.arjun_view, name='tool_arjun'),
+    path('ptgui_viz/tools/rainbowcrack/', views.rainbow_view, name='tool_rainbowcrack'),
+    path('ptgui_viz/tools/airbase/', views.airbase_view, name='tool_airbase'),
+    path('ptgui_viz/tools/amap/', views.amap_view, name='tool_amap'),
+    path('ptgui_viz/tools/amass/', views.amass_view, name='tool_amass'),
+    path('ptgui_viz/tools/arpaname/', views.arpaname_view, name='tool_arpaname'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
     #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
     path('upskilling/', UpskillingView.as_view(), name='upskilling'),
@@ -43,6 +52,7 @@ urlpatterns = [
     path('deakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='threat_mirror_join_us'),
     path('vr/', views.Vr_main, name='Vr_main'),
     path('vr/join_us', views.vr_join_us, name='cybersafe_vr_join_us'),
+    path('upskilling/complete/<slug:slug>/', MarkSkillCompletedView.as_view(), name='complete_skill'),
     # path('contact-central/', views.Contact_central, name='contact-central'),
     path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
     path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
@@ -136,6 +146,8 @@ urlpatterns = [
     path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form')
+
+
 
 
 
