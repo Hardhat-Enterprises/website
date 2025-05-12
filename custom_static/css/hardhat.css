@@ -3706,6 +3706,111 @@ fieldset:disabled .btn {
     display: block;
   }
 }
+
+.mobile-search-container {
+  position: relative;
+  width: 90%; /* responsive */
+  margin: 15px auto;
+}
+
+.search-box-mobile {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 25px;
+}
+
+.search-btn-mobile {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffcd11;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.search-btn-mobile:hover {
+  background: #e6b60f;
+}
+
+.mobile-result-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  color: black;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-result-box div {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-result-box div:last-child {
+  border-bottom: none;
+}
+
+.mobile-result-box div:hover {
+  background-color: #f0f0f0;
+}
+
+.search-container {
+  position: relative;
+  width: 300px; 
+  margin: 20px;
+}
+
+.search-box {
+  border-radius: 25px;
+  padding: 10px 15px;
+}
+
+.search-btn {
+  border-radius: 0px 25px 25px 0px;
+}
+
+.result-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  color: black;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.result-box div {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.result-box div:last-child {
+  border-bottom: none;
+}
+
+.result-box div:hover {
+  background-color: #f0f0f0;
+}
+
 .btn-primary {
   color: #ffffff;
   background-color: #242e4c;
@@ -21852,7 +21957,7 @@ fieldset:disabled .btn {
   background-color: var(--navbar-light);
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 100;
@@ -27230,4 +27335,46 @@ blockquote {
     color: #4caf50; 
 }
 
+}
+
+/* Custom progress color for In Progress status */
+.progress-in-progress {
+  background-color: #f1c40f !important; /* vivid yellow */
+  color: black;
+}
+
+/* Light/dark mode safe styling for Not Started card */
+.not-started-card {
+  background-color: #f8f9fa; /* Light gray */
+  color: #111;
+  transition: all 0.3s ease-in-out;
+}
+
+html[data-theme="dark"] .not-started-card {
+  background-color: #000; /* Black in dark mode */
+  color: #fff;
+}
+
+.not-started-text {
+  font-weight: bold;
+}
+
+
+/* Force dark mode background on mobile navbar when collapsed */
+body.dark-mode .navbar-collapse.show {
+  background-color: #333333 !important;
+}
+
+body.dark-mode .navbar-collapse.show a,
+body.dark-mode .navbar-collapse.show label,
+body.dark-mode .navbar-collapse.show .nav-link {
+  color: #ffffff !important;
+}
+
+/* Immediate dark background for collapsed navbar in dark mode */
+@media (max-width: 991.98px) {
+  body.dark-mode .navbar-collapse {
+    background-color: #222 !important;
+    transition: none !important;
+  }
 }

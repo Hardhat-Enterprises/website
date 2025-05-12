@@ -1,6 +1,5 @@
 import uuid
 
-from django.db.models.deletion import PROTECT
 from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
@@ -8,6 +7,10 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser  
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.sessions.models import Session
+
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
@@ -50,6 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
+    upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
+
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -122,7 +127,13 @@ class User(AbstractBaseUser, PermissionsMixin):
                 new_key = Passkey.generate_passkey()
                 Passkey.objects.create(user=self, key=new_key)
 
-
+    def update_last_activity(self, request):
+        #Updates user last activity with timestamp
+        if not request.session.session_key:
+            request.session.save()
+        self.last_activity = now()
+        self.current_session_key = request.session.session_key
+        self.save(update_fields=['last_activity', 'current_session_key'])
 
 #Search Bar Models:
 
@@ -222,19 +233,19 @@ class Student(AbstractBaseSet):
             "unique": _("A user with that Student ID already exists."),
         },
     )
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="users", blank=False, null=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="users", blank=False, null=False)
     year = models.PositiveIntegerField(blank=True)
     trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
     unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
     course = models.CharField(max_length=10, choices=COURSES, blank=True, null=True)
-    p1 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p1_preferences", null=True, blank=True)
-    p2 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p2_preferences", null=True, blank=True)
-    p3 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p3_preferences", null=True, blank=True)
+    p1 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p1_preferences", null=True, blank=True)
+    p2 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p2_preferences", null=True, blank=True)
+    p3 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p3_preferences", null=True, blank=True)
 
     def clean(self):
         if self.p1 == self.p2 or self.p1 == self.p3 or self.p2 == self.p3:
             raise ValidationError("Project preferences p1, p2, and p3 must be unique.")
-    allocated = models.ForeignKey(Project, on_delete=PROTECT, related_name="allocated", blank=True, null=True)
+    allocated = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="allocated", blank=True, null=True)
     skills = models.ManyToManyField(Skill, through='Progress')
     
     def __str__(self) -> str:
@@ -331,6 +342,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     bio = models.TextField(max_length=500, blank=True, null=True)
+    linkedin = models.URLField(max_length=200, blank=True, null=True)
+    github = models.URLField(max_length=200, blank=True, null=True)
+    # phone = models.CharField(max_length=20, blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -493,7 +508,7 @@ class JobApplication(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     resume = models.FileField(upload_to="resumes/")
-    cover_letter = models.TextField()
+    cover_letter = models.FileField(upload_to="cover_letter/")
     applied_date = models.DateTimeField(auto_now_add=True)
 
 
@@ -506,13 +521,15 @@ class LeaderBoardTable(models.Model):
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
     
-
+    class Meta:
+        ordering = ['-total_points']  
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
 class Experience(models.Model):
     name = models.CharField(max_length=100)
     feedback = models.TextField()
+    rating = models.IntegerField(null=True, blank=True)  # ⭐ ADDED THIS LINE
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -530,3 +547,36 @@ class Passkey(models.Model):
     def generate_passkey():
         """Generate a new passkey"""
         return ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+
+class AppAttackReport(models.Model):
+    year = models.PositiveIntegerField()
+    title = models.CharField(max_length=255)
+    pdf = models.FileField(upload_to='appattack/reports/')
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
+
+
+class PenTestingRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - PenTesting Request"
+
+
+class SecureCodeReviewRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - Secure Code Review Request"
+

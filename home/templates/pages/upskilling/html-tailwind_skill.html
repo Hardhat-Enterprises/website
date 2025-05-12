@@ -1,0 +1,97 @@
+{% extends 'pages/upskilling/skill_base.html' %}
+{% load static %}
+
+{% block skill_content %}
+
+<div class="container">
+  <div id="sections" class="my-5">
+    
+    <!-- SECTION 1: HTML Basics -->
+    <section class="section card mb-3 p-3">
+      <h2 class="card-title">HTML Basics</h2>
+      <ul class="card-text">
+        <li>🔖 <strong>Tags, Elements, and Attributes</strong></li>
+        <li>🏗️ <strong>Structure:</strong> 
+          <code>&lt;html&gt;</code>, 
+          <code>&lt;head&gt;</code>, 
+          <code>&lt;body&gt;</code>, etc.
+        </li>
+        <li>🔗 <strong>Links, Images, Forms</strong></li>
+        <li>📦 <strong>Semantic HTML:</strong> 
+          <code>&lt;section&gt;</code>, 
+          <code>&lt;article&gt;</code>, 
+          <code>&lt;nav&gt;</code>, 
+          <code>&lt;footer&gt;</code>
+        </li>
+        <li>📐 <strong>Layout techniques:</strong> Flexbox & Grid (used via Tailwind)</li>
+      </ul>
+      <p>Reference: <a href="https://www.w3schools.com/html/" target="_blank">HTML by W3Schools</a></p>
+    </section>
+
+    <!-- SECTION 2: Tailwind CSS -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Tailwind CSS Fundamentals</h2>
+      <ul>
+        <li>🎨 Utility-first CSS framework</li>
+        <li>📏 Responsive design with classes like <code>md:px-4</code>, <code>lg:grid-cols-3</code></li>
+        <li>🔄 Flex/Grid layout using <code>flex</code>, <code>justify-between</code>, <code>grid-cols-2</code>, etc.</li>
+        <li>🌗 Dark Mode Support with <code>dark:bg-gray-900</code></li>
+        <li>💡 Highly customizable via the <code>tailwind.config.js</code></li>
+      </ul>
+      <p>Reference: <a href="https://tailwindcss.com/docs" target="_blank">Tailwind CSS Docs</a></p>
+    </section>
+
+    <!-- SECTION 3: Learning Resources -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Learn HTML & Tailwind</h2>
+      <ul>
+        <li><a href="https://www.w3schools.com/html/" target="_blank">📘 HTML Tutorial – W3Schools</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank">📘 MDN Web Docs – HTML</a></li>
+        <li><a href="https://www.youtube.com/watch?v=UBOj6rqRUME" target="_blank">🎥 Tailwind Crash Course – Traversy Media</a></li>
+        <li><a href="https://www.youtube.com/watch?v=lCxcTsOHrjo" target="_blank">🎥 Tailwind CSS Full Course for Beginners – All-in-One Tutorial</a></li>
+        <li><a href="https://tailwindcss.com/docs" target="_blank">📘 Official Tailwind CSS Docs</a></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="d-flex justify-content-between mb-4">
+    <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
+    <button id="next-button" class="btn btn-primary">Next</button>
+    <form id="finishForm" method="post" action="{% url 'complete_skill' slug='html-tailwind' %}" style="display: none;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">Finish</button>
+    </form>
+      
+  </div>
+
+  <!-- Navigation Script -->
+  <script>
+    let currentIndex = 0;
+    const sections = document.querySelectorAll("#sections .section");
+    const totalCards = sections.length;
+
+    function toggleButtons(index, total) {
+        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+    }
+
+
+    function showSection(index) {
+      sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
+      toggleButtons(index, totalCards);
+    }
+
+    showSection(currentIndex);
+
+    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
+    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+
+  </script>
+
+  <script src="{% static 'skill_navigation.js' %}"></script>
+</div>
+
+{% endblock %}

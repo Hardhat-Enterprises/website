@@ -8,7 +8,12 @@ from django.shortcuts import render, redirect, get_object_or_404
  
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-
+from textblob import TextBlob
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import ExperienceForm
+from .models import Experience
+from django.db.models import Avg, Count
 
 from django.contrib.auth import authenticate, login
 
@@ -61,6 +66,9 @@ from django.core.cache import cache
 from django.shortcuts import redirect
 from django.urls import reverse
 from home.models import Announcement, JobApplication
+from django.http import Http404
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
 
  
 # import os
@@ -117,6 +125,9 @@ from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
 from .models import Passkey
+
+from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
+from .models import AppAttackReport
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -155,8 +166,72 @@ def what_we_do(request):
 
 @login_required
 def profile(request):
-    return render(request, 'pages/profile.html')
- 
+    # Ensure the user has a profile, create it if not
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    # Get student object if exists
+    try:
+        student = Student.objects.get(user=request.user)
+        skill_count = Progress.objects.filter(student=student, completed=True).count()
+    except Student.DoesNotExist:
+        skill_count = 0
+
+    achievement_count = UserChallenge.objects.filter(user=request.user, completed=True).count()
+
+    if request.method == 'POST':
+        if 'save_photo' in request.POST:
+            # Only handle avatar upload
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            u_form = UserUpdateForm(instance=request.user)  # Don't update user fields
+            if p_form.is_valid():
+                # Only save the avatar field
+                profile.avatar = p_form.cleaned_data['avatar']
+                profile.save()
+                messages.success(request, 'Your profile picture has been updated!')
+            else:
+                messages.error(request, 'Failed to update profile picture.')
+            return redirect('profile')
+        else:
+            # Handle profile details update
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+            if u_form.is_valid() and p_form.is_valid():
+                u_form.save()
+                # Save all fields except avatar
+                profile.bio = p_form.cleaned_data['bio']
+                profile.linkedin = p_form.cleaned_data['linkedin']
+                profile.github = p_form.cleaned_data['github']
+                profile.location = p_form.cleaned_data['location']
+                profile.save()
+                messages.success(request, 'Your profile has been updated successfully.')
+            else:
+                messages.error(request, 'Failed to update profile details.')
+            return redirect('profile_details')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+        'skill_count': skill_count,
+        'achievement_count': achievement_count,
+    }
+
+    return render(request, 'pages/profile.html', context)
+
+@login_required
+def profile_details(request):
+    profile = request.user.profile
+    return render(request, 'pages/profile_details.html', {
+        'user': request.user,
+        'profile': profile,
+    })
+
 def blog(request):
     return render(request, 'blog/index.html')
  
@@ -388,12 +463,52 @@ def SearchSuggestions(request):
 
 #Search-Results page
 def SearchResults(request):
-    query = request.POST.get('q', '')  # Get search query from request
+    User = get_user_model()
+    query = request.POST.get('q', '').strip()  # Get search query from request
+    
+    if not query:
+        return render(request, 'pages/search-results.html', {
+            'searched': '',
+            'webpages': [],
+            'projects': [],
+            'courses': [],
+            'skills': [],
+            'articles': [],
+            'users': [],
+            'students': [],
+            'contacts': []
+    })
+
+    # Projects logic
+    if query.lower() == "projects":
+        project_results = Project.objects.all()
+    else:
+        project_results = Project.objects.filter(title__icontains=query)
+
+    # Courses logic
+    if query.lower() == "courses":
+        course_results = Course.objects.all()
+    else:
+        course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
+
+    # Users logic
+    if query.lower() == "user":
+        users = User.objects.filter(id=request.user.id)
+    else:
+        users = User.objects.filter(
+            first_name__icontains=query
+        ) | User.objects.filter(
+            last_name__icontains=query
+        ) | User.objects.filter(
+            email__icontains=query
+        )
+
     results = {
         'searched': query,
         'webpages': Webpage.objects.filter(title__icontains=query),
-        'projects': Project.objects.filter(title__icontains=query),
-        'courses': Course.objects.filter(title__icontains=query),
+        'projects': project_results,
+        'users': users,
+        'courses': course_results,
         'skills': Skill.objects.filter(name__icontains=query),
         'articles': Article.objects.filter(title__icontains=query),
     }
@@ -949,13 +1064,44 @@ def secure_code_review(request):
 @login_required
 def dashboard(request):
     user = request.user
-    try:
-        student = Student.objects.get(user=user)
-    except Student.DoesNotExist:
-        return redirect('/joinus')
-    progress = Progress.objects.filter(student=student)
-    context = {'user': user, 'student': student, 'progress': progress}
-    return render(request, 'pages/dashboard.html', context)
+    student = Student.objects.filter(user=user).first()
+
+    skills = [
+        {'title': 'Docker Basics', 'slug': 'docker-basics'},
+        {'title': 'HTML & Tailwind Styling', 'slug': 'html-tailwind'},
+        {'title': 'Git & GitHub Workflows', 'slug': 'git-github-workflows'},
+        {'title': 'Django', 'slug': 'django'},
+        {'title': 'Secure Code Review', 'slug': 'secure-code-review'},
+    ]
+
+    progress_data = user.upskilling_progress or {}
+
+    completed = in_progress = not_started = 0
+
+    for skill in skills:
+        status = progress_data.get(skill['slug'], 'Not Started')
+        skill['status'] = status
+        if status == 'Completed':
+            completed += 1
+        elif status == 'In Progress':
+            in_progress += 1
+        else:
+            not_started += 1
+
+    total = len(skills)
+    percent = round((completed / total) * 100) if total > 0 else 0
+
+    return render(request, 'pages/dashboard.html', {
+        'user': user,
+        'student': student,
+        'skills': skills,
+        'completed_count': completed,
+        'in_progress_count': in_progress,
+        'not_started_count': not_started,
+        'percent': percent,
+        'total': total,
+    })
+
  
 def update_progress(request, progress_id):
     progress = get_object_or_404(Progress, id=progress_id)
@@ -1071,7 +1217,6 @@ def generate_and_send_passkeys(user):
 
     print(f"DEBUG MODE: Lifetime Passkeys for {user.email}: {passkeys}")  # Debugging
  
- 
 # Blog
 class Index(ListView):
     model = Article
@@ -1101,64 +1246,157 @@ class LikeArticle(View):
         article.save()
         return redirect('detail_article', pk)
  
- 
- 
- 
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
-    template_name = 'pages/upskilling.html'  
- 
+    template_name = 'pages/upskilling.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Retrieve the user's saved upskilling progress from the database
+        progress_data = self.request.user.upskilling_progress or {}
+
+        # Define the list of skills
+        context['skills'] = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': progress_data.get('docker-basics', 'Not Started')
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': progress_data.get('html-tailwind', 'Not Started')
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': progress_data.get('git-github-workflows', 'Not Started')
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': progress_data.get('django', 'Not Started')
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': progress_data.get('secure-code-review', 'Not Started')
+            }
+        ]
+
+        return context
+
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
-            # Get the progress objects for the student
+            student = Student.objects.filter(user=self.request.user).first()
             progress = Progress.objects.filter(student=student)
-            # Return the associated skills
             return [p.skill for p in progress]
         else:
             return self.model.objects.none()
- 
+
+
+
 class UpskillingSkillView(LoginRequiredMixin, DetailView):
     login_url = '/accounts/login/'  
     model = Skill
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
- 
+
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
-            # Check if the progress objects for the student exist
-            if not Progress.objects.filter(student=student).exists():
-                # If not, redirect to the home page
-                return redirect('/')
-            try:
-                # Get the progress associated with the student and the current skill
-                progress = Progress.objects.get(student=student, skill=self.get_object())
-                # If progress does not exist, redirect to home page
-            except Progress.DoesNotExist:
-                return redirect('/')
-        # Otherwise, proceed as usual
+        slug = kwargs.get('slug')
+        progress = request.user.upskilling_progress or {}
+
+        if progress.get(slug) != "Completed":
+            progress[slug] = "In Progress"
+            request.user.upskilling_progress = progress
+            request.user.save()
+
         return super().get(request, *args, **kwargs)
- 
+
     def get_template_names(self):
         return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
- 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
- 
-        if self.request.user.is_authenticated:
-            # Get the student
-            student = Student.objects.get(user=self.request.user)
- 
-            # Get the progress associated with the student and the current skill
-            progress = Progress.objects.get(student=student, skill=self.object)
-            # Add the progress_id to the context
-            context['progress_id'] = progress.id
 
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            if student:
+                progress = Progress.objects.filter(student=student, skill=self.object).first()
+                if progress:
+                    context['progress_id'] = progress.id
 
         return context
 
+    def get_object(self):
+        dummy_skills = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': 'Completed'
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': 'In Progress'
+            }
+        ]
+
+        for skill in dummy_skills:
+            if skill['slug'] == self.kwargs['slug']:
+                return skill
+
+        raise Http404("Skill not found")
+
+
+class MarkSkillCompletedView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        user = request.user
+        progress = user.upskilling_progress or {}
+
+        # Mark the skill as completed
+        progress[slug] = "Completed"
+        user.upskilling_progress = progress
+        user.save()
+
+        return redirect('upskilling')  # send them back to dashboard
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
@@ -1191,6 +1429,15 @@ class UserPasswordResetView(PasswordResetView):
 def vr_join_us(request):
     return projects_join_us(request, 'pages/Vr/join_us.html', 'cybersafe_vr_join_us')
 
+def cyber_threat_simulation(request):
+    return render(request, 'pages/Vr/cyber_threat_simulation.html')
+
+def secure_digital_practices(request):
+    return render(request, 'pages/Vr/secure_digital_practices.html')
+
+def cybersecurity_awareness_reports(request):
+    return render(request, 'pages/Vr/cybersecurity_awareness_reports.html')
+
 def Deakin_Threat_mirror_joinus(request):
     return projects_join_us(request, 'pages/DeakinThreatmirror/join_us.html', 'threat_mirror_join_us')
 
@@ -1215,18 +1462,58 @@ def projects_join_us(request, page_url, page_name):
     print(request)
     return render(request, page_url, {'form': form, 'page_name': page_name})
 
-
 def feedback_view(request):
+    sentiment = None
+    name = None
+    rating = None
+
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('feedback')
+            feedback_obj = form.save(commit=False)
+            feedback_text = form.cleaned_data.get('feedback')
+            name = form.cleaned_data.get('name')
+            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+
+            # 🧠 Sentiment analysis
+            blob = TextBlob(feedback_text)
+            polarity = blob.sentiment.polarity
+
+            if polarity >= 0.1:
+                sentiment = "positive"
+            elif polarity <= -0.1:
+                sentiment = "negative"
+            else:
+                sentiment = "neutral"
+
+            # ⭐️ Save rating if present
+            if rating:
+                feedback_obj.rating = int(rating)
+
+            feedback_obj.save()
+
+            # 📊 Calculate average rating and total number of ratings
+            aggregate = Experience.objects.aggregate(
+                avg=Avg('rating'),
+                count=Count('rating')
+            )
+            average_rating = round(aggregate['avg'] or 0, 1)
+            rating_count = aggregate['count']
+
+            return render(request, 'feedback/thank_you.html', {
+                'name': name,
+                'sentiment': sentiment,
+                'rating': int(rating) if rating else None,
+                'average_rating': average_rating,
+                'rating_count': rating_count
+            })
     else:
         form = ExperienceForm()
 
+    # 📥 Fetch all past feedback
     feedbacks = Experience.objects.all().order_by('-created_at')
-    return render(request, 'feedback.html', {
+
+    return render(request, 'pages/feedback.html', {
         'form': form,
         'feedbacks': feedbacks
     })
@@ -1241,37 +1528,6 @@ def challenge_list(request):
     return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
 
 
-
-@login_required
-def profile(request):
-    # Ensure the user has a profile, create it if not
-    try:
-        profile = request.user.profile
-    except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=request.user)
-
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, 'Your profile has been updated successfully.')
-            # Fetch the updated profile object to ensure it's refreshed
-            profile = request.user.profile
-            return redirect('profile')
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
-
-    context = {
-        'u_form': u_form,
-        'p_form': p_form,
-        'profile': profile,
-    }
-
-    return render(request, 'pages/profile.html', context)
 
 @login_required
 def category_challenges(request, category):
@@ -1378,6 +1634,25 @@ def submit_answer(request, challenge_id):
         user_challenge.completed = is_correct
         user_challenge.score = challenge.points if is_correct else 0
         user_challenge.save()
+        
+        # If challenge is correct, update the leaderboard
+        if is_correct:
+            user_challenge.completed = True
+            user_challenge.score = challenge.points
+            user_challenge.save()
+            # Calculate total points
+            total_points = UserChallenge.objects.filter(
+                user=request.user,
+                challenge__category=challenge.category
+            ).aggregate(Sum('score'))['score__sum'] or 0
+
+            # Update leaderboard
+            leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+                user=request.user,
+                category=challenge.category
+            )
+            leaderboard_entry.total_points = total_points
+            leaderboard_entry.save()
 
         return JsonResponse({
             'is_correct': is_correct,
@@ -1408,13 +1683,29 @@ def blog_list(request):
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
 
-
 def list_careers(request):
     jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
+
+    search = request.GET.get('search', '')
+    job_type = request.GET.get('job_type', '')
+    location = request.GET.get('location', '')
+
+    if search:
+        jobs = jobs.filter(Q(title__icontains=search) | Q(description__icontains=search))
+    if job_type:
+        jobs = jobs.filter(job_type=job_type)
+    if location:
+        jobs = jobs.filter(location=location)
+
     context = {
-        "jobs":jobs
+        "jobs": jobs,
     }
-    return render(request,"careers/career-list.html",context)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "careers/partials/job-listings.html", context)
+    else:
+        return render(request, "careers/career-list.html", context)
+
 
 def career_detail(request,id):
     job = get_object_or_404(Job, id=id)
@@ -1422,6 +1713,20 @@ def career_detail(request,id):
         "job":job
     }
     return render(request,"careers/career-detail.html",context)
+
+def career_discover(request):
+    return render(request, "careers/discover.html")
+
+def internships(request):
+    internships = Job.objects.filter(job_type='internship', closing_date__gte=timezone.now()).order_by('closing_date')
+    context = {
+        "internships": internships
+    }
+    return render(request, "careers/internships.html", context)
+
+# View for Job Alerts Page
+def job_alerts(request):
+    return render(request, "careers/job-alerts.html")
 
 def career_application(request,id):
     job = get_object_or_404(Job, id=id)
@@ -1484,9 +1789,21 @@ class EmailNotificationViewSet(ViewSet):
         return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
-    leaderboard_entry = LeaderBoardTable.objects.order_by('-total_points')[:10]
-    print(leaderboard_entry)
-    return render(request, 'pages/leaderboard.html', {'entries': leaderboard_entry})
+    #Select category to display leaderboard table
+    selected_category = request.GET.get('category', '')
+    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    if selected_category:
+        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
+    else:
+        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
+
+    context = {
+        'entries': leaderboard_entry,
+        'categories': categories,
+        'selected_category': selected_category,
+
+    }
+    return render(request, 'pages/leaderboard.html', context)
 
 def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
@@ -1500,4 +1817,95 @@ def leaderboard_update():
 
             if total_points > 0:
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+
+
+def cyber_quiz(request):
+    """
+    View for the cybersecurity quiz page.
+    """
+    return render(request, 'pages/challenges/quiz.html')
+
+def comphrehensive_reports(request):
+    reports = AppAttackReport.objects.all().order_by('-year')
+    return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
+
+def pen_testing(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('pen-testing')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, '/pen_testing.html', {'form': form})
+
+def secure_code_review(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully.")
+            return redirect('secure-code-review')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
+
+@login_required
+def pen_testing_form_view(request):
+    if request.method == 'POST':
+        form = PenTestingRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('/appattack')
+    else:
+        form = PenTestingRequestForm()
+    return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
+
+@login_required
+def secure_code_review_form_view(request):
+    if request.method == 'POST':
+        form = SecureCodeReviewRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Request submitted successfully!")
+            return redirect('/appattack')
+    else:
+        form = SecureCodeReviewRequestForm()
+    return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        logout(request)
+        messages.success(request, "Your account has been deleted.")
+        return redirect('login') 
+    return HttpResponseNotAllowed(['POST'])
+
+def tools_home(request):
+    return render(request, 'pages/pt_gui/tools/index.html')
+
+def aircrack_view(request):
+    return render(request, 'pages/pt_gui/tools/aircrack/index.html')
+
+def arjun_view(request):
+    return render(request, 'pages/pt_gui/tools/arjun/index.html')
+
+def rainbow_view(request):
+    return render(request, 'pages/pt_gui/tools/rainbowcrack/index.html')
+
+def airbase_view(request):
+    return render(request, 'pages/pt_gui/tools/airbase/index.html')
+
+def amap_view(request):
+    return render(request, 'pages/pt_gui/tools/amap/index.html')
+
+def amass_view(request):
+    return render(request, 'pages/pt_gui/tools/amass/index.html')
+
+def arpaname_view(request):
+    return render(request, 'pages/pt_gui/tools/arpaname/index.html')
 
