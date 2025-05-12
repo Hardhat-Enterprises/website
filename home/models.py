@@ -1,6 +1,5 @@
 import uuid
 
-from django.db.models.deletion import PROTECT
 from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
@@ -54,6 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
+    upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
+
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -76,6 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(_("updated_at"), auto_now=True)
     
     last_activity = models.DateTimeField(null=True, blank=True, default=now)
+
 
     current_session_key = models.CharField(max_length=40, null=True, blank=True)
 
@@ -231,19 +233,19 @@ class Student(AbstractBaseSet):
             "unique": _("A user with that Student ID already exists."),
         },
     )
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="users", blank=False, null=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="users", blank=False, null=False)
     year = models.PositiveIntegerField(blank=True)
     trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
     unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
     course = models.CharField(max_length=10, choices=COURSES, blank=True, null=True)
-    p1 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p1_preferences", null=True, blank=True)
-    p2 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p2_preferences", null=True, blank=True)
-    p3 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p3_preferences", null=True, blank=True)
+    p1 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p1_preferences", null=True, blank=True)
+    p2 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p2_preferences", null=True, blank=True)
+    p3 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p3_preferences", null=True, blank=True)
 
     def clean(self):
         if self.p1 == self.p2 or self.p1 == self.p3 or self.p2 == self.p3:
             raise ValidationError("Project preferences p1, p2, and p3 must be unique.")
-    allocated = models.ForeignKey(Project, on_delete=PROTECT, related_name="allocated", blank=True, null=True)
+    allocated = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="allocated", blank=True, null=True)
     skills = models.ManyToManyField(Skill, through='Progress')
     
     def __str__(self) -> str:
@@ -340,6 +342,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     bio = models.TextField(max_length=500, blank=True, null=True)
+    linkedin = models.URLField(max_length=200, blank=True, null=True)
+    github = models.URLField(max_length=200, blank=True, null=True)
+    # phone = models.CharField(max_length=20, blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -502,7 +508,7 @@ class JobApplication(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     resume = models.FileField(upload_to="resumes/")
-    cover_letter = models.TextField()
+    cover_letter = models.FileField(upload_to="cover_letter/")
     applied_date = models.DateTimeField(auto_now_add=True)
 
 
@@ -515,7 +521,8 @@ class LeaderBoardTable(models.Model):
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
     
-
+    class Meta:
+        ordering = ['-total_points']  
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"

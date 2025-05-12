@@ -145,7 +145,9 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'xss_attempts.log',
         },
+
     },
+
     'loggers': {
         'xss_logger': {
             'handlers': ['xss_file'],
@@ -388,6 +390,12 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
+        'audit_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'audit.log'),
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django': {
@@ -397,6 +405,11 @@ LOGGING = {
         },
         'page_access_logger': {
             'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'audit_logger': {
+            'handlers': ['audit_file'],
             'level': 'INFO',
             'propagate': False,
         },
@@ -420,5 +433,3 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
