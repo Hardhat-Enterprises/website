@@ -1643,13 +1643,29 @@ def blog_list(request):
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
 
-
 def list_careers(request):
     jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
+
+    search = request.GET.get('search', '')
+    job_type = request.GET.get('job_type', '')
+    location = request.GET.get('location', '')
+
+    if search:
+        jobs = jobs.filter(Q(title__icontains=search) | Q(description__icontains=search))
+    if job_type:
+        jobs = jobs.filter(job_type=job_type)
+    if location:
+        jobs = jobs.filter(location=location)
+
     context = {
-        "jobs":jobs
+        "jobs": jobs,
     }
-    return render(request,"careers/career-list.html",context)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "careers/partials/job-listings.html", context)
+    else:
+        return render(request, "careers/career-list.html", context)
+
 
 def career_detail(request,id):
     job = get_object_or_404(Job, id=id)
@@ -1657,6 +1673,20 @@ def career_detail(request,id):
         "job":job
     }
     return render(request,"careers/career-detail.html",context)
+
+def career_discover(request):
+    return render(request, "careers/discover.html")
+
+def internships(request):
+    internships = Job.objects.filter(job_type='internship', closing_date__gte=timezone.now()).order_by('closing_date')
+    context = {
+        "internships": internships
+    }
+    return render(request, "careers/internships.html", context)
+
+# View for Job Alerts Page
+def job_alerts(request):
+    return render(request, "careers/job-alerts.html")
 
 def career_application(request,id):
     job = get_object_or_404(Job, id=id)

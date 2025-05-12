@@ -248,8 +248,28 @@
             </div>
           </li>
 
-          <li class="nav-item">
-            <a href="{% url 'career-list' %}" class="nav-link"> Careers </a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Careers
+            </a>
+            <style>
+              .dropdown-menu {
+                background-color: #212529; 
+              }
+              .dropdown-menu .dropdown-item {
+                color: #ffc107 !important; 
+              }
+              .dropdown-menu .dropdown-item:hover {
+                background-color: #ffc107 !important;  
+                color: #212529 !important;  
+              }
+            </style>
+            <ul class="dropdown-menu" aria-labelledby="careersDropdown">
+              <li><a class="dropdown-item" href="{% url 'career-discover' %}">Discover Hardhat</a></li>
+              <li><a class="dropdown-item" href="{% url 'career-list' %}">All Jobs</a></li>
+              <li><a class="dropdown-item" href="{% url 'internships' %}">Internships</a></li>
+              <li><a class="dropdown-item" href="{% url 'job-alerts' %}">Job Alerts</a></li> 
+            </ul>
           </li>
 
           <li class="nav-item">
