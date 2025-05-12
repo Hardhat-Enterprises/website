@@ -53,6 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
+    upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
+
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -506,7 +508,7 @@ class JobApplication(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     resume = models.FileField(upload_to="resumes/")
-    cover_letter = models.TextField()
+    cover_letter = models.FileField(upload_to="cover_letter/")
     applied_date = models.DateTimeField(auto_now_add=True)
 
 
