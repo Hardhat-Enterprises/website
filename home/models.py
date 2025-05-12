@@ -1,6 +1,5 @@
 import uuid
 
-from django.db.models.deletion import PROTECT
 from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
@@ -234,19 +233,19 @@ class Student(AbstractBaseSet):
             "unique": _("A user with that Student ID already exists."),
         },
     )
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="users", blank=False, null=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="users", blank=False, null=False)
     year = models.PositiveIntegerField(blank=True)
     trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
     unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
     course = models.CharField(max_length=10, choices=COURSES, blank=True, null=True)
-    p1 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p1_preferences", null=True, blank=True)
-    p2 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p2_preferences", null=True, blank=True)
-    p3 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p3_preferences", null=True, blank=True)
+    p1 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p1_preferences", null=True, blank=True)
+    p2 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p2_preferences", null=True, blank=True)
+    p3 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p3_preferences", null=True, blank=True)
 
     def clean(self):
         if self.p1 == self.p2 or self.p1 == self.p3 or self.p2 == self.p3:
             raise ValidationError("Project preferences p1, p2, and p3 must be unique.")
-    allocated = models.ForeignKey(Project, on_delete=PROTECT, related_name="allocated", blank=True, null=True)
+    allocated = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="allocated", blank=True, null=True)
     skills = models.ManyToManyField(Skill, through='Progress')
     
     def __str__(self) -> str:
