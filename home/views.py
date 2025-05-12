@@ -66,6 +66,9 @@ from django.core.cache import cache
 from django.shortcuts import redirect
 from django.urls import reverse
 from home.models import Announcement, JobApplication
+from django.http import Http404
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
 
  
 # import os
@@ -1021,13 +1024,44 @@ def secure_code_review(request):
 @login_required
 def dashboard(request):
     user = request.user
-    try:
-        student = Student.objects.get(user=user)
-    except Student.DoesNotExist:
-        return redirect('/joinus')
-    progress = Progress.objects.filter(student=student)
-    context = {'user': user, 'student': student, 'progress': progress}
-    return render(request, 'pages/dashboard.html', context)
+    student = Student.objects.filter(user=user).first()
+
+    skills = [
+        {'title': 'Docker Basics', 'slug': 'docker-basics'},
+        {'title': 'HTML & Tailwind Styling', 'slug': 'html-tailwind'},
+        {'title': 'Git & GitHub Workflows', 'slug': 'git-github-workflows'},
+        {'title': 'Django', 'slug': 'django'},
+        {'title': 'Secure Code Review', 'slug': 'secure-code-review'},
+    ]
+
+    progress_data = user.upskilling_progress or {}
+
+    completed = in_progress = not_started = 0
+
+    for skill in skills:
+        status = progress_data.get(skill['slug'], 'Not Started')
+        skill['status'] = status
+        if status == 'Completed':
+            completed += 1
+        elif status == 'In Progress':
+            in_progress += 1
+        else:
+            not_started += 1
+
+    total = len(skills)
+    percent = round((completed / total) * 100) if total > 0 else 0
+
+    return render(request, 'pages/dashboard.html', {
+        'user': user,
+        'student': student,
+        'skills': skills,
+        'completed_count': completed,
+        'in_progress_count': in_progress,
+        'not_started_count': not_started,
+        'percent': percent,
+        'total': total,
+    })
+
  
 def update_progress(request, progress_id):
     progress = get_object_or_404(Progress, id=progress_id)
@@ -1172,64 +1206,157 @@ class LikeArticle(View):
         article.save()
         return redirect('detail_article', pk)
  
- 
- 
- 
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
-    template_name = 'pages/upskilling.html'  
- 
+    template_name = 'pages/upskilling.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Retrieve the user's saved upskilling progress from the database
+        progress_data = self.request.user.upskilling_progress or {}
+
+        # Define the list of skills
+        context['skills'] = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': progress_data.get('docker-basics', 'Not Started')
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': progress_data.get('html-tailwind', 'Not Started')
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': progress_data.get('git-github-workflows', 'Not Started')
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': progress_data.get('django', 'Not Started')
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': progress_data.get('secure-code-review', 'Not Started')
+            }
+        ]
+
+        return context
+
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
-            # Get the progress objects for the student
+            student = Student.objects.filter(user=self.request.user).first()
             progress = Progress.objects.filter(student=student)
-            # Return the associated skills
             return [p.skill for p in progress]
         else:
             return self.model.objects.none()
- 
+
+
+
 class UpskillingSkillView(LoginRequiredMixin, DetailView):
     login_url = '/accounts/login/'  
     model = Skill
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
- 
+
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
-            # Check if the progress objects for the student exist
-            if not Progress.objects.filter(student=student).exists():
-                # If not, redirect to the home page
-                return redirect('/')
-            try:
-                # Get the progress associated with the student and the current skill
-                progress = Progress.objects.get(student=student, skill=self.get_object())
-                # If progress does not exist, redirect to home page
-            except Progress.DoesNotExist:
-                return redirect('/')
-        # Otherwise, proceed as usual
+        slug = kwargs.get('slug')
+        progress = request.user.upskilling_progress or {}
+
+        if progress.get(slug) != "Completed":
+            progress[slug] = "In Progress"
+            request.user.upskilling_progress = progress
+            request.user.save()
+
         return super().get(request, *args, **kwargs)
- 
+
     def get_template_names(self):
         return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
- 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
- 
-        if self.request.user.is_authenticated:
-            # Get the student
-            student = Student.objects.get(user=self.request.user)
- 
-            # Get the progress associated with the student and the current skill
-            progress = Progress.objects.get(student=student, skill=self.object)
-            # Add the progress_id to the context
-            context['progress_id'] = progress.id
 
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            if student:
+                progress = Progress.objects.filter(student=student, skill=self.object).first()
+                if progress:
+                    context['progress_id'] = progress.id
 
         return context
 
+    def get_object(self):
+        dummy_skills = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': 'Completed'
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': 'In Progress'
+            }
+        ]
+
+        for skill in dummy_skills:
+            if skill['slug'] == self.kwargs['slug']:
+                return skill
+
+        raise Http404("Skill not found")
+
+
+class MarkSkillCompletedView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        user = request.user
+        progress = user.upskilling_progress or {}
+
+        # Mark the skill as completed
+        progress[slug] = "Completed"
+        user.upskilling_progress = progress
+        user.save()
+
+        return redirect('upskilling')  # send them back to dashboard
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
@@ -1635,7 +1762,7 @@ def pen_testing(request):
             return redirect('pen-testing')
     else:
         form = PenTestingRequestForm()
-    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
+    return render(request, '/pen_testing.html', {'form': form})
 
 def secure_code_review(request):
     if request.method == 'POST':
