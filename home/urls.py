@@ -87,6 +87,7 @@ urlpatterns = [
     path("careers/discover/", career_discover, name="career-discover"),
     
     path('blog/', Index.as_view(), name = 'blog'),
+    # path('blog/<int:pk>/', DetaswilArticleView.as_view(), name='blog_post'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
     
@@ -117,6 +118,7 @@ urlpatterns = [
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),
+    path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),

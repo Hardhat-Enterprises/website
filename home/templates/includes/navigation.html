@@ -272,8 +272,26 @@
             </ul>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'challenge_list' %}">Cyber Challenges</a>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Cyber Challenges
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'challenge_list' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    All Challenges
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'cyber_quiz' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Quiz
+                  </li>
+                </a>
+              </ul>
+            </div>
           </li>
 
         </ul>
@@ -290,11 +308,11 @@
             class="fas fa-sign-out-alt me-2"></span> Logout</a>
 
         <a class="profile-container" href="{% url 'profile' %}">
-          <img
-            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-          <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
-        </a>
+        <img
+          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+        <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
+      </a>
 
         {% else %}
         <div class="sign-up-button-container">

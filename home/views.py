@@ -1779,6 +1779,12 @@ def leaderboard_update():
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
 
 
+def cyber_quiz(request):
+    """
+    View for the cybersecurity quiz page.
+    """
+    return render(request, 'pages/challenges/quiz.html')
+
 def comphrehensive_reports(request):
     reports = AppAttackReport.objects.all().order_by('-year')
     return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
