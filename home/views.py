@@ -586,6 +586,21 @@ class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
     
+    def form_valid(self, form):
+        # Force new session to rotate session key (prevents fixation)
+        self.request.session.flush()  # <-- This destroys old session
+        
+        # Successful login, proceed as normal
+        response = super().form_valid(form)
+
+        # Store session info for hijack protection
+        request = self.request
+        request.session['ip_address'] = self.get_client_ip(request)
+        request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+        request.session['session_token'] = request.session.session_key
+
+        return response
+
     def form_invalid(self, form):
         # Increment the failed login attempts
         failed_attempts = cache.get('failed_login_attempts', 0) + 1
@@ -600,6 +615,13 @@ class UserLoginView(LoginView):
             return redirect(reverse('rate_limit_exceeded'))  # Redirect to a rate limit exceeded page
 
         return super().form_invalid(form)
+
+def get_client_ip(self, request):
+        """Helper method to get client IP address."""
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            return x_forwarded_for.split(',')[0]
+        return request.META.get('REMOTE_ADDR')
 
 def rate_limit_exceeded(request):
     remaining_time = 60  # Use the helper function
