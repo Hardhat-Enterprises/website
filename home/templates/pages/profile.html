@@ -104,11 +104,19 @@
                 </div>
               </div>
             </div>
-
-            <div class="d-flex justify-content-end">
-              <button type="submit" class="btn btn-dark px-4">Update Profile</button>
+            <div class="d-flex justify-content-between align-items-center">
+              <button type="submit" class="btn btn-dark px-4">
+              Update Profile
+              </button>
+              </form>
+              <form action="{% url 'delete-account' %}" method="post" class="m-0" onsubmit="return confirmDelete();">
+                {% csrf_token %}
+                <button type="button" class="btn btn-outline-danger px-4" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
+                  Delete My Account
+                </button>
+              </form>
             </div>
-          </form>
+
         </div>
       </div>
     </div>
@@ -512,4 +520,29 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="deleteConfirmModalLabel">Confirm Deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your account? This action cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="{% url 'delete-account' %}" method="post" class="m-0">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Bootstrap JS (for modal to work) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 {% endblock %}

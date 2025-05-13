@@ -1,0 +1,191 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<style>
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.stats-container p {
+  flex: 1;
+  background-color: #ffcd11;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.charts-row {
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.chart-box {
+  flex: 1;
+  min-width: 350px;
+  max-width: 600px;
+}
+
+</style>
+<!--Block Row -->
+ 
+<div class="stats-container">
+  <p>Total Users: {{ total_users }}</p>
+  <p>Total Feedback: {{ total_feedback }}</p>
+  <p>Total Cyber Challenges: {{ total_challenges }}</p>
+  <p>Total Results In CyberChallenge Dashboard: {{ total_dashboard }}</p>
+</div>
+
+<!-- Charts Row -->
+<div class="charts-row">
+  <!-- Feedback Chart-->
+  <div class="chart-box">
+    <canvas id="experienceChart" width="400" height="400"></canvas>
+    <span id="feedback_labels" style="display: none;">{{ feedback_labels|safe }}</span>
+    <span id="feedback_data" style="display: none;">{{ feedback_data|safe }}</span>
+  </div>
+
+  <!--Questions per Category in CyberChallenge Chart -->
+  <div class="chart-box">
+    <canvas id="questionsChart" width="800" height="200"></canvas>
+    <span id="count_network" style="display: none;">{{ total_question_in_each_category.network }}</span>
+    <span id="count_web" style="display: none;">{{ total_question_in_each_category.web }}</span>
+    <span id="count_crypto" style="display: none;">{{ total_question_in_each_category.crypto }}</span>
+    <span id="count_general" style="display: none;">{{ total_question_in_each_category.general }}</span>
+  </div>
+  <!-- User Registrations Over Time Chart -->
+  <div class="chart-box">
+    <canvas id="userRegistrationsChart" width="400" height="400"></canvas>
+    <span id="user_labels" style="display: none;">{{ user_labels }}</span>
+    <span id="user_registration" style="display: none;">{{ user_registration }}</span>
+  </div>
+</div>
+
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // const totalChallenges = parseInt(document.getElementById("total_challenges").textContent.trim()) || 0;
+
+  // Feedback Chart
+  const feedback_labels = JSON.parse(document.getElementById('feedback_labels').textContent); 
+  const feedback_data = JSON.parse(document.getElementById('feedback_data').textContent);
+
+  new Chart(document.getElementById('experienceChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: feedback_labels,
+      datasets: [{
+        label: 'Number of feedbacks',
+        data: feedback_data,
+        backgroundColor: '#4CAF50',
+        borderRadius: 5
+      }]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Numbers of feedback receive in this week'
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+          callback: function(value) {
+            if (Number.isInteger(value)) {
+              return value;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Questions per Category Chart
+  // prepare data
+  const network = parseInt(document.getElementById('count_network').textContent.trim()) || 0;
+  const web = parseInt(document.getElementById('count_web').textContent.trim()) || 0;
+  const crypto = parseInt(document.getElementById('count_crypto').textContent.trim()) || 0;
+  const general = parseInt(document.getElementById('count_general').textContent.trim()) || 0;
+
+  // console.log(totalChallenges )
+  // const chartData = [{totalChallenges}, 15, 7, 12];
+  new Chart(document.getElementById('questionsChart').getContext('2d'), {
+    type: 'pie',
+    data: {
+      labels: ['Network Security', 'Web Application', 'Cryptography', 'General Knowledge'], // Example categories
+      datasets: [{
+        label: 'Total Questions',
+        data: [network, web, crypto, general],
+        backgroundColor: ['#2196F3', '#FFC107', '#4CAF50', '#E91E63'],
+        borderRadius: 5
+      }]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Questions per Challenge Category'
+        }
+      }
+    }
+  });
+
+  // User Registrations Over Time - Line Chart
+  const user_labels = parseInt(document.getElementById('user_labels').textContent); 
+  const user_registration = parseInt(document.getElementById('user_registration').textContent);    // Use the 'data' context passed from the view
+  
+  new Chart(document.getElementById('userRegistrationsChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: user_labels, // Use the labels for the x-axis
+      datasets: [{
+        label: 'User Registrations',
+        data: user_registration,     // Use the data for the y-axis
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'User Registrations Over Time'
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Date'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Users'
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}
