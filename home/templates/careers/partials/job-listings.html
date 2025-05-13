@@ -1,0 +1,26 @@
+<div id="job-listings" class="row">
+    {% if jobs %}
+      {% for job in jobs %}
+        <div class="col-md-6 mb-4">
+          <div class="card career-card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ job.title }}</h5>
+              <p>
+                <span class="badge badge-jobtype">{{ job.get_job_type_display }}</span>
+                <span class="badge badge-location">{{ job.location }}</span>
+              </p>
+              <p class="closing-text mb-1">Closing: {{ job.closing_date }}</p>
+              <a href="{% url 'career-detail' job.id %}" class="btn btn-view btn-sm mt-2">View Details</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+    <div class="text-center my-5">
+      <div style="font-size: 2rem;">🥺</div>
+      <h5 class="mt-2" style="color: var(--text-color, #ffffff);">No jobs found.</h5>
+      <p style="color: var(--text-color, #ffffff);">Try adjusting the filters or check back later.</p>
+    </div>
+    {% endif %}
+  </div>
+  

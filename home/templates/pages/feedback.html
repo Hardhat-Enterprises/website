@@ -13,7 +13,11 @@
         <p>Please provide your experiences with our company.</p>
 
         <form method="post" action="{% url 'feedback' %}" class="card" id="feedback-form">
-         {% if messages %}
+
+
+        
+        {% if messages %}
+
             {% for message in messages %}
                 <p style="color: green;">{{ message }}</p>
             {% endfor %}
