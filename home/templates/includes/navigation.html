@@ -130,22 +130,28 @@
           </div>
         </div>
 
-        <form class="position-relative Search-container mobile-search-bar" method=POST
-          action="{% url 'pages/search-results'%}">
-          {% csrf_token %}
-          <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-          <button class="search-btn" type="submit">
-            <i class="fas fa-search search-icon"></i>
-          </button>
+          <form class="mobile-search-bar" 
+                method="POST" 
+                action="{% url 'pages/search-results' %}">
+            {% csrf_token %}
+            <input class="form-control search-box-mobile" 
+                   type="search" 
+                   id="mobileSearchInput" 
+                   name="q" 
+                   placeholder="Search..." 
+                   aria-label="Search" 
+                   autocomplete="off">
+            <button class="search-btn-mobile" type="submit">
+              <i class="fas fa-search search-icon"></i>
+            </button>
+          </form>
+          <div class="mobile-result-box d-none"></div>
+ 
 
-
-          <div id="suggestions" class="dropdown-content"></div>
-        </form>
         <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
           <li class="nav-item">
             <a href="{% url 'index' %}" class="nav-link"> Home </a>
           </li>
-
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
@@ -294,12 +300,31 @@
             </div>
           </li>
 
+          
+          <div class="search-container position-relative">
+            <form class="desktop-search-bar" 
+                  method="POST" 
+                  action="{% url 'pages/search-results' %}">
+              {% csrf_token %}
+              <input class="form-control me-4 search-box" 
+                     type="search" 
+                     id="searchInput" 
+                     name="q" 
+                     placeholder="Search..." 
+                     aria-label="Search" 
+                     autocomplete="off">
+              <button class="search-btn" type="submit">
+                <div><i class="fas fa-search search-icon"></i></div>
+              </button>
+            </form>
+            <div class="result-box d-none"></div>
+          </div>       
+
         </ul>
 
-
-        {% comment %} <!--action="{% url 'pages/search-results'%}"--> {% endcomment %}
-
       </div>
+
+
       <div class="d-flex align-items-center justify-content-center">
         {% if request.user.is_authenticated %}
 
@@ -317,19 +342,6 @@
         {% else %}
         <div class="sign-up-button-container">
 
-
-          <form class="position-relative Search-container desktop-search-bar" method=POST
-            action="{% url 'pages/search-results'%}">
-            {% csrf_token %}
-            <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-            <button class="search-btn" type="submit">
-              <div>
-                <i class="fas fa-search search-icon"></i>
-              </div>
-            </button>
-
-            <div id="suggestions" class="dropdown-content"></div>
-          </form>
           {% endif %}
 
           <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
@@ -406,3 +418,4 @@
   </nav>
 </header>
 <script src="{% static 'js/toggles.js' %}"></script>
+<script src="{% static 'js/search_suggestions.js' %}"></script>

@@ -6,6 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, rate_limit_exceeded
+from .views import delete_account
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
@@ -133,7 +134,7 @@ urlpatterns = [
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
  
-
+    
 
     #swagger-new-implementation
     path('api-models/', APIModelListView.as_view(), name='api-models'),
@@ -147,11 +148,11 @@ urlpatterns = [
     path("appattack/pen-testing/", views.pen_testing, name="pen-testing"),
     path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
-    path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form')
+    path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
+    path('account/delete/', delete_account, name='delete-account')
 
-
-
+    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
