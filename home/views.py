@@ -692,6 +692,14 @@ def login_with_passkey(request):
             if Passkey.objects.filter(user=user, key=passkey).exists():
                 request.session['pending_user_id'] = user.id  # Store user ID temporarily
                 login(request, user)
+
+                # Save IP and browser info when logging in with passkey
+                user.last_login_ip = get_client_ip(request)
+                user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
+                print("Tracked login IP:", user.last_login_ip)
+                print("Tracked browser:", user.last_login_browser)
+                user.save(update_fields=['last_login_ip', 'last_login_browser'])
+
                 messages.success(request, "Passkey verified! Please complete CAPTCHA verification.")
                 request.session['is_otp_verified'] = True  # Mark OTP as verified
                 return redirect("/")
@@ -919,6 +927,27 @@ def post_otp_login_captcha(request):
 
     return render(request, 'accounts/post_otp_captcha.html', {'form': form})
 
+def get_client_ip(request):
+    # Using x_forwarded_for allows for proxy bypass to give the true IP of a user
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+def login_with_tracking(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+
+            # Save IP and browser info when logging in with OTP
+            user.last_login_ip = get_client_ip(request)
+            user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
+            user.save(update_fields=['last_login_ip', 'last_login_browser'])
+            return redirect('home')
+    return render(request, 'accounts/sign-in.html')
 
 # Email Verification 
 # def verify_email(request, first_name):

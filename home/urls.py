@@ -134,7 +134,7 @@ urlpatterns = [
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
  
-
+    
 
     #swagger-new-implementation
     path('api-models/', APIModelListView.as_view(), name='api-models'),
@@ -152,7 +152,7 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account')
 
-
+    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
