@@ -1,17 +1,23 @@
 from django.urls import include, path
 
 from django.contrib import admin
+
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback, policy_deployment
+
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts,career_detail,career_application, feedback_view, delete_feedback, career_discover
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, rate_limit_exceeded
+from .views import delete_account
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
 from .views import AnalyticsAPI
 from .views import UserManagementAPI, EmailNotificationViewSet
+from .views import MarkSkillCompletedView
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
@@ -31,6 +37,14 @@ urlpatterns = [
     path('ptgui_viz/contact-us/', views.ptgui_contact_us, name='ptgui_contact-us'),
     path('maintenance', views.http_503, name='maintenance'),
     path('ptgui_viz/faq/', views.faq, name='faq'),
+    path('ptgui_viz/tools/', views.tools_home, name='ptgui_tools_home'),
+    path('ptgui_viz/tools/aircrack/', views.aircrack_view, name='tool_aircrack'),
+    path('ptgui_viz/tools/arjun/', views.arjun_view, name='tool_arjun'),
+    path('ptgui_viz/tools/rainbowcrack/', views.rainbow_view, name='tool_rainbowcrack'),
+    path('ptgui_viz/tools/airbase/', views.airbase_view, name='tool_airbase'),
+    path('ptgui_viz/tools/amap/', views.amap_view, name='tool_amap'),
+    path('ptgui_viz/tools/amass/', views.amass_view, name='tool_amass'),
+    path('ptgui_viz/tools/arpaname/', views.arpaname_view, name='tool_arpaname'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
     #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
     path('upskilling/', UpskillingView.as_view(), name='upskilling'),
@@ -43,6 +57,7 @@ urlpatterns = [
     path('deakinThreatmirror/join_us', views.Deakin_Threat_mirror_joinus, name='threat_mirror_join_us'),
     path('vr/', views.Vr_main, name='Vr_main'),
     path('vr/join_us', views.vr_join_us, name='cybersafe_vr_join_us'),
+    path('upskilling/complete/<slug:slug>/', MarkSkillCompletedView.as_view(), name='complete_skill'),
     # path('contact-central/', views.Contact_central, name='contact-central'),
     path('accounts/password-reset/', views.UserPasswordResetView.as_view(), name='password_reset'),
     path('accounts/password-reset-confirm/<uidb64>/<token>/', views.UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
@@ -73,8 +88,12 @@ urlpatterns = [
     path("careers/", list_careers , name="career-list"),
     path("careers/<int:id>/", career_detail , name="career-detail"),
     path("careers/<int:id>/apply", career_application , name="career-application"),
+    path("careers/internships/", internships, name="internships"),
+    path("careers/job-alerts/", job_alerts, name="job-alerts"),
+    path("careers/discover/", career_discover, name="career-discover"),
     
     path('blog/', Index.as_view(), name = 'blog'),
+    # path('blog/<int:pk>/', DetaswilArticleView.as_view(), name='blog_post'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
     path('<int:pk>/like', LikeArticle.as_view(), name='like_article'),
     
@@ -105,6 +124,7 @@ urlpatterns = [
 
 
     path('challenges/', views.challenge_list, name='challenge_list'),
+    path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
@@ -119,7 +139,7 @@ urlpatterns = [
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
  
-
+    
 
     #swagger-new-implementation
     path('api-models/', APIModelListView.as_view(), name='api-models'),
@@ -134,7 +154,9 @@ urlpatterns = [
     path("appattack/pen-testing/", views.pen_testing, name="pen-testing"),
     path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
-    path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form')
+    path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
+
+    path('account/delete/', delete_account, name='delete-account')
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

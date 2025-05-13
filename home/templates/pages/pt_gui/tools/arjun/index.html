@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arjun Tool</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #2e2e2e;
+      border-bottom: 2px solid #444;
+    }
+
+    .tab {
+      cursor: pointer;
+      color: #ccc;
+      padding: 0.5rem 1rem;
+      text-align: center;
+    }
+
+    .tab:hover {
+      color: #fff;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    .container {
+      display: none;
+    }
+
+    input#tab1:checked ~ #guide,
+    input#tab2:checked ~ #configuration,
+    input#tab3:checked ~ #output {
+      display: block;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #2e2e2e;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    input[type="checkbox"] {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 4px;
+      border: none;
+      background-color: #444;
+      color: #fff;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    .btn {
+      margin-top: 1rem;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      background-color: #007acc;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #005fa3;
+    }
+
+    .output-console {
+      margin-top: 2rem;
+      background-color: #1a1a1a;
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 1rem;
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .console-text {
+      background-color: #1a1a1a;
+      color: #00ff00;
+      font-family: monospace;
+      font-size: 0.9rem;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding: 0.5rem;
+      border: 1px solid #333;
+    }
+
+    .clear-btn {
+      background: none;
+      color: #ccc;
+      border: 1px solid #555;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      background-color: #333;
+    }
+
+    .save-section {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .saved-status {
+      color: #00cc00;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: 1px solid #555;
+    }
+  </style>
+</head>
+<div style="padding: 20px; text-align: center;">
+  <a href="/" style="
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+  " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+    Redirect to Website
+  </a>
+</div>
+
+<body>
+
+  <div class="navbar">
+    <label for="tab1" class="tab">User Guide</label>
+    <label for="tab2" class="tab">Configuration</label>
+    <label for="tab3" class="tab">Output</label>
+  </div>
+
+  <input type="radio" id="tab1" name="tab" checked>
+  <input type="radio" id="tab2" name="tab">
+  <input type="radio" id="tab3" name="tab">
+
+  <!-- User Guide -->
+  <div class="container" id="guide">
+    <h1>What is Arjun?</h1>
+    <p>Arjun is a command-line tool that helps you discover GET and POST parameters by fuzzing endpoints. It's ideal for recon during web application testing.</p>
+    <pre>
+Step 1: Enter a valid URL, e.g. https://www.deakin.edu.au.
+Step 2: Toggle Stability Mode if needed.
+Step 3: Click the Scan button.
+Step 4: View your output in the Output tab.
+    </pre>
+  </div>
+
+  <!-- Configuration -->
+  <div class="container" id="configuration">
+    <h1>Arjun Tool Configuration</h1>
+    <form onsubmit="simulateScan(event)">
+      <label for="url">Target URL</label>
+      <input type="text" id="url" placeholder="https://www.example.com" required />
+
+      <label>
+        <input type="checkbox" id="stability" />
+        Stability Mode
+      </label>
+
+      <label for="outputFile">Output Filename (optional)</label>
+      <input type="text" id="outputFile" placeholder="results.json" />
+
+      <button type="submit" class="btn">Scan</button>
+    </form>
+  </div>
+
+  <!-- Output -->
+  <div class="container" id="output">
+    <h1>Scan Output</h1>
+
+    <div class="output-console">
+      <div class="console-header">
+        <span>Console Output</span>
+        <button class="clear-btn" onclick="clearConsole()">Clear</button>
+      </div>
+      <pre class="console-text" id="console-text">[output will appear here]</pre>
+    </div>
+
+    <div class="save-section">
+      <button class="btn save-btn" onclick="saveOutput()">Save Output</button>
+      <span class="saved-status" id="saved-status">Output saved successfully!</span>
+    </div>
+
+    <hr />
+
+    <h2>Example Pseudo Output</h2>
+    <pre class="console-text">
+[Arjun v1.6.2] Targeting: https://example.com/page.php
+
+[+] Using 25,890 parameters from default dictionary.
+[+] Stability Mode: Off
+[+] Threads: 10
+
+Found parameters:
+  - https://example.com/page.php?user=
+  - https://example.com/page.php?id=
+  - https://example.com/page.php?token=
+  - https://example.com/page.php?redirect=
+  - https://example.com/page.php?debug=
+
+Scan Duration: 7.23 seconds
+Total Requests Sent: 31
+Valid Parameters Found: 5
+
+[✔] Scan Complete.
+    </pre>
+  </div>
+
+  <script>
+    function simulateScan(event) {
+      event.preventDefault();
+      const url = document.getElementById("url").value;
+      const stability = document.getElementById("stability").checked ? "On" : "Off";
+      const output = `
+[Arjun v1.6.2] Targeting: ${url}
+
+[+] Using 25,890 parameters from default dictionary.
+[+] Stability Mode: ${stability}
+[+] Threads: 10
+
+Found parameters:
+  - ${url}?user=
+  - ${url}?id=
+  - ${url}?token=
+  - ${url}?redirect=
+  - ${url}?debug=
+
+Scan Duration: 5.42 seconds
+Total Requests Sent: 27
+Valid Parameters Found: 5
+
+[✔] Scan Complete.
+`;
+      document.getElementById("tab3").checked = true;
+      document.getElementById("console-text").textContent = output;
+    }
+
+    function clearConsole() {
+      document.getElementById("console-text").textContent = "[output will appear here]";
+    }
+
+    function saveOutput() {
+      const status = document.getElementById("saved-status");
+      status.style.display = "inline";
+      setTimeout(() => status.style.display = "none", 3000);
+    }
+  </script>
+
+</body>
+</html>
