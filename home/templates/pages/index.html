@@ -20,10 +20,12 @@
     <div class="container col-xxl-8 px-4 py-5">
       <div class="row flex-lg-row-reverse align-items-center g-5 py-5 mobile-heading">
         <div class="col-10 col-sm-8 col-lg-6">
+
           <img src="{% static 'assets/img/pages/home/hero-image.svg' %}" alt="Hardhat Enterprises cybersecurity tools illustration" loading="lazy">
+
         </div>
         <div class="col-lg-6" style="position: relative; z-index: 99;">
-          <h1 class="fw-bolder display-1 text-center-head">Hardhat Enterprises</h1>
+          <h1 class="fw-bolder display-1 text-center-head blink-animation">Hardhat Enterprises</h1>
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">Security is a necessity. Not a choice</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">Explore Projects</a>
@@ -31,12 +33,14 @@
           </div>
         </div>
       </div>
+
       <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
         <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
           <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
         </svg>
       </figure>
     </div>
+
   </section>
 
   <!-- Vision and Mission (Reverted to Original) -->
@@ -115,6 +119,7 @@
   <!-- Projects -->
   <section id="projects" class="section section-lg bg-tertiary">
     <div class="container">
+
       <h2 class="fw-bolder display-2 text-center mb-lg-2">Our Cybersecurity Projects</h2>
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <div class="col">
@@ -198,17 +203,72 @@
               <a href="{% url 'malware_viz_main' %}">
                 <div class="btn btn-secondary mt-auto">Learn More</div>
               </a>
+
             </div>
           </div>
+          <!-- End Project Cards -->
         </div>
+        <button class="slider-btn prev">&#10094;</button>
+        <button class="slider-btn next">&#10095;</button>
       </div>
     </div>
+
     <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
       <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
         <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
       </svg>
     </figure>
+
   </section>
+
+    <!-- News Section -->
+    <section id="news" class="section section-lg">
+      <div class="container">
+        <h2 class="fw-bolder display-4 text-center mb-5">Cybersecurity News</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <!-- News Card 1 -->
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
+              <img src="{% static 'assets/img/pages/News/img.jpg' %}" class="card-img-top img-fluid rounded-top" alt="TROX Stealer Malware">
+              <div class="card-body d-flex flex-column rounded-bottom">
+                <h5 class="card-title">TROX Stealer Malware Spreads via Fake Updates</h5>
+                <p class="card-text">A new wave of cyberattacks spreads malware through fake software update alerts targeting unsuspecting users globally.</p>
+                <a href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+          <!-- News Card 2 -->
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
+              <img src="{% static 'assets/img/pages/News/imgg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="AI in Cybersecurity">
+              <div class="card-body d-flex flex-column rounded-bottom">
+                <h5 class="card-title">AI Shaping the Future of Cyber Defense</h5>
+                <p class="card-text">Experts explore how artificial intelligence is transforming threat detection and proactive cybersecurity measures worldwide.</p>
+                <a href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+          <!-- News Card 3 -->
+          <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-3">
+              <img src="{% static 'assets/img/pages/News/imggg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="Zero Trust Model">
+              <div class="card-body d-flex flex-column rounded-bottom">
+                <h5 class="card-title">Zero Trust Security: Why It Matters in 2025</h5>
+                <p class="card-text">With rising remote work trends, the zero-trust model becomes essential in securing networks beyond traditional perimeters.</p>
+                <a href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>
+        #news .card-body {
+          background-color: #ffcd11;
+        }
+      </style>
+    </section>
+    
+  
 
   {% if show_announcement %}
   <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
@@ -229,6 +289,7 @@
   </div>
   {% endif %}
 
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       console.log("DOM fully loaded");
@@ -239,5 +300,6 @@
       }, 3000);
     });
   </script>
+
 </main>
 {% endblock content %}
