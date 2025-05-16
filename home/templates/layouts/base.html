@@ -79,6 +79,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRP6y3b0BYU7QjZh3p79Dww0EWwrckaBtdvzwfxn5" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGFf6EErR3vvDQT1bII5Q1YXEfzY51T3bhQXA3+0hruQ" crossorigin="anonymous"></script>
     <link type="text/css" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    
+    <!-- Chatbot CSS -->
+    <link type="text/css" href="{% static 'css/chatbot.css' %}" rel="stylesheet">
 
     <style>
       .password-input-container {
@@ -326,31 +329,29 @@
   
   {% endblock header %}
 
+  <!-- Chatbot components -->
   <div id="chat-button">
-    <button id="chatOpenButton">💬 Chat with us</button>
+    <button id="chatOpenButton">💬 Chat with Hardhat Assistant</button>
   </div>
   
   <div id="chat-popup" class="hidden">
     <div class="chat-header">
-      <span class="chat-title">Let's chat?</span>
+      <span class="chat-title">Hardhat Assistant</span>
       <button id="chatCloseButton" class="CloseButton">x</button>
     </div>
     <div class="chat-body">
-      <form id="chatForm">
-        <div class="chat-text">Please fill out the form below to start chatting with the next available agent.</div>
-      <div class="chat-div">
-        <input type="text" class="chatInput" id="userName" name="userName" placeholder="Enter your name" required /> 
-        <input type="email" class="chatInput" id="userEmail" name="userEmail" placeholder="Enter your email" required />
-        <textarea id="userMessage" class="chatInput chat-textarea" name="userMessage" placeholder="Type your message..." rows="4" required></textarea>
-        <div class="buttonChat">
-         <button class="chatSubmit" type="submit">Submit</button>
-        </div>
+      <div class="connection-status connecting" id="connection-status">
+        Connecting to Hardhat Assistant...
       </div>
-  
-      </form>
+      <div class="chat-box" id="chat-box">
+        <!-- Messages will be added here dynamically -->
+      </div>
+      <div class="input-container">
+        <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+        <button id="send-button" class="chat-button">Send</button>
+      </div>
     </div>
   </div>
-  
 
   {% block content %}{% endblock content %}
 
@@ -402,40 +403,7 @@ crossorigin="anonymous"></script>
 <script src="{% static 'js/last-viewed.js' %}" defer></script>
 <script src="{% static 'js/visit-counter.js' %}" defer></script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const chatPopup = document.getElementById("chat-popup");
-    const chatOpenButton = document.getElementById("chatOpenButton");
-    const chatCloseButton = document.getElementById("chatCloseButton");
-    const chatForm = document.getElementById("chatForm");
-  
-    // Open the chat popup
-    chatOpenButton.addEventListener("click", function () {
-      chatPopup.classList.remove("hidden");
-    });
-  
-    // Close the chat popup
-    chatCloseButton.addEventListener("click", function () {
-      chatPopup.classList.add("hidden");
-    });
-
-    chatForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById("userName").value;
-    const email = document.getElementById("userEmail").value;
-    const message = document.getElementById("userMessage").value;
-
-    // Clear form fields
-    chatForm.reset();
-
-    // Close the popup after submission
-    chatPopup.classList.add("hidden");
-
-    // You can add logic here to send the form data to a server
-  });
-  });
-</script>
+<!-- Chatbot JavaScript --><script src="{% static 'js/chatbot.js' %}"></script>
 </body>
 
 </html>

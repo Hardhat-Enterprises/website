@@ -1,0 +1,92 @@
+{# Chat Response Templates #}
+
+{# Template for Cyber Challenge response #}
+{% macro cyber_challenge(title, category, points, difficulty, description, question="", choices={}, correct_answer="", explanation="") %}
+⸻
+📘 {{ title }}
+{{ description }}
+🔑 Category: {{ category }}
+{% if difficulty == 'easy' %}
+🟩 Difficulty: Easy
+{% elif difficulty == 'medium' %}
+🟨 Difficulty: Medium
+{% else %}
+🟥 Difficulty: Hard
+{% endif %}
+{% if points %}🔥 Points: {{ points }}{% endif %}
+⸻
+{% endmacro %}
+
+{# Template for Announcement #}
+{% macro announcement(message, isActive, created_at) %}
+📢 Announcement:
+{{ message }}
+{% if isActive %}
+Status: Active
+{% else %}
+Status: Inactive
+{% endif %}
+Date: {{ created_at }}
+{% endmacro %}
+
+{# Template for Article #}
+{% macro article(title, date, author, featured, likes, content) %}
+⸻
+📝 {{ title }}
+{{ content }}
+✍️ Author: {{ author }}
+📅 Date: {{ date }}
+{% if featured %}⭐ Featured Article{% endif %}
+👍 {{ likes }} likes
+⸻
+{% endmacro %}
+
+{# Template for Contact #}
+{% macro contact(name, email, message) %}
+👤 {{ name }}
+📧 {{ email }}
+💬 {{ message }}
+{% endmacro %}
+
+{# Template for Course #}
+{% macro course(title, code, is_postgraduate) %}
+⸻
+📚 {{ title }}
+🔢 Course Code: {{ code }}
+{% if is_postgraduate %}
+🎓 Level: Postgraduate
+{% else %}
+🎓 Level: Undergraduate
+{% endif %}
+⸻
+{% endmacro %}
+
+{# Template for Job #}
+{% macro job(title, location, posted_date, closing_date, job_type, description) %}
+⸻
+💼 {{ title }}
+📍 Location: {{ location }}
+🕒 Job Type: {{ job_type }}
+{{ description }}
+📅 Posted: {{ posted_date }}
+⏰ Closing: {{ closing_date }}
+⸻
+{% endmacro %}
+
+{# Template for Project #}
+{% macro project(title, id) %}
+🛠️ {{ title }} (ID: {{ id }})
+{% endmacro %}
+
+{# Template for Skill #}
+{% macro skill(name, description, slug) %}
+✨ {{ name }}
+{{ description }}
+{% endmacro %}
+
+{# Template for Webpage #}
+{% macro webpage(title, url, id) %}
+🌐 {{ title }}
+🔗 URL: {{ url }}
+ID: {{ id }}
+{% endmacro %} 
