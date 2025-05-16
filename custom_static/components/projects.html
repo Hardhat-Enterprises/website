@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/projects.css">
+    <title>Projects</title>
+</head>
+<body>
+    <section class="projects-section">
+        <div class="projects-grid">
+            <!-- Initial visible projects -->
+            <div class="project-card">
+                <h3>AppAttack</h3>
+                <p>We deliver targeted mobile reports by deep scanning and analyzing vulnerabilities to achieve scale security. Built to automate security assessments for thousands of mobile applications.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+
+            <div class="project-card">
+                <h3>PT-GLB</h3>
+                <p>Introducing the "Profile Generator System (PGS)" - a smart AI-based profile generation system for modern penetration testing. Automate profile creation with AI-ML and NLP techniques.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+
+            <div class="project-card">
+                <h3>CyberSafe VR</h3>
+                <p>Deploy CyberSafe VR visualization environment for testing using interactive VR technology to identify security gaps in virtual environments before deployment.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+
+            <!-- Hidden projects (initially hidden) -->
+            <div class="project-card hidden-project">
+                <h3>Security Detection</h3>
+                <p>Spotting attackers aims to develop an innovative detection app for real-time monitoring and threat analysis using advanced ML algorithms.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+
+            <div class="project-card hidden-project">
+                <h3>Threat Hunter</h3>
+                <p>Threat Hunter aims to revolutionize cyber threat intelligence by leveraging AI and machine learning for automated threat detection and response.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+
+            <div class="project-card hidden-project">
+                <h3>Network Visualization</h3>
+                <p>The Network Visualization project enables a user-friendly tool that helps security teams understand complex network topologies through interactive visualization.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+
+            <div class="project-card hidden-project">
+                <h3>AI Security Guardian</h3>
+                <p>An advanced AI-powered security monitoring system that provides real-time threat detection and automated response capabilities.</p>
+                <a href="#" class="learn-more-btn">Learn More</a>
+            </div>
+        </div>
+
+        <div class="show-more-container">
+            <button class="show-more-btn">Show More Projects</button>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showMoreBtn = document.querySelector('.show-more-btn');
+            const hiddenProjects = document.querySelectorAll('.hidden-project');
+            let isExpanded = false;
+
+            showMoreBtn.addEventListener('click', function() {
+                if (!isExpanded) {
+                    hiddenProjects.forEach(project => {
+                        project.classList.add('visible');
+                        project.classList.remove('hidden-project');
+                    });
+                    showMoreBtn.textContent = 'Show Less';
+                } else {
+                    hiddenProjects.forEach(project => {
+                        project.classList.remove('visible');
+                        project.classList.add('hidden-project');
+                    });
+                    showMoreBtn.textContent = 'Show More Projects';
+                }
+                isExpanded = !isExpanded;
+            });
+        });
+    </script>
+</body>
+</html> 

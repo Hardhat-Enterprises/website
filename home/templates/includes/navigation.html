@@ -66,7 +66,7 @@
                       <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="/">The Policy Deployment Engine</a>
+                      <a class="menu-link" href="{% url 'policy_deployment' %}">The Policy Deployment Engine</a>
                     </li>
                   </ul>
                 </div>
@@ -222,7 +222,11 @@
                     Deakin Threat mirror (Finished)
                   </li>
                 </a>
+
+                <a class="menu-link" href="{% url 'policy_deployment' %}">
+
                 <a class="menu-link" href="{% url 'malware_viz_main' %}">
+
                   <li class="mb-2 menu ps-3 py-1">
                     Malware (Finished)
                   </li>
