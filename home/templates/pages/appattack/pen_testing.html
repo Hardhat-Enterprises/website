@@ -14,7 +14,6 @@
 <main>
     {% include 'includes/pre-loader.html' %}
 
-    <!-- Hero Section -->
     <div class="section-header bg-primary-app pb-0">
         <div class="container">
             <div class="row justify-content-center text-center">
@@ -38,29 +37,29 @@
             </div>
         </div>
     </div>
-    <!-- End of Hero Section -->
 
-    <!-- About Penetration Testing -->
     <section class="section section-lg bg-white">
         <div class="container">
             <div class="row justify-content-between align-items-center mb-lg-4 mb-5">
                 <div class="col-12 col-lg-7 mb-5 order-lg-2">
-                    <h2>What is Penetration Testing?</h2>
+                    <h2>What is Pen Testing?</h2>
                     <p>
-                        AppAttack’s penetration testers utilize a variety of cybersecurity tools for ethical hacking training, mimicking hacker tactics to uncover weaknesses in your organization’s defenses before they can be exploited by malicious actors.
+                        Penetration testers utilize a variety of techniques, tools, and methodologies to mimic the tactics of hackers, 
+                        aiming to uncover weaknesses in an organization's defenses before they can be exploited by bad actors.
                     </p>
                     <p>
-                        Our dedicated team collaborates with partner organizations, creating custom testing environments to reveal vulnerabilities in critical applications. We conduct thorough analyses, delivering detailed penetration testing reports that identify vulnerabilities and offer strategic steps to create a safer, more secure, and resilient environment using ethical hacking tools.
+                        Similarly, our dedicated team engages in collaborative dialogues with partner organizations, creating custom 
+                        testing environments to reveal vulnerabilities in essential applications. We conduct thorough analyses, 
+                        delivering detailed reports that not only identify vulnerabilities but also offer strategic steps toward creating a safer, more secure, and resilient environment.
                     </p>
                 </div>
                 <div class="col-12 col-lg-3 mb-2 order-lg-1">
                     <img
                         src="{% static 'assets/img/pages/appattack/icon.5.svg' %}"
                         class="img-fluid"
-                        alt="Secure penetration testing environment illustration"
+                        alt="A secure testing illustration"
                         width="300"
                         height="300"
-                        loading="lazy"
                     />
                 </div>
             </div>
@@ -71,30 +70,47 @@
 
     </section>
 
-    <!-- Navigation Buttons -->
-    <div class="container d-flex justify-content-center align-items-center mb-3 mt-5">
-        <button type="button" class="btn btn-primary btn-lg px-4 mx-2 gap-3" id="secureCodeReview">
+    <div
+        class="container d-flex justify-content-center align-items-center mb-3 mt-5"
+    >
+        <button
+            type="button"
+            class="btn btn-primary btn-lg px-4 mx-2 gap-3"
+            id="secureCodeReview"
+        >
             Secure Code Review
         </button>
-        <button type="button" class="btn btn-primary btn-lg px-4 mx-2 gap-3" id="comprehensiveReports">
+        <button
+            type="button"
+            class="btn btn-primary btn-lg px-4 mx-2 gap-3"
+            id="comprehensiveReports"
+        >
             Comprehensive Reports
         </button>
-        <button type="button" class="btn btn-primary btn-lg px-4 mx-2 gap-3" id="backButton">
+        <button
+            type="button"
+            class="btn btn-primary btn-lg px-4 mx-2 gap-3"
+            id="backButton"
+        >
             Back
         </button>
     </div>
-
-    <!-- Move JavaScript to the end of the content block for better performance -->
     <script>
-        document.getElementById("backButton").addEventListener("click", function() {
-            window.location.href = "{% url 'appattack' %}";
-        });
-        document.getElementById("secureCodeReview").addEventListener("click", function() {
-            window.location.href = "{% url 'secure-code-review' %}";
-        });
-        document.getElementById("comprehensiveReports").addEventListener("click", function() {
-            window.location.href = "{% url 'comphrehensive_report' %}";
-        });
+        document
+            .getElementById("backButton")
+            .addEventListener("click", function () {
+                window.location.href = "{% url 'appattack' %}";
+            });
+        document
+            .getElementById("secureCodeReview")
+            .addEventListener("click", function () {
+                window.location.href = "{% url 'secure-code-review' %}";
+            });
+        document
+            .getElementById("comprehensiveReports")
+            .addEventListener("click", function () {
+                window.location.href = "{% url 'comphrehensive_report' %}";
+            });
     </script>
 </main>
 {% endblock content %}

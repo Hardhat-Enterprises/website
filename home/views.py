@@ -1869,7 +1869,7 @@ def pen_testing(request):
             return redirect('pen-testing')
     else:
         form = PenTestingRequestForm()
-    return render(request, '/pen_testing.html', {'form': form})
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
 
 def secure_code_review(request):
     if request.method == 'POST':
