@@ -1,0 +1,85 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<style>
+  /* Apply yellow background in dark mode only */
+  @media (prefers-color-scheme: dark) {
+    .internship-section {
+      background-color: #ffc107 !important;
+    }
+  }
+
+  /* Force card text to white in light mode for visibility */
+  @media (prefers-color-scheme: light) {
+    .internship-card {
+      color: white !important;
+    }
+    .internship-card .text-muted {
+      color: #ccc !important;
+    }
+  }
+</style>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-5">Internship Opportunities</h2>
+
+  {% if internships %}
+    {% for job in internships %}
+      <div class="card mb-3 p-3 shadow-sm">
+        <h4>{{ job.title }}</h4>
+        <p><strong>Location:</strong> {{ job.location }}</p>
+        <p><strong>Salary:</strong> {{ job.salary }}</p>
+        <a href="{% url 'career-detail' job.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <!-- Static Upcoming Internship Section if no internships exist -->
+    <section class="py-5 text-center internship-section">
+      <div class="container">
+        <h2 class="mb-5" style="font-weight: 700;">Upcoming Internship Opportunities</h2>
+        <div class="row justify-content-center">
+          <!-- Marketing Intern -->
+          <div class="col-md-4 mb-4">
+            <div class="card bg-dark internship-card h-100">
+              <div class="card-body text-center">
+                <h5 class="card-title" style="color: #ffc107;">Marketing Intern</h5>
+                <p class="card-text" style="color: #f6f5f1;">
+                  Join our creative team to assist in digital campaigns, analytics, and content creation.
+                </p>
+                <p class="text-muted small">Remote | Starts Jul 2025</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frontend Developer Intern -->
+          <div class="col-md-4 mb-4">
+            <div class="card bg-dark internship-card h-100">
+              <div class="card-body text-center">
+                <h5 class="card-title" style="color: #ffc107;">Frontend Developer Intern</h5>
+                <p class="card-text" style="color: #f6f5f1;">
+                  Work with React and Django to build user interfaces and refine website features.
+                </p>
+                <p class="text-muted small">Onsite | Starts Aug 2025</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Analyst Intern -->
+          <div class="col-md-4 mb-4">
+            <div class="card bg-dark internship-card h-100">
+              <div class="card-body text-center">
+                <h5 class="card-title" style="color: #ffc107;">Data Analyst Intern</h5>
+                <p class="card-text" style="color: #f6f5f1;">
+                  Support the BI team with dashboards, Excel, and data wrangling using Python and SQL.
+                </p>
+                <p class="text-muted small">Hybrid | Starts Sep 2025</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+</div>
+
+{% endblock %}
