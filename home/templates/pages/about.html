@@ -18,80 +18,221 @@
     {% include 'includes/pre-loader.html' %}
 
     <!-- Hero -->
-    <section class="section-header bg-tertiary text-black">
-        <div class="container">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
-                    <h1 class="display-2 mb-4">
-                        Full-Service Cybersecurity Agency
-                    </h1>
-                    <p class="lead mb-4 text-muted">
-                        Hardhat Enterprises specializes in cybersecurity services, securing your webapps with penetration testing, code reviews, and threat detection solutions for peace of mind.
-                    </p>
-                    <a href="{% url 'what_we_do' %}" class="btn btn-tertiary me-3 animate-up-2">
-                        What We Do
-                        <span class="ms-2"><span class="fas fa-arrow-right"></span></span>
-                    </a>
-                </div>
-                <div class="col-12 col-md-5 d-none d-md-block text-center">
-                    <img src="{% static 'assets/img/pages/about/hero.svg' %}" alt="Hardhat Enterprises cybersecurity agency hero illustration" class="img-fluid" loading="lazy">
-                </div>
-            </div>
+  <section class="section-header bg-tertiary text-black">
+    <div class="container">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
+          <h1 class="display-2 mb-4">
+            Full-Service <br class="d-none d-md-inline" />Cyber Security Agency
+          </h1>
+          <p class="lead mb-4 text-muted">
+            Hardhat can help you secure your webapps, review your code,
+            visualize the threats and provide an interractive UI for
+            pen-testing, that will bring your customers a peace of mind and
+            security.
+          </p>
+          <a
+            href="{% url 'what_we_do'%}"
+            class="btn btn-tertiary me-3 animate-up-2"
+            >What we do
+            <span class="ms-2"><span class="fas fa-arrow-right"></span></span
+          ></a>
         </div>
-    </section>
-    <!-- End of Hero section -->
-
-    <!-- Kudoboard Section Starts Here -->
-    <div class="whiteboard-container">
-        <h2>Kudoboard: Share Your Cybersecurity Feedback</h2>
-        <p class="mb-4">
-            At Hardhat Enterprises, we value your feedback on our cybersecurity services. Use our interactive Kudoboard to share your experience with our penetration testing, threat detection, or code review solutions.
-        </p>
-        <div id="whiteboard" class="whiteboard"></div>
-        <textarea id="reviewText" rows="3" placeholder="Type your review of our cybersecurity services..."></textarea>
-        <div>
-            <button id="submitReview">Submit</button>
-            <button id="clearReviews" disabled>Clear</button>
-        </div>
-    </div>
-
-      </section>
-      <!-- End of Hero section -->
-      <!-- Kudoboard Section Starts Here -->
-    <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <div class="whiteboard-container">
-          <h2 class="text-center mb-4" style="color: #1f2937;">Kudoboard</h2>
-          <div id="whiteboard" class="whiteboard mb-4"></div>
-          <textarea id="reviewText" class="form-control mb-4" rows="3" placeholder="Type your review here..."></textarea>
-          <div class="text-center">
-            <button id="submitReview" class="mx-2">Submit</button>
-            <button id="clearReviews" class="mx-2" disabled>Clear</button>
-          </div>
-        </div>
-      </div>
-  </div>
-</section>
-<!-- End of Hero section -->
-<!-- Kudoboard Section Starts Here -->
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <div class="whiteboard-container">
-          <h2 class="text-center mb-4" style="color: #1f2937;">Kudoboard</h2>
-          <div id="whiteboard" class="whiteboard mb-4"></div>
-          <textarea id="reviewText" class="form-control mb-4" rows="3" placeholder="Type your review here..."></textarea>
-          <div class="text-center">
-            <button id="submitReview" class="mx-2">Submit</button>
-            <button id="clearReviews" class="mx-2" disabled>Clear</button>
-          </div>
+        <div class="col-12 col-md-5 d-none d-md-block text-center">
+          <img src="{% static 'assets/img/pages/about/hero.svg' %}" alt="" />
         </div>
       </div>
     </div>
   </section>
   <!-- End of Hero section -->
   <!-- Kudoboard Section Starts Here -->
+
+<div class="whiteboard-container">
+  <h2>Our Team's Kudoboard</h2>
+  <div id="whiteboard" class="whiteboard"></div>
+  <textarea id="reviewText" rows="3" placeholder="Share your appreciation for our team..."></textarea>
+  <div class="color-picker-container">
+    <label for="noteColor">Choose note color: </label>
+    <input type="color" id="noteColor" value="#fff9c4" list="presetColors">
+    <datalist id="presetColors">
+      <option value="#fff9c4"></option>
+      <option value="#f8bbd0"></option>
+      <option value="#c8e6c9"></option>
+      <option value="#bbdefb"></option>
+      <option value="#e1bee7"></option>
+      <option value="#ffccbc"></option>
+      <!-- Dark colors -->
+      <option value="#1a1a1a"></option>
+      <option value="#2d2d2d"></option>
+      <option value="#374151"></option>
+      <option value="#4b5563"></option>
+      <option value="#22223b"></option>
+      <option value="#0f172a"></option>
+      <!-- Vibrant colors -->
+      <option value="#ff4b5c"></option>
+      <option value="#ffb347"></option>
+      <option value="#ffe066"></option>
+      <option value="#4ade80"></option>
+      <option value="#2dd4bf"></option>
+      <option value="#60a5fa"></option>
+      <option value="#a78bfa"></option>
+      <option value="#f472b6"></option>
+      <option value="#e11d48"></option>
+      <option value="#a3e635"></option>
+      <option value="#22d3ee"></option>
+      <option value="#ffd700"></option>
+    </datalist>
+  </div>
+  <div class="button-container">
+    <button id="submitReview">Add Note</button>
+    <button id="clearReviews" disabled>Clear Board</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const whiteboard = document.getElementById('whiteboard');
+  const reviewText = document.getElementById('reviewText');
+  const submitReview = document.getElementById('submitReview');
+  const clearReviews = document.getElementById('clearReviews');
+  const noteColor = document.getElementById('noteColor');
+
+  function createStickyNote(text, color, rotation, skipSave, pinned) {
+    const note = document.createElement('div');
+    note.className = 'sticky-note fade-in';
+    note.style.backgroundColor = color || getRandomColor();
+    note.style.transform = rotation || `rotate(${Math.random() * 10 - 5}deg)`;
+    note.setAttribute('data-pinned', pinned ? 'true' : 'false');
+    note.innerHTML = `
+      <span class="note-text">${text}</span>
+      <div class="note-actions">
+        <button class="edit-note" title="Edit">✏️</button>
+        <button class="pin-note" title="Pin">${pinned ? '📌' : '📍'}</button>
+      </div>
+    `;
+    // Pin logic
+    if (pinned) {
+      whiteboard.insertBefore(note, whiteboard.firstChild);
+    } else {
+      whiteboard.appendChild(note);
+    }
+    toggleClearButton();
+
+    // Edit handler
+    note.querySelector('.edit-note').onclick = function(e) {
+      e.stopPropagation();
+      const noteText = note.querySelector('.note-text');
+      const originalText = noteText.textContent;
+      noteText.innerHTML = `<textarea class='edit-area'>${originalText}</textarea><div class='edit-actions'><button class='save-edit'>Save</button><button class='cancel-edit'>Cancel</button></div>`;
+      const editArea = noteText.querySelector('.edit-area');
+      editArea.focus();
+      // Save edit
+      noteText.querySelector('.save-edit').onclick = function(ev) {
+        ev.stopPropagation();
+        const newText = editArea.value.trim();
+        if (newText) {
+          noteText.textContent = newText;
+          saveReviews();
+        }
+      };
+      // Cancel edit
+      noteText.querySelector('.cancel-edit').onclick = function(ev) {
+        ev.stopPropagation();
+        noteText.textContent = originalText;
+      };
+    };
+    // Pin handler
+    note.querySelector('.pin-note').onclick = function(e) {
+      e.stopPropagation();
+      const isPinned = note.getAttribute('data-pinned') === 'true';
+      note.setAttribute('data-pinned', !isPinned);
+      this.textContent = !isPinned ? '📌' : '📍';
+      saveReviews();
+      renderAllNotes();
+    };
+    // Double-click to delete
+    note.ondblclick = function(e) {
+      if (e.target.classList.contains('edit-area') || e.target.classList.contains('save-edit') || e.target.classList.contains('cancel-edit')) return;
+      e.stopPropagation();
+      note.classList.remove('fade-in');
+      note.classList.add('fade-out');
+      setTimeout(() => {
+        note.remove();
+        saveReviews();
+        toggleClearButton();
+      }, 300);
+    };
+    if (!skipSave) saveReviews();
+  }
+
+  function getRandomColor() {
+    const colors = [
+      '#fff9c4', '#f8bbd0', '#c8e6c9', '#bbdefb', '#e1bee7', '#ffccbc',
+      '#1a1a1a', '#2d2d2d', '#374151', '#4b5563', '#22223b', '#0f172a',
+      '#ff4b5c', '#ffb347', '#ffe066', '#4ade80', '#2dd4bf', '#60a5fa',
+      '#a78bfa', '#f472b6', '#e11d48', '#a3e635', '#22d3ee', '#ffd700'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  function saveReviews() {
+    const notes = Array.from(whiteboard.children).map(note => ({
+      text: note.querySelector('.note-text').textContent,
+      color: note.style.backgroundColor,
+      rotation: note.style.transform,
+      pinned: note.getAttribute('data-pinned') === 'true'
+    }));
+    localStorage.setItem('reviews', JSON.stringify(notes));
+  }
+
+  function renderAllNotes() {
+    // Clear board
+    whiteboard.innerHTML = '';
+    // Load and sort notes (pinned first)
+    const savedReviews = localStorage.getItem('reviews');
+    if (savedReviews) {
+      const notes = JSON.parse(savedReviews);
+      notes.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+      notes.forEach(note => {
+        createStickyNote(note.text, note.color, note.rotation, true, note.pinned);
+      });
+    }
+    toggleClearButton();
+  }
+
+  function loadReviews() {
+    renderAllNotes();
+  }
+
+  submitReview.addEventListener('click', function() {
+    const text = reviewText.value.trim();
+    if (text) {
+      createStickyNote(text, noteColor.value, undefined, false, false);
+      reviewText.value = '';
+    } else {
+      alert('Please enter a message before submitting.');
+    }
+  });
+
+  clearReviews.addEventListener('click', function() {
+    if (confirm('Are you sure you want to clear all notes?')) {
+      whiteboard.innerHTML = '';
+      localStorage.removeItem('reviews');
+      toggleClearButton();
+    }
+  });
+
+  const toggleClearButton = () => {
+    clearReviews.disabled = whiteboard.children.length === 0;
+  };
+
+  // Load saved reviews when page loads
+  loadReviews();
+});
+</script>
+<!-- Kudoboard Section Ends Here -->
+ <!-- Section -->
+
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-12">
@@ -107,6 +248,10 @@
       </div>
     </div>
   </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 059eae21 (Fixed issue)
   <style>
   .whiteboard-container {
       max-width: 1200px;
@@ -177,6 +322,7 @@
   </style>
   <!-- Kudoboard Section Ends Here -->
   <!-- Section -->
+
   <section class="section section-md">
     <div class="container">
       <div class="row align-items-center justify-content-around">
@@ -215,111 +361,203 @@
             <div class="icon icon-primary mb-4">
               <span class="fas fa-user"></span>
             </div>
+            <h3 class="h5">Team Members</h3>
+            <span class="counter display-3 text-gray d-block">60</span>
+          </div>
+          <!-- End of Visit Box -->
         </div>
-    </section>
-    <!-- End of section -->
+        <div class="col-md-4 col-lg-4 text-center">
+          <!-- Call Box -->
+          <div class="icon-box mb-4">
+            <div class="icon icon-primary mb-4">
+              <span class="fas fa-money-check"></span>
+            </div> {% endcomment %}
 
-    <!-- Section -->
-    <section class="section section-lg pt-0">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-lg-4 text-center">
-                    <!-- Visit Box -->
-                    <div class="icon-box mb-4">
-                        <div class="icon icon-primary mb-4">
-                            <span class="fas fa-user"></span>
+        </section>
+        <!-- End of section -->
+        <!-- Section -->
+        <section class="section section-lg pt-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 text-center">
+                        <!-- Visit Box -->
+                        <div class="icon-box mb-4">
+                            <div class="icon icon-primary mb-4">
+                                <span class="fas fa-user"></span>
+                            </div>
+                            <h3 class="h5">Team Members</h3>
+                            <span class="counter display-3 d-block">60</span>
                         </div>
-                        <h3 class="h5">Team Members</h3>
-                        <span class="counter display-3 d-block">60</span>
+                        <!-- End of Visit Box -->
                     </div>
-                    <!-- End of Visit Box -->
-                </div>
-                <div class="col-md-4 col-lg-4 text-center">
-                    <!-- Call Box -->
-                    <div class="icon-box mb-4">
-                        <div class="icon icon-primary mb-4">
-                            <span class="fas fa-money-check"></span>
+                    <div class="col-md-4 col-lg-4 text-center">
+                        <!-- Call Box -->
+                        <div class="icon-box mb-4">
+                            <div class="icon icon-primary mb-4">
+                                <span class="fas fa-money-check"></span>
+                            </div>
+                            <h3 class="h5">Projects Secured</h3>
+                            <span class="counter display-3 d-block">12</span>
                         </div>
-                        <h3 class="h5">Projects Secured</h3>
-                        <span class="counter display-3 d-block">12</span>
+                        <!-- End of Call Box -->
                     </div>
-                    <!-- End of Call Box -->
-                </div>
-                <div class="col-md-4 col-lg-4 text-center">
-                    <!-- Email Box -->
-                    <div class="icon-box mb-4">
-                        <div class="icon icon-primary mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="35.75" width="36" viewBox="0 0 512 512">
-                                <path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
-                            </svg>
+                    <div class="col-md-4 col-lg-4 text-center">
+                        <!-- Email Box -->
+                        <div class="icon-box mb-4">
+                            <div class="icon icon-primary mb-4">
+                                {% comment %} <span class="fa-solid fa-triangle-exclamation"></span> {% endcomment %}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35.75" width="36" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
+                            </div>
+                            <h3 class="h5">Threats found</h3>
+                            <span class="counter display-3 d-block">150+</span>
                         </div>
-                        <h3 class="h5">Threats Found</h3>
-                        <span class="counter display-3 d-block">150+</span>
+                        <!-- End of Email Box -->
                     </div>
-                    <!-- End of Email Box -->
                 </div>
-            </div>
-        </div>
-    </section>
-    <!-- End of section -->
 
-    <!-- Section -->
-    <section class="section section-lg bg-gray-200">
-        <figure class="position-absolute top-0 left-0 w-100 d-none d-md-block mt-n3">
-            <svg class="fill-gray-200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 43.4" style="enable-background: new 0 0 1920 43.4" xml:space="preserve">
-                <path d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"></path>
-            </svg>
-        </figure>
-        <div class="container">
-            <div class="row text-center">
-                <div class="col">
-                    <h2 class="h1 fw-light"><span class="fw-bold">Our</span> History in Cybersecurity</h2>
-                </div>
-            </div>
-            <div class="row justify-content-center mt-6">
-                <div class="row justify-content-center">
-                    <div class="col-md-12 col-lg-8">
-                        <div class="timeline timeline-one dark px-3 px-sm-0">
-                            <!-- Timeline Item 1 -->
-                            <div class="timeline-item">
-                                <h3 class="h4 mb-4">Present</h3>
-                                <p>
-                                    Established an incident response team and provided remote work security solutions. Actively engaged with the global cybersecurity community, adapting to emerging threats with advanced cybersecurity services.
-                                </p>
-                            </div>
-                            <!-- Timeline Item 2 -->
-                            <div class="timeline-item">
-                                <h3 class="h4 mb-4">Technology and Innovation</h3>
-                                <p>
-                                    Introduced advanced threat detection solutions, established a cybersecurity training academy, and embraced AI integration. Released a proprietary threat intelligence platform to enhance cybersecurity services.
-                                </p>
-                            </div>
-                            <!-- Timeline Item 3 -->
-                            <div class="timeline-item">
-                                <h3 class="h4 mb-4">Growth and Recognition</h3>
-                                <p>
-                                    Expanded penetration testing services and vulnerability assessments. Formed strategic partnerships, received industry awards, achieved international expansion, and collaborated on major cybersecurity research projects.
-                                </p>
-                            </div>
-                            <!-- Timeline Item 4 -->
-                            <div class="timeline-item">
-                                <h3 class="h4 mb-4">Establishment and Early Success</h3>
-                                <p>
-                                    Founded in 2022 by cybersecurity enthusiasts, Hardhat focused on awareness training and consulting. Secured first clients and built a reputation for reliable cybersecurity services.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% comment %} <h3 class="h5">Projects Secured</h3>
+            <span class="counter display-3 d-block">12</span> {% endcomment %}
+          </div>
+          <!-- End of Call Box -->
         </div>
-        <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
-            <svg class="fill-white" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 43.4" style="enable-background: new 0 0 1920 43.4" xml:space="preserve">
-                <path d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"></path>
-            </svg>
-        </figure>
-    </section>
-    <!-- Section -->
+        {% comment %} <div class="col-md-4 col-lg-4 text-center">
+          <!-- Email Box -->
+          <div class="icon-box mb-4">
+            <div class="icon icon-primary mb-4">
+              <span class="fa-solid fa-triangle-exclamation"></span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="45"
+                width="36"
+                viewBox="0 0 512 512"
+              >
+                <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+                <path
+                  fill="#FFCD11"
+                  d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="h5">Threats found</h3>
+            <span class="counter display-3  d-block">150+</span>
+          </div>
+          <!-- End of Email Box -->
+        </div> {% endcomment %}
+      </div>
+    </div>
+  </section>
+  <!-- End of section -->
+
+  <!-- Section -->
+  <section class="section section-lg bg-gray-200">
+    <figure
+      class="position-absolute top-0 left-0 w-100 d-none d-md-block mt-n3"
+    >
+      <svg
+        class="fill-gray-200"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 1920 43.4"
+        style="enable-background: new 0 0 1920 43.4"
+        xml:space="preserve"
+      >
+        <path
+          d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"
+        ></path>
+      </svg>
+    </figure>
+    <div class="container">
+      <div class="row text-center">
+        <div class="col">
+          <h2 class="h1 fw-light"><span class="fw-bold">Our</span> history</h2>
+        </div>
+      </div>
+      <div class="row justify-content-center mt-6">
+        <div class="row justify-content-center">
+          <div class="col-md-12 col-lg-8">
+            <div class="timeline timeline-one dark px-3 px-sm-0">
+              <!-- Timeline Item 1 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Present</h3>
+                <p>
+                  Established an incident response team and provided remote work
+                  security solutions. Actively engaged with the global
+                  cybersecurity community. Continued growth, adapting to
+                  emerging threats and technologies.
+                </p>
+              </div>
+              <!-- Timeline Item 2 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Technology and Innovation</h3>
+                <p>
+                  Introduced advanced threat detection technologies. Established
+                  a cybersecurity training academy and embraced AI integration.
+                  Released a proprietary threat intelligence platform.
+                </p>
+              </div>
+              <!-- Timeline Item 3 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Growth and Recognition</h3>
+                <p>
+                  Expanded services to include penetration testing and
+                  vulnerability assessments. Formed strategic partnerships and
+                  received industry awards. Achieved international expansion and
+                  collaborated on a major research project.
+                </p>
+              </div>
+              <!-- Timeline Item 4 -->
+              <div class="timeline-item">
+                <h3 class="h4 mb-4">Establishment and Early Success</h3>
+                <p>
+                  Founded in 2022 by a group of cybersecurity enthusiasts.
+                  Initial focus on basic cybersecurity awareness training and
+                  consulting. Secured first clients and gained a reputation for
+                  reliable services.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figure
+      class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"
+    >
+      <svg
+        class="fill-white"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 1920 43.4"
+        style="enable-background: new 0 0 1920 43.4"
+        xml:space="preserve"
+      >
+        <path
+          d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"
+        ></path>
+      </svg>
+    </figure>
+  </section>
+  <!-- Section -->
+  <section class="section section-lg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <!-- Contact Card -->
+          <div class="card border-0 p-2 p-md-3 p-lg-5">
+            <div id="form-header" class="card-header bg-white border-0 text-center">
+              <h2>Want to work with us?</h2>
+              <p>Awesome! Tell us about yourself</p>
+            </div>
+            <div id="form-body" class="card-body pt-0">
+              <form id="contactForm" action="/contact" method="post" onsubmit="handleFormSubmit(event)">
+                {% csrf_token %}
 
                 <!-- Form -->
                 <div class="mb-4">
@@ -376,10 +614,15 @@
                     Send Message
                   </button>
                 </div>
+              </form>
             </div>
+          </div>
         </div>
-    </section>
-    <!-- End of section -->
+      </div>
+    </div>
+  </section>
+  
+  <!-- End of section -->
 </main>
 <script src="{% static 'js/handleFormSubmit.js' %}"></script>
 <script src="{% static 'js/kudoboard.js' %}"></script>
