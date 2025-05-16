@@ -114,6 +114,7 @@ INSTALLED_APPS = [
 
     'home',
     'theme_pixel',
+    'chatbot_app',
 
     'corsheaders',
 
@@ -421,6 +422,9 @@ LOGGING = {
 # CORS configuration
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',  # Website localhost server url
+    'http://localhost:8000',   # Alternative localhost URL
+    'https://127.0.0.1:8000',  # HTTPS version for localhost
+    'https://localhost:8000',  # HTTPS version for alternative localhost
     'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
 ]
 
@@ -429,7 +433,12 @@ CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-type',
     'authorization',
-
+    'x-csrftoken',            # Allow CSRF token in headers
+    'x-requested-with',       # Allow requested-with header
+    'accept',                 # Allow accept header
+    'origin',                 # Allow origin header
+    'x-auth-token',           # Custom auth token header
+    'x-auth-timestamp',       # Custom auth timestamp header
 ]
 
 MEDIA_URL = '/media/'
