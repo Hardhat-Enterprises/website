@@ -541,31 +541,7 @@ def Vr_main(request):
 def client_login(request):
     form = ClientLoginForm
     return render(request, 'accounts/sign-in-client.html',{'form': form})
-
-# Duplicate feedback form code. see def feedback_view(request) below for the correct one.
-# def feedback(request):
-#     if request.method == 'POST':
-#         form = ExperienceForm(request.POST)
-#         if form.is_valid():
-#             feedback = form.save(commit=False) # Create a feedback instance without saving it to the database
-#             if 'anonymous' in request.POST:
-#                 feedback.name = 'Anonymous'
-#             feedback.save() # Save the feedback to the database
-#             messages.success(request, "Thank you for your feedback!")
-#             return redirect('feedback')  # Redirect to clear the form
-#         else:
-#             messages.error(request, "There was an error. Please try again.")
-
-#     else:
-#         form = ExperienceForm()
-
-#     # Retrieve recent feedback from the database
-#     feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
-
-#     return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
-
-
-
+    
 ## Web-Form 
 
 def website_form(request):

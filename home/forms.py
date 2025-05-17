@@ -495,7 +495,17 @@ class ExperienceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ExperienceForm, self).__init__(*args, **kwargs)
-        self.fields['name'].required = False  # 🔓 Make 'name' optional
+        self.fields['name'].required = False  # Let us handle this manually in clean()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        anonymous = self.data.get('anonymous')  # Read from raw POST data (checkbox input)
+
+        if not anonymous and not name:
+            self.add_error('name', 'Please enter your name or check "Make it anonymous".')
+
+
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:

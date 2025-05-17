@@ -38,7 +38,16 @@
                     <!-- Name Field -->
                     <div class="card-text form-group" id="nameField">
                         <label for="id_name">Name:</label>
-                        {{ form.name }}
+                         {{ form.name }}
+
+                     <!-- Display field-specific error -->
+                        {% if form.name.errors %}
+                            <div class="text-danger">
+                                {% for error in form.name.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                     <br>
 
@@ -81,6 +90,10 @@
             {% for feedback in feedbacks %}
                 <li>
                     <strong>{{ feedback.name }}</strong>: {{ feedback.feedback }}
+                    <form method="post" action="{% url 'delete_feedback' feedback.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
