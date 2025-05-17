@@ -506,6 +506,7 @@ class JobApplicationForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
     resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+
     cover_letter = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
 class PenTestingRequestForm(forms.ModelForm):
@@ -521,3 +522,4 @@ class SecureCodeReviewRequestForm(forms.ModelForm):
     class Meta:
         model = SecureCodeReviewRequest
         fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+

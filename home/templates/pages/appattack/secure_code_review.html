@@ -1,8 +1,16 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
-<head>
-  <title>Secure Code Review</title>
-</head>
+{% extends 'layouts/base.html' %}
+{% load static %}
 
+{% block seo %}
+    <title>AppAttack Secure Code Review Services - Cybersecurity Tools</title>
+    <meta name="description" content="AppAttack provides secure code review services using cybersecurity tools to identify vulnerabilities like SQL injection and XSS, ensuring your applications are secure.">
+    <meta name="keywords" content="secure code review, secure code review services, cybersecurity tools, ethical hacking tools, cybersecurity tools for ethical hacking training, Hardhat Enterprises">
+    <meta property="og:title" content="AppAttack Secure Code Review Services">
+    <meta property="og:description" content="Learn how AppAttack’s secure code review services use cybersecurity tools to protect your applications from vulnerabilities.">
+    <meta property="og:image" content="{% static 'assets/img/pages/appattack/scr.svg' %}">
+{% endblock %}
+
+{% block content %}
 <main>
   {% include 'includes/pre-loader.html' %}
 
@@ -91,10 +99,7 @@
       </div>
     </div>
 
-    <div class="text-center mt-5">
-      <a href="{% url 'secure_code_review_form' %}" class="btn btn-primary btn-lg">Request Secure Code Review</a>
-    </div>
-    
+        
     <!-- Buttons -->
     <div
       class="container d-flex justify-content-center align-items-center mb-3 mt-5"
