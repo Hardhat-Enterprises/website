@@ -588,6 +588,21 @@ class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
     
+    def form_valid(self, form):
+        # Force new session to rotate session key (prevents fixation)
+        self.request.session.flush()  # <-- This destroys old session
+        
+        # Successful login, proceed as normal
+        response = super().form_valid(form)
+
+        # Store session info for hijack protection
+        request = self.request
+        request.session['ip_address'] = self.get_client_ip(request)
+        request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+        request.session['session_token'] = request.session.session_key
+
+        return response
+
     def form_invalid(self, form):
         # Increment the failed login attempts
         failed_attempts = cache.get('failed_login_attempts', 0) + 1
