@@ -74,19 +74,20 @@
         <br>
 
         <div class="feedback-list">
-            <h5>Recent Feedback</h5>
-            
-            <ul>
-                
+    <h5>Recent Feedback</h5>
+
+    {% if feedbacks %}
+        <ul>
+            {% for feedback in feedbacks %}
                 <li>
                     <strong>{{ feedback.name }}</strong>: {{ feedback.feedback }}
                 </li>
-                
-            </ul>
-            
-                <p>No feedback yet</p>
-            
-        </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No feedback yet</p>
+    {% endif %}
+</div>
     </div>
 
     <!-- ⭐ Custom CSS -->
