@@ -1,94 +1,119 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+{% block seo %}
+    <title>What We Do - Cybersecurity Services by Hardhat Enterprises</title>
+    <meta name="description" content="Hardhat Enterprises offers cybersecurity services, including penetration testing, code review, and threat visualization, to enhance white-hat operations and secure digital assets.">
+    <meta name="keywords" content="cybersecurity services, white-hat cybersecurity, open-source security tools, penetration testing services, ethical hacking tools, Hardhat Enterprises">
+    <meta property="og:title" content="What We Do - Cybersecurity Services by Hardhat Enterprises">
+    <meta property="og:description" content="Discover Hardhat Enterprises' cybersecurity services, from penetration testing to open-source security tools, designed to protect your organization.">
+    <meta property="og:image" content="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}">
+{% endblock %}
+
 {% block content %}
-    <main>
+<main>
+    {% include 'includes/pre-loader.html' %}
 
-        {% include 'includes/pre-loader.html' %}
-
-        <!-- Hero -->
-        <section class="section-header bg-tertiary text-black">
-            <div class="container">
-               <div class="row justify-content-between align-items-center">
-                  <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
-                        <h1 class="display-2 mb-4">Full-Service <br class="d-none d-md-inline">Cyber Security Agency</h1>
-                        <p class="lead mb-4 text-muted">Hardhat Enterprises is an organization that enhances and strives to improve white hat operations' cyber
-                            security posture by safeguarding assets, reducing threats, and thwarting vulnerability exploits. This vision
-                            will be the focus of each project's deliverables throughout the trimester. The open-source security
-                            architecture, tools, processes, and mitigation techniques that are generated satisfy market gaps and
-                            requirements. Some deliverables due to their nature, like testing reports, are private to the appropriate
-                            parties.</p>
-                    </div>
-                  <div class="col-12 col-md-5 d-none d-md-block text-center"><img src="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}" alt=""></div>
-               </div>
-            </div>
-        </section>
-        <!-- End of Hero section -->
-        
-        <!-- Other sections omitted for brevity -->
-
-        <!-- Section -->
-        <section class="section section-lg">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-lg-8">
-                        <!-- Contact Card -->
-                        <div class="card border-0 p-2 p-md-3 p-lg-5">
-                            <div class="card-header bg-white border-0 text-center">
-                                <h2>Want to work with us?</h2>
-                                <p>Awesome! Tell us about yourself</p>
-                            </div>
-                            <div class="card-body pt-0">
-                                <form id="contactForm" onsubmit="return handleSubmit(event)">
-                                    <!-- Form -->
-                                    <div class="mb-4">
-                                        <label for="name">Your Name</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon3"><span class="fas fa-user-circle"></span></span>
-                                            <input type="text" class="form-control" placeholder="e.g. Bonnie Green" id="name" required>
-                                        </div>
-                                    </div>
-                                    <!-- End of Form -->
-                                    <!-- Form -->
-                                    <div class="mb-4">
-                                        <label for="email">Your Email</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon4"><span class="fas fa-envelope"></span></span>
-                                            <input type="email" class="form-control" placeholder="example@company.com" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" size="30" id="email" required>
-                                        </div>
-                                    </div>
-                                    <!-- End of Form -->
-                                    <div class="mb-4">
-                                        <label for="message">Your Message</label>
-                                        <textarea placeholder="Your message" class="form-control" id="message" rows="4" required></textarea>
-                                    </div>
-                                    <!-- End of Form -->
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-secondary">Send message</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <!-- End of Contact Card -->
-                    </div>
+    <!-- Hero -->
+    <section class="section-header bg-tertiary text-black">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
+                    <h1 class="display-2 mb-4">Full-Service Cybersecurity Agency</h1>
+                    <p class="lead mb-4 text-muted">
+                        Hardhat Enterprises enhances white-hat cybersecurity by safeguarding assets, reducing threats, and thwarting vulnerability exploits. Our cybersecurity services, including penetration testing and open-source security tools, address market gaps and secure your digital assets.
+                    </p>
+                </div>
+                <div class="col-12 col-md-5 d-none d-md-block text-center">
+                    <img src="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}" alt="Hardhat Enterprises team providing cybersecurity services" class="img-fluid" loading="lazy">
                 </div>
             </div>
-        </section>
-        <!-- End of section -->
-    </main>
+        </div>
+    </section>
+    <!-- End of Hero section -->
 
-    <script>
-        function handleSubmit(event) {
-            event.preventDefault(); // Prevent the default form submission
+    <!-- Services Section -->
+    <section class="section section-lg">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col">
+                    <h2 class="h1 fw-light">Our <span class="fw-bold">Cybersecurity Services</span></h2>
+                    <p class="lead mb-5">Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Penetration Testing Services</h3>
+                    <p>We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>Secure Code Review</h3>
+                    <p>Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>Open-Source Security Tools</h3>
+                    <p>We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Services Section -->
 
-            // Display confirmation message
-            alert("You're details are entered!");
+    <!-- Contact Section -->
+    <section class="section section-lg">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <!-- Contact Card -->
+                    <div class="card border-0 p-2 p-md-3 p-lg-5">
+                        <div class="card-header bg-white border-0 text-center">
+                            <h2>Work With Our Cybersecurity Agency</h2>
+                            <p>Tell us about your cybersecurity needs!</p>
+                        </div>
+                        <div class="card-body pt-0">
+                            <form id="contactForm" onsubmit="return handleSubmit(event)">
+                                <!-- Form -->
+                                <div class="mb-4">
+                                    <label for="name">Your Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon3"><span class="fas fa-user-circle"></span></span>
+                                        <input type="text" class="form-control" placeholder="e.g. Bonnie Green" id="name" required>
+                                    </div>
+                                </div>
+                                <!-- End of Form -->
+                                <!-- Form -->
+                                <div class="mb-4">
+                                    <label for="email">Your Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon4"><span class="fas fa-envelope"></span></span>
+                                        <input type="email" class="form-control" placeholder="example@company.com" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" size="30" id="email" required>
+                                    </div>
+                                </div>
+                                <!-- End of Form -->
+                                <div class="mb-4">
+                                    <label for="message">Your Message</label>
+                                    <textarea placeholder="How can our cybersecurity services help you?" class="form-control" id="message" rows="4" required></textarea>
+                                </div>
+                                <!-- End of Form -->
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-secondary">Send Message</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- End of Contact Card -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Contact Section -->
+</main>
 
-            // Optionally, you can also clear the form fields after submission
-            document.getElementById("contactForm").reset();
-        }
-    </script>
-
+<script>
+    function handleSubmit(event) {
+        event.preventDefault();
+        alert("Your details are entered!");
+        document.getElementById("contactForm").reset();
+    }
+</script>
 {% endblock content %}
-
-

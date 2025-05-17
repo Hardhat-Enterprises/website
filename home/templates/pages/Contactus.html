@@ -1,138 +1,141 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+
+{% block seo %}
+    <title>Contact Hardhat Enterprises - Cybersecurity Services in Burwood VIC</title>
+    <meta name="description" content="Contact Hardhat Enterprises, a cybersecurity agency in Burwood VIC, for penetration testing, threat detection, and cybersecurity solutions. Call or email us today!">
+    <meta name="keywords" content="contact cybersecurity Burwood VIC, cybersecurity services VIC, cybersecurity agency, penetration testing services, ethical hacking tools, Hardhat Enterprises">
+    <meta property="og:title" content="Contact Hardhat Enterprises - Cybersecurity Services in Burwood VIC">
+    <meta property="og:description" content="Reach out to Hardhat Enterprises in Burwood VIC for expert cybersecurity services, including penetration testing and threat detection.">
+    <meta property="og:image" content="{% static 'assets/img/pages/home/talking.png' %}">
+    <!-- Local Business Schema for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Hardhat Enterprises",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "221 Burwood Hwy",
+            "addressLocality": "Burwood",
+            "addressRegion": "VIC",
+            "postalCode": "3125",
+            "addressCountry": "AU"
+        },
+        "telephone": "04**",
+        "email": "hardhat@gmail.com",
+        "description": "Hardhat Enterprises is a cybersecurity agency in Burwood VIC, offering penetration testing, threat detection, and cybersecurity solutions."
+    }
+    </script>
+{% endblock %}
+
 {% block content %}
-
 <main>
-  
-  {% include 'includes/pre-loader.html' %}
-  
-  <!-- Section Header -->
-  <section class="section-header bg-tertiary text-black">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-12 col-lg-6 contact-info">
-          <p>How can we help you?</p>
-          <h1>Contact Us</h1>
-          <p>
-            For further information, please contact us using the details below:
-          </p>
-          <div class="icon-text">
-            <i class="fas fa-map-marker-alt"></i>
-            <span>221 Burwood Hwy, Burwood VIC 3125</span>
-          </div>
-          <div class="icon-text">
-            <i class="fas fa-phone"></i>
-            <span>04**</span>
-          </div>
-          <div class="icon-text">
-            <i class="fas fa-envelope"></i>
-            <span>hardhat@gmail.com</span>
-          </div>
+    {% include 'includes/pre-loader.html' %}
+
+    <!-- Section Header -->
+    <section class="section-header bg-tertiary text-black">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6 contact-info">
+                    <p>How can we help with your cybersecurity needs?</p>
+                    <h1>Contact Hardhat Enterprises in Burwood VIC</h1>
+                    <p>
+                        For further information on our cybersecurity services, please contact us using the details below:
+                    </p>
+                    <div class="icon-text">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>221 Burwood Hwy, Burwood VIC 3125</span>
+                    </div>
+                    <div class="icon-text">
+                        <i class="fas fa-phone"></i>
+                        <span>04**</span>
+                    </div>
+                    <div class="icon-text">
+                        <i class="fas fa-envelope"></i>
+                        <span>hardhat@gmail.com</span>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 contact-image">
+                    <img src="{% static 'assets/img/pages/home/talking.png' %}" alt="Contact Hardhat Enterprises for cybersecurity services in Burwood VIC" class="img-fluid" loading="lazy">
+                </div>
+            </div>
         </div>
-        <div class="col-12 col-lg-6 contact-image">
-          <img
-            src="{% static 'assets/img/pages/home/talking.png' %}"
-            alt="contact image"
-            class="img-fluid"
-          />
+    </section>
+
+    <!-- Contact Form and Map Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Contact Form -->
+                <div class="col-12 col-md-6 contact-form-container" id="contact-form-container">
+                    <h2 class="text-center mb-4">Leave Us a Message About Cybersecurity Services</h2>
+                    <form id="contact-form" action="/contact-central" method="post" onsubmit="handleSubmit(event)">
+                        <div class="form-group mb-4">
+                            <label for="name">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="email">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="message">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" placeholder="How can our cybersecurity services help you?"></textarea>
+                        </div>
+
+                        <!-- Google reCAPTCHA -->
+                        <div class="form-group mb-4">
+                            <div class="g-recaptcha" data-sitekey="6Lc5wpIqAAAAAItxvQUvBggCoqycfLa6cESyTt_W"></div>
+                        </div>
+
+                        {% if error %}
+                            <div class="alert alert-danger">
+                                {{ error }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Button Container -->
+                        <div class="button-container text-center">
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                            <button type="reset" class="btn btn-primary">Reset</button>
+                        </div>
+
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+                <!-- Google Map with Address -->
+                <div class="col-12 col-md-6 map-container" id="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8955021029794!2d145.1213769157944!3d-37.84991947974343!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad6419eb35a09f1%3A0x7e3ed94e3ebf12d!2s221%20Burwood%20Hwy%2C%20Burwood%20VIC%203125!5e0!3m2!1sen!2sus!4v1697838690523" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Hardhat Enterprises location at 221 Burwood Hwy, Burwood VIC 3125"></iframe>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact Form and Map Section -->
-  <section class="contact-section">
-    <div class="container">
-      <div class="row align-items-center">
-        <!-- Contact Form -->
-        <div class="col-12 col-md-6 contact-form-container" id="contact-form-container">
-          <h2 class="text-center mb-4">Leave Us a Message</h2>
-          <form
-            id="contact-form"
-            action="/contact-central"
-            method="post"
-            onsubmit="handleSubmit(event)"
-          >
-            <div class="form-group mb-4">
-              <label for="name">Full Name</label>
-              <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required />
-            </div>
-            <div class="form-group mb-4">
-              <label for="email">Email Address</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required />
-            </div>
-            <div class="form-group mb-4">
-              <label for="message">Message</label>
-              <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your message"></textarea>
-            </div>
-
-            <!-- Google reCAPTCHA -->
-            <div class="form-group mb-4">
-              <div class="g-recaptcha" data-sitekey="6Lc5wpIqAAAAAItxvQUvBggCoqycfLa6cESyTt_W"></div>
-            </div>
-
-            {% if error %}
-              <div class="alert alert-danger">
-                {{ error }}
-              </div>
-            {% endif %}
-
-            <!-- Button Container -->
-            <div class="button-container text-center">
-              <button type="submit" class="btn btn-primary">Send Message</button>
-              <button type="reset" class="btn btn-primary">Reset</button>
-            </div>
-
-            {% csrf_token %}
-          </form>
+    <!-- Thank You Message -->
+    <section id="thank-you-message" style="display: none;">
+        <div class="thank-you text-center">
+            <h1>Thank You for Contacting Hardhat Enterprises!</h1>
+            <p>We appreciate your interest in our cybersecurity services and will get back to you shortly if needed.</p>
         </div>
-
-        <!-- Google Map with Address -->
-        <div class="col-12 col-md-6 map-container" id="map-container">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8955021029794!2d145.1213769157944!3d-37.84991947974343!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad6419eb35a09f1%3A0x7e3ed94e3ebf12d!2s221%20Burwood%20Hwy%2C%20Burwood%20VIC%203125!5e0!3m2!1sen!2sus!4v1697838690523"
-            width="100%"
-            height="600"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Thank You Message -->
-  <section id="thank-you-message" style="display: none;">
-    <div class="thank-you text-center">
-      <h1>Thank you for submitting your response!</h1>
-      <p>We appreciate your feedback and will get back to you shortly if needed.</p>
-    </div>
-  </section>
-
+    </section>
 </main>
 
 <script>
-  function handleSubmit(event) {
-    // Prevent the form from submitting
-    event.preventDefault();
-
-    // Check if reCAPTCHA is checked
-    var recaptchaResponse = grecaptcha.getResponse();
-    if (recaptchaResponse.length === 0) {
-      alert("Please verify that you are not a robot.");
-      return; // Stop form submission
+    function handleSubmit(event) {
+        event.preventDefault();
+        var recaptchaResponse = grecaptcha.getResponse();
+        if (recaptchaResponse.length === 0) {
+            alert("Please verify that you are not a robot.");
+            return;
+        }
+        document.getElementById("contact-form-container").style.display = "none";
+        document.getElementById("map-container").style.display = "none";
+        document.getElementById("thank-you-message").style.display = "block";
     }
-
-    // Hide the form and map, and show the thank you message
-    document.getElementById("contact-form-container").style.display = "none";
-    document.getElementById("map-container").style.display = "none";
-    document.getElementById("thank-you-message").style.display = "block";
-  }
 </script>
 
 <!-- Include reCAPTCHA script -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 {% endblock content %}
