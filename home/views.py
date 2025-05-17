@@ -124,10 +124,12 @@ from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
+
 from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -1867,7 +1869,7 @@ def pen_testing(request):
             return redirect('pen-testing')
     else:
         form = PenTestingRequestForm()
-    return render(request, '/pen_testing.html', {'form': form})
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
 
 def secure_code_review(request):
     if request.method == 'POST':

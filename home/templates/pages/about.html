@@ -1,11 +1,23 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block seo %}
+    <title>About Hardhat Enterprises - Cybersecurity Services & Solutions</title>
+    <meta name="description" content="Hardhat Enterprises is a full-service cybersecurity agency offering penetration testing, threat detection, and cybersecurity visualization for secure webapps and code reviews.">
+    <meta name="keywords" content="cybersecurity services, cybersecurity agency, penetration testing services, threat detection solutions, ethical hacking tools, Hardhat Enterprises">
+    <meta property="og:title" content="About Hardhat Enterprises - Cybersecurity Agency">
+    <meta property="og:description" content="Learn about Hardhat Enterprises, a cybersecurity agency providing penetration testing, threat detection, and secure code review services.">
+    <meta property="og:image" content="{% static 'assets/img/pages/about/hero.svg' %}">
+{% endblock %}
+
+{% block content %}
 <head>
-  <link rel="stylesheet" href="{% static 'css/kudoboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/kudoboard.css' %}">
 </head>
 <main>
-  {% include 'includes/pre-loader.html' %}
+    {% include 'includes/pre-loader.html' %}
 
-  <!-- Hero -->
+    <!-- Hero -->
   <section class="section-header bg-tertiary text-black">
     <div class="container">
       <div class="row justify-content-between align-items-center">
@@ -34,6 +46,193 @@
   </section>
   <!-- End of Hero section -->
   <!-- Kudoboard Section Starts Here -->
+
+<div class="whiteboard-container">
+  <h2>Our Team's Kudoboard</h2>
+  <div id="whiteboard" class="whiteboard"></div>
+  <textarea id="reviewText" rows="3" placeholder="Share your appreciation for our team..."></textarea>
+  <div class="color-picker-container">
+    <label for="noteColor">Choose note color: </label>
+    <input type="color" id="noteColor" value="#fff9c4" list="presetColors">
+    <datalist id="presetColors">
+      <option value="#fff9c4"></option>
+      <option value="#f8bbd0"></option>
+      <option value="#c8e6c9"></option>
+      <option value="#bbdefb"></option>
+      <option value="#e1bee7"></option>
+      <option value="#ffccbc"></option>
+      <!-- Dark colors -->
+      <option value="#1a1a1a"></option>
+      <option value="#2d2d2d"></option>
+      <option value="#374151"></option>
+      <option value="#4b5563"></option>
+      <option value="#22223b"></option>
+      <option value="#0f172a"></option>
+      <!-- Vibrant colors -->
+      <option value="#ff4b5c"></option>
+      <option value="#ffb347"></option>
+      <option value="#ffe066"></option>
+      <option value="#4ade80"></option>
+      <option value="#2dd4bf"></option>
+      <option value="#60a5fa"></option>
+      <option value="#a78bfa"></option>
+      <option value="#f472b6"></option>
+      <option value="#e11d48"></option>
+      <option value="#a3e635"></option>
+      <option value="#22d3ee"></option>
+      <option value="#ffd700"></option>
+    </datalist>
+  </div>
+  <div class="button-container">
+    <button id="submitReview">Add Note</button>
+    <button id="clearReviews" disabled>Clear Board</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const whiteboard = document.getElementById('whiteboard');
+  const reviewText = document.getElementById('reviewText');
+  const submitReview = document.getElementById('submitReview');
+  const clearReviews = document.getElementById('clearReviews');
+  const noteColor = document.getElementById('noteColor');
+
+  function createStickyNote(text, color, rotation, skipSave, pinned) {
+    const note = document.createElement('div');
+    note.className = 'sticky-note fade-in';
+    note.style.backgroundColor = color || getRandomColor();
+    note.style.transform = rotation || `rotate(${Math.random() * 10 - 5}deg)`;
+    note.setAttribute('data-pinned', pinned ? 'true' : 'false');
+    note.innerHTML = `
+      <span class="note-text">${text}</span>
+      <div class="note-actions">
+        <button class="edit-note" title="Edit">✏️</button>
+        <button class="pin-note" title="Pin">${pinned ? '📌' : '📍'}</button>
+      </div>
+    `;
+    // Pin logic
+    if (pinned) {
+      whiteboard.insertBefore(note, whiteboard.firstChild);
+    } else {
+      whiteboard.appendChild(note);
+    }
+    toggleClearButton();
+
+    // Edit handler
+    note.querySelector('.edit-note').onclick = function(e) {
+      e.stopPropagation();
+      const noteText = note.querySelector('.note-text');
+      const originalText = noteText.textContent;
+      noteText.innerHTML = `<textarea class='edit-area'>${originalText}</textarea><div class='edit-actions'><button class='save-edit'>Save</button><button class='cancel-edit'>Cancel</button></div>`;
+      const editArea = noteText.querySelector('.edit-area');
+      editArea.focus();
+      // Save edit
+      noteText.querySelector('.save-edit').onclick = function(ev) {
+        ev.stopPropagation();
+        const newText = editArea.value.trim();
+        if (newText) {
+          noteText.textContent = newText;
+          saveReviews();
+        }
+      };
+      // Cancel edit
+      noteText.querySelector('.cancel-edit').onclick = function(ev) {
+        ev.stopPropagation();
+        noteText.textContent = originalText;
+      };
+    };
+    // Pin handler
+    note.querySelector('.pin-note').onclick = function(e) {
+      e.stopPropagation();
+      const isPinned = note.getAttribute('data-pinned') === 'true';
+      note.setAttribute('data-pinned', !isPinned);
+      this.textContent = !isPinned ? '📌' : '📍';
+      saveReviews();
+      renderAllNotes();
+    };
+    // Double-click to delete
+    note.ondblclick = function(e) {
+      if (e.target.classList.contains('edit-area') || e.target.classList.contains('save-edit') || e.target.classList.contains('cancel-edit')) return;
+      e.stopPropagation();
+      note.classList.remove('fade-in');
+      note.classList.add('fade-out');
+      setTimeout(() => {
+        note.remove();
+        saveReviews();
+        toggleClearButton();
+      }, 300);
+    };
+    if (!skipSave) saveReviews();
+  }
+
+  function getRandomColor() {
+    const colors = [
+      '#fff9c4', '#f8bbd0', '#c8e6c9', '#bbdefb', '#e1bee7', '#ffccbc',
+      '#1a1a1a', '#2d2d2d', '#374151', '#4b5563', '#22223b', '#0f172a',
+      '#ff4b5c', '#ffb347', '#ffe066', '#4ade80', '#2dd4bf', '#60a5fa',
+      '#a78bfa', '#f472b6', '#e11d48', '#a3e635', '#22d3ee', '#ffd700'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  function saveReviews() {
+    const notes = Array.from(whiteboard.children).map(note => ({
+      text: note.querySelector('.note-text').textContent,
+      color: note.style.backgroundColor,
+      rotation: note.style.transform,
+      pinned: note.getAttribute('data-pinned') === 'true'
+    }));
+    localStorage.setItem('reviews', JSON.stringify(notes));
+  }
+
+  function renderAllNotes() {
+    // Clear board
+    whiteboard.innerHTML = '';
+    // Load and sort notes (pinned first)
+    const savedReviews = localStorage.getItem('reviews');
+    if (savedReviews) {
+      const notes = JSON.parse(savedReviews);
+      notes.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+      notes.forEach(note => {
+        createStickyNote(note.text, note.color, note.rotation, true, note.pinned);
+      });
+    }
+    toggleClearButton();
+  }
+
+  function loadReviews() {
+    renderAllNotes();
+  }
+
+  submitReview.addEventListener('click', function() {
+    const text = reviewText.value.trim();
+    if (text) {
+      createStickyNote(text, noteColor.value, undefined, false, false);
+      reviewText.value = '';
+    } else {
+      alert('Please enter a message before submitting.');
+    }
+  });
+
+  clearReviews.addEventListener('click', function() {
+    if (confirm('Are you sure you want to clear all notes?')) {
+      whiteboard.innerHTML = '';
+      localStorage.removeItem('reviews');
+      toggleClearButton();
+    }
+  });
+
+  const toggleClearButton = () => {
+    clearReviews.disabled = whiteboard.children.length === 0;
+  };
+
+  // Load saved reviews when page loads
+  loadReviews();
+});
+</script>
+<!-- Kudoboard Section Ends Here -->
+ <!-- Section -->
+
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-12">
@@ -49,7 +248,10 @@
       </div>
     </div>
   </div>
+<<<<<<< HEAD
+=======
 
+>>>>>>> 059eae21 (Fixed issue)
   <style>
   .whiteboard-container {
       max-width: 1200px;
@@ -120,6 +322,7 @@
   </style>
   <!-- Kudoboard Section Ends Here -->
   <!-- Section -->
+
   <section class="section section-md">
     <div class="container">
       <div class="row align-items-center justify-content-around">
