@@ -139,14 +139,20 @@
         });
       
       function toggleNameField() {
-            const checkbox = document.getElementById('anonymousCheck');
-            const nameField = document.getElementById('nameField');
-            if (checkbox.checked) {
-                nameField.style.display = 'none';
-            } else {
-                nameField.style.display = 'block';
-            }
+        const checkbox = document.getElementById('anonymousCheck');
+        const nameField = document.getElementById('nameField');
+        const nameInput = document.getElementById('id_name');
+
+        if (checkbox.checked) {
+            nameField.style.display = 'none';
+            nameInput.value = '';  // Clear name input
+        } else {
+            nameField.style.display = 'block';
         }
+    }
+
+    // Run on page load in case of form re-render
+    window.onload = toggleNameField;
     </script>
 
     <!-- Bootstrap Scripts -->

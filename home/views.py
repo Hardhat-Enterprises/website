@@ -1500,16 +1500,17 @@ def feedback_view(request):
     rating = None
 
     if request.method == 'POST':
-        form = ExperienceForm(request.POST)
+        post_data = request.POST.copy()  # Make a mutable copy
+        if 'anonymous' in post_data:
+            post_data['name'] = 'Anonymous'
+
+        form = ExperienceForm(post_data)  # Use modified post_data
+
         if form.is_valid():
-            feedback_obj = form.save(commit=False) # Create a feedback instance without saving it to the database
+            feedback_obj = form.save(commit=False)
             feedback_text = form.cleaned_data.get('feedback')
-            if 'anonymous' in request.POST:
-                feedback_obj.name = 'Anonymous'
-                name = 'Anonymous'
-            else: 
-                name = form.cleaned_data.get('name')
-            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+            name = form.cleaned_data.get('name')
+            rating = post_data.get('rating')  # ⭐️ Rating from hidden/radio field
 
             # 🧠 Sentiment analysis
             blob = TextBlob(feedback_text)

@@ -492,6 +492,10 @@ class ExperienceForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
             'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ExperienceForm, self).__init__(*args, **kwargs)
+        self.fields['name'].required = False  # 🔓 Make 'name' optional
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:
