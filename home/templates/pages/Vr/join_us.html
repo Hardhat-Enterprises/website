@@ -10,7 +10,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-8">
                     <!-- Contact Card -->
-                    <div class="card border-0 p-md-3 p-lg-5 p-4 shadow-lg">
+                    <div class="card border-0 p-2 p-md-3 p-lg-5">
                         <div class="card-header bg-white border-0 text-center">
                             <h2>Want to work with us?</h2>
                             <p>Cool! Let's talk about your project</p>
@@ -59,7 +59,7 @@
                                     <label for="message">Your Message</label>
                                     <textarea placeholder="Your message" class="form-control" id="message" rows="4"
                                         name="message"></textarea>
-                                </div>         
+                                </div>
                                 <!-- End of Form -->
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-secondary">Send message</button>
@@ -72,5 +72,17 @@
             </div>
         </div>
     </section>
+
+    <form method="POST" enctype="multipart/form-data" id="avatar-form">
+        {% csrf_token %}
+        <div class="form-group mb-4">
+            <label for="avatar" class="form-label"><strong>Change Profile Picture:</strong></label>
+            <input type="file" name="avatar" id="avatar-input" class="form-control">
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" id="clear-avatar" class="btn btn-dark px-4">Clear</button>
+                <button type="submit" class="btn btn-dark px-4" name="save_photo">Save Photo</button>
+            </div>
+        </div>
+    </form>
 
     {% endblock content %}
