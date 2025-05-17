@@ -541,28 +541,7 @@ def Vr_main(request):
 def client_login(request):
     form = ClientLoginForm
     return render(request, 'accounts/sign-in-client.html',{'form': form})
-
-
-def feedback(request):
-    if request.method == 'POST':
-        form = ExperienceForm(request.POST)
-        if form.is_valid():
-            form.save()  # Save the feedback to the database
-            messages.success(request, "Thank you for your feedback!")
-            return redirect('feedback')  # Redirect to clear the form
-        else:
-            messages.error(request, "There was an error. Please try again.")
-
-    else:
-        form = ExperienceForm()
-
-    # Retrieve recent feedback from the database
-    feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
-
-    return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
-
-
-
+    
 ## Web-Form 
 
 def website_form(request):
@@ -1514,12 +1493,17 @@ def feedback_view(request):
     rating = None
 
     if request.method == 'POST':
-        form = ExperienceForm(request.POST)
+        post_data = request.POST.copy()  # Make a mutable copy
+        if 'anonymous' in post_data:
+            post_data['name'] = 'Anonymous'
+
+        form = ExperienceForm(post_data)  # Use modified post_data
+
         if form.is_valid():
             feedback_obj = form.save(commit=False)
             feedback_text = form.cleaned_data.get('feedback')
             name = form.cleaned_data.get('name')
-            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+            rating = post_data.get('rating')  # ⭐️ Rating from hidden/radio field
 
             # 🧠 Sentiment analysis
             blob = TextBlob(feedback_text)
