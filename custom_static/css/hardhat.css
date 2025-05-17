@@ -27232,6 +27232,20 @@ blockquote {
 
 }
 
+body.dark-mode .faq-button {
+  background-color: #ffffff !important;
+  color: #333333;
+}
+body.dark-mode .faq-content {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+}
+body.dark-mode .faq-content p{
+  color: #333333 !important;
+}
+body.dark-mode .faq-sub-header{
+  color: #f9c74f !important;
+}
 .faq-item {
     margin-bottom: 15px;
 }
@@ -27239,8 +27253,8 @@ blockquote {
 .faq-button {
     width: 100%;
     padding: 15px;
-    background-color: #333333;
-    color: white;
+    background-color: #f9c74f !important;
+    color: #333333;
     font-size: 18px;
     border: none;
     text-align: left;
@@ -27262,7 +27276,7 @@ blockquote {
 .faq-content {
     display: none;
     padding: 10px 15px;
-    background-color: #333333;
+    background-color: #f9c74f;
     border-radius: 0px 0px 4px 4px;
     transition: max-height 0.5s ease-out, opacity 0.3s ease;
 }
