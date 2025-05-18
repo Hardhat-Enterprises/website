@@ -5,10 +5,8 @@
     "\\home",
     "\\home\\templates",
     "\\home\\templates\\admin",
-    "\\home\\templates\\admin\\home",
     "\\home\\templates\\layouts",
     "\\home\\templates\\pages"
   ],
-  "SelectedNode": "\\core\\settings.py",
   "PreviewInSolutionExplorer": false
 }

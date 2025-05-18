@@ -20,7 +20,10 @@ class AutoLogoutMiddleware(MiddlewareMixin):
             # If the user is no longer on the admin page, log them out immediately
             if not is_admin_page:
                 logout(request)
-                logger.info(f"User {user.username} has been logged out as they left the admin site.")
+                logger.info(f"User {user.get_username()} has been logged out as they left the admin site.")
+
+
+
 
 
 class LogRequestMiddleware:
