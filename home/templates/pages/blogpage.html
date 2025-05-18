@@ -92,7 +92,7 @@
           {% csrf_token %}
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="editModalLabel">Edit Blog</h5>
+              <h5 style="color: black;" id="editModalLabel">Edit Blog</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetEditForm()">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -100,23 +100,23 @@
             <div class="modal-body">
               <input type="hidden" name="id" id="editBlogId">
               <div class="form-group">
-                <label for="editName">Name</label>
+                <label for="editName" style="color: black;">Name</label>
                 <input type="text" class="form-control" id="editName" name="name" required>
               </div>
               <br/>
               <div class="form-group">
-                <label for="editTitle">Blog Title</label>
+                <label for="editTitle" style="color: black;">Blog Title</label>
                 <input type="text" class="form-control" id="editTitle" name="title" required>
               </div>
               <br/>
               <div class="form-group">
-                <label for="editDescription">Blog Description</label>
+                <label for="editDescription" style="color: black;">Blog Description</label>
                 <textarea class="form-control" id="editDescription" name="description" rows="4" required></textarea>
               </div>
               <br/>
               <div class="form-group">
-                <label for="editFile">Change Image (optional)</label>
-                <input type="file" class="form-control-file" id="editFile" name="file">
+                <label for="editFile" style="color: black;">Change Image (optional)</label>
+                <input style="color: black;" type="file" class="form-control-file" id="editFile" name="file">
               </div>
             </div>           
             <br/>

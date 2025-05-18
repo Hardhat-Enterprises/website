@@ -177,18 +177,24 @@
               Admin Settings
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-              <li class="dropdown-submenu position-relative">
-                <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" id="adminReviewDropdown">
+             <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
+              <div class="row">
+                <div class="col">
+            <ul class="list-style-none">
+              <li class="dropdown-submenu position-relative mb-2 menu ps-3 py-1">
+                <a class="d-flex justify-content-between align-items-center menu-link" href="#" id="adminReviewDropdown">
                   Admin Blog Review
                   <span class="fas fa-angle-right"></span>
                 </a>
                 <ul class="dropdown-menu submenu position-absolute start-100 top-0">
-                  <li><a class="dropdown-item" href="{% url 'adminblogpage' %}">Review Blogs</a></li>
-                  <li><a class="dropdown-item" href="{% url 'reports' %}">Reports</a></li>
+                  <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'adminblogpage' %}">Review Blogs</a></li>
+                  <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'reports' %}">Reports</a></li>
                 </ul>
               </li>
             </ul>
+            </div>
+            </div>
+            </div>
           </li>          
           {% endif %}
 
@@ -250,18 +256,22 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               Blog
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <ul class="dropdown-menu" aria-labelledby="blogDropdown">
-              <li><a class="dropdown-item" href="{% url 'blogpage' %}">Create a Blog</a></li>
-              <li><a class="dropdown-item" href="{% url 'publishedblog' %}">Published Blogs</a></li>
+            <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
+              <div class="row">
+                <div class="col">
+            <ul class="list-style-none">
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">Create a Blog</a></li>
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">Published Blogs</a></li>
             </ul>
+            </div>
+            </div>
+            </div>
           </li>
           
-          
-
           <li class="nav-item">
             <a href="{% url 'career-list' %}" class="nav-link"> Careers </a>
           </li>

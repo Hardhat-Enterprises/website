@@ -68,18 +68,18 @@
       <form method="POST" action="{% url 'report_blog' %}">
         {% csrf_token %}
         <div class="modal-header">
-          <h5 class="modal-title" id="reportModalLabel">Report Blog</h5>
+          <h5 class="modal-title" style="color: black;" id="reportModalLabel">Report Blog</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <input type="hidden" name="blog_id" id="reportBlogId">
           <input type="hidden" name="blog_name" id="reportBlogName"> <!-- ✅ THIS FIXES THE ERROR -->
 
-          <p><strong>Blog:</strong> <span id="reportBlogTitle" class="text-dark"></span></p>
-          <p><strong>Writer:</strong> <span id="reportBlogWriter" class="text-dark"></span></p>
+          <p style="color: black;"><strong>Blog:</strong> <span id="reportBlogTitle" class="text-dark"></span></p>
+          <p style="color: black;"><strong>Writer:</strong> <span id="reportBlogWriter" class="text-dark"></span></p>
 
           <div class="mb-3">
-            <label for="reportReason" class="form-label">Reason for Reporting:</label>
+            <label style="color: black;" for="reportReason" class="form-label">Reason for Reporting:</label>
             <textarea class="form-control" id="reportReason" name="reason" rows="3" required></textarea>
           </div>
         </div>
