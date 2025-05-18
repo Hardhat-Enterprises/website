@@ -174,21 +174,6 @@ def appattack(request):
 def skills_view(request):
     return render(request, 'pages/appattack/appattack_skills.html')
 
-def malware_skills(request):
-    return render(request, 'pages/malware_visualization/malware_skills.html')
-
-def smishing_skills(request):
-    return render(request, 'pages/smishing_detection/smishing_skills.html')
-
-
-
-
-
-
-def deakinthreatmirror_skills(request):
-    return render(request, 'pages/DeakinThreatmirror/deakinthreatmirror_skills.html')
-
-
 
 
 def form_success(request):
@@ -252,6 +237,10 @@ def products_services(request):
  
 def malwarehome(request):
     return render(request, 'pages/malware_visualization/main.html')
+
+def malware_skills(request):
+    return render(request, 'pages/malware_visualization/malware_skills.html')
+
  
 def malware_joinus(request):
     return render(request, 'pages/malware_visualization/malware_viz_joinus.html')
@@ -309,6 +298,10 @@ def join_project(request):
  
 def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
+
+def smishing_skills(request):
+    return render(request, 'pages/smishing_detection/smishing_skills.html')
+
  
 def smishingdetection_join_us(request):
  
@@ -448,11 +441,17 @@ def SearchResults(request):
 def Deakin_Threat_mirror_main(request):
     return render(request, 'pages/DeakinThreatmirror/main.html')
 
+def deakinthreatmirror_skills(request):
+    return render(request, 'pages/DeakinThreatmirror/deakinthreatmirror_skills.html')
+
+
+
 def Vr_main(request):
     return render(request, 'pages/Vr/main.html')
 
 def cybersafe_vr_skills(request):
     return render(request, 'pages/Vr/cybersafe_vr_skills.html')
+
 
 # Authentication
 

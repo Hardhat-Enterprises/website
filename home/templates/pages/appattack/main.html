@@ -1,51 +1,109 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
-
-<head>
-    <title>AppAttack</title>
-</head>
-
+{% extends 'layouts/base.html' %} {% load static %} {% block seo %}
+<title>AppAttack by Hardhat Enterprises - Ethical Hacking Tools</title>
+<meta name="description" content="AppAttack by Hardhat Enterprises offers cybersecurity tools for ethical hacking, including penetration testing and secure code reviews, to safeguard digital assets.">
+<meta name="keywords" content="cybersecurity tools, ethical hacking tools, penetration testing, secure code review, Hardhat Enterprises, best free cybersecurity tools 2025">
+<meta property="og:title" content="AppAttack by Hardhat Enterprises">
+<meta property="og:description" content="Explore AppAttack’s cybersecurity services, including penetration testing and secure code reviews, to protect your digital assets.">
+<meta property="og:image" content="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}"> {% endblock seo %} {% block content %}
 <main>
     {% include 'includes/preloader-appattack.html' %}
 
     <!-- Hero Section -->
-    <section class="section-header text-black py-5">
-        <div class="px-4 py-5 my-5 text-center">
+    <section class="section-header bg-tertiary text-black py-5">
+        <div class="px-4 py-3 my-2 text-center">
             <h1 class="fw-bold display-1">AppAttack</h1>
             <img width="500" height="500" src="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}" alt="Hero image">
             <div class="col-lg-6 mx-auto">
                 <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
                 <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                    </head>
-
-                    <body>
-                        <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
-                        <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
-                        <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
-
-                        <script>
-                            src = document.getElementById("penTesting").addEventListener("click", function() {
-                                window.location.href = "{% url 'pen-testing' %}";
-                            });
-                            document.getElementById("secureCodeReview").addEventListener("click", function() {
-                                window.location.href = "{% url 'secure-code-review' %}";
-                            });
-                            document.getElementById("comprehensiveReports").addEventListener("click", function() {
-                                window.location.href = "{% url 'comphrehensive_report' %}";
-                            });
-                        </script>
-                    </body>
-
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
                 </div>
             </div>
         </div>
     </section>
-    <!-- End of Hero Section -->
+
+    <script>
+        document.getElementById("penTesting").addEventListener("click", function() {
+            window.location.href = "{% url 'pen-testing' %}";
+        });
+        document.getElementById("secureCodeReview").addEventListener("click", function() {
+            window.location.href = "{% url 'secure-code-review' %}";
+        });
+        document.getElementById("comprehensiveReports").addEventListener("click", function() {
+            window.location.href = "{% url 'comphrehensive_report' %}";
+        });
+    </script>
+
+    <!-- Tools Section -->
+    <section class="section section-lg bg-tertiary py-4">
+        <div class="container">
+            <h2 class="fw-bolder display-2 text-center">Tools</h2>
+            <div class="row">
+                <div class="col-sm mb-5 mb-lg-0">
+                    <a href="https://nmap.org/" target="_blank" class="tools-link">
+                        <div class="text-center">
+                            <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/nmap.jpeg' %}" alt="Nmap logo">
+                            <p class="fw-bold mt-2">NMAP</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm mb-5 mb-lg-0">
+                    <a href="https://portswigger.net/burp" target="_blank" class="tools-link">
+                        <div class="text-center">
+                            <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/burpsuite.png' %}" alt="burp suite logo">
+                            <p class="fw-bold mt-2">Burp Suite</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm mb-5 mb-lg-0">
+                    <a href="https://www.zaproxy.org/" target="_blank" class="tools-link">
+                        <div class="text-center">
+                            <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/owsap.png' %}" alt="OWASP ZAP logo">
+                            <p class="fw-bold mt-2">OWASP ZAP</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm mb-5 mb-lg-0">
+                    <a href="https://scan.coverity.com/" target="_blank" class="tools-link">
+                        <div class="text-center">
+                            <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/coverity-logo-svg-vector.svg' %}" alt="Coverity logo">
+                            <p class="fw-bold mt-2">Coverity</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm mb-5 mb-lg-0">
+                    <a href="https://www.veracode.com/" target="_blank" class="tools-link">
+                        <div class="text-center">
+                            <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/veracode.svg' %}" alt="veracode logo">
+                            <p class="fw-bold mt-2">Veracode</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm mb-5 mb-lg-0">
+                    <a href="https://checkmarx.com/" target="_blank" class="tools-link">
+                        <div class="text-center">
+                            <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/checkmarx.png' %}" alt="checkmarx logo">
+                            <p class="fw-bold mt-2">Checkmarx</p>
+                        </div>
+                    </a>
+                </div>
+                <h1 style="text-align: center;">Official Documentation of App Attack For Upskilling</h1>
+                <a type="button" href="https://app-attack-docs.netlify.app/" style="font-size: 20px; text-align: center;"><button class="btn btn-primary">App Attack Docs</button></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- End Tools -->
 
     <!-- Core Skills Section -->
+    <section class="section section-lg bg-tertiary py-4">
 
-    <a href="{% url 'Appattack_Skills' %}" style="text-decoration: none;">
-        <div class="container d-flex justify-content-center">
-            <div style="
+
+        <a href="{% url 'Appattack_Skills' %}" style="text-decoration: none;">
+            <div class="container d-flex justify-content-center">
+                <div style="
               background: rgba(30, 31, 63, 0.85);
               border-radius: 20px;
               padding: 1.8rem;
@@ -63,130 +121,73 @@
               width: 100%;
               text-align: center;
             " onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 14px 50px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 40px rgba(0, 0, 0, 0.7)'">
-                <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">⚡ Core Skills</h4>
+                    <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">⚡ Core Skills</h4>
 
-                <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
-                    <li style="margin-bottom: 0.8rem;">
-                        <span style="margin-right: 0.5rem;">💥</span>Penetration Testing
-                    </li>
-                    <li style="margin-bottom: 0.8rem;">
-                        <span style="margin-right: 0.5rem;">🔐</span>Secure Code Review
-                    </li>
-                    <li>
-                        <span style="margin-right: 0.5rem;">📝</span>Security Reporting & Documentation
-                    </li>
-                </ul>
+                    <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
+                        <li style="margin-bottom: 0.8rem;">
+                            <span style="margin-right: 0.5rem;">💥</span>Penetration Testing
+                        </li>
+                        <li style="margin-bottom: 0.8rem;">
+                            <span style="margin-right: 0.5rem;">🔐</span>Secure Code Review
+                        </li>
+                        <li>
+                            <span style="margin-right: 0.5rem;">📝</span>Security Reporting & Documentation
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </a>
+        </a>
 
-    <style>
-        @keyframes glowPulse {
-            0% {
-                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+        <style>
+            @keyframes glowPulse {
+                0% {
+                    box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                }
+                50% {
+                    box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+                }
+                100% {
+                    box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                }
             }
-            50% {
-                box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
-            }
-            100% {
-                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
-            }
-        }
-    </style>
+        </style>
 
-    <!-- Tools -->
-
-    <div class="container">
-        <h2 class="fw-bolder display-2 text-center">Tools</h2>
-        <div class="row">
-            <div class="col-sm mb-5 mb-lg-0">
-                <a href="https://nmap.org/" target="_blank" class="tools-link">
-                    <div class="text-center">
-                        <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/nmap.jpeg' %}" alt="Nmap logo">
-                        <p class="fw-bold mt-2">NMAP</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm mb-5 mb-lg-0">
-                <a href="https://portswigger.net/burp" target="_blank" class="tools-link">
-                    <div class="text-center">
-                        <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/burpsuite.png' %}" alt="burp suite logo">
-                        <p class="fw-bold mt-2">Burp Suite</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm mb-5 mb-lg-0">
-                <a href="https://www.zaproxy.org/" target="_blank" class="tools-link">
-                    <div class="text-center">
-                        <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/owsap.png' %}" alt="OWASP ZAP logo">
-                        <p class="fw-bold mt-2">OWASP ZAP</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm mb-5 mb-lg-0">
-                <a href="https://scan.coverity.com/" target="_blank" class="tools-link">
-                    <div class="text-center">
-                        <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/coverity-logo-svg-vector.svg' %}" alt="Coverity logo">
-                        <p class="fw-bold mt-2">Coverity</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm mb-5 mb-lg-0">
-                <a href="https://www.veracode.com/" target="_blank" class="tools-link">
-                    <div class="text-center">
-                        <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/veracode.svg' %}" alt="veracode logo">
-                        <p class="fw-bold mt-2">Veracode</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm mb-5 mb-lg-0">
-                <a href="https://checkmarx.com/" target="_blank" class="tools-link">
-                    <div class="text-center">
-                        <img class="small-card rounded shadow border-0" src="{% static 'assets/img/pages/appattack/checkmarx.png' %}" alt="checkmarx logo">
-                        <p class="fw-bold mt-2">Checkmarx</p>
-                    </div>
-                </a>
-            </div>
-            <h1 style="text-align: center;">Offical Documentation of App Attack For Upskilling</h1>
-            <a type="button" href="https://app-attack-docs.netlify.app/" style="font-size: 20px; text-align: center;"><button class="btn btn-primary">App Attack Docs</button></a>
-        </div>
-    </div>
-
-    <!-- End Tools -->
+    </section>
 
     <!-- Join Us -->
-
-    <div class="container">
-        <div class="row mb-5">
-            <div class="col-12 mt-5">
-                <div class="card shadow mb-6">
-                    <div class="card-body px-5 py-5 text-center text-md-left">
-                        <div class="row align-items-center">
-                            <div class="col-md-6">
-                                <h2 class="mb-3">Join Us Today!</h2>
-                                <p class="mb-0">
-                                    Empower your future in cybersecurity! Join AppAttack and contribute to shaping a secure digital landscape. Explore opportunities, join us today!
-                                </p>
-                            </div>
-                            <div class="col-12 col-md-6 mt-4 mt-md-0 text-md-right">
-                                <a href="{% url 'appattack_join' %}" class="btn btn-primary">
-                                    <span class="me-1">
-                                            <span class="fas fa-handshake"></span>
-                                    </span>
-                                    Join Us
-                                </a>
+    <section class="section section-md">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 mt-5">
+                    <div class="card shadow mb-6">
+                        <div class="card-body px-5 py-5 text-center text-md-left">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h2 class="mb-3">Join Us Today!</h2>
+                                    <p class="mb-0">
+                                        Empower your future in cybersecurity! Join AppAttack and contribute to shaping a secure digital landscape. Explore opportunities, join us today!
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4 mt-md-0 text-md-right">
+                                    <a href="{% url 'appattack_join' %}" class="btn btn-primary">
+                                        <span class="me-1">
+											<span class="fas fa-handshake"></span>
+                                        </span>
+                                        Join Us
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
 
     <!-- End Join Us -->
 
     <!-- FAQ Section -->
-
     <section class="section section-lg bg-warning py-5">
         <div class="container">
             <h1 class="fw-bolder display-50 text-center text-black mb-5 mt-5">Frequently Asked Questions</h1>
@@ -272,8 +273,9 @@
             </div>
         </div>
     </section>
-
     <!-- End of FAQ Section -->
+
+
 </main>
 
 {% endblock content %}
