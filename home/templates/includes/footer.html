@@ -1,4 +1,6 @@
 {% load static %}
+{% load tz %}
+
 
 <footer class="footer pt-6 pb-5 bg-secondary text-white">
   <div class="container">
@@ -128,7 +130,7 @@
           role="contentinfo"
         >
           <p class="fw-normal font-small mb-0 text-muted">
-            &copy; copyright 2023.
+            &copy; copyright {% now "Y" %}.
           </p>
         </div>
           <div class="page-visit-counter text-center mt-1">
