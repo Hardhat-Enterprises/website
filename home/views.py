@@ -66,6 +66,9 @@ from django.core.cache import cache
 from django.shortcuts import redirect
 from django.urls import reverse
 from home.models import Announcement, JobApplication
+from django.http import Http404
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
 
  
 # import os
@@ -121,10 +124,12 @@ from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
+
 from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -460,12 +465,52 @@ def SearchSuggestions(request):
 
 #Search-Results page
 def SearchResults(request):
-    query = request.POST.get('q', '')  # Get search query from request
+    User = get_user_model()
+    query = request.POST.get('q', '').strip()  # Get search query from request
+    
+    if not query:
+        return render(request, 'pages/search-results.html', {
+            'searched': '',
+            'webpages': [],
+            'projects': [],
+            'courses': [],
+            'skills': [],
+            'articles': [],
+            'users': [],
+            'students': [],
+            'contacts': []
+    })
+
+    # Projects logic
+    if query.lower() == "projects":
+        project_results = Project.objects.all()
+    else:
+        project_results = Project.objects.filter(title__icontains=query)
+
+    # Courses logic
+    if query.lower() == "courses":
+        course_results = Course.objects.all()
+    else:
+        course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
+
+    # Users logic
+    if query.lower() == "user":
+        users = User.objects.filter(id=request.user.id)
+    else:
+        users = User.objects.filter(
+            first_name__icontains=query
+        ) | User.objects.filter(
+            last_name__icontains=query
+        ) | User.objects.filter(
+            email__icontains=query
+        )
+
     results = {
         'searched': query,
         'webpages': Webpage.objects.filter(title__icontains=query),
-        'projects': Project.objects.filter(title__icontains=query),
-        'courses': Course.objects.filter(title__icontains=query),
+        'projects': project_results,
+        'users': users,
+        'courses': course_results,
         'skills': Skill.objects.filter(name__icontains=query),
         'articles': Article.objects.filter(title__icontains=query),
     }
@@ -496,28 +541,7 @@ def Vr_main(request):
 def client_login(request):
     form = ClientLoginForm
     return render(request, 'accounts/sign-in-client.html',{'form': form})
-
-
-def feedback(request):
-    if request.method == 'POST':
-        form = ExperienceForm(request.POST)
-        if form.is_valid():
-            form.save()  # Save the feedback to the database
-            messages.success(request, "Thank you for your feedback!")
-            return redirect('feedback')  # Redirect to clear the form
-        else:
-            messages.error(request, "There was an error. Please try again.")
-
-    else:
-        form = ExperienceForm()
-
-    # Retrieve recent feedback from the database
-    feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
-
-    return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
-
-
-
+    
 ## Web-Form 
 
 def website_form(request):
@@ -543,6 +567,21 @@ class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
     
+    def form_valid(self, form):
+        # Force new session to rotate session key (prevents fixation)
+        self.request.session.flush()  # <-- This destroys old session
+        
+        # Successful login, proceed as normal
+        response = super().form_valid(form)
+
+        # Store session info for hijack protection
+        request = self.request
+        request.session['ip_address'] = self.get_client_ip(request)
+        request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+        request.session['session_token'] = request.session.session_key
+
+        return response
+
     def form_invalid(self, form):
         # Increment the failed login attempts
         failed_attempts = cache.get('failed_login_attempts', 0) + 1
@@ -649,6 +688,14 @@ def login_with_passkey(request):
             if Passkey.objects.filter(user=user, key=passkey).exists():
                 request.session['pending_user_id'] = user.id  # Store user ID temporarily
                 login(request, user)
+
+                # Save IP and browser info when logging in with passkey
+                user.last_login_ip = get_client_ip(request)
+                user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
+                print("Tracked login IP:", user.last_login_ip)
+                print("Tracked browser:", user.last_login_browser)
+                user.save(update_fields=['last_login_ip', 'last_login_browser'])
+
                 messages.success(request, "Passkey verified! Please complete CAPTCHA verification.")
                 request.session['is_otp_verified'] = True  # Mark OTP as verified
                 return redirect("/")
@@ -876,6 +923,27 @@ def post_otp_login_captcha(request):
 
     return render(request, 'accounts/post_otp_captcha.html', {'form': form})
 
+def get_client_ip(request):
+    # Using x_forwarded_for allows for proxy bypass to give the true IP of a user
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+def login_with_tracking(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+
+            # Save IP and browser info when logging in with OTP
+            user.last_login_ip = get_client_ip(request)
+            user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
+            user.save(update_fields=['last_login_ip', 'last_login_browser'])
+            return redirect('home')
+    return render(request, 'accounts/sign-in.html')
 
 # Email Verification 
 # def verify_email(request, first_name):
@@ -1021,13 +1089,44 @@ def secure_code_review(request):
 @login_required
 def dashboard(request):
     user = request.user
-    try:
-        student = Student.objects.get(user=user)
-    except Student.DoesNotExist:
-        return redirect('/joinus')
-    progress = Progress.objects.filter(student=student)
-    context = {'user': user, 'student': student, 'progress': progress}
-    return render(request, 'pages/dashboard.html', context)
+    student = Student.objects.filter(user=user).first()
+
+    skills = [
+        {'title': 'Docker Basics', 'slug': 'docker-basics'},
+        {'title': 'HTML & Tailwind Styling', 'slug': 'html-tailwind'},
+        {'title': 'Git & GitHub Workflows', 'slug': 'git-github-workflows'},
+        {'title': 'Django', 'slug': 'django'},
+        {'title': 'Secure Code Review', 'slug': 'secure-code-review'},
+    ]
+
+    progress_data = user.upskilling_progress or {}
+
+    completed = in_progress = not_started = 0
+
+    for skill in skills:
+        status = progress_data.get(skill['slug'], 'Not Started')
+        skill['status'] = status
+        if status == 'Completed':
+            completed += 1
+        elif status == 'In Progress':
+            in_progress += 1
+        else:
+            not_started += 1
+
+    total = len(skills)
+    percent = round((completed / total) * 100) if total > 0 else 0
+
+    return render(request, 'pages/dashboard.html', {
+        'user': user,
+        'student': student,
+        'skills': skills,
+        'completed_count': completed,
+        'in_progress_count': in_progress,
+        'not_started_count': not_started,
+        'percent': percent,
+        'total': total,
+    })
+
  
 def update_progress(request, progress_id):
     progress = get_object_or_404(Progress, id=progress_id)
@@ -1172,64 +1271,157 @@ class LikeArticle(View):
         article.save()
         return redirect('detail_article', pk)
  
- 
- 
- 
 class UpskillingView(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
     model = Skill
-    template_name = 'pages/upskilling.html'  
- 
+    template_name = 'pages/upskilling.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Retrieve the user's saved upskilling progress from the database
+        progress_data = self.request.user.upskilling_progress or {}
+
+        # Define the list of skills
+        context['skills'] = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': progress_data.get('docker-basics', 'Not Started')
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': progress_data.get('html-tailwind', 'Not Started')
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': progress_data.get('git-github-workflows', 'Not Started')
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': progress_data.get('django', 'Not Started')
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': progress_data.get('secure-code-review', 'Not Started')
+            }
+        ]
+
+        return context
+
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
-            # Get the progress objects for the student
+            student = Student.objects.filter(user=self.request.user).first()
             progress = Progress.objects.filter(student=student)
-            # Return the associated skills
             return [p.skill for p in progress]
         else:
             return self.model.objects.none()
- 
+
+
+
 class UpskillingSkillView(LoginRequiredMixin, DetailView):
     login_url = '/accounts/login/'  
     model = Skill
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
- 
+
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            student = Student.objects.get(user=self.request.user)
-            # Check if the progress objects for the student exist
-            if not Progress.objects.filter(student=student).exists():
-                # If not, redirect to the home page
-                return redirect('/')
-            try:
-                # Get the progress associated with the student and the current skill
-                progress = Progress.objects.get(student=student, skill=self.get_object())
-                # If progress does not exist, redirect to home page
-            except Progress.DoesNotExist:
-                return redirect('/')
-        # Otherwise, proceed as usual
+        slug = kwargs.get('slug')
+        progress = request.user.upskilling_progress or {}
+
+        if progress.get(slug) != "Completed":
+            progress[slug] = "In Progress"
+            request.user.upskilling_progress = progress
+            request.user.save()
+
         return super().get(request, *args, **kwargs)
- 
+
     def get_template_names(self):
         return [f'pages/upskilling/{self.kwargs["slug"]}_skill.html']
- 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
- 
-        if self.request.user.is_authenticated:
-            # Get the student
-            student = Student.objects.get(user=self.request.user)
- 
-            # Get the progress associated with the student and the current skill
-            progress = Progress.objects.get(student=student, skill=self.object)
-            # Add the progress_id to the context
-            context['progress_id'] = progress.id
 
+        if self.request.user.is_authenticated:
+            student = Student.objects.filter(user=self.request.user).first()
+            if student:
+                progress = Progress.objects.filter(student=student, skill=self.object).first()
+                if progress:
+                    context['progress_id'] = progress.id
 
         return context
 
+    def get_object(self):
+        dummy_skills = [
+            {
+                'title': 'Docker Basics',
+                'slug': 'docker-basics',
+                'difficulty': 'Beginner',
+                'tags': ['DevOps', 'Containers'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'HTML & Tailwind Styling',
+                'slug': 'html-tailwind',
+                'difficulty': 'Beginner',
+                'tags': ['Frontend', 'UI', 'CSS'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Git & GitHub Workflows',
+                'slug': 'git-github-workflows',
+                'difficulty': 'Intermediate',
+                'tags': ['Collaboration', 'Version Control'],
+                'status': 'Completed'
+            },
+            {
+                'title': 'Django',
+                'slug': 'django',
+                'difficulty': 'Intermediate',
+                'tags': ['Python', 'Web Dev'],
+                'status': 'Not Started'
+            },
+            {
+                'title': 'Secure Code Review',
+                'slug': 'secure-code-review',
+                'difficulty': 'Advanced',
+                'tags': ['Security', 'Code Quality'],
+                'status': 'In Progress'
+            }
+        ]
+
+        for skill in dummy_skills:
+            if skill['slug'] == self.kwargs['slug']:
+                return skill
+
+        raise Http404("Skill not found")
+
+
+class MarkSkillCompletedView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        user = request.user
+        progress = user.upskilling_progress or {}
+
+        # Mark the skill as completed
+        progress[slug] = "Completed"
+        user.upskilling_progress = progress
+        user.save()
+
+        return redirect('upskilling')  # send them back to dashboard
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'accounts/password_reset.html'
@@ -1301,12 +1493,17 @@ def feedback_view(request):
     rating = None
 
     if request.method == 'POST':
-        form = ExperienceForm(request.POST)
+        post_data = request.POST.copy()  # Make a mutable copy
+        if 'anonymous' in post_data:
+            post_data['name'] = 'Anonymous'
+
+        form = ExperienceForm(post_data)  # Use modified post_data
+
         if form.is_valid():
             feedback_obj = form.save(commit=False)
             feedback_text = form.cleaned_data.get('feedback')
             name = form.cleaned_data.get('name')
-            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+            rating = post_data.get('rating')  # ⭐️ Rating from hidden/radio field
 
             # 🧠 Sentiment analysis
             blob = TextBlob(feedback_text)
@@ -1516,13 +1713,29 @@ def blog_list(request):
     posts_html = render_to_string('posts_partial.html', {'page_obj': page_obj})
     return JsonResponse({'posts_html': posts_html, 'has_next': page_obj.has_next()})
 
-
 def list_careers(request):
     jobs = Job.objects.filter(closing_date__gte=timezone.now()).order_by('closing_date')
+
+    search = request.GET.get('search', '')
+    job_type = request.GET.get('job_type', '')
+    location = request.GET.get('location', '')
+
+    if search:
+        jobs = jobs.filter(Q(title__icontains=search) | Q(description__icontains=search))
+    if job_type:
+        jobs = jobs.filter(job_type=job_type)
+    if location:
+        jobs = jobs.filter(location=location)
+
     context = {
-        "jobs":jobs
+        "jobs": jobs,
     }
-    return render(request,"careers/career-list.html",context)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, "careers/partials/job-listings.html", context)
+    else:
+        return render(request, "careers/career-list.html", context)
+
 
 def career_detail(request,id):
     job = get_object_or_404(Job, id=id)
@@ -1530,6 +1743,20 @@ def career_detail(request,id):
         "job":job
     }
     return render(request,"careers/career-detail.html",context)
+
+def career_discover(request):
+    return render(request, "careers/discover.html")
+
+def internships(request):
+    internships = Job.objects.filter(job_type='internship', closing_date__gte=timezone.now()).order_by('closing_date')
+    context = {
+        "internships": internships
+    }
+    return render(request, "careers/internships.html", context)
+
+# View for Job Alerts Page
+def job_alerts(request):
+    return render(request, "careers/job-alerts.html")
 
 def career_application(request,id):
     job = get_object_or_404(Job, id=id)
@@ -1622,6 +1849,12 @@ def leaderboard_update():
                 LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
 
 
+def cyber_quiz(request):
+    """
+    View for the cybersecurity quiz page.
+    """
+    return render(request, 'pages/challenges/quiz.html')
+
 def comphrehensive_reports(request):
     reports = AppAttackReport.objects.all().order_by('-year')
     return render(request, 'pages/appattack/comprehensive_reports.html', {'reports': reports})
@@ -1648,6 +1881,7 @@ def secure_code_review(request):
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review.html', {'form': form})
 
+@login_required
 def pen_testing_form_view(request):
     if request.method == 'POST':
         form = PenTestingRequestForm(request.POST)
@@ -1659,6 +1893,7 @@ def pen_testing_form_view(request):
         form = PenTestingRequestForm()
     return render(request, 'pages/appattack/pen_testing_form.html', {'form': form, 'title': "Pen Testing Request"})
 
+@login_required
 def secure_code_review_form_view(request):
     if request.method == 'POST':
         form = SecureCodeReviewRequestForm(request.POST)
@@ -1669,4 +1904,38 @@ def secure_code_review_form_view(request):
     else:
         form = SecureCodeReviewRequestForm()
     return render(request, 'pages/appattack/secure_code_review_form.html', {'form': form, 'title': "Secure Code Review Request"})
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        logout(request)
+        messages.success(request, "Your account has been deleted.")
+        return redirect('login') 
+    return HttpResponseNotAllowed(['POST'])
+
+def tools_home(request):
+    return render(request, 'pages/pt_gui/tools/index.html')
+
+def aircrack_view(request):
+    return render(request, 'pages/pt_gui/tools/aircrack/index.html')
+
+def arjun_view(request):
+    return render(request, 'pages/pt_gui/tools/arjun/index.html')
+
+def rainbow_view(request):
+    return render(request, 'pages/pt_gui/tools/rainbowcrack/index.html')
+
+def airbase_view(request):
+    return render(request, 'pages/pt_gui/tools/airbase/index.html')
+
+def amap_view(request):
+    return render(request, 'pages/pt_gui/tools/amap/index.html')
+
+def amass_view(request):
+    return render(request, 'pages/pt_gui/tools/amass/index.html')
+
+def arpaname_view(request):
+    return render(request, 'pages/pt_gui/tools/arpaname/index.html')
 
