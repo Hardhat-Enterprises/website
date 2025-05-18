@@ -124,10 +124,12 @@ from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
+
 from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+
  
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -542,28 +544,7 @@ def Vr_main(request):
 def client_login(request):
     form = ClientLoginForm
     return render(request, 'accounts/sign-in-client.html',{'form': form})
-
-
-def feedback(request):
-    if request.method == 'POST':
-        form = ExperienceForm(request.POST)
-        if form.is_valid():
-            form.save()  # Save the feedback to the database
-            messages.success(request, "Thank you for your feedback!")
-            return redirect('feedback')  # Redirect to clear the form
-        else:
-            messages.error(request, "There was an error. Please try again.")
-
-    else:
-        form = ExperienceForm()
-
-    # Retrieve recent feedback from the database
-    feedbacks = Experience.objects.all().order_by('-created_at')[:10]  
-
-    return render(request, 'pages/feedback.html', {'form': form, 'feedbacks': feedbacks})
-
-
-
+    
 ## Web-Form 
 
 def website_form(request):
@@ -589,6 +570,21 @@ class UserLoginView(LoginView):
     template_name = 'accounts/sign-in.html'
     form_class = UserLoginForm
     
+    def form_valid(self, form):
+        # Force new session to rotate session key (prevents fixation)
+        self.request.session.flush()  # <-- This destroys old session
+        
+        # Successful login, proceed as normal
+        response = super().form_valid(form)
+
+        # Store session info for hijack protection
+        request = self.request
+        request.session['ip_address'] = self.get_client_ip(request)
+        request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+        request.session['session_token'] = request.session.session_key
+
+        return response
+
     def form_invalid(self, form):
         # Increment the failed login attempts
         failed_attempts = cache.get('failed_login_attempts', 0) + 1
@@ -1500,12 +1496,17 @@ def feedback_view(request):
     rating = None
 
     if request.method == 'POST':
-        form = ExperienceForm(request.POST)
+        post_data = request.POST.copy()  # Make a mutable copy
+        if 'anonymous' in post_data:
+            post_data['name'] = 'Anonymous'
+
+        form = ExperienceForm(post_data)  # Use modified post_data
+
         if form.is_valid():
             feedback_obj = form.save(commit=False)
             feedback_text = form.cleaned_data.get('feedback')
             name = form.cleaned_data.get('name')
-            rating = request.POST.get('rating')  # ⭐️ Rating from hidden/radio field
+            rating = post_data.get('rating')  # ⭐️ Rating from hidden/radio field
 
             # 🧠 Sentiment analysis
             blob = TextBlob(feedback_text)
@@ -1872,7 +1873,7 @@ def pen_testing(request):
             return redirect('pen-testing')
     else:
         form = PenTestingRequestForm()
-    return render(request, '/pen_testing.html', {'form': form})
+    return render(request, 'pages/appattack/pen_testing.html', {'form': form})
 
 def secure_code_review(request):
     if request.method == 'POST':

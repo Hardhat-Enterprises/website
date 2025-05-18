@@ -492,6 +492,20 @@ class ExperienceForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
             'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ExperienceForm, self).__init__(*args, **kwargs)
+        self.fields['name'].required = False  # Let us handle this manually in clean()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        anonymous = self.data.get('anonymous')  # Read from raw POST data (checkbox input)
+
+        if not anonymous and not name:
+            self.add_error('name', 'Please enter your name or check "Make it anonymous".')
+
+
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:
@@ -502,6 +516,7 @@ class JobApplicationForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
     resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+
     cover_letter = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
 class PenTestingRequestForm(forms.ModelForm):
@@ -517,3 +532,4 @@ class SecureCodeReviewRequestForm(forms.ModelForm):
     class Meta:
         model = SecureCodeReviewRequest
         fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+

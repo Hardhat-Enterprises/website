@@ -1,13 +1,16 @@
-
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+{% block seo %}
+    <title>AppAttack by Hardhat Enterprises - Ethical Hacking Tools</title>
+    <meta name="description" content="AppAttack by Hardhat Enterprises offers cybersecurity tools for ethical hacking, including penetration testing and secure code reviews, to safeguard digital assets.">
+    <meta name="keywords" content="cybersecurity tools, ethical hacking tools, penetration testing, secure code review, Hardhat Enterprises, best free cybersecurity tools 2025">
+    <meta property="og:title" content="AppAttack by Hardhat Enterprises">
+    <meta property="og:description" content="Explore AppAttack’s cybersecurity services, including penetration testing and secure code reviews, to protect your digital assets.">
+    <meta property="og:image" content="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}">
+{% endblock seo %}
+
 {% block content %}
-<head>
-
-	<title>AppAttack</title>
-</head>
-
 <main>
     {% include 'includes/preloader-appattack.html' %}
 
@@ -19,7 +22,6 @@
 			<div class="col-lg-6 mx-auto">
 			  <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
 			  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-			</head>
 			<body>
 			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
 			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>

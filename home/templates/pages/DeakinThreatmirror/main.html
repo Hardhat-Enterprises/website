@@ -1,6 +1,15 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+{% block seo %}
+    <title>Deakin Threat Mirror - Threat Intelligence Platform & Cybersecurity Visualization</title>
+    <meta name="description" content="Deakin Threat Mirror is an open-source threat intelligence platform for SMEs, offering cybersecurity visualization and actionable threat analysis tools. Project currently paused.">
+    <meta name="keywords" content="threat intelligence platform, cybersecurity visualization, threat analysis tools, cybersecurity tools, ethical hacking tools, Hardhat Enterprises">
+    <meta property="og:title" content="Deakin Threat Mirror - Threat Intelligence Platform">
+    <meta property="og:description" content="Discover Deakin Threat Mirror, an open-source platform for cybersecurity visualization and threat analysis, designed for SMEs. Project currently paused.">
+    <meta property="og:image" content="{% static 'assets/img/pages/home/deakin_threat_mirror.svg' %}">
+{% endblock %}
+
 {% block content %}
 <main>
     {% include 'includes/preloader-dtm.html' %}
@@ -10,8 +19,7 @@
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
-                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror.svg' %}" alt="Dashboard Preview"
-                        width="500" height="500">
+                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror.svg' %}" alt="Deakin Threat Mirror dashboard preview" width="500" height="500" loading="lazy">
                     <div class="mt-4 mb-5">
                         <h2 class="fw-bolder">Deakin Threat Mirror</h2>
                         <h4 class="fw-normal">Project Paused: Awaiting Next Steps.</h4>
@@ -23,74 +31,67 @@
     <!-- End of Hero Section -->
 
     <section>
-        <!-- About  -->
-        <!-- <div class="container">
+        <!-- Overview -->
+        <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Overview</h2>
-                    <p class="mb-4">Introducing Deakin Threat Mirror – a data visualization project aimed at
-                        providing insights into cyber threats and trends. By analyzing and presenting cybersecurity
-                        data in visually engaging ways, users can gain a deeper understanding of the evolving threat
-                        landscape. Our goal is to empower individuals and organizations to make informed decisions
-                        and enhance their cybersecurity posture.</p>
+                    <h2 class="fw-bolder text-dark">Overview of Deakin Threat Mirror</h2>
+                    <p class="mb-4">
+                        Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize cyber threat data. Aimed at small and medium-sized enterprises (SMEs) and developing economies, it provides actionable cybersecurity visualization and threat analysis tools to enhance security. Note: This project is currently paused, awaiting further development.
+                    </p>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror-about.svg' %}" class="img-fluid"
-                        alt="About Us">
+                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror-about.svg' %}" class="img-fluid" alt="Deakin Threat Mirror overview illustration" loading="lazy">
                 </div>
-            </div> -->
-            <!-- End of About  -->
+            </div>
+            <!-- End of Overview -->
+
             <!-- Goals -->
-            <!-- <div class="row justify-content-between align-items-center">
+            <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror-goals.svg' %}" class="img-fluid"
-                        alt="Goals and Objectives">
+                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror-goals.svg' %}" class="img-fluid" alt="Deakin Threat Mirror goals and objectives" loading="lazy">
                 </div>
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Goals</h2>
+                    <h2 class="fw-bolder text-dark">Goals of Deakin Threat Mirror</h2>
                     <ul class="mb-4">
-                        <li>Visualize cyber threat data in intuitive and interactive formats.</li>
-                        <li>Identify emerging threats and patterns through data analysis and visualization.</li>
-                        <li>Empower users to make data-driven decisions in cybersecurity risk management.</li>
-                        <li>Facilitate collaboration and knowledge-sharing among cybersecurity professionals and
-                            researchers.</li>
+                        <li>Visualize cyber threat data with intuitive threat intelligence platforms</li>
+                        <li>Identify emerging threats through advanced cybersecurity visualization</li>
+                        <li>Empower SMEs with data-driven cybersecurity decisions</li>
+                        <li>Facilitate collaboration among cybersecurity professionals</li>
                     </ul>
                     <h2 class="fw-bolder text-dark">Objectives</h2>
                     <ul class="mb-4">
-                        <li>Develop a user-friendly web application for exploring and analyzing cybersecurity
-                            data.</li>
-                        <li>Integrate data sources and APIs to collect and process cybersecurity data.</li>
-                        <li>Implement data visualization techniques to present insights and trends effectively.</li>
-                        <li>Provide tools for customization and filtering to meet diverse user needs.</li>
+                        <li>Develop a user-friendly web app for threat analysis tools</li>
+                        <li>Integrate data sources and APIs for real-time threat data processing</li>
+                        <li>Implement visualization techniques to highlight threat trends</li>
+                        <li>Offer customization tools for diverse user needs</li>
                     </ul>
                 </div>
-            </div> -->
+            </div>
             <!-- End of Goals -->
-            <!-- Class of Action Section -->
-            <!-- <div class="bg-primary-app">
+
+            <!-- Call to Action Section -->
+            <div class="bg-primary-app">
                 <div class="row justify-content-center text-center">
                     <div class="col-lg-8">
                         <div class="mt-4 mb-5">
-                            <h2 class="fw-bolder text-dark">Join Us</h2>
-                            <p class="mb-4">Join our mission to enhance cybersecurity awareness and decision-making
-                                through data visualization. Whether you're a data scientist, developer, or cybersecurity
-                                enthusiast, your expertise can contribute to making cyberspace safer for everyone.</p>
-                            <a href="{% url 'threat_mirror_join_us' %}" class="btn btn-primary animate-up-2"
-                                alt="Join Us"><span class="fas fa-handshake me-2"></span>
-                                Join Us</a>
-
+                            <h2 class="fw-bolder text-dark">Stay Updated on Deakin Threat Mirror</h2>
+                            <p class="mb-4">
+                                While Deakin Threat Mirror is currently paused, we invite you to stay informed about its future updates. Join our community to contribute ideas or follow the project’s progress as we aim to enhance cybersecurity awareness through a powerful threat intelligence platform.
+                            </p>
+                            <a href="{% url 'threat_mirror_join_us' %}" class="btn btn-primary animate-up-2" alt="Join the Deakin Threat Mirror community">
+                                <span class="fas fa-handshake me-2"></span>Join Us
+                            </a>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div> -->
-        <!-- End of Class of Action Section -->
+            <!-- End of Call to Action Section -->
+        </div>
     </section>
-    <!-- End of Social Links Section -->
 
-     <!-- FAQ Section -->
-     <section class="section section-lg bg-secondary-app py-5">
+    <!-- FAQ Section -->
+    <section class="section section-lg bg-secondary-app py-5">
         <div class="container">
             <h1 class="fw-bolder display-50 text-center text-white mb-5 mt-5">Frequently Asked Questions</h1>
             <h2 class="fw-bolder display-5 text-center text-white mb-5 mt-5">Explore the answers to common questions about Deakin Threat Mirror</h2>
@@ -98,99 +99,100 @@
                 <div class="col-12">
                     <div class="accordion" id="accordionPanelsStayOpenExample">
                         <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                            <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                <b>What is the Deakin Threat Mirror project?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                                The Deakin Threat Mirror project is an open-source threat intelligence platform designed to aggregate, process, and visualize diverse threat feeds into actionable intelligence. It focuses on supporting small and medium-sized enterprises (SMEs) and developing economies by making cybersecurity more accessible and effective.
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    <b>What is the Deakin Threat Mirror project?</b>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                    Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize diverse threat feeds into actionable intelligence. It focuses on supporting SMEs and developing economies by making cybersecurity more accessible through cybersecurity visualization.
+                                </div>
                             </div>
-                          </div>
                         </div>
                         <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                            <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                <b>What are the main goals of the project?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
-                                The primary goals are to revolutionize the way cybersecurity threats are analyzed and understood, to provide a cost-effective and efficient threat intelligence solution for SMEs and developing economies and to transform raw threat feeds and malware analysis patterns into actionable threat intelligence using advanced visual analytics, machine learning, and user-friendly interfaces.
+                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                    <b>What are the main goals of the project?</b>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                                <div class="accordion-body">
+                                    The project aims to revolutionize cybersecurity threat analysis, provide a cost-effective threat intelligence platform for SMEs, and transform raw threat feeds into actionable insights using advanced visual analytics and machine learning.
+                                </div>
                             </div>
-                          </div>
                         </div>
                         <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                            <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                              <b>What challenges does the project address?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                            <div class="accordion-body">
-                                The project addresses the critical challenge of consolidating and interpreting vast amounts of cyber threat data for SMEs and developing economies, which often lack the resources for commercial security tools. It aims to bridge this gap by offering enhanced protection against cyber-attacks.
+                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                    <b>What challenges does the project address?</b>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                <div class="accordion-body">
+                                    Deakin Threat Mirror addresses the challenge of consolidating and interpreting vast amounts of cyber threat data for SMEs and developing economies, offering enhanced protection through a user-friendly threat intelligence platform.
+                                </div>
                             </div>
-                          </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                                <b>What are the long-term goals of the project?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                                    <b>What are the long-term goals of the project?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
-                              <div class="accordion-body">
-                                In the long term, the project aims to create a lightweight, easy-to-use threat intelligence platform. This platform will transform raw threat feeds and malware analysis patterns into actionable threat intelligence using statistical data analysis, artificial intelligence, and machine learning, particularly benefiting SMEs and developing economies.
+                                <div class="accordion-body">
+                                    The long-term goal is to create a lightweight, easy-to-use threat intelligence platform that transforms raw threat feeds into actionable insights using statistical analysis, AI, and machine learning, particularly benefiting SMEs and developing economies.
+                                </div>
                             </div>
-                         </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingFive">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-                                <b>How will the project benefit SMEs and developing economies?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
+                                    <b>How will the project benefit SMEs and developing economies?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
-                              <div class="accordion-body">
-                                The project will provide SMEs and developing economies with a cost-effective and efficient threat intelligence solution. By making cybersecurity more accessible and effective, it will help these organizations protect themselves against cyber-attacks, despite their limited resources.
-                              </div>
+                                <div class="accordion-body">
+                                    Deakin Threat Mirror provides SMEs and developing economies with a cost-effective threat intelligence solution, making cybersecurity accessible and helping them protect against cyber-attacks despite limited resources.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingSix">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
-                                <b>How will the project benefit small businesses?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
+                                    <b>What technologies are being leveraged in the project?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
-                              <div class="accordion-body">
-                                The project will provide small businesses with practical, hands-on training in cybersecurity. By engaging with realistic scenarios in a VR environment, users will gain a deeper understanding of how to protect their businesses against cyber threats, ultimately enhancing their overall cybersecurity posture.
-                              </div>
+                                <div class="accordion-body">
+                                    The project leverages advanced visual analytics, machine learning, and user-friendly interfaces to transform raw data into actionable cybersecurity visualization, making threat analysis tools accessible for all.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingSeven">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
-                                <b>What technologies are being leveraged in the project?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
+                                    <b>How can interested parties get involved or contribute to the project?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSeven">
-                              <div class="accordion-body">
-                                The project leverages advanced visual analytics, machine learning, and user-friendly interfaces to transform raw data into insightful, actionable information. These technologies help in making cybersecurity more accessible and effective for organizations with limited resources.
+                                <div class="accordion-body">
+                                    Interested parties can get involved by participating in technical reviews, providing feedback, or contributing to development. Follow the project’s progress on platforms like GitHub to stay updated on this threat intelligence platform.
+                                </div>
                             </div>
-                        </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingEight">
-                              <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
-                                <b>How can interested parties get involved or contribute to the project?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
+                                    <b>What is the current status of the project?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
                               <div class="accordion-body">
                                 Interested parties can get involved or contribute to the project by participating in the technical review, providing feedback, or contributing to the development of the platform. They can also follow the project's progress and updates on platforms like GitHub
                               </div>
+                                </div>
                             </div>
                         </div>
                     </div>
