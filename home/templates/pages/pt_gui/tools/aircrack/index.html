@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aircrack-ng</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      padding: 40px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .navbar-title {
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #444;
+    }
+
+    .tab {
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+      text-align: center;
+      flex: 1;
+      padding: 12px 0;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      color: #007bff;
+      border-bottom: 3px solid #007bff;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      margin-top: 20px;
+      color: #ccc;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      font-size: 14px;
+    }
+
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      margin-left: 10px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #555;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    .toggle-switch input:checked + .slider {
+      background-color: #007bff;
+    }
+
+    .toggle-switch input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .btn {
+      margin-top: 30px;
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #0069d9;
+    }
+
+    .required {
+      color: red;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    .output-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+
+    .output-box {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .output-box span {
+      color: #42a5f5;
+    }
+
+    .clear-btn {
+      background-color: #e53935;
+      color: white;
+      margin-top: 10px;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      background-color: #c62828;
+    }
+
+    .note {
+      font-weight: bold;
+      color: #f44336;
+    }
+
+    .output-section {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<div style="padding: 20px; text-align: center;">
+  <a href="/" style="
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+  " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+    Redirect to Website
+  </a>
+</div>
+
+<body>
+
+  <div class="navbar">
+    <div class="navbar-title">Aircrack-ng</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab">User Guide</div>
+    <div class="tab active">Configuration</div>
+    <div class="tab">Tutorial</div>
+  </div>
+
+  <div class="container">
+    <h2>Configure Aircrack-ng</h2>
+
+    <label for="auth">WEP or WPA-PSK <span class="required">*</span></label>
+    <select id="auth">
+      <option>WEP</option>
+      <option>WPA</option>
+    </select>
+
+    <div class="toggle-group">
+      <label for="advanced-toggle" style="font-weight: 600;">Advanced Mode</label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="advanced-toggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <label for="bssid">Set AP MAC address (BSSID)</label>
+    <input type="text" id="bssid" placeholder="eg: xx:xx:xx:xx:xx:xx" />
+
+    <label for="essid">Set AP identifier (ESSID)</label>
+    <input type="text" id="essid" placeholder="eg: MyWiFi" />
+
+    <label for="capture">Packet capture file <span class="required">*</span></label>
+    <input type="text" id="capture" placeholder="eg: /path/to/file.cap" />
+
+    <label for="output">Save output file</label>
+    <input type="text" id="output" placeholder="eg: /path/to/key.txt" />
+
+    <button class="btn" onclick="showOutput()">Start Aircrack-ng</button>
+
+    <!-- OUTPUT SECTION -->
+    <div class="output-section" id="output-section">
+      <div class="output-title">Output</div>
+      <div class="output-box">
+        $ aircrack-ng /media/sf_Shared_Folder/D2-resources/wifi.pcap
+  
+        <br />
+        Reading packets, please wait...
+        <br />
+        Opening /media/sf_Shared_Folder/D2-resources/wifi.pcap
+        <br />
+        Read 133068 packets.
+        <br /><br />
+        #  BSSID              ESSID                     Encryption
+  
+        <br />
+        1  00:23:69:61:00:D0  Ment0rNet                 WEP (29719 IVs)
+  
+        <br /><br />
+        Choosing first network as target.
+  
+        <br />
+        Reading packets, please wait...
+        Opening /media/sf_Shared_Folder/D2-resources/wifi.pcap
+  
+        <br />
+        Read 133068 packets.
+  
+        <br />
+        1 potential targets
+  
+        <br />
+        Attack will be restarted every 5000 captured ivs.
+        Got 29719 out of 25000 IVsStarting PTW attack with 29719 ivs.
+  
+        <br />
+        [00:00:01] Tested 938 keys (got 26805 IVs)KB    depth   byte(vote)
+  
+        <br />
+        0    3/  4   D0(33536) 1F(33024) 27(33024) BC(33024) 2F(31744)
+        1    0/  1   E5(38656) 82(33024) 0C(32256) 3C(32000) EB(31744)
+        2    0/  6   9E(34048) 27(33792) 7A(32768) E9(32512) 8B(31744)
+        3    0/  4   B9(35328) D4(35072) 2E(34048) B9(33024) 00(32768)
+        4    8/ 10   6D(31488) 10(31232) B9(31232) 7A(30976) 95(30976)
+  
+        <br /><br />
+        KEY FOUND! [ D0:E5:9E:B9:04 ]
+  
+        <br />
+        Decrypted correctly: <span>100%</span>
+  
+        <br /><br />
+        Process completed successfully.
+  
+        <br /><br />
+        <span class="note">Note: this is for demo purpose only.</span>
+      </div>
+
+      <button class="clear-btn" onclick="clearOutput()">Clear Output</button>
+    </div>
+  </div>
+
+  <script>
+    function showOutput() {
+      const capture = document.getElementById("capture").value;
+      if (!capture.trim()) {
+        alert("Please provide a valid packet capture file.");
+        return;
+      }
+
+      document.getElementById("output-section").style.display = "block";
+    }
+
+    function clearOutput() {
+      document.getElementById("output-section").style.display = "none";
+    }
+  </script>
+</body>
+</html>

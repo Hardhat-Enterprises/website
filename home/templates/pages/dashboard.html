@@ -1,71 +1,126 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% block content %}
+
 <main class="pt-6">
   {% include 'includes/pre-loader.html' %}
 
-  <!-- Hero -->
+  <!-- Header -->
   <section class="section-header bg-tertiary text-black text-center py-5">
-    <h1>Welcome to your dashboard, {{ user.first_name }}</h1>
-    <p>Unit: {{ student.unit }}</p>
-    <p>Student ID: {{ student.id }}</p>
+    <h1>Welcome to your Upskilling Dashboard, {{ user.first_name }}</h1>
   </section>
 
-  <div class="container">
-    <div class="row">
-      <!-- Project Preferences Section -->
-      <div class="col-md-6">
-        <section class="pt-5">
-          <h2>Project Preferences</h2>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col" style="font-size: 25px;">Your Project Preferences</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Preference 1: {{ student.p1 }}</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Preference 2: {{ student.p2 }}</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Preference 3: {{ student.p3 }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
+  <div class="container py-5">
+    <!-- Summary Cards -->
+    <div class="row text-light mb-4">
+      <div class="col-md-4">
+        <div class="card bg-success shadow-sm p-3 rounded-4 text-center text-white">
+          <h5>✅ Completed</h5>
+          <h3>{{ completed_count }}/{{ total }}</h3>
+        </div>
       </div>
-
-      <!-- Upskilling Progress Tracker -->
-      <div class="col-md-6">
-        <section class="text-left pt-5">
-          <h2>Your Upskilling Progress</h2>
-          {% for p in progress %}
-          <div class="mb-3">
-            <label for="progress">{{ p.skill.name }}:</label>
-            <span>{{ p.progress }}%</span>
-            <div class="progress" style="height: 10px;">
-              <div class="progress-bar bg-warning" role="progressbar" style="width: {{ p.progress }}%;" aria-valuenow="{{ p.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          {% endfor %}
-        </section>
+      <div class="col-md-4">
+        <!-- Forced blue background to fix visibility issue -->
+        <div class="card shadow-sm p-3 rounded-4 text-center text-white" style="background-color: #0d6efd;">
+          <h5>🔵 In Progress</h5>
+          <h3>{{ in_progress_count }}/{{ total }}</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-dark shadow-sm p-3 rounded-4 text-center text-danger">
+          <h5>⭕ Not Started</h5>
+          <h3>{{ not_started_count }}/{{ total }}</h3>
+        </div>
       </div>
     </div>
 
-    <!-- Allocation -->
-    <section class="text-left pb-5">
-      <h2>Your Allocation</h2>
-      <p>Status: {{ student.allocated }}</p>
-    </section>
+    <!-- Pie Chart Above Cards -->
+    <div style="margin-bottom: 50px; text-align: center;">
+      <h4 style="color: black; margin-bottom: 20px;">Skill Progress Overview</h4>
+      <canvas id="progressPieChart" style="max-width: 300px; margin: 0 auto;"></canvas>
+    </div>
+
+    <!-- Overall Progress Bar -->
+    <div class="mb-5">
+      <label class="text-light">Total Progress: {{ percent }}%</label>
+      <div class="progress" style="height: 16px;">
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percent }}%;" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+
+    <!-- Skill Cards -->
+    <div class="row">
+      {% for skill in skills %}
+      <div class="col-md-6 mb-4">
+        <div class="card bg-dark text-white shadow-sm rounded-4 transition transform hover:scale-105 hover:shadow-lg">
+          <div class="card-body">
+            <h5 class="card-title text-warning">{{ skill.title }}</h5>
+            <p>
+              <strong>Status:</strong>
+              {% if skill.status == "Completed" %}
+                <span class="badge bg-success">Completed</span>
+              {% elif skill.status == "In Progress" %}
+                <span class="badge text-white" style="background-color: #0d6efd;">In Progress</span>
+              {% else %}
+                <span class="badge bg-secondary">Not Started</span>
+              {% endif %}
+            </p>
+            <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-outline-light btn-sm">Open Skill</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 
-  <!-- End of section -->
+  <div style="height: 100px;"></div>
 </main>
-{% endblock content %}
+
+<!-- Chart.js and Pie Chart Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{ completed_count|json_script:"completed-data" }}
+{{ in_progress_count|json_script:"in-progress-data" }}
+{{ not_started_count|json_script:"not-started-data" }}
+
+<script>
+  const ctx = document.getElementById('progressPieChart').getContext('2d');
+  const completed = JSON.parse(document.getElementById("completed-data").textContent);
+  const inProgress = JSON.parse(document.getElementById("in-progress-data").textContent);
+  const notStarted = JSON.parse(document.getElementById("not-started-data").textContent);
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Completed', 'In Progress', 'Not Started'],
+      datasets: [{
+        label: 'Skill Progress',
+        data: [completed, inProgress, notStarted],
+        backgroundColor: [
+          '#198754',    // green
+          '#0d6efd',    // blue
+          '#6c757d'     // grey
+        ],
+        borderColor: '#ffffff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      animation: {
+        animateRotate: true,
+        animateScale: true
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: 'black',
+            font: { size: 14 }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}

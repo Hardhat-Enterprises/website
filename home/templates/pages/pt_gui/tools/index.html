@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tools</title>
+  {% load static %}
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 40px 0 20px;
+      font-size: 2.5rem;
+    }
+
+    .filter-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    select {
+      background-color: #2c2c2c;
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      font-size: 16px;
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      margin-bottom: 50px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #444;
+      text-align: left;
+      padding: 16px 12px;
+      vertical-align: top;
+    }
+
+    th {
+      color: #cfcfcf;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: #2a2a2a;
+    }
+
+    .go-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .go-button:hover {
+      background-color: #0056b3;
+    }
+
+    .button-cell {
+      text-align: center;
+    }
+  </style>
+</head>
+<div style="padding: 20px; text-align: center;">
+  <a href="/" style="
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+  " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+    Redirect to Website
+  </a>
+</div>
+
+<body>
+  <h1>Tools</h1>
+  <div class="filter-container">
+    <select id="categoryFilter">
+      <option>All</option>
+      <option>Wireless Attacks and Rogue Access Point Creation</option>
+      <option>Password Cracking and Authentication Testing</option>
+      <option>Network Scanning and Enumeration</option>
+      <option>Information Gathering and Analysis</option>
+      <option>Web Application Testing</option>
+    </select>
+  </div>
+
+  <table id="toolsTable">
+    <thead>
+      <tr>
+        <th>Tool name</th>
+        <th>Tool description</th>
+        <th>Category</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="Wireless Attacks and Rogue Access Point Creation">
+        <td>Airbase NG</td>
+        <td>A network attack tool that can create a fake access point (AP) to capture and analyse traffic from devices that connect to it.</td>
+        <td>Wireless Attacks and Rogue Access Point Creation</td>
+        <td class="button-cell"><a href="{% url 'tool_airbase' %}" class="go-button">Go</a></td>
+      </tr>
+      <tr class="Password Cracking and Authentication Testing">
+        <td>Aircrack NG</td>
+        <td>A wireless network auditing tool designed for analysing packets captured from Wi-Fi networks, cracking WEP and WPA-PSK passwords, and identifying vulnerabilities in wireless networks.</td>
+        <td>Password Cracking and Authentication Testing</td>
+        <td class="button-cell"><a href="{% url 'tool_aircrack' %}" class="go-button">Go</a></td>
+      </tr>
+      <tr class="Network Scanning and Enumeration">
+        <td>Amap</td>
+        <td>A network scanning tool designed to identify and fingerprint services and applications running on open ports of targeted hosts.</td>
+        <td>Network Scanning and Enumeration</td>
+        <td class="button-cell"><a href="{% url 'tool_amap' %}" class="go-button">Go</a></td>
+      </tr>
+      <tr class="Information Gathering and Analysis">
+        <td>Amass</td>
+        <td>A tool for in-depth DNS enumeration and network mapping.</td>
+        <td>Information Gathering and Analysis</td>
+        <td class="button-cell"><a href="{% url 'tool_amass' %}" class="go-button">Go</a></td>
+      </tr>
+      <tr class="Web Application Testing">
+        <td>Arjun</td>
+        <td>A tool that helps find hidden GET and POST parameters for URL endpoints by analysing web traffic and identifying potential query parameters.</td>
+        <td>Web Application Testing</td>
+        <td class="button-cell"><a href="{% url 'tool_arjun' %}" class="go-button">Go</a></td>
+      </tr>
+      <tr class="Web Application Testing">
+        <td>Arpaname</td>
+        <td>A web application tool to perform reverse DNS lookups for IP addresses, mapping them back to associated domain names.</td>
+        <td>Web Application Testing</td>
+        <td class="button-cell"><a href="{% url 'tool_arpaname' %}" class="go-button">Go</a></td>
+      </tr>
+      <tr class="Password Cracking and Authentication Testing">
+        <td>RainbowCrack</td>
+        <td>Uses rainbow tables to crack password hashes.</td>
+        <td>Password Cracking and Authentication Testing</td>
+        <td class="button-cell"><a href="{% url 'tool_rainbowcrack' %}" class="go-button">Go</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const filterDropdown = document.getElementById('categoryFilter');
+    const tableRows = document.querySelectorAll('#toolsTable tbody tr');
+
+    filterDropdown.addEventListener('change', function() {
+      const selectedCategory = filterDropdown.value;
+      tableRows.forEach(row => {
+        const rowCategory = row.className;
+        row.style.display = (selectedCategory === 'All' || rowCategory === selectedCategory) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
