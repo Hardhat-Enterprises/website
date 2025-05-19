@@ -1,11 +1,16 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block content %}
-<head>
-    <title>Pen Testing Services</title>
-</head>
+{% block seo %}
+    <title>AppAttack Pen Testing Services - Ethical Hacking Tools</title>
+    <meta name="description" content="AppAttack offers penetration testing services using ethical hacking tools to identify vulnerabilities and secure your systems from cyber attacks.">
+    <meta name="keywords" content="penetration testing, penetration testing services, cybersecurity tools, ethical hacking tools, cybersecurity tools for ethical hacking training, Hardhat Enterprises">
+    <meta property="og:title" content="AppAttack Penetration Testing Services">
+    <meta property="og:description" content="Discover how AppAttack’s penetration testing services use ethical hacking tools to protect your systems from cyber threats.">
+    <meta property="og:image" content="{% static 'assets/img/pages/appattack/pen-test.svg' %}">
+{% endblock %}
 
+{% block content %}
 <main>
     {% include 'includes/pre-loader.html' %}
 
