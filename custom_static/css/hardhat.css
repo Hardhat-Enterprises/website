@@ -26787,29 +26787,35 @@ blockquote {
     width: 300px;
     background-color: white;
     border: 1px solid #ccc;
-    border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+      background: #fff;
+    border-radius: 18px;
+  }
+
+  .chat-text{
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
   }
   
   #chat-popup.hidden {
     display: none;
   }
   
-  .chat-header {
+ .chat-header {
     padding: 10px;
-    background-color: #FFCD11;
+    background: linear-gradient(to right, #896d17, #FFCD11);
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 10px 10px 0 0;
+    border-radius: 18px 18px 0 0;
   }
 
   #chatForm{
     display: flex;
     flex-direction: column;
-
   }
 
   .chatForm{
@@ -26821,32 +26827,54 @@ blockquote {
       display: block;
     }
   }
+.chat-title{
+  padding-left: 14px;
+}
 
+.chat-div {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
   .chatInput{
-    padding-top: 5px;
-    padding-bottom: 5px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    font-size: 14px;
   }
-  
+  .chat-textarea {
+    resize: none;
+  }
   .chat-body {
     padding: 10px;
-    height: 350px;
-    overflow-y: auto;
-
+    height: 430px;
+    overflow: hidden;
+    padding: 20px;
   }
 
   .chatSubmit{
-    width: 200px;
-    height: 40px;
-    margin-top: 10px;
-    background-color: #FFCD11;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    margin-left: auto;
-    margin-right: auto;
+    background: linear-gradient(to right, #896d17, #FFCD11);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
   }
-  
+
+  .CloseButton{
+    border: bold;
+    border: #93a1b8;
+    color : #fff;
+    background-color: transparent;
+    border-radius: 15px;
+  }
   .chat-footer {
     display: flex;
     border-top: 1px solid #ccc;
@@ -26868,7 +26896,6 @@ blockquote {
     margin-left: 5px;
     border-radius: 5px;
   }
-  
 
 .chartist-tooltip:before {
   content: "";
@@ -27337,6 +27364,112 @@ blockquote {
 
 }
 
+
+/* testimonials styles */
+
+
+.testimonial-slider-container {
+  width: 100%; 
+  max-width: 100%; 
+  padding:  0px; 
+  box-sizing: border-box; 
+  position: relative;
+  overflow: hidden; 
+}
+
+.testimonial-slider {
+  display: flex;
+  transition: transform 3s ease-in-out;
+}
+
+.testimonial-item {
+  flex: 0 0 100%; 
+  padding: 40px; 
+  box-sizing: border-box; 
+  text-align: center;
+}
+
+.testimonial-item p {
+  font-size: 16px;
+  color: #555;
+}
+
+.testimonial-item h3 {
+  font-size: 16px;
+  color: #333;
+  margin-top: 10px;
+}
+body.dark-mode .testimonial-section {
+  background-color: #333333 !important;
+  color: #ffffff;
+}
+body.dark-mode .testimonial-section {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .testimonials-title {
+  font-size: 32px !important;
+  color: #ffffff !important;
+}
+body.dark-mode .testimonial-contentp{
+  color: #ffffff !important;
+  font-size: 16px !important;
+}
+body.dark-mode .testimonial-content{
+  color: #ffffff !important;
+  font-size: 16px !important;
+}
+.prev-btn, .next-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.prev-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
+.prev-btn:hover, .next-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.testimonial-section{
+  background-color: #fff !important;
+}
+.testimonials-title{
+  font-size: 32px;
+  color: #333;
+}
+.sub-header{
+  color: #ffc107;
+  margin: 0px !important;
+  font-size: 20px;
+  font-weight: 400;
+}
+.testimonial-content{
+  font-style: italic;
+}
+.testimonial-contentp{
+  font-style: italic;
+  font-size: 16px !important;
+}
+
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+
 /* Custom progress color for In Progress status */
 .progress-in-progress {
   background-color: #f1c40f !important; /* vivid yellow */
@@ -27358,6 +27491,7 @@ html[data-theme="dark"] .not-started-card {
 .not-started-text {
   font-weight: bold;
 }
+
 
 
 /* Force dark mode background on mobile navbar when collapsed */
