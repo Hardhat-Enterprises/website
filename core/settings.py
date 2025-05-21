@@ -87,7 +87,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'captcha',
     "django_light",
-    # "django.contrib.admin",
+    #"django.contrib.admin",
     "core.apps.CustomAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",

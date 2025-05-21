@@ -8,19 +8,19 @@ logger = logging.getLogger('admin_logout_logger')
 
 class AutoLogoutMiddleware(MiddlewareMixin):
     """
-    Middleware to log out the user as soon as they leave the admin page.
+    Middleware to log out users (except superusers) when they leave the admin area.
     """
     def process_request(self, request):
         user = request.user
-        # Only process if the user is logged in
         if user.is_authenticated:
-            # Check if the user is currently on the admin page
-            is_admin_page = request.path.startswith(reverse('admin:index'))
-
-            # If the user is no longer on the admin page, log them out immediately
-            if not is_admin_page:
-                logout(request)
-                logger.info(f"User {user.get_username()} has been logged out as they left the admin site.")
+            is_admin_page = request.path.startswith('/admin')
+            if not user.is_superuser:
+                if not is_admin_page and request.session.get('admin_session'):
+                    logout(request)
+                    request.session.pop('admin_session', None)
+                    logger.info(f"User {user.username} has been logged out after leaving the admin area.")
+                elif is_admin_page:
+                    request.session['admin_session'] = True
 
 
 
