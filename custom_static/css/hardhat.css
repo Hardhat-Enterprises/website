@@ -27365,23 +27365,27 @@ blockquote {
 }
 /* faq styles */
 .faq-section{
-  background-color: #ffcd11 !important ;
+  background-color: #ffffff !important ;
 }
 
 body.dark-mode .faq-button {
-  background-color: #ffffff !important;
+  background-color: #ffcd11 !important;
   color: #333333;
 }
-body.dark-mode .faq-content {
-  background-color: #ffffff !important;
+body.dark-mode .faq-section {
+  background-color: #333333 !important;
   color: #333333 !important;
+}
+body.dark-mode .faq-content {
+  background-color: #ffcd11 !important;
 }
 body.dark-mode .faq-content p{
   color: #333333 !important;
 }
 body.dark-mode .faq-sub-header{
-  color: #f9c74f !important;
+  color: #ffffff !important;
 }
+
 .faq-item {
     margin-bottom: 15px;
 }
@@ -27467,24 +27471,32 @@ body.dark-mode .faq-sub-header{
   margin-top: 10px;
 }
 body.dark-mode .testimonial-section {
-  background-color: #333333 !important;
+  background-color: #ffcd11  !important;
   color: #ffffff;
 }
-body.dark-mode .testimonial-section {
-  background-color: #333333 !important;
-  color: #ffffff !important;
-}
-
 body.dark-mode .testimonials-title {
   font-size: 32px !important;
+  color: #333333 !important;
+}
+body.dark-mode .faq-title{
   color: #ffffff !important;
 }
+body.dark-mode .testimonial-sub-header{
+  color: #000000 !important;
+  font-weight: 600;
+  font-size: 20px;
+}
+.testimonial-sub-header{
+  color: #000000 !important;
+  font-weight: 600;
+  font-size: 20px;
+}
 body.dark-mode .testimonial-contentp{
-  color: #ffffff !important;
+  color: #333333 !important;
   font-size: 16px !important;
 }
 body.dark-mode .testimonial-content{
-  color: #ffffff !important;
+  color: #333333 !important;
   font-size: 16px !important;
 }
 .prev-btn, .next-btn {
@@ -27512,7 +27524,7 @@ body.dark-mode .testimonial-content{
   background-color: rgba(0, 0, 0, 0.7);
 }
 .testimonial-section{
-  background-color: #fff !important;
+  background-color: #ffc107 !important;
 }
 .testimonials-title{
   font-size: 32px;
@@ -27536,7 +27548,7 @@ body.dark-mode .testimonial-content{
 h2 {
     margin-bottom: 20px;
     color: #333;
-
+}
 /* Custom progress color for In Progress status */
 .progress-in-progress {
   background-color: #f1c40f !important; /* vivid yellow */
