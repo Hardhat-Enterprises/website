@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arpaname</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      padding: 40px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .navbar-title {
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #444;
+    }
+
+    .tab {
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+      text-align: center;
+      flex: 1;
+      padding: 12px 0;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      color: #007bff;
+      border-bottom: 3px solid #007bff;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      margin-top: 20px;
+      color: #ccc;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      font-size: 14px;
+    }
+
+    .btn {
+      margin-top: 30px;
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #0069d9;
+    }
+
+    .required {
+      color: red;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    .output-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+
+    .output-box {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .output-box span {
+      color: #42a5f5;
+    }
+
+    .clear-btn {
+      background-color: #e53935;
+      color: white;
+      margin-top: 10px;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      background-color: #c62828;
+    }
+
+    .note {
+      font-weight: bold;
+      color: #f44336;
+    }
+
+    .output-section {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+
+<div style="padding: 20px; text-align: center;">
+  <a href="/" style="display: inline-block; background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Redirect to Website</a>
+</div>
+
+<body>
+
+  <div class="navbar">
+    <div class="navbar-title">Arpaname</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab">User Guide</div>
+    <div class="tab active">Configuration</div>
+    <div class="tab">Tutorial</div>
+  </div>
+
+  <div class="container">
+    <h2>Perform Reverse DNS Lookup</h2>
+
+    <label for="ip-address">IP Address <span class="required">*</span></label>
+    <input type="text" id="ip-address" placeholder="e.g. 8.8.8.8" />
+
+    <button class="btn" onclick="showOutput()">Run Arpaname</button>
+
+    <!-- OUTPUT SECTION -->
+    <div class="output-section" id="output-section">
+      <div class="output-title">Output</div>
+      <div class="output-box">
+        $ arpaname 8.8.8.8<br><br>
+        Performing reverse DNS lookup...<br><br>
+        Domain found: <span>dns.google</span><br><br>
+        Lookup completed successfully.<br><br>
+        <span class="note">Note: This is sample output for demonstration only.</span>
+      </div>
+
+      <button class="clear-btn" onclick="clearOutput()">Clear Output</button>
+    </div>
+  </div>
+
+  <script>
+    function showOutput() {
+      const ip = document.getElementById("ip-address").value;
+      if (!ip.trim()) {
+        alert("Please enter a valid IP address.");
+        return;
+      }
+      document.getElementById("output-section").style.display = "block";
+    }
+
+    function clearOutput() {
+      document.getElementById("output-section").style.display = "none";
+    }
+  </script>
+</body>
+</html>

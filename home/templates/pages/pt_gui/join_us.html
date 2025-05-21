@@ -5,21 +5,35 @@
 <main>
     {% include 'includes/pre-loader.html' %}
 
-    <!-- Title -->
+    <!-- SEO Title Tag -->
+    <title>Join Us at Deakin Detonator Toolkit (DDT) - Cybersecurity Opportunities</title>
+    <meta name="description" content="Join the Deakin Detonator Toolkit (DDT) and be part of a dynamic cybersecurity community. Gain hands-on experience, access cutting-edge tools, and contribute to impactful projects. Apply now to start your journey in cybersecurity excellence.">
+    <meta name="keywords" content="join us, Deakin Detonator Toolkit, cybersecurity opportunities, hands-on experience, cybersecurity projects, DDT, Deakin University">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Join Us at Deakin Detonator Toolkit (DDT) - Cybersecurity Opportunities">
+    <meta property="og:description" content="Join the Deakin Detonator Toolkit (DDT) and be part of a dynamic cybersecurity community. Gain hands-on experience, access cutting-edge tools, and contribute to impactful projects. Apply now to start your journey in cybersecurity excellence.">
+    <meta property="og:image" content="{% static 'assets/img/pages/home/pt-gui-join-us.svg' %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="website">
+
+    <!-- Title Section -->
     <div class="section-header bg-tertiary text-black pb-0">
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
                     <div class="mt-4 mb-5">
                         <h2 class="fw-bolder text-dark">Join Us at Deakin Detonator Toolkit</h2>
-                        <img src="{% static 'assets/img/pages/home/pt-gui-join-us.svg' %}" alt="Join Us" width="300"
-                            height="300">
+                        <!-- Image with alt text for accessibility and SEO -->
+                        <img src="{% static 'assets/img/pages/home/pt-gui-join-us.svg' %}" alt="Join Deakin Detonator Toolkit for hands-on cybersecurity experience" width="300" height="300">
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- End of Title Section -->
+
+    <!-- Join Us Form Section -->
     <section>
         <div class="container">
             <div class="bg-primary-app text-dark py-5">
@@ -28,7 +42,7 @@
                         <div class="card border-0 p-4 shadow-lg">
                             <form method="post">
                                 {% csrf_token %}
-                                <!-- Form -->
+                                <!-- Full Name Field -->
                                 <div class="mb-4">
                                     <label for="name" class="form-label">Full Name</label>
                                     <div class="input-group">
@@ -38,6 +52,8 @@
                                         <input type="text" class="form-control" placeholder="Enter your full name" id="name" name="fullname" required>
                                     </div>
                                 </div>
+                                
+                                <!-- Email Field -->
                                 <div class="mb-4">
                                     <label for="email" class="form-label">Email</label>
                                     <div class="input-group">
@@ -47,6 +63,8 @@
                                         <input type="email" class="form-control" placeholder="Enter your deakin email address" id="email" name="email" required>
                                     </div>
                                 </div>
+                                
+                                <!-- Mobile Field -->
                                 <div class="mb-4">
                                     <label for="mobile" class="form-label">Mobile</label>
                                     <div class="input-group">
@@ -56,38 +74,33 @@
                                         <input type="tel" class="form-control" placeholder="Enter your mobile" id="mobile" name="mobile" required>
                                     </div>
                                 </div>
+                                
+                                <!-- Experience Field -->
                                 <div class="mb-4">
                                     <label for="experience" class="form-label">Experience</label>
                                     <textarea class="form-control" id="experience" rows="4" name="message"
                                         placeholder="Enter your prior experience"></textarea>
                                 </div>
+                                
+                                <!-- Submit Button -->
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-secondary">Submit</button>
                                 </div>
                             </form>
-                            <!--End of Form -->
                         </div>
-                        
                     </div>
+
                     <!-- Why Join DDT Section -->
                     <div class="col-12 col-md-6">
                         <h3 class="fw-bolder text-dark">Why Join DDT?</h3>
-                        <p class="mb-4">Join our dynamic cybersecurity community for
-                            unparalleled
-                            opportunities with hands-on experiences, access cutting-edge tools, and collaborate
-                            on
-                            impactful projects. Enjoy a supportive environment that recognizes your
-                            contributions,
-                            fostering continuous learning and growth. Your journey to cybersecurity excellence
-                            starts here.</p>
+                        <!-- Content enhanced with keywords -->
+                        <p class="mb-4">Join our dynamic cybersecurity community at Deakin Detonator Toolkit (DDT) for unparalleled opportunities with hands-on experiences, access to cutting-edge cybersecurity tools, and the chance to collaborate on impactful projects. Enjoy a supportive environment that recognizes your contributions, fostering continuous learning and growth in cybersecurity.</p>
+                        
                         <div class="mt-4 mb-5">
-                            <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2"
-                                alt="Click to immerse yourself in practical cybersecurity experiences."><span
-                                    class="fas fa-envelope"></span>
+                            <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2" alt="Click to immerse yourself in practical cybersecurity experiences."><span class="fas fa-envelope"></span>
                                 Get in Touch</a>
                         </div>
                     </div>
-                     <!--End of Why Join DDT Section -->
                 </div>
             </div>
         </div>
