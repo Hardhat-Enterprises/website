@@ -1,4 +1,6 @@
 {% load static %}
+{% load tz %}
+
 
 <footer class="footer pt-6 pb-5 bg-secondary text-white">
   <div class="container">
@@ -8,7 +10,7 @@
           Hardhat Enterprises offers open-source protection, so it's free for
           everyone.
         </p>
-        <ul class="social-buttons mb-4 mb-lg-0">
+        <ul class="social-buttons mb-0 mb-lg-0">
           <li>
             <a
               href="https://www.facebook.com/profile.php?id=61563816997325&sk=about"
@@ -43,13 +45,13 @@
       </div>
 
       
-      <div class="col-6 col-md-2 mb-4 mb-lg-0">
+      <div class="col-6 col-md-2 mb-0 mb-lg-0">
         <ul class="footer-links">
           <li><a href="{% url 'blog' %}" class="nav-link" style="padding-top: 0;">Blog</a></li>
           <li><a href="{% url 'index' %}" class="nav-link" style="padding-top: 0;">Home</a></li>
 
 
-     {% comment %} # <div class="col-6 col-md-2 mb-4 mb-lg-0">
+     {% comment %} # <div class="col-6 col-md-2 mb-0 mb-lg-0">
      #   <ul class="footer-links">
      #     <li>
      #       <a href="{% url 'blog' %}" class="nav-link" style="padding-top: 0"
@@ -64,7 +66,7 @@
 
         </ul>
       </div>
-      <div class="col-6 col-md-2 mb-4 mb-lg-0">
+      <div class="col-6 col-md-2 mb-0 mb-lg-0">
         <ul class="footer-links">
 
           <li><a href="{% url 'about_us' %}" class="nav-link" style="padding-top: 0;">About Us</a></li>
@@ -92,7 +94,7 @@
           </li>
         </ul>
       </div>
-      <div class="col-12 col-md-4 mb-4 mb-lg-0">
+      <div class="col-12 col-md-4 mb-0 mb-lg-0">
         <span class="h5">The OWASP Top 10</span>
         <p class="text-muted font-small mt-2">
           Learn more about cyber security standards and applications
@@ -111,10 +113,10 @@
         </form>
       </div>
     </div>
-    <hr class="bg-secondary my-3 my-lg-5" />
+  
     <div class="row">
       <div class="col mb-md-0">
-        <a href="{% url 'index' %}" class="d-flex justify-content-center mb-3">
+        <a href="{% url 'index' %}" class="d-flex justify-content-center mb-0">
           <img
             src="{% static 'assets/img/brand/logo.svg' %}"
             height="30"
@@ -128,16 +130,28 @@
           role="contentinfo"
         >
           <p class="fw-normal font-small mb-0 text-muted">
-            &copy; copyright 2023.
+            &copy; copyright {% now "Y" %}.
           </p>
         </div>
+          <div class="page-visit-counter text-center mt-1">
+            <p class="font-small text-muted">
+              <span class="text-white">This page has been visited </span>
+              <span id="visit-counter" class="fw-bold text-warning">0</span>
+              <span class="text-white"> times!</span>
+            </p>
+            
+          </div>
+        <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+          <strong>Last Updated:</strong> <span id="last-updated"></span>
+          </div>
+
       </div>
     </div>
   </div>
 
-  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
-    <div class="container mt-5">
-      <div class="page-visit-counter text-center mt-4">
+  <!-- <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+    <div class="container mt-1">
+      <div class="page-visit-counter text-center mt-1">
         <p class="font-small text-muted">
           <span class="text-white">This page has been visited </span>
           <span id="visit-counter" class="fw-bold text-warning">0</span>
@@ -145,7 +159,7 @@
         </p>
       </div>
     </div>
-  </div>
+  </div> -->
   
 
 <!--<div class="container mt-4">
@@ -159,18 +173,24 @@
 
 
 
-  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
-    <div class="container mt-5">
+  <!-- <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+    <div class="container mt-1">
       <div class="alert alert-custom" role="alert">
         <strong>Last Updated:</strong> <span id="last-updated"></span>
       </div>
     </div>
-  </div>
+  </div> -->
   <style>
     .alert-custom {
         background-color: transparent; /* Removes the background color */
         border: none;                  /* Removes the border */
         box-shadow: none;              /* Removes the box shadow if present */
+    }
+
+    /* Dark mode card border fix for VR tools section */
+    body.dark-mode .card {
+      border: 2px solid #ffc107 !important;
+      background-color: #232323 !important;
     }
 </style>
   <script>// script.js
