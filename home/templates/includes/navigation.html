@@ -130,22 +130,28 @@
           </div>
         </div>
 
-        <form class="position-relative Search-container mobile-search-bar" method=POST
-          action="{% url 'pages/search-results'%}">
-          {% csrf_token %}
-          <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-          <button class="search-btn" type="submit">
-            <i class="fas fa-search search-icon"></i>
-          </button>
+          <form class="mobile-search-bar" 
+                method="POST" 
+                action="{% url 'pages/search-results' %}">
+            {% csrf_token %}
+            <input class="form-control search-box-mobile" 
+                   type="search" 
+                   id="mobileSearchInput" 
+                   name="q" 
+                   placeholder="Search..." 
+                   aria-label="Search" 
+                   autocomplete="off">
+            <button class="search-btn-mobile" type="submit">
+              <i class="fas fa-search search-icon"></i>
+            </button>
+          </form>
+          <div class="mobile-result-box d-none"></div>
+ 
 
-
-          <div id="suggestions" class="dropdown-content"></div>
-        </form>
         <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
           <li class="nav-item">
             <a href="{% url 'index' %}" class="nav-link"> Home </a>
           </li>
-
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
@@ -191,11 +197,6 @@
                     AppAttack
                   </li>
                 </a>
-                <a class="menu-link" href="{% url 'malware_viz_main' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    Malware (On Hold)
-                  </li>
-                </a>
                 <a class="menu-link" href="{% url 'ptgui_viz_main' %}">
                   <li class="mb-2 menu ps-3 py-1">
                     PT-GUI
@@ -211,16 +212,19 @@
                     Deakin CyberSafe VR
                   </li>
                 </a>
-                <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    Deakin Threat mirror (On
-                    Hold)
-                  </li>
-                </a>
-
                 <a class="menu-link" href="\">
                   <li class="mb-2 menu ps-3 py-1">
-                    The Policy Deployment Engine
+                    The Policy Deployment Engine (New)
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Deakin Threat mirror (Finished)
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'malware_viz_main' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Malware (Finished)
                   </li>
                 </a>
 
@@ -250,20 +254,77 @@
             </div>
           </li>
 
-          <li class="nav-item">
-            <a href="{% url 'career-list' %}" class="nav-link"> Careers </a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Careers
+            </a>
+            <style>
+              .dropdown-menu {
+                background-color: #212529; 
+              }
+              .dropdown-menu .dropdown-item {
+                color: #ffc107 !important; 
+              }
+              .dropdown-menu .dropdown-item:hover {
+                background-color: #ffc107 !important;  
+                color: #212529 !important;  
+              }
+            </style>
+            <ul class="dropdown-menu" aria-labelledby="careersDropdown">
+              <li><a class="dropdown-item" href="{% url 'career-discover' %}">Discover Hardhat</a></li>
+              <li><a class="dropdown-item" href="{% url 'career-list' %}">All Jobs</a></li>
+              <li><a class="dropdown-item" href="{% url 'internships' %}">Internships</a></li>
+              <li><a class="dropdown-item" href="{% url 'job-alerts' %}">Job Alerts</a></li> 
+            </ul>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'challenge_list' %}">Cyber Challenges</a>
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Cyber Challenges
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'challenge_list' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    All Challenges
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'cyber_quiz' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Quiz
+                  </li>
+                </a>
+              </ul>
+            </div>
           </li>
+
+          
+          <div class="search-container position-relative">
+            <form class="desktop-search-bar" 
+                  method="POST" 
+                  action="{% url 'pages/search-results' %}">
+              {% csrf_token %}
+              <input class="form-control me-4 search-box" 
+                     type="search" 
+                     id="searchInput" 
+                     name="q" 
+                     placeholder="Search..." 
+                     aria-label="Search" 
+                     autocomplete="off">
+              <button class="search-btn" type="submit">
+                <div><i class="fas fa-search search-icon"></i></div>
+              </button>
+            </form>
+            <div class="result-box d-none"></div>
+          </div>       
 
         </ul>
 
-
-        {% comment %} <!--action="{% url 'pages/search-results'%}"--> {% endcomment %}
-
       </div>
+
+
       <div class="d-flex align-items-center justify-content-center">
         {% if request.user.is_authenticated %}
 
@@ -272,28 +333,27 @@
             class="fas fa-sign-out-alt me-2"></span> Logout</a>
 
         <a class="profile-container" href="{% url 'profile' %}">
+
           <img
             src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
             class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+
           <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+
+          <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
+
         </a>
+
+        <img
+          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+        <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
+      </a>
+
 
         {% else %}
         <div class="sign-up-button-container">
 
-
-          <form class="position-relative Search-container desktop-search-bar" method=POST
-            action="{% url 'pages/search-results'%}">
-            {% csrf_token %}
-            <input class="form-control pe-6" type="search" name="q" placeholder="Search..." aria-label="Search">
-            <button class="search-btn" type="submit">
-              <div>
-                <i class="fas fa-search search-icon"></i>
-              </div>
-            </button>
-
-            <div id="suggestions" class="dropdown-content"></div>
-          </form>
           {% endif %}
 
           <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
@@ -370,7 +430,11 @@
   </nav>
 </header>
 <script src="{% static 'js/toggles.js' %}"></script>
+
 <style>
 .header-profile-name { color: #1a1a1a !important; }
 body.dark-mode .header-profile-name { color: #fff !important; }
 </style>
+
+<script src="{% static 'js/search_suggestions.js' %}"></script>
+
