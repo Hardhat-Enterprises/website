@@ -97,7 +97,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'captcha',
     "django_light",
-    # "django.contrib.admin",
+    #"django.contrib.admin",
     "core.apps.CustomAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -107,8 +107,6 @@ INSTALLED_APPS = [
     "django_extensions",
     'django_cron',
 
-
- 
     'rest_framework',  
     'drf_yasg', 
 
@@ -133,7 +131,7 @@ MIDDLEWARE = [
     "home.idle.LogoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    "core.middleware.LogRequestMiddleware",
+    'core.middleware.AutoLogoutMiddleware'
 ]
 
 LOGGING = {
@@ -430,6 +428,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-type',
     'authorization',
 
+
 ]
 
 MEDIA_URL = '/media/'
+
