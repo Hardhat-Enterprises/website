@@ -1,265 +1,258 @@
 {% extends 'layouts/base.html' %} {% load static %} {% block seo %}
-<title>Smishing Detection App - Mobile Cybersecurity & SMS Phishing Protection</title>
-<meta name="description" content="Smishing Detection app uses AI to protect Android and iOS devices from SMS phishing attacks, enhancing mobile cybersecurity and user awareness.">
-<meta name="keywords" content="smishing detection, mobile cybersecurity, SMS phishing protection, cybersecurity tools, ethical hacking tools, Hardhat Enterprises">
-<meta property="og:title" content="Smishing Detection App - Mobile Cybersecurity Solution">
-<meta property="og:description" content="Protect your device from SMS phishing with the Smishing Detection app, a mobile cybersecurity tool powered by AI.">
-<meta property="og:image" content="{% static 'assets/img/pages/home/smishing_detection.svg' %}"> {% endblock %} {% block content %}
-<main>
-    {% include 'includes/preloader-sd.html' %}
+<title>Deakin Threat Mirror - Threat Intelligence Platform & Cybersecurity Visualization</title>
+<meta name="description" content="Deakin Threat Mirror is an open-source threat intelligence platform for SMEs, offering cybersecurity visualization and actionable threat analysis tools. Project currently paused.">
+<meta name="keywords" content="threat intelligence platform, cybersecurity visualization, threat analysis tools, cybersecurity tools, ethical hacking tools, Hardhat Enterprises">
+<meta property="og:title" content="Deakin Threat Mirror - Threat Intelligence Platform">
+<meta property="og:description" content="Discover Deakin Threat Mirror, an open-source platform for cybersecurity visualization and threat analysis, designed for SMEs. Project currently paused.">
+<meta property="og:image" content="{% static 'assets/img/pages/home/deakin_threat_mirror.svg' %}"> {% endblock %} {% block content %}
 
+<main>
+    {% include 'includes/preloader-dtm.html' %}
+ 
     <!-- Hero -->
     <div class="section-header bg-primary-app pb-0">
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
-                    <img src="{% static 'assets/img/pages/home/smishing_detection.svg' %}" alt="Smishing Detection app illustration" width="500" height="500" loading="lazy">
+                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror.svg' %}" alt="Deakin Threat Mirror dashboard preview" width="500" height="500" loading="lazy">
                     <div class="mt-4 mb-5">
-                        <h1 class="fw-bolder text-dark">Smishing Detection App</h1>
-                        <h5 class="fw-normal text-dark">Transforming Mobile Cybersecurity with AI-Driven SMS Phishing Protection</h5>
+                        <h2 class="fw-bolder">Deakin Threat Mirror</h2>
+                        <h4 class="fw-normal">Project Paused: Awaiting Next Steps.</h4>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <a href="{% url 'deakinthreatmirror_skills' %}" style="text-decoration: none;">
+        <div class="container d-flex justify-content-center">
+            <div style="
+      background: rgba(30, 31, 63, 0.85);
+      border-radius: 20px;
+      padding: 1.8rem;
+      border: 2px solid transparent;
+      background-image: linear-gradient(135deg, rgba(30, 31, 63, 0.85), rgba(42, 44, 79, 0.85)),
+                        linear-gradient(135deg, #ffc107, #ff5722);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      color: white;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
+      animation: glowPulse 3s infinite ease-in-out;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    " onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 14px 50px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 40px rgba(0, 0, 0, 0.7)'">
+
+                <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">📊 Deakin Threat Mirror (On Hold)</h4>
+
+                <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
+                    <li style="margin-bottom: 0.8rem;">
+                        <span style="margin-right: 0.5rem;">🧠</span>Threat Modeling and Visualization
+                    </li>
+                    <li style="margin-bottom: 0.8rem;">
+                        <span style="margin-right: 0.5rem;">📊</span>Dashboard Design
+                    </li>
+                    <li>
+                        <span style="margin-right: 0.5rem;">📡</span>SIEM Data Integration
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </a>
+
+    <style>
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+            }
+        }
+    </style>
+    </div>
+    </div>
+    </div>
+    </div>
     <!-- End of Hero Section -->
 
     <section>
-        <!-- About -->
+        <!-- Overview -->
         <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Overview of Smishing Detection</h2>
+                    <h2 class="fw-bolder text-dark">Overview of Deakin Threat Mirror</h2>
                     <p class="mb-4">
-                        The Smishing Detection app is a groundbreaking mobile cybersecurity solution designed to combat SMS phishing (smishing) attacks on Android and iOS devices. Leveraging AI-driven technology, our app detects and alerts users to potential smishing attempts,
-                        safeguarding personal information and reducing fraud. We aim to enhance mobile security, promote cybersecurity awareness, and contribute to global anti-scam efforts.
+                        Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize cyber threat data. Aimed at small and medium-sized enterprises (SMEs) and developing economies, it provides actionable cybersecurity visualization
+                        and threat analysis tools to enhance security. Note: This project is currently paused, awaiting further development.
                     </p>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/smishing_detection-about.svg' %}" class="img-fluid" alt="Smishing Detection app overview illustration" loading="lazy">
+                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror-about.svg' %}" class="img-fluid" alt="Deakin Threat Mirror overview illustration" loading="lazy">
                 </div>
             </div>
-            <!-- End of About -->
+            <!-- End of Overview -->
 
             <!-- Goals -->
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/smishing_detection-goals.svg' %}" class="img-fluid" alt="Smishing Detection goals and objectives" loading="lazy">
+                    <img src="{% static 'assets/img/pages/home/deakin_threat_mirror-goals.svg' %}" class="img-fluid" alt="Deakin Threat Mirror goals and objectives" loading="lazy">
                 </div>
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Goals of Smishing Detection</h2>
+                    <h2 class="fw-bolder text-dark">Goals of Deakin Threat Mirror</h2>
                     <ul class="mb-4">
-                        <li>User-friendly platform for seamless smishing detection</li>
-                        <li>Strengthen mobile cybersecurity to protect personal data</li>
-                        <li>Educate users on SMS phishing risks and mitigation strategies</li>
-                        <li>Support global anti-scam efforts with effective cybersecurity tools</li>
+                        <li>Visualize cyber threat data with intuitive threat intelligence platforms</li>
+                        <li>Identify emerging threats through advanced cybersecurity visualization</li>
+                        <li>Empower SMEs with data-driven cybersecurity decisions</li>
+                        <li>Facilitate collaboration among cybersecurity professionals</li>
                     </ul>
                     <h2 class="fw-bolder text-dark">Objectives</h2>
                     <ul class="mb-4">
-                        <li>Implement machine learning for accurate smishing detection</li>
-                        <li>Integrate real-time notifications to alert users of SMS phishing threats</li>
-                        <li>Provide educational resources on smishing prevention within the app</li>
-                        <li>Collaborate with cybersecurity experts to stay updated on emerging threats</li>
-                        <li>Continuously improve the app based on user feedback and evolving threats</li>
+                        <li>Develop a user-friendly web app for threat analysis tools</li>
+                        <li>Integrate data sources and APIs for real-time threat data processing</li>
+                        <li>Implement visualization techniques to highlight threat trends</li>
+                        <li>Offer customization tools for diverse user needs</li>
                     </ul>
-                    <a href="{% url 'smishing_skills' %}" style="text-decoration: none;">
-                        <div class="mt-4" style="
-                        background: rgba(30, 31, 63, 0.85);
-                        border-radius: 20px;
-                        padding: 1.8rem;
-                        border: 2px solid transparent;
-                        background-image: linear-gradient(135deg, rgba(30, 31, 63, 0.85), rgba(42, 44, 79, 0.85)),
-                                          linear-gradient(135deg, #ffc107, #ff5722);
-                        background-origin: border-box;
-                        background-clip: padding-box, border-box;
-                        color: white;
-                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
-                        transition: transform 0.3s ease, box-shadow 0.3s ease;
-                        backdrop-filter: blur(10px);
-                        animation: glowPulse 3s infinite ease-in-out;
-                        max-width: 100%;
-                        text-align: center;
-                      " onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 14px 50px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 40px rgba(0, 0, 0, 0.7)'">
-
-                            <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">⚡ Core Skills</h4>
-
-                            <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
-                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">🧠</span>Natural Language Processing (NLP)</li>
-                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">🤖</span>Machine Learning for SMS Classification</li>
-                                <li><span style="margin-right: 0.5rem;">🧹</span>Data Preprocessing</li>
-                            </ul>
-                        </div>
-                    </a>
-
-                </div>
-
-                <!-- Right Column: Image -->
-                <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}" alt="Teamwork illustration" class="img-fluid">
                 </div>
             </div>
+            <!-- End of Goals -->
 
-
-            <style>
-                @keyframes glowPulse {
-                    0% {
-                        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
-                    }
-                    50% {
-                        box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
-                    }
-                    100% {
-                        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
-                    }
-                }
-            </style>
-
-        </div>
-        </div>
-        <!-- End of Goals -->
-        <!-- Class of Action Section -->
-        <div class="bg-primary-app">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-8">
-                    <div class="mt-4 mb-5">
-                        <h2 class="fw-bolder text-dark">Join Us</h2>
-                        <p class="mb-4">Join our mission to revolutionize mobile security and combat SMS phishing attacks. Whether you're a skilled developer, cybersecurity enthusiast, or passionate advocate for online safety, there are numerous ways to get involved.
-                        </p>
-                        <a href="{% url 'smishingdetection_join_us' %}" class="btn btn-primary animate-up-2" alt="Join Us"><span class="fas fa-handshake me-2"></span>
-                                Join Us</a>
-
-
-                        <!-- End of Goals -->
-
-                        <!-- Call to Action Section -->
-                        <div class="bg-primary-app">
-                            <div class="row justify-content-center text-center">
-                                <div class="col-lg-8">
-                                    <div class="mt-4 mb-5">
-                                        <h2 class="fw-bolder text-dark">Join Our Mobile Cybersecurity Mission</h2>
-                                        <p class="mb-4">
-                                            Join our mission to revolutionize mobile security and combat SMS phishing attacks. Whether you're a developer, cybersecurity enthusiast, or advocate for online safety, there’s a place for you in our community.
-                                        </p>
-                                        <a href="{% url 'smishingdetection_join_us' %}" class="btn btn-primary animate-up-2" alt="Join the Smishing Detection community">
-                                            <span class="fas fa-handshake me-2"></span>Join Us
-                                        </a>
-                                    </div>
-
-                                </div>
-
-                            </div>
+            <!-- Call to Action Section -->
+            <div class="bg-primary-app">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <div class="mt-4 mb-5">
+                            <h2 class="fw-bolder text-dark">Stay Updated on Deakin Threat Mirror</h2>
+                            <p class="mb-4">
+                                While Deakin Threat Mirror is currently paused, we invite you to stay informed about its future updates. Join our community to contribute ideas or follow the project’s progress as we aim to enhance cybersecurity awareness through a powerful threat intelligence
+                                platform.
+                            </p>
+                            <a href="{% url 'threat_mirror_join_us' %}" class="btn btn-primary animate-up-2" alt="Join the Deakin Threat Mirror community">
+                                <span class="fas fa-handshake me-2"></span>Join Us
+                            </a>
                         </div>
-                        <!-- End of Call to Action Section -->
                     </div>
+                </div>
+            </div>
+            <!-- End of Call to Action Section -->
+        </div>
     </section>
 
     <!-- FAQ Section -->
     <section class="section section-lg bg-secondary-app py-5">
         <div class="container">
-            <h1 class="fw-bolder display-50 text-center mb-5 mt-5">Frequently Asked Questions</h1>
-            <h2 class="fw-bolder display-5 text-center mb-5 mt-5">Explore Answers to Common Questions About Smishing Detection</h2>
+            <h1 class="fw-bolder display-50 text-center text-white mb-5 mt-5">Frequently Asked Questions</h1>
+            <h2 class="fw-bolder display-5 text-center text-white mb-5 mt-5">Explore the answers to common questions about Deakin Threat Mirror</h2>
             <div class="row g-5">
                 <div class="col-12">
                     <div class="accordion" id="accordionPanelsStayOpenExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                    <b>What is smishing?</b>
+                                    <b>What is the Deakin Threat Mirror project?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                                 <div class="accordion-body">
-                                    Smishing is a form of phishing attack executed via SMS, where attackers send malicious messages to trick users into revealing sensitive information like login credentials or financial details, often requiring SMS phishing protection.
+                                    Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize diverse threat feeds into actionable intelligence. It focuses on supporting SMEs and developing economies by making cybersecurity more accessible
+                                    through cybersecurity visualization.
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                    <b>How does smishing work?</b>
+                                    <b>What are the main goals of the project?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
                                 <div class="accordion-body">
-                                    Smishing attackers use leaked personal data to craft convincing SMS messages with malicious URLs or phone numbers, enticing users to click links or call, leading to data breaches or financial losses without proper mobile cybersecurity.
+                                    The project aims to revolutionize cybersecurity threat analysis, provide a cost-effective threat intelligence platform for SMEs, and transform raw threat feeds into actionable insights using advanced visual analytics and machine learning.
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                                    <b>What is the goal of the Smishing Detection project?</b>
+                                    <b>What challenges does the project address?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
                                 <div class="accordion-body">
-                                    The Smishing Detection project develops AI-driven models to detect smishing attempts in real-time, integrating with a mobile app to flag scam messages and empower users with SMS phishing protection tools.
+                                    Deakin Threat Mirror addresses the challenge of consolidating and interpreting vast amounts of cyber threat data for SMEs and developing economies, offering enhanced protection through a user-friendly threat intelligence platform.
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                                    <b>How do AI-driven models help in detecting smishing?</b>
+                                    <b>What are the long-term goals of the project?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
                                 <div class="accordion-body">
-                                    AI-driven models use machine learning and natural language processing to analyze SMS patterns, identifying subtle indicators of smishing attempts that enhance mobile cybersecurity beyond human detection.
+                                    The long-term goal is to create a lightweight, easy-to-use threat intelligence platform that transforms raw threat feeds into actionable insights using statistical analysis, AI, and machine learning, particularly benefiting SMEs and developing economies.
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingFive">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-                                    <b>How does the mobile application work?</b>
+                                    <b>How will the project benefit SMEs and developing economies?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
                                 <div class="accordion-body">
-                                    The Smishing Detection app monitors incoming SMS messages on smartphones, using AI to flag potential scams in real-time. Users receive notifications and can delete or ignore flagged messages, ensuring SMS phishing protection.
+                                    Deakin Threat Mirror provides SMEs and developing economies with a cost-effective threat intelligence solution, making cybersecurity accessible and helping them protect against cyber-attacks despite limited resources.
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingSix">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
-                                    <b>What makes the Smishing Detection project unique?</b>
+                                    <b>What technologies are being leveraged in the project?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
                                 <div class="accordion-body">
-                                    The project combines advanced AI techniques with a user-friendly mobile app, offering real-time smishing detection and empowering users with effective cybersecurity tools to combat SMS-based threats.
+                                    The project leverages advanced visual analytics, machine learning, and user-friendly interfaces to transform raw data into actionable cybersecurity visualization, making threat analysis tools accessible for all.
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingSeven">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
-                                    <b>How can users benefit from this application?</b>
+                                    <b>How can interested parties get involved or contribute to the project?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSeven">
                                 <div class="accordion-body">
-                                    Users gain an additional layer of mobile cybersecurity, identifying and avoiding smishing scams to protect sensitive information and reduce financial risks with SMS phishing protection.
+                                    Interested parties can get involved by participating in technical reviews, providing feedback, or contributing to development. Follow the project’s progress on platforms like GitHub to stay updated on this threat intelligence platform.
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingEight">
                                 <button class="accordion-button collapsed bg-warning" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
-                                    <b>What are the future plans for the project?</b>
+                                    <b>What is the current status of the project?</b>
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
                                 <div class="accordion-body">
-                                    Future plans include enhancing AI models, expanding app features, and integrating user feedback to improve smishing detection, ensuring ongoing mobile cybersecurity against evolving threats.
+                                    Interested parties can get involved or contribute to the project by participating in the technical review, providing feedback, or contributing to the development of the platform. They can also follow the project's progress and updates on platforms like
+                                    GitHub
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
     <!-- End of FAQ Section -->
