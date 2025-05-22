@@ -1,4 +1,4 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block seo %}
+x{% extends 'layouts/base.html' %} {% load static %} {% block content %}
 <main>
     {% include 'includes/preloader-vr.html' %}
 
@@ -140,6 +140,316 @@
                             </ul>
                         </div>
                     </a>
+
+                    <style>
+                        @keyframes glowPulse {
+                            0% {
+                                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                            }
+                            50% {
+                                box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+                            }
+                            100% {
+                                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                            }
+                        }
+                    </style>
+
+
+                </div>
+            </div>
+            <!-- End of Goals -->
+
+            <!-- Call to Action Section -->
+            <div class="bg-primary-app">
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <div class="mt-4 mb-5">
+                            <h2 class="fw-bolder text-dark">Join Us</h2>
+                            <p class="mb-4">Join our mission to revolutionize cybersecurity education through immersive VR experiences. Whether you're a developer, designer, educator, or simply passionate about cybersecurity, there's a place for you in our community.</p>
+                            <a href="{% url 'cybersafe_vr_join_us' %}" class="btn btn-primary animate-up-2" alt="Join Us"><span class="fas fa-handshake me-2"></span>Join Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Call to Action Section -->
+    </section>
+    <!-- End of Social Links Section -->
+
+    <!-- FAQ Section -->
+    <section class="section section-lg bg-warning py-5">
+        <div class="container">
+            <h1 class="fw-bolder display-50 text-center text-black mb-5 mt-5">Frequently Asked Questions</h1>
+            <h2 class="fw-bolder display-5 text-center text-black mb-5 mt-5">Explore the answers to common questions about Deakin CyberSafe VR</h2>
+            <div class="row g-5">
+                <div class="col-12">
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                <b>What is the Deakin CyberSafe VR project?</b>
+                            </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                    The Deakin CyberSafe VR project aims to revolutionize cybersecurity training for small businesses by leveraging interactive virtual reality (VR) technology. It focuses on bridging the gap between theoretical knowledge and practical application of cybersecurity
+                                    measures among small business owners and employees.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                <b>What are the main goals of the project?</b>
+                            </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                                <div class="accordion-body">
+                                    The primary goals are to develop an immersive VR platform that simulates real-world cybersecurity scenarios, enhance the practical understanding of cybersecurity principles among small businesses and cover fundamental topics such as password security,
+                                    data encryption, network security, safe web browsing, and recognizing common cyber threats like phishing and smishing.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                              <b>What topics will the VR modules cover?</b>
+                            </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                <div class="accordion-body">
+                                    The VR modules will cover essential cybersecurity topics, including password security, data encryption, Wi-Fi and network security, Safe web browsing and Common cyber-attacks like phishing and smishing
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                                <b>How will the VR modules work?</b>
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+                                <div class="accordion-body">
+                                    Users will navigate through virtual office spaces where they will identify and respond to cybersecurity threats. For example, they might identify and respond to phishing emails or infected USB drives, learn to identify suspicious emails and remove viruses,
+                                    implement accounts with the least privileges, encrypt backup hard drives, configure device or Wi-Fi network security settings and use VPNs and install anti-virus software.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingFive">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
+                                <b>What is the objective of the project?</b>
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
+                                <div class="accordion-body">
+                                    The project aims to create interactive VR modules tailored to the needs of small businesses and build a functional MVP (Minimum Viable Product) that demonstrates the core features of the Deakin CyberSafe VR platform.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingSix">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
+                                <b>How will the project benefit small businesses?</b>
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
+                                <div class="accordion-body">
+                                    The project will provide small businesses with practical, hands-on training in cybersecurity. By engaging with realistic scenarios in a VR environment, users will gain a deeper understanding of how to protect their businesses against cyber threats, ultimately
+                                    enhancing their overall cybersecurity posture.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingSeven">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
+                                <b>What makes this project unique?</b>
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSeven">
+                                <div class="accordion-body">
+                                    The Deakin CyberSafe VR project combines cutting-edge VR technology with comprehensive cybersecurity training. It offers an immersive and interactive learning experience that goes beyond traditional training methods, making it easier for users to apply
+                                    cybersecurity principles in real-world situations.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="panelsStayOpen-headingEight">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
+                                <b>What are the future plans for the project?</b>
+                              </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
+                                <div class="accordion-body">
+                                    Future plans include continuously testing and iterating on the VR modules to enhance their effectiveness. The project aims to expand its reach and impact by incorporating feedback from users and staying updated with the latest cybersecurity threats and
+                                    best practices.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of FAQ Section -->
+</main>
+{% endblock content %}{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main>
+    {% include 'includes/preloader-vr.html' %}
+
+    <!-- Hero -->
+    <div class="section-header bg-primary-app pb-0">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <img src="{% static 'assets/img/pages/home/deakin_cybersafe_vr.svg' %}" alt="Dashboard Preview" width="500" height="500">
+                    <div class="mt-4 mb-5">
+                        <h2 class="fw-bolder text-dark">Deakin Cybersafe VR</h2>
+                        <h5 class="fw-normal text-dark">Exploring cybersecurity through immersive virtual reality.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Hero Section -->
+
+    <!-- Hero Section -->
+    <section class="section-header bg-tertiary text-black py-5">
+        <div class="px-4 py-5 my-5 text-center">
+            <h1 class="fw-bold display-1">Deakin Cybersafe VR</h1>
+            <img width="500" height="500" src="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}" alt="Hero image">
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="comprehensiveReports">Comprehensive Reports</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Hero Section -->
+
+    <!-- Tools -->
+    <section class="section section-lg bg-tertiary">
+        <div class="container">
+            <h2 class="fw-bolder display-2 text-center">Tools</h2>
+            <div class="row">
+                <!-- Tools content here -->
+            </div>
+        </div>
+    </section>
+    <!-- End Tools -->
+
+    <!-- Join Us -->
+    <section class="section section-md">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 mt-5">
+                    <div class="card shadow mb-6">
+                        <div class="card-body px-5 py-5 text-center text-md-left">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h2 class="mb-3">Join Us Today!</h2>
+                                    <p class="mb-0">
+                                        Empower your future in cybersecurity! Join AppAttack and contribute to shaping a secure digital landscape. Explore opportunities, join us today!
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4 mt-md-0 text-md-right">
+                                    <a href="{% url 'cybersafe_vr_join_us' %}" class="btn btn-primary">
+                                        <span class="me-1">
+                                            <span class="fas fa-handshake"></span>
+                                        </span>
+                                        Join Us
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Join Us -->
+
+    <section>
+        <!-- About -->
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="fw-bolder text-dark">Overview</h2>
+                    <p class="mb-4">Introducing Deakin Cybersafe VR – an innovative project that aims to educate and raise awareness about cybersecurity using immersive virtual reality experiences. By simulating real-world cyber threats and scenarios, users can learn
+                        best practices for protecting themselves and their data in a safe and engaging environment. Our goal is to empower individuals with the knowledge and skills to navigate the digital landscape securely and confidently.</p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="{% static 'assets/img/pages/home/deakin_cybersafe_vr-about.svg' %}" class="img-fluid" alt="About Us">
+                </div>
+            </div>
+            <!-- End of About -->
+
+            <!-- Goals -->
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <img src="{% static 'assets/img/pages/home/deakin_cybersafe_vr-goals.svg' %}" class="img-fluid" alt="Goals and Objectives">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="fw-bolder text-dark">Goals</h2>
+                    <ul class="mb-4">
+                        <li>Create immersive VR experiences that effectively simulate cyber threats and challenges.</li>
+                        <li>Educate users about cybersecurity best practices in a memorable and interactive way.</li>
+                        <li>Engage diverse audiences, including students, professionals, and the general public, in cybersecurity awareness initiatives.</li>
+                        <li>Collaborate with industry partners and educational institutions to expand access to cybersafe VR experiences.</li>
+                    </ul>
+                    <h2 class="fw-bolder text-dark">Objectives</h2>
+                    <ul class="mb-4">
+                        <li>Develop high-quality VR content that addresses key cybersecurity concepts and scenarios.</li>
+                        <li>Integrate interactive elements and feedback mechanisms to enhance user engagement and learning outcomes.</li>
+                        <li>Conduct user testing and feedback sessions to iterate and improve the VR experience based on user input.</li>
+                        <li>Partner with Deakin University and other institutions to promote and distribute Cybersafe VR experiences to students and educators.</li>
+                    </ul>
+                    <a href="{% url 'cybersafe_vr_skills' %}" style="text-decoration: none;">
+                        <div class="mt-4" style="
+                        background: rgba(30, 31, 63, 0.85);
+                        border-radius: 20px;
+                        padding: 1.8rem;
+                        border: 2px solid transparent;
+                        background-image: linear-gradient(135deg, rgba(30, 31, 63, 0.85), rgba(42, 44, 79, 0.85)),
+                                          linear-gradient(135deg, #ffc107, #ff5722);
+                        background-origin: border-box;
+                        background-clip: padding-box, border-box;
+                        color: white;
+                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                        backdrop-filter: blur(10px);
+                        animation: glowPulse 3s infinite ease-in-out;
+                        max-width: 100%;
+                        text-align: center;
+                      " onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 14px 50px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 40px rgba(0, 0, 0, 0.7)'">
+
+                            <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">⚡ Core Skills</h4>
+
+                            <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
+                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">🎮</span>Virtual Reality Development (Unity or Unreal)</li>
+                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">🛡️</span>Cybersecurity Awareness Training</li>
+                                <li><span style="margin-right: 0.5rem;">🎯</span>User Experience (UX) Design</li>
+                            </ul>
+                        </div>
+                    </a>
+
+                    <style>
+                        @keyframes glowPulse {
+                            0% {
+                                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                            }
+                            50% {
+                                box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+                            }
+                            100% {
+                                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                            }
+                        }
+                    </style>
 
 
                 </div>
