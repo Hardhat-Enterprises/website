@@ -124,13 +124,12 @@ from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
-
 from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
- 
+
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
     max_age = 3600;

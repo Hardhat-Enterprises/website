@@ -2,7 +2,9 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.sessions.models import Session
 from django.dispatch import receiver
 from django.utils.timezone import now
- 
+
+
+
 @receiver(user_logged_in)
 def set_session_last_activity_on_login(sender, request, user, **kwargs):
     """
