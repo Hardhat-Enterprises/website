@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 
 from django.db import models
 from django.core.mail import send_mail
@@ -29,8 +29,29 @@ import string
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 from django.db import models
-
 import nh3
+from django.conf import settings
+
+class AdminNotification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('feedback', 'Feedback'),
+        ('update', 'System Update'),
+        ('alert', 'Alert'),
+        ('info', 'Information'),
+    ]
+
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES, default='info')
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    related_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)  
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"[{self.get_notification_type_display()}] {self.title}"
 
 class APIModel(models.Model):
     name = models.CharField(max_length=255)
