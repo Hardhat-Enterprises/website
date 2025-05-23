@@ -1,7 +1,11 @@
 from django.urls import include, path
 
 from django.contrib import admin
+
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback, policy_deployment
+
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts,career_detail,career_application, feedback_view, delete_feedback, career_discover
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
@@ -77,6 +81,7 @@ urlpatterns = [
     # path('contact-central/', views.Contact_central, name='contact-central'),
      path('appattack/join/', views.appattack_join, name='appattack_join'),
       path('form_success/', views.form_success, name='form_success'),
+      path('policy-deployment/', views.policy_deployment, name='policy_deployment'),
     
     
     
@@ -161,6 +166,7 @@ urlpatterns = [
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
 
+
     path("appattack/reports/", views.comphrehensive_reports, name="comphrehensive_reports"),
     path("appattack/pen-testing/", views.pen_testing, name="pen-testing"),
     path("appattack/secure-code-review/", views.secure_code_review, name="secure-code-review"),
@@ -169,8 +175,5 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account')
 
-    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
