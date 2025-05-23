@@ -1,0 +1,65 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main>
+    {% include 'includes/preloader-dtm.html' %}
+
+    <section class="section bg-primary-app py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h1 class="fw-bolder text-warning">⚡ Core Skills Explained</h1>
+                <h2 class="text-light fw-bold display-2">Core Threat Mirror Skills</h2>
+            </div>
+
+            <div class="row g-5">
+                <!-- Threat Modeling -->
+                <div class="col-md-4">
+                    <div class="card shadow-lg border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h4 class="card-title text-warning">🛡️ Threat Modeling & Visualization</h4>
+                            <p class="card-text text-white">
+                                Threat modeling is the process of identifying potential security threats and vulnerabilities in a system, application, or process. In this project, we used visual tools to map out threat actors, attack surfaces, and mitigation strategies to anticipate
+                                risks before they become incidents.
+                                <br><br>
+                                <b>Tools Used:</b> Draw.io, Lucidchart, MITRE ATT&CK Matrix.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Design -->
+                <div class="col-md-4">
+                    <div class="card shadow-lg border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h4 class="card-title text-warning">📊 Dashboard Design</h4>
+                            <p class="card-text text-white">
+                                Dashboard design involves creating intuitive, data-rich interfaces that display real-time or historical analytics. We built dashboards that showcase key cybersecurity metrics like malware trends, login anomalies, and threat detections—ensuring stakeholders
+                                can make informed decisions quickly.
+                                <br><br>
+                                <b>Tools Used:</b> Plotly, Chart.js, Tableau (Mockups).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIEM Integration -->
+                <div class="col-md-4">
+                    <div class="card shadow-lg border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body">
+                            <h4 class="card-title text-warning">📡 SIEM Data Integration</h4>
+                            <p class="card-text text-white">
+                                SIEM (Security Information and Event Management) systems aggregate and analyze logs from multiple sources. In the Deakin Threat Mirror project, we simulated the integration of security logs into a SIEM-like interface to detect threats and suspicious activities
+                                in real-time.
+                                <br><br>
+                                <b>Concepts Covered:</b> Log parsing, event correlation, alert triggering.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="{% url 'Deakin_Threat_mirror_main' %}" class="btn btn-dark"> ⬅️ Back to Project</a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

@@ -33,6 +33,7 @@ sqlparse==0.5.1
 virtualenv==20.25.1
 wheel==0.44.0
 nh3==0.2.18
+bleach==6.1.0
 
 
 # Image Processing

@@ -1,4 +1,7 @@
 from django.contrib import admin
+
+from .models import AdminNotification
+
 from django.utils.html import format_html
 
 from .models import (
@@ -11,6 +14,7 @@ from .models import (
     Contact,
     ContactSubmission,
     Experience,
+    UserBlogPage,
 
     Webpage,
     DDT_contact,
@@ -40,10 +44,15 @@ from .models import (
 
 
 
+@admin.register(AdminNotification)
+class AdminNotificationAdmin(admin.ModelAdmin):
+    list_display = ('message', 'created_at', 'is_read', 'related_user')
+    list_filter = ('is_read', 'created_at')
+    search_fields = ('message',)
+
 admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
 admin.site.register(DDT_contact)
-
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
 admin.site.index_title = "Welcome to Hardhat Admin Portal"
@@ -132,7 +141,12 @@ class AnnouncementAdmin(admin.ModelAdmin):
 class ExperienceAdmin(admin.ModelAdmin):
     list_display = ['name', 'feedback', 'created_at']
     search_fields = ['name', 'feedback']
-    readonly_fields = ['created_at'] 
+    
+@admin.register(UserBlogPage)
+class UserBlogPageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title', 'description', 'created_at']
+    search_fields = ['name', 'title', 'description']
+    readonly_fields = ['created_at']  # Make created_at read-only
     
 # @admin.register(Contact_central)
 # class Contact_centralAdmin(admin.ModelAdmin):

@@ -27132,6 +27132,10 @@ blockquote {
   margin-top: 20px;
 }
 
+.grecaptcha-badge {
+  bottom: 100px !important;
+}
+
 .alert-danger {
   background-color: #f8d7da;
   border-color: #f5c6cb;
@@ -27363,7 +27367,78 @@ blockquote {
 }
 
 }
+/* faq styles */
+.faq-section{
+  background-color: #ffffff !important ;
+}
 
+body.dark-mode .faq-button {
+  background-color: #ffcd11 !important;
+  color: #333333;
+}
+body.dark-mode .faq-section {
+  background-color: #333333 !important;
+  color: #333333 !important;
+}
+body.dark-mode .faq-content {
+  background-color: #ffcd11 !important;
+}
+body.dark-mode .faq-content p{
+  color: #333333 !important;
+}
+body.dark-mode .faq-sub-header{
+  color: #ffffff !important;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+}
+
+.faq-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #ffffff !important;
+    color: #333333;
+    font-size: 18px;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px 4px 0px 0px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+
+
+.faq-button .icon {
+    margin-right: 15px;
+    font-size: 20px;
+    transition: transform 0.3s;
+}
+
+.faq-content {
+    display: none;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border-radius: 0px 0px 4px 4px;
+    transition: max-height 0.5s ease-out, opacity 0.3s ease;
+}
+.faq-sub-header{
+  color: #000000 !important;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.faq-button.open .icon {
+    transform: rotate(90deg);
+}
+.d-flexf{
+  display: flex;
+} 
+.space-betweenf{
+  justify-content: space-between;
+}
 
 /* testimonials styles */
 
@@ -27400,24 +27475,32 @@ blockquote {
   margin-top: 10px;
 }
 body.dark-mode .testimonial-section {
-  background-color: #333333 !important;
+  background-color: #ffcd11  !important;
   color: #ffffff;
 }
-body.dark-mode .testimonial-section {
-  background-color: #333333 !important;
-  color: #ffffff !important;
-}
-
 body.dark-mode .testimonials-title {
   font-size: 32px !important;
+  color: #333333 !important;
+}
+body.dark-mode .faq-title{
   color: #ffffff !important;
 }
+body.dark-mode .testimonial-sub-header{
+  color: #000000 !important;
+  font-weight: 600;
+  font-size: 20px;
+}
+.testimonial-sub-header{
+  color: #000000 !important;
+  font-weight: 600;
+  font-size: 20px;
+}
 body.dark-mode .testimonial-contentp{
-  color: #ffffff !important;
+  color: #333333 !important;
   font-size: 16px !important;
 }
 body.dark-mode .testimonial-content{
-  color: #ffffff !important;
+  color: #333333 !important;
   font-size: 16px !important;
 }
 .prev-btn, .next-btn {
@@ -27445,7 +27528,7 @@ body.dark-mode .testimonial-content{
   background-color: rgba(0, 0, 0, 0.7);
 }
 .testimonial-section{
-  background-color: #fff !important;
+  background-color: #ffc107 !important;
 }
 .testimonials-title{
   font-size: 32px;
@@ -27469,7 +27552,7 @@ body.dark-mode .testimonial-content{
 h2 {
     margin-bottom: 20px;
     color: #333;
-
+}
 /* Custom progress color for In Progress status */
 .progress-in-progress {
   background-color: #f1c40f !important; /* vivid yellow */

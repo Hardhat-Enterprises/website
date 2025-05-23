@@ -29,9 +29,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from .models import ContactSubmission
 from django.utils.html import strip_tags
+from .models import Report
 
-
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job #Feedback 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, UserBlogPage #Feedback 
 
 
 from django.contrib.auth import get_user_model
@@ -45,12 +45,15 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm
 
 from .forms import CaptchaForm
 
 import os
 import json
+import bleach
+import requests
+import time
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
 from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
@@ -124,13 +127,12 @@ from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
 from django.contrib.auth.models import User
 
-
 from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
- 
+
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
     max_age = 3600;
@@ -240,6 +242,11 @@ def blog(request):
 def appattack(request):
     return render(request, 'pages/appattack/main.html')
 
+def skills_view(request):
+    return render(request, 'pages/appattack/appattack_skills.html')
+
+
+
 def form_success(request):
     return render(request, 'emails/form_success.html')
  
@@ -301,12 +308,20 @@ def products_services(request):
  
 def malwarehome(request):
     return render(request, 'pages/malware_visualization/main.html')
+
+def malware_skills(request):
+    return render(request, 'pages/malware_visualization/malware_skills.html')
+
  
 def malware_joinus(request):
     return render(request, 'pages/malware_visualization/malware_viz_joinus.html')
  
 def ptguihome(request):
     return render(request, 'pages/pt_gui/main.html')
+
+def ptgui_skills(request):
+    return render(request, 'pages/pt_gui/ptgui_skills.html')
+
  
 def ptgui_contact_us(request):
     return render(request, 'pages/pt_gui/contact-us.html')
@@ -354,6 +369,10 @@ def join_project(request):
  
 def smishing_detection(request):
     return render(request, 'pages/smishing_detection/main.html')
+
+def smishing_skills(request):
+    return render(request, 'pages/smishing_detection/smishing_skills.html')
+
  
 def smishingdetection_join_us(request):
  
@@ -400,26 +419,46 @@ def UpskillingJoinProjectView(request):
     return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
 
 # OTP-Based Login
-
 def login_with_otp(request):
     """
     For Login
     """
     if request.method == 'POST':
+        # First, verify reCAPTCHA
+        token = request.POST.get('g-recaptcha-response')
+        secret_key = settings.RECAPTCHA_SECRET_KEY
+
+        recaptcha_response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={'secret': secret_key, 'response': token}
+        )
+
+        result = recaptcha_response.json()
+
+        if settings.DEBUG:
+            print("DEBUG MODE: reCAPTCHA result:", result)
+
+        if not result.get('success') or result.get('score', 0) < 0.5:
+            messages.error(request, "reCAPTCHA verification failed. Please try again.")
+            if settings.DEBUG:
+                print("DEBUG MODE: reCAPTCHA failed with response:", result)
+            return render(request, 'accounts/sign-in.html')
+
+        # reCAPTCHA passed — continue login logic
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
         if user:
-            # Generate OTP
             otp = random.randint(100000, 999999)
             request.session['otp'] = otp
             request.session['user_id'] = user.id
+            request.session['otp_timestamp'] = time.time()  #Set time
+            request.session['otp_attempts'] = 0  # Reset attempts on new OTP
 
-            # Send OTP via email
             send_mail(
                 subject="Your OTP Code",
-                message=f"Your OTP code is {otp}. Use it to verify your login.",
+                message=f"Your OTP code is {otp}, it expires in 5 minutes. Use it to verify your login.",
                 from_email="deakinhardhatwebsite@gmail.com",
                 recipient_list=[user.email],
                 fail_silently=False,
@@ -432,26 +471,65 @@ def login_with_otp(request):
             return redirect('verify_otp')
         else:
             messages.error(request, "Invalid username or password.")
+
+            if settings.DEBUG:
+                print(f"DEBUG MODE: Invalid login attempt for username: {username}")
+                print(f"DEBUG MODE: Password entered: {password}")
+
     return render(request, 'accounts/sign-in.html')
 
 
 
+# Verify OTP
 def verify_otp(request):
     """
     OTP verification during login.
+    Locks out after 5 failed attempts or 5 minutes by redirecting to login.
     """
     if request.method == 'POST':
         entered_otp = request.POST.get('otp')
         saved_otp = request.session.get('otp')
         user_id = request.session.get('user_id')
 
-        print(f"[DEBUG] Entered OTP: {entered_otp}, Saved OTP: {saved_otp}, User ID: {user_id}")
+        # Initialize OTP timestamp if not already set
+        otp_timestamp = request.session.get('otp_timestamp')
+        if not otp_timestamp:
+            request.session['otp_timestamp'] = time.time()
+        else:
+            elapsed = time.time() - otp_timestamp
+            if elapsed > 300:  # 300 seconds = 5 minutes
+                messages.error(request, "OTP session expired. Please log in again.")
+                print("[DEBUG] OTP expired after 5 minutes. Elapsed time: {:.2f} seconds".format(elapsed))
+                request.session.flush()
+                return redirect('login')
 
         if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
-            request.session['is_otp_verified'] = True  # Mark OTP as verified
-            return redirect('post_otp_login_captcha')  # Go to captcha page before login
+            User = get_user_model()
+            try:
+                user = User.objects.get(id=user_id)
+                login(request, user)
+                # Clear session data on success
+                request.session.pop('otp', None)
+                request.session.pop('user_id', None)
+                request.session.pop('otp_attempts', None)
+                request.session.pop('otp_timestamp', None)
+                messages.success(request, "Login successful!")
+                return redirect('/')
+            except User.DoesNotExist:
+                messages.error(request, "User does not exist.")
         else:
-            messages.error(request, "Invalid OTP. Please try again.")
+            # Handle OTP failure
+            otp_attempts = request.session.get('otp_attempts', 0) + 1
+            request.session['otp_attempts'] = otp_attempts
+            print(f"[DEBUG] Failed OTP attempt #{otp_attempts} for user ID: {user_id}")
+
+            if otp_attempts >= 5:
+                messages.error(request, "Too many failed attempts. Redirecting to login.")
+                print("[DEBUG] Too many failed attempts. Redirecting to login.")
+                request.session.flush()
+                return redirect('login')
+
+            messages.error(request, f"Invalid OTP. Attempt {otp_attempts}/5.")
 
     return render(request, 'accounts/verify-otp.html')
 
@@ -533,8 +611,17 @@ def SearchResults(request):
 def Deakin_Threat_mirror_main(request):
     return render(request, 'pages/DeakinThreatmirror/main.html')
 
+def deakinthreatmirror_skills(request):
+    return render(request, 'pages/DeakinThreatmirror/deakinthreatmirror_skills.html')
+
+
+
 def Vr_main(request):
     return render(request, 'pages/Vr/main.html')
+
+def cybersafe_vr_skills(request):
+    return render(request, 'pages/Vr/cybersafe_vr_skills.html')
+
 
 # Authentication
 
@@ -1070,7 +1157,136 @@ def get_priority_breakdown(request, priority):
             }]
         }
     })
+
+import base64
+
+def blogpage(request):
+    if request.method == 'POST':
+        form = UserBlogPageForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+
+            # Ensure 'isShow' is set to False by default
+            blog.isShow = False  # Default value is False, no need to check
+
+            uploaded_file = request.FILES.get('file')
+            if uploaded_file:
+                blog.file = base64.b64encode(uploaded_file.read()).decode('utf-8')
+
+            blog.save()
+            return redirect('blogpage')
+    else:
+        form = UserBlogPageForm()
+
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')[:10]
+    return render(request, 'pages/blogpage.html', {'form': form, 'blogpages': blogpages})
+
+
+def edit_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+
+    if request.method == 'POST':
+        blog.name = request.POST.get('name')
+        blog.title = request.POST.get('title')
+        blog.description = request.POST.get('description')
+        uploaded_file = request.FILES.get('file')
+        if uploaded_file:
+         blog.file = base64.b64encode(uploaded_file.read()).decode('utf-8')
+        blog.save()
+        return redirect('blogpage')
+
+    return render(request, 'pages/blogpage.html', {'blog': blog})
  
+def blogpage_view(request):
+    if request.method == 'POST':
+        form = UserBlogPageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blogpage')
+    else:
+        form = UserBlogPageForm()
+
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')
+    return render(request, 'blogpage.html', {
+        'form': form,
+        'blogpages': blogpages
+    })
+
+def delete_blogpage(request, id):
+    blogpage= get_object_or_404(UserBlogPage, id=id)
+    blogpage.delete()
+    return redirect('blogpage')
+
+def adminblogpage(request):
+    blogpages = UserBlogPage.objects.all().order_by('-created_at')
+    return render(request, 'pages/adminblogpage.html', {'blogpages': blogpages})
+
+def approve_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+    blog.isShow = True
+    blog.save()
+    return redirect('adminblogpage')
+
+def reject_blogpage(request, id):
+    blog = get_object_or_404(UserBlogPage, id=id)
+    blog.delete()
+    return redirect('adminblogpage')
+
+def publishedblog(request):
+    blogpages = UserBlogPage.objects.filter(isShow=True).order_by('-created_at')
+    return render(request, 'pages/publishedblog.html', {'blogpages': blogpages})
+
+def report_blog(request):
+    if request.method == 'POST':
+        blog_id = request.POST.get('blog_id')
+        blog_name = request.POST.get('blog_name')
+        reason = request.POST.get('reason')
+
+        print(f"Blog ID: {blog_id}")
+        print(f"Blog Name: {blog_name}")
+        print(f"Report Reason: {reason}")
+
+        # Save the report to the database
+        Report.objects.create(
+            blog_id=blog_id,
+            blog_name=blog_name,
+            reason=reason
+        )
+
+        messages.success(request, "Thanks for reporting the blog.")
+        return redirect('publishedblog')
+
+    # Optional fallback for non-POST requests
+    messages.warning(request, "Invalid request.")
+    return redirect('publishedblog')
+
+def adminblogreports(request):
+    reports = Report.objects.all().order_by('-created_at')
+    return render(request, 'pages/reports.html', {'reports': reports})
+
+import csv
+from django.http import HttpResponse
+
+def download_reported_blogs(request):
+    reports = Report.objects.all()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="reported_blogs.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['#', 'Blog ID', 'Blog Name', 'Reason', 'Date'])
+
+    for idx, report in enumerate(reports, start=1):
+        writer.writerow([
+            idx,
+            report.blog_id,
+            report.blog_name,
+            report.reason,
+            report.created_at.strftime('%Y-%m-%d %H:%M')
+        ])
+
+    return response
+    
 def statistics_view(request):
     return render(request, 'charts/statistics.html')
  
