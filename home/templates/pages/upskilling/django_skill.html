@@ -1,75 +1,103 @@
-{% extends 'pages/upskilling/skill_base.html' %} 
+{% extends 'pages/upskilling/skill_base.html' %}
 {% load static %}
-
 
 {% block skill_content %}
 
-
 <div class="container">
   <div id="sections" class="my-5">
+    <!-- SECTION 1 -->
     <section class="section card mb-3 p-3">
       <h2 class="card-title">Structure</h2>
-      <p class="card-text">Django follows the MVT architecture. MVT stands for Model-View-Template. In an MVT architecture, there are three parts to this architecture: Model: The model provides a logical data structure to the application and maintains data with the help of a database. Reference: <a href="https://www.naukri.com/code360/library/project-structure-in-django">Code360 Project Structure in Django</a></p>
+      <p class="card-text">
+        Django follows the MVT architecture. MVT stands for Model-View-Template. In an MVT architecture, there are three parts:
+        <br><br>
+        <strong>Model:</strong> Provides a logical data structure and maintains data using a database.<br>
+        <strong>View:</strong> Controls the logic that accesses models and renders templates.<br>
+        <strong>Template:</strong> Handles the UI — the HTML structure sent to users.
+        <br><br>
+        Reference: <a href="https://www.naukri.com/code360/library/project-structure-in-django" target="_blank">Code360 – Django Structure</a>
+      </p>
     </section>
 
+    <!-- SECTION 2 -->
     <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Syntax</h2>
-      <p class="card-text">Django’s template language is designed to strike a balance between power and ease. It’s designed to feel comfortable to those used to working with HTML. Reference: <a href="https://docs.djangoproject.com/en/5.0/ref/templates/language/">Django Offical Documentation</a></p>
+      <h2 class="card-title">Syntax & Templates</h2>
+      <p class="card-text">
+        Django’s template language is designed to strike a balance between power and ease. It’s built for HTML-friendly developers and supports filters, tags, inheritance, and autoescaping.
+        <br><br>
+        Reference: <a href="https://docs.djangoproject.com/en/5.0/ref/templates/language/" target="_blank">Django Template Language Docs</a>
+      </p>
     </section>
 
-    <!-- More sections... -->
+    <!-- SECTION 3 -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Helpful Django Resources</h2>
+      <ul>
+        <li><a href="https://docs.djangoproject.com/en/5.0/" target="_blank">📘 Official Django 5.0 Docs</a></li>
+        <li><a href="https://www.djangoproject.com/start/" target="_blank">🌐 Getting Started (Django)</a></li>
+        <li><a href="https://www.w3schools.com/django/" target="_blank">🌐 W3Schools Django Guide</a></li>
+        <li><a href="https://learndjango.com/tutorials/getting-started-django-tutorial" target="_blank">🌐 LearnDjango Beginner Tutorial</a></li>
+        <li><a href="https://www.youtube.com/watch?v=rHux0gMZ3Eg" target="_blank">🎥 Mosh Django Tutorial</a></li>
+        <li><a href="https://www.youtube.com/watch?v=nGIg40xs9e4" target="_blank">🎥 Tech With Tim – Django in 20 Minutes</a></li>
+        <li><a href="https://www.youtube.com/watch?v=ZxMB6Njs3ck" target="_blank">🎥 Django Marketplace (freeCodeCamp)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=0sMtoedWaf0" target="_blank">🎥 Django in 8 Minutes (Denis Ivy)</a></li>
+      </ul>
+    </section>
   </div>
 
+  <!-- NAVIGATION BUTTONS -->
   <div class="d-flex justify-content-between mb-4">
     <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
     <button id="next-button" class="btn btn-primary">Next</button>
-    <button id="finishButton" class="btn btn-warning" style="display: none">Finish</button>
+    <form id="finishForm" method="post" action="{% url 'complete_skill' slug='django' %}" style="display: none;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-warning">Finish</button>
+    </form>
+    
   </div>
 
-<script>
+  <!-- Progress Data -->
+  <script>
     window.progressId = "{{ progress_id }}";
     window.csrfToken = "{{ csrf_token }}";
-       // Function to handle button visibility for cards so that the finish button is invisible on the first card and the next button is invisible on the second card
-       function toggleButtons(currentIndex, totalCards) {
-        if (currentIndex === 0) {
-            // If it's the first card, hide the back button
-            document.getElementById("back-button").style.display = "none";
-        } else {
-            // Otherwise, show the back button
-            document.getElementById("back-button").style.display = "block";
-        }
 
-        if (currentIndex === totalCards - 1) {
-            // If it's the last card, hide the next button and show the finish button
-            document.getElementById("next-button").style.display = "none";
-            document.getElementById("finishButton").style.display = "block";
-        } else {
-            // Otherwise, show the next button and hide the finish button
-            document.getElementById("next-button").style.display = "block";
-            document.getElementById("finishButton").style.display = "none";
-        }
+    function toggleButtons(index, total) {
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
     }
 
-    var currentIndex = 0; // Update this value based on user navigation
-    var totalCards = document.querySelectorAll("#sections .section").length;
 
-    //Toggle of Button Visibility 
-    toggleButtons(currentIndex, totalCards);
+    let currentIndex = 0;
+    const sections = document.querySelectorAll("#sections .section");
+    const totalCards = sections.length;
 
-    // Event listener for the back button click
-    document.getElementById("back-button").addEventListener("click", function() {
+    function showSection(index) {
+      sections.forEach((section, i) => {
+        section.style.display = i === index ? "block" : "none";
+      });
+      toggleButtons(index, totalCards);
+    }
+
+    showSection(currentIndex);
+
+    document.getElementById("back-button").addEventListener("click", () => {
+      if (currentIndex > 0) {
         currentIndex--;
-        toggleButtons(currentIndex, totalCards); // Update button visibility
+        showSection(currentIndex);
+      }
     });
 
-    // Event listener for the next button click
-    document.getElementById("next-button").addEventListener("click", function() {
+    document.getElementById("next-button").addEventListener("click", () => {
+      if (currentIndex < totalCards - 1) {
         currentIndex++;
-        toggleButtons(currentIndex, totalCards); // Update button visibility
+        showSection(currentIndex);
+      }
     });
-</script>
-</script>
 
-<script src="{% static 'skill_navigation.js' %}"></script>
+  </script>
+
+  <script src="{% static 'skill_navigation.js' %}"></script>
+</div>
 
 {% endblock %}

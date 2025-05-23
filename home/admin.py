@@ -1,4 +1,9 @@
 from django.contrib import admin
+
+from .models import AdminNotification
+
+from django.utils.html import format_html
+
 from .models import (
     User,
     Student,
@@ -29,16 +34,25 @@ from .models import (
     SecurityEvent,
 
     #LeaderBaord
-    LeaderBoardTable
+    LeaderBoardTable,
+
+    AppAttackReport, 
+    PenTestingRequest, 
+    SecureCodeReviewRequest
 
 )
 
 
 
+@admin.register(AdminNotification)
+class AdminNotificationAdmin(admin.ModelAdmin):
+    list_display = ('message', 'created_at', 'is_read', 'related_user')
+    list_filter = ('is_read', 'created_at')
+    search_fields = ('message',)
+
 admin.site.register(Smishingdetection_join_us)
 admin.site.register(Article)
 admin.site.register(DDT_contact)
-
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
 admin.site.index_title = "Welcome to Hardhat Admin Portal"
@@ -181,6 +195,30 @@ class LeaderboardTableAdmin(admin.ModelAdmin):
 
 
 
+
+@admin.register(AppAttackReport)
+class AppAttackReportAdmin(admin.ModelAdmin):
+    list_display = ('year', 'title', 'pdf_link')
+
+    def pdf_link(self, obj):
+        return format_html("<a href='{}' target='_blank'>View PDF</a>", obj.pdf.url)
+    pdf_link.short_description = "PDF"
+
+
+@admin.register(PenTestingRequest)
+class PenTestingRequestAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'github_repo_link', 'submitted_at']
+    list_filter = ['submitted_at']
+    search_fields = ['name', 'email', 'github_repo_link']
+    readonly_fields = ['submitted_at']
+
+
+@admin.register(SecureCodeReviewRequest)
+class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'github_repo_link', 'submitted_at']
+    list_filter = ['submitted_at']
+    search_fields = ['name', 'email', 'github_repo_link']
+    readonly_fields = ['submitted_at']
 
 
 

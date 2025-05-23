@@ -11,6 +11,7 @@ six==1.16.0
 django-ratelimit==4.1.0
 django-cors-headers==4.6.0
 pymemcache==4.0.0
+django-cron==0.6.0
 
 # UI
 django-crispy-forms==2.3
@@ -51,4 +52,15 @@ drf-yasg==1.21.8
 #Cron Jobs
 django-cron==0.6.0
 
+
+
+# Sentiment Analysis
+textblob==0.18.0
+
+
+
 django-cron==0.6.0
+
+# tests
+webdriver-manager==4.0.2
+selenium==4.31.0

@@ -1,0 +1,84 @@
+{% extends 'pages/upskilling/skill_base.html' %}
+{% load static %}
+
+{% block skill_content %}
+
+<div class="container">
+  <div id="sections" class="my-5">
+    <!-- SECTION 1 -->
+    <section class="section card mb-3 p-3">
+      <h2 class="card-title">What is Secure Code Review?</h2>
+      <p class="card-text">
+        Secure Code Review is a process of manually or automatically inspecting source code to identify security flaws or vulnerabilities before deployment. This ensures that web applications follow secure coding standards and reduce the risk of exploitation.
+        <br><br>
+        Reference: <a href="https://owasp.org/www-project-code-review-guide/" target="_blank">OWASP Code Review Guide</a>
+      </p>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Common Security Issues to Look For</h2>
+      <ul>
+        <li>🔐 SQL Injection (e.g., unsafe query construction)</li>
+        <li>🧬 Cross-Site Scripting (XSS)</li>
+        <li>🧱 Insecure Authentication or Session Handling</li>
+        <li>🔓 Sensitive data exposure (e.g., credentials in code)</li>
+        <li>🛑 Lack of Input Validation / Output Encoding</li>
+        <li>⚠️ Insecure dependencies</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Learn Secure Code Review</h2>
+      <ul>
+        <li><a href="https://owasp.org/www-project-code-review-guide/" target="_blank">📘 OWASP Code Review Guide</a></li>
+        <li><a href="https://cheatsheetseries.owasp.org/" target="_blank">📘 OWASP Cheat Sheet Series</a></li>
+        <li><a href="https://www.youtube.com/watch?v=UimqLp5xc98" target="_blank">🎥 Secure Code Review for Beginners (Security Zone)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=eltB_dBSyFA" target="_blank">🎥 Secure Code Review with Semgrep (Live Walkthrough)</a></li>
+        <li><a href="https://www.veracode.com/security/secure-code-review" target="_blank">📘 Intro to Secure Code Review (Veracode)</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="d-flex justify-content-between mb-4">
+    <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
+    <button id="next-button" class="btn btn-primary">Next</button>
+    <form id="finishForm" method="post" action="{% url 'complete_skill' slug='secure-code-review' %}" style="display: none;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">Finish</button>
+    </form>
+      
+  </div>
+
+  <!-- Section JS -->
+  <script>
+    let currentIndex = 0;
+    const sections = document.querySelectorAll("#sections .section");
+    const totalCards = sections.length;
+
+    function toggleButtons(index, total) {
+        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+    }
+
+
+    function showSection(index) {
+      sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
+      toggleButtons(index, totalCards);
+    }
+
+    showSection(currentIndex);
+
+    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
+    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+
+    
+  </script>
+
+  <script src="{% static 'skill_navigation.js' %}"></script>
+</div>
+
+{% endblock %}

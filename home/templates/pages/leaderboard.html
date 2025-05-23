@@ -7,6 +7,15 @@
     <br>
     <h1 class="text-center" style="color: black">Leaderboard</h1>
     <p class="text-center" style="color: black"><b>Here are the top 10 users who are currently on this table</b></p>
+    <form method="get" class="mb-4">
+        <label for="category">Select Category:</label>
+        <select name="category" id="category" onchange="this.form.submit()">
+            <option value="">-- Select Category --</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </form>
     <table class="table table-bordered table-striped mt-4">
         <thead>
             <tr>

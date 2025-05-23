@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from home import views
-from django.urls import path, re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-
+from django.urls import path, re_path
 from .admin import admin_statistics_view
+
+from .admin import admin_dashboard
 
 handler404 = 'home.views.error_404_view'
 schema_view = get_schema_view(
@@ -40,22 +41,21 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
+    path("admin/dashboard/", admin.site.admin_view(admin_dashboard), name="admin-dashboard"),
     path('admin/', admin.site.urls),
     path('accounts/', include('home.urls')), 
     path('', include('home.urls')),
-    # path('', include('theme_pixel.urls')),
     path('about-us/', views.about_us, name='about_us'),
     path('contact', views.contact, name='contact'),
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
     path('plan/', views.package_plan, name='package_plan'),
+    path('cyber_threat_simulation/', views.cyber_threat_simulation, name='cyber_threat_simulation'),
+    path('secure_digital_practices/', views.secure_digital_practices, name='secure_digital_practices'),
+    path('cybersecurity_awareness_reports/', views.cybersecurity_awareness_reports, name='cybersecurity_awareness_reports'),
     
     # blog
-    #path('admin/', admin.site.urls),
-    # path('blog/', include('blogs.urls')),
-    #path('', include('blogs.urls')),
-    #path('accounts/', include('users.urls')),
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
     
@@ -91,6 +91,4 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('', include('home.urls')),
 
-]
-
-
+   ]

@@ -15,6 +15,7 @@ import re
 import nh3
 
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience,UserBlogPage, SecurityEvent, JobApplication
+from .models import PenTestingRequest, SecureCodeReviewRequest
 from .validators import xss_detection
 
 logger = logging.getLogger(__name__)
@@ -441,7 +442,25 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):  
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio']
+        fields = ['avatar', 'bio', 'linkedin', 'github', 'location']
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tell us about yourself'
+            }),
+            'linkedin': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'LinkedIn Profile URL'
+            }),
+            'github': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'GitHub Profile URL'
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'City, Country'
+            })
+        }
 
 class CaptchaForm(forms.Form):
     captcha = CaptchaField()
@@ -485,7 +504,20 @@ class ExperienceForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
             'feedback': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your feedback'}),
         }
-        
+
+    def __init__(self, *args, **kwargs):
+        super(ExperienceForm, self).__init__(*args, **kwargs)
+        self.fields['name'].required = False  # Let us handle this manually in clean()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        anonymous = self.data.get('anonymous')  # Read from raw POST data (checkbox input)
+
+        if not anonymous and not name:
+            self.add_error('name', 'Please enter your name or check "Make it anonymous".')
+
+
 # class JobApplicationForm(forms.ModelForm):
     
 #     class Meta:
@@ -496,8 +528,20 @@ class JobApplicationForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
     resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
-    cover_letter = forms.CharField(widget=forms.Textarea(attrs={
-        'class': 'form-control', 
-        'rows': 5, 
-        'placeholder': 'Write your cover letter here...'
-    }))
+
+    cover_letter = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+
+class PenTestingRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = PenTestingRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+
+class SecureCodeReviewRequestForm(forms.ModelForm):
+    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    class Meta:
+        model = SecureCodeReviewRequest
+        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+

@@ -1,6 +1,15 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+{% block seo %}
+    <title>Deakin Detonator Toolkit (DDT) - Penetration Testing GUI & Cybersecurity Tools</title>
+    <meta name="description" content="Deakin Detonator Toolkit (DDT) by PT-GUI offers a user-friendly penetration testing GUI with cybersecurity tools for beginners and professionals, simplifying ethical hacking workflows.">
+    <meta name="keywords" content="penetration testing GUI, cybersecurity tools, ethical hacking tools, cybersecurity tools for beginners, ethical hacking software, Hardhat Enterprises">
+    <meta property="og:title" content="Deakin Detonator Toolkit (DDT) - Penetration Testing GUI">
+    <meta property="og:description" content="Explore the Deakin Detonator Toolkit (DDT) by PT-GUI, a user-friendly penetration testing GUI with cybersecurity tools for ethical hacking.">
+    <meta property="og:image" content="{% static 'assets/img/pages/home/pt-gui-card.svg' %}">
+{% endblock %}
+
 {% block content %}
 <main>
     {% include 'includes/preloader-pt.html' %}
@@ -10,11 +19,12 @@
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
-                    <img src="{% static 'assets/img/pages/home/pt-gui-card.svg' %}" alt="Dashboard Preview" width="500"
-                        height="500">
+                    <img src="{% static 'assets/img/pages/home/pt-gui-card.svg' %}" alt="Deakin Detonator Toolkit dashboard preview" width="500" height="500" loading="lazy">
                     <div class="mt-4 mb-5">
-                        <h2 class="fw-bolder text-dark">Deakin Detonator Toolkit</h2>
-                        <h5 class="fw-normal text-dark">Your gateway to mastering cybersecurity tools with ease.</h5>
+
+                        <h1 class="fw-bolder text-dark">Deakin Detonator Toolkit (DDT)</h1>
+                        <h5 class="fw-normal text-dark">Your Gateway to Mastering Cybersecurity Tools with a Penetration Testing GUI</h5>
+
                     </div>
                 </div>
             </div>
@@ -23,187 +33,182 @@
     <!-- End of Hero Section -->
 
     <section>
-        <!-- About  -->
+        <!-- About -->
         <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">About Us</h2>
-                    <p class="mb-4">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern
-                        penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit;
-                        it's a revolution in cybersecurity practice. Harnessing the robust Tauri framework alongside
-                        React and Mantine, DDT offers an intuitive interface that simplifies complex pen-testing
-                        workflows. With Python at its core, DDT automates and executes scripts for vulnerability
-                        exploitation with precision, freeing you from the intricacies of command-line tools. By the end
-                        of T2 2023, DDT boasts an impressive repertoire of 44 pen-testing tools, 5 targeted attack
-                        vectors, 12 walkthroughs of HackTheBox challenges, and a comprehensive reference for all
-                        dependencies, making it an indispensable tool for professionals and enthusiasts alike.</p>
+                    <h2 class="fw-bolder text-dark">About Deakin Detonator Toolkit</h2>
+                    <p class="mb-4">
+                        The Deakin Detonator Toolkit (DDT) by PT-GUI is a cutting-edge penetration testing GUI for modern cybersecurity professionals. Built with the Tauri framework, React, and Mantine, DDT offers an intuitive interface that simplifies complex pen-testing workflows. Powered by Python, it automates vulnerability exploitation with precision, featuring 44 ethical hacking tools, 5 attack vectors, 12 HackTheBox challenge walkthroughs, and comprehensive dependency references as of T2 2023—perfect for beginners and experts alike.
+                    </p>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/pt-gui-about.svg' %}" class="img-fluid" alt="About Us">
+                    <img src="{% static 'assets/img/pages/home/pt-gui-about.svg' %}" class="img-fluid" alt="About Deakin Detonator Toolkit illustration" loading="lazy">
                 </div>
             </div>
-            <!-- End of About  -->
+            <!-- End of About -->
+
             <!-- Goals -->
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/pt-gui-goals.svg' %}" class="img-fluid"
-                        alt="Goals and Objectives">
+                    <img src="{% static 'assets/img/pages/home/pt-gui-goals.svg' %}" class="img-fluid" alt="Goals and objectives of Deakin Detonator Toolkit" loading="lazy">
                 </div>
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Goals</h2>
+                    <h2 class="fw-bolder text-dark">Goals of DDT</h2>
                     <ul class="mb-4">
-                        <li>User-Friendly Platform.</li>
-                        <li>Access to Cybersecurity Tools.</li>
-                        <li>Streamlined Learning Process.</li>
-                        <li>Community Building.</li>
-                        <li>Wide Accessibility.</li>
+                        <li>User-Friendly Penetration Testing GUI</li>
+                        <li>Access to Ethical Hacking Tools</li>
+                        <li>Streamlined Cybersecurity Learning Process</li>
+                        <li>Community Building for White-Hat Hackers</li>
+                        <li>Wide Accessibility for All Skill Levels</li>
                     </ul>
                     <h2 class="fw-bolder text-dark">Objectives</h2>
                     <ul class="mb-4">
-                        <li>Design a clean, easy-to-use website to make it easier for students and professionals in
-                            cybersecurity.</li>
-                        <li>Easily connect different cybersecurity tools, streamlining complex command line tasks for
-                            users with varying levels of experience.</li>
-                        <li>Facilitate a streamlined learning process for cybersecurity tools, making it more efficient
-                            for users to acquire and apply knowledge.</li>
-                        <li>Foster a community of cybersecurity enthusiasts, encouraging collaboration, knowledge
-                            sharing, and engagement.</li>
-                        <li>Ensure accessibility to a broader audience by designing the website in a way that caters to
-                            users with varying technical expertise.</li>
+                        <li>Design a clean, easy-to-use penetration testing GUI for students and professionals in cybersecurity</li>
+                        <li>Connect cybersecurity tools seamlessly, simplifying complex command-line tasks for users of all experience levels</li>
+                        <li>Facilitate efficient learning of cybersecurity tools for beginners, helping users acquire and apply knowledge</li>
+                        <li>Foster a community of cybersecurity enthusiasts, encouraging collaboration and knowledge sharing</li>
+                        <li>Ensure accessibility to a broader audience with varying technical expertise</li>
                     </ul>
                 </div>
             </div>
             <!-- End of Goals -->
-            <!--Our Services Section -->
-            <!-- Services Header section -->
+
+            <!-- Our Services Section -->
+            <!-- Services Header Section -->
             <div class="bg-primary-app">
                 <div class="row justify-content-center text-center">
                     <div class="col-lg-8">
                         <div class="mt-4 mb-5">
-                            <h2 class="fw-bolder text-dark">Explore our offerings</h2>
-                            <h5 class="fw-normal text-dark">Effortless penetration testing with our intuitive GUI
-                                tool—bridging cybersecurity expertise and accessibility for seamless security
-                                assessments.</h5>
+                            <h2 class="fw-bolder text-dark">Explore Our Cybersecurity Offerings</h2>
+                            <h5 class="fw-normal text-dark">Effortless Penetration Testing with Our Intuitive GUI Tool—Bridging Cybersecurity Expertise and Accessibility</h5>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--End of Services Header section -->
+            <!-- End of Services Header Section -->
+
             <!-- Penetration Testing Learning Tool Service Section -->
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Simplified Penetration Testing</h2>
-                    <p class="mb-4">Explore the world of penetration testing with ease using our GUI-based tools. Say
-                        goodbye to complex command lines. Our user-friendly interface empowers users to conduct
-                        penetration tests efficiently, making cybersecurity assessments more accessible and intuitive.
+                    <h2 class="fw-bolder text-dark">Simplified Penetration Testing GUI</h2>
+                    <p class="mb-4">
+                        Explore penetration testing with ease using DDT’s GUI-based ethical hacking tools. Our user-friendly interface eliminates the complexity of command lines, empowering users to conduct cybersecurity assessments efficiently and making penetration testing accessible to all.
                     </p>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/pt-gui-pentest.svg' %}" class="img-fluid"
-                        alt="Penetration Testing">
+                    <img src="{% static 'assets/img/pages/home/pt-gui-pentest.svg' %}" class="img-fluid" alt="Simplified penetration testing GUI illustration" loading="lazy">
                 </div>
             </div>
             <!-- End of Penetration Testing Learning Tool Service Section -->
+
             <!-- Usage Service Section -->
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/pt-gui-usage.svg' %}" class="img-fluid"
-                        alt="Penetration Testing">
+                    <img src="{% static 'assets/img/pages/home/pt-gui-usage.svg' %}" class="img-fluid" alt="Streamlined cybersecurity tool usage illustration" loading="lazy">
                 </div>
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Streamlined Tool Usage</h2>
-                    <p class="mb-4">Experience cybersecurity tool usage like never before. Our Usage Service simplifies
-                        the practical application of cybersecurity tools, focusing on simplicity without sacrificing
-                        effectiveness. Navigate through tasks effortlessly, whether you're a seasoned professional or
-                        new to the field.</p>
+                    <h2 class="fw-bolder text-dark">Streamlined Cybersecurity Tool Usage</h2>
+                    <p class="mb-4">
+                        Experience cybersecurity tool usage with DDT’s simplified approach. Our Usage Service focuses on simplicity without sacrificing effectiveness, allowing both seasoned professionals and beginners to navigate tasks effortlessly using ethical hacking software.
+                    </p>
                 </div>
             </div>
             <!-- End of Usage Service Section -->
+
             <!-- Beginner's Cyber Toolkit Section -->
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-6">
-                    <h2 class="fw-bolder text-dark">Beginner's Cyber Toolkit</h2>
-                    <p class="mb-4">Embark on your cybersecurity learning journey with our dedicated tool for beginners.
-                        This service educates newcomers on fundamental commands and tools, providing a supportive
-                        environment for learning. Start your exploration into cybersecurity confidently, laying the
-                        groundwork for a successful career.</p>
+                    <h2 class="fw-bolder text-dark">Beginner’s Cyber Toolkit</h2>
+                    <p class="mb-4">
+                        Start your cybersecurity journey with DDT’s beginner-friendly tools. This service educates newcomers on fundamental commands and cybersecurity tools for beginners, providing a supportive environment to build a strong foundation in ethical hacking.
+                    </p>
                 </div>
                 <div class="col-lg-6">
-                    <img src="{% static 'assets/img/pages/home/pt-gui-learningtool.svg' %}" class="img-fluid"
-                        alt="Penetration Testing">
+                    <img src="{% static 'assets/img/pages/home/pt-gui-learningtool.svg' %}" class="img-fluid" alt="Beginner’s cybersecurity toolkit illustration" loading="lazy">
                 </div>
             </div>
-            <!-- End of Beginner's Cyber Toolkit Section -->
-            <!-- End of Services section-->
+            <!-- End of Beginner’s Cyber Toolkit Section -->
         </div>
+        <div class="text-center my-4">
+            <a href="/ptgui_viz/tools/" class="btn btn-primary animate-up-2">
+              <span class="fas fa-toolbox me-2"></span> Explore Cybersecurity Tools
+            </a>
+          </div>
+          
     </section>
+
     <section>
         <div class="bg-secondary-app text-white mb-4">
             <div class="container">
                 <!-- Tools Section -->
-                <!--Tools Header Section-->
+                <!-- Tools Header Section -->
                 <div class="row justify-content-center text-center">
                     <div class="col-lg-8">
                         <div class="mt-4 mb-5">
-                            <h2 class="fw-bolder text-white">SecureCraft Utilities</h2>
-                            <p class="mb-4">Elevate your cybersecurity experience with our advanced toolset, crafted
-                                to
-                                streamline intricate operations and elevate your prowess in the dynamic realm of
-                                cybersecurity.</p>
+                            <h2 class="fw-bolder text-white">SecureCraft Utilities for Ethical Hacking</h2>
+                            <p class="mb-4">
+                                Elevate your cybersecurity experience with DDT’s advanced ethical hacking tools, designed to streamline intricate operations and enhance your skills in the dynamic realm of cybersecurity.
+                            </p>
                         </div>
                     </div>
                 </div>
+                <!-- End of Tools Header Section -->
 
-                <!--End of Tools Header Section-->
                 <!-- Tools List Section -->
                 <div class="row justify-content-between align-items-center">
                     <div class="col-lg-6">
-                        <img src="{% static 'assets/img/pages/home/pt-gui-tools.svg' %}" class="img-fluid"
-                            alt="Goals and Objectives">
+                        <img src="{% static 'assets/img/pages/home/pt-gui-tools.svg' %}" class="img-fluid" alt="Cybersecurity tools in Deakin Detonator Toolkit" loading="lazy">
                     </div>
                     <div class="col-lg-6">
-                        <h2 class="fw-bolder text-white">Tools</h2>
+                        <h2 class="fw-bolder text-white">Cybersecurity Tools in DDT</h2>
                         <ul class="mb-4">
-                            <li>Nmap</li>
-                            <li>SMB Enumeration</li>
-                            <li>SNMP-Check</li>
-                            <li>Shodan API</li>
-                            <li>Dirb</li>
-                            <li>JohnTheRipper</li>
-                            <li>Hashcat</li>
-                            <li>Hydra</li>
-                            <li>Urlsnarf</li>
-                            <li>SearchSploit</li>
-                            <li>SMG-Ghost Scanner</li>
-                            <li>ARP Spoofing</li>
+                            <li>Nmap for Network Scanning</li>
+                            <li>SMB Enumeration for Vulnerability Detection</li>
+                            <li>SNMP-Check for System Monitoring</li>
+                            <li>Shodan API for Threat Intelligence</li>
+                            <li>Dirb for Web Directory Scanning</li>
+                            <li>JohnTheRipper for Password Cracking</li>
+                            <li>Hashcat for Advanced Password Recovery</li>
+                            <li>Hydra for Brute Force Attacks</li>
+                            <li>Urlsnarf for URL Monitoring</li>
+                            <li>SearchSploit for Exploit Searching</li>
+                            <li>SMG-Ghost Scanner for Network Analysis</li>
+                            <li>ARP Spoofing for Network Testing</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
         <!-- End of Tools List Section -->
+
         <!-- How Do We Do It Section -->
         <div class="row justify-content-center text-center">
-            <h2 class="text-center fw-bolder text-dark">How Do We Do It?</h2>
+            <h2 class="text-center fw-bolder text-dark">How Does DDT Work?</h2>
             <div class="row text-center">
                 <div class="col-md-4">
                     <div class="ptgui_viz-card">
-                        <img src="{% static 'assets/img/pages/home/pt-gui-how1.svg' %}" alt="Tool Screenshot 1">
+                        <img src="{% static 'assets/img/pages/home/pt-gui-how1.svg' %}" alt="Deakin Detonator Toolkit go button screenshot" loading="lazy">
                     </div>
-                    <p class="mb-4" style="    font-size: 0.75rem;">To initiate the tool, just click the "Go" button to start the execution.</p>
+                    <p class="mb-4" style="font-size: 0.75rem;">
+                        To initiate the tool, click the "Go" button to start the penetration testing execution.
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <div class="ptgui_viz-card">
-                        <img src="{% static 'assets/img/pages/home/pt-gui-how2.svg' %}" alt="Tool Screenshot 2">
+                        <img src="{% static 'assets/img/pages/home/pt-gui-how2.svg' %}" alt="Deakin Detonator Toolkit scan button screenshot" loading="lazy">
                     </div>
-                    <p class="mb-4" style="    font-size: 0.75rem;">Provide the necessary information and select the "Scan" button to initiate the
-                        operation.</p>
+                    <p class="mb-4" style="font-size: 0.75rem;">
+                        Provide the necessary information and select the "Scan" button to initiate the cybersecurity operation.
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <div class="ptgui_viz-card">
-                        <img src="{% static 'assets/img/pages/home/pt-gui-how3.svg' %}" alt="Tool Screenshot 3">
+                        <img src="{% static 'assets/img/pages/home/pt-gui-how3.svg' %}" alt="Deakin Detonator Toolkit output section screenshot" loading="lazy">
                     </div>
-                    <p class="mb-4" style="    font-size: 0.75rem;">Check the Output section to see the results of the scan.</p>
+                    <p class="mb-4" style="font-size: 0.75rem;">
+                        Check the Output section to view the results of the cybersecurity scan.
+                    </p>
                 </div>
             </div>
         </div>
@@ -215,20 +220,16 @@
                 <div class="row justify-content-center text-center">
                     <div class="col-lg-8">
                         <div class="mt-4 mb-5">
-                            <h2 class="fw-bolder">DDT GitHub</h2>
-                            <p class="mb-4 text-white">Explore the PT-GUI GitHub Repository for in-depth access to the source
-                                code,
-                                documentation, and collaborative resources. Contribute to the development of this
-                                powerful cybersecurity tool, designed to simplify complex operations for both
-                                learners
-                                and professionals.</p>
-                            <img src="{% static 'assets/img/pages/home/pt-gui-git.svg' %}" alt="Dashboard Preview"
-                                width="500" height="400">
+                            <h2 class="fw-bolder">Deakin Detonator Toolkit GitHub</h2>
+                            <p class="mb-4 text-white">
+                                Explore the PT-GUI GitHub Repository for access to the source code, documentation, and collaborative resources for ethical hacking software. Contribute to the development of this powerful penetration testing GUI, designed for learners and professionals.
+                            </p>
+                            <img src="{% static 'assets/img/pages/home/pt-gui-git.svg' %}" alt="Deakin Detonator Toolkit GitHub preview" width="500" height="400" loading="lazy">
                             <div>
-                                <a href="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit"
-                                    class="btn btn-outline-gray-100 me-md-3">
+                                <a href="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit" class="btn btn-outline-gray-100 me-md-3">
                                     <span class="fab fa-github me-2"></span>
-                                    Visit GitHub</a>
+                                    Visit GitHub
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -237,182 +238,156 @@
         </div>
         <!-- End of GitHub Link Section -->
 
-        <!-- Class of Action Section -->
+        <!-- Call to Action Section -->
         <div class="bg-primary-app">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
                     <div class="mt-4 mb-5">
-                        <h2 class="fw-bolder text-dark">Ignite Your PenTest Journey</h2>
-                        <p class="mb-4">Ready to level up your cybersecurity skills? Join us to experience
-                            user-friendly
-                            tools and collaborative learning.</p>
-                        <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2"
-                            alt="Click to immerse yourself in practical cybersecurity experiences."><span
-                                class="fas fa-envelope"></span>
-                            Get in Touch</a>
-                        <a href="{% url 'ptgui_join_us' %}" class="btn btn-primary animate-up-2"
-                            alt="Join our team of cybersecurity professionals"><span
-                                class="fas fa-handshake me-2"></span>
-                            Join Us</a>
+                        <h2 class="fw-bolder text-dark">Ignite Your PenTest Journey with DDT</h2>
+                        <p class="mb-4">
+                            Ready to level up your cybersecurity skills? Join us to experience user-friendly penetration testing GUI tools and collaborative learning for white-hat hackers.
+                        </p>
+                        <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2" alt="Contact us to immerse yourself in practical cybersecurity experiences">
+                            <span class="fas fa-envelope"></span>
+                            Get in Touch
+                        </a>
+                        <a href="{% url 'ptgui_join_us' %}" class="btn btn-primary animate-up-2" alt="Join our team of cybersecurity professionals">
+                            <span class="fas fa-handshake me-2"></span>
+                            Join Us
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-        <!-- End of Class of Action Section -->
+        <!-- End of Call to Action Section -->
     </section>
-    <!-- End of Social Links Section -->
 
     <!-- FAQ Section -->
     <section class="section section-lg bg-warning py-5">
         <div class="container">
             <h1 class="fw-bolder display-50 text-center text-black mb-5 mt-5">Frequently Asked Questions</h1>
-            <h2 class="fw-bolder display-5 text-center text-black mb-5 mt-5">Explore the answers to common questions about PT-GUI</h2>
+            <h2 class="fw-bolder display-5 text-center text-black mb-5 mt-5">Explore Answers to Common Questions About PT-GUI and DDT</h2>
             <div class="row g-5">
                 <div class="col-12">
                     <div class="accordion" id="accordionPanelsStayOpenExample">
                         <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                            <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                <b>How can I install PT-GUI on my system?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
-                            <div class="accordion-body">
-                                You can install PT-GUI by following the installation instructions provided
-                                in the official PT-GUI documentation. The installation process typically involves downloading
-                                the necessary files, configuring dependencies, and running the installation script.
+                            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    <b>How can I install PT-GUI on my system?</b>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                    You can install PT-GUI and the Deakin Detonator Toolkit (DDT) by following the instructions in the official documentation. The process involves downloading files, configuring dependencies, and running the installation script for this penetration testing GUI.
+                                </div>
                             </div>
-                          </div>
                         </div>
                         <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                            <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                <b>What operating systems does PT-GUI support?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                            <div class="accordion-body">
-                                PT-GUI is designed to be cross-platform and supports various operating
-                                systems, including Windows, macOS, and Linux. Make sure to check the documentation for specific
-                                requirements and compatibility details.
+                            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                    <b>What operating systems does PT-GUI support?</b>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                                <div class="accordion-body">
+                                    PT-GUI and DDT are cross-platform, supporting Windows, macOS, and Linux. Check the documentation for specific requirements and compatibility details for this ethical hacking software.
+                                </div>
                             </div>
-                          </div>
                         </div>
                         <div class="accordion-item">
-                          <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                            <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                              <b>Are there any tutorials available for using PT-GUI?</b>
-                            </button>
-                          </h2>
-                          <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                            <div class="accordion-body">
-                                Yes, PT-GUI provides tutorials and walkthroughs to help users get started
-                                with the toolkit. These tutorials cover a range of topics, from basic tool usage to advanced
-                                penetration testing techniques. Check the official PT-GUI website and documentation for the
-                                latest tutorials.
+                            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                    <b>Are there any tutorials available for using PT-GUI?</b>
+                                </button>
+                            </h2>
+                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                <div class="accordion-body">
+                                    Yes, PT-GUI offers tutorials and walkthroughs, including 12 HackTheBox challenges, to help users master cybersecurity tools for beginners. Visit the official website for the latest resources on this penetration testing GUI.
+                                </div>
                             </div>
-                          </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingFour">
-                              <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
-                                <b>Can I customize the PT-GUI interface?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                                    <b>Can I customize the PT-GUI interface?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
-                              <div class="accordion-body">
-                                PT-GUI offers some degree of customization for the user interface. Users can
-                                configure settings, choose themes, and personalize the layout to suit their preferences. Refer
-                                to the PT-GUI documentation for details on how to customize the interface.
-                              </div>
+                                <div class="accordion-body">
+                                    PT-GUI allows customization of its user interface, including themes and layout settings. Refer to the documentation for details on personalizing this ethical hacking software to suit your preferences.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingFive">
-                              <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
-                                <b>Does PT-GUI support collaboration and team usage?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
+                                    <b>Does PT-GUI support collaboration and team usage?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
-                              <div class="accordion-body">
-                                Yes, PT-GUI is designed to support collaboration and team usage. It provides
-                                features for sharing projects, collaborating on assessments, and managing user roles within the
-                                toolkit. Team members can work together seamlessly using PT-GUI's collaborative capabilities.
-                              </div>
+                                <div class="accordion-body">
+                                    Yes, PT-GUI and DDT support collaboration with features for sharing projects and managing user roles, making it ideal for team-based cybersecurity assessments using this penetration testing GUI.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingSix">
-                              <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
-                                <b>What security measures are in place for PT-GUI?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
+                                    <b>What security measures are in place for PT-GUI?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
-                              <div class="accordion-body">
-                                PT-GUI prioritizes security and follows best practices to ensure a secure
-                                environment for penetration testing. Regular updates and security patches are released to
-                                address vulnerabilities. Users are encouraged to stay informed about security practices and
-                                update PT-GUI regularly.
-                              </div>
+                                <div class="accordion-body">
+                                    PT-GUI prioritizes security with regular updates and patches to ensure a safe environment for ethical hacking tools. Users should update regularly to maintain a secure penetration testing experience.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingSeven">
-                              <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
-                                <b>Can I integrate PT-GUI with other cybersecurity tools?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
+                                    <b>Can I integrate PT-GUI with other cybersecurity tools?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSeven">
-                              <div class="accordion-body">
-                                Yes, PT-GUI is designed with integration in mind. Users can integrate PT-GUI
-                                with other cybersecurity tools and frameworks to enhance their workflow. The documentation
-                                provides guidance on integrating PT-GUI with third-party tools and services.
-                              </div>
+                                <div class="accordion-body">
+                                    Yes, PT-GUI supports integration with other cybersecurity tools to enhance workflows. The documentation provides guidance on connecting this ethical hacking software with third-party tools.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingEight">
-                              <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
-                                <b>Is there a community forum or support channel for PT-GUI users?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
+                                    <b>Is there a community forum or support channel for PT-GUI users?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
-                              <div class="accordion-body">
-                                Yes, PT-GUI has an active community forum and support channels where users
-                                can seek help, share experiences, and collaborate with other cybersecurity enthusiasts. Joining
-                                the community provides an opportunity to connect with like-minded individuals and receive
-                                assistance from experienced users
-                              </div>
+                                <div class="accordion-body">
+                                    PT-GUI has an active community forum for users to seek help, share experiences, and collaborate on cybersecurity tools for beginners, fostering a supportive environment for white-hat hackers.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingNine">
-                              <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseNine" aria-expanded="false" aria-controls="panelsStayOpen-collapseNine">
-                                <b>What is the roadmap for future PT-GUI developments?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseNine" aria-expanded="false" aria-controls="panelsStayOpen-collapseNine">
+                                    <b>What is the roadmap for future PT-GUI developments?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseNine" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingNine">
-                              <div class="accordion-body">
-                                The PT-GUI development team is committed to continuous improvement and
-                                innovation. The roadmap for future developments includes expanding the toolkit's toolset,
-                                enhancing user experience, and incorporating feedback from the community. Stay tuned to official
-                                announcements and releases for updates on PT-GUI's evolution.
-                              </div>
+                                <div class="accordion-body">
+                                    The PT-GUI team is committed to expanding DDT’s toolset, enhancing user experience, and incorporating community feedback to improve this penetration testing GUI for ethical hacking.
+                                </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="panelsStayOpen-headingTen">
-                              <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTen" aria-expanded="false" aria-controls="panelsStayOpen-collapseTen">
-                                <b>How can I report bugs or contribute to PT-GUI development?</b>
-                              </button>
+                                <button class="accordion-button collapsed bg-secondary-app text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTen" aria-expanded="false" aria-controls="panelsStayOpen-collapseTen">
+                                    <b>How can I report bugs or contribute to PT-GUI development?</b>
+                                </button>
                             </h2>
                             <div id="panelsStayOpen-collapseTen" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTen">
-                              <div class="accordion-body">
-                                PT-GUI GitHub repository. You can submit bug reports, contribute code, or participate in
-                                discussions with the development community. Your contributions play a crucial role in making
-                                PT-GUI a robust and effective cybersecurity toolkit.
-                              </div>
+                                <div class="accordion-body">
+                                    Contribute to PT-GUI via the GitHub repository by submitting bug reports, contributing code, or joining discussions. Your input helps improve this ethical hacking software for the community.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -421,4 +396,5 @@
         </div>
     </section>
     <!-- End of FAQ Section -->
-    {% endblock content %}
+</main>
+{% endblock content %}
