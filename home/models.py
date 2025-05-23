@@ -550,6 +550,7 @@ class LeaderBoardTable(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
+        
 class Experience(models.Model):
     name = models.CharField(max_length=100)
     feedback = models.TextField()
@@ -558,11 +559,34 @@ class Experience(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.feedback[:50]}"
+      
+class UserBlogPage(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.TextField()
+    description = models.TextField()
+    file = models.TextField(blank=True, null=True)  # <-- Base64 Image field
+    created_at = models.DateTimeField(auto_now_add=True)
+    isShow = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.name} - {self.title[:50]} - {self.description[:50]}"
+
+class Report(models.Model):
+    blog_id = models.IntegerField()
+    blog_name = models.CharField(max_length=255)
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.blog_name} - {self.reason[:50]}"
+
+
+
+# Passkey Model
 class Passkey(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="passkeys")
     key = models.CharField(max_length=12, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Passkey for {self.user.email}"

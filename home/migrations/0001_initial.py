@@ -257,6 +257,18 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='UserBlogPage',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
+                ('title', models.TextField()),
+                ('description', models.TextField()),
+                ('file', models.TextField(blank=True, null=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('isShow', models.BooleanField(default=False)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Webpage',
             fields=[
                 ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False, unique=True)),

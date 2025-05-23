@@ -116,7 +116,16 @@ urlpatterns = [
     path('ptgui_viz/join_us', views.ptgui_join_us, name='ptgui_join_us'),
     
  
-
+    path('blogpage/', views.blogpage, name='blogpage'),
+    path('blogpage/delete/<int:id>', views.delete_blogpage, name='delete_blogpage'),
+    path('edit_blogpage/<int:id>/', views.edit_blogpage, name='edit_blogpage'),
+    path('adminblogpage/', views.adminblogpage, name='adminblogpage'),
+    path('adminblogpage/approve/<int:id>/', views.approve_blogpage, name='approve_blogpage'),
+    path('adminblogpage/reject/<int:id>/', views.reject_blogpage, name='reject_blogpage'),
+    path('publishedblog/', views.publishedblog, name='publishedblog'),
+    path('report-blog/', views.report_blog, name='report_blog'),
+    path('reports/', views.adminblogreports, name='reports'),
+    path('reported/download/', views.download_reported_blogs, name='download_reported_blogs'),
 
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),

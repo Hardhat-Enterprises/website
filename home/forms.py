@@ -14,9 +14,8 @@ import logging
 import re
 import nh3
 
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience,UserBlogPage, SecurityEvent, JobApplication
 from .models import PenTestingRequest, SecureCodeReviewRequest
-
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, SecurityEvent, JobApplication
 from .validators import xss_detection
 
 logger = logging.getLogger(__name__)
@@ -468,6 +467,18 @@ class CaptchaForm(forms.Form):
         
 
 
+class UserBlogPageForm(ModelForm):
+    file = forms.FileField(required=False)
+
+    class Meta:
+        model = UserBlogPage
+        fields = ['name', 'title', 'description', 'file']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
+            'title': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your title'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your description'}),
+        }
+
 #Newly Added
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
@@ -484,6 +495,7 @@ class ContactForm(forms.Form):
         message = xss_detection(message)
         return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
         
+# Experience Form
 class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience

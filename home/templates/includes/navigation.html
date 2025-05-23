@@ -177,6 +177,33 @@
           </li>
           {% endif %}
 
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+              Admin Settings
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+             <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
+              <div class="row">
+                <div class="col">
+            <ul class="list-style-none">
+              <li class="dropdown-submenu position-relative mb-2 menu ps-3 py-1">
+                <a class="d-flex justify-content-between align-items-center menu-link" href="#" id="adminReviewDropdown">
+                  Admin Blog Review
+                  <span class="fas fa-angle-right"></span>
+                </a>
+                <ul class="dropdown-menu submenu position-absolute start-100 top-0">
+                  <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'adminblogpage' %}">Review Blogs</a></li>
+                  <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'reports' %}">Reports</a></li>
+                </ul>
+              </li>
+            </ul>
+            </div>
+            </div>
+            </div>
+          </li>          
+          {% endif %}
+
 
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
@@ -233,24 +260,19 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
+            <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               Blog
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
-
-
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'feedback' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    User Experience
-                  </li>
-                </a>
-
-              </ul>
-
-
+            <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
+              <div class="row">
+                <div class="col">
+            <ul class="list-style-none">
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">Create a Blog</a></li>
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">Published Blogs</a></li>
+            </ul>
+            </div>
+            </div>
             </div>
           </li>
 
@@ -418,4 +440,96 @@
   </nav>
 </header>
 <script src="{% static 'js/toggles.js' %}"></script>
+<style>
+.dropdown-submenu {
+  position: relative;
+}
+
+.submenu {
+  display: none;
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+  border-radius: 0.25rem;
+  z-index: 1000;
+}
+
+.dropdown-submenu.show > .submenu {
+  display: block;
+}
+
+  </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const blogPagePlus = document.getElementById('blogPagePlus');
+    const parentSubmenu = blogPagePlus.closest('.dropdown-submenu');
+    const submenu = blogPagePlus.nextElementSibling;
+
+    // Prevent Bootstrap auto-close on click inside dropdown
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+      menu.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+    });
+
+    // Bootstrap fix: Stop parent from closing when submenu toggles
+    document.querySelectorAll('.dropdown').forEach(drop => {
+      drop.addEventListener('hide.bs.dropdown', function (e) {
+        if (parentSubmenu.classList.contains('show')) {
+          e.preventDefault(); // prevent closing if submenu is open
+          parentSubmenu.classList.remove('show'); // manually close submenu
+        }
+      });
+    });
+
+    // Toggle submenu on Blog Page + click
+    blogPagePlus.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close all other open submenus
+      document.querySelectorAll('.dropdown-submenu').forEach(sub => {
+        if (sub !== parentSubmenu) sub.classList.remove('show');
+      });
+
+      // Toggle current submenu
+      parentSubmenu.classList.toggle('show');
+    });
+
+    // Close submenu if clicked outside the entire dropdown
+    document.addEventListener('click', function (e) {
+      if (!parentSubmenu.contains(e.target)) {
+        parentSubmenu.classList.remove('show');
+      }
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const adminReviewDropdown = document.getElementById('adminReviewDropdown');
+    const adminSubmenu = adminReviewDropdown.closest('.dropdown-submenu');
+
+    adminReviewDropdown.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close other open submenus
+      document.querySelectorAll('.dropdown-submenu').forEach(item => {
+        if (item !== adminSubmenu) item.classList.remove('show');
+      });
+
+      adminSubmenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!adminSubmenu.contains(e.target)) {
+        adminSubmenu.classList.remove('show');
+      }
+    });
+  });
+</script>
 <script src="{% static 'js/search_suggestions.js' %}"></script>
+
+
