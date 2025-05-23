@@ -1945,3 +1945,6 @@ def amass_view(request):
 def arpaname_view(request):
     return render(request, 'pages/pt_gui/tools/arpaname/index.html')
 
+def policy_deployment(request):
+    return render(request, 'pages/policy_deployment.html')
+
