@@ -27132,6 +27132,10 @@ blockquote {
   margin-top: 20px;
 }
 
+.grecaptcha-badge {
+  bottom: 100px !important;
+}
+
 .alert-danger {
   background-color: #f8d7da;
   border-color: #f5c6cb;

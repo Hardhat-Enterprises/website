@@ -51,6 +51,9 @@ from .forms import CaptchaForm
 
 import os
 import json
+import bleach
+import requests
+import time
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
 from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
@@ -400,26 +403,46 @@ def UpskillingJoinProjectView(request):
     return render(request, 'joinproject.html', {'form': form, 'student_exists': False})
 
 # OTP-Based Login
-
 def login_with_otp(request):
     """
     For Login
     """
     if request.method == 'POST':
+        # First, verify reCAPTCHA
+        token = request.POST.get('g-recaptcha-response')
+        secret_key = settings.RECAPTCHA_SECRET_KEY
+
+        recaptcha_response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={'secret': secret_key, 'response': token}
+        )
+
+        result = recaptcha_response.json()
+
+        if settings.DEBUG:
+            print("DEBUG MODE: reCAPTCHA result:", result)
+
+        if not result.get('success') or result.get('score', 0) < 0.5:
+            messages.error(request, "reCAPTCHA verification failed. Please try again.")
+            if settings.DEBUG:
+                print("DEBUG MODE: reCAPTCHA failed with response:", result)
+            return render(request, 'accounts/sign-in.html')
+
+        # reCAPTCHA passed — continue login logic
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
         if user:
-            # Generate OTP
             otp = random.randint(100000, 999999)
             request.session['otp'] = otp
             request.session['user_id'] = user.id
+            request.session['otp_timestamp'] = time.time()  #Set time
+            request.session['otp_attempts'] = 0  # Reset attempts on new OTP
 
-            # Send OTP via email
             send_mail(
                 subject="Your OTP Code",
-                message=f"Your OTP code is {otp}. Use it to verify your login.",
+                message=f"Your OTP code is {otp}, it expires in 5 minutes. Use it to verify your login.",
                 from_email="deakinhardhatwebsite@gmail.com",
                 recipient_list=[user.email],
                 fail_silently=False,
@@ -432,26 +455,65 @@ def login_with_otp(request):
             return redirect('verify_otp')
         else:
             messages.error(request, "Invalid username or password.")
+
+            if settings.DEBUG:
+                print(f"DEBUG MODE: Invalid login attempt for username: {username}")
+                print(f"DEBUG MODE: Password entered: {password}")
+
     return render(request, 'accounts/sign-in.html')
 
 
 
+# Verify OTP
 def verify_otp(request):
     """
     OTP verification during login.
+    Locks out after 5 failed attempts or 5 minutes by redirecting to login.
     """
     if request.method == 'POST':
         entered_otp = request.POST.get('otp')
         saved_otp = request.session.get('otp')
         user_id = request.session.get('user_id')
 
-        print(f"[DEBUG] Entered OTP: {entered_otp}, Saved OTP: {saved_otp}, User ID: {user_id}")
+        # Initialize OTP timestamp if not already set
+        otp_timestamp = request.session.get('otp_timestamp')
+        if not otp_timestamp:
+            request.session['otp_timestamp'] = time.time()
+        else:
+            elapsed = time.time() - otp_timestamp
+            if elapsed > 300:  # 300 seconds = 5 minutes
+                messages.error(request, "OTP session expired. Please log in again.")
+                print("[DEBUG] OTP expired after 5 minutes. Elapsed time: {:.2f} seconds".format(elapsed))
+                request.session.flush()
+                return redirect('login')
 
         if entered_otp and saved_otp and int(entered_otp) == int(saved_otp):
-            request.session['is_otp_verified'] = True  # Mark OTP as verified
-            return redirect('post_otp_login_captcha')  # Go to captcha page before login
+            User = get_user_model()
+            try:
+                user = User.objects.get(id=user_id)
+                login(request, user)
+                # Clear session data on success
+                request.session.pop('otp', None)
+                request.session.pop('user_id', None)
+                request.session.pop('otp_attempts', None)
+                request.session.pop('otp_timestamp', None)
+                messages.success(request, "Login successful!")
+                return redirect('/')
+            except User.DoesNotExist:
+                messages.error(request, "User does not exist.")
         else:
-            messages.error(request, "Invalid OTP. Please try again.")
+            # Handle OTP failure
+            otp_attempts = request.session.get('otp_attempts', 0) + 1
+            request.session['otp_attempts'] = otp_attempts
+            print(f"[DEBUG] Failed OTP attempt #{otp_attempts} for user ID: {user_id}")
+
+            if otp_attempts >= 5:
+                messages.error(request, "Too many failed attempts. Redirecting to login.")
+                print("[DEBUG] Too many failed attempts. Redirecting to login.")
+                request.session.flush()
+                return redirect('login')
+
+            messages.error(request, f"Invalid OTP. Attempt {otp_attempts}/5.")
 
     return render(request, 'accounts/verify-otp.html')
 
