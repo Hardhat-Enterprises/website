@@ -117,7 +117,7 @@ urlpatterns = [
     
  
     path('blogpage/', views.blogpage, name='blogpage'),
-    path('blogpage/delete/<int:id>', delete_blogpage, name='delete_blogpage'),
+    path('blogpage/delete/<int:id>', views.delete_blogpage, name='delete_blogpage'),
     path('edit_blogpage/<int:id>/', views.edit_blogpage, name='edit_blogpage'),
     path('adminblogpage/', views.adminblogpage, name='adminblogpage'),
     path('adminblogpage/approve/<int:id>/', views.approve_blogpage, name='approve_blogpage'),
