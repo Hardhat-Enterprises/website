@@ -64,6 +64,12 @@ if RENDER_EXTERNAL_HOSTNAME:
 #Secure Cookies Can be implemented but it affects OTP Functionality.
 #Ensure cookies are only sent over HTTPS when set True
 SESSION_COOKIE_SECURE = False
+
+#Ensure v3 Google ReCAPTCHA keys are set
+#To set up new keys, navigate to https://www.google.com/recaptcha/admin/site/
+# Use credentials for Gmail hardhatwebsite@gmail.com
+RECAPTCHA_SITE_KEY = '6LfAVkYrAAAAADQTOddD3d6Ly-LWGDt-O5zpOkao'
+RECAPTCHA_SECRET_KEY = '6LfAVkYrAAAAAHmiKUs--9QR_U70BlGPU6yP522i'
  
 # Prevents JavaScript from accessing session cookies when set True
 SESSION_COOKIE_HTTPONLY = False
@@ -175,6 +181,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
+                'home.context_processors.recaptcha_site_key',
 
 
             ],
@@ -282,8 +289,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587 # For TLS, 465 for SSL
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'hardhatcompanywebsite@gmail.com'
-EMAIL_HOST_PASSWORD = 'nuje nbmo cfqe skjb'
+
+#For Gmail Password, speak to your administrator. App Passwords are required for this application.
+EMAIL_HOST_USER = 'hardhatwebsite@gmail.com'
+EMAIL_HOST_PASSWORD = 'bcee pser zmli mgrn'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
