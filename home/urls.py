@@ -156,9 +156,7 @@ urlpatterns = [
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
-    path('account/delete/', delete_account, name='delete-account'),
-    path('policy-deployment/', views.policy_deployment, name='policy_deployment'),
+    path('account/delete/', delete_account, name='delete-account')
 
 
-] 
-+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
