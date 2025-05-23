@@ -1,0 +1,75 @@
+{% extends 'pages/upskilling/skill_base.html' %}
+{% load static %}
+
+{% block skill_content %}
+<div class="container">
+  <div id="sections" class="my-5">
+    <section class="section card mb-3 p-3">
+      <h2 class="card-title">What is Git?</h2>
+      <p class="card-text">
+        Git is a distributed version control system used to manage source code history and collaboration across teams. GitHub is a platform built around Git for hosting, reviewing, and managing repositories.
+        <br><br>
+        Reference: <a href="https://git-scm.com/doc" target="_blank">Git Official Docs</a>
+      </p>
+    </section>
+
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Key Concepts</h2>
+      <ul>
+        <li><strong>clone</strong> - download a remote repo</li>
+        <li><strong>branch</strong> - isolate your work</li>
+        <li><strong>commit</strong> - snapshot of your changes</li>
+        <li><strong>push/pull</strong> - sync changes with GitHub</li>
+        <li><strong>merge</strong> - combine branches</li>
+        <li><strong>pull request</strong> - propose changes to main repo</li>
+      </ul>
+    </section>
+
+    <section class="section card mb-3 p-3" style="display: none">
+      <h2 class="card-title">Learn Git & GitHub</h2>
+      <ul>
+        <li><a href="https://www.w3schools.com/git/" target="_blank">Git Tutorial by W3Schools</a></li>
+        <li><a href="https://learngitbranching.js.org/" target="_blank">Interactive Git Branching Visualizer</a></li>
+        <li><a href="https://www.youtube.com/watch?v=LxJpwYzoO9A" target="_blank">🎥 GitHub Workflow Tutorial | Git Flow vs GitHub Flow (Edureka)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=ylEy4eLdhFs" target="_blank">🎥 GitHub Actions Step by Step for Beginners</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="d-flex justify-content-between mb-4">
+    <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
+    <button id="next-button" class="btn btn-primary">Next</button>
+    <form id="finishForm" method="post" action="{% url 'complete_skill' slug='git-github-workflows' %}" style="display: none;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">Finish</button>
+    </form>
+      
+  </div>
+
+  <script>
+    let currentIndex = 0;
+    const sections = document.querySelectorAll("#sections .section");
+    const totalCards = sections.length;
+
+    function toggleButtons(index, total) {
+        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+    }
+
+
+    function showSection(index) {
+      sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
+      toggleButtons(index, totalCards);
+    }
+
+    showSection(currentIndex);
+
+    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
+    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+
+  </script>
+
+  <script src="{% static 'skill_navigation.js' %}"></script>
+</div>
+{% endblock %}

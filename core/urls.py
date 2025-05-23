@@ -1,12 +1,14 @@
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.contrib.auth import views as auth_views
+
 from home import views as home_views
 from core.views import blacklisted_ips_view
-from core.schema import schema_view
+from .admin import admin_statistics_view, admin_dashboard
+
+from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework import permissions
 
 handler404 = 'home.views.error_404_view'
 
@@ -24,9 +26,11 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    # Admin and admin-related views
+    # Admin and dashboards
     path('admin/', admin.site.urls),
-    path('admin/statistics/', admin.site.admin_view(blacklisted_ips_view), name="admin-statistics"),
+    path("admin/statistics/", admin.site.admin_view(admin_statistics_view), name="admin-statistics"),
+    path("admin/dashboard/", admin.site.admin_view(admin_dashboard), name="admin-dashboard"),
+    path('admin/statistics/', admin.site.admin_view(blacklisted_ips_view), name="blacklisted-ips"),
 
     # API docs
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -72,12 +76,12 @@ urlpatterns = [
     path('pen-testing/', home_views.pen_testing, name='pen-testing'),
     path('secure-code-review/', home_views.secure_code_review, name='secure-code-review'),
 
-    # TinyMCE editor
+    # TinyMCE
     path('tinymce/', include('tinymce.urls')),
 
     # Verification
     path("verifyEmail/", home_views.VerifyOTP, name="verifyEmail"),
 
-    # Include home app URLs for remaining routes
+    # Include all other home URLs
     path('', include('home.urls')),
 ]

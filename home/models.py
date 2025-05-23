@@ -1,6 +1,5 @@
-import uuid
+﻿import uuid
 
-from django.db.models.deletion import PROTECT
 from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
@@ -8,6 +7,10 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser  
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.sessions.models import Session
+
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
@@ -20,13 +23,35 @@ from django.utils.timezone import now
 from django.utils.text import slugify
 
 import secrets
-
+import random
+import string
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 from django.db import models
-
 import nh3
+from django.conf import settings
+
+class AdminNotification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('feedback', 'Feedback'),
+        ('update', 'System Update'),
+        ('alert', 'Alert'),
+        ('info', 'Information'),
+    ]
+
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES, default='info')
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    related_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)  
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"[{self.get_notification_type_display()}] {self.title}"
 
 class APIModel(models.Model):
     name = models.CharField(max_length=255)
@@ -49,6 +74,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
+    upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
+
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -71,6 +98,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(_("updated_at"), auto_now=True)
     
     last_activity = models.DateTimeField(null=True, blank=True, default=now)
+
+
+    current_session_key = models.CharField(max_length=40, null=True, blank=True)
+    
+    last_login_ip = models.GenericIPAddressField(null=True, blank=True)
+    last_login_browser = models.TextField(null=True, blank=True)
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
@@ -108,7 +141,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.is_active = True
         self.save()
         print(f"User {self.email} has been activated and verified.")
+    
+    def generate_passkeys(self):
+        """Generate 5 unique passkeys for the user after email verification."""
+        from home.models import Passkey 
 
+        if self.passkeys.count() < 5:
+            for _ in range(5):
+                new_key = Passkey.generate_passkey()
+                Passkey.objects.create(user=self, key=new_key)
+
+    def update_last_activity(self, request):
+        #Updates user last activity with timestamp
+        if not request.session.session_key:
+            request.session.save()
+        self.last_activity = now()
+        self.current_session_key = request.session.session_key
+        self.save(update_fields=['last_activity', 'current_session_key'])
 
 #Search Bar Models:
 
@@ -208,19 +257,19 @@ class Student(AbstractBaseSet):
             "unique": _("A user with that Student ID already exists."),
         },
     )
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=PROTECT, related_name="users", blank=False, null=False)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="users", blank=False, null=False)
     year = models.PositiveIntegerField(blank=True)
     trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
     unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
     course = models.CharField(max_length=10, choices=COURSES, blank=True, null=True)
-    p1 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p1_preferences", null=True, blank=True)
-    p2 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p2_preferences", null=True, blank=True)
-    p3 = models.ForeignKey(Project, on_delete=models.PROTECT, related_name="p3_preferences", null=True, blank=True)
+    p1 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p1_preferences", null=True, blank=True)
+    p2 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p2_preferences", null=True, blank=True)
+    p3 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p3_preferences", null=True, blank=True)
 
     def clean(self):
         if self.p1 == self.p2 or self.p1 == self.p3 or self.p2 == self.p3:
             raise ValidationError("Project preferences p1, p2, and p3 must be unique.")
-    allocated = models.ForeignKey(Project, on_delete=PROTECT, related_name="allocated", blank=True, null=True)
+    allocated = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="allocated", blank=True, null=True)
     skills = models.ManyToManyField(Skill, through='Progress')
     
     def __str__(self) -> str:
@@ -317,6 +366,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     bio = models.TextField(max_length=500, blank=True, null=True)
+    linkedin = models.URLField(max_length=200, blank=True, null=True)
+    github = models.URLField(max_length=200, blank=True, null=True)
+    # phone = models.CharField(max_length=20, blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -333,23 +386,50 @@ class CyberChallenge(models.Model):
         ('web', 'Web Application Security'),
         ('crypto', 'Cryptography'),
         ('general', 'General Knowledge'),
+        ('python', 'Python'),
+        ('javascript', 'JavaScript'),
+        ('html_css', 'HTML & CSS'),
+        ('web_security', 'Web Security'),
+        ('reverse_engineering', 'Reverse Engineering'),
+        ('forensics', 'Forensics'),
+        ('binary_exploitation', 'Binary Exploitation'),
+        ('linux', 'Linux'),
+        ('algorithms', 'Algorithms'),
+        ('data_structures', 'Data Structures'),
+        ('databases', 'Databases'),
+        ('regex', 'Regex'),
+        ('secure_coding', 'Secure Coding'),
+        ('logic_reasoning', 'Logic & Reasoning'),
+        ('misc', 'Miscellaneous'),
     ]
     
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
     description = models.TextField()
-    question = models.TextField()
-    choices = models.JSONField()  # For multiple choice questions
-    correct_answer = models.CharField(max_length=200)
-    explanation = models.TextField()
+    question = models.TextField(blank=True, null=True, default="")
+    choices = models.JSONField(blank=True, null=True)  # For MCQ challenges
+    correct_answer = models.CharField(max_length=200, blank=True, null=True)  # Correct answer for MCQs or expected output for code challenges
+    starter_code = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    sample_input = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    expected_output = models.TextField(blank=True, null=True)  # For Fix the Code challenges
+    explanation = models.TextField(blank=True, null=True, default="")
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     points = models.IntegerField(default=10)
+    challenge_type = models.CharField(max_length=20, choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')])
+    time_limit = models.IntegerField(default=60)  
+
+    def __str__(self):
+        return self.title
+
 
 class UserChallenge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.challenge.title}"
 
 
 
@@ -452,7 +532,7 @@ class JobApplication(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     resume = models.FileField(upload_to="resumes/")
-    cover_letter = models.TextField()
+    cover_letter = models.FileField(upload_to="cover_letter/")
     applied_date = models.DateTimeField(auto_now_add=True)
 
 
@@ -465,24 +545,73 @@ class LeaderBoardTable(models.Model):
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
     
-
+    class Meta:
+        ordering = ['-total_points']  
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
 class Experience(models.Model):
     name = models.CharField(max_length=100)
     feedback = models.TextField()
+    rating = models.IntegerField(null=True, blank=True)  # ⭐ ADDED THIS LINE
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name} - {self.feedback[:50]}"
 
-
 class FailedLoginAttempt(models.Model):
     ip_address = models.GenericIPAddressField()
     attempt_time = models.DateTimeField(auto_now_add=True)
     # Other fields you may want to track
-    
-    def __str__(self):
-        return "Failed login attempt from {self.ip_address}"
 
+    def __str__(self):
+        return f"Failed login attempt from {self.ip_address}"
+
+
+class Passkey(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="passkeys")
+    key = models.CharField(max_length=12, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Passkey for {self.user.email}"
+
+    @staticmethod
+    def generate_passkey():
+        """Generate a new passkey"""
+        import random
+        import string
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+
+
+class AppAttackReport(models.Model):
+    year = models.PositiveIntegerField()
+    title = models.CharField(max_length=255)
+    pdf = models.FileField(upload_to='appattack/reports/')
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
+
+
+class PenTestingRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - PenTesting Request"
+
+
+class SecureCodeReviewRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    github_repo_link = models.URLField()
+    project_description = models.TextField(blank=True)
+    terms_accepted = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - Secure Code Review Request"

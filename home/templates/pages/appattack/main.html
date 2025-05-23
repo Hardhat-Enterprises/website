@@ -1,13 +1,16 @@
-
 {% extends 'layouts/base.html' %}
 {% load static %}
 
+{% block seo %}
+    <title>AppAttack by Hardhat Enterprises - Ethical Hacking Tools</title>
+    <meta name="description" content="AppAttack by Hardhat Enterprises offers cybersecurity tools for ethical hacking, including penetration testing and secure code reviews, to safeguard digital assets.">
+    <meta name="keywords" content="cybersecurity tools, ethical hacking tools, penetration testing, secure code review, Hardhat Enterprises, best free cybersecurity tools 2025">
+    <meta property="og:title" content="AppAttack by Hardhat Enterprises">
+    <meta property="og:description" content="Explore AppAttack’s cybersecurity services, including penetration testing and secure code reviews, to protect your digital assets.">
+    <meta property="og:image" content="{% static 'assets/img/pages/appattack/appattack-hero-1.svg' %}">
+{% endblock seo %}
+
 {% block content %}
-<head>
-
-	<title>AppAttack</title>
-</head>
-
 <main>
     {% include 'includes/preloader-appattack.html' %}
 
@@ -19,7 +22,6 @@
 			<div class="col-lg-6 mx-auto">
 			  <p class="lead mb-4">Click on one of the buttons below to explore how AppAttack empowers organizations to proactively safeguard their digital assets</p>
 			  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-			</head>
 			<body>
 			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="penTesting">Pen-Testing</button>
 			  <button type="button" class="btn btn-primary btn-lg px-4 gap-3" id="secureCodeReview">Secure Code Review</button>
@@ -54,7 +56,7 @@
 			<div class="col-sm mb-5 mb-lg-0">
 				<a href="https://nmap.org/" target="_blank" class="tools-link">
 					<div class="text-center">
-						<img class="small-card rounded shadow border-0" src="https://nmap.org/images/sitelogo-nmap.svg" alt="Nmap logo">
+						<img class="small-card rounded shadow border-0" src="{% static "assets/img/pages/appattack/nmap.jpeg" %}" alt="Nmap logo">
 						<p class="fw-bold mt-2">NMAP</p>
 					</div>
 				</a>
@@ -62,7 +64,7 @@
 			<div class="col-sm mb-5 mb-lg-0">
 				<a href="https://portswigger.net/burp" target="_blank" class="tools-link">
 					<div class="text-center">
-						<img class="small-card rounded shadow border-0" src="https://avatars.githubusercontent.com/u/13749115" alt="burp suite logo">
+						<img class="small-card rounded shadow border-0" src="{% static "assets/img/pages/appattack/burpsuite.png" %}" alt="burp suite logo">
 						<p class="fw-bold mt-2">Burp Suite</p>
 					</div>
 				</a>
@@ -70,7 +72,7 @@
 			<div class="col-sm mb-5 mb-lg-0">
 				<a href="https://www.zaproxy.org/" target="_blank" class="tools-link">
 					<div class="text-center">
-						<img class="small-card rounded shadow border-0" src="https://avatars.githubusercontent.com/u/6716868" alt="OWASP ZAP logo">
+						<img class="small-card rounded shadow border-0" src="{% static "assets/img/pages/appattack/owsap.png" %}" alt="OWASP ZAP logo">
 						<p class="fw-bold mt-2">OWASP ZAP</p>
 					</div>
 				</a>
@@ -94,7 +96,7 @@
 			<div class="col-sm mb-5 mb-lg-0">
 				<a href="https://checkmarx.com/" target="_blank" class="tools-link">
 					<div class="text-center">
-						<img class="small-card rounded shadow border-0" src="https://avatars.githubusercontent.com/u/15811295" alt="checkmarx logo">
+						<img class="small-card rounded shadow border-0" src="{% static "assets/img/pages/appattack/checkmarx.png" %}" alt="checkmarx logo">
 						<p class="fw-bold mt-2">Checkmarx</p>
 					</div>
 				</a>

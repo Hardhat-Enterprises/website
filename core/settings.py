@@ -12,25 +12,35 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os, random, string
 from pathlib import Path
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
 from django.core.cache.backends.base import InvalidCacheBackendError
 from pymemcache.client.base import Client
 
 # Import for CORS headers
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
-load_dotenv()  # take environment variables from .env.
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+env_path = BASE_DIR / '.env'
+
+if not env_path.exists():
+    secret_key = ''.join(random.choice(string.ascii_lowercase) for i in range(50))
+    with open(env_path, 'w') as f:
+        f.write(f'SECRET_KEY={secret_key}\n')
+
+load_dotenv()  # take environment variables from .env.
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# This draws the SECRET KEY from the .env file. Previously the secret key rotated as it was not defined therefore sessions would corrupt.
+SECRET_KEY = os.environ['SECRET_KEY']
 if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choice( string.ascii_lowercase  ) for i in range( 32 ))
+    SECRET_KEY = ''.join(random.choice(string.ascii_lowercase) for i in range(32))
+    # Save it into the .env file
+    set_key('.env', 'SECRET_KEY', SECRET_KEY)
 
 # Render Deployment Code
 #DEBUG = False
@@ -65,7 +75,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = True
 
 #Enhance CSRF protection
-CSRF_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 #Ensure DEBUG is set to False in production to avoid sensitive information exposure
 DEBUG = True
@@ -87,6 +97,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'captcha',
     'tinymce',
+    'django_light',
     'django_cron',
     'corsheaders',
     'django_extensions',
@@ -122,10 +133,11 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "home.idle.IdleTimeoutMiddleware",  
+    # "home.idle.IdleTimeoutMiddleware",
+    "home.idle.LogoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    "core.middleware.LogRequestMiddleware",
+    'core.middleware.AutoLogoutMiddleware'
 ]
 
 LOGGING = {
@@ -137,7 +149,9 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'xss_attempts.log',
         },
+
     },
+
     'loggers': {
         'xss_logger': {
             'handlers': ['xss_file'],
@@ -155,7 +169,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
 
-        "DIRS": [BASE_DIR / HOME_TEMPLATES],
+        #"DIRS": [BASE_DIR / HOME_TEMPLATES],
 
         "DIRS": [os.path.join(BASE_DIR, "templates")],
       
@@ -252,9 +266,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'custom_static/'
-# STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = 'custom_static/'
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'custom_static')
 ]
@@ -338,7 +352,7 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SESSION_COOKIE_AGE = 600 #10 minutes
+SESSION_COOKIE_AGE = 1209600 #2 weeks 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -380,6 +394,12 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
+        'audit_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'audit.log'),
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django': {
@@ -389,6 +409,11 @@ LOGGING = {
         },
         'page_access_logger': {
             'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'audit_logger': {
+            'handlers': ['audit_file'],
             'level': 'INFO',
             'propagate': False,
         },
@@ -409,6 +434,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'content-type',
     'authorization',
 
+
 ]
 
+MEDIA_URL = '/media/'
 
