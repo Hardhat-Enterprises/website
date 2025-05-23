@@ -1,16 +1,10 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
-
-{% block seo %}
-    <title>Deakin Detonator Toolkit (DDT) - Penetration Testing GUI & Cybersecurity Tools</title>
-    <meta name="description" content="Deakin Detonator Toolkit (DDT) by PT-GUI offers a user-friendly penetration testing GUI with cybersecurity tools for beginners and professionals, simplifying ethical hacking workflows.">
-    <meta name="keywords" content="penetration testing GUI, cybersecurity tools, ethical hacking tools, cybersecurity tools for beginners, ethical hacking software, Hardhat Enterprises">
-    <meta property="og:title" content="Deakin Detonator Toolkit (DDT) - Penetration Testing GUI">
-    <meta property="og:description" content="Explore the Deakin Detonator Toolkit (DDT) by PT-GUI, a user-friendly penetration testing GUI with cybersecurity tools for ethical hacking.">
-    <meta property="og:image" content="{% static 'assets/img/pages/home/pt-gui-card.svg' %}">
-{% endblock %}
-
-{% block content %}
+{% extends 'layouts/base.html' %} {% load static %} {% block seo %}
+<title>Deakin Detonator Toolkit (DDT) - Penetration Testing GUI & Cybersecurity Tools</title>
+<meta name="description" content="Deakin Detonator Toolkit (DDT) by PT-GUI offers a user-friendly penetration testing GUI with cybersecurity tools for beginners and professionals, simplifying ethical hacking workflows.">
+<meta name="keywords" content="penetration testing GUI, cybersecurity tools, ethical hacking tools, cybersecurity tools for beginners, ethical hacking software, Hardhat Enterprises">
+<meta property="og:title" content="Deakin Detonator Toolkit (DDT) - Penetration Testing GUI">
+<meta property="og:description" content="Explore the Deakin Detonator Toolkit (DDT) by PT-GUI, a user-friendly penetration testing GUI with cybersecurity tools for ethical hacking.">
+<meta property="og:image" content="{% static 'assets/img/pages/home/pt-gui-card.svg' %}"> {% endblock %} {% block content %}
 <main>
     {% include 'includes/preloader-pt.html' %}
 
@@ -39,7 +33,9 @@
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">About Deakin Detonator Toolkit</h2>
                     <p class="mb-4">
-                        The Deakin Detonator Toolkit (DDT) by PT-GUI is a cutting-edge penetration testing GUI for modern cybersecurity professionals. Built with the Tauri framework, React, and Mantine, DDT offers an intuitive interface that simplifies complex pen-testing workflows. Powered by Python, it automates vulnerability exploitation with precision, featuring 44 ethical hacking tools, 5 attack vectors, 12 HackTheBox challenge walkthroughs, and comprehensive dependency references as of T2 2023—perfect for beginners and experts alike.
+                        The Deakin Detonator Toolkit (DDT) by PT-GUI is a cutting-edge penetration testing GUI for modern cybersecurity professionals. Built with the Tauri framework, React, and Mantine, DDT offers an intuitive interface that simplifies complex pen-testing workflows.
+                        Powered by Python, it automates vulnerability exploitation with precision, featuring 44 ethical hacking tools, 5 attack vectors, 12 HackTheBox challenge walkthroughs, and comprehensive dependency references as of T2 2023—perfect
+                        for beginners and experts alike.
                     </p>
                 </div>
                 <div class="col-lg-6">
@@ -70,6 +66,49 @@
                         <li>Foster a community of cybersecurity enthusiasts, encouraging collaboration and knowledge sharing</li>
                         <li>Ensure accessibility to a broader audience with varying technical expertise</li>
                     </ul>
+
+                    <a href="{% url 'ptgui_skills' %}" style="text-decoration: none;">
+                        <div class="mt-4" style="
+                            background: rgba(30, 31, 63, 0.85);
+                            border-radius: 20px;
+                            padding: 1.8rem;
+                            border: 2px solid transparent;
+                            background-image: linear-gradient(135deg, rgba(30, 31, 63, 0.85), rgba(42, 44, 79, 0.85)),
+                                              linear-gradient(135deg, #ffc107, #ff5722);
+                            background-origin: border-box;
+                            background-clip: padding-box, border-box;
+                            color: white;
+                            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+                            transition: transform 0.3s ease, box-shadow 0.3s ease;
+                            backdrop-filter: blur(10px);
+                            animation: glowPulse 3s infinite ease-in-out;
+                            max-width: 100%;
+                            text-align: center;
+                        " onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 14px 50px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 40px rgba(0, 0, 0, 0.7)'">
+
+                            <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">⚡ Core Skills</h4>
+
+                            <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
+                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">💻</span>GUI Development (Python)</li>
+                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">🛠️</span>Tool Integration for Security Testing</li>
+                                <li><span style="margin-right: 0.5rem;">👥</span>User-Centered Design</li>
+                            </ul>
+                        </div>
+                    </a>
+
+                    <style>
+                        @keyframes glowPulse {
+                            0% {
+                                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                            }
+                            50% {
+                                box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+                            }
+                            100% {
+                                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                            }
+                        }
+                    </style>
                 </div>
             </div>
             <!-- End of Goals -->
@@ -93,7 +132,8 @@
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Simplified Penetration Testing GUI</h2>
                     <p class="mb-4">
-                        Explore penetration testing with ease using DDT’s GUI-based ethical hacking tools. Our user-friendly interface eliminates the complexity of command lines, empowering users to conduct cybersecurity assessments efficiently and making penetration testing accessible to all.
+                        Explore penetration testing with ease using DDT’s GUI-based ethical hacking tools. Our user-friendly interface eliminates the complexity of command lines, empowering users to conduct cybersecurity assessments efficiently and making penetration testing
+                        accessible to all.
                     </p>
                 </div>
                 <div class="col-lg-6">
@@ -132,10 +172,10 @@
         </div>
         <div class="text-center my-4">
             <a href="/ptgui_viz/tools/" class="btn btn-primary animate-up-2">
-              <span class="fas fa-toolbox me-2"></span> Explore Cybersecurity Tools
+                <span class="fas fa-toolbox me-2"></span> Explore Cybersecurity Tools
             </a>
-          </div>
-          
+        </div>
+
     </section>
 
     <section>
@@ -227,8 +267,7 @@
                             <img src="{% static 'assets/img/pages/home/pt-gui-git.svg' %}" alt="Deakin Detonator Toolkit GitHub preview" width="500" height="400" loading="lazy">
                             <div>
                                 <a href="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit" class="btn btn-outline-gray-100 me-md-3">
-                                    <span class="fab fa-github me-2"></span>
-                                    Visit GitHub
+                                    <span class="fab fa-github me-2"></span> Visit GitHub
                                 </a>
                             </div>
                         </div>
@@ -248,12 +287,10 @@
                             Ready to level up your cybersecurity skills? Join us to experience user-friendly penetration testing GUI tools and collaborative learning for white-hat hackers.
                         </p>
                         <a href="{% url 'ptgui_contact-us' %}" class="btn btn-primary animate-up-2" alt="Contact us to immerse yourself in practical cybersecurity experiences">
-                            <span class="fas fa-envelope"></span>
-                            Get in Touch
+                            <span class="fas fa-envelope"></span> Get in Touch
                         </a>
                         <a href="{% url 'ptgui_join_us' %}" class="btn btn-primary animate-up-2" alt="Join our team of cybersecurity professionals">
-                            <span class="fas fa-handshake me-2"></span>
-                            Join Us
+                            <span class="fas fa-handshake me-2"></span> Join Us
                         </a>
                     </div>
                 </div>
@@ -278,7 +315,8 @@
                             </h2>
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                                 <div class="accordion-body">
-                                    You can install PT-GUI and the Deakin Detonator Toolkit (DDT) by following the instructions in the official documentation. The process involves downloading files, configuring dependencies, and running the installation script for this penetration testing GUI.
+                                    You can install PT-GUI and the Deakin Detonator Toolkit (DDT) by following the instructions in the official documentation. The process involves downloading files, configuring dependencies, and running the installation script for this penetration testing
+                                    GUI.
                                 </div>
                             </div>
                         </div>

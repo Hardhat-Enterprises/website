@@ -1,0 +1,79 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<main>
+    {% include 'includes/preloader-pt.html' %}
+
+    <section style="background-color: #ffc107; padding: 6rem 0 4rem;">
+        <div class="container text-center">
+            <h2 class="text-light fw-bold display-2">Core PT-GUI Skills</h2>
+            <div class="row justify-content-center g-4">
+
+                <!-- PT-GUI Card -->
+                <!-- Card 1: GUI Development (Python) -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+        background: #1e1f3f;
+        color: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        text-align: left;
+        height: 100%;
+    ">
+                        <h4 style="color: #ffc107;">💻 GUI Development (Python)</h4>
+                        <p>
+                            Built a clean and responsive graphical interface using Python libraries to simplify penetration testing workflows and reduce command-line complexity.
+                        </p>
+                        <p><strong>Tools Used:</strong> Python (Tkinter, PyQt)</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Tool Integration for Security Testing -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+        background: #1e1f3f;
+        color: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        text-align: left;
+        height: 100%;
+    ">
+                        <h4 style="color: #ffc107;">🛠️ Tool Integration for Security Testing</h4>
+                        <p>
+                            Integrated essential security tools into the GUI to allow users to perform scanning, payload generation, and vulnerability analysis within a single interface.
+                        </p>
+                        <p><strong>Tools Used:</strong> Nmap, Burp Suite</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: User-Centered Design -->
+                <div class="col-md-6 col-lg-4">
+                    <div style="
+        background: #1e1f3f;
+        color: white;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        text-align: left;
+        height: 100%;
+    ">
+                        <h4 style="color: #ffc107;">👥 User-Centered Design</h4>
+                        <p>
+                            Applied human-centered design principles to ensure the interface was intuitive, accessible, and efficient for users with varying levels of cybersecurity expertise.
+                        </p>
+                        <p><strong>Deliverables:</strong> Usability Testing, UX Improvements</p>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="mt-5">
+                <a href="{% url 'ptgui_viz_main' %}" class="btn btn-dark">
+                    ⬅️ Back to Project
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}
