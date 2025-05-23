@@ -486,4 +486,3 @@ class FailedLoginAttempt(models.Model):
     def __str__(self):
         return "Failed login attempt from {self.ip_address}"
 
-

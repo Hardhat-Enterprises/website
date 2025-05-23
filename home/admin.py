@@ -1,4 +1,8 @@
 from django.contrib import admin
+from .models import FailedLoginAttempt
+from core.models import BlacklistedIP
+
+
 from .models import (
     User,
     Student,
@@ -41,6 +45,8 @@ admin.site.register(DDT_contact)
 admin.site.site_header = "Hardhat Enterprises Administration"
 admin.site.site_title = "Hardhat Admin Portal"
 admin.site.index_title = "Welcome to Hardhat Admin Portal"
+
+admin.site.register(FailedLoginAttempt)
 
 # Register your models here.
 @admin.register(User)

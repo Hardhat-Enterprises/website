@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Cyber Threat Intelligence Dashboard{% endblock %}
+
+{% block content %}
+<h1>Cyber Threat Intelligence Dashboard</h1>
+
+<h2>Blacklisted IPs</h2>
+  {% if blacklisted_ips %}
+<ul>
+    {% for ip in blacklisted_ips %}
+    <li>{{ ip.ip_address }} - {{ ip.reason|default:"Unknown" }}</li>
+    {% endfor %}
+</ul>
+  {% else %}
+<p>No blacklisted IPs found.</p>
+  {% endif %}
+
+<h2>Failed Login Attempts</h2>
+  {% if failed_logins %}
+<ul>
+    {% for log in failed_logins %}
+    <li>{{ log.timestamp }} - {{ log.username }} - {{ log.ip_address }}</li>
+    {% endfor %}
+</ul>
+  {% else %}
+<p>No failed logins recorded.</p>
+  {% endif %}
+{% endblock %}

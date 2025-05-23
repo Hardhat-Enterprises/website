@@ -2,6 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\core",
+    "\\core\\templates",
+    "\\core\\templates\\core",
     "\\home",
     "\\home\\management",
     "\\home\\management\\commands",
@@ -9,6 +11,6 @@
     "\\home\\templates\\home",
     "\\utils"
   ],
-  "SelectedNode": "\\home\\views.py",
+  "SelectedNode": "\\home\\utils.py",
   "PreviewInSolutionExplorer": false
 }

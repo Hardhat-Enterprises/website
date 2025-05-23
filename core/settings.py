@@ -82,33 +82,36 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
 # Application definition
 
 INSTALLED_APPS = [
+    # Third-party apps
     'crispy_forms',
-    'tinymce',
     'crispy_bootstrap5',
     'captcha',
-    "django_light",
-    # "django.contrib.admin",
-    "core.apps.CustomAdminConfig",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "django_extensions",
+    'tinymce',
     'django_cron',
+    'corsheaders',
+    'django_extensions',
 
+    # Custom admin (replaces default admin)
+    'core.apps.CustomAdminConfig',
 
- 
-    'rest_framework',  
-    'drf_yasg', 
+    # Django core apps
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 
+    # Your apps
+    'core.apps.CoreConfig',
     'home',
     'theme_pixel',
 
-    'corsheaders',
-
-
+    # APIs and Swagger
+    'rest_framework',
+    'drf_yasg',
 ]
+
+
 
 MIDDLEWARE = [
     # CORS middleware must come before commonmiddleware
