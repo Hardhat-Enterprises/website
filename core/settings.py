@@ -67,8 +67,9 @@ SESSION_COOKIE_SECURE = False
 
 #Ensure v3 Google ReCAPTCHA keys are set
 #To set up new keys, navigate to https://www.google.com/recaptcha/admin/site/
-RECAPTCHA_SITE_KEY = '6LftM_4qAAAAAPLLi31_4GMvkerassybVYocrbJj'
-RECAPTCHA_SECRET_KEY = '6LftM_4qAAAAAKurjw7VyLBeABE0QwAZsxgUemxw'
+# Use credentials for Gmail hardhatwebsite@gmail.com
+RECAPTCHA_SITE_KEY = '6LfAVkYrAAAAADQTOddD3d6Ly-LWGDt-O5zpOkao'
+RECAPTCHA_SECRET_KEY = '6LfAVkYrAAAAAHmiKUs--9QR_U70BlGPU6yP522i'
  
 # Prevents JavaScript from accessing session cookies when set True
 SESSION_COOKIE_HTTPONLY = False
