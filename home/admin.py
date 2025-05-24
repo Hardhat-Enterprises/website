@@ -159,7 +159,7 @@ class FeedbackAdmin(admin.ModelAdmin):
 #     list_display = ("user", "otp_code")
 
 #admin.site.register(OtpToken, OtpTokenAdmin)
-admin.site.register(Projects_join_us)
+
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):

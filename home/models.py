@@ -564,7 +564,7 @@ class UserBlogPage(models.Model):
     name = models.CharField(max_length=100)
     title = models.TextField()
     description = models.TextField()
-    file = models.TextField(blank=True, null=True)  # <-- Base64 Image field
+    file = models.TextField(blank=True, null=True)  # `-- Base64 Image field
     created_at = models.DateTimeField(auto_now_add=True)
     isShow = models.BooleanField(default=False)
 
@@ -577,7 +577,6 @@ class FailedLoginAttempt(models.Model):
         return f"Failed login attempt from {self.ip_address}"
 
 
-=======
     def __str__(self):
         return f"{self.name} - {self.title[:50]} - {self.description[:50]}"
 

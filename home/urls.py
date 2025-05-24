@@ -1,4 +1,4 @@
-from django.urls import include, path
+﻿from django.urls import include, path
 from django.contrib import admin
 
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback, policy_deployment
@@ -115,6 +115,7 @@ urlpatterns = [
     path("passkeys/reset/verify/", views.reset_passkeys_verify, name="reset_passkeys_verify"),
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
     path('accounts/login/', UserLoginView.as_view(), name='login'),
+    path('accounts/login/otp/', views.login_with_otp, name='login_with_otp'),
     path('accounts/verify-otp/', views.verify_otp, name='verify_otp'),
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
     path('account/delete/', delete_account, name='delete-account'),
@@ -169,7 +170,4 @@ urlpatterns = [
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    path('account/delete/', delete_account, name='delete-account')
-
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+   
