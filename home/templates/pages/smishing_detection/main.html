@@ -1,17 +1,11 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
-
-{% block seo %}
-    <title>Smishing Detection App - Mobile Cybersecurity & SMS Phishing Protection</title>
-    <meta name="description" content="Smishing Detection app uses AI to protect Android and iOS devices from SMS phishing attacks, enhancing mobile cybersecurity and user awareness.">
-    <meta name="keywords" content="smishing detection, mobile cybersecurity, SMS phishing protection, cybersecurity tools, ethical hacking tools, Hardhat Enterprises">
-    <meta property="og:title" content="Smishing Detection App - Mobile Cybersecurity Solution">
-    <meta property="og:description" content="Protect your device from SMS phishing with the Smishing Detection app, a mobile cybersecurity tool powered by AI.">
-    <meta property="og:image" content="{% static 'assets/img/pages/home/smishing_detection.svg' %}">
-{% endblock %}
-
-{% block content %}
-<main class="smishing-bg-white">
+{% extends 'layouts/base.html' %} {% load static %} {% block seo %}
+<title>Smishing Detection App - Mobile Cybersecurity & SMS Phishing Protection</title>
+<meta name="description" content="Smishing Detection app uses AI to protect Android and iOS devices from SMS phishing attacks, enhancing mobile cybersecurity and user awareness.">
+<meta name="keywords" content="smishing detection, mobile cybersecurity, SMS phishing protection, cybersecurity tools, ethical hacking tools, Hardhat Enterprises">
+<meta property="og:title" content="Smishing Detection App - Mobile Cybersecurity Solution">
+<meta property="og:description" content="Protect your device from SMS phishing with the Smishing Detection app, a mobile cybersecurity tool powered by AI.">
+<meta property="og:image" content="{% static 'assets/img/pages/home/smishing_detection.svg' %}"> {% endblock %} {% block content %}
+<main>
     {% include 'includes/preloader-sd.html' %}
 
     <!-- Hero -->
@@ -37,7 +31,8 @@
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Overview of Smishing Detection</h2>
                     <p class="mb-4">
-                        The Smishing Detection app is a groundbreaking mobile cybersecurity solution designed to combat SMS phishing (smishing) attacks on Android and iOS devices. Leveraging AI-driven technology, our app detects and alerts users to potential smishing attempts, safeguarding personal information and reducing fraud. We aim to enhance mobile security, promote cybersecurity awareness, and contribute to global anti-scam efforts.
+                        The Smishing Detection app is a groundbreaking mobile cybersecurity solution designed to combat SMS phishing (smishing) attacks on Android and iOS devices. Leveraging AI-driven technology, our app detects and alerts users to potential smishing attempts,
+                        safeguarding personal information and reducing fraud. We aim to enhance mobile security, promote cybersecurity awareness, and contribute to global anti-scam efforts.
                     </p>
                 </div>
                 <div class="col-lg-6">
@@ -67,32 +62,99 @@
                         <li>Collaborate with cybersecurity experts to stay updated on emerging threats</li>
                         <li>Continuously improve the app based on user feedback and evolving threats</li>
                     </ul>
-                </div>
-            </div>
-            <!-- End of Goals -->
+                    <a href="{% url 'smishing_skills' %}" style="text-decoration: none;">
+                        <div class="mt-4" style="
+                        background: rgba(30, 31, 63, 0.85);
+                        border-radius: 20px;
+                        padding: 1.8rem;
+                        border: 2px solid transparent;
+                        background-image: linear-gradient(135deg, rgba(30, 31, 63, 0.85), rgba(42, 44, 79, 0.85)),
+                                          linear-gradient(135deg, #ffc107, #ff5722);
+                        background-origin: border-box;
+                        background-clip: padding-box, border-box;
+                        color: white;
+                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                        backdrop-filter: blur(10px);
+                        animation: glowPulse 3s infinite ease-in-out;
+                        max-width: 100%;
+                        text-align: center;
+                      " onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 14px 50px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 40px rgba(0, 0, 0, 0.7)'">
 
-            <!-- Call to Action Section -->
-            <div class="bg-primary-app">
-                <div class="row justify-content-center text-center">
-                    <div class="col-lg-8">
-                        <div class="mt-4 mb-5">
-                            <h2 class="fw-bolder text-dark">Join Our Mobile Cybersecurity Mission</h2>
-                            <p class="mb-4">
-                                Join our mission to revolutionize mobile security and combat SMS phishing attacks. Whether you're a developer, cybersecurity enthusiast, or advocate for online safety, there’s a place for you in our community.
-                            </p>
-                            <a href="{% url 'smishingdetection_join_us' %}" class="btn btn-primary animate-up-2" alt="Join the Smishing Detection community">
-                                <span class="fas fa-handshake me-2"></span>Join Us
-                            </a>
+                            <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">⚡ Core Skills</h4>
+
+                            <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
+                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">🧠</span>Natural Language Processing (NLP)</li>
+                                <li style="margin-bottom: 0.8rem;"><span style="margin-right: 0.5rem;">🤖</span>Machine Learning for SMS Classification</li>
+                                <li><span style="margin-right: 0.5rem;">🧹</span>Data Preprocessing</li>
+                            </ul>
                         </div>
-                    </div>
+                    </a>
+
+                </div>
+
+                <!-- Right Column: Image -->
+                <div class="col-lg-6">
+                    <img src="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}" alt="Teamwork illustration" class="img-fluid">
                 </div>
             </div>
-            <!-- End of Call to Action Section -->
+
+
+            <style>
+                @keyframes glowPulse {
+                    0% {
+                        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                    }
+                    50% {
+                        box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+                    }
+                    100% {
+                        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+                    }
+                }
+            </style>
+
         </div>
+        </div>
+        <!-- End of Goals -->
+        <!-- Class of Action Section -->
+        <div class="bg-primary-app">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <div class="mt-4 mb-5">
+                        <h2 class="fw-bolder text-dark">Join Us</h2>
+                        <p class="mb-4">Join our mission to revolutionize mobile security and combat SMS phishing attacks. Whether you're a skilled developer, cybersecurity enthusiast, or passionate advocate for online safety, there are numerous ways to get involved.
+                        </p>
+                        <a href="{% url 'smishingdetection_join_us' %}" class="btn btn-primary animate-up-2" alt="Join Us"><span class="fas fa-handshake me-2"></span>
+                                Join Us</a>
+
+
+                        <!-- End of Goals -->
+
+                        <!-- Call to Action Section -->
+                        <div class="bg-primary-app">
+                            <div class="row justify-content-center text-center">
+                                <div class="col-lg-8">
+                                    <div class="mt-4 mb-5">
+                                        <h2 class="fw-bolder text-dark">Join Our Mobile Cybersecurity Mission</h2>
+                                        <p class="mb-4">
+                                            Join our mission to revolutionize mobile security and combat SMS phishing attacks. Whether you're a developer, cybersecurity enthusiast, or advocate for online safety, there’s a place for you in our community.
+                                        </p>
+                                        <a href="{% url 'smishingdetection_join_us' %}" class="btn btn-primary animate-up-2" alt="Join the Smishing Detection community">
+                                            <span class="fas fa-handshake me-2"></span>Join Us
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- End of Call to Action Section -->
+                    </div>
     </section>
 
     <!-- FAQ Section -->
-    <section class="section section-lg bg-white py-5">
+    <section class="section section-lg bg-secondary-app py-5">
         <div class="container">
             <h1 class="fw-bolder display-50 text-center mb-5 mt-5">Frequently Asked Questions</h1>
             <h2 class="fw-bolder display-5 text-center mb-5 mt-5">Explore Answers to Common Questions About Smishing Detection</h2>
@@ -190,11 +252,9 @@
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
-
                                 <div class="accordion-body">
                                     Future plans include enhancing AI models, expanding app features, and integrating user feedback to improve smishing detection, ensuring ongoing mobile cybersecurity against evolving threats.
                                 </div>
-
                             </div>
                         </div>
                     </div>

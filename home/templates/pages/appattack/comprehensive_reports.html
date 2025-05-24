@@ -1,16 +1,29 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block seo %}
-    <title>AppAttack Comprehensive Reports - Best Cybersecurity Tools 2025</title>
-    <meta name="description" content="AppAttack provides comprehensive cybersecurity reports using the best tools in 2025, detailing vulnerabilities and recommendations from penetration testing and secure code reviews.">
-    <meta name="keywords" content="comprehensive cybersecurity reports, cybersecurity tools, ethical hacking tools, penetration testing reports, best free cybersecurity tools 2025, Hardhat Enterprises">
-    <meta property="og:title" content="AppAttack Comprehensive Reports">
-    <meta property="og:description" content="Learn how AppAttack’s comprehensive reports enhance your security strategy with top cybersecurity tools in 2025.">
-    <meta property="og:image" content="{% static 'assets/img/pages/appattack/report.svg' %}">
-{% endblock %}
-
 {% block content %}
+<head>
+    <title>Comprehensive Reports</title>
+    <style>
+        /* Text color adjustments for both dark and light mode */
+        @media (prefers-color-scheme: dark), (prefers-color-scheme: light) {
+            main p,
+            main li {
+                color: inherit; /* Keeps default text */
+            }
+
+            main h2,
+            main h5 {
+                color: #ffc107 !important; /* Yellow - Bootstrap warning color */
+            }
+
+            main .text-muted {
+                color: #adb5bd !important;
+            }
+        }
+    </style>
+</head>
+
 <main>
     {% include 'includes/pre-loader.html' %}
 
@@ -27,7 +40,7 @@
                         height="300"
                     />
                     <div class="mt-3 mb-2">
-                        <h2>Comprehensive Reports</h2>
+                        <h2 style="color: black !important;">Comprehensive Reports</h2>
                         <p>
                             Our findings compiled into actionable reports following Pen Testing or Secure Code Review, helping strengthen your security posture.
                         </p>
@@ -78,9 +91,9 @@
         <!-- PDF Archive -->
         <div class="container mt-5">
             <h2 class="text-center mb-4">Reports Archive</h2>
-            
+            {% if reports %}
                 <div class="row">
-                    
+                    {% for report in reports %}
                     <div class="col-lg-6 mb-4">
                         <div class="card shadow border-0">
                             <div class="card-body">
@@ -89,11 +102,11 @@
                             </div>
                         </div>
                     </div>
-                    
+                    {% endfor %}
                 </div>
-            
+            {% else %}
                 <p class="text-center text-muted">No reports uploaded yet.</p>
-            
+            {% endif %}
         </div>
 
         <!-- Navigation Buttons -->
@@ -117,18 +130,4 @@
         });
     </script>
 </main>
-
-<!-- Move JavaScript to the end of the content block for better performance -->
-<script>
-    document.getElementById("penTesting").addEventListener("click", function() {
-        window.location.href = "{% url 'pen-testing' %}";
-    });
-    document.getElementById("secureCodeReview").addEventListener("click", function() {
-        window.location.href = "{% url 'secure-code-review' %}";
-    });
-    document.getElementById("backButton").addEventListener("click", function() {
-        window.location.href = "{% url 'appattack' %}";
-    });
-</script>
-
 {% endblock content %}

@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearReviews = document.getElementById('clearReviews');
     const stickyColors = ['#ffc107', '#ff5722', '#8bc34a', '#03a9f4', '#e91e63']; // Modern bold colors
     let usedColors = [];
+    const noteColor = document.getElementById('noteColor');
 
     // Load saved reviews from localStorage
     const loadReviews = () => {
@@ -22,12 +23,43 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('reviews', JSON.stringify(reviews));
     };
 
+    // Helper: get contrast color (white or black) for a given background
+    function getContrastYIQ(hexcolor) {
+        if (!hexcolor) return '#222';
+        hexcolor = hexcolor.replace('#', '');
+        if (hexcolor.length === 3) {
+            hexcolor = hexcolor.split('').map(x => x + x).join('');
+        }
+        var r = parseInt(hexcolor.substr(0,2),16);
+        var g = parseInt(hexcolor.substr(2,2),16);
+        var b = parseInt(hexcolor.substr(4,2),16);
+        var yiq = ((r*299)+(g*587)+(b*114))/1000;
+        return (yiq >= 128) ? '#222' : '#fff';
+    }
+
     // Create a sticky note
     const createStickyNote = (text, color = null) => {
         const note = document.createElement('div');
         note.className = 'sticky-note';
         note.textContent = text;
         note.style.backgroundColor = color || getUniqueColor();
+        
+        // Set font color for contrast
+        let bg = note.style.backgroundColor;
+        let hex = bg;
+        if (bg.startsWith('rgb')) {
+            // Convert rgb to hex
+            let rgb = bg.match(/\d+/g);
+            if (rgb) {
+                hex = "#" + rgb.map(x => (+x).toString(16).padStart(2, '0')).join('');
+            }
+        }
+        // If dark mode, force white text
+        if (document.body.classList.contains('dark-mode')) {
+            note.style.color = '#fff';
+        } else {
+            note.style.color = getContrastYIQ(hex);
+        }
         
         // Calculate size based on text length
         const textLength = text.length;
@@ -84,11 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
     submitReview.addEventListener('click', function() {
         const text = reviewText.value.trim();
         if (text) {
-            createStickyNote(text);
+            createStickyNote(text, noteColor ? noteColor.value : undefined);
             reviewText.value = '';
             saveReviews();
-        } else {
-            alert('Please enter a review.');
         }
     });
 

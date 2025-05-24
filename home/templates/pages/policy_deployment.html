@@ -1,0 +1,186 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block seo %}
+    <title>Policy Deployment Engine - Hardhat Enterprises</title>
+    <meta name="description" content="Automate and streamline security policy enforcement across cloud environments with the Policy Deployment Engine by Hardhat Enterprises.">
+{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --primary-yellow: #FFD600;
+        --card-bg-dark: #232323;
+        --card-bg-light: #fff;
+        --text-dark: #fff;
+        --text-light: #232323;
+        --muted-dark: #e0e0e0;
+        --muted-light: #444;
+        --border-radius: 18px;
+    }
+    body.dark-mode .policy-deployment-section {
+        background: var(--card-bg-dark);
+        color: var(--text-dark);
+    }
+    body:not(.dark-mode) .policy-deployment-section {
+        background: var(--card-bg-light);
+        color: var(--text-light);
+    }
+    .policy-deployment-section {
+        border-radius: var(--border-radius);
+        margin: 120px auto 40px auto;
+        max-width: 900px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        padding: 32px 24px 32px 24px;
+        overflow: visible;
+    }
+    .policy-header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+    .policy-header img {
+        width: 48px;
+        height: 48px;
+    }
+    .policy-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    .policy-divider {
+        border: none;
+        border-top: 2px solid var(--primary-yellow);
+        margin: 18px 0 28px 0;
+    }
+    .policy-section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #232323;
+        transition: color 0.2s;
+    }
+    body.dark-mode .policy-section-title {
+        color: #fff !important;
+    }
+    body:not(.dark-mode) .policy-section-title {
+        color: #232323 !important;
+    }
+    .policy-features, .policy-approach {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    @media (min-width: 700px) {
+        .policy-features, .policy-approach {
+            flex-direction: row;
+            gap: 40px;
+        }
+    }
+    .policy-feature-list, .policy-approach-list {
+        flex: 1;
+        padding-left: 0;
+        list-style: none;
+    }
+    .policy-feature-list li, .policy-approach-list li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+    .policy-feature-list li i, .policy-approach-list li i {
+        color: var(--primary-yellow);
+        font-size: 1.1em;
+    }
+    .policy-benefits {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 32px;
+    }
+    @media (min-width: 700px) {
+        .policy-benefits {
+            flex-direction: row;
+        }
+    }
+    .policy-benefit-card {
+        flex: 1;
+        background: rgba(255, 214, 0, 0.08);
+        border: 1.5px solid var(--primary-yellow);
+        border-radius: var(--border-radius);
+        padding: 18px 16px;
+        min-width: 180px;
+    }
+    .policy-benefit-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .policy-benefit-title i {
+        font-size: 1.2em;
+    }
+    .policy-benefit-desc {
+        font-size: 0.98rem;
+        color: var(--muted-dark);
+    }
+    body:not(.dark-mode) .policy-benefit-desc {
+        color: var(--muted-light);
+    }
+</style>
+<section class="policy-deployment-section">
+    <div class="policy-header">
+        <img src="{% static 'assets/img/pages/home/The_policy_deployment.png' %}" alt="Policy Deployment Engine icon">
+        <h1 class="policy-title">Policy Deployment Engine</h1>
+    </div>
+    <hr class="policy-divider">
+    <div class="policy-section-title">Overview</div>
+    <p style="margin-bottom: 24px;">
+        The Policy Deployment Engine is a sophisticated solution designed to automate and streamline security policy enforcement across cloud environments. Starting with Google Cloud Platform (GCP) and expanding to AWS and Azure, our engine provides a centralized system for efficient policy deployment, management, and updates. This comprehensive approach ensures compliance while significantly reducing manual effort and operational complexity.
+    </p>
+    <div class="row" style="display: flex; flex-wrap: wrap; gap: 32px; margin-bottom: 32px;">
+        <div class="col policy-features" style="flex: 1; min-width: 260px;">
+            <div>
+                <div class="policy-section-title">Key Features</div>
+                <ul class="policy-feature-list">
+                    <li><i class="fas fa-cloud"></i> Multi-Cloud Support (GCP, AWS, Azure)</li>
+                    <li><i class="fas fa-robot"></i> Automated Policy Enforcement</li>
+                    <li><i class="fas fa-cogs"></i> Centralized Policy Management</li>
+                    <li><i class="fas fa-sync-alt"></i> Real-time Policy Updates</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col policy-approach" style="flex: 1; min-width: 260px;">
+            <div>
+                <div class="policy-section-title">Our Approach</div>
+                <ul class="policy-approach-list">
+                    <li><i class="fas fa-search"></i> Cloud Environment Assessment</li>
+                    <li><i class="fas fa-file-alt"></i> Policy Template Development</li>
+                    <li><i class="fas fa-rocket"></i> Automated Deployment Strategy</li>
+                    <li><i class="fas fa-chart-line"></i> Continuous Monitoring & Updates</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="policy-section-title">Benefits</div>
+    <div class="policy-benefits">
+        <div class="policy-benefit-card">
+            <div class="policy-benefit-title"><i class="fas fa-shield-alt"></i> Enhanced Security</div>
+            <div class="policy-benefit-desc">Strengthen your cloud security posture through automated policy enforcement and consistent implementation across multiple cloud platforms.</div>
+        </div>
+        <div class="policy-benefit-card">
+            <div class="policy-benefit-title"><i class="fas fa-tasks"></i> Operational Efficiency</div>
+            <div class="policy-benefit-desc">Reduce manual effort and streamline policy management through automation and centralized control.</div>
+        </div>
+        <div class="policy-benefit-card">
+            <div class="policy-benefit-title"><i class="fas fa-expand-arrows-alt"></i> Scalable Solution</div>
+            <div class="policy-benefit-desc">Easily scale your policy management across multiple cloud providers and growing infrastructure needs.</div>
+        </div>
+    </div>
+</section>
+{% endblock %} 
+

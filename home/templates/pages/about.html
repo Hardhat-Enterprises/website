@@ -55,20 +55,20 @@
     <label for="noteColor">Choose note color: </label>
     <input type="color" id="noteColor" value="#fff9c4" list="presetColors">
     <datalist id="presetColors">
-      <option value="#fff9c4"></option>
-      <option value="#f8bbd0"></option>
-      <option value="#c8e6c9"></option>
-      <option value="#bbdefb"></option>
-      <option value="#e1bee7"></option>
-      <option value="#ffccbc"></option>
-      <!-- Dark colors -->
+      <!-- Remove light colors -->
+      <!-- <option value="#fff9c4"></option> -->
+      <!-- <option value="#f8bbd0"></option> -->
+      <!-- <option value="#c8e6c9"></option> -->
+      <!-- <option value="#bbdefb"></option> -->
+      <!-- <option value="#e1bee7"></option> -->
+      <!-- <option value="#ffccbc"></option> -->
+      <!-- Keep only dark and vibrant colors -->
       <option value="#1a1a1a"></option>
       <option value="#2d2d2d"></option>
       <option value="#374151"></option>
       <option value="#4b5563"></option>
       <option value="#22223b"></option>
       <option value="#0f172a"></option>
-      <!-- Vibrant colors -->
       <option value="#ff4b5c"></option>
       <option value="#ffb347"></option>
       <option value="#ffe066"></option>
@@ -233,25 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Kudoboard Section Ends Here -->
  <!-- Section -->
 
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <div class="whiteboard-container">
-          <h2 class="text-center mb-4" style="color: #1f2937;">Kudoboard</h2>
-          <div id="whiteboard" class="whiteboard mb-4"></div>
-          <textarea id="reviewText" class="form-control mb-4" rows="3" placeholder="Type your review here..."></textarea>
-          <div class="text-center">
-            <button id="submitReview" class="mx-2">Submit</button>
-            <button id="clearReviews" class="mx-2" disabled>Clear</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<<<<<<< HEAD
-=======
 
->>>>>>> 059eae21 (Fixed issue)
   <style>
   .whiteboard-container {
       max-width: 1200px;

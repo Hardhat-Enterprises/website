@@ -1,5 +1,6 @@
 # home/context_processors.py
 from django.utils.text import capfirst
+from django.conf import settings
 
 def dynamic_page_title(request):
     # Extract the path and capitalize it
@@ -26,3 +27,8 @@ def dynamic_page_title(request):
 
     full_title = f"{page_title} - Hardhat Enterprises"
     return {"dynamic_title": full_title}
+
+def recaptcha_site_key(request):
+    return {
+        'RECAPTCHA_SITE_KEY': settings.RECAPTCHA_SITE_KEY
+    }

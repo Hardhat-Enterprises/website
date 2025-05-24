@@ -1,0 +1,52 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+  <section class="section section-lg">
+    <div class="container">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-primary mb-0">📋 Reported Blogs</h3>
+            {% if reports %}
+            <a href="{% url 'download_reported_blogs' %}" class="btn btn-outline-primary btn-sm">
+              ⬇️ Download CSV
+            </a>
+            {% endif %}
+          </div>
+
+          {% if reports %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle rounded-3 overflow-hidden">
+              <thead class="table-dark text-white">
+                <tr>
+                  <th>#</th>
+                  <th>Blog ID</th>
+                  <th>Blog Name</th>
+                  <th>Reason</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for report in reports %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td><span class="badge bg-secondary">{{ report.blog_id }}</span></td>
+                  <td class="fw-semibold">{{ report.blog_name }}</td>
+                  <td style="white-space: pre-wrap;">{{ report.reason }}</td>
+                  <td><small class="text-muted">{{ report.created_at|date:"M d, Y - H:i" }}</small></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="alert alert-info">No reports found.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
