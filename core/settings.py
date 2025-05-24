@@ -12,14 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os, random, string
 from pathlib import Path
-from dotenv import load_dotenv
-from django.core.cache.backends.base import InvalidCacheBackendError
-from pymemcache.client.base import Client
 
-# Import for CORS headers
-from corsheaders.defaults import default_headers
-from django.contrib.messages import constants as messages
-load_dotenv()  # take environment variables from .env.
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,17 +46,17 @@ if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 #Secure Cookies Can be implemented but it affects OTP Functionality.
-#Ensure cookies are only sent over HTTPS when set True
-SESSION_COOKIE_SECURE = False
+#Ensure cookies are only sent ovSESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
  
 # Prevents JavaScript from accessing session cookies when set True
-SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
  
 #Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Strict'
 
 #Ensure CSRF cookies are sent over HTTPS only
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = not DEBUG
 
 #Enhance CSRF protection
 CSRF_COOKIE_SAMESITE = 'Strict'
@@ -277,15 +271,6 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
-MESSAGE_TAGS = {
-    messages.ERROR: 'error'
-}
-
-#EMAIL_HOST_USER = {'kaviuln@gmail.com'}
-
-MESSAGE_TAGS = {
-    messages.SUCCESS: 'success'
-}
 
 
 CACHES = {
@@ -296,10 +281,10 @@ CACHES = {
 }
 
 try:
-    from pymemcache.client import Client
+    import Client # type: ignore
     client = Client(os.getenv('CACHE_LOCATION', '127.0.0.1:11211'))
     client.version()
-except (ImportError, InvalidCacheBackendError, ConnectionRefusedError):
+except (ImportError, ConnectionRefusedError):
     
     CACHES = {
         'default': {
@@ -335,7 +320,21 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SESSION_COOKIE_AGE = 600 #10 minutes
+# ====================== IDLE Session Timeout Configuration ======================
+
+# Set session cookie age to 5 minutes (300 seconds)
+# This ensures users are logged out after 5 minutes of inactivity
+SESSION_COOKIE_AGE = 300  # 5 minutes
+
+# Ensure the session expires when the browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Save session on every request to reset the inactivity timer
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Use the database for session storage
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -402,7 +401,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
+CORS_ALLOW_HEADERS = list + [
     'content-type',
     'authorization',
 

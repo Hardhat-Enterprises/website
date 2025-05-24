@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from two_factor.urls import urlpatterns as tf_urls
 from django.contrib.auth import views as auth_views
 from home import views
 from django.urls import path, re_path
@@ -50,6 +51,10 @@ urlpatterns = [
     path('joinus/', views.join_project, name='join-project'),
     path('what-we-do/', views.what_we_do, name='what_we_do'),
     path('plan/', views.package_plan, name='package_plan'),
+    path('', include(tf_urls)),  # Two-factor login and setup routes
+    # path('admin/', admin.site.urls),  # keep your existing URLs too
+]
+
     
     # blog
     #path('admin/', admin.site.urls),
