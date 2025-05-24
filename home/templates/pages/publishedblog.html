@@ -1,0 +1,126 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+<section class="section section-lg">
+  <div class="container">
+    <h4 class="mb-4">Published Blogs</h4>
+
+    <div class="row justify-content-center">
+      {% for blog in blogpages %}
+        <div class="col-md-8 mb-4">
+          <div class="card position-relative" style="width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 10px;">
+            
+            <!-- 3 Dots Dropdown -->
+            <div class="dropdown position-absolute top-0 end-0 m-2">
+              <button class="btn btn-link text-muted p-0" type="button" id="dropdownMenuButton{{ forloop.counter }}" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px;">
+                &#8942;
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ forloop.counter }}">
+                <li>
+                  <button 
+                    class="dropdown-item text-danger" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#reportModal" 
+                    data-blog-id="{{ blog.id }}" 
+                    data-blog-title="{{ blog.title }}" 
+                    data-blog-writer="{{ blog.name }}">
+                    Report
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-body">
+              <div style="margin-bottom: 10px;">
+                <h6 class="mb-0">{{ blog.name }}</h6>
+                <small class="text-muted">{{ blog.created_at|date:"F d, Y" }}</small>
+              </div>
+
+              {% if blog.file %}
+                <img src="data:image/jpeg;base64,{{ blog.file }}" style="width: 100%; border-radius: 10px; margin-bottom: 10px; object-fit: cover;" alt="Blog Image">
+              {% endif %}
+
+              <h5>{{ blog.title }}</h5>
+              <p>{{ blog.description }}</p>
+
+              <div style="display: flex; align-items: center;">
+                <button class="btn btn-outline-primary btn-sm like-btn" onclick="toggleLike(this)">
+                  ❤️ Like (<span class="like-count">0</span>)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>No blogs have been published yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- Report Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'report_blog' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" style="color: black;" id="reportModalLabel">Report Blog</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="blog_id" id="reportBlogId">
+          <input type="hidden" name="blog_name" id="reportBlogName"> <!-- ✅ THIS FIXES THE ERROR -->
+
+          <p style="color: black;"><strong>Blog:</strong> <span id="reportBlogTitle" class="text-dark"></span></p>
+          <p style="color: black;"><strong>Writer:</strong> <span id="reportBlogWriter" class="text-dark"></span></p>
+
+          <div class="mb-3">
+            <label style="color: black;" for="reportReason" class="form-label">Reason for Reporting:</label>
+            <textarea class="form-control" id="reportReason" name="reason" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Submit Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleLike(button) {
+  let countSpan = button.querySelector('.like-count');
+  let currentLikes = parseInt(countSpan.textContent);
+
+  if (button.classList.contains('liked')) {
+    currentLikes -= 1;
+    button.classList.remove('liked', 'btn-danger');
+    button.classList.add('btn-outline-primary');
+  } else {
+    currentLikes += 1;
+    button.classList.add('liked', 'btn-danger');
+    button.classList.remove('btn-outline-primary');
+  }
+
+  countSpan.textContent = currentLikes;
+}
+
+// Handle Report Modal
+const reportModal = document.getElementById('reportModal');
+reportModal.addEventListener('show.bs.modal', function (event) {
+  const button = event.relatedTarget;
+  const blogId = button.getAttribute('data-blog-id');
+  const blogTitle = button.getAttribute('data-blog-title');
+  const blogWriter = button.getAttribute('data-blog-writer');
+
+  reportModal.querySelector('#reportBlogId').value = blogId;
+  reportModal.querySelector('#reportBlogTitle').textContent = blogTitle;
+  reportModal.querySelector('#reportBlogWriter').textContent = blogWriter;
+  reportModal.querySelector('#reportBlogName').value = blogTitle; // ✅ This line ensures blog_name is POSTed
+});
+</script>
+{% endblock %}

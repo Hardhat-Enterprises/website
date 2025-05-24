@@ -1,94 +1,581 @@
 .whiteboard-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center-align the content horizontally */
-  justify-content: center; /* Center-align the content vertically */
-  height: 100vh; /* Full viewport height */
-  padding: 20px;
-  border-radius: 4px;
-  text-align: center; /* Ensure text inside elements is centered */
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 60vh;
+  padding: 60px 0 40px 0;
+  background: #222;
+  color: #fff;
+  width: 100vw;
+  max-width: 100vw;
+  min-width: 100vw;
+  box-sizing: border-box;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+
+.whiteboard-container h2 {
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
 .whiteboard {
-  width: 80%; /* Set a width for the whiteboard */
-  min-height: 300px; /* Set a minimum height for the whiteboard */
-  border: 2px solid #ccc; /* Border for the whiteboard */
-  border-radius: 4px;
-  background-color: #f9f9f9; /* Light background for the whiteboard */
-  margin-bottom: 20px; /* Space between whiteboard and review text area */
+  width: 90%;
+  max-width: 1200px;
+  min-height: 220px;
+  border: none;
+  border-radius: 16px;
+  background-color: #181818;
+  margin-bottom: 24px;
   position: relative;
   overflow-y: auto;
+  padding: 32px 16px 16px 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 24px;
 }
 
-textarea {
-  width: 80%; /* Set width for the textarea */
-  min-height: 50px; /* Minimum height for the text area */
-  font-size: 16px; /* Set a larger font size */
-  padding: 10px;
-  margin-bottom: 15px; /* Space below the textarea */
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.input-container {
+  width: 90%;
+  max-width: 800px;
+  position: relative;
+  margin-bottom: 20px;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 16px; /* Increased font size for the button */
-  border-radius: 4px;
-  margin: 0px;
+.textarea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding: 0 10px;
+}
+
+#charCount {
+  color: #666;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.emoji-picker {
+  position: relative;
+}
+
+.emoji-trigger {
+  background: none;
+  border: none;
+  font-size: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 5px;
+  transition: transform 0.2s ease;
 }
 
-.btn-primary {
-  background-color: #03a9f4;
+.emoji-trigger:hover {
+  transform: scale(1.2);
+}
+
+.emoji-list {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 8px;
+  z-index: 1000;
+}
+
+.emoji-list.show {
+  display: flex;
+  gap: 8px;
+}
+
+.emoji-list span {
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+  transition: transform 0.2s ease;
+}
+
+.emoji-list span:hover {
+  transform: scale(1.2);
+}
+
+.secondary-button {
+  background: #f8f9fa;
+  color: #1c243b;
+  border: 2px solid #1c243b;
+}
+
+.secondary-button:hover {
+  background: #1c243b;
+  color: white;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  margin: 15% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+}
+
+.close:hover {
+  color: #000;
+}
+
+.note-timestamp {
+  font-size: 12px;
+  color: rgba(0,0,0,0.5);
+  margin-top: 8px;
+  text-align: right;
+}
+
+textarea,
+#reviewText {
+  width: 100%;
+  max-width: 800px;
+  min-height: 100px;
+  font-size: 1rem;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1.5px solid #444;
+  background-color: #222;
   color: #fff;
-  border: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  resize: vertical;
 }
 
-.btn-primary:hover {
-  background-color: #0288d1;
+textarea:focus,
+#reviewText:focus {
+  outline: none;
+  border-color: #ffc107;
 }
 
-.btn-secondary {
-  background-color: #e91e63;
-  color: #fff;
-  border: none;
-}
-
-.btn-secondary:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.btn-secondary:hover {
-  background-color: #d81b60;
-}
-
-/* Sticky Notes Styling */
-.sticky-note {
-  display: inline-block;
-  padding: 15px;
-  margin: 10px;
-  font-size: 16px; /* Increased font size for sticky notes */
-  border-radius: 4px;
-  max-width: 200px;
-  word-wrap: break-word; /* Allow text to wrap within the sticky note */
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  cursor: move; /* Add a move cursor for drag-and-drop functionality */
+.button-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 #submitReview,
 #clearReviews {
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   height: 50px;
   width: 200px;
-  font-size: 20px;
-  background: white;
-  color: black;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: #fff;
+  color: #222;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
+
 #submitReview:hover,
 #clearReviews:hover {
-  background-color: #1c243b;
-  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  background-color: #ffc107;
+}
+
+#clearReviews:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  color: #fff;
+  opacity: 0.7;
+}
+
+.color-picker-container {
+  margin: 10px 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-picker-container label {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.color-picker-container input[type="color"] {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.sticky-note {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-width: 120px;
+  min-height: 80px;
+  padding: 16px 12px 12px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 8px 8px 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  word-break: break-word;
+}
+
+.sticky-note:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  transform: scale(1.04) rotate(-1deg);
+}
+
+.note-text {
+  flex: 1;
+  word-break: break-word;
+}
+
+.delete-note {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  color: #b71c1c;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
+  z-index: 2;
+}
+
+.delete-note:hover {
+  opacity: 1;
+  color: #f44336;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .whiteboard-container {
+    padding: 20px 10px;
+  }
+  
+  .whiteboard-container h2 {
+    font-size: 2rem;
+  }
+  
+  .whiteboard {
+    width: 95%;
+    padding: 15px;
+  }
+  
+  textarea {
+    width: 95%;
+  }
+  
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #submitReview,
+  #clearReviews {
+    width: 90%;
+    max-width: 300px;
+  }
+  
+  .sticky-note {
+    max-width: 200px;
+    min-width: 150px;
+  }
+  
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+  }
+  
+  .emoji-list {
+    right: -50%;
+  }
+  
+  .button-container {
+    flex-wrap: wrap;
+  }
+  
+  #previewNote {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Kudoboard Section Height & Centering */
+.whiteboard-container {
+  min-height: 60vh;
+  background: #222;
+  color: #fff;
+  justify-content: center;
+  padding: 60px 0 40px 0;
+}
+
+.whiteboard-container h2 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.whiteboard {
+  background: #181818;
+  min-height: 220px;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+  border: none;
+  padding: 32px 16px 16px 16px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 24px;
+  position: relative;
+}
+
+.sticky-note {
+  min-width: 120px;
+  min-height: 80px;
+  max-width: 200px;
+  padding: 16px 12px 12px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 8px 8px 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  word-break: break-word;
+  /* Font color will be set inline by JS for contrast */
+}
+
+.sticky-note:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  transform: scale(1.04) rotate(-1deg);
+}
+
+textarea,
+#reviewText {
+  background: #222;
+  color: #fff;
+  border: 1.5px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  width: 100%;
+  transition: border 0.2s, background 0.2s, color 0.2s;
+}
+
+textarea:focus,
+#reviewText:focus {
+  border-color: #ffc107;
+  outline: none;
+}
+
+.color-picker-container label {
+  color: #fff;
+}
+
+input[type="color"] {
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.button-container button,
+.whiteboard-container button {
+  background: #fff;
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 8px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.button-container button:hover,
+.whiteboard-container button:hover {
+  background: #ffc107;
+  color: #222;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.button-container button:disabled,
+.whiteboard-container button:disabled {
+  background: #888;
+  color: #fff;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* DARK MODE */
+body.dark-mode .whiteboard-container,
+.dark-mode .whiteboard-container {
+  background: #222 !important;
+  color: #fff !important;
+}
+
+body.dark-mode .whiteboard,
+.dark-mode .whiteboard {
+  background: #181818 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+body.dark-mode textarea,
+body.dark-mode #reviewText,
+.dark-mode textarea,
+.dark-mode #reviewText {
+  background: #181818 !important;
+  color: #fff !important;
+  border: 1.5px solid #444 !important;
+}
+
+body.dark-mode .color-picker-container label,
+.dark-mode .color-picker-container label {
+  color: #fff !important;
+}
+
+body.dark-mode .button-container button,
+body.dark-mode .whiteboard-container button,
+.dark-mode .button-container button,
+.dark-mode .whiteboard-container button {
+  background: #222 !important;
+  color: #fff !important;
+  border: 1.5px solid #444 !important;
+}
+
+body.dark-mode .button-container button:hover,
+body.dark-mode .whiteboard-container button:hover,
+.dark-mode .button-container button:hover,
+.dark-mode .whiteboard-container button:hover {
+  background: #fff !important;
+  color: #222 !important;
+  border: 1.5px solid #fff !important;
+}
+
+body.dark-mode .sticky-note,
+.dark-mode .sticky-note {
+  /* Do NOT set background here, let JS set it */
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.28);
+}
+
+/* LIGHT MODE */
+body:not(.dark-mode) .whiteboard-container,
+:not(.dark-mode) .whiteboard-container {
+  background: #f8f9fa;
+  color: #222;
+}
+body:not(.dark-mode) .whiteboard,
+:not(.dark-mode) .whiteboard {
+  background: #fff;
+  color: #222;
+}
+body:not(.dark-mode) textarea,
+body:not(.dark-mode) #reviewText,
+:not(.dark-mode) textarea,
+:not(.dark-mode) #reviewText {
+  background: #fff;
+  color: #222;
+  border: 1.5px solid #e5e7eb;
+}
+body:not(.dark-mode) .sticky-note,
+:not(.dark-mode) .sticky-note {
+  background: #fff;
+  color: #222;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+body:not(.dark-mode) .whiteboard-container > h2 {
+  color: #111 !important;
+}
+
+body:not(.dark-mode) .color-picker-container label,
+:not(.dark-mode) .color-picker-container label {
+  color: #111 !important;
+}
+
+body.dark-mode #whiteboard {
+  background: #fff !important;
+  color: #111 !important;
+}
+
+body.dark-mode #reviewText {
+  background: #fff !important;
+  color: #111 !important;
 }

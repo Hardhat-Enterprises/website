@@ -1,19 +1,14 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
+{% extends 'layouts/base.html' %} {% load static %} {% block seo %}
+<title>Deakin Threat Mirror - Threat Intelligence Platform & Cybersecurity Visualization</title>
+<meta name="description" content="Deakin Threat Mirror is an open-source threat intelligence platform for SMEs, offering cybersecurity visualization and actionable threat analysis tools. Project currently paused.">
+<meta name="keywords" content="threat intelligence platform, cybersecurity visualization, threat analysis tools, cybersecurity tools, ethical hacking tools, Hardhat Enterprises">
+<meta property="og:title" content="Deakin Threat Mirror - Threat Intelligence Platform">
+<meta property="og:description" content="Discover Deakin Threat Mirror, an open-source platform for cybersecurity visualization and threat analysis, designed for SMEs. Project currently paused.">
+<meta property="og:image" content="{% static 'assets/img/pages/home/deakin_threat_mirror.svg' %}"> {% endblock %} {% block content %}
 
-{% block seo %}
-    <title>Deakin Threat Mirror - Threat Intelligence Platform & Cybersecurity Visualization</title>
-    <meta name="description" content="Deakin Threat Mirror is an open-source threat intelligence platform for SMEs, offering cybersecurity visualization and actionable threat analysis tools. Project currently paused.">
-    <meta name="keywords" content="threat intelligence platform, cybersecurity visualization, threat analysis tools, cybersecurity tools, ethical hacking tools, Hardhat Enterprises">
-    <meta property="og:title" content="Deakin Threat Mirror - Threat Intelligence Platform">
-    <meta property="og:description" content="Discover Deakin Threat Mirror, an open-source platform for cybersecurity visualization and threat analysis, designed for SMEs. Project currently paused.">
-    <meta property="og:image" content="{% static 'assets/img/pages/home/deakin_threat_mirror.svg' %}">
-{% endblock %}
-
-{% block content %}
 <main>
     {% include 'includes/preloader-dtm.html' %}
-
+ 
     <!-- Hero -->
     <div class="section-header bg-primary-app pb-0">
         <div class="container">
@@ -28,6 +23,62 @@
             </div>
         </div>
     </div>
+
+    <a href="{% url 'deakinthreatmirror_skills' %}" style="text-decoration: none;">
+        <div class="container d-flex justify-content-center">
+            <div style="
+      background: rgba(30, 31, 63, 0.85);
+      border-radius: 20px;
+      padding: 1.8rem;
+      border: 2px solid transparent;
+      background-image: linear-gradient(135deg, rgba(30, 31, 63, 0.85), rgba(42, 44, 79, 0.85)),
+                        linear-gradient(135deg, #ffc107, #ff5722);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      color: white;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
+      animation: glowPulse 3s infinite ease-in-out;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    " onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 14px 50px rgba(255, 193, 7, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 40px rgba(0, 0, 0, 0.7)'">
+
+                <h4 style="color: #ffc107; margin-bottom: 1.2rem; font-weight: bold; letter-spacing: 0.5px;">📊 Deakin Threat Mirror (On Hold)</h4>
+
+                <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 1.2rem;">
+                    <li style="margin-bottom: 0.8rem;">
+                        <span style="margin-right: 0.5rem;">🧠</span>Threat Modeling and Visualization
+                    </li>
+                    <li style="margin-bottom: 0.8rem;">
+                        <span style="margin-right: 0.5rem;">📊</span>Dashboard Design
+                    </li>
+                    <li>
+                        <span style="margin-right: 0.5rem;">📡</span>SIEM Data Integration
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </a>
+
+    <style>
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+            }
+        }
+    </style>
+    </div>
+    </div>
+    </div>
+    </div>
     <!-- End of Hero Section -->
 
     <section>
@@ -37,7 +88,8 @@
                 <div class="col-lg-6">
                     <h2 class="fw-bolder text-dark">Overview of Deakin Threat Mirror</h2>
                     <p class="mb-4">
-                        Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize cyber threat data. Aimed at small and medium-sized enterprises (SMEs) and developing economies, it provides actionable cybersecurity visualization and threat analysis tools to enhance security. Note: This project is currently paused, awaiting further development.
+                        Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize cyber threat data. Aimed at small and medium-sized enterprises (SMEs) and developing economies, it provides actionable cybersecurity visualization
+                        and threat analysis tools to enhance security. Note: This project is currently paused, awaiting further development.
                     </p>
                 </div>
                 <div class="col-lg-6">
@@ -77,7 +129,8 @@
                         <div class="mt-4 mb-5">
                             <h2 class="fw-bolder text-dark">Stay Updated on Deakin Threat Mirror</h2>
                             <p class="mb-4">
-                                While Deakin Threat Mirror is currently paused, we invite you to stay informed about its future updates. Join our community to contribute ideas or follow the project’s progress as we aim to enhance cybersecurity awareness through a powerful threat intelligence platform.
+                                While Deakin Threat Mirror is currently paused, we invite you to stay informed about its future updates. Join our community to contribute ideas or follow the project’s progress as we aim to enhance cybersecurity awareness through a powerful threat intelligence
+                                platform.
                             </p>
                             <a href="{% url 'threat_mirror_join_us' %}" class="btn btn-primary animate-up-2" alt="Join the Deakin Threat Mirror community">
                                 <span class="fas fa-handshake me-2"></span>Join Us
@@ -106,7 +159,8 @@
                             </h2>
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
                                 <div class="accordion-body">
-                                    Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize diverse threat feeds into actionable intelligence. It focuses on supporting SMEs and developing economies by making cybersecurity more accessible through cybersecurity visualization.
+                                    Deakin Threat Mirror is an open-source threat intelligence platform designed to aggregate, process, and visualize diverse threat feeds into actionable intelligence. It focuses on supporting SMEs and developing economies by making cybersecurity more accessible
+                                    through cybersecurity visualization.
                                 </div>
                             </div>
                         </div>
@@ -189,15 +243,16 @@
                                 </button>
                             </h2>
                             <div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
-                              <div class="accordion-body">
-                                Interested parties can get involved or contribute to the project by participating in the technical review, providing feedback, or contributing to the development of the platform. They can also follow the project's progress and updates on platforms like GitHub
-                              </div>
+                                <div class="accordion-body">
+                                    Interested parties can get involved or contribute to the project by participating in the technical review, providing feedback, or contributing to the development of the platform. They can also follow the project's progress and updates on platforms like
+                                    GitHub
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
     <!-- End of FAQ Section -->

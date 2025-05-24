@@ -13,6 +13,7 @@ from .models import (
     Contact,
     ContactSubmission,
     Experience,
+    UserBlogPage,
     Webpage,
     DDT_contact,
     Job,
@@ -127,6 +128,38 @@ class ExperienceAdmin(admin.ModelAdmin):
     list_display = ['name', 'feedback', 'created_at']
     search_fields = ['name', 'feedback']
     readonly_fields = ['created_at'] 
+    
+@admin.register(UserBlogPage)
+class UserBlogPageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'title', 'description', 'created_at']
+    search_fields = ['name', 'title', 'description']
+    readonly_fields = ['created_at']  # Make created_at read-only
+    
+# @admin.register(Contact_central)
+# class Contact_centralAdmin(admin.ModelAdmin):
+#     list_display = [field.name for field in Contact_central._meta.fields]
+
+#Feedback page
+#@admin.register(Feedback, FeedbackAdmin)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ['feedback_type', 'user', 'created_at']
+    list_filter = ['feedback_type', 'created_at']
+    search_fields = ['content', 'user__email']
+    readonly_fields = ['created_at']
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # If we are editing an existing object
+            return ['user', 'feedback_type', 'content'] + self.readonly_fields
+        return self.readonly_fields
+
+#admin.site.register(Feedback, FeedbackAdmin)
+
+
+# class OtpTokenAdmin(admin.ModelAdmin):
+#     list_display = ("user", "otp_code")
+
+#admin.site.register(OtpToken, OtpTokenAdmin)
+admin.site.register(Projects_join_us)
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):

@@ -66,7 +66,7 @@
                       <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
                     </li>
                     <li class="mb-2 menu-item">
-                      <a class="menu-link" href="/">The Policy Deployment Engine</a>
+                      <a class="menu-link" href="{% url 'policy_deployment' %}">The Policy Deployment Engine</a>
                     </li>
                   </ul>
                 </div>
@@ -155,26 +155,47 @@
 
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="upskillingDropdown" aria-expanded="false" data-bs-toggle="dropdown">
               Upskilling
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-              <div class="row">
-                <div class="col">
-                  <ul class="list-style-none mb-4">
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'dashboard' %}">Dashboard</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'upskilling' %}">Skills</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+            <div class="dropdown-menu pt-2" aria-labelledby="upskillingDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'dashboard' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Dashboard
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'upskilling' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    Skills
+                  </li>
+                </a>
+              </ul>
             </div>
           </li>
+          
+          {% endif %}
+
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+              Admin Settings
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'adminblogpage' %}">
+                  <li class="mb-2 menu ps-3 py-1">Review Blogs</li>
+                </a>
+                <a class="menu-link" href="{% url 'reports' %}">
+                  <li class="mb-2 menu ps-3 py-1">Reports</li>
+                </a>
+              </ul>
+            </div>
+          </li>
+          
+                 
           {% endif %}
 
 
@@ -212,7 +233,7 @@
                     Deakin CyberSafe VR
                   </li>
                 </a>
-                <a class="menu-link" href="\">
+                <a class="menu-link" href="{% url 'policy_deployment' %}">
                   <li class="mb-2 menu ps-3 py-1">
                     The Policy Deployment Engine (New)
                   </li>
@@ -222,7 +243,11 @@
                     Deakin Threat mirror (Finished)
                   </li>
                 </a>
+
+                <a class="menu-link" href="{% url 'policy_deployment' %}">
+
                 <a class="menu-link" href="{% url 'malware_viz_main' %}">
+
                   <li class="mb-2 menu ps-3 py-1">
                     Malware (Finished)
                   </li>
@@ -233,50 +258,45 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
+            <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               Blog
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
-
-
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'feedback' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    User Experience
-                  </li>
-                </a>
-
-              </ul>
-
-
+            <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
+              <div class="row">
+                <div class="col">
+            <ul class="list-style-none">
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">Create a Blog</a></li>
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">Published Blogs</a></li>
+            </ul>
+            </div>
+            </div>
             </div>
           </li>
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Careers
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <style>
-              .dropdown-menu {
-                background-color: #212529; 
-              }
-              .dropdown-menu .dropdown-item {
-                color: #ffc107 !important; 
-              }
-              .dropdown-menu .dropdown-item:hover {
-                background-color: #ffc107 !important;  
-                color: #212529 !important;  
-              }
-            </style>
-            <ul class="dropdown-menu" aria-labelledby="careersDropdown">
-              <li><a class="dropdown-item" href="{% url 'career-discover' %}">Discover Hardhat</a></li>
-              <li><a class="dropdown-item" href="{% url 'career-list' %}">All Jobs</a></li>
-              <li><a class="dropdown-item" href="{% url 'internships' %}">Internships</a></li>
-              <li><a class="dropdown-item" href="{% url 'job-alerts' %}">Job Alerts</a></li> 
-            </ul>
+            <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'career-discover' %}">
+                  <li class="mb-2 menu ps-3 py-1">Discover Hardhat</li>
+                </a>
+                <a class="menu-link" href="{% url 'career-list' %}">
+                  <li class="mb-2 menu ps-3 py-1">All Jobs</li>
+                </a>
+                <a class="menu-link" href="{% url 'internships' %}">
+                  <li class="mb-2 menu ps-3 py-1">Internships</li>
+                </a>
+                <a class="menu-link" href="{% url 'job-alerts' %}">
+                  <li class="mb-2 menu ps-3 py-1">Job Alerts</li>
+                </a>
+              </ul>
+            </div>
           </li>
+          
 
           <li class="nav-item dropdown">
             <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
@@ -332,12 +352,13 @@
         <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
             class="fas fa-sign-out-alt me-2"></span> Logout</a>
 
-        <a class="profile-container" href="{% url 'profile' %}">
+       <a class="profile-container" href="{% url 'profile' %}">
         <img
           src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
           class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-        <span>{{ request.user.first_name }} {{ request.user.last_name }}</span>
+          <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
       </a>
+
 
         {% else %}
         <div class="sign-up-button-container">
@@ -418,4 +439,103 @@
   </nav>
 </header>
 <script src="{% static 'js/toggles.js' %}"></script>
+
 <script src="{% static 'js/search_suggestions.js' %}"></script>
+
+<style>
+  .header-profile-name { color: #1a1a1a !important; }
+  body.dark-mode .header-profile-name { color: #fff !important; }
+  </style>
+
+<style>
+.dropdown-submenu {
+  position: relative;
+}
+
+.submenu {
+  display: none;
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+  border-radius: 0.25rem;
+  z-index: 1000;
+}
+
+.dropdown-submenu.show > .submenu {
+  display: block;
+}
+
+  </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const blogPagePlus = document.getElementById('blogPagePlus');
+    const parentSubmenu = blogPagePlus.closest('.dropdown-submenu');
+    const submenu = blogPagePlus.nextElementSibling;
+
+    // Prevent Bootstrap auto-close on click inside dropdown
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+      menu.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+    });
+
+    // Bootstrap fix: Stop parent from closing when submenu toggles
+    document.querySelectorAll('.dropdown').forEach(drop => {
+      drop.addEventListener('hide.bs.dropdown', function (e) {
+        if (parentSubmenu.classList.contains('show')) {
+          e.preventDefault(); // prevent closing if submenu is open
+          parentSubmenu.classList.remove('show'); // manually close submenu
+        }
+      });
+    });
+
+    // Toggle submenu on Blog Page + click
+    blogPagePlus.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close all other open submenus
+      document.querySelectorAll('.dropdown-submenu').forEach(sub => {
+        if (sub !== parentSubmenu) sub.classList.remove('show');
+      });
+
+      // Toggle current submenu
+      parentSubmenu.classList.toggle('show');
+    });
+
+    // Close submenu if clicked outside the entire dropdown
+    document.addEventListener('click', function (e) {
+      if (!parentSubmenu.contains(e.target)) {
+        parentSubmenu.classList.remove('show');
+      }
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const adminReviewDropdown = document.getElementById('adminReviewDropdown');
+    const adminSubmenu = adminReviewDropdown.closest('.dropdown-submenu');
+
+    adminReviewDropdown.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close other open submenus
+      document.querySelectorAll('.dropdown-submenu').forEach(item => {
+        if (item !== adminSubmenu) item.classList.remove('show');
+      });
+
+      adminSubmenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!adminSubmenu.contains(e.target)) {
+        adminSubmenu.classList.remove('show');
+      }
+    });
+  });
+</script>
+<script src="{% static 'js/search_suggestions.js' %}"></script>
+

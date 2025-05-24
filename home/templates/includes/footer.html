@@ -47,7 +47,7 @@
       
       <div class="col-6 col-md-2 mb-0 mb-lg-0">
         <ul class="footer-links">
-          <li><a href="{% url 'blog' %}" class="nav-link" style="padding-top: 0;">Blog</a></li>
+          <li><a href="{% url 'blogpage' %}" class="nav-link" style="padding-top: 0;">Blog Page</a></li>
           <li><a href="{% url 'index' %}" class="nav-link" style="padding-top: 0;">Home</a></li>
 
 
@@ -121,35 +121,22 @@
             src="{% static 'assets/img/brand/logo.svg' %}"
             height="30"
             class="me-2"
-            alt="hardhat Logo"
-          />
+            alt="hardhat Logo" />
           <p class="fw-bold footer-logo-text m-0 text-white">HardHat Enterprises</p>
         </a>
         <div
           class="d-flex text-center justify-content-center align-items-center"
-          role="contentinfo"
-        >
+          role="contentinfo">
           <p class="fw-normal font-small mb-0 text-muted">
             &copy; copyright {% now "Y" %}.
           </p>
         </div>
-          <div class="page-visit-counter text-center mt-1">
-            <p class="font-small text-muted">
-              <span class="text-white">This page has been visited </span>
-              <span id="visit-counter" class="fw-bold text-warning">0</span>
-              <span class="text-white"> times!</span>
-            </p>
-            
-          </div>
-        <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
-          <strong>Last Updated:</strong> <span id="last-updated"></span>
-          </div>
 
       </div>
     </div>
   </div>
 
-  <!-- <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
+  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
     <div class="container mt-1">
       <div class="page-visit-counter text-center mt-1">
         <p class="font-small text-muted">
@@ -159,27 +146,16 @@
         </p>
       </div>
     </div>
-  </div> -->
-  
+  </div> 
 
-<!--<div class="container mt-4">
-  <div id="last-viewed-container" class="last-viewed-container">
-      <h5>Recently Viewed Pages</h5>
-      <ul id="last-viewed-list" class="list-unstyled">
-          <li>No pages visited yet.</li>
-      </ul>
-  </div>
-</div>-->
+  <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
 
-
-
-  <!-- <div class="d-flex text-center justify-content-center align-items-center" role="contentinfo">
     <div class="container mt-1">
       <div class="alert alert-custom" role="alert">
         <strong>Last Updated:</strong> <span id="last-updated"></span>
       </div>
     </div>
-  </div> -->
+  </div> 
   <style>
     .alert-custom {
         background-color: transparent; /* Removes the background color */
