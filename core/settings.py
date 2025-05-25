@@ -88,7 +88,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True      # Clear session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
 # Application definition
-
 INSTALLED_APPS = [
     'crispy_forms',
     'tinymce',
@@ -346,11 +345,6 @@ SECURE_HSTS_PRELOAD = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-SESSION_COOKIE_AGE = 1209600 #2 weeks 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_SAVE_EVERY_REQUEST = True
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 #cron-job-feature
 # Django-cron configuration class
