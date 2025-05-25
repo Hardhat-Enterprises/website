@@ -70,30 +70,22 @@ SESSION_COOKIE_SECURE = False
 # Use credentials for Gmail hardhatwebsite@gmail.com
 RECAPTCHA_SITE_KEY = '6LfAVkYrAAAAADQTOddD3d6Ly-LWGDt-O5zpOkao'
 RECAPTCHA_SECRET_KEY = '6LfAVkYrAAAAAHmiKUs--9QR_U70BlGPU6yP522i'
- 
-# Prevents JavaScript from accessing session cookies when set True
-SESSION_COOKIE_HTTPONLY = False
- 
-#Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
-SESSION_COOKIE_SAMESITE = 'Lax'
 
-#Ensure CSRF cookies are sent over HTTPS only
-CSRF_COOKIE_SECURE = True
+# ---------------- Secure Session Cookie Settings ----------------
+# These settings ensure cookies are securely transmitted over HTTPS and protected from JS and CSRF attacks
+SESSION_COOKIE_SECURE = not DEBUG           # Only allow HTTPS cookies in production
+SESSION_COOKIE_HTTPONLY = True              # Prevent access to session cookies via JavaScript
+SESSION_COOKIE_SAMESITE = 'Strict'          # Restrict cross-origin cookie sharing
 
-#Enhance CSRF protection
-CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = not DEBUG              # Ensure CSRF cookie is sent over HTTPS
+CSRF_COOKIE_SAMESITE = 'Strict'             # Restrict CSRF cookie from cross-origin requests
 
-#Ensure DEBUG is set to False in production to avoid sensitive information exposure
-DEBUG = True
-
-
-#Limit request header sizes and body lenghts
-#Limit number of form fileds
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000 
-
-# Limit max upload memory size 10 MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
-
+# ---------------- Idle Session Timeout Configuration ----------------
+# Automatically logs out users after 5 minutes of inactivity, resets on every user request
+SESSION_COOKIE_AGE = 300                    # 5 minutes timeout
+SESSION_SAVE_EVERY_REQUEST = True           # Reset timer on user activity
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True      # Clear session when browser closes
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
 # Application definition
 
@@ -364,6 +356,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # Django-cron configuration class
 CRON_CLASSES = [
     'home.tasks.CleanStaleRecordsCronJob', 
+    'home.tasks.ClearExpiredSessionsCronJob',
 ]
 
 LOGGING = {
