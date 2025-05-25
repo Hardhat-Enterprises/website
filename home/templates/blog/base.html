@@ -22,6 +22,29 @@
     "logo": "/custom_static/assets/img/brand/logo.svg"
   }
   </script>
+
+  <script>
+  let idleTime = 0;
+  const warnAt = 240;  // 4 minutes
+  const logoutAt = 300; // 5 minutes
+
+  function resetIdleTime() {
+    idleTime = 0;
+  }
+
+  setInterval(() => {
+    idleTime++;
+    if (idleTime === warnAt) {
+      alert("⚠️ You've been inactive. You’ll be logged out soon.");
+    }
+    if (idleTime >= logoutAt) {
+      window.location.href = "{% url 'logout' %}";
+    }
+  }, 1000); // check every second
+
+  document.addEventListener("mousemove", resetIdleTime);
+  document.addEventListener("keypress", resetIdleTime);
+</script>
   <!-- Existing Styles -->
   <link rel="stylesheet" href="https://bootswatch.com/5/simplex/bootstrap.min.css" />
   <link rel="stylesheet" href="{% static 'styles.css' %}" />
