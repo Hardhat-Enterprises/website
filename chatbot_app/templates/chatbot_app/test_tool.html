@@ -1,0 +1,59 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Chatbot API Test Tool{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1>Chatbot API Test Tool</h1>
+            <p class="lead">Use this tool to test the chatbot API endpoints and diagnose issues.</p>
+            
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Test Endpoints</h5>
+                </div>
+                <div class="card-body">
+                    <div id="chatbot-test-container">
+                        <!-- The test interface will be injected here by the test_chatbot.js script -->
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading test tool...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Debugging Information</h5>
+                </div>
+                <div class="card-body">
+                    <h6>API Endpoint Information</h6>
+                    <ul>
+                        <li><strong>Config API:</strong> <code>/api/config/</code></li>
+                        <li><strong>User API:</strong> <code>/get-current-user/</code></li>
+                        <li><strong>Verify API:</strong> <code>/api/verify/</code></li>
+                        <li><strong>Message API:</strong> <code>/api/message/</code></li>
+                    </ul>
+                    
+                    <h6>Common Debugging Steps</h6>
+                    <ol>
+                        <li>Verify database connections are working</li>
+                        <li>Check if the search engine can initialize and find models</li>
+                        <li>Test with simple, known working queries first</li>
+                        <li>Look for detailed error messages in the console logs</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ block.super }}
+<script src="{% static 'chatbot_app/js/test_chatbot.js' %}"></script>
+{% endblock %} 

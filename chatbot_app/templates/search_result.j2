@@ -1,0 +1,105 @@
+{# Macro to format a single Cyber Challenge result in Hardhat Assistant style #}
+{% macro format_challenge_result(result) %}
+⸻
+
+📘 {{ result.title }}
+{{ result.description }}
+{% if result.difficulty == 'Easy' %}🟩{% elif result.difficulty == 'Medium' %}🟨{% elif result.difficulty == 'Hard' %}🟥{% else %}?{% endif %} Difficulty: {{ result.difficulty }}
+🔥 {{ result.points if result.points is defined else result.details.Points if result.details and result.details.Points is defined else 'N/A' }} {# Adjust 'points' or 'details.Points' based on your actual data structure #}
+🔗 <a href="/challenges/detail/{{ result.id }}">Take Challenge</a>
+{% endmacro %}
+
+{# Main template structure - Adapted for Hardhat Assistant Style #}
+{% set top_n = results|length %} {# Or hardcode to 3 if needed, e.g., {% set top_n = 3 %} #}
+
+{# --- Hardhat Assistant Output Start --- #}
+<div class="hardhat-assistant-output" style="font-family: monospace; white-space: pre-wrap; line-height: 1.4;"> {# Basic styling for readability #}
+👋 Hi {{ USER | default('there') }}! Here are the top {{ top_n }} Cyber Challenges ready for you to tackle:
+
+{% for result in results %}
+    {{ format_challenge_result(result) }}
+{% endfor %}
+
+⸻
+
+💬 Would you like to see more cyber challenges?
+👉 <a href="#">Show me more cyber challenges</a> {# Replace # with the actual link/action #}
+</div>
+{# --- Hardhat Assistant Output End --- #}
+
+{# Keep the original HTML structure below if needed for other views, otherwise remove it #}
+{#
+# Search Results (Original Structure - Deactivated)
+
+{{ format_summary(total_results, model_counts) }} # This macro might need adapting if you still want a separate summary
+
+## Found Items:
+<div class="search-results">
+    <div class="search-summary">
+        <h3>Search Results for: "{{ query }}"</h3>
+        <p>Total Results: {{ total_results }}</p>
+
+        <div class="result-types">
+            <h4>Results by Type:</h4>
+            <ul>
+            {% for model_type, count in model_counts.items() %}
+                <li>{{ model_type }}: {{ count }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {# table_html might not be relevant for the Hardhat view #}
+    {# <div class="results-list">
+        {{ table_html|safe }}
+    </div> #}
+
+    <div class="individual-results">
+        {# This loop is now handled by the Hardhat section above #}
+        {# {% for result in results %}
+            {{ format_result(result) }} # Using the *old* format_result macro
+            {% if not loop.last %}
+            <hr class="result-separator">
+            {% endif %}
+        {% endfor %} #}
+    </div>
+</div>
+#}
+
+{# Original format_result macro (kept for reference or other views, but renamed/unused in Hardhat view) #}
+{% macro format_result_original(result) %}
+<div class="search-result">
+    <div class="result-header">
+        {{ result.emoji }} {{ result.model_label }}: {{ result.title }}
+        {% if result.difficulty %}
+            <span class="difficulty-badge">{{ result.difficulty }}</span>
+        {% endif %}
+    </div>
+
+    {% if result.description %}
+    <div class="result-description">
+        {{ result.description|truncate(200) }}
+    </div>
+    {% endif %}
+
+    {% if result.details %}
+    <div class="result-details">
+        <ul>
+        {% for key, value in result.details.items() %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# Original format_summary macro (kept for reference or other views) #}
+{% macro format_summary_original(total_results, model_counts) %}
+Total Results: {{ total_results }}
+
+Results by Type:
+{% for model_type, count in model_counts.items() %}
+* {{ model_type }}: {{ count }}
+{% endfor %}
+{% endmacro %}

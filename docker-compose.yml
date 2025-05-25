@@ -9,6 +9,7 @@ services:
       - .:/app  # Mount project code
       - staticfiles:/app/static
       - mediafiles:/app/media
+      - ./db.sqlite3:/app/db.sqlite3  # Mount database file
       # Keep custom_static mount if you have static files there
       - ./custom_static:/app/custom_static 
     networks:
@@ -19,7 +20,8 @@ services:
       - "8000:80"
     # Run collectstatic and migrate before starting gunicorn
     command: >
-      sh -c "python manage.py migrate && 
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate && 
              python manage.py collectstatic --noinput --clear &&
              gunicorn --bind 0.0.0.0:8000 core.wsgi"
 

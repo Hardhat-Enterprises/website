@@ -121,6 +121,7 @@ INSTALLED_APPS = [
 
     'corsheaders',
 
+    'chatbot_app',
 
 ]
 

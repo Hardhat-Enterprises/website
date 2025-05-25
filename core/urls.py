@@ -44,6 +44,7 @@ urlpatterns = [
     path("admin/dashboard/", admin.site.admin_view(admin_dashboard), name="admin-dashboard"),
     path('admin/', admin.site.urls),
     path('accounts/', include('home.urls')), 
+    path('', include('chatbot_app.urls')),
     path('', include('home.urls')),
     path('about-us/', views.about_us, name='about_us'),
     path('contact', views.contact, name='contact'),

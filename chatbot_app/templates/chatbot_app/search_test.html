@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Engine Test</title>
+    <link rel="stylesheet" href="{% static 'chatbot_app/css/chatbot_views.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <h1>Search Test Interface</h1>
+            <form method="post" class="search-form">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" name="query" class="form-control" value="{{ query|default:'' }}" placeholder="Enter search query...">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="test-queries">
+            <h3>Try these test queries:</h3>
+            <a href="?q=appatack">appatack</a>
+            <a href="?q=smishing">smishing</a>
+            <a href="?q=cyber+atack">cyber atack</a>
+            <a href="?q=vr+security">vr security</a>
+            <a href="?q=malware+visulaization">malware visulaization</a>
+            <a href="?q=penetration+testing">penetration testing</a>
+            <a href="?q=courses">courses</a>
+            <a href="?q=course">course</a>
+        </div>
+
+        {% if was_corrected %}
+        <div class="correction-notice">
+            <strong>Spelling correction:</strong> The query "{{ query }}" was corrected to "{{ corrected_query }}".
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="results-container mt-4">
+            <div class="tab">
+                <button class="tablinks active" onclick="openTab(event, 'ResultsTab')">Results</button>
+                <button class="tablinks" onclick="openTab(event, 'SQLTab')">SQL</button>
+                <button class="tablinks" onclick="openTab(event, 'RawTab')">Raw</button>
+            </div>
+
+            <div id="ResultsTab" class="tabcontent active">
+                <h2>Search Results</h2>
+                <p>Query: <strong>"{{ query }}"</strong></p>
+                
+                {% if results.display_text %}
+                    {# Rich formatted results #}
+                    <div class="rich-results">
+                        <pre class="rich-output">{{ results.display_text|safe }}</pre>
+                    </div>
+                {% else %}
+                    {# Fallback to old format #}
+                    <p>Total results: <strong>{{ results.total_results|default:"0" }}</strong></p>
+                    <p>Categories: <strong>{{ categories_str|default:"None" }}</strong></p>
+                    <p>Search method: <strong>{{ search_method|default:"unknown" }}</strong></p>
+                    
+                    <h3>Formatted Response</h3>
+                    <div class="formatted-response">{{ formatted_response|safe }}</div>
+                {% endif %}
+            </div>
+
+            <div id="SQLTab" class="tabcontent">
+                <h2>SQL Queries</h2>
+                <p>This shows how Django ORM translated your search into SQL queries:</p>
+                
+                {% if sql_queries %}
+                    {% for query_info in sql_queries %}
+                    <div class="sql-container">
+                        <h3>Model: {{ query_info.model|default:"Unknown" }}</h3>
+                        <div class="query-info">
+                            <span class="result-count">Results: {{ query_info.result_count|default:"0" }}</span>
+                            <span class="time-taken">Time: {{ query_info.time|floatformat:4 }}s</span>
+                        </div>
+                        <div class="sql-query">{{ query_info.sql|default:"No SQL captured" }}</div>
+                        <div class="orm-query">Django ORM: {{ query_info.orm_query|default:"No ORM query captured" }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No SQL queries were captured for this search.</p>
+                {% endif %}
+            </div>
+
+            <div id="RawTab" class="tabcontent">
+                <h2>Raw Search Results</h2>
+                <div class="json-display">{{ results_json|safe }}</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <script src="{% static 'chatbot_app/js/chatbot_views.js' %}"></script>
+</body>
+</html>
+
+<style>
+.rich-results {
+    background: #1e1e1e;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.rich-output {
+    color: #ffffff;
+    font-family: 'Consolas', 'Monaco', monospace;
+    white-space: pre-wrap;
+    margin: 0;
+}
+</style> 

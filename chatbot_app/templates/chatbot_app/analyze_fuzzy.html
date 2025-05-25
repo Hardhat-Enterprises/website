@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fuzzy Search Analysis: {{ query }}</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+        }
+        h1, h2, h3 { 
+            color: #333; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        .word-card { 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            padding: 15px; 
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+        .corrected { 
+            background-color: #e6ffe6; 
+        }
+        .match-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px;
+        }
+        .match-table th, .match-table td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: left;
+        }
+        .match-table th { 
+            background-color: #f2f2f2; 
+        }
+        .selected { 
+            background-color: #e6ffe6; 
+            font-weight: bold;
+        }
+        .summary {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .vocab-sample {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fuzzy Search Analysis</h1>
+        
+        <div class="summary">
+            <h2>Query Summary</h2>
+            <p><strong>Original query:</strong> "{{ query }}"</p>
+            <p><strong>Preprocessed query:</strong> "{{ preprocessed_query }}"</p>
+            <p><strong>Corrected query:</strong> "{{ corrected_query }}"</p>
+            <p><strong>Was corrected:</strong> {{ was_corrected }}</p>
+            <p><strong>Vocabulary size:</strong> {{ vocabulary_size }} terms</p>
+            
+            <h3>Vocabulary Sample</h3>
+            <div class="vocab-sample">
+                <ul>
+                    {% for term in vocab_sample %}
+                        <li>{{ term }}</li>
+                    {% endfor %}
+                    {% if vocab_remaining > 0 %}
+                        <li>... and {{ vocab_remaining }} more terms</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <h2>Word-by-Word Analysis</h2>
+        {% for word_info in word_analysis %}
+            <div class="word-card {% if word_info.was_corrected %}corrected{% endif %}">
+                <h3>Word: "{{ word_info.original }}"</h3>
+                <p><strong>Length:</strong> {{ word_info.length }}</p>
+                
+                {% if word_info.is_stopword %}
+                    <p><strong>Status:</strong> Stopword (not eligible for correction)</p>
+                {% elif word_info.is_too_short %}
+                    <p><strong>Status:</strong> Too short (not eligible for correction)</p>
+                {% else %}
+                    {% if word_info.was_corrected %}
+                        <p><strong>Status:</strong> Corrected from "{{ word_info.original }}" to "{{ word_info.corrected_to }}"</p>
+                    {% else %}
+                        <p><strong>Status:</strong> No correction needed or no suitable match found</p>
+                    {% endif %}
+                    
+                    {% if word_info.top_matches %}
+                        <h4>Top Matches:</h4>
+                        <table class="match-table">
+                            <tr>
+                                <th>Word</th>
+                                <th>Similarity</th>
+                                <th>Status</th>
+                            </tr>
+                            {% for match in word_info.top_matches %}
+                                <tr class="{% if match.would_be_selected %}selected{% endif %}">
+                                    <td>{{ match.word }}</td>
+                                    <td>{{ match.similarity|floatformat:4 }} ({{ match.similarity_percent }}%)</td>
+                                    <td>{{ match.status }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        <p><strong>Matches:</strong> No matches found in vocabulary</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html> 

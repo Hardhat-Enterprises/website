@@ -16,6 +16,9 @@
 -->
 
 {% load static %}
+{# {% load theme_pixel %} #}
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -269,39 +272,11 @@
       .dropdown-submenu:hover .dropdown-menu {
           opacity: 1;
           visibility: visible;
-          display: block;
       }
-
-      /* Add a small delay before hiding the dropdown */
-      .dropdown-submenu .dropdown-menu {
-          transition: opacity 0.3s ease 0.1s, visibility 0.3s ease 0.1s;
-      }
-
-      /* Make the dropdown menu more stable */
-      .dropdown-submenu .dropdown-menu {
-          position: absolute;
-          top: 0;
-          left: 100%;
-          margin-top: 0;
-          margin-left: 0;
-          border: 2px solid #ffcd11;
-          background-color: #fff;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-          min-width: 250px;
-          opacity: 0;
-          visibility: hidden;
-          transition: opacity 0.3s ease, visibility 0.3s ease;
-          display: block;
-          z-index: 1000;
-      }
-
-      /* Ensure the dropdown stays visible when hovering over the parent */
-      .dropdown-submenu:hover .dropdown-menu {
-          opacity: 1;
-          visibility: visible;
-          display: block;
-      }
-  </style>
+    </style>
+  
+  <!-- Load chatbot styles at the top of the page to prevent flash of unstyled content -->
+  <link rel="stylesheet" href="{% static 'chatbot_app/css/chatbot.css' %}">
   
 </head>
 
@@ -332,22 +307,20 @@
   
   <div id="chat-popup" class="hidden">
     <div class="chat-header">
-      <span class="chat-title">Let's chat?</span>
+      <span class="chat-title">Hardhat Assistant</span>
       <button id="chatCloseButton" class="CloseButton">x</button>
     </div>
     <div class="chat-body">
-      <form id="chatForm">
-        <div class="chat-text">Please fill out the form below to start chatting with the next available agent.</div>
-      <div class="chat-div">
-        <input type="text" class="chatInput" id="userName" name="userName" placeholder="Enter your name" required /> 
-        <input type="email" class="chatInput" id="userEmail" name="userEmail" placeholder="Enter your email" required />
-        <textarea id="userMessage" class="chatInput chat-textarea" name="userMessage" placeholder="Type your message..." rows="4" required></textarea>
-        <div class="buttonChat">
-         <button class="chatSubmit" type="submit">Submit</button>
-        </div>
+      <div class="connection-status connecting" id="connection-status">
+        Connecting to Hardie Hat...
       </div>
-  
-      </form>
+      <div class="chat-box" id="chat-box">
+        <!-- Messages will be added here dynamically -->
+      </div>
+      <div class="input-container">
+        <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+        <button id="send-button" class="chat-button">Send</button>
+      </div>
     </div>
   </div>
   
@@ -399,45 +372,13 @@ integrity="sha384-KAUcUASKfGZ0sxENVFRiH12jtpvd9SsVpgzvYdvv8ZMLqB99G3gX3DAts418wz
 crossorigin="anonymous"></script>
 <!--Internal script no SRI needed-->
 <script src="{% static 'backToTop.js' %}"></script>
-<script src="{% static 'faqjs.js' %}"></script>
 <script src="{% static 'testimonial.js' %}"></script>
-<script src="{% static 'js/last-viewed.js' %}" defer></script>
-<script src="{% static 'js/visit-counter.js' %}" defer></script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const chatPopup = document.getElementById("chat-popup");
-    const chatOpenButton = document.getElementById("chatOpenButton");
-    const chatCloseButton = document.getElementById("chatCloseButton");
-    const chatForm = document.getElementById("chatForm");
-  
-    // Open the chat popup
-    chatOpenButton.addEventListener("click", function () {
-      chatPopup.classList.remove("hidden");
-    });
-  
-    // Close the chat popup
-    chatCloseButton.addEventListener("click", function () {
-      chatPopup.classList.add("hidden");
-    });
-
-    chatForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById("userName").value;
-    const email = document.getElementById("userEmail").value;
-    const message = document.getElementById("userMessage").value;
-
-    // Clear form fields
-    chatForm.reset();
-
-    // Close the popup after submission
-    chatPopup.classList.add("hidden");
-
-    // You can add logic here to send the form data to a server
-  });
-  });
-</script>
+<script src="{% static 'faqjs.js' %}"></script>
+<script src="{% static 'last-viewed.js' %}"></script>
+<script src="{% static 'visit-counter.js' %}"></script>
+<!-- Load chatbot styles and scripts -->
+<script src="{% static 'chatbot_app/js/chatbot_config.js' %}"></script>
+<script src="{% static 'chatbot_app/js/chatbot.js' %}" defer></script>
 </body>
 
 </html>

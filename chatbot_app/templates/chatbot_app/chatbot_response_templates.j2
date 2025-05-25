@@ -1,0 +1,275 @@
+{# chatbot_response_templates.j2 #}
+
+{# Announcements #}
+{% macro announcement(message, created_at) %}
+📢 Here are this week's Announcements!! 📢 <br><br>
+📝 Message: {{ message|replace('\n', '<br>')|safe }}<br>
+📅 Posted On: {{ created_at }}  <br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Articles #}
+{% macro article(title, date, author, featured, likes, content) %}
+⸻
+
+📰 Here are some articles I found<br><br>
+📰 [{{ title }}]<br>
+🗓️ Date: {{ date }} | ✍️ Author: {{ author }} | ⭐ Featured: {{ featured }}<br>
+❤️ Likes: {{ likes }}<br>
+📄 Content: {{ content }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Contact Submissions #}
+{% macro contact_submission(first_name, last_name, email, message, created_at) %}
+⸻
+
+📥 Contact Submissions<br><br>
+📥 [Contact Submission]<br>
+👤 Name: {{ first_name }} {{ last_name }}<br>
+📧 Email: {{ email }}<br>
+📝 Message: {{ message }}<br>
+📅 Submitted: {{ created_at }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Contacts #}
+{% macro contact(name, email, message) %}
+⸻
+
+🧾 Contacts<br><br>
+📇 [Contact Record]<br>
+👤 Name: {{ name }}<br>
+📧 Email: {{ email }}<br>
+💬 Message: {{ message }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Courses #}
+{% macro course(title, code, is_postgraduate) %}
+⸻
+
+📚 Here are some courses I found<br><br>
+🎓 [Course: {{ title }}]<br>
+🆔 Code: {{ code }}<br>
+🎓 Postgraduate: {{ is_postgraduate }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Cyber Challenges #}
+{% macro cyber_challenge(title, category, points, difficulty, question, description, choices, correct_answer, explanation) %}
+⸻
+
+Here are some cyber challenges I found<br><br>
+🧠 Cyber Challenges<br>
+🧠 Challenge: {{ title }}<br><br>
+📂 Category: {{ category }} <br> 
+{% if difficulty|lower == 'easy' %}
+🟢 Difficulty: {{ difficulty }}
+{% elif difficulty|lower == 'medium' %}
+🟡 Difficulty: {{ difficulty }}
+{% elif difficulty|lower == 'hard' %}
+🔴 Difficulty: {{ difficulty }}
+{% else %}
+⚪ Difficulty: {{ difficulty }}
+{% endif %} 
+🔥 Points: {{ points }} <br>
+📄 Description: {{ description }}<br><br>
+🔗 Click Here <a href="#/{{category}}" ><br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# DDT Contacts #}
+{% macro ddt_contact(fullname, email, mobile, message) %}
+⸻
+
+📞 DDT Contacts<br><br>
+📞 [DDT Contact]<br>
+👤 Full Name: {{ fullname }}<br>
+📧 Email: {{ email }} | 📱 Mobile: {{ mobile }}<br>
+📝 Message: {{ message }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Experiences #}
+{% macro experience(name, feedback, created_at) %}
+⸻
+
+💼 Experiences<br><br>
+💼 [Experience Entry]<br>
+👤 Name: {{ name }}<br>
+📝 Feedback: {{ feedback }}<br>
+📅 Date: {{ created_at }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Job Applications #}
+{% macro job_application(job, name, email, resume, cover_letter, applied_date) %}
+⸻
+
+📑 Job Applications<br><br>
+📑 [Application for: {{ job }}]<br>
+👤 Name: {{ name }} | 📧 Email: {{ email }}<br>
+📎 Resume: {{ resume }} | 📄 Cover Letter: {{ cover_letter }}<br>
+📅 Applied On: {{ applied_date }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Jobs #}
+{% macro job(title, location, posted_date, closing_date, job_type, description) %}
+⸻
+
+🧰 Jobs<br><br>
+🧰 [Job Listing: {{ title }}]<br>
+📍 Location: {{ location }} | 📅 Posted: {{ posted_date }} | ⏳ Closing: {{ closing_date }}<br>
+🧾 Type: {{ job_type }}<br>
+📄 Description: {{ description }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Leader Board #}
+{% macro LeaderBoardTable(category, user, total_points) %}
+⸻
+
+🏆 Leader Board<br><br>
+🏆 Leaderboard: {{ category }}<br>
+👤 User: {{ user }}<br>
+🔥 Points: {{ total_points }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Progress #}
+{% macro progress(student, skill, progress, completed) %}
+⸻
+
+📊 Progress<br><br>
+📊 [Progress]<br>
+👨‍🎓 Student: {{ student }} | 📘 Skill: {{ skill }}<br>
+📈 Progress: {{ progress }}% | ✅ Completed: {{ completed }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Projects #}
+{% macro project(title, id) %}
+⸻
+
+🛠️ Projects<br><br>
+🛠️ [Project: {{ title }}]<br>
+🆔 ID: {{ id }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Projects Join Us #}
+{% macro projects_join_us(name, email, message, page_name) %}
+⸻
+
+🧪 Projects Join Us<br><br>
+🧪 [Join Project Request]<br>
+👤 Name: {{ name }} | 📧 Email: {{ email }}<br>
+💬 Message: {{ message }} | 🔗 Page: {{ page_name }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Security Events #}
+{% macro security_event(user, timestamp, ip_address, event_type, details) %}
+⸻
+
+🚨 Security Events<br><br>
+🚨 [Security Event]<br>
+👤 User: {{ user }}<br>
+📅 Time: {{ timestamp }} | 📍 IP: {{ ip_address }}<br>
+🔐 Type: {{ event_type }}<br>
+📝 Details: {{ details }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Skills #}
+{% macro skill(name, description, slug) %}
+⸻
+
+🧠 Skills<br><br>
+🧠 [Skill: {{ name }}]<br>
+📄 Description: {{ description }} | 🔗 Slug: {{ slug }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Smishing Join Us #}
+{% macro smishing_join_us(name, email, message) %}
+⸻
+
+📱 Smishing Join Us<br><br>
+📱 [Smishing Detection Request]<br>
+👤 Name: {{ name }} | 📧 Email: {{ email }}<br>
+💬 Message: {{ message }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Students #}
+{% macro student(id, user, course, year, trimester, unit, p1, p2, p3, skills) %}
+⸻
+
+🎓 Students<br><br>
+🎓 [Student ID: {{ id }}]<br>
+👤 User: {{ user }}<br>
+📘 Course: {{ course }} | 📆 Year: {{ year }} | 📅 Trimester: {{ trimester }}<br>
+📚 Units: {{ unit }}<br>
+📈 Performance: P1={{ p1 }}, P2={{ p2 }}, P3={{ p3 }}<br>
+🎯 Allocated Skills: {{ skills }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# User Challenges #}
+{% macro user_challenge(user, challenge, completed, score) %}
+⸻
+
+🏁 User Challenges<br><br>
+🏁 [User Challenge]<br>
+👤 User: {{ user }} | 🎯 Challenge: {{ challenge }}<br>
+✅ Completed: {{ completed }} | 🔥 Score: {{ score }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Users #}
+{% macro user(first_name, last_name, email, is_staff, is_verified, is_master, is_active, created_at, updated_at, last_activity) %}
+⸻
+
+👥 Users<br><br>
+👥 [User: {{ first_name }} {{ last_name }}]<br>
+📧 Email: {{ email }}<br>
+🧾 Roles: Staff={{ is_staff }}, Verified={{ is_verified }}, Master={{ is_master }}<br>
+✅ Active: {{ is_active }}<br>
+📅 Created: {{ created_at }} | 🔄 Updated: {{ updated_at }}<br>
+🕒 Last Seen: {{ last_activity }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %}
+
+{# Webpages #}
+{% macro webpage(title, url, id) %}
+⸻
+
+🌐 Webpages<br><br>
+🌐 [Webpage: {{ title }}]<br>
+🔗 URL: {{ url }} | 🆔 ID: {{ id }}<br><br>
+
+Can I help you with anything else?
+{% endmacro %} 

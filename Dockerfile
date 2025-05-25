@@ -17,6 +17,10 @@ COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Download NLTK and TextBlob corpora
+RUN python -m textblob.download_corpora
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab', raise_on_error=False); nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('averaged_perceptron_tagger')"
+
 # Copy project
 COPY . .
 
@@ -24,6 +28,7 @@ COPY . .
 RUN mkdir -p /app/static /app/media
 
 # Run migrations
+RUN python manage.py makemigrations
 RUN python manage.py migrate
 
 # Run gunicorn
