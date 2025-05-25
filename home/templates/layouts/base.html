@@ -305,6 +305,30 @@
   
 </head>
 
+<script>
+  let idleTime = 0;
+  const warnAt = 240;   // 4 minutes (show warning)
+  const logoutAt = 300; // 5 minutes (auto logout)
+
+  function resetIdleTime() {
+    idleTime = 0;
+  }
+
+  setInterval(() => {
+    idleTime++;
+    if (idleTime === warnAt) {
+      alert("⚠️ You’ve been inactive. You’ll be logged out soon if no activity is detected.");
+    }
+    if (idleTime >= logoutAt) {
+      window.location.href = "{% url 'logout' %}";
+    }
+  }, 1000); // every second
+
+  document.addEventListener("mousemove", resetIdleTime);
+  document.addEventListener("keypress", resetIdleTime);
+</script>
+
+
 <body>
   <div class="recently-viewed-sidebar">
     <div class="dropdown">

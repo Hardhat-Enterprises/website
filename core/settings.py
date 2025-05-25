@@ -1,10 +1,15 @@
 import os, random, string
 from pathlib import Path
+<<<<<<< HEAD
 from dotenv import load_dotenv, set_key
 from django.core.cache.backends.base import InvalidCacheBackendError
 from pymemcache.client.base import Client
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
+=======
+
+
+>>>>>>> 41a1a08203d5867fec1286998917f0a0a019bdb2
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env_path = BASE_DIR / '.env'
@@ -31,6 +36,7 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+<<<<<<< HEAD
 # ---------------- Idle Session Timeout Configuration ----------------
 SESSION_COOKIE_AGE = 300  # 5 minutes
 SESSION_SAVE_EVERY_REQUEST = True
@@ -41,6 +47,20 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Strict'
+=======
+#Secure Cookies Can be implemented but it affects OTP Functionality.
+#Ensure cookies are only sent ovSESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+ 
+# Prevents JavaScript from accessing session cookies when set True
+SESSION_COOKIE_HTTPONLY = True
+ 
+#Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
+SESSION_COOKIE_SAMESITE = 'Strict'
+
+#Ensure CSRF cookies are sent over HTTPS only
+CSRF_COOKIE_SECURE = not DEBUG
+>>>>>>> 41a1a08203d5867fec1286998917f0a0a019bdb2
 
 # ---------------- CSRF Cookie Security Settings ----------------
 CSRF_COOKIE_SECURE = not DEBUG
@@ -191,10 +211,13 @@ EMAIL_HOST_PASSWORD = 'nuje nbmo cfqe skjb'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
+<<<<<<< HEAD
 MESSAGE_TAGS = {
     messages.ERROR: 'error',
     messages.SUCCESS: 'success'
 }
+=======
+>>>>>>> 41a1a08203d5867fec1286998917f0a0a019bdb2
 
 CACHES = {
     'default': {
@@ -204,9 +227,17 @@ CACHES = {
 }
 
 try:
+<<<<<<< HEAD
     client = Client(os.getenv('CACHE_LOCATION', '127.0.0.1:11211'))
     client.version()
 except (ImportError, InvalidCacheBackendError, ConnectionRefusedError):
+=======
+    import Client # type: ignore
+    client = Client(os.getenv('CACHE_LOCATION', '127.0.0.1:11211'))
+    client.version()
+except (ImportError, ConnectionRefusedError):
+    
+>>>>>>> 41a1a08203d5867fec1286998917f0a0a019bdb2
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -233,6 +264,29 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+<<<<<<< HEAD
+=======
+# ====================== IDLE Session Timeout Configuration ======================
+
+# Set session cookie age to 5 minutes (300 seconds)
+# This ensures users are logged out after 5 minutes of inactivity
+SESSION_COOKIE_AGE = 300  # 5 minutes
+
+# Ensure the session expires when the browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Save session on every request to reset the inactivity timer
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Use the database for session storage
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+#cron-job-feature
+>>>>>>> 41a1a08203d5867fec1286998917f0a0a019bdb2
 # Django-cron configuration class
 # CRON_CLASSES = [
 #     'home.tasks.CleanStaleRecordsCronJob',
@@ -304,8 +358,14 @@ CORS_ALLOWED_ORIGINS = [
     'https://hardhatwebdev2024.pythonanywhere.com',
 ]
 
+<<<<<<< HEAD
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
+=======
+CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
+
+CORS_ALLOW_HEADERS = list + [
+>>>>>>> 41a1a08203d5867fec1286998917f0a0a019bdb2
     'content-type',
     'authorization',
 ]
