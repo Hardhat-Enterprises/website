@@ -24,30 +24,26 @@
   </script>
   <!-- Idle Timeout Warning Script -->
 <script>
-  let warningTime = 240; // 4 minutes
-  let logoutTime = 300;  // 5 minutes
+let idleTime = 0;
+const warnAt = 240;  // 4 minutes
+const logoutAt = 300;  // 5 minutes
 
-  let warningPopup = setTimeout(() => {
-    alert("⚠️ You've been inactive. You'll be logged out soon.");
-  }, warningTime);
+function resetIdleTime() {
+    idleTime = 0;
+}
 
-  let logoutTrigger = setTimeout(() => {
-    window.location.href = "{% url 'logout' %}";
-  }, logoutTime);
+setInterval(() => {
+    idleTime++;
+    if (idleTime === warnAt) {
+        alert("⚠️ You’ve been inactive. You’ll be logged out soon if no activity is detected.");
+    }
+    if (idleTime >= logoutAt) {
+        window.location.href = "{% url 'logout' %}";
+    }
+}, 1000);
 
-  function resetTimers() {
-    clearTimeout(warningPopup);
-    clearTimeout(logoutTrigger);
-    warningPopup = setTimeout(() => {
-      alert("⚠️ You've been inactive. You'll be logged out soon.");
-    }, warningTime);
-    logoutTrigger = setTimeout(() => {
-      window.location.href = "{% url 'logout' %}";
-    }, logoutTime);
-  }
-
-  document.addEventListener("mousemove", resetTimers);
-  document.addEventListener("keypress", resetTimers);
+document.addEventListener("mousemove", resetIdleTime);
+document.addEventListener("keypress", resetIdleTime);
 </script>
 </body>
 </html>
