@@ -1,4 +1,4 @@
-from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.contrib.auth.signals import user_logged_in, user_logged_out, password_changed
 from django.contrib.sessions.models import Session
 from django.dispatch import receiver
 from django.utils.timezone import now
@@ -44,4 +44,26 @@ def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
     if hasattr(user, 'current_session_key') and user.current_session_key == request.session.session_key:
         user.current_session_key = None
         user.save()
+
+@receiver(password_changed)
+def clear_user_sessions_on_password_change(sender, request, user, **kwargs):
+    """
+    Clear all sessions for a user when their password is changed/reset
+    Keeps only the current session active
+    """
+    if not user:
+        return
+
+    # Get all sessions for user
+    Session.objects.filter(
+        expire_date__gte=now()
+    ).exclude(
+        session_key=request.session.session_key  # Exclude current session
+    ).filter(
+        get_decoded().get('_auth_user_id') == str(user.id)
+    ).delete()
+
+    # Update current session key
+    user.current_session_key = request.session.session_key
+    user.save(update_fields=['current_session_key'])
 

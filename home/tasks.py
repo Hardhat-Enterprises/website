@@ -33,8 +33,8 @@ class CleanStaleRecordsCronJob(CronJobBase):
 
 # Cron job for clearing expired sessions
 class ClearExpiredSessionsCronJob(CronJobBase):
-    RUN_EVERY_MINS = 720  # Run every 12 hours (adjust as needed)
-    schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
+    RUN_AT_TIMES = ['03:00']  # Run at 3 AM local time
+    schedule = Schedule(run_at_times=RUN_AT_TIMES)
     code = 'home.clear_expired_sessions_cron_job'
 
     def do(self):
