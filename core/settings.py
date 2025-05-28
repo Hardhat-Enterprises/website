@@ -82,9 +82,9 @@ CSRF_COOKIE_SAMESITE = 'Strict'             # Restrict CSRF cookie from cross-or
 
 # ---------------- Idle Session Timeout Configuration ----------------
 # Automatically logs out users after 5 minutes of inactivity, resets on every user request
-SESSION_COOKIE_AGE = 300                    # 5 minutes timeout
-SESSION_SAVE_EVERY_REQUEST = True           # Reset timer on user activity
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True      # Clear session when browser closes
+SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
 # Application definition
