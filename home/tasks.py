@@ -2,6 +2,7 @@ from datetime import timedelta
 from home.models import ExampleModel
 from django_cron import CronJobBase, Schedule
 from django.utils import timezone
+from django.core.management import call_command  
 
 #class for runing cron job
 class CleanStaleRecordsCronJob(CronJobBase):
@@ -29,3 +30,17 @@ class CleanStaleRecordsCronJob(CronJobBase):
         except Exception as e:
             print(f"Error in cron job: {e}")
             raise
+
+# Cron job for clearing expired sessions
+class ClearExpiredSessionsCronJob(CronJobBase):
+    RUN_AT_TIMES = ['03:00']  # Run at 3 AM local time
+    schedule = Schedule(run_at_times=RUN_AT_TIMES)
+    code = 'home.clear_expired_sessions_cron_job'
+
+    def do(self):
+        print("Running ClearExpiredSessionsCronJob...")
+        try:
+            call_command('clearsessions')
+            print("Expired sessions cleared successfully.")
+        except Exception as e:
+            print(f"Error clearing sessions: {e}")

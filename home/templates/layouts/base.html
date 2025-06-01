@@ -438,6 +438,68 @@ crossorigin="anonymous"></script>
   });
   });
 </script>
+
+  <!-- Inactivity Warning Modal -->
+  <div class="modal fade" id="inactivityModal" tabindex="-1" aria-labelledby="inactivityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="inactivityModalLabel">Session Timeout Warning</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Your session will expire in 1 minute due to inactivity. Any unsaved changes will be lost.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="resetTimer()">Stay Logged In</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let timeoutWarning = 240000; // 4 minutes in milliseconds
+    let timeoutNow = 300000; // 5 minutes in milliseconds
+    let warningTimer;
+    let logoutTimer;
+    let modal;
+
+    // Start timers on page load
+    window.onload = function() {
+      modal = new bootstrap.Modal(document.getElementById('inactivityModal'));
+      resetTimer();
+      setupTimers();
+    }
+
+    // Reset timers
+    function resetTimer() {
+      clearTimeout(warningTimer);
+      clearTimeout(logoutTimer);
+      if (modal) {
+        modal.hide();
+      }
+      setupTimers();
+    }
+
+    // Setup both warning and logout timers
+    function setupTimers() {
+      warningTimer = setTimeout(function() {
+        modal.show();
+      }, timeoutWarning);
+
+      logoutTimer = setTimeout(function() {
+        window.location.href = "{% url 'logout' %}";
+      }, timeoutNow);
+    }
+
+    // Reset timer on user activity
+    document.addEventListener('mousemove', resetTimer);
+    document.addEventListener('mousedown', resetTimer);
+    document.addEventListener('keypress', resetTimer);
+    document.addEventListener('touchmove', resetTimer);
+    document.addEventListener('scroll', resetTimer);
+  </script>
+
 </body>
 
 </html>

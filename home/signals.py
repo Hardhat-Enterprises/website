@@ -2,8 +2,8 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.sessions.models import Session
 from django.dispatch import receiver
 from django.utils.timezone import now
-
-
+from django.contrib.auth.signals import user_login_failed
+from django.core.signals import request_finished
 
 @receiver(user_logged_in)
 def set_session_last_activity_on_login(sender, request, user, **kwargs):
@@ -44,4 +44,21 @@ def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
     if hasattr(user, 'current_session_key') and user.current_session_key == request.session.session_key:
         user.current_session_key = None
         user.save()
+
+def clear_user_sessions(user, current_session_key=None):
+    """
+    Clear all sessions for a user except the current one
+    """
+    if not user:
+        return
+
+    # Get all sessions for user
+    sessions = Session.objects.filter(expire_date__gte=now())
+    if current_session_key:
+        sessions = sessions.exclude(session_key=current_session_key)
+    
+    for session in sessions:
+        session_data = session.get_decoded()
+        if str(user.id) == session_data.get('_auth_user_id'):
+            session.delete()
 

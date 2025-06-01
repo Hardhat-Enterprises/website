@@ -70,33 +70,24 @@ SESSION_COOKIE_SECURE = False
 # Use credentials for Gmail hardhatwebsite@gmail.com
 RECAPTCHA_SITE_KEY = '6LfAVkYrAAAAADQTOddD3d6Ly-LWGDt-O5zpOkao'
 RECAPTCHA_SECRET_KEY = '6LfAVkYrAAAAAHmiKUs--9QR_U70BlGPU6yP522i'
- 
-# Prevents JavaScript from accessing session cookies when set True
-SESSION_COOKIE_HTTPONLY = False
- 
-#Mitigate CSRF attacks by restricting cross-origin cookie sharing when set Strict
-SESSION_COOKIE_SAMESITE = 'Lax'
 
-#Ensure CSRF cookies are sent over HTTPS only
-CSRF_COOKIE_SECURE = True
+# ---------------- Secure Session Cookie Settings ----------------
+# These settings ensure cookies are securely transmitted over HTTPS and protected from JS and CSRF attacks
+SESSION_COOKIE_SECURE = not DEBUG           # Only allow HTTPS cookies in production
+SESSION_COOKIE_HTTPONLY = True              # Prevent access to session cookies via JavaScript
+SESSION_COOKIE_SAMESITE = 'Strict'          # Restrict cross-origin cookie sharing
 
-#Enhance CSRF protection
-CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = not DEBUG              # Ensure CSRF cookie is sent over HTTPS
+CSRF_COOKIE_SAMESITE = 'Strict'             # Restrict CSRF cookie from cross-origin requests
 
-#Ensure DEBUG is set to False in production to avoid sensitive information exposure
-DEBUG = True
-
-
-#Limit request header sizes and body lenghts
-#Limit number of form fileds
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000 
-
-# Limit max upload memory size 10 MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  
-
+# ---------------- Idle Session Timeout Configuration ----------------
+# Automatically logs out users after 5 minutes of inactivity, resets on every user request
+SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
 # Application definition
-
 INSTALLED_APPS = [
     'crispy_forms',
     'tinymce',
@@ -355,15 +346,11 @@ SECURE_HSTS_PRELOAD = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-SESSION_COOKIE_AGE = 1209600 #2 weeks 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_SAVE_EVERY_REQUEST = True
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-
 #cron-job-feature
 # Django-cron configuration class
 CRON_CLASSES = [
     'home.tasks.CleanStaleRecordsCronJob', 
+    'home.tasks.ClearExpiredSessionsCronJob',
 ]
 
 LOGGING = {
@@ -441,4 +428,15 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 ]
 
 MEDIA_URL = '/media/'
+
+# Limit request header sizes and body lengths
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+
+# ---------------- Idle Session Timeout Configuration ----------------
+# Automatically logs out users after 5 minutes of inactivity, resets on every user request
+SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
