@@ -427,29 +427,12 @@ def login_with_otp(request):
     For Login
     """
     if request.method == 'POST':
-        # First, verify reCAPTCHA
-        token = request.POST.get('g-recaptcha-response')
-        secret_key = settings.RECAPTCHA_SECRET_KEY
-
-        recaptcha_response = requests.post(
-            'https://www.google.com/recaptcha/api/siteverify',
-            data={'secret': secret_key, 'response': token}
-        )
-
-        result = recaptcha_response.json()
-
-        if settings.DEBUG:
-            print("DEBUG MODE: reCAPTCHA result:", result)
-
-        if not result.get('success') or result.get('score', 0) < 0.5:
-            messages.error(request, "reCAPTCHA verification failed. Please try again.")
-            if settings.DEBUG:
-                print("DEBUG MODE: reCAPTCHA failed with response:", result)
-            return render(request, 'accounts/sign-in.html')
-
-        # reCAPTCHA passed — continue login logic
+        # Direct login logic without reCAPTCHA
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
+        print(f"DEBUG: Login attempt - Username: {username}, Password: HIDDEN")
+        
         user = authenticate(request, username=username, password=password)
 
         if user:
@@ -517,7 +500,7 @@ def verify_otp(request):
                 request.session.pop('otp_attempts', None)
                 request.session.pop('otp_timestamp', None)
                 messages.success(request, "Login successful!")
-                return redirect('/')
+                return redirect('/profile')
             except User.DoesNotExist:
                 messages.error(request, "User does not exist.")
         else:
@@ -753,8 +736,8 @@ def VerifyOTP(request):
                 print(f"OTP matched. Account for {user.email} has been activated and verified.")
                 print(f"Passkeys sent to {user.email}: {passkeys}") 
 
-                messages.success(request, "Your account has been successfully verified! Your passkeys have been sent via email.")
-                return redirect('/')
+                messages.success(request, "Your account has been successfully verified! Your passkeys have been sent via email. Please sign in to continue.")
+                return redirect('login')
 
             except User.DoesNotExist:
                 messages.error(request, "User does not exist. Please register again.")

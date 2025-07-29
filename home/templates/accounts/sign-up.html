@@ -1,4 +1,5 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block header %} {%include 'includes/navigation.html'%} {% endblock header %} {% block content %}
+{% extends 'layouts/base.html' %} {% load static %} {% load i18n %}
+{% block header %} {%include 'includes/navigation.html'%} {% endblock header %} {% block content %}
 
 <style>
 /* Form Control Styling */
@@ -245,6 +246,17 @@ button:focus {
             />
             <h1 class="mb-0 h3">Create an account</h1>
           </div>
+
+          <!-- Django Messages Display -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">×</button>
+              </div>
+            {% endfor %}
+          {% endif %}
+
           <form method="post" action="{% url 'signup' %}">
             {% csrf_token %}
             <!-- Form -->
@@ -274,9 +286,29 @@ button:focus {
                 {{ field }}
               </div>
               {% endif %}
-              <span class="text-danger"> {{ field.errors }}</span>
+              {% if field.errors %}
+                <div class="text-danger mt-1">
+                  {% for error in field.errors %}
+                    <small class="d-block">{{ error }}</small>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
             {% endfor %}
+
+            <!-- Password Requirements Info Box -->
+            <div class="alert alert-info mb-4">
+              <h6 class="mb-2"><i class="fas fa-info-circle"></i> Password Requirements</h6>
+              <small>Your password must include:</small>
+              <ul class="mb-0 small">
+                <li>At least 8 characters</li>
+                <li>At least one uppercase letter (A-Z)</li>
+                <li>At least one lowercase letter (a-z)</li>
+                <li>At least one number (0-9)</li>
+                <li>At least one special character (@, $, !, %, *, ?, &)</li>
+              </ul>
+            </div>
+
             <div class="d-flex justify-content-center mb-4">
               <button onclick="get_rand_pass()" class="btn btn-outline-primary btn-generate-password">
                 <i class="fas fa-key me-2"></i>Generate Password

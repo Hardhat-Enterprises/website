@@ -44,8 +44,18 @@
               <h3 class="mb-0 h3">Verify Email</h3>
             </div>
 
-            <form action="" method="POST">
+            <form action="{% url 'verifyEmail' %}" method="POST">
               {% csrf_token %}
+
+              <!-- Django Messages Display -->
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">×</button>
+                  </div>
+                {% endfor %}
+              {% endif %}
 
               <div class="mb-3">
                 <input
@@ -54,45 +64,13 @@
                   name="otp"
                   id="otp"
                   placeholder="Enter OTP"
+                  required
                 />
               </div>
 
-              <button class="btn btn-primary" style="width: 100%">
+              <button type="submit" class="btn btn-primary" style="width: 100%">
                 Activate Account
               </button>
-              <script>
-                $("#otp").change(function () {
-                  let otp = $("#otp").val();
-                  console.log("OTP: ", otp);
-
-                  if (otp == "{{otp}}") {
-                    console.log("OTP Matched!");
-
-                    $.ajax({
-                      type: "POST",
-                      url: "{% url 'verifyEmail' %}",
-                      data: {
-                        otp: otp,
-                        first_name: "{{first_name}}",
-                        last_name: "{{last_name}}",
-                        email: "{{email}}",
-                        password1: "{{password1}}",
-                        password2: "{{password2}}",
-                      },
-                      success: function (data) {
-                        console.log("OTP works fine");
-                        window.location.href = "/";
-                      },
-                    });
-                  }
-                });
-              </script>
-
-              {% comment %}
-              <p>
-                Need a new OTP? <a href="{% url 'resend-otp' %}">Resend OTP</a>
-              </p>
-              {% endcomment %}
             </form>
           </div>
         </div>

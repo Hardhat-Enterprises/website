@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+  postgres:
+    container_name: postgres_db
+    image: postgres:15-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - web_network
+    environment:
+      - POSTGRES_DB=hardhat_db
+      - POSTGRES_USER=hardhat_user
+      - POSTGRES_PASSWORD=hardhat_pass
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hardhat_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   web:
     container_name: django_app
     build: .
@@ -15,8 +35,17 @@ services:
       - web_network
     environment:
       - DEBUG=0
+      - DB_ENGINE=postgresql
+      - DB_NAME=hardhat_db
+      - DB_USERNAME=hardhat_user
+      - DB_PASS=hardhat_pass
+      - DB_HOST=postgres
+      - DB_PORT=5432
     expose:
       - "8000:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
     # Run collectstatic and migrate before starting gunicorn
     command: >
       sh -c "python manage.py migrate && 
@@ -48,4 +77,5 @@ networks:
 volumes:
   staticfiles: {}
   mediafiles: {}
+  postgres_data: {} 
  

@@ -52,9 +52,8 @@
                                 <span class="text-danger"> {{ form.password.errors|default_if_none:"" }} </span>
                             </div>
 
-                            <!-- Hidden Recaptcha Input-->
-
-                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                            <!-- Hidden Recaptcha Input (Commented out for now) -->
+                            <!-- <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response"> -->
 
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div class="form-check mb-0">
@@ -89,7 +88,8 @@
     {% include 'includes/footer.html' %}
 </main>
 
-<script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_SITE_KEY }}"></script>
+<!-- reCAPTCHA Script (Commented out for now) -->
+<!-- <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_SITE_KEY }}"></script> -->
 
 <!-- Add JavaScript for password toggle -->
 <script>
@@ -108,13 +108,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// reCAPTCHA JavaScript (Commented out for now)
+/*
 grecaptcha.ready(function () {
-        grecaptcha.execute('{{ RECAPTCHA_SITE_KEY }}', {action: 'submit'})
-        .then(function (token) {
-            console.log("reCAPTCHA token generated onload:", token);
-            document.getElementById('g-recaptcha-response').value = token;
-        });
+    grecaptcha.execute('{{ RECAPTCHA_SITE_KEY }}', {action: 'submit'})
+    .then(function (token) {
+        console.log("reCAPTCHA token generated onload:", token);
+        document.getElementById('g-recaptcha-response').value = token;
     });
+});
+*/
 </script>
 
 {% endblock content %}

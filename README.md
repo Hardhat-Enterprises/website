@@ -41,3 +41,22 @@ Deploying HardHat Website from Docker Platform
 Step 1: clone the github project to your machine by running the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
 
 Step 2: Run command 'docker-compose up build' and it will run the application on your machine using docker and You can access the application on localhost:80.
+
+## Quick Start
+
+### Using Docker (Recommended)
+```bash
+docker compose up -d
+```
+Access the application at http://localhost
+
+### Local Development
+1. Install PostgreSQL locally
+2. Copy `env.sample` to `.env` and configure database settings
+3. Run:
+   - **Windows**: `run_local.bat`
+   - **Linux/macOS**: `./run_local.sh`
+
+Access the application at http://localhost:8000
+
+For detailed PostgreSQL setup instructions, see [PostgreSQL_Migration_Documentation.md](PostgreSQL_Migration_Documentation.md)
