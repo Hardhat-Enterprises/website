@@ -1,5 +1,0 @@
-[33m8ddda452[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m changed db to postgresql, modfied dockerfiles to accomidate, fixed login and authentication issues
-[33m4047b490[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Harden Session Management: Idle Timeout with Warning, Secure Cookies and Cleanup (#331)
-[33m0f67965e[m Update README.md
-[33m09d273f3[m Migrations Fix + Dark Mode Fix + Some Pages Functionality Fix (#329)
-[33m779b5299[m policy Deployment engine menu (#286)
