@@ -8,7 +8,7 @@ APP_NAME="Hardhat Enterprises Web App"
 ENV_FILE=".env"
 ENV_SAMPLE_FILE="env.sample"
 COMPOSE_FILE="docker-compose.yml"
-HEALTHCHECK_URL="http://localhost:80"
+HEALTHCHECK_URL="http://localhost:80/health"
 
 # Colors & symbols
 GREEN="\033[0;32m"
@@ -100,7 +100,7 @@ run_setup() {
   sleep 5
 
   if check_health; then
-    echo -e "\n🎉 ${GREEN}Setup complete. Visit your app at http://localhost:80\n"
+    echo -e "\n🎉 ${GREEN}Setup complete. Visit your app at http://localhost:80/health\n"
   else
     echo -e "\n${RED}❌ Setup ran but app is not healthy. Please check logs using 'docker-compose logs'.${NC}\n"
   fi
