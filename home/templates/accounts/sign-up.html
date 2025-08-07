@@ -1,319 +1,336 @@
-{% extends 'layouts/base.html' %} {% load static %} {% block header %} {%include 'includes/navigation.html'%} {% endblock header %} {% block content %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block header %}
+{% include 'includes/navigation.html' %}
+{% endblock header %}
+
+{% block content %}
+
 
 <style>
-/* Form Control Styling */
-.form-control,
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+  /* Form Control Styling */
+  .form-control,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
     background-color: #ffffff !important;
     border: 1px solid #ced4da !important;
     border-radius: 0.375rem !important;
     transition: all 0.2s ease-in-out !important;
     outline: none !important;
-}
+  }
 
-/* Remove default focus outline and add custom styling */
-.form-control:focus {
+  /* Remove default focus outline and add custom styling */
+  .form-control:focus {
     border-color: #ced4da !important;
     box-shadow: none !important;
     outline: none !important;
-}
+  }
 
-/* Invalid state styling */
-.form-control.is-invalid,
-#id_password1.is-invalid,
-#id_password2.is-invalid {
+  /* Invalid state styling */
+  .form-control.is-invalid,
+  #id_password1.is-invalid,
+  #id_password2.is-invalid {
     background-color: #ffffff !important;
     border-color: #dc3545 !important;
     border-width: 1px !important;
     box-shadow: none !important;
-}
+  }
 
-/* Valid state styling */
-.form-control.is-valid,
-#id_password1.is-valid,
-#id_password2.is-valid {
+  /* Valid state styling */
+  .form-control.is-valid,
+  #id_password1.is-valid,
+  #id_password2.is-valid {
     background-color: #ffffff !important;
     border-color: #198754 !important;
     border-width: 1px !important;
     box-shadow: none !important;
-}
+  }
 
-/* Input group styling */
-.input-group-text {
+  /* Input group styling */
+  .input-group-text {
     background-color: #ffffff !important;
     border: 1px solid #ced4da !important;
     border-right: none !important;
     padding: 0.5rem 0.75rem !important;
-}
+  }
 
-.input-group .form-control {
+  .input-group .form-control {
     border-left: none !important;
-}
+  }
 
-.input-group .password-toggle-icon {
+  .input-group .password-toggle-icon {
     background-color: #ffffff !important;
     border: 1px solid #ced4da !important;
     border-left: none !important;
     cursor: pointer !important;
-}
+  }
 
-.password-toggle-icon:hover {
+  .password-toggle-icon:hover {
     background-color: #f8f9fa !important;
-}
+  }
 
-.input-group .form-control.is-valid + .input-group-text .fas,
-.input-group .form-control.is-valid ~ .password-toggle-icon .fas {
+  .input-group .form-control.is-valid+.input-group-text .fas,
+  .input-group .form-control.is-valid~.password-toggle-icon .fas {
     color: #198754 !important;
-}
+  }
 
-.input-group .form-control.is-valid + .input-group-text,
-.input-group .form-control.is-valid ~ .password-toggle-icon {
+  .input-group .form-control.is-valid+.input-group-text,
+  .input-group .form-control.is-valid~.password-toggle-icon {
     border-color: #198754 !important;
-}
+  }
 
-/* Invalid state icon styling */
-.input-group .form-control.is-invalid + .input-group-text .fas,
-.input-group .form-control.is-invalid ~ .password-toggle-icon .fas {
+  /* Invalid state icon styling */
+  .input-group .form-control.is-invalid+.input-group-text .fas,
+  .input-group .form-control.is-invalid~.password-toggle-icon .fas {
     color: #dc3545 !important;
-}
+  }
 
-.input-group .form-control.is-invalid + .input-group-text,
-.input-group .form-control.is-invalid ~ .password-toggle-icon {
+  .input-group .form-control.is-invalid+.input-group-text,
+  .input-group .form-control.is-invalid~.password-toggle-icon {
     border-color: #dc3545 !important;
-}
+  }
 
-/* Hover effect for password toggle */
-.password-toggle-icon:hover .fas {
+  /* Hover effect for password toggle */
+  .password-toggle-icon:hover .fas {
     color: #495057 !important;
-}
+  }
 
-/* Override any Bootstrap validation backgrounds */
-.was-validated .form-control:valid,
-.was-validated .form-control:invalid {
+  /* Override any Bootstrap validation backgrounds */
+  .was-validated .form-control:valid,
+  .was-validated .form-control:invalid {
     background-image: none !important;
-}
+  }
 
-/* Remove default browser focus outline */
-input:focus,
-button:focus {
+  /* Remove default browser focus outline */
+  input:focus,
+  button:focus {
     outline: none !important;
-}
+  }
 
-/* Lock icon base styling - with transition */
-.input-group-text .fa-unlock-alt {
+  /* Lock icon base styling - with transition */
+  .input-group-text .fa-unlock-alt {
     color: #6c757d !important;
     transition: color 0.2s ease-in-out !important;
     font-size: 1rem !important;
-}
+  }
 
-/* Eye icon styling - always gray */
-.password-toggle-icon .fas,
-#password1-eye,
-#password2-eye {
+  /* Eye icon styling - always gray */
+  .password-toggle-icon .fas,
+  #password1-eye,
+  #password2-eye {
     color: #6c757d !important;
     font-size: 1rem !important;
-}
+  }
 
-/* Valid state icon styling */
-.is-valid ~ .input-group-text .fa-unlock-alt {
+  /* Valid state icon styling */
+  .is-valid~.input-group-text .fa-unlock-alt {
     color: #198754 !important;
-}
+  }
 
-.is-valid ~ .input-group-text,
-.is-valid ~ .password-toggle-icon {
+  .is-valid~.input-group-text,
+  .is-valid~.password-toggle-icon {
     border-color: #198754 !important;
-}
+  }
 
-/* Invalid state icon styling */
-.is-invalid ~ .input-group-text .fa-unlock-alt {
+  /* Invalid state icon styling */
+  .is-invalid~.input-group-text .fa-unlock-alt {
     color: #dc3545 !important;
-}
+  }
 
-.is-invalid ~ .input-group-text,
-.is-invalid ~ .password-toggle-icon {
+  .is-invalid~.input-group-text,
+  .is-invalid~.password-toggle-icon {
     border-color: #dc3545 !important;
-}
+  }
 
-/* Lock icon base styling */
-.input-group-text .fas {
+  /* Lock icon base styling */
+  .input-group-text .fas {
     color: #6c757d !important;
     transition: color 0.2s ease-in-out !important;
     font-size: 1rem !important;
-}
+  }
 
-/* Eye icon styling */
-.password-toggle-icon .fas {
+  /* Eye icon styling */
+  .password-toggle-icon .fas {
     color: #6c757d !important;
     font-size: 1rem !important;
-}
+  }
 
-/* Password toggle icon container */
-.password-toggle-icon {
+  /* Password toggle icon container */
+  .password-toggle-icon {
     background-color: #ffffff !important;
     border: 1px solid #ced4da !important;
     border-left: none !important;
     cursor: pointer !important;
-}
+  }
 
-.password-toggle-icon:hover {
+  .password-toggle-icon:hover {
     background-color: #f8f9fa !important;
-}
+  }
 
-/* Valid state styling */
-.input-group:has(.is-valid) .input-group-text .fas {
+  /* Valid state styling */
+  .input-group:has(.is-valid) .input-group-text .fas {
     color: #198754 !important;
-}
+  }
 
-.input-group:has(.is-valid) .input-group-text {
+  .input-group:has(.is-valid) .input-group-text {
     border-color: #198754 !important;
-}
+  }
 
-/* Invalid state styling */
-.input-group:has(.is-invalid) .input-group-text .fas {
+  /* Invalid state styling */
+  .input-group:has(.is-invalid) .input-group-text .fas {
     color: #dc3545 !important;
-}
+  }
 
-.input-group:has(.is-invalid) .input-group-text {
+  .input-group:has(.is-invalid) .input-group-text {
     border-color: #dc3545 !important;
-}
+  }
 
-/* Remove background images from validation states */
-.form-control.is-valid,
-.form-control.is-invalid {
+  /* Remove background images from validation states */
+  .form-control.is-valid,
+  .form-control.is-invalid {
     background-image: none !important;
-}
+  }
 
-/* Ensure eye icons stay consistent color */
-.password-toggle-icon .fas,
-.input-group:has(.is-valid) .password-toggle-icon .fas,
-.input-group:has(.is-invalid) .password-toggle-icon .fas,
-.fa-eye,
-.fa-eye-slash {
+  /* Ensure eye icons stay consistent color */
+  .password-toggle-icon .fas,
+  .input-group:has(.is-valid) .password-toggle-icon .fas,
+  .input-group:has(.is-invalid) .password-toggle-icon .fas,
+  .fa-eye,
+  .fa-eye-slash {
     color: #6c757d !important;
     transition: none !important;
-}
+  }
 
-/* Only change border color for password toggle container */
-.input-group:has(.is-valid) .password-toggle-icon {
+  /* Only change border color for password toggle container */
+  .input-group:has(.is-valid) .password-toggle-icon {
     border-color: #198754 !important;
-}
+  }
 
-.input-group:has(.is-invalid) .password-toggle-icon {
+  .input-group:has(.is-invalid) .password-toggle-icon {
     border-color: #dc3545 !important;
-}
+  }
 
-/* Dark mode styles for generate password button */
-.dark-mode .btn-generate-password,
-.dark-mode .generate-password {
+  /* Dark mode styles for generate password button */
+  .dark-mode .btn-generate-password,
+  .dark-mode .generate-password {
     background-color: #ffc107 !important;
     color: #1c2540 !important;
     border: none;
     box-shadow: none;
     opacity: 1 !important;
-}
+  }
 
-.dark-mode .btn-generate-password:disabled,
-.dark-mode .generate-password:disabled {
+  .dark-mode .btn-generate-password:disabled,
+  .dark-mode .generate-password:disabled {
     background-color: #ffe082 !important;
     color: #1c2540 !important;
     opacity: 0.7 !important;
-}
+  }
 </style>
 
 <main>
   {% include 'includes/pre-loader.html' %}
-  
+
 
   <!-- Section -->
-  <section
-    class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
-    data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}"
-  >
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-17 d-flex align-items-center justify-content-center">
-        <div
-          class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
-        >
-          <div class="text-center text-md-center mb-4 mt-md-6">
-            <img
-              src="{% static 'assets/img/pages/login/favicon.ico' %}"
-              alt="Logo"
-              class="mb-3"
-            />
-            <h1 class="mb-0 h3">Create an account</h1>
-          </div>
-          <form method="post" action="{% url 'signup' %}">
-            {% csrf_token %}
-            <!-- Form -->
-            {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                {{ form.non_field_errors }}
+  <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+    data-background="{% static 'assets/img/pages/sign-up/sign-up-bg.svg' %}">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-17 d-flex align-items-center justify-content-center">
+          <div
+            class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
+            <div class="text-center text-md-center mb-4 mt-md-6">
+              <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt="Logo" class="mb-3" />
+              <h1 class="mb-0 h3">Create an account</h1>
             </div>
-            {% endif %}
-            {% for field in form %}
-            <div class="form-group mb-4">
-              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {% if field.name == 'password1' or field.name == 'password2' %}
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon3">
-                  <span class="fas fa-unlock-alt"></span>
-                </span>
-                {{ field }}
-                <span class="input-group-text password-toggle-icon" onclick="toggleSinglePasswordVisibility('{{ field.name }}')">
-                  <i class="fas fa-eye" id="{{ field.name }}-eye"></i>
-                </span>
-              </div>
-              {% else %}
-              <div class="input-group">
-                <span class="input-group-text" id="basic-addon3">
-                  <span class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"></span>
-                </span>
-                {{ field }}
+            <form method="post" action="{% url 'signup' %}">
+              {% csrf_token %}
+              <!-- Form -->
+              {% if form.non_field_errors %}
+              <div class="alert alert-danger">
+                {{ form.non_field_errors }}
               </div>
               {% endif %}
-              <span class="text-danger"> {{ field.errors }}</span>
+              {% for field in form %}
+              <div class="form-group mb-4">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% if field.name == 'password1' or field.name == 'password2' %}
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">
+                    <span class="fas fa-unlock-alt"></span>
+                  </span>
+                  {{ field }}
+                  <span class="input-group-text password-toggle-icon"
+                    onclick="toggleSinglePasswordVisibility('{{ field.name }}')">
+                    <i class="fas fa-eye" id="{{ field.name }}-eye"></i>
+                  </span>
+                </div>
+
+                {% if field.name == 'password1' %}
+                <!-- Password Strength Meter -->
+                <div id="password-strength-container" style="display: none; margin-top: 10px;">
+                  <div id="password-strength-bar" style="height: 8px; background-color: #e0e0e0; border-radius: 4px;">
+                    <div id="password-strength-fill"
+                      style="height: 100%; width: 0%; background-color: red; border-radius: 4px;"></div>
+                  </div>
+                  <small id="password-strength-label" class="form-text text-muted">Strength: </small>
+                  <small id="password-feedback" class="form-text text-muted"></small>
+                </div>
+                {% endif %}
+
+                {% else %}
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">
+                    <span
+                      class="fas {% if field.name == 'email' %} fa-envelope {% elif field.name == 'first_name' or field.name == 'last_name' %} fa-user {% elif field.name == 'year' %} fa-calendar {% else %} fa-unlock-alt {% endif %}"></span>
+                  </span>
+                  {{ field }}
+                </div>
+                {% endif %}
+                <span class="text-danger"> {{ field.errors }}</span>
+              </div>
+              {% endfor %}
+              <div class="d-flex justify-content-center mb-4">
+                <button onclick="get_rand_pass()" class="btn btn-outline-primary btn-generate-password">
+                  <i class="fas fa-key me-2"></i>Generate Password
+                </button>
+              </div>
+
+              <!-- Real-Time Password Requirements Checklist -->
+              <div class="form-group">
+                <label>Password must include:</label>
+                <ul class="password-requirements">
+                  <li id="length-check" class="text-danger"><i class="fas fa-times"></i> At least 8 characters</li>
+                  <li id="lowercase-check" class="text-danger"><i class="fas fa-times"></i> At least one lowercase
+                    letter</li>
+                  <li id="uppercase-check" class="text-danger"><i class="fas fa-times"></i> At least one uppercase
+                    letter</li>
+                  <li id="number-check" class="text-danger"><i class="fas fa-times"></i> At least one number</li>
+                  <li id="symbol-check" class="text-danger"><i class="fas fa-times"></i> At least one special symbol (@,
+                    $, !, %, *, ?, &)</li>
+                </ul>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-warning btn-primary">
+                  Sign up
+                </button>
+              </div>
+            </form>
+            <div class="d-flex justify-content-center align-items-center mt-4">
+              <span class="fw-normal">
+                Already have an account?
+                <a href="{% url 'login' %}" class="fw-bold text-underline login-here">Login here</a>
+              </span>
             </div>
-            {% endfor %}
-            <div class="d-flex justify-content-center mb-4">
-              <button onclick="get_rand_pass()" class="btn btn-outline-primary btn-generate-password">
-                <i class="fas fa-key me-2"></i>Generate Password
-              </button>
-            </div>
-  
-            <!-- Real-Time Password Requirements Checklist -->
-            <div class="form-group">
-              <label>Password must include:</label>
-              <ul class="password-requirements">
-                <li id="length-check" class="text-danger"><i class="fas fa-times"></i> At least 8 characters</li>
-                <li id="lowercase-check" class="text-danger"><i class="fas fa-times"></i> At least one lowercase letter</li>
-                <li id="uppercase-check" class="text-danger"><i class="fas fa-times"></i> At least one uppercase letter</li>
-                <li id="number-check" class="text-danger"><i class="fas fa-times"></i> At least one number</li>
-                <li id="symbol-check" class="text-danger"><i class="fas fa-times"></i> At least one special symbol (@, $, !, %, *, ?, &)</li>
-              </ul>
-            </div>
-  
-            <div class="d-grid">
-              <button type="submit" class="btn btn-warning btn-primary">
-                Sign up
-              </button>
-            </div>
-          </form>
-          <div class="d-flex justify-content-center align-items-center mt-4">
-            <span class="fw-normal">
-              Already have an account?
-              <a href="{% url 'login' %}" class="fw-bold text-underline login-here"
-                >Login here</a
-              >
-            </span>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  
+
   </section>
   {% include 'includes/footer.html' %}
 </main>
@@ -334,64 +351,64 @@ button:focus {
   function toggleSinglePasswordVisibility(fieldName) {
     var passwordField = document.getElementsByName(fieldName)[0];
     var eyeIcon = document.getElementById(fieldName + "-eye");
-    
+
     if (passwordField.type === "password") {
-        passwordField.type = "text";
-        eyeIcon.classList.remove("fa-eye");
-        eyeIcon.classList.add("fa-eye-slash");
+      passwordField.type = "text";
+      eyeIcon.classList.remove("fa-eye");
+      eyeIcon.classList.add("fa-eye-slash");
     } else {
-        passwordField.type = "password";
-        eyeIcon.classList.remove("fa-eye-slash");
-        eyeIcon.classList.add("fa-eye");
+      passwordField.type = "password";
+      eyeIcon.classList.remove("fa-eye-slash");
+      eyeIcon.classList.add("fa-eye");
     }
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     // Email Validation
     const emailField = document.getElementById("id_email");
     if (emailField) {
       const emailErrorMessage = document.getElementById("email-error");
       const emailIcon = document.querySelector("#basic-addon3 .fa-envelope");
 
-      emailField.addEventListener("input", function() {
-          const emailValue = emailField.value.trim();
-          const emailPattern = /@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$/;
+      emailField.addEventListener("input", function () {
+        const emailValue = emailField.value.trim();
+        const emailPattern = /@([a-zA-Z0-9-]+\.)?deakin\.edu\.au$/;
 
-          if (emailPattern.test(emailValue)) {
-              if (emailErrorMessage) emailErrorMessage.textContent = "";
-              emailField.classList.remove("is-invalid");
-              emailField.classList.add("is-valid");
-              if (emailIcon) {
-                emailIcon.classList.remove("fa-envelope");
-                emailIcon.classList.add("fa-check-circle");
-                emailIcon.style.color = "green";
-              }
-          } else {
-              if (emailErrorMessage) emailErrorMessage.textContent = "Email must match your Deakin email address";
-              emailField.classList.remove("is-valid");
-              emailField.classList.add("is-invalid");
-              if (emailIcon) {
-                emailIcon.classList.remove("fa-check-circle");
-                emailIcon.classList.add("fa-envelope");
-                emailIcon.style.color = "red";
-              }
+        if (emailPattern.test(emailValue)) {
+          if (emailErrorMessage) emailErrorMessage.textContent = "";
+          emailField.classList.remove("is-invalid");
+          emailField.classList.add("is-valid");
+          if (emailIcon) {
+            emailIcon.classList.remove("fa-envelope");
+            emailIcon.classList.add("fa-check-circle");
+            emailIcon.style.color = "green";
           }
+        } else {
+          if (emailErrorMessage) emailErrorMessage.textContent = "Email must match your Deakin email address";
+          emailField.classList.remove("is-valid");
+          emailField.classList.add("is-invalid");
+          if (emailIcon) {
+            emailIcon.classList.remove("fa-check-circle");
+            emailIcon.classList.add("fa-envelope");
+            emailIcon.style.color = "red";
+          }
+        }
       });
     }
 
     // Password Validation
     const passwordField = document.getElementById("id_password1");
     const confirmPasswordField = document.getElementById("id_password2");
-    
+
     if (passwordField && confirmPasswordField) {
       // Add input event listeners to both password fields
-      passwordField.addEventListener("input", function() {
+      passwordField.addEventListener("input", function () {
         const passwordValue = this.value;
         validatePasswordRequirements(passwordValue);
         validatePasswordMatch();
       });
 
-      confirmPasswordField.addEventListener("input", function() {
+      confirmPasswordField.addEventListener("input", function () {
         validatePasswordMatch();
       });
     }
@@ -399,9 +416,9 @@ button:focus {
     function validatePasswordMatch() {
       const passwordField = document.getElementById("id_password1");
       const confirmPasswordField = document.getElementById("id_password2");
-      
+
       if (!passwordField || !confirmPasswordField) return;
-      
+
       const passwordValue = passwordField.value;
       const confirmPasswordValue = confirmPasswordField.value;
 
@@ -420,23 +437,23 @@ button:focus {
   function validatePasswordRequirements(passwordValue) {
     const passwordField = document.getElementById("id_password1");
     const confirmPasswordField = document.getElementById("id_password2");
-    
+
     // Check if all requirements are met
     const hasLength = passwordValue.length >= 8;
     const hasLowercase = /[a-z]/.test(passwordValue);
     const hasUppercase = /[A-Z]/.test(passwordValue);
     const hasNumber = /\d/.test(passwordValue);
     const hasSymbol = /[@$!%*?&]/.test(passwordValue);
-    
+
     const allRequirementsMet = hasLength && hasLowercase && hasUppercase && hasNumber && hasSymbol;
-    
+
     // Update password field styling
     if (allRequirementsMet) {
-        passwordField.classList.remove("is-invalid");
-        passwordField.classList.add("is-valid");
+      passwordField.classList.remove("is-invalid");
+      passwordField.classList.add("is-valid");
     } else {
-        passwordField.classList.remove("is-valid");
-        passwordField.classList.add("is-invalid");
+      passwordField.classList.remove("is-valid");
+      passwordField.classList.add("is-invalid");
     }
 
     // Update requirement checks
@@ -448,86 +465,150 @@ button:focus {
 
     // If confirm password has a value, validate it
     if (confirmPasswordField && confirmPasswordField.value) {
-        validatePasswordMatch();
+      validatePasswordMatch();
     }
+
+    // Calculate strength and update strength meter
+    updatePasswordStrengthMeter(passwordValue);
+
   }
 
   function updateRequirementCheck(elementId, condition) {
     const element = document.getElementById(elementId);
     if (condition) {
-        element.classList.remove("text-danger");
-        element.classList.add("text-success");
-        element.innerHTML = '<i class="fas fa-check"></i> ' + element.textContent.replace(/^[^a-zA-Z]+/, '');
+      element.classList.remove("text-danger");
+      element.classList.add("text-success");
+      element.innerHTML = '<i class="fas fa-check"></i> ' + element.textContent.replace(/^[^a-zA-Z]+/, '');
     } else {
-        element.classList.remove("text-success");
-        element.classList.add("text-danger");
-        element.innerHTML = '<i class="fas fa-times"></i> ' + element.textContent.replace(/^[^a-zA-Z]+/, '');
+      element.classList.remove("text-success");
+      element.classList.add("text-danger");
+      element.innerHTML = '<i class="fas fa-times"></i> ' + element.textContent.replace(/^[^a-zA-Z]+/, '');
     }
   }
 
   function show_rand_pass() {
-      document.getElementsByName("password1")[0].type = "text";
-      document.getElementsByName("password2")[0].type = "text";
+    document.getElementsByName("password1")[0].type = "text";
+    document.getElementsByName("password2")[0].type = "text";
   }
 
   // Ensure eye icons stay gray on page load
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const eyeIcons = document.querySelectorAll('.password-toggle-icon .fas');
     eyeIcons.forEach(icon => {
-        icon.style.color = '#6c757d';
+      icon.style.color = '#6c757d';
     });
   });
+
+  function updatePasswordStrengthMeter(password) {
+    const strengthContainer = document.getElementById("password-strength-container");
+    const strengthBar = document.getElementById("password-strength-fill");
+    const strengthLabel = document.getElementById("password-strength-label");
+    const feedbackText = document.getElementById("password-feedback");
+
+    // Show container only if user starts typing
+    if (password.length > 0) {
+      strengthContainer.style.display = "block";
+    } else {
+      strengthContainer.style.display = "none";
+      return;
+    }
+
+    let score = 0;
+    const feedback = [];
+
+    const hasLength = password.length >= 8;
+    const hasLowercase = /[a-z]/.test(password);
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSymbol = /[@$!%*?&]/.test(password);
+
+    if (hasLength) score++; else feedback.push("at least 8 characters");
+    if (hasLowercase) score++; else feedback.push("a lowercase letter");
+    if (hasUppercase) score++; else feedback.push("an uppercase letter");
+    if (hasNumber) score++; else feedback.push("a number");
+    if (hasSymbol) score++; else feedback.push("a special character");
+
+    let strength = "";
+    let color = "";
+    let width = "";
+
+    if (score <= 2) {
+      strength = "Weak";
+      color = "red";
+      width = "25%";
+    } else if (score === 3 || score === 4) {
+      strength = "Medium";
+      color = "orange";
+      width = "60%";
+    } else if (score === 5) {
+      strength = "Strong";
+      color = "green";
+      width = "100%";
+    }
+
+    strengthBar.style.width = width;
+    strengthBar.style.backgroundColor = color;
+    strengthLabel.textContent = "Strength: " + strength;
+
+    if (feedback.length > 0) {
+      feedbackText.innerHTML = "<br>Try adding " + feedback.join(", ");
+    } else {
+      feedbackText.textContent = "";
+    }
+  }
+
+
 </script>
 
 <style>
-.is-valid {
+  .is-valid {
     border-color: #28a745 !important;
     background-color: rgba(40, 167, 69, 0.1) !important;
-}
+  }
 
-.is-invalid {
+  .is-invalid {
     border-color: #dc3545 !important;
     background-color: rgba(220, 53, 69, 0.1) !important;
-}
+  }
 
-.password-requirements {
+  .password-requirements {
     list-style-type: none;
     padding-left: 0;
-}
+  }
 
-.password-requirements li {
+  .password-requirements li {
     margin-bottom: 0.5rem;
-}
+  }
 
-.password-requirements i {
+  .password-requirements i {
     margin-right: 0.5rem;
-}
+  }
 
-.btn-outline-primary {
+  .btn-outline-primary {
     border-color: #3a3a32;
     color: #3a3a32;
-}
+  }
 
-.btn-outline-primary:hover {
+  .btn-outline-primary:hover {
     background-color: #3a3a32;
     color: white;
-}
+  }
 
-/* Add these new styles to ensure the input fields show the validation state */
-.form-control.is-valid,
-.form-control.is-invalid {
+  /* Add these new styles to ensure the input fields show the validation state */
+  .form-control.is-valid,
+  .form-control.is-invalid {
     background-image: none !important;
     padding-right: 0.75rem !important;
-}
+  }
 
-.input-group .form-control.is-valid,
-.input-group .form-control.is-invalid {
+  .input-group .form-control.is-valid,
+  .input-group .form-control.is-invalid {
     border-right: none !important;
-}
+  }
 
-.input-group-text {
+  .input-group-text {
     border-left: none !important;
-}
+  }
 </style>
 
 {% endblock content %}
