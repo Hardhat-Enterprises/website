@@ -11,6 +11,7 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, rate_limit_exceeded
 from .views import delete_account
+from django.views.decorators.csrf import csrf_exempt
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
@@ -173,7 +174,33 @@ urlpatterns = [
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
-    path('account/delete/', delete_account, name='delete-account')
+    path('account/delete/', delete_account, name='delete-account'),
+    
+
+  
+   # Extend session expiry via modal interaction.
+    path('session/extend-session/', csrf_exempt(views.extend_session_view), name='extend_session'),
+
+    # Log frontend-triggered session events (e.g. modal shown, dismissed).
+    path('session/session-events/', csrf_exempt(views.session_events_view), name='session_events'),
+
+    # Trigger session termination via XHR/fetch (CSRF-exempted here).
+    path('auto-logout/', csrf_exempt(views.auto_logout_view), name='session_auto_logout'),
+
+    # Trigger session termination via sendBeacon() (already CSRF-exempt).
+    path('session/auto-logout-beacon/', csrf_exempt(views.auto_logout_beacon_view), name='session_auto_logout_beacon'),
+
+    # Redirect-based logout (used by frontend button).
+    path('logout/', views.logout_view, name='logout')  # Ensure views.logout_view is defined
+
+
+
+
+
+
+
+
+
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

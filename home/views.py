@@ -1,7 +1,8 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
- 
+
+
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
@@ -37,6 +38,8 @@ from .models import Article, Student, Project, Contact, Smishingdetection_join_u
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
+from django.utils.timezone import now
+
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
@@ -121,7 +124,9 @@ from .serializers import APIModelSerializer
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.viewsets import ViewSet
 
-
+#Session Security
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 #For LeaderBoard
 from django.db.models import Sum
 from .models import LeaderBoardTable, UserChallenge
@@ -914,6 +919,9 @@ def register_client(request):
     return render(request, 'accounts/sign-up-client.html', context)
 
 logger = logging.getLogger(__name__)  # Initialize logger
+session_logger = logging.getLogger('session_security_logger')  # For security/audit logs
+
+
 
 def register(request):
     """
@@ -2164,3 +2172,155 @@ def arpaname_view(request):
 def policy_deployment(request):
     return render(request, 'pages/policy_deployment.html')
 
+
+
+
+
+
+# --- Beacon Logout (CSRF-exempt) ---
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])  # Session context expected, but CSRF skipped
+def auto_logout_beacon_view(request):
+    """
+    Terminate session via sendBeacon (CSRF-exempt transport).
+    Used for background logout when modal is dismissed or timeout occurs.
+    Session key may be unavailable due to transport limitations.
+    """
+    try:
+        raw_data = json.loads(request.body.decode('utf-8'))
+        request._full_data = raw_data  # Patch for request.data fallback
+    except Exception as e:
+        session_logger.warning(
+            "Beacon logout payload parse failed | error=%s | ip=%s | agent=%s",
+            str(e),
+            request.META.get("REMOTE_ADDR"),
+            request.META.get("HTTP_USER_AGENT")
+        )
+        return Response({'error': 'Invalid JSON payload'}, status=400)
+
+    meta = extract_session_metadata(request)
+    logout(request)  # Silently succeeds even if no session is active
+    log_auto_logout(meta)
+
+    session_logger.info(
+        "Beacon logout | user=%s | reason=%s | transport=%s | ip=%s | agent=%s | time=%s",
+        getattr(request.user, 'username', 'anonymous'),
+        meta.get('reason', 'unspecified'),
+        meta.get('transport', 'beacon'),
+        request.META.get("REMOTE_ADDR"),
+        request.META.get("HTTP_USER_AGENT"),
+        now().isoformat()
+    )
+
+    return Response({
+        'status': 'logged out',
+        'reason': meta.get('reason', 'unspecified'),
+        'transport': meta.get('transport', 'beacon')
+    })
+
+
+# --- XHR Logout (CSRF skipped) ---
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def auto_logout_view(request):
+    """
+    Terminate session via XHR/fetch (CSRF-exempt transport).
+    Triggered when frontend detects inactivity and initiates logout.
+    CSRF protection is intentionally disabled at this stage.
+    """
+    session_key = request.session.session_key
+    if not session_key:
+        session_logger.warning(
+            "XHR logout rejected | no session key | user=%s | ip=%s | agent=%s",
+            getattr(request.user, 'username', 'anonymous'),
+            request.META.get("REMOTE_ADDR"),
+            request.META.get("HTTP_USER_AGENT")
+        )
+        return Response({'error': 'No active session'}, status=403)
+
+    meta = extract_session_metadata(request)
+    logout(request)
+    log_auto_logout(meta)
+
+    session_logger.info(
+        "XHR logout | user=%s | session=%s | reason=%s | transport=%s | ip=%s | agent=%s | time=%s",
+        getattr(request.user, 'username', 'anonymous'),
+        session_key,
+        meta.get('reason', 'inactivity'),
+        meta.get('transport', 'xhr'),
+        request.META.get("REMOTE_ADDR"),
+        request.META.get("HTTP_USER_AGENT"),
+        now().isoformat()
+    )
+
+    return Response({
+        'status': 'logged out',
+        'reason': meta.get('reason', 'inactivity'),
+        'transport': meta.get('transport', 'xhr')
+    })
+
+
+# --- Session Extension (CSRF skipped) ---
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def extend_session_view(request):
+    """
+    Extend session expiry and log the extension event.
+    Triggered by modal interaction or user activity.
+    CSRF protection is intentionally disabled at this stage.
+    """
+    try:
+        request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+        session_logger.info(
+            "Session extended | user=%s | session=%s | ip=%s | agent=%s | time=%s",
+            request.user.username,
+            request.session.session_key,
+            request.META.get("REMOTE_ADDR"),
+            request.META.get("HTTP_USER_AGENT"),
+            now().isoformat()
+        )
+        return Response({'status': 'extended'})
+    except Exception as e:
+        session_logger.error(
+            "Session extension failed | user=%s | error=%s | ip=%s",
+            request.user.username,
+            str(e),
+            request.META.get("REMOTE_ADDR")
+        )
+        return Response({'error': str(e)}, status=500)
+
+
+# --- Frontend Session Events (CSRF skipped) ---
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def session_events_view(request):
+    """
+    Log frontend-triggered session events (e.g. modal shown, dismissed).
+    Useful for correlating UI activity with backend session lifecycle.
+    CSRF protection is intentionally disabled at this stage.
+    """
+    try:
+        event = request.data.get('event', 'unspecified')
+        timestamp = request.data.get('timestamp', now().isoformat())
+        session_logger.info(
+            "Frontend event | event=%s | user=%s | session=%s | ip=%s | agent=%s | time=%s",
+            event,
+            request.user.username,
+            request.session.session_key,
+            request.META.get("REMOTE_ADDR"),
+            request.META.get("HTTP_USER_AGENT"),
+            timestamp
+        )
+        return Response({'status': 'logged'})
+    except Exception as e:
+        session_logger.error(
+            "Frontend event logging failed | user=%s | error=%s | ip=%s",
+            request.user.username,
+            str(e),
+            request.META.get("REMOTE_ADDR")
+        )
+        return Response({'error': str(e)}, status=400)

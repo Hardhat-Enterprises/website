@@ -23,6 +23,9 @@
   <title>{{ dynamic_title }}</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+  
+
     <!-- Primary Meta Tags -->
     <title>Hardhat Enterprises</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -499,6 +502,71 @@ crossorigin="anonymous"></script>
     document.addEventListener('touchmove', resetTimer);
     document.addEventListener('scroll', resetTimer);
   </script>
+
+<script>
+
+   // Auto-logout triggers with CSRF protection and audit tagging (tab-close, screen-lock, suspend)
+
+  function getCSRFToken() {
+    const el = document.querySelector('meta[name="csrf-token"]');
+    return el ? el.getAttribute('content') : '';
+  }
+
+  function sendAutoLogout(reason) {
+    fetch('/auto-logout/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCSRFToken()
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ reason: reason })
+    }).catch(err => {
+      console.warn(`Auto-logout (${reason}) failed:`, err);
+    });
+  }
+
+  // Use sendBeacon for unload reliability
+  window.addEventListener('beforeunload', () => {
+    const data = new Blob([JSON.stringify({ reason: 'tab-close' })], { type: 'application/json' });
+    navigator.sendBeacon('/auto-logout/', data);
+  });
+
+  // Debounced visibility change
+  let visibilityTimer;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      visibilityTimer = setTimeout(() => sendAutoLogout('screen-lock-or-suspend'), 3000);
+    } else {
+      clearTimeout(visibilityTimer);
+    }
+  });
+</script>
+
+<!-- Session Expiry Modal -->
+<div class="modal fade" id="sessionExpiryModal" tabindex="-1" aria-labelledby="sessionExpiryLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="sessionExpiryLabel">Session Expiring Soon</h5>
+      </div>
+      <div class="modal-body">
+        Your session will expire in <span id="countdown">1</span> minute. Would you like to extend it?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="extendSessionBtn">Extend Session</button>
+        <button type="button" class="btn btn-outline-danger" id="logoutBtn">Log Out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include session.js -->
+<script src="{% static 'js/utils/session.js' %}"></script>
+
+<meta name="csrf-token" content="{{ csrf_token }}">
+
+
 
 </body>
 

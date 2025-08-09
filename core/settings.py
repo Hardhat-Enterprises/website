@@ -131,16 +131,30 @@ MIDDLEWARE = [
     'core.middleware.AutoLogoutMiddleware'
 ]
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
+    'formatters': {
+        'audit': {
+            'format': '[{asctime}] {levelname} {name} :: {message}',
+            'style': '{',
+        },
+    },
+
     'handlers': {
         'xss_file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': 'xss_attempts.log',
         },
-
+        'session_cleanup_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'session_cleanup.log',
+            'formatter': 'audit',
+        },
     },
 
     'loggers': {
@@ -149,8 +163,14 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': False,
         },
+        'session_cleanup': {
+            'handlers': ['session_cleanup_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     },
 }
+
 
 ROOT_URLCONF = "core.urls"
 
