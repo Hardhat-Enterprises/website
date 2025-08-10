@@ -5,7 +5,8 @@
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
- 
+from django import forms
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
@@ -131,6 +132,7 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+from .analyzer import analyze_url 
 
 
 def index(request):
@@ -2164,3 +2166,47 @@ def arpaname_view(request):
 def policy_deployment(request):
     return render(request, 'pages/policy_deployment.html')
 
+class URLAnalyzerForm(forms.Form):
+    url = forms.URLField(
+        label='Website URL',
+        widget=forms.URLInput(attrs={
+            'placeholder': 'https://example.com',
+            'class': 'form-control',
+        })
+    )
+
+
+def link_analyzer(request):
+    """
+    Renders the Link Analyzer page and processes submissions.
+    All UI-specific values (bar class, width string, gauge color) are computed here
+    so the template stays dumb/safe.
+    """
+    result = None
+    form = URLAnalyzerForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        # Core analysis (returns dict with risk, verdict, badge, reasons, etc.)
+        result = analyze_url(form.cleaned_data['url'])
+
+        # Normalize & decorate for the template
+        risk_value = int(result.get("risk", 0) or 0)
+        if risk_value < 20:
+            bar_class = "bg-success"
+            gauge_color = "#2ecc71"
+        elif risk_value < 50:
+            bar_class = "bg-warning"
+            gauge_color = "#f1c40f"
+        else:
+            bar_class = "bg-danger"
+            gauge_color = "#e74c3c"
+
+        result["risk_value"] = risk_value           # e.g., 38
+        result["width"] = f"{risk_value}%"          # e.g., "38%"
+        result["bar_class"] = bar_class             # Bootstrap class
+        result["gauge_color"] = gauge_color         # for donut gauge JS/SVG
+
+    return render(request, 'services/link_analyzer.html', {
+        'form': form,
+        'result': result
+    })

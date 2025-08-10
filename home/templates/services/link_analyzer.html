@@ -1,0 +1,192 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Link Analyzer · Hardhat Enterprises</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap + Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    :root{
+      --hh-yellow:#f4c430;
+      --hh-ink:#111;
+      --hh-soft:#fff7d6;
+    }
+    body{ background: var(--hh-soft); }
+    .hero{
+      background: linear-gradient(180deg,var(--hh-yellow),#ffd44a);
+      color: var(--hh-ink);
+      padding: 3.2rem 0 2.2rem;
+    }
+    .pill{ border-radius: 999px; padding:.25rem .65rem; font-weight:700; font-size:.85rem }
+    .card-xx{ border:0; border-radius: 20px; box-shadow:0 10px 30px rgba(0,0,0,.12) }
+    .feature-tile{
+      border-radius: 14px; background:#fff; padding:1rem;
+      box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    .meter{ height:12px; background:#eee; border-radius:999px; overflow:hidden }
+    .donut-wrap{ position:relative; width:200px; height:200px }
+    .donut-text{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center }
+    .score-num{ font-weight:800; font-size:34px; line-height:1 }
+    .subtle{ color:#6c757d }
+    .reason-badge{ font-variant-numeric: tabular-nums }
+    .kbd{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; background:#f1f3f5; border-radius:6px; padding:.15rem .4rem; font-size:.8rem }
+    .divider{ height:1px; background:rgba(0,0,0,.06); margin:1rem 0 }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div>
+        <div class="pill bg-dark text-white mb-2 d-inline-flex align-items-center gap-2"><i class="bi bi-shield-lock"></i> Hardhat Services</div>
+        <h1 class="fw-bold display-5 mb-2">Link Analyzer</h1>
+        <p class="lead mb-0">Instant risk insights for any URL — before you click.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK FEATURES ROW -->
+<div class="container my-4">
+  <div class="row g-3">
+    <div class="col-6 col-lg-3">
+      <div class="feature-tile"><i class="bi bi-activity me-2"></i><strong>Heuristic Scoring</strong><div class="subtle small">TLDs, length, subdomains, keywords</div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="feature-tile"><i class="bi bi-lock me-2"></i><strong>TLS Posture</strong><div class="subtle small">SSL freshness & expiry</div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="feature-tile"><i class="bi bi-braces-asterisk me-2"></i><strong>Security Headers</strong><div class="subtle small">HSTS / CSP / X-Frame</div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="feature-tile"><i class="bi bi-arrow-repeat me-2"></i><strong>Redirect Depth</strong><div class="subtle small">Detect risky chains</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="container my-4">
+  <div class="card card-xx p-4">
+    <form method="post" class="row g-3 align-items-center">
+      {% csrf_token %}
+      <div class="col-12 col-lg-9">
+        {{ form.url }}
+      </div>
+      <div class="col-12 col-lg-3 d-grid">
+        <button class="btn btn-dark btn-lg" type="submit"><i class="bi bi-search"></i> Analyze</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- RESULT -->
+{% if result %}
+<div class="container mb-5">
+  <div class="card card-xx p-4">
+    <div class="row g-4 align-items-center">
+      <!-- Donut Gauge (SOLID color from view) -->
+      <div class="col-12 col-md-4 d-flex justify-content-center">
+        <div class="donut-wrap">
+          <svg width="200" height="200" viewBox="0 0 120 120">
+            <!-- track -->
+            <circle cx="60" cy="60" r="50" stroke="#eee" stroke-width="12" fill="none"/>
+            <!-- colored arc -->
+            <circle id="hh-arc" cx="60" cy="60" r="50"
+                    stroke="{{ result.gauge_color }}" stroke-width="12"
+                    stroke-linecap="round" fill="none"
+                    stroke-dasharray="314" stroke-dashoffset="314"
+                    transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="donut-text">
+            <div class="score-num">{{ result.risk_value|default:0 }}</div>
+            <div class="subtle small">Risk / 100</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary & Meter -->
+      <div class="col-12 col-md-8">
+        <div class="d-flex justify-content-between flex-wrap align-items-start">
+          <div class="pe-3">
+            <div class="fw-bold fs-5">Result:
+              <span class="badge bg-{{ result.badge }} ms-1">{{ result.verdict }}</span>
+            </div>
+            <div class="subtle small mt-1" style="word-break:break-all;">
+              <span id="analyzed-url">{{ result.final_url|default:result.normalized_url }}</span>
+              <button class="btn btn-sm btn-outline-secondary ms-2" id="copy-url" type="button"><i class="bi bi-clipboard"></i> Copy</button>
+            </div>
+            {% if result.redirects %}
+              <div class="subtle small mt-1"><i class="bi bi-arrow-right-circle"></i> Redirects followed: {{ result.redirects }}</div>
+            {% endif %}
+            {% if result.http_status %}
+              <div class="subtle small"><i class="bi bi-check2-circle"></i> HTTP Status: {{ result.http_status }}</div>
+            {% endif %}
+          </div>
+
+          <div class="flex-grow-1" style="min-width:260px;">
+            <div class="meter mb-1">
+              <!-- use same solid color as donut -->
+              <div class="progress-bar" style="width: {{ result.width }}; background: {{ result.gauge_color }};"></div>
+            </div>
+            <div class="text-end subtle small">Risk Score: {{ result.risk_value|default:0 }} / 100</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Reasons -->
+        <div class="fw-semibold mb-2">Why this score?</div>
+        {% if result.reasons %}
+          <ul class="list-group list-group-flush">
+            {% for label, pts in result.reasons %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>🔎 {{ label }}</span>
+                <span class="subtle small reason-badge">{% if pts > 0 %}+{{ pts }}{% else %}{{ pts }}{% endif %}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="subtle">No notable risk signals.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- JS -->
+<script>
+  // Animate donut to score
+  (function () {
+    var arc = document.getElementById('hh-arc');
+    if (!arc) return;
+    var score = {{ result.risk_value|default:0 }};
+    var total = 314; // 2πr with r=50
+    var offset = total * (1 - (score / 100));
+    requestAnimationFrame(function(){
+      arc.style.transition = 'stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)';
+      arc.style.strokeDashoffset = offset;
+    });
+  })();
+
+  // Copy URL button
+  (function (){
+    var btn = document.getElementById('copy-url');
+    var node = document.getElementById('analyzed-url');
+    if (!btn || !node) return;
+    btn.addEventListener('click', function(){
+      var text = node.textContent || node.innerText;
+      navigator.clipboard.writeText(text);
+      btn.innerHTML = '<i class="bi bi-clipboard-check"></i> Copied';
+      setTimeout(function(){ btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy'; }, 1200);
+    });
+  })();
+</script>
+
+</body>
+</html>

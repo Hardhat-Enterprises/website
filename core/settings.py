@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     'theme_pixel',
 
     'corsheaders',
+    'services',
 
 
 ]
@@ -439,4 +440,5 @@ SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
-
+SAFE_BROWSING_API_KEY = os.environ.get("SAFE_BROWSING_API_KEY", "")   # Google
+VIRUSTOTAL_API_KEY    = os.environ.get("VIRUSTOTAL_API_KEY", "")      # VirusTotal

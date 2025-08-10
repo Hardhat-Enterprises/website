@@ -19,6 +19,7 @@ from .views import AnalyticsAPI
 from .views import UserManagementAPI, EmailNotificationViewSet
 from .views import MarkSkillCompletedView
 from rest_framework.routers import DefaultRouter
+from home import views as home_views
 router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
@@ -173,7 +174,8 @@ urlpatterns = [
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
-    path('account/delete/', delete_account, name='delete-account')
+    path('account/delete/', delete_account, name='delete-account'),
+     path('services/link-analyzer/', home_views.link_analyzer, name='link_analyzer')
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

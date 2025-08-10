@@ -293,6 +293,8 @@
                 <a class="menu-link" href="{% url 'job-alerts' %}">
                   <li class="mb-2 menu ps-3 py-1">Job Alerts</li>
                 </a>
+                <a href="{% url 'career_path_finder' %}">
+                  <li class="mb-2 menu ps-3 py-1">Career Path Finder</li></a>
               </ul>
             </div>
           </li>
@@ -320,7 +322,25 @@
             </div>
           </li>
 
-          
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link" id="servicesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              Services
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+             <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'link_analyzer' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                      Link Analyzer
+                  </li>
+                </a>
+              </ul>
+            </div>
+           </li>
+
+
+        
           <div class="search-container position-relative">
             <form class="desktop-search-bar" 
                   method="POST" 
