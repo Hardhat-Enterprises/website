@@ -1,0 +1,592 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cybersecurity Career Path Finder | Hardhat Enterprises</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --hh-yellow: #fbbf24;
+      --hh-yellow-strong: #f59e0b;
+      --hh-dark: #0e1218;         /* deeper charcoal */
+      --hh-surface: #171e26;      /* navbar */
+      --hh-card: #101520;         /* cards */
+      --hh-glass: rgba(255,255,255,.06);
+      --hh-line: rgba(255,255,255,.10);
+      --hh-text: #e5e7eb;
+      --hh-text-muted: #cbd5e1;
+      --hh-text-dark: #0f172a;
+      --radius-xl: 18px;
+      --radius-lg: 14px;
+      --shadow-1: 0 10px 30px rgba(0,0,0,.25);
+      --shadow-2: 0 18px 50px rgba(0,0,0,.35);
+    }
+    *{ box-sizing:border-box; }
+    html,body{
+      margin:0; padding:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--hh-text);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(251,191,36,.15), transparent 60%),
+        radial-gradient(900px 500px at 10% 110%, rgba(251,191,36,.10), transparent 60%),
+        var(--hh-dark);
+    }
+
+    /* Header / Navbar (kept simple to match your site) */
+    header{
+      position: sticky; top:0; z-index:50;
+      background: var(--hh-surface);
+      border-bottom: 1px solid var(--hh-line);
+      backdrop-filter: blur(8px);
+    }
+    .wrap{ max-width: 1180px; margin:0 auto; padding: 0 16px; }
+    .nav{ height:72px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+    .brand{ display:flex; gap:10px; align-items:center; color:var(--hh-yellow); font-weight:800; }
+    .brand-logo{
+      width:36px; height:36px; border-radius:12px;
+      background: var(--hh-yellow); color:#111; display:grid; place-items:center; font-weight:900;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.1);
+    }
+    .menu{ display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+    .menu a{ color:#e5e7eb; text-decoration:none; font-weight:600; opacity:.9; }
+    .menu a:hover{ color:#fff; }
+    .dd{ position:relative; }
+    .dd > a::after{ content:"▾"; margin-left:6px; font-size:.8rem; opacity:.7; }
+    .ddmenu{
+      position:absolute; top:110%; left:0; min-width:240px;
+      background: var(--hh-card); border:1px solid var(--hh-line);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-2); padding:8px; display:none;
+    }
+    .dd:hover .ddmenu{ display:block; }
+    .ddmenu a{ display:block; padding:10px 12px; border-radius:10px; }
+    .ddmenu a:hover{ background: var(--hh-glass); }
+
+    .right{ display:flex; gap:12px; align-items:center; }
+    .search{ display:flex; gap:8px; align-items:center; padding:8px 12px; border:1px solid var(--hh-line); border-radius:999px; background: rgba(255,255,255,.04); }
+    .search input{ background:transparent; border:none; outline:none; color:var(--hh-text); width:200px; }
+    .btn{ border:none; cursor:pointer; font-weight:700; border-radius:999px; padding:10px 14px; transition: transform .06s ease; }
+    .btn:active{ transform: translateY(1px); }
+    .btn-yellow{ background:var(--hh-yellow); color:#111; }
+    .btn-yellow:hover{ background:var(--hh-yellow-strong); }
+    .btn-ghost{ background:rgba(255,255,255,.08); color:#fff; }
+    .btn-ghost:hover{ background:rgba(255,255,255,.12); }
+
+    /* Hero */
+    .hero{
+      background: var(--hh-yellow);
+      color: var(--hh-text-dark);
+      padding: 44px 0 36px;
+      border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
+      box-shadow: var(--shadow-1);
+    }
+    .hero h1{ margin:0 0 10px; font-size: clamp(28px, 4vw, 40px); }
+    .hero p{ margin:0; opacity:.9; }
+
+    /* Main */
+    main{ max-width: 980px; margin: 26px auto 80px; padding: 0 16px; }
+    .card{
+      background: linear-gradient(165deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      color: var(--hh-text);
+      border: 1px solid var(--hh-line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-1);
+      padding: 22px;
+    }
+    h2.section{ font-size: 1.6rem; margin: 0 0 10px;}
+    h3.q{ font-size: 1.05rem; margin: 12px 0 8px; }
+    .fieldset{ padding: 14px; border-radius: var(--radius-lg); background: rgba(255,255,255,.03); border: 1px dashed var(--hh-line); }
+    label.option{ display:block; padding: 8px 10px; border-radius: 10px; cursor:pointer; }
+    label.option:hover{ background: var(--hh-glass); }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+    .result-card{
+      background: #f9fafb; color: var(--hh-text-dark);
+      border-radius: var(--radius-xl); box-shadow: var(--shadow-2);
+      border: 1px solid rgba(0,0,0,.06);
+      padding: 22px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 12px; border-radius: 999px;
+      background: var(--hh-yellow); color:#111; font-weight: 800; font-size: .85rem;
+    }
+    .list{ margin: 8px 0 0; padding-left: 18px; }
+    .muted{ color: #475569; }
+    .hidden{ display:none; }
+
+    /* Progress bar for quiz */
+    .progress{
+      width:100%; height:8px; background: rgba(255,255,255,.15);
+      border-radius: 999px; overflow:hidden; margin: 8px 0 16px;
+    }
+    .progress > span{
+      display:block; height:100%; width:0%;
+      background: linear-gradient(90deg, #fde68a, #f59e0b);
+      transition: width .25s ease;
+    }
+
+    @media print{
+      header, .actions .btn-ghost{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      .hero{ border-radius:0; }
+      .card, .result-card{ box-shadow:none; border:1px solid #ddd; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Header / Navbar ===== -->
+  <header>
+    <div class="wrap">
+      <nav class="nav">
+        <div class="brand">
+          <div class="brand-logo">HH</div>
+          <div>Hardhat Enterprises</div>
+        </div>
+
+        <div class="menu">
+          <a href="/">Home</a>
+
+          <div class="dd">
+            <a href="#">Upskilling</a>
+            <div class="ddmenu">
+              <a href="#">Courses</a>
+              <a href="#">Labs</a>
+              <a href="#">Cert Guides</a>
+            </div>
+          </div>
+
+          <a href="#">Admin Settings</a>
+          <a href="#">About</a>
+
+          <div class="dd">
+            <a href="#">Projects</a>
+            <div class="ddmenu">
+              <a href="#">Explore Projects</a>
+              <a href="#">Submit Idea</a>
+            </div>
+          </div>
+
+          <a href="#">Blog</a>
+
+          <div class="dd">
+            <a href="#">Careers</a>
+            <div class="ddmenu">
+              <a class="menu-link" href="{% url 'career-discover' %}">Discover Hardhat</a>
+              <a class="menu-link" href="{% url 'career-list' %}">All Jobs</a>
+              <a class="menu-link" href="{% url 'internships' %}">Internships</a>
+              <a class="menu-link" href="{% url 'job-alerts' %}">Job Alerts</a>
+              <a class="menu-link" href="{% url 'career_path_finder' %}">Career Path Finder</a>
+            </div>
+          </div>
+
+          <div class="dd">
+            <a href="#">Cyber Challenges</a>
+            <div class="ddmenu">
+              <a href="/challenges/quiz/">Quick Quiz</a>
+              <a href="/challenges/ctf/">Mini CTF</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="search">
+            <input placeholder="Search..." />
+            <button class="btn btn-yellow">🔍</button>
+          </div>
+          <button class="btn btn-ghost">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="wrap">
+      <h1>Cybersecurity Career Path Finder</h1>
+      <p>Answer a few questions to get a personalised path: roles, skills, tools, starter projects, certs, companies, and a PDF plan.</p>
+    </div>
+  </section>
+
+  <!-- ===== Main ===== -->
+  <main>
+    <!-- Quiz -->
+    <section id="quizCard" class="card">
+      <h2 class="section">Tell us what excites you</h2>
+      <div class="progress" aria-label="Progress"><span id="progressBar" style="width:0%"></span></div>
+
+      <form id="careerQuiz">
+        <!-- Q1 -->
+        <div class="fieldset">
+          <h3 class="q">1) Which work style sounds most fun?</h3>
+          <label class="option"><input type="radio" name="q1" value="offensive"> 🧨 Breaking apps to find weaknesses</label>
+          <label class="option"><input type="radio" name="q1" value="defensive"> 🛡️ Watching dashboards & stopping threats live</label>
+          <label class="option"><input type="radio" name="q1" value="forensics"> 🧪 Investigating incidents & evidence</label>
+          <label class="option"><input type="radio" name="q1" value="architecture"> 🧭 Designing secure systems & policies</label>
+        </div>
+
+        <!-- Q2 -->
+        <div class="fieldset">
+          <h3 class="q">2) Your comfort with coding/scripting?</h3>
+          <label class="option"><input type="radio" name="q2" value="offensive"> 💻 Love writing scripts/tools</label>
+          <label class="option"><input type="radio" name="q2" value="defensive"> 🔎 Comfortable with queries & parsers</label>
+          <label class="option"><input type="radio" name="q2" value="forensics"> 🧰 Prefer tools; light scripting OK</label>
+          <label class="option"><input type="radio" name="q2" value="architecture"> 📝 Minimal coding; focus on design/policy</label>
+        </div>
+
+        <!-- Q3 -->
+        <div class="fieldset">
+          <h3 class="q">3) Pick a theme:</h3>
+          <label class="option"><input type="radio" name="q3" value="offensive"> 🔴 Red Team / Exploitation</label>
+          <label class="option"><input type="radio" name="q3" value="defensive"> 🔵 Blue Team / Detection & Response</label>
+          <label class="option"><input type="radio" name="q3" value="forensics"> 🟣 Incident Response & Forensics</label>
+          <label class="option"><input type="radio" name="q3" value="governance"> 🟠 GRC (Governance, Risk, Compliance)</label>
+        </div>
+
+        <!-- Q4 -->
+        <div class="fieldset">
+          <h3 class="q">4) Cloud, networking, or management?</h3>
+          <label class="option"><input type="radio" name="q4" value="cloud"> ☁️ Cloud security (AWS/Azure/GCP)</label>
+          <label class="option"><input type="radio" name="q4" value="defensive"> 🌐 Network defense / SOC</label>
+          <label class="option"><input type="radio" name="q4" value="forensics"> 🧭 DFIR (response + evidence)</label>
+          <label class="option"><input type="radio" name="q4" value="architecture"> 🏛️ Security architecture / policy</label>
+        </div>
+
+        <!-- Q5 -->
+        <div class="fieldset">
+          <h3 class="q">5) Team vibe?</h3>
+          <label class="option"><input type="radio" name="q5" value="defensive"> ⚡ Fast-paced team operations</label>
+          <label class="option"><input type="radio" name="q5" value="offensive"> 🧠 Small team, creative exploits</label>
+          <label class="option"><input type="radio" name="q5" value="forensics"> 🧩 Task-focused investigations</label>
+          <label class="option"><input type="radio" name="q5" value="governance"> 🤝 Stakeholder management & reporting</label>
+        </div>
+
+        <!-- Q6 -->
+        <div class="fieldset">
+          <h3 class="q">6) Preferred learning path to start?</h3>
+          <label class="option"><input type="radio" name="q6" value="offensive"> 🏁 Labs & CTFs</label>
+          <label class="option"><input type="radio" name="q6" value="defensive"> 📈 Home SOC lab & log hunting</label>
+          <label class="option"><input type="radio" name="q6" value="forensics"> 🔬 Disk/network analysis practice</label>
+          <label class="option"><input type="radio" name="q6" value="governance"> 📚 Frameworks & risk methods</label>
+        </div>
+
+        <!-- Q7 (optional tools interest) -->
+        <div class="fieldset">
+          <h3 class="q">7) Which tools sound exciting? (choose any)</h3>
+          <label class="option"><input type="checkbox" name="tools" value="offensive"> Kali, Burp Suite, Metasploit</label>
+          <label class="option"><input type="checkbox" name="tools" value="defensive"> Splunk, Wazuh, Suricata</label>
+          <label class="option"><input type="checkbox" name="tools" value="forensics"> Autopsy, Volatility, Wireshark</label>
+          <label class="option"><input type="checkbox" name="tools" value="cloud"> IAM, CloudTrail/Defender, SCC</label>
+        </div>
+
+        <div class="actions" style="margin-top:14px;">
+          <button type="submit" id="seeResults" class="btn btn-yellow">See my path</button>
+          <button type="button" id="loadPrev" class="btn btn-ghost hidden">Load my last result</button>
+          <button type="button" id="clearQuiz" class="btn btn-ghost">Clear</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Results -->
+    <section id="results" class="hidden" style="margin-top:22px;">
+      <div class="result-card">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+          <span class="pill">🎯 Your Recommendation</span>
+          <strong id="primaryRec" style="font-size:1.05rem;"></strong>
+        </div>
+
+        <div class="wrap-rows" style="display:grid; gap:18px; grid-template-columns: repeat(2,minmax(0,1fr));">
+          <div>
+            <h3 style="margin:0 0 6px;">Suggested Roles</h3>
+            <ul id="roleList" class="list"></ul>
+          </div>
+          <div>
+            <h3 style="margin:0 0 6px;">Tools & Platforms</h3>
+            <ul id="toolList" class="list"></ul>
+          </div>
+          <div>
+            <h3 style="margin:0 0 6px;">Skills to Focus On</h3>
+            <ul id="skillList" class="list"></ul>
+          </div>
+          <div>
+            <h3 style="margin:0 0 6px;">Certs to Start With</h3>
+            <ul id="certList" class="list"></ul>
+          </div>
+          <div>
+            <h3 style="margin:0 0 6px;">Top Companies Hiring in This Area</h3>
+            <ul id="companyList" class="list"></ul>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <h3 style="margin:0 0 6px;">Starter Projects</h3>
+          <ul id="projectList" class="list"></ul>
+        </div>
+
+        <div style="margin-top:14px;">
+          <h3 style="margin:0 0 6px;">Approx. Salary (Australia)</h3>
+          <p id="salaryText" class="muted" style="margin:0;"></p>
+        </div>
+
+        <div style="margin-top:16px;">
+          <canvas id="interestChart" height="120"></canvas>
+        </div>
+
+        <div class="actions" style="margin-top:16px;">
+          <button id="savePlan" class="btn btn-ghost">Save My Plan</button>
+          <button id="downloadPlan" class="btn btn-yellow">Download as PDF</button>
+          <button id="retake" class="btn btn-ghost">Retake</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* ===== Catalog data (with cert links + top companies) ===== */
+    const CATS = ["offensive","defensive","forensics","architecture","cloud","governance"];
+    const CATALOG = {
+      offensive: {
+        label:"Offensive Security",
+        roles:["Penetration Tester","Red Team Operator","AppSec Engineer (Offensive)"],
+        tools:["Kali Linux","Burp Suite","Metasploit","Nmap","OWASP ZAP","Python"],
+        skills:["OWASP Top 10","Recon & exploitation","Scripting/automation","Reporting"],
+        certs:[
+          {name:"eJPT (INE/ElearnSecurity)", url:"https://elearnsecurity.com/product/ejpt-certification/"},
+          {name:"PNPT (TCM)", url:"https://certifications.tcm-sec.com/pnpt/"},
+          {name:"OSCP (OffSec)", url:"https://www.offsec.com/courses/pen-200/"}
+        ],
+        companies:["NCC Group","Trustwave","Rapid7","HackerOne","Bugcrowd","Cobalt"],
+        projects:[
+          "Exploit DVWA/Juice Shop in a lab and write a report",
+          "Bug bounty–style recon on a safe scope (your own lab)",
+          "Build a Python script to automate recon or wordlists"
+        ],
+        salaryAU:"Junior 75–110k, Mid 110–150k, Senior 150k+ (AUD, indicative)"
+      },
+      defensive: {
+        label:"Defensive Security",
+        roles:["SOC Analyst","Security Engineer","Threat Hunter"],
+        tools:["Splunk","Elastic/Wazuh SIEM","Suricata","Sysmon","Sigma","Python"],
+        skills:["Log analysis","Detection engineering","IR playbooks","Windows/Linux internals"],
+        certs:[
+          {name:"CompTIA Security+", url:"https://www.comptia.org/certifications/security"},
+          {name:"Blue Team Level 1 (BTL1)", url:"https://securityblue.team/collections/certifications/products/blue-team-level-1"},
+          {name:"Splunk Core User", url:"https://education.splunk.com/"}
+        ],
+        companies:["CrowdStrike","Palo Alto Networks","Microsoft","Splunk","Elastic","Darktrace"],
+        projects:[
+          "Home SOC lab with Wazuh/Elastic and detect a simulated attack",
+          "Write Sigma rules and validate detections",
+          "Create an incident triage/runbook"
+        ],
+        salaryAU:"Junior 70–100k, Mid 100–140k, Senior 140k+"
+      },
+      forensics: {
+        label:"Digital Forensics & Incident Response",
+        roles:["DFIR Analyst","Forensics Investigator","Malware Analyst (junior)"],
+        tools:["Autopsy","FTK Imager","Volatility","Wireshark","YARA"],
+        skills:["Disk & memory forensics","Timeline analysis","Windows artefacts","Chain of custody"],
+        certs:[
+          {name:"CompTIA CySA+", url:"https://www.comptia.org/certifications/cybersecurity-analyst"},
+          {name:"SANS DFIR (various)", url:"https://www.sans.org/cyber-security-skills/dfir/"},
+          {name:"CHFI (EC-Council)", url:"https://www.eccouncil.org/train-certify/computer-hacking-forensic-investigator-chfi/"}
+        ],
+        companies:["Mandiant (Google)","Kroll","CrowdStrike Services","PwC Incident Response","Cellebrite"],
+        projects:[
+          "Analyze a memory image with Volatility and document findings",
+          "Create a Windows artefact cheat sheet",
+          "Packet analysis case study in Wireshark"
+        ],
+        salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"
+      },
+      architecture: {
+        label:"Security Architecture",
+        roles:["Security Architect","Security Consultant","Compliance Manager"],
+        tools:["Threat modeling (STRIDE)","Security frameworks (NIST/ISO)","Design reviews"],
+        skills:["Secure design patterns","Policy & standards","Stakeholder communication"],
+        certs:[
+          {name:"CISSP (experience required)", url:"https://www.isc2.org/Certifications/CISSP"},
+          {name:"SABSA Foundation", url:"https://www.sabsa.org/"},
+          {name:"ISO 27001 Lead Implementer", url:"https://pecb.com/certified-iso-iec-27001-lead-implementer"}
+        ],
+        companies:["AWS","Microsoft","IBM","Accenture","Deloitte","Consultancies/SIs"],
+        projects:[
+          "Threat model a 3-tier web app and propose mitigations",
+          "Write a minimal security standard for APIs",
+          "Design a secure reference architecture diagram"
+        ],
+        salaryAU:"Mid 160–200k, Senior 200k+"
+      },
+      cloud: {
+        label:"Cloud Security",
+        roles:["Cloud Security Engineer","SecOps (Cloud)","DevSecOps Engineer"],
+        tools:["AWS IAM/GuardDuty/Config","Azure Defender","GCP SCC","Terraform","Kubernetes"],
+        skills:["Identity & access","Logging/monitoring","Network segmentation","IaC security"],
+        certs:[
+          {name:"AWS CCP", url:"https://aws.amazon.com/certification/certified-cloud-practitioner/"},
+          {name:"AWS Security Specialty", url:"https://aws.amazon.com/certification/certified-security-specialty/"},
+          {name:"Microsoft AZ-500", url:"https://learn.microsoft.com/certifications/exams/az-500/"}
+        ],
+        companies:["AWS","Microsoft Azure","Google Cloud","HashiCorp","Palo Alto Networks","Wiz"],
+        projects:[
+          "Enable GuardDuty + CloudTrail + Config in a sandbox account",
+          "Write least-privilege IAM policies",
+          "Scan Terraform with tfsec/Checkov and fix findings"
+        ],
+        salaryAU:"Junior 100–130k, Mid 130–170k, Senior 170k+"
+      },
+      governance: {
+        label:"Governance, Risk & Compliance (GRC)",
+        roles:["GRC Analyst","Risk Analyst","Compliance Specialist"],
+        tools:["Risk registers","GRC platforms","Policy frameworks (NIST/ISO)"],
+        skills:["Risk assessment","Control mapping","Audit readiness","Stakeholder communication"],
+        certs:[
+          {name:"ISO 27001 Foundation/Implementer", url:"https://www.iso.org/standard/27001"},
+          {name:"CRISC (ISACA)", url:"https://www.isaca.org/credentialing/crisc"},
+          {name:"CISM (ISACA)", url:"https://www.isaca.org/credentialing/cism"}
+        ],
+        companies:["Deloitte","PwC","KPMG","EY","Protiviti","Consultancies/GRC vendors"],
+        projects:[
+          "Create a risk register for a small SaaS (likelihood/impact/controls)",
+          "Map controls to ISO 27001/NIST CSF",
+          "Vendor risk assessment template & walkthrough"
+        ],
+        salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"
+      }
+    };
+
+    /* ===== Quiz scoring & rendering ===== */
+    function scoreQuiz(form){
+      const scores = {offensive:0, defensive:0, forensics:0, architecture:0, cloud:0, governance:0};
+      for(let i=1;i<=6;i++){
+        const ans = form.querySelector(`input[name="q${i}"]:checked`);
+        if(ans) scores[ans.value] = (scores[ans.value]||0)+2;
+      }
+      form.querySelectorAll('input[name="tools"]:checked').forEach(cb=>{
+        scores[cb.value] = (scores[cb.value]||0)+1;
+      });
+      return scores;
+    }
+    function topCategory(scores){
+      return Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+    }
+    function fillList(id, items){
+      const ul = document.getElementById(id);
+      ul.innerHTML = "";
+      items.forEach(t=>{
+        // allow links in certs; items may be string or {name,url}
+        const li = document.createElement("li");
+        if (typeof t === "string"){
+          li.textContent = t;
+        } else {
+          const a = document.createElement("a");
+          a.href = t.url; a.target = "_blank"; a.rel = "noopener";
+          a.textContent = t.name;
+          li.appendChild(a);
+        }
+        ul.appendChild(li);
+      });
+    }
+
+    function renderResults(cat, scores){
+      const data = CATALOG[cat];
+      document.getElementById("primaryRec").innerHTML =
+        `<strong>${data.label}</strong> looks like the best match for you based on your answers.`;
+
+      fillList("roleList", data.roles);
+      fillList("toolList", data.tools);
+      fillList("skillList", data.skills);
+      fillList("certList", data.certs);
+      fillList("companyList", data.companies);
+      fillList("projectList", data.projects);
+      document.getElementById("salaryText").textContent = data.salaryAU;
+
+      // Chart
+      const ctx = document.getElementById("interestChart");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: CATS.map(k=>CATALOG[k]?.label || k),
+          datasets: [{ label: "Your interest profile", data: CATS.map(k=>scores[k]||0) }]
+        },
+        options: { responsive:true, plugins:{ legend:{ display:false }}, scales:{ y:{ beginAtZero:true } } }
+      });
+
+      // Save result
+      localStorage.setItem("hh_career_path_scores", JSON.stringify(scores));
+      localStorage.setItem("hh_career_path_choice", cat);
+    }
+
+    /* ===== UI wiring ===== */
+    const form = document.getElementById("careerQuiz");
+    const quizCard = document.getElementById("quizCard");
+    const results = document.getElementById("results");
+    const progress = document.getElementById("progressBar");
+    const loadPrevBtn = document.getElementById("loadPrev");
+
+    // Progress update
+    function updateProgress(){
+      let answered = 0;
+      for(let i=1;i<=6;i++){
+        if(form.querySelector(`input[name="q${i}"]:checked`)) answered++;
+      }
+      const pct = Math.round((answered/6)*100);
+      progress.style.width = pct + "%";
+    }
+    form.addEventListener("change", updateProgress);
+
+    form.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      const scores = scoreQuiz(form);
+      const cat = topCategory(scores);
+      quizCard.classList.add("hidden");
+      results.classList.remove("hidden");
+      renderResults(cat, scores);
+      window.scrollTo({ top:0, behavior:"smooth" });
+    });
+
+    document.getElementById("clearQuiz").addEventListener("click", ()=> {
+      form.reset(); updateProgress();
+    });
+
+    document.getElementById("retake").addEventListener("click", ()=>{
+      results.classList.add("hidden");
+      quizCard.classList.remove("hidden");
+      form.reset();
+      updateProgress();
+      // Clear saved plan so refresh shows quiz again
+      localStorage.removeItem("hh_career_path_scores");
+      localStorage.removeItem("hh_career_path_choice");
+      window.scrollTo({ top:0, behavior:"smooth" });
+    });
+
+    // Print to PDF
+    document.getElementById("downloadPlan").addEventListener("click", ()=> window.print());
+
+    // Save plan “toast”
+    document.getElementById("savePlan").addEventListener("click", ()=> alert("Saved! We’ll remember your latest result on this device."));
+
+    // Always start on the quiz; offer optional “Load my last result” button
+    window.addEventListener("DOMContentLoaded", ()=>{
+      quizCard.classList.remove("hidden");
+      results.classList.add("hidden");
+      updateProgress();
+
+      const saved = localStorage.getItem("hh_career_path_scores");
+      const choice = localStorage.getItem("hh_career_path_choice");
+      if(saved && choice){
+        loadPrevBtn.classList.remove("hidden");
+        loadPrevBtn.addEventListener("click", ()=>{
+          quizCard.classList.add("hidden");
+          results.classList.remove("hidden");
+          renderResults(choice, JSON.parse(saved));
+          window.scrollTo({ top:0, behavior:"smooth" });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -20,7 +20,9 @@ django-theme-pixel==1.0.3
 django-tinymce==4.1.0
 
 # Database
-psycopg2-binary==2.9.9
+psycopg[binary]>=3.2.2,<3.3
+
+
 
 # Deployment
 whitenoise==6.7.0

@@ -99,6 +99,7 @@ urlpatterns = [
     path("careers/internships/", internships, name="internships"),
     path("careers/job-alerts/", job_alerts, name="job-alerts"),
     path("careers/discover/", career_discover, name="career-discover"),
+     path("careers/path-finder/", views.career_path_finder, name="career_path_finder"),
     
     path('blog/', Index.as_view(), name = 'blog'),
     # path('blog/<int:pk>/', DetaswilArticleView.as_view(), name='blog_post'),
