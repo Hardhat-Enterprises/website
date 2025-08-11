@@ -19,17 +19,8 @@
           <h1 class="fw-bolder display-2 text-center-head">Hardhat Enterprises</h1>
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">Security is a necessity. Not a choice</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-          <a id="explore-btn" type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">
-  Explore Projects
-</a>
-<a id="join-btn" type="button" href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">
-  Join Us
-</a>
-
-<audio id="click-sound" preload="auto" aria-hidden="true">
-  <source src="{% static 'assets/sounds/click.mp3' %}" type="audio/mpeg">
-</audio>
- 
+            <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">Explore Projects</a>
+            <a type="button" href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">Join Us</a>
           </div>
         </div>
       </div>
@@ -343,7 +334,7 @@
               <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">TROX Stealer Malware Spreads via Fake Updates</h5>
                 <p class="card-text">A new wave of cyberattacks spreads malware through fake software update alerts targeting unsuspecting users globally.</p>
-               <a id="reada-btn" href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
+                <a href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
               </div>
             </div>
           </div>
@@ -354,7 +345,7 @@
               <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">AI Shaping the Future of Cyber Defense</h5>
                 <p class="card-text">Experts explore how artificial intelligence is transforming threat detection and proactive cybersecurity measures worldwide.</p>
-                <a id="readd-btn" href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
+                <a href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
               </div>
             </div>
           </div>
@@ -365,7 +356,7 @@
               <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">Zero Trust Security: Why It Matters in 2025</h5>
                 <p class="card-text">With rising remote work trends, the zero-trust model becomes essential in securing networks beyond traditional perimeters.</p>
-                <a id="read-btn" href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
+                <a href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">Read More</a>
               </div>
             </div>
           </div>
@@ -582,41 +573,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const buttons = [
-    document.getElementById("explore-btn"),
-    document.getElementById("join-btn"),
-    document.getElementById("read-btn"),
-        document.getElementById("reada-btn"),
-            document.getElementById("readd-btn")
-
-  ];
-  
-  const audioElem = document.getElementById("click-sound");
-  let lastPlay = 0;
-
-  function playSound() {
-    if (!audioElem) return;
-    const now = Date.now();
-    if (now - lastPlay < 150) return;
-    lastPlay = now;
-    const promise = audioElem.play();
-    if (promise !== undefined) {
-      promise.catch(() => {});
-    }
-  }
-
-  buttons.forEach(btn => {
-    if (btn) {
-      btn.addEventListener("click", function() {
-        playSound();
-      });
-    }
-  });
-});
-</script>
-
 
 </main>
 
