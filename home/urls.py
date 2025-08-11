@@ -11,7 +11,8 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, rate_limit_exceeded
 from .views import delete_account
-
+# Health Endpoint Work
+from .views import health_check
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
@@ -173,7 +174,9 @@ urlpatterns = [
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
-    path('account/delete/', delete_account, name='delete-account')
+    path('account/delete/', delete_account, name='delete-account'),
+
+    path("health", health_check, name="health-check")
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
