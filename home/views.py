@@ -2163,4 +2163,7 @@ def arpaname_view(request):
 
 def policy_deployment(request):
     return render(request, 'pages/policy_deployment.html')
+ #Health Check Function
+def health_check(request):
+    return JsonResponse({"status": "ok"}, status=200) 
 
