@@ -6,10 +6,23 @@
 
 {% include 'includes/pre-loader.html' %}
 
+<style>
+  .masonry-grid {
+    column-count: 3;
+    column-gap: 1rem;
+  }
+
+  .masonry-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+</style>
+
 <section class="section section-lg">
   <div class="container">
     <h4>User Blogs</h4>
-    <br>
+    <br> 
     <p>Please provide your blog details with our company.</p>
     <br>
 
@@ -50,31 +63,35 @@
     <div class="feedback-list">
       <h5><u>Recent Blog Pages</u></h5>
       <br>
-      <div class="row">
+      <div class="masonry-grid">
         {% if blogpages %}
           {% for blogpage in blogpages %}
-            <div class="col-md-4 mb-4">
+            <div class="masonry-item">
               <div class="card" style="width: 100%; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 15px;">
-                <img src="data:image/jpeg;base64,{{ blogpage.file }}" class="card-img-top" style="border-top-left-radius: 15px; border-top-right-radius: 15px; height: 200px; object-fit: cover;" alt="Blog Image">
+                {% if blogpage.file %}
+                  <img src="data:image/jpeg;base64,{{ blogpage.file }}" class="card-img-top"
+                      style="border-top-left-radius: 15px; border-top-right-radius: 15px; height: 200px; object-fit: cover;" 
+                      alt="Blog Image">
+                {% else %}
+                  <div style="height: 200px; background-color: #e0e0e0; border-top-left-radius: 15px; border-top-right-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <span class="text-muted">No Image</span>
+                  </div>
+                {% endif %}
                 <div class="card-body">
                   <h5 class="card-title">{{ blogpage.title }}</h5>
                   <h6 class="card-subtitle mb-2 text-muted">By {{ blogpage.name }}</h6>
                   <p class="card-text">{{ blogpage.description|truncatewords:20 }}</p>
 
                   <div style="display: flex; justify-content: space-between;">
-                    <!-- Edit Button -->
                     <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal"
                       onclick="openEditModal('{{ blogpage.id }}', '{{ blogpage.name }}', '{{ blogpage.title }}', `{{ blogpage.description|escapejs }}`)">
                       Edit
                     </button>
-
-                    <!-- Delete Form -->
                     <form method="post" action="{% url 'delete_blogpage' blogpage.id %}">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
                   </div>
-
                 </div>
               </div>
             </div>
