@@ -275,7 +275,7 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Careers
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
@@ -369,7 +369,7 @@
 
           <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
           {% if not user.is_authenticated %}
-          <div class="position-relative sign-up-button-inner-container">
+          <!-- <div class="position-relative sign-up-button-inner-container">
             <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
               class="sign-up-button">
               <span href="#" class="fas fa-sign-in-alt me-2">
@@ -391,13 +391,20 @@
                 </a>
               </ul>
             </div>
+          </div> -->
+          <div class="position-relative sign-up-button-inner-container">
+            <button id="frontPagesDropdown" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
+              <a href="{% url 'login' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
+              Sign In
+              </a>
+            </button>
           </div>
           {% endif %}
 
 
           <!-- Sign Up Dropdown for Team/Client -->
           {% if not user.is_authenticated %}
-          <div class="position-relative sign-up-button-inner-container">
+          <!-- <div class="position-relative sign-up-button-inner-container">
             <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
               class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
                 Sign Up
@@ -415,9 +422,15 @@
                     Client Sign Up
                   </li>
                 </a>
-
               </ul>
             </div>
+          </div> -->
+          <div class="position-relative sign-up-button-inner-container">
+            <button id="frontPagesDropdown" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
+              <a href="{% url 'register' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
+                Sign Up
+              </a>
+            </button>
           </div>
           {% endif %}
 
