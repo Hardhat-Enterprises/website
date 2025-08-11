@@ -153,7 +153,6 @@
             <a href="{% url 'index' %}" class="nav-link"> Home </a>
           </li>
 
-          {% if user.is_authenticated %}
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="upskillingDropdown" aria-expanded="false" data-bs-toggle="dropdown">
               Upskilling
@@ -174,42 +173,48 @@
               </ul>
             </div>
           </li>
-          
-          {% endif %}
 
-          {% if user.is_authenticated %}
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-              Admin Settings
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'adminblogpage' %}">
-                  <li class="mb-2 menu ps-3 py-1">Review Blogs</li>
-                </a>
-                <a class="menu-link" href="{% url 'reports' %}">
-                  <li class="mb-2 menu ps-3 py-1">Reports</li>
-                </a>
-              </ul>
-            </div>
-          </li>
-          
-                 
-          {% endif %}
-
+            {% if user.is_authenticated %}
+              {% if user.is_staff or user.is_superuser %}
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+                Admin Dashboard
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
+                <ul class="list-style-none">
+                  <a class="menu-link" href="#">
+                    <li class="mb-2 menu ps-3 py-1">User Management</li>
+                  </a>
+                  <a class="menu-link" href="#">
+                    <li class="mb-2 menu ps-3 py-1">Project Assignment</li>
+                  </a>
+                  <a class="menu-link" href="#">
+                    <li class="mb-2 menu ps-3 py-1">Project Teams</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'adminblogpage' %}">
+                    <li class="mb-2 menu ps-3 py-1">Review Blogs</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'reports' %}">
+                    <li class="mb-2 menu ps-3 py-1">Reports</li>
+                  </a>
+                </ul>
+              </div>
+            </li>
+              {% endif %}
+            {% endif %}
 
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
           </li>
 
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+            <a href="#" class="nav-link" id="projectsDropdown" aria-expanded="false"
               data-bs-toggle="dropdown">
               Projects
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+            <div class="dropdown-menu pt-2" aria-labelledby="projectsDropdown">
 
 
               <ul class="list-style-none">
@@ -299,12 +304,12 @@
           
 
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+            <a href="#" class="nav-link" id="cyberChallengesDropdown" aria-expanded="false"
               data-bs-toggle="dropdown">
               Cyber Challenges
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+            <div class="dropdown-menu pt-2" aria-labelledby="cyberChallengesDropdown">
               <ul class="list-style-none">
                 <a class="menu-link" href="{% url 'challenge_list' %}">
                   <li class="mb-2 menu ps-3 py-1">
@@ -359,7 +364,6 @@
           <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
       </a>
 
-
         {% else %}
         <div class="sign-up-button-container">
 
@@ -367,26 +371,26 @@
 
           <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
 
-          <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
+          <!-- Sign In Dropdown for Team/Staff when User is Not Logged In -->
           {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
-            <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
+                        <button id="signInDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
               class="sign-up-button">
               <span href="#" class="fas fa-sign-in-alt me-2">
-              Sign In
+                Sign In
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </span>
             </button>
-            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
+            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="signInDropdown">
               <ul class="list-style-none">
                 <a class="menu-link" href="{% url 'login' %}">
                   <li class="mb-2 menu ps-3 py-1">
-                    Team Sign In
+                    Student Sign In
                   </li>
                 </a>
-                <a class="menu-link" href="#">
+                <a class="menu-link" href="{% url 'admin_login' %}">
                   <li class="mb-2 menu ps-3 py-1">
-                    Client Sign In
+                    Staff Sign In
                   </li>
                 </a>
               </ul>
@@ -398,24 +402,18 @@
           <!-- Sign Up Dropdown for Team/Client -->
           {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
-            <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
+            <button id="signUpDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
               class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
                 Sign Up
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </span></button>
-            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
+            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="signUpDropdown">
               <ul class="list-style-none">
                 <a class="menu-link" href="{% url 'register' %}">
                   <li class="mb-2 menu ps-3 py-1">
-                    Team Sign Up
+                    Sign Up
                   </li>
                 </a>
-                <a class="menu-link" href="#">
-                  <li class="mb-2 menu ps-3 py-1">
-                    Client Sign Up
-                  </li>
-                </a>
-
               </ul>
             </div>
           </div>
