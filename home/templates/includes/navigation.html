@@ -437,10 +437,53 @@
       </div>
     </div>
   </nav>
+  <audio id="click-sound" preload="auto" aria-hidden="true">
+  <source src="{% static 'assets/sounds/click.mp3' %}" type="audio/mpeg">
+</audio>
 </header>
 <script src="{% static 'js/toggles.js' %}"></script>
 
 <script src="{% static 'js/search_suggestions.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const audio = document.getElementById("click-sound");
+  if (!audio) return;
+
+  let lastPlay = 0;
+  function playSound() {
+    const now = Date.now();
+    if (now - lastPlay < 150) return; 
+    lastPlay = now;
+    const p = audio.play();
+    if (p !== undefined) p.catch(() => {}); 
+  }
+
+  
+  document.body.addEventListener("click", function(e) {
+    
+    const target = e.target.closest("button, a, [role='button']");
+    if (!target) return;
+
+    
+    if (target.disabled || target.getAttribute("aria-disabled") === "true") return;
+
+    
+    playSound();
+
+    
+    if (target.tagName.toLowerCase() === "a") {
+      const href = target.getAttribute("href");
+      const targetAttr = target.getAttribute("target");
+      if (href && !href.startsWith("javascript:") && targetAttr !== "_blank" && !e.defaultPrevented) {
+        e.preventDefault();   
+        setTimeout(() => {
+          window.location.href = href;
+        }, 100);
+      }      
+    }
+  }, true); 
+});
+</script>
 
 <style>
   .header-profile-name { color: #1a1a1a !important; }
