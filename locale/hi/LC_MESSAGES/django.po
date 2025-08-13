@@ -1,0 +1,336 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-09 00:11+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
+msgid "First Name"
+msgstr "पहला नाम"
+
+#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
+msgid "Last Name"
+msgstr "उपनाम"
+
+#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
+msgid "Deakin Email Address"
+msgstr "डीकन ईमेल पता"
+
+#: .\home\forms.py:58
+msgid "Email"
+msgstr "ईमेल"
+
+#: .\home\forms.py:64 .\home\forms.py:173
+msgid "Your Password"
+msgstr "आपका पासवर्ड"
+
+#: .\home\forms.py:68 .\home\forms.py:177
+msgid "Confirm Password"
+msgstr "पासवर्ड की पुष्टि करें"
+
+#: .\home\forms.py:79
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lowercase "
+"letters, numbers, and special characters."
+msgstr "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष वर्ण शामिल होने चाहिए।"
+
+#: .\home\forms.py:94
+msgid "Email must match your Deakin email."
+msgstr "ईमेल आपके डीकन ईमेल से मेल खाना चाहिए।"
+
+#: .\home\forms.py:162
+msgid "Business Email"
+msgstr "व्यवसाय ईमेल"
+
+#: .\home\forms.py:168
+msgid "Business Name"
+msgstr "व्यवसाय का नाम"
+
+#: .\home\forms.py:188
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lawercase "
+"letters, numbers and special characters."
+msgstr "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष वर्ण शामिल होने चाहिए।"
+
+#: .\home\forms.py:200
+msgid "Email must be valid email."
+msgstr "ईमेल मान्य होना चाहिए।"
+
+#: .\home\forms.py:210 .\home\forms.py:274
+msgid "Password"
+msgstr "पासवर्ड"
+
+#: .\home\forms.py:229 .\home\forms.py:257
+msgid "Too many login attempts. Please try again later."
+msgstr "बहुत अधिक लॉगिन प्रयास। कृपया बाद में पुनः प्रयास करें।"
+
+#: .\home\forms.py:310
+msgid "Your Email"
+msgstr "आपका ईमेल"
+
+#: .\home\forms.py:315 .\home\forms.py:326
+msgid "New Password"
+msgstr "नया पासवर्ड"
+
+#: .\home\forms.py:318 .\home\forms.py:329
+msgid "Confirm New Password"
+msgstr "नए पासवर्ड की पुष्टि करें"
+
+#: .\home\forms.py:323
+msgid "Old Password"
+msgstr "पुराना पासवर्ड"
+
+#: .\home\forms.py:333
+msgid "Deakin Student ID"
+msgstr "डीकन छात्र आईडी"
+
+#: .\home\forms.py:336
+msgid "Year"
+msgstr "वर्ष"
+
+#: .\home\mixins.py:27
+msgid "Superuser must have is_superuser = True"
+msgstr "सुपरयूज़र के पास is_superuser = True होना चाहिए"
+
+#: .\home\mixins.py:29
+msgid "Superuser must have is_staff = True"
+msgstr "सुपरयूज़र के पास is_staff = True होना चाहिए"
+
+#: .\home\mixins.py:39 .\home\models.py:97
+msgid "created_at"
+msgstr "निर्माण तिथि"
+
+#: .\home\mixins.py:40 .\home\models.py:98
+msgid "updated_at"
+msgstr "अद्यतन तिथि"
+
+#: .\home\models.py:74
+msgid "first name"
+msgstr "पहला नाम"
+
+#: .\home\models.py:75
+msgid "last name"
+msgstr "उपनाम"
+
+#: .\home\models.py:76
+msgid "deakin email address"
+msgstr "डीकन ईमेल पता"
+
+#: .\home\models.py:80
+msgid "staff status"
+msgstr "कर्मचारी स्थिति"
+
+#: .\home\models.py:82
+msgid "Designates whether the user can log into this admin site."
+msgstr "निर्धारित करता है कि उपयोगकर्ता इस एडमिन साइट में लॉग इन कर सकता है या नहीं।"
+
+#: .\home\models.py:85
+msgid "active"
+msgstr "सक्रिय"
+
+#: .\home\models.py:88
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr "निर्धारित करता है कि इस उपयोगकर्ता को सक्रिय माना जाए या नहीं। खाता हटाने के बजाय इस विकल्प को अनचेक करें।"
+
+#: .\home\models.py:93
+msgid "verified"
+msgstr "सत्यापित"
+
+#: .\home\models.py:95
+msgid "Designates whether the user has verified their account."
+msgstr "निर्धारित करता है कि उपयोगकर्ता ने अपना खाता सत्यापित किया है या नहीं।"
+
+#: .\home\models.py:114
+msgid "user"
+msgstr "उपयोगकर्ता"
+
+#: .\home\models.py:115
+msgid "users"
+msgstr "उपयोगकर्ता सूची"
+
+#: .\home\models.py:186
+msgid "project title"
+msgstr "परियोजना का शीर्षक"
+
+#: .\home\models.py:195
+msgid "course title"
+msgstr "पाठ्यक्रम का शीर्षक"
+
+#: .\home\models.py:196
+msgid "course code"
+msgstr "पाठ्यक्रम कोड"
+
+#: .\home\models.py:197
+msgid "postgraduate status"
+msgstr "स्नातकोत्तर स्थिति"
+
+#: .\home\models.py:251
+msgid "student_id"
+msgstr "छात्र आईडी"
+
+#: .\home\models.py:254
+msgid "Required. Enter Deakin Student ID. Digits only."
+msgstr "आवश्यक। डीकन छात्र आईडी दर्ज करें, केवल अंक।"
+
+#: .\home\models.py:257
+msgid "A user with that Student ID already exists."
+msgstr "उस छात्र आईडी वाला उपयोगकर्ता पहले से मौजूद है।"
+
+#: .\home\models.py:262
+msgid "trimester"
+msgstr "त्रैमासिक"
+
+#: .\home\models.py:263
+msgid "unit"
+msgstr "इकाई"
+
+#: .\home\templates\admin\home\app_index.html:7
+#: .\home\templates\includes\navigation.html:51
+msgid "Home"
+msgstr "होम"
+
+#: .\home\templates\includes\navigation.html:57
+msgid "Upskilling"
+msgstr "कौशल विकास"
+
+#: .\home\templates\includes\navigation.html:64
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+#: .\home\templates\includes\navigation.html:69
+msgid "Skills"
+msgstr "कौशल"
+
+#: .\home\templates\includes\navigation.html:81
+msgid "Admin Settings"
+msgstr "प्रशासनिक सेटिंग्स"
+
+#: .\home\templates\includes\navigation.html:87
+msgid "Review Blogs"
+msgstr "ब्लॉग समीक्षा"
+
+#: .\home\templates\includes\navigation.html:90
+msgid "Reports"
+msgstr "रिपोर्ट्स"
+
+#: .\home\templates\includes\navigation.html:101
+msgid "About"
+msgstr "परिचय"
+
+#: .\home\templates\includes\navigation.html:107
+msgid "Projects"
+msgstr "परियोजनाएं"
+
+#: .\home\templates\includes\navigation.html:116
+msgid "AppAttack"
+msgstr "ऐप अटैक"
+
+#: .\home\templates\includes\navigation.html:121
+msgid "PT-GUI"
+msgstr "पीटी-जीयूआई"
+
+#: .\home\templates\includes\navigation.html:126
+msgid "Smishing Detection"
+msgstr "स्मिशिंग पहचान"
+
+#: .\home\templates\includes\navigation.html:131
+msgid "Deakin CyberSafe VR"
+msgstr "डीकन साइबरसेफ वीआर"
+
+#: .\home\templates\includes\navigation.html:136
+msgid "The Policy Deployment Engine (New)"
+msgstr "नीति परिनियोजन इंजन (नया)"
+
+#: .\home\templates\includes\navigation.html:141
+msgid "Deakin Threat mirror (Finished)"
+msgstr "डीकन थ्रेट मिरर (पूर्ण)"
+
+#: .\home\templates\includes\navigation.html:160
+msgid "Blog"
+msgstr "ब्लॉग"
+
+#: .\home\templates\includes\navigation.html:167
+msgid "Create a Blog"
+msgstr "ब्लॉग बनाएं"
+
+#: .\home\templates\includes\navigation.html:168
+msgid "Published Blogs"
+msgstr "प्रकाशित ब्लॉग"
+
+#: .\home\templates\includes\navigation.html:174
+msgid "Careers"
+msgstr "करियर"
+
+#: .\home\templates\includes\navigation.html:180
+msgid "Discover Hardhat"
+msgstr "हार्डहैट खोजें"
+
+#: .\home\templates\includes\navigation.html:183
+msgid "All Jobs"
+msgstr "सभी नौकरियां"
+
+#: .\home\templates\includes\navigation.html:186
+msgid "Internships"
+msgstr "इंटर्नशिप"
+
+#: .\home\templates\includes\navigation.html:189
+msgid "Job Alerts"
+msgstr "नौकरी अलर्ट"
+
+#: .\home\templates\includes\navigation.html:199
+msgid "Cyber Challenges"
+msgstr "साइबर चुनौतियां"
+
+#: .\home\templates\includes\navigation.html:206
+msgid "All Challenges"
+msgstr "सभी चुनौतियां"
+
+#: .\home\templates\includes\navigation.html:211
+msgid "Quiz"
+msgstr "प्रश्नोत्तरी"
+
+#: .\home\templates\pages\index.html:20
+msgid "Hardhat Enterprises"
+msgstr "हार्डहैट एंटरप्राइजेज"
+
+#: .\home\templates\pages\index.html:21
+msgid "Security is a necessity. Not a choice"
+msgstr "सुरक्षा एक आवश्यकता है, विकल्प नहीं।"
+
+#: .\home\templates\pages\index.html:23
+msgid "Explore Projects"
+msgstr "परियोजनाओं का अन्वेषण करें"
+
+#: .\home\templates\pages\index.html:24
+msgid "Join Us"
+msgstr "हमसे जुड़ें"
+
+#: .\home\templates\pages\index.html:98
+msgid ""
+"Hardhat Enterprises is an organisation that aims to create cyber weapons and "
+"tools that can be used to empower white-hat operations. All deliverables "
+"produced by the company will be open source so that anyone may use and "
+"benefit from them. These deliverables should either improve on existing "
+"tools or fill a market need that is not yet met."
+msgstr "हार्डहैट एंटरप्राइजेज एक संगठन है जिसका उद्देश्य साइबर हथियार और उपकरण बनाना है जो व्हाइट-हैट कार्यों को सशक्त बनाने के लिए उपयोग किए जा सकते हैं। कंपनी द्वारा तैयार की गई सभी डिलिवरेबल्स ओपन सोर्स होंगी ताकि कोई भी उनका उपयोग कर सके और उनसे लाभ उठा सके। ये डिलिवरेबल्स या तो मौजूदा उपकरणों में सुधार करेंगी या किसी ऐसी बाजार आवश्यकता को पूरा करेंगी जो अभी तक पूरी नहीं हुई है।"
+
+#: .\home\validators.py:19
+msgid "Enter a valid student ID. This value must contain 9 digits only"
+msgstr "मान्य छात्र आईडी दर्ज करें। इसमें केवल 9 अंक होने चाहिए।"
+

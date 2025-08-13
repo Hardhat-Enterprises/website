@@ -1,0 +1,335 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-09 00:11+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
+msgid "First Name"
+msgstr "名"
+
+#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
+msgid "Last Name"
+msgstr "姓"
+
+#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
+msgid "Deakin Email Address"
+msgstr "ディーキン大学のメールアドレス"
+
+#: .\home\forms.py:58
+msgid "Email"
+msgstr "メールアドレス"
+
+#: .\home\forms.py:64 .\home\forms.py:173
+msgid "Your Password"
+msgstr "パスワード"
+
+#: .\home\forms.py:68 .\home\forms.py:177
+msgid "Confirm Password"
+msgstr "パスワードの確認"
+
+#: .\home\forms.py:79
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lowercase "
+"letters, numbers, and special characters."
+msgstr "パスワードは8文字以上で、大文字・小文字・数字・特殊文字を含める必要があります。"
+
+#: .\home\forms.py:94
+msgid "Email must match your Deakin email."
+msgstr "メールアドレスはディーキン大学のものと一致する必要があります。"
+
+#: .\home\forms.py:162
+msgid "Business Email"
+msgstr "ビジネスメール"
+
+#: .\home\forms.py:168
+msgid "Business Name"
+msgstr "会社名"
+
+#: .\home\forms.py:188
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lawercase "
+"letters, numbers and special characters."
+msgstr "パスワードは8文字以上で、大文字・小文字・数字・特殊文字を含める必要があります。"
+
+#: .\home\forms.py:200
+msgid "Email must be valid email."
+msgstr "有効なメールアドレスを入力してください。"
+
+#: .\home\forms.py:210 .\home\forms.py:274
+msgid "Password"
+msgstr "パスワード"
+
+#: .\home\forms.py:229 .\home\forms.py:257
+msgid "Too many login attempts. Please try again later."
+msgstr "ログイン試行回数が多すぎます。後でもう一度お試しください。"
+
+#: .\home\forms.py:310
+msgid "Your Email"
+msgstr "あなたのメールアドレス"
+
+#: .\home\forms.py:315 .\home\forms.py:326
+msgid "New Password"
+msgstr "新しいパスワード"
+
+#: .\home\forms.py:318 .\home\forms.py:329
+msgid "Confirm New Password"
+msgstr "新しいパスワードの確認"
+
+#: .\home\forms.py:323
+msgid "Old Password"
+msgstr "古いパスワード"
+
+#: .\home\forms.py:333
+msgid "Deakin Student ID"
+msgstr "ディーキン大学の学生ID"
+
+#: .\home\forms.py:336
+msgid "Year"
+msgstr "年度"
+
+#: .\home\mixins.py:27
+msgid "Superuser must have is_superuser = True"
+msgstr "スーパーユーザーは is_superuser = True に設定する必要があります"
+
+#: .\home\mixins.py:29
+msgid "Superuser must have is_staff = True"
+msgstr "スーパーユーザーは is_staff = True に設定する必要があります"
+
+#: .\home\mixins.py:39 .\home\models.py:97
+msgid "created_at"
+msgstr "作成日時"
+
+#: .\home\mixins.py:40 .\home\models.py:98
+msgid "updated_at"
+msgstr "更新日時"
+
+#: .\home\models.py:74
+msgid "first name"
+msgstr "名"
+
+#: .\home\models.py:75
+msgid "last name"
+msgstr "姓"
+
+#: .\home\models.py:76
+msgid "deakin email address"
+msgstr "ディーキン大学のメールアドレス"
+
+#: .\home\models.py:80
+msgid "staff status"
+msgstr "スタッフの状態"
+
+#: .\home\models.py:82
+msgid "Designates whether the user can log into this admin site."
+msgstr "この管理サイトにユーザーがログインできるかを指定します。"
+
+#: .\home\models.py:85
+msgid "active"
+msgstr "有効"
+
+#: .\home\models.py:88
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr "このユーザーを有効として扱うかどうかを指定します。アカウントを削除する代わりにこの選択を解除してください。"
+
+#: .\home\models.py:93
+msgid "verified"
+msgstr "確認済み"
+
+#: .\home\models.py:95
+msgid "Designates whether the user has verified their account."
+msgstr "ユーザーがアカウントを確認済みかどうかを指定します。"
+
+#: .\home\models.py:114
+msgid "user"
+msgstr "ユーザー"
+
+#: .\home\models.py:115
+msgid "users"
+msgstr "ユーザー一覧"
+
+#: .\home\models.py:186
+msgid "project title"
+msgstr "プロジェクト名"
+
+#: .\home\models.py:195
+msgid "course title"
+msgstr "コース名"
+
+#: .\home\models.py:196
+msgid "course code"
+msgstr "コースコード"
+
+#: .\home\models.py:197
+msgid "postgraduate status"
+msgstr "大学院生の状態"
+
+#: .\home\models.py:251
+msgid "student_id"
+msgstr "学生ID"
+
+#: .\home\models.py:254
+msgid "Required. Enter Deakin Student ID. Digits only."
+msgstr "必須。ディーキン大学の学生IDを入力してください。数字のみ。"
+
+#: .\home\models.py:257
+msgid "A user with that Student ID already exists."
+msgstr "その学生IDのユーザーはすでに存在します。"
+
+#: .\home\models.py:262
+msgid "trimester"
+msgstr "学期"
+
+#: .\home\models.py:263
+msgid "unit"
+msgstr "ユニット"
+
+#: .\home\templates\admin\home\app_index.html:7
+#: .\home\templates\includes\navigation.html:51
+msgid "Home"
+msgstr "ホーム"
+
+#: .\home\templates\includes\navigation.html:57
+msgid "Upskilling"
+msgstr "スキル向上"
+
+#: .\home\templates\includes\navigation.html:64
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+#: .\home\templates\includes\navigation.html:69
+msgid "Skills"
+msgstr "スキル"
+
+#: .\home\templates\includes\navigation.html:81
+msgid "Admin Settings"
+msgstr "管理者設定"
+
+#: .\home\templates\includes\navigation.html:87
+msgid "Review Blogs"
+msgstr "ブログ審査"
+
+#: .\home\templates\includes\navigation.html:90
+msgid "Reports"
+msgstr "レポート"
+
+#: .\home\templates\includes\navigation.html:101
+msgid "About"
+msgstr "概要"
+
+#: .\home\templates\includes\navigation.html:107
+msgid "Projects"
+msgstr "プロジェクト"
+
+#: .\home\templates\includes\navigation.html:116
+msgid "AppAttack"
+msgstr "AppAttack"
+
+#: .\home\templates\includes\navigation.html:121
+msgid "PT-GUI"
+msgstr "PT-GUI"
+
+#: .\home\templates\includes\navigation.html:126
+msgid "Smishing Detection"
+msgstr "スミッシング検出"
+
+#: .\home\templates\includes\navigation.html:131
+msgid "Deakin CyberSafe VR"
+msgstr "ディーキン CyberSafe VR"
+
+#: .\home\templates\includes\navigation.html:136
+msgid "The Policy Deployment Engine (New)"
+msgstr "ポリシー展開エンジン（新）"
+
+#: .\home\templates\includes\navigation.html:141
+msgid "Deakin Threat mirror (Finished)"
+msgstr "ディーキン Threat Mirror（完了）"
+
+#: .\home\templates\includes\navigation.html:160
+msgid "Blog"
+msgstr "ブログ"
+
+#: .\home\templates\includes\navigation.html:167
+msgid "Create a Blog"
+msgstr "ブログを作成"
+
+#: .\home\templates\includes\navigation.html:168
+msgid "Published Blogs"
+msgstr "公開済みブログ"
+
+#: .\home\templates\includes\navigation.html:174
+msgid "Careers"
+msgstr "採用情報"
+
+#: .\home\templates\includes\navigation.html:180
+msgid "Discover Hardhat"
+msgstr "Hardhatについて知る"
+
+#: .\home\templates\includes\navigation.html:183
+msgid "All Jobs"
+msgstr "全ての求人"
+
+#: .\home\templates\includes\navigation.html:186
+msgid "Internships"
+msgstr "インターンシップ"
+
+#: .\home\templates\includes\navigation.html:189
+msgid "Job Alerts"
+msgstr "求人アラート"
+
+#: .\home\templates\includes\navigation.html:199
+msgid "Cyber Challenges"
+msgstr "サイバー・チャレンジ"
+
+#: .\home\templates\includes\navigation.html:206
+msgid "All Challenges"
+msgstr "全てのチャレンジ"
+
+#: .\home\templates\includes\navigation.html:211
+msgid "Quiz"
+msgstr "クイズ"
+
+#: .\home\templates\pages\index.html:20
+msgid "Hardhat Enterprises"
+msgstr "Hardhat エンタープライズ"
+
+#: .\home\templates\pages\index.html:21
+msgid "Security is a necessity. Not a choice"
+msgstr "セキュリティは必需品であり、選択肢ではない"
+
+#: .\home\templates\pages\index.html:23
+msgid "Explore Projects"
+msgstr "プロジェクトを見る"
+
+#: .\home\templates\pages\index.html:24
+msgid "Join Us"
+msgstr "参加する"
+
+#: .\home\templates\pages\index.html:98
+msgid ""
+"Hardhat Enterprises is an organisation that aims to create cyber weapons and "
+"tools that can be used to empower white-hat operations. All deliverables "
+"produced by the company will be open source so that anyone may use and "
+"benefit from them. These deliverables should either improve on existing "
+"tools or fill a market need that is not yet met."
+msgstr "Hardhatエンタープライズは、ホワイトハット活動を支援するためのサイバー兵器やツールを開発することを目的とした組織です。同社が制作するすべての成果物はオープンソースとなり、誰でも利用し利益を得ることができます。これらの成果物は、既存のツールを改良するか、またはまだ満たされていない市場のニーズを満たす必要があります。"
+
+#: .\home\validators.py:19
+msgid "Enter a valid student ID. This value must contain 9 digits only"
+msgstr "有効な学生IDを入力してください。この値は9桁の数字のみでなければなりません"

@@ -1,0 +1,336 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-09 00:11+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
+msgid "First Name"
+msgstr "Prénom"
+
+#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
+msgid "Last Name"
+msgstr "Nom de famille"
+
+#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
+msgid "Deakin Email Address"
+msgstr "Adresse e-mail Deakin"
+
+#: .\home\forms.py:58
+msgid "Email"
+msgstr "E-mail"
+
+#: .\home\forms.py:64 .\home\forms.py:173
+msgid "Your Password"
+msgstr "Votre mot de passe"
+
+#: .\home\forms.py:68 .\home\forms.py:177
+msgid "Confirm Password"
+msgstr "Confirmer le mot de passe"
+
+#: .\home\forms.py:79
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lowercase "
+"letters, numbers, and special characters."
+msgstr "Le mot de passe doit comporter au moins 8 caractères et inclure des lettres majuscules, minuscules, des chiffres et des caractères spéciaux."
+
+#: .\home\forms.py:94
+msgid "Email must match your Deakin email."
+msgstr "L'adresse e-mail doit correspondre à votre e-mail Deakin."
+
+#: .\home\forms.py:162
+msgid "Business Email"
+msgstr "E-mail professionnel"
+
+#: .\home\forms.py:168
+msgid "Business Name"
+msgstr "Nom de l'entreprise"
+
+#: .\home\forms.py:188
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lawercase "
+"letters, numbers and special characters."
+msgstr "Le mot de passe doit comporter au moins 8 caractères et inclure des lettres majuscules, minuscules, des chiffres et des caractères spéciaux."
+
+#: .\home\forms.py:200
+msgid "Email must be valid email."
+msgstr "L'adresse e-mail doit être valide."
+
+#: .\home\forms.py:210 .\home\forms.py:274
+msgid "Password"
+msgstr "Mot de passe"
+
+#: .\home\forms.py:229 .\home\forms.py:257
+msgid "Too many login attempts. Please try again later."
+msgstr "Trop de tentatives de connexion. Veuillez réessayer plus tard."
+
+#: .\home\forms.py:310
+msgid "Your Email"
+msgstr "Votre e-mail"
+
+#: .\home\forms.py:315 .\home\forms.py:326
+msgid "New Password"
+msgstr "Nouveau mot de passe"
+
+#: .\home\forms.py:318 .\home\forms.py:329
+msgid "Confirm New Password"
+msgstr "Confirmer le nouveau mot de passe"
+
+#: .\home\forms.py:323
+msgid "Old Password"
+msgstr "Ancien mot de passe"
+
+#: .\home\forms.py:333
+msgid "Deakin Student ID"
+msgstr "Identifiant étudiant Deakin"
+
+#: .\home\forms.py:336
+msgid "Year"
+msgstr "Année"
+
+#: .\home\mixins.py:27
+msgid "Superuser must have is_superuser = True"
+msgstr "L'utilisateur superadmin doit avoir is_superuser = True"
+
+#: .\home\mixins.py:29
+msgid "Superuser must have is_staff = True"
+msgstr "L'utilisateur superadmin doit avoir is_staff = True"
+
+#: .\home\mixins.py:39 .\home\models.py:97
+msgid "created_at"
+msgstr "créé_le"
+
+#: .\home\mixins.py:40 .\home\models.py:98
+msgid "updated_at"
+msgstr "mis_à_jour_le"
+
+#: .\home\models.py:74
+msgid "first name"
+msgstr "prénom"
+
+#: .\home\models.py:75
+msgid "last name"
+msgstr "nom"
+
+#: .\home\models.py:76
+msgid "deakin email address"
+msgstr "adresse e-mail Deakin"
+
+#: .\home\models.py:80
+msgid "staff status"
+msgstr "statut du personnel"
+
+#: .\home\models.py:82
+msgid "Designates whether the user can log into this admin site."
+msgstr "Indique si l'utilisateur peut se connecter à ce site d'administration."
+
+#: .\home\models.py:85
+msgid "active"
+msgstr "actif"
+
+#: .\home\models.py:88
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr "Indique si cet utilisateur doit être considéré comme actif. Décochez ceci au lieu de supprimer le compte."
+
+#: .\home\models.py:93
+msgid "verified"
+msgstr "vérifié"
+
+#: .\home\models.py:95
+msgid "Designates whether the user has verified their account."
+msgstr "Indique si l'utilisateur a vérifié son compte."
+
+#: .\home\models.py:114
+msgid "user"
+msgstr "utilisateur"
+
+#: .\home\models.py:115
+msgid "users"
+msgstr "utilisateurs"
+
+#: .\home\models.py:186
+msgid "project title"
+msgstr "titre du projet"
+
+#: .\home\models.py:195
+msgid "course title"
+msgstr "titre du cours"
+
+#: .\home\models.py:196
+msgid "course code"
+msgstr "code du cours"
+
+#: .\home\models.py:197
+msgid "postgraduate status"
+msgstr "statut de troisième cycle"
+
+#: .\home\models.py:251
+msgid "student_id"
+msgstr "identifiant étudiant"
+
+#: .\home\models.py:254
+msgid "Required. Enter Deakin Student ID. Digits only."
+msgstr "Obligatoire. Entrez l'identifiant étudiant Deakin. Chiffres uniquement."
+
+#: .\home\models.py:257
+msgid "A user with that Student ID already exists."
+msgstr "Un utilisateur avec cet identifiant étudiant existe déjà."
+
+#: .\home\models.py:262
+msgid "trimester"
+msgstr "trimestre"
+
+#: .\home\models.py:263
+msgid "unit"
+msgstr "unité"
+
+#: .\home\templates\admin\home\app_index.html:7
+#: .\home\templates\includes\navigation.html:51
+msgid "Home"
+msgstr "Accueil"
+
+#: .\home\templates\includes\navigation.html:57
+msgid "Upskilling"
+msgstr "Perfectionnement"
+
+#: .\home\templates\includes\navigation.html:64
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: .\home\templates\includes\navigation.html:69
+msgid "Skills"
+msgstr "Compétences"
+
+#: .\home\templates\includes\navigation.html:81
+msgid "Admin Settings"
+msgstr "Paramètres administrateur"
+
+#: .\home\templates\includes\navigation.html:87
+msgid "Review Blogs"
+msgstr "Vérifier les blogs"
+
+#: .\home\templates\includes\navigation.html:90
+msgid "Reports"
+msgstr "Rapports"
+
+#: .\home\templates\includes\navigation.html:101
+msgid "About"
+msgstr "À propos"
+
+#: .\home\templates\includes\navigation.html:107
+msgid "Projects"
+msgstr "Projets"
+
+#: .\home\templates\includes\navigation.html:116
+msgid "AppAttack"
+msgstr "AppAttack"
+
+#: .\home\templates\includes\navigation.html:121
+msgid "PT-GUI"
+msgstr "PT-GUI"
+
+#: .\home\templates\includes\navigation.html:126
+msgid "Smishing Detection"
+msgstr "Détection de smishing"
+
+#: .\home\templates\includes\navigation.html:131
+msgid "Deakin CyberSafe VR"
+msgstr "Deakin CyberSafe VR"
+
+#: .\home\templates\includes\navigation.html:136
+msgid "The Policy Deployment Engine (New)"
+msgstr "Le moteur de déploiement de politique (Nouveau)"
+
+#: .\home\templates\includes\navigation.html:141
+msgid "Deakin Threat mirror (Finished)"
+msgstr "Miroir de menace Deakin (Terminé)"
+
+#: .\home\templates\includes\navigation.html:160
+msgid "Blog"
+msgstr "Blog"
+
+#: .\home\templates\includes\navigation.html:167
+msgid "Create a Blog"
+msgstr "Créer un blog"
+
+#: .\home\templates\includes\navigation.html:168
+msgid "Published Blogs"
+msgstr "Blogs publiés"
+
+#: .\home\templates\includes\navigation.html:174
+msgid "Careers"
+msgstr "Carrières"
+
+#: .\home\templates\includes\navigation.html:180
+msgid "Discover Hardhat"
+msgstr "Découvrir Hardhat"
+
+#: .\home\templates\includes\navigation.html:183
+msgid "All Jobs"
+msgstr "Tous les emplois"
+
+#: .\home\templates\includes\navigation.html:186
+msgid "Internships"
+msgstr "Stages"
+
+#: .\home\templates\includes\navigation.html:189
+msgid "Job Alerts"
+msgstr "Alertes emploi"
+
+#: .\home\templates\includes\navigation.html:199
+msgid "Cyber Challenges"
+msgstr "Défis cyber"
+
+#: .\home\templates\includes\navigation.html:206
+msgid "All Challenges"
+msgstr "Tous les défis"
+
+#: .\home\templates\includes\navigation.html:211
+msgid "Quiz"
+msgstr "Quiz"
+
+#: .\home\templates\pages\index.html:20
+msgid "Hardhat Enterprises"
+msgstr "Hardhat Entreprises"
+
+#: .\home\templates\pages\index.html:21
+msgid "Security is a necessity. Not a choice"
+msgstr "La sécurité est une nécessité, pas un choix"
+
+#: .\home\templates\pages\index.html:23
+msgid "Explore Projects"
+msgstr "Explorer les projets"
+
+#: .\home\templates\pages\index.html:24
+msgid "Join Us"
+msgstr "Rejoignez-nous"
+
+#: .\home\templates\pages\index.html:98
+msgid ""
+"Hardhat Enterprises is an organisation that aims to create cyber weapons and "
+"tools that can be used to empower white-hat operations. All deliverables "
+"produced by the company will be open source so that anyone may use and "
+"benefit from them. These deliverables should either improve on existing "
+"tools or fill a market need that is not yet met."
+msgstr "Hardhat Entreprises est une organisation qui vise à créer des armes et outils cyber pouvant être utilisés pour renforcer les opérations white-hat. Tous les livrables produits par l'entreprise seront open source afin que chacun puisse les utiliser et en bénéficier. Ces livrables devraient soit améliorer les outils existants, soit répondre à un besoin du marché qui n'est pas encore satisfait."
+
+#: .\home\validators.py:19
+msgid "Enter a valid student ID. This value must contain 9 digits only"
+msgstr "Entrez un identifiant étudiant valide. Cette valeur doit contenir uniquement 9 chiffres"
+

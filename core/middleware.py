@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
+from django.utils import translation
 logger = logging.getLogger('admin_logout_logger')
 
 class AutoLogoutMiddleware(MiddlewareMixin):
@@ -91,3 +92,18 @@ class LogRequestMiddleware:
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip   
+
+
+class ForceDefaultLanguageMiddleware:
+  
+    # Force the default language to English, ignoring the browser Accept-Language
+   
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if not request.session.get('django_language'):
+            translation.activate('en')
+            request.session['django_language'] = 'en'
+            request.LANGUAGE_CODE = 'en'
+        return self.get_response(request)

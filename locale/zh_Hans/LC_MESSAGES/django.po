@@ -1,0 +1,353 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-09 01:35+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
+msgid "First Name"
+msgstr "名字"
+
+#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
+msgid "Last Name"
+msgstr "姓氏"
+
+#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
+msgid "Deakin Email Address"
+msgstr "迪肯大学邮箱地址"
+
+#: .\home\forms.py:58
+msgid "Email"
+msgstr "电子邮箱"
+
+#: .\home\forms.py:64 .\home\forms.py:173
+msgid "Your Password"
+msgstr "您的密码"
+
+#: .\home\forms.py:68 .\home\forms.py:177
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: .\home\forms.py:79
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lowercase "
+"letters, numbers, and special characters."
+msgstr "密码必须至少包含8个字符，并包括大写字母、小写字母、数字和特殊字符。"
+
+#: .\home\forms.py:94
+msgid "Email must match your Deakin email."
+msgstr "邮箱必须与您的迪肯大学邮箱一致。"
+
+#: .\home\forms.py:162
+msgid "Business Email"
+msgstr "企业邮箱"
+
+#: .\home\forms.py:168
+msgid "Business Name"
+msgstr "企业名称"
+
+#: .\home\forms.py:188
+msgid ""
+"Password must be at least 8 characters long and include uppercase, lawercase "
+"letters, numbers and special characters."
+msgstr "密码必须至少包含8个字符，并包括大写字母、小写字母、数字和特殊字符。"
+
+#: .\home\forms.py:200
+msgid "Email must be valid email."
+msgstr "请输入有效的电子邮箱地址。"
+
+#: .\home\forms.py:210 .\home\forms.py:274
+msgid "Password"
+msgstr "密码"
+
+#: .\home\forms.py:229 .\home\forms.py:257
+msgid "Too many login attempts. Please try again later."
+msgstr "登录尝试次数过多，请稍后再试。"
+
+#: .\home\forms.py:310
+msgid "Your Email"
+msgstr "您的电子邮箱"
+
+#: .\home\forms.py:315 .\home\forms.py:326
+msgid "New Password"
+msgstr "新密码"
+
+#: .\home\forms.py:318 .\home\forms.py:329
+msgid "Confirm New Password"
+msgstr "确认新密码"
+
+#: .\home\forms.py:323
+msgid "Old Password"
+msgstr "旧密码"
+
+#: .\home\forms.py:333
+msgid "Deakin Student ID"
+msgstr "迪肯大学学号"
+
+#: .\home\forms.py:336
+msgid "Year"
+msgstr "年份"
+
+#: .\home\mixins.py:27
+msgid "Superuser must have is_superuser = True"
+msgstr "超级用户必须将 is_superuser 设置为 True"
+
+#: .\home\mixins.py:29
+msgid "Superuser must have is_staff = True"
+msgstr "超级用户必须将 is_staff 设置为 True"
+
+#: .\home\mixins.py:39 .\home\models.py:97
+msgid "created_at"
+msgstr "创建时间"
+
+#: .\home\mixins.py:40 .\home\models.py:98
+msgid "updated_at"
+msgstr "更新时间"
+
+#: .\home\models.py:74
+msgid "first name"
+msgstr "名"
+
+#: .\home\models.py:75
+msgid "last name"
+msgstr "姓"
+
+#: .\home\models.py:76
+msgid "deakin email address"
+msgstr "迪肯大学邮箱地址"
+
+#: .\home\models.py:80
+msgid "staff status"
+msgstr "员工状态"
+
+#: .\home\models.py:82
+msgid "Designates whether the user can log into this admin site."
+msgstr "指定用户是否可以登录此管理站点。"
+
+#: .\home\models.py:85
+msgid "active"
+msgstr "激活状态"
+
+#: .\home\models.py:88
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr "指定该用户是否应被视为激活状态。取消选择此项而不是删除账户。"
+
+#: .\home\models.py:93
+msgid "verified"
+msgstr "已验证"
+
+#: .\home\models.py:95
+msgid "Designates whether the user has verified their account."
+msgstr "指定该用户是否已验证其账户。"
+
+#: .\home\models.py:114
+msgid "user"
+msgstr "用户"
+
+#: .\home\models.py:115
+msgid "users"
+msgstr "用户列表"
+
+#: .\home\models.py:186
+msgid "project title"
+msgstr "项目标题"
+
+#: .\home\models.py:195
+msgid "course title"
+msgstr "课程标题"
+
+#: .\home\models.py:196
+msgid "course code"
+msgstr "课程代码"
+
+#: .\home\models.py:197
+msgid "postgraduate status"
+msgstr "研究生状态"
+
+#: .\home\models.py:251
+msgid "student_id"
+msgstr "学生学号"
+
+#: .\home\models.py:254
+msgid "Required. Enter Deakin Student ID. Digits only."
+msgstr "必填。请输入迪肯大学学生学号，仅限数字。"
+
+#: .\home\models.py:257
+msgid "A user with that Student ID already exists."
+msgstr "已存在使用该学生学号的用户。"
+
+#: .\home\models.py:262
+msgid "trimester"
+msgstr "学期"
+
+#: .\home\models.py:263
+msgid "unit"
+msgstr "单元"
+
+#: .\home\templates\admin\home\app_index.html:7
+#: .\home\templates\includes\navigation.html:51
+msgid "Home"
+msgstr "首页"
+
+#: .\home\templates\includes\navigation.html:57
+msgid "Upskilling"
+msgstr "技能提升"
+
+#: .\home\templates\includes\navigation.html:64
+msgid "Dashboard"
+msgstr "仪表盘"
+
+#: .\home\templates\includes\navigation.html:69
+msgid "Skills"
+msgstr "技能"
+
+#: .\home\templates\includes\navigation.html:81
+msgid "Admin Settings"
+msgstr "管理员设置"
+
+#: .\home\templates\includes\navigation.html:87
+msgid "Review Blogs"
+msgstr "审核博客"
+
+#: .\home\templates\includes\navigation.html:90
+msgid "Reports"
+msgstr "报告"
+
+#: .\home\templates\includes\navigation.html:101
+msgid "About"
+msgstr "关于"
+
+#: .\home\templates\includes\navigation.html:107
+msgid "Projects"
+msgstr "项目"
+
+#: .\home\templates\includes\navigation.html:116
+msgid "AppAttack"
+msgstr "应用攻击（AppAttack）"
+
+#: .\home\templates\includes\navigation.html:121
+msgid "PT-GUI"
+msgstr "PT-GUI"
+
+#: .\home\templates\includes\navigation.html:126
+msgid "Smishing Detection"
+msgstr "短信钓鱼检测"
+
+#: .\home\templates\includes\navigation.html:131
+msgid "Deakin CyberSafe VR"
+msgstr "迪肯网络安全虚拟现实"
+
+#: .\home\templates\includes\navigation.html:136
+msgid "The Policy Deployment Engine (New)"
+msgstr "策略部署引擎（新）"
+
+#: .\home\templates\includes\navigation.html:141
+msgid "Deakin Threat mirror (Finished)"
+msgstr "迪肯威胁镜像（已完成）"
+
+#: .\home\templates\includes\navigation.html:160
+msgid "Blog"
+msgstr "博客"
+
+#: .\home\templates\includes\navigation.html:167
+msgid "Create a Blog"
+msgstr "创建博客"
+
+#: .\home\templates\includes\navigation.html:168
+msgid "Published Blogs"
+msgstr "已发布的博客"
+
+#: .\home\templates\includes\navigation.html:174
+msgid "Careers"
+msgstr "招聘"
+
+#: .\home\templates\includes\navigation.html:180
+msgid "Discover Hardhat"
+msgstr "探索 Hardhat"
+
+#: .\home\templates\includes\navigation.html:183
+msgid "All Jobs"
+msgstr "全部职位"
+
+#: .\home\templates\includes\navigation.html:186
+msgid "Internships"
+msgstr "实习"
+
+#: .\home\templates\includes\navigation.html:189
+msgid "Job Alerts"
+msgstr "职位提醒"
+
+#: .\home\templates\includes\navigation.html:199
+msgid "Cyber Challenges"
+msgstr "网络挑战"
+
+#: .\home\templates\includes\navigation.html:206
+msgid "All Challenges"
+msgstr "全部挑战"
+
+#: .\home\templates\includes\navigation.html:211
+msgid "Quiz"
+msgstr "测验"
+
+#: .\home\templates\pages\index.html:20
+msgid "Hardhat Enterprises"
+msgstr "Hardhat 企业"
+
+#: .\home\templates\pages\index.html:21
+msgid "Security is a necessity. Not a choice"
+msgstr "安全是必需品，而非选择"
+
+#: .\home\templates\pages\index.html:23
+msgid "Explore Projects"
+msgstr "探索项目"
+
+#: .\home\templates\pages\index.html:24
+msgid "Join Us"
+msgstr "加入我们"
+
+#: .\home\templates\pages\index.html:97
+msgid "Company Vision"
+msgstr "公司愿景"
+
+#: .\home\templates\pages\index.html:98
+msgid ""
+"Hardhat Enterprises is an organisation that aims to create cyber weapons and "
+"tools that can be used to empower white-hat operations. All deliverables "
+"produced by the company will be open source so that anyone may use and "
+"benefit from them. These deliverables should either improve on existing "
+"tools or fill a market need that is not yet met."
+msgstr ""
+"Hardhat 企业是一家致力于创建网络武器和工具的组织，这些工具可用于支持白帽行"
+"动。公司制作的所有成果都将开源，以便任何人都可以使用并从中受益。这些成果应当"
+"改进现有工具或填补尚未满足的市场需求。"
+
+#: .\home\templates\pages\index.html:104
+msgid "Company Mission"
+msgstr "公司使命"
+
+#: .\home\templates\pages\index.html:105
+msgid ""
+"Achieve an engaging learning experience for students within the company. An "
+"opportunity for students to gain cross department/project experience and the "
+"opportunity to share their expertise outside of their project team."
+msgstr "为公司内部的学生创造一个引人入胜的学习体验，让他们有机会获得跨部门/跨项目的经验，并能够在项目团队之外分享自己的专业知识。"
+
+#: .\home\validators.py:19
+msgid "Enter a valid student ID. This value must contain 9 digits only"
+msgstr "请输入有效的学生学号，该值必须仅包含 9 位数字"
