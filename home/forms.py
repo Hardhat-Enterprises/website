@@ -28,29 +28,6 @@ def possible_years(first_year_in_scroll, last_year_in_scroll):
         p_year_tuple = str(i), i
         p_year.append(p_year_tuple)
     return p_year
-class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email', )
-
-        labels = {
-            'first_name': _('First Name'),
-            'last_name': _('Last Name'),
-            'email': _('Deakin Email Address'),
-        }
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'First Name'
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Last Name'
-            }),
-            'email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'example@deakin.edu.au'
-            })
-        }
 
 class RegistrationForm(UserCreationForm):
     # Newly added...........................
@@ -71,13 +48,23 @@ class RegistrationForm(UserCreationForm):
     # Newly added................................................
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
-        # Define the regex pattern for the required password format
-        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
         
-        if not re.match(pattern, password):
-            raise ValidationError(
-                _("Password must be at least 8 characters long and include uppercase, lowercase letters, numbers, and special characters.")
-            )
+        # Check individual requirements - this matches the frontend validation
+        if len(password) < 8:
+            raise ValidationError(_("Password must be at least 8 characters long."))
+        
+        if not re.search(r'[a-z]', password):
+            raise ValidationError(_("Password must include at least one lowercase letter."))
+            
+        if not re.search(r'[A-Z]', password):
+            raise ValidationError(_("Password must include at least one uppercase letter."))
+            
+        if not re.search(r'\d', password):
+            raise ValidationError(_("Password must include at least one number."))
+            
+        if not re.search(r'[@$!%*?&]', password):
+            raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
+        
         return password
     # ...........................................................
 
@@ -132,29 +119,6 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email', )
-        labels = {
-            'first_name': _('First Name'),
-            'last_name': _('Last Name'),
-            'email': _('Deakin Email Address'),
-        }
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'First Name'
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Last Name'
-            }),
-            'email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'example@deakin.edu.au'
-            })
-        }
 
 class ClientRegistrationForm(UserCreationForm):
     # Newly added...........................
@@ -180,13 +144,23 @@ class ClientRegistrationForm(UserCreationForm):
     # Newly added................................................
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
-        # Define the regex pattern for the required password format
-        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
         
-        if not re.match(pattern, password):
-            raise ValidationError(
-                _("Password must be at least 8 characters long and include uppercase, lawercase letters, numbers and special characters.")
-            )
+        # Check individual requirements - this matches the frontend validation
+        if len(password) < 8:
+            raise ValidationError(_("Password must be at least 8 characters long."))
+        
+        if not re.search(r'[a-z]', password):
+            raise ValidationError(_("Password must include at least one lowercase letter."))
+            
+        if not re.search(r'[A-Z]', password):
+            raise ValidationError(_("Password must include at least one uppercase letter."))
+            
+        if not re.search(r'\d', password):
+            raise ValidationError(_("Password must include at least one number."))
+            
+        if not re.search(r'[@$!%*?&]', password):
+            raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
+        
         return password
     # ...........................................................
 
