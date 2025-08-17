@@ -47,6 +47,7 @@ urlpatterns = [
     path('accounts/', include('home.urls')), 
     path('', include('home.urls')),
     path('about-us/', views.about_us, name='about_us'),
+    path('our-tools/', views.security_tools, name='our_tools'),
     path('contact', views.contact, name='contact'),
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
