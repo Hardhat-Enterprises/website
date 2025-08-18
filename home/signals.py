@@ -1,33 +1,37 @@
+import hashlib
+from django.conf import settings
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.sessions.models import Session
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.timezone import now
-from .models import User
-from django.contrib.auth.signals import user_login_failed
-from django.core.signals import request_finished
-from utils.email_notifications import send_account_notification
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 
+from .models import User, KnownDevice
+from utils.email_notifications import send_account_notification
 
 User = get_user_model()
 
+print("✅ Signals loaded")
+
+# -------------------------
+# SESSION SECURITY SIGNALS
+# -------------------------
 
 @receiver(user_logged_in)
 def set_session_last_activity_on_login(sender, request, user, **kwargs):
     """
     Set the initial 'last_activity' in session on user login.
+    Prevent concurrent sessions by deleting the old one.
     """
-    request.session['last_activity'] = now().timestamp()
+    request.session['last_activity'] = timezone.now().timestamp()
 
-    # Force session save if no session key available
     if not request.session.session_key:
         request.session.save()
 
     current_session_key = request.session.session_key
     print(f"[Login] Current session key: {current_session_key}")
 
-    # Prevent concurrent logins
     if hasattr(user, 'current_session_key') and user.current_session_key and user.current_session_key != current_session_key:
         try:
             old_session = Session.objects.get(session_key=user.current_session_key)
@@ -36,16 +40,10 @@ def set_session_last_activity_on_login(sender, request, user, **kwargs):
         except Session.DoesNotExist:
             print("[Login] Old session not found.")
 
-    # Save new session key to user model
     user.current_session_key = current_session_key
-    user.save()
+    user.save(update_fields=['current_session_key'])
 
-    # Send login email notification
-    ip = request.META.get('REMOTE_ADDR')
-    browser = request.META.get('HTTP_USER_AGENT', 'Unknown Browser')
-    message = f"You logged in on {now()} from IP: {ip}\nBrowser: {browser}"
-    send_account_notification(user, "New Login Detected", message)
- 
+
 @receiver(user_logged_out)
 def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
     """
@@ -54,39 +52,84 @@ def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
     if 'last_activity' in request.session:
         del request.session['last_activity']
 
-    # Clear session tracking on logout
     if hasattr(user, 'current_session_key') and user.current_session_key == request.session.session_key:
         user.current_session_key = None
-        user.save()
+        user.save(update_fields=['current_session_key'])
 
-    # Send logout email notification
-    ip = request.META.get('REMOTE_ADDR')
-    message = f"You logged out on {now()} from IP: {ip}"
-    send_account_notification(user, "Account Logout Notification", message)
 
-def clear_user_sessions(user, current_session_key=None):
-    """
-    Clear all sessions for a user except the current one
-    """
-    if not user:
-        return
-
-    # Get all sessions for user
-    sessions = Session.objects.filter(expire_date__gte=now())
-    if current_session_key:
-        sessions = sessions.exclude(session_key=current_session_key)
-    
-    for session in sessions:
-        session_data = session.get_decoded()
-        if str(user.id) == session_data.get('_auth_user_id'):
-            session.delete()
-
+# -------------------------
+# PROFILE UPDATE SIGNAL (OPTIONAL)
+# -------------------------
 
 @receiver(post_save, sender=User)
-def notify_user_profile_update(sender, instance, created, **kwargs):
+def notify_user_profile_update(sender, instance, created, update_fields=None, **kwargs):
     """
-    Send email notification when the user updates their profile.
+    Only send email if real profile fields changed.
+    Avoid emails on login/logout.
     """
-    if not created:  # Only send on updates, not when a new user is created
-        message = f"Your profile was updated on {now()}.\n\nIf this wasn't you, please secure your account immediately."
-        send_account_notification(instance, "Profile Update Notification", message)
+    if created:
+        return  # Don't notify on account creation
+
+    ignored_fields = {"current_session_key", "last_login", "password"}
+
+    if update_fields is None or set(update_fields).issubset(ignored_fields):
+        return  # Skip login/logout updates
+
+    message = (
+        f"Your profile was updated on {timezone.now()}.\n\n"
+        "If this wasn't you, please secure your account immediately."
+    )
+    send_account_notification(instance, "Profile Update Notification", message)
+
+
+# -------------------------
+# NEW DEVICE DETECTION
+# -------------------------
+
+def get_client_ip(request):
+    xff = request.META.get('HTTP_X_FORWARDED_FOR')
+    return xff.split(',')[0].strip() if xff else request.META.get('REMOTE_ADDR')
+
+
+def fingerprint_user_agent(request):
+    ua = (request.META.get('HTTP_USER_AGENT') or '').strip()
+    fp = hashlib.sha256(ua.encode('utf-8')).hexdigest()
+    return fp, ua
+
+
+@receiver(user_logged_in)
+def notify_on_new_device(sender, request, user, **kwargs):
+    """
+    Send an email ONLY when the login comes from a NEW device.
+    Track last_seen on every login from the device.
+    No emails on logout or repeated logins from known devices.
+    """
+    ip = get_client_ip(request)
+    fp, ua = fingerprint_user_agent(request)
+
+    # Get or create the device
+    device, created = KnownDevice.objects.get_or_create(
+        user=user,
+        fingerprint=fp,
+        defaults={'user_agent': ua, 'last_ip': ip}
+    )
+
+    # Update last_seen and last_ip for every login
+    device.last_seen = timezone.now()
+    if device.last_ip != ip:
+        device.last_ip = ip
+    device.save(update_fields=['last_ip', 'last_seen'])
+
+    # Send email only if this is a NEW device
+    if created:
+        subject = "New device sign-in to your Hardhat account"
+        body = (
+            f"Hi {getattr(user, 'first_name', '') or user.username},\n\n"
+            "We noticed a sign-in from a new device on your account.\n\n"
+            f"Time: {timezone.now():%Y-%m-%d %H:%M:%S %Z}\n"
+            f"IP: {ip}\n"
+            f"Device: {ua or 'Unknown'}\n\n"
+            "If this was you, no action is needed.\n"
+            "If not, please reset your password immediately and contact support."
+        )
+        send_account_notification(user, subject, body)

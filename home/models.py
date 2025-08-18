@@ -100,7 +100,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_activity = models.DateTimeField(null=True, blank=True, default=now)
 
 
-    current_session_key = models.CharField(max_length=40, null=True, blank=True)
+    current_session_key = models.CharField(max_length=40, blank=True, null=True)
     
     last_login_ip = models.GenericIPAddressField(null=True, blank=True)
     last_login_browser = models.TextField(null=True, blank=True)
@@ -669,3 +669,23 @@ def update_activity(self):
 
     self.last_activity = now()
     self.save(update_fields=['last_activity'])
+
+#KnownDevice Model
+class KnownDevice(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="known_devices"
+    )
+    fingerprint = models.CharField(max_length=64, db_index=True)  # hash of user agent
+    user_agent = models.TextField(blank=True)
+    last_ip = models.GenericIPAddressField(null=True, blank=True)
+    first_seen = models.DateTimeField(auto_now_add=True)
+    last_seen = models.DateTimeField(default=timezone.now)
+    label = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'fingerprint')
+
+    def __str__(self):
+        return f"{self.user} - {self.fingerprint[:8]}"
