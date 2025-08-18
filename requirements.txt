@@ -19,6 +19,9 @@ crispy-bootstrap5==2024.2
 django-theme-pixel==1.0.3
 django-tinymce==4.1.0
 
+# Database
+psycopg2-binary==2.9.9
+
 # Deployment
 whitenoise==6.7.0
 gunicorn==23.0.0

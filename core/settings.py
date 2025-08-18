@@ -128,7 +128,9 @@ MIDDLEWARE = [
     "home.idle.LogoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    'core.middleware.AutoLogoutMiddleware'
+    "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
+    'core.middleware.AutoLogoutMiddleware',
+
 ]
 
 LOGGING = {
