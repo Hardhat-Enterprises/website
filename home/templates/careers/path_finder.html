@@ -1,0 +1,359 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}Cybersecurity Career Path Finder | Hardhat Enterprises{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+<style>
+  /* === Hardhat-aligned dark card & readable text (page-local only) === */
+  .hh-card-dark{
+    background-color:#212529;      /* dark surface */
+    color:#f1f3f5;                  /* default light text */
+  }
+
+  /* Ensure ALL key text inside the dark card stays readable regardless of global theme */
+  .hh-card-dark .hh-headline,
+  .hh-card-dark #primaryRec,
+  .hh-card-dark h1,
+  .hh-card-dark h2,
+  .hh-card-dark h3{
+    color:#ffffff !important;       /* bright headings */
+  }
+
+  .hh-card-dark p,
+  .hh-card-dark li,
+  .hh-card-dark label,
+  .hh-card-dark .form-check-label{
+    color:#e9ecef !important;       /* body text */
+  }
+
+  /* Muted text inside the dark card should still be legible */
+  .hh-card-dark .text-muted{ color:#cfd6de !important; }
+
+  /* Links keep Hardhat yellow for consistency */
+  .hh-card-dark a{ color:#ffcd11; }
+  .hh-card-dark a:hover{ color:#e6b800; }
+
+  /* “Our Recommendation” badge + headline sizing/weight (already in your page, repeated here for clarity) */
+  .hh-badge-lg{ font-weight:800; font-size:0.95rem; border-radius:16px; }
+  .hh-headline{ font-size:1.35rem; font-weight:800; margin:0; }
+
+  /* Unify radios & checkboxes look and feel (you already had this, keeping it here) */
+  .hh-card-dark .form-check-input{
+    width:1.1rem; height:1.1rem;
+    border-color:#ffcd11; background-color:transparent; cursor:pointer;
+  }
+  .hh-card-dark .form-check-input:checked{
+    background-color:#ffcd11; border-color:#ffcd11;
+  }
+
+  /* Chart height */
+  #interestChart{ max-height:260px; }
+</style>
+
+
+  <!-- Banner -->
+  <div class="bg-warning bg-opacity-25 border-0 rounded-3 p-4 mb-4">
+    <h1 class="h3 mb-1">Cybersecurity Career Path Finder</h1>
+    <p class="mb-0 text-muted hh-hero-blurb">
+      Answer a few questions to get a personalised path: roles, skills, tools, starter projects, certs, companies, and a PDF plan.
+    </p>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizCard" class="card shadow-sm hh-card-dark mb-4">
+    <div class="card-body">
+      <h2 class="h5 mb-3">Tell us what excites you</h2>
+
+      <!-- Progress -->
+      <div class="progress mb-3" style="height:8px;">
+        <div id="progressBar" class="progress-bar bg-warning" style="width:0%"></div>
+      </div>
+
+      <form id="careerQuiz" class="vstack gap-3">
+
+        <!-- Q1 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">1) Which work style sounds most fun?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="offensive" id="q1a"><label class="form-check-label" for="q1a">Breaking apps to find weaknesses</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="defensive" id="q1b"><label class="form-check-label" for="q1b">Watching dashboards & stopping threats live</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="forensics" id="q1c"><label class="form-check-label" for="q1c">Investigating incidents & evidence</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="architecture" id="q1d"><label class="form-check-label" for="q1d">Designing secure systems & policies</label></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">2) Your comfort with coding/scripting?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="offensive" id="q2a"><label class="form-check-label" for="q2a">Love writing scripts/tools</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="defensive" id="q2b"><label class="form-check-label" for="q2b">Comfortable with queries & parsers</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="forensics" id="q2c"><label class="form-check-label" for="q2c">Prefer tools; light scripting OK</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="architecture" id="q2d"><label class="form-check-label" for="q2d">Minimal coding; focus on design/policy</label></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">3) Pick a theme:</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="offensive" id="q3a"><label class="form-check-label" for="q3a">Red Team / Exploitation</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="defensive" id="q3b"><label class="form-check-label" for="q3b">Blue Team / Detection & Response</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="forensics" id="q3c"><label class="form-check-label" for="q3c">Incident Response & Forensics</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="governance" id="q3d"><label class="form-check-label" for="q3d">GRC (Governance, Risk, Compliance)</label></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">4) Cloud, networking, or management?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="cloud" id="q4a"><label class="form-check-label" for="q4a">Cloud security (AWS/Azure/GCP)</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="defensive" id="q4b"><label class="form-check-label" for="q4b">Network defense / SOC</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="forensics" id="q4c"><label class="form-check-label" for="q4c">DFIR (response + evidence)</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="architecture" id="q4d"><label class="form-check-label" for="q4d">Security architecture / policy</label></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">5) Team vibe?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="defensive" id="q5a"><label class="form-check-label" for="q5a">Fast-paced team operations</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="offensive" id="q5b"><label class="form-check-label" for="q5b">Small team, creative exploits</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="forensics" id="q5c"><label class="form-check-label" for="q5c">Task-focused investigations</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="governance" id="q5d"><label class="form-check-label" for="q5d">Stakeholder management & reporting</label></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">6) Preferred learning path to start?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="offensive" id="q6a"><label class="form-check-label" for="q6a">Labs & CTFs</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="defensive" id="q6b"><label class="form-check-label" for="q6b">Home SOC lab & log hunting</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="forensics" id="q6c"><label class="form-check-label" for="q6c">Disk/network analysis practice</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="governance" id="q6d"><label class="form-check-label" for="q6d">Frameworks & risk methods</label></div>
+        </div>
+
+        <!-- Q7 (checkboxes) -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">7) Which tools sound exciting? <span class="text-muted">(choose any)</span></h3>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="offensive" id="t1"><label class="form-check-label" for="t1">Kali, Burp Suite, Metasploit</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="defensive" id="t2"><label class="form-check-label" for="t2">Splunk, Wazuh, Suricata</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="forensics" id="t3"><label class="form-check-label" for="t3">Autopsy, Volatility, Wireshark</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="cloud" id="t4"><label class="form-check-label" for="t4">IAM, CloudTrail/Defender, SCC</label></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="pt-3 mt-2 border-top d-flex flex-wrap gap-2">
+          <button type="submit" id="seeResults" class="btn btn-warning text-dark fw-semibold">See my path</button>
+          <button type="button" id="loadPrev" class="btn btn-outline-warning d-none">Load my last result</button>
+          <button type="button" id="clearQuiz" class="btn btn-outline-warning">Clear</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="d-none">
+    <div class="card border-0 shadow-sm hh-card-dark">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <span class="badge bg-warning text-dark hh-badge-lg px-3 py-2">Our Recommendation</span>
+          <h2 id="primaryRec" class="hh-headline"></h2>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6">
+            <h3 class="h6 text-warning hh-section-title mb-2">Suggested Roles</h3>
+            <ul id="roleList"></ul>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h6 text-warning hh-section-title mb-2">Tools &amp; Platforms</h3>
+            <ul id="toolList"></ul>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h6 text-warning hh-section-title mb-2">Skills to Focus On</h3>
+            <ul id="skillList"></ul>
+          </div>
+          <div class="col-md-6">
+            <h3 class="h6 text-warning hh-section-title mb-2">Certs to Start With</h3>
+            <ul id="certList"></ul>
+          </div>
+          <div class="col-12">
+            <h3 class="h6 text-warning hh-section-title mb-2">Top Companies Hiring in This Area</h3>
+            <ul id="companyList"></ul>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <h3 class="h6 text-warning hh-section-title mb-2">Starter Projects</h3>
+          <ul id="projectList"></ul>
+        </div>
+
+        <div class="mt-3">
+          <h3 class="h6 text-warning hh-section-title mb-1">Approx. Salary (Australia)</h3>
+          <p id="salaryText" class="text-muted mb-2"></p>
+        </div>
+
+        <canvas id="interestChart" class="w-100"></canvas>
+
+        <!-- All three strong and identical for visibility -->
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <button id="savePlan" class="btn btn-warning text-dark fw-semibold">Save My Plan</button>
+          <button id="downloadPlan" class="btn btn-warning text-dark fw-semibold">Download as PDF</button>
+          <button id="retake" class="btn btn-warning text-dark fw-semibold">Retake</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  /* ===== Catalog data ===== */
+  const CATS = ["offensive","defensive","forensics","architecture","cloud","governance"];
+  const CATALOG = {
+    offensive:{label:"Offensive Security",roles:["Penetration Tester","Red Team Operator","AppSec Engineer (Offensive)"],tools:["Kali Linux","Burp Suite","Metasploit","Nmap","OWASP ZAP","Python"],skills:["OWASP Top 10","Recon & exploitation","Scripting/automation","Reporting"],certs:[{name:"eJPT (INE/ElearnSecurity)",url:"https://elearnsecurity.com/product/ejpt-certification/"},{name:"PNPT (TCM)",url:"https://certifications.tcm-sec.com/pnpt/"},{name:"OSCP (OffSec)",url:"https://www.offsec.com/courses/pen-200/"}],companies:["NCC Group","Trustwave","Rapid7","HackerOne","Bugcrowd","Cobalt"],projects:["Exploit DVWA/Juice Shop in a lab and write a report","Bug bounty–style recon on a safe scope (your own lab)","Build a Python script to automate recon or wordlists"],salaryAU:"Junior 75–110k, Mid 110–150k, Senior 150k+ (AUD, indicative)"},
+    defensive:{label:"Defensive Security",roles:["SOC Analyst","Security Engineer","Threat Hunter"],tools:["Splunk","Elastic/Wazuh SIEM","Suricata","Sysmon","Sigma","Python"],skills:["Log analysis","Detection engineering","IR playbooks","Windows/Linux internals"],certs:[{name:"CompTIA Security+",url:"https://www.comptia.org/certifications/security"},{name:"Blue Team Level 1 (BTL1)",url:"https://securityblue.team/collections/certifications/products/blue-team-level-1"},{name:"Splunk Core User",url:"https://education.splunk.com/"}],companies:["CrowdStrike","Palo Alto Networks","Microsoft","Splunk","Elastic","Darktrace"],projects:["Home SOC lab with Wazuh/Elastic and detect a simulated attack","Write Sigma rules and validate detections","Create an incident triage/runbook"],salaryAU:"Junior 70–100k, Mid 100–140k, Senior 140k+"},
+    forensics:{label:"Digital Forensics & Incident Response",roles:["DFIR Analyst","Forensics Investigator","Malware Analyst (junior)"],tools:["Autopsy","FTK Imager","Volatility","Wireshark","YARA"],skills:["Disk & memory forensics","Timeline analysis","Windows artefacts","Chain of custody"],certs:[{name:"CompTIA CySA+",url:"https://www.comptia.org/certifications/cybersecurity-analyst"},{name:"SANS DFIR (various)",url:"https://www.sans.org/cyber-security-skills/dfir/"},{name:"CHFI (EC-Council)",url:"https://www.eccouncil.org/train-certify/computer-hacking-forensic-investigator-chfi/"}],companies:["Mandiant (Google)","Kroll","CrowdStrike Services","PwC Incident Response","Cellebrite"],projects:["Analyze a memory image with Volatility and document findings","Create a Windows artefact cheat sheet","Packet analysis case study in Wireshark"],salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"},
+    architecture:{label:"Security Architecture",roles:["Security Architect","Security Consultant","Compliance Manager"],tools:["Threat modeling (STRIDE)","Security frameworks (NIST/ISO)","Design reviews"],skills:["Secure design patterns","Policy & standards","Stakeholder communication"],certs:[{name:"CISSP (experience required)",url:"https://www.isc2.org/Certifications/CISSP"},{name:"SABSA Foundation",url:"https://www.sabsa.org/"},{name:"ISO 27001 Lead Implementer",url:"https://pecb.com/certified-iso-iec-27001-lead-implementer"}],companies:["AWS","Microsoft","IBM","Accenture","Deloitte","Consultancies/SIs"],projects:["Threat model a 3-tier web app and propose mitigations","Write a minimal security standard for APIs","Design a secure reference architecture diagram"],salaryAU:"Mid 160–200k, Senior 200k+"},
+    cloud:{label:"Cloud Security",roles:["Cloud Security Engineer","SecOps (Cloud)","DevSecOps Engineer"],tools:["AWS IAM/GuardDuty/Config","Azure Defender","GCP SCC","Terraform","Kubernetes"],skills:["Identity & access","Logging/monitoring","Network segmentation","IaC security"],certs:[{name:"AWS CCP",url:"https://aws.amazon.com/certification/certified-cloud-practitioner/"},{name:"AWS Security Specialty",url:"https://aws.amazon.com/certification/certified-security-specialty/"},{name:"Microsoft AZ-500",url:"https://learn.microsoft.com/certifications/exams/az-500/"}],companies:["AWS","Microsoft Azure","Google Cloud","HashiCorp","Palo Alto Networks","Wiz"],projects:["Enable GuardDuty + CloudTrail + Config in a sandbox account","Write least-privilege IAM policies","Scan Terraform with tfsec/Checkov and fix findings"],salaryAU:"Junior 100–130k, Mid 130–170k, Senior 170k+"},
+    governance:{label:"Governance, Risk & Compliance (GRC)",roles:["GRC Analyst","Risk Analyst","Compliance Specialist"],tools:["Risk registers","GRC platforms","Policy frameworks (NIST/ISO)"],skills:["Risk assessment","Control mapping","Audit readiness","Stakeholder communication"],certs:[{name:"ISO 27001 Foundation/Implementer",url:"https://www.iso.org/standard/27001"},{name:"CRISC (ISACA)",url:"https://www.isaca.org/credentialing/crisc"},{name:"CISM (ISACA)",url:"https://www.isaca.org/credentialing/cism"}],companies:["Deloitte","PwC","KPMG","EY","Protiviti","Consultancies/GRC vendors"],projects:["Create a risk register for a small SaaS (likelihood/impact/controls)","Map controls to ISO 27001/NIST CSF","Vendor risk assessment template & walkthrough"],salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"}
+  };
+
+  /* ===== Quiz scoring & rendering ===== */
+  function scoreQuiz(form){
+    const scores = {offensive:0, defensive:0, forensics:0, architecture:0, cloud:0, governance:0};
+    for(let i=1;i<=6;i++){
+      const ans = form.querySelector(`input[name="q${i}"]:checked`);
+      if(ans) scores[ans.value] = (scores[ans.value]||0)+2;
+    }
+    form.querySelectorAll('input[name="tools"]:checked').forEach(cb=>{
+      scores[cb.value] = (scores[cb.value]||0)+1;
+    });
+    return scores;
+  }
+  function topCategory(scores){
+    return Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+  }
+  function fillList(id, items){
+    const ul = document.getElementById(id);
+    ul.innerHTML = "";
+    items.forEach(t=>{
+      const li = document.createElement("li");
+      if (typeof t === "string"){ li.textContent = t; }
+      else { const a=document.createElement("a"); a.href=t.url; a.target="_blank"; a.rel="noopener"; a.textContent=t.name; li.appendChild(a); }
+      ul.appendChild(li);
+    });
+  }
+
+  function renderResults(cat, scores){
+    const data = CATALOG[cat];
+    // Headline text with bold track name
+    document.getElementById("primaryRec").innerHTML =
+      `<span class="fw-bold">${data.label}</span> looks like the best match for you based on your answers.`;
+
+    fillList("roleList", data.roles);
+    fillList("toolList", data.tools);
+    fillList("skillList", data.skills);
+    fillList("certList", data.certs);
+    fillList("companyList", data.companies);
+    fillList("projectList", data.projects);
+    document.getElementById("salaryText").textContent = data.salaryAU;
+
+    // Theme-aligned chart
+    const ctx = document.getElementById("interestChart").getContext("2d");
+    const themeYellow = '#ffcd11';
+    const barFill = 'rgba(255, 205, 17, 0.7)';
+    const barBorder = themeYellow;
+
+    if (window._hhChart) window._hhChart.destroy();
+    window._hhChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: CATS.map(k=>CATALOG[k]?.label || k),
+        datasets: [{
+          label: "Your interest profile",
+          data: CATS.map(k=>scores[k]||0),
+          backgroundColor: barFill,
+          borderColor: barBorder,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive:true,
+        plugins:{ legend:{ display:false }},
+        scales:{
+          x: { ticks: { color: "#eaeaea", font: { size: 11 } }, grid: { color: "rgba(255,255,255,.08)" } },
+          y: { beginAtZero:true, ticks: { color: "#eaeaea", font: { size: 11 } }, grid: { color: "rgba(255,255,255,.08)" } }
+        }
+      }
+    });
+
+    localStorage.setItem("hh_career_path_scores", JSON.stringify(scores));
+    localStorage.setItem("hh_career_path_choice", cat);
+  }
+
+  /* ===== UI wiring ===== */
+  const form = document.getElementById("careerQuiz");
+  const quizCard = document.getElementById("quizCard");
+  const results = document.getElementById("results");
+  const progress = document.getElementById("progressBar");
+  const loadPrevBtn = document.getElementById("loadPrev");
+
+  function updateProgress(){
+    let answered = 0;
+    for(let i=1;i<=6;i++){
+      if(form.querySelector(`input[name="q${i}"]:checked`)) answered++;
+    }
+    const pct = Math.round((answered/6)*100);
+    progress.style.width = pct + "%";
+    progress.setAttribute("aria-valuenow", pct);
+  }
+  form.addEventListener("change", updateProgress);
+
+  form.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const scores = scoreQuiz(form);
+    const cat = topCategory(scores);
+    quizCard.classList.add("d-none");
+    results.classList.remove("d-none");
+    renderResults(cat, scores);
+    window.scrollTo({ top:0, behavior:"smooth" });
+  });
+
+  document.getElementById("clearQuiz").addEventListener("click", ()=>{
+    form.reset(); updateProgress();
+  });
+
+  document.getElementById("retake").addEventListener("click", ()=>{
+    results.classList.add("d-none");
+    quizCard.classList.remove("d-none");
+    form.reset(); updateProgress();
+    localStorage.removeItem("hh_career_path_scores");
+    localStorage.removeItem("hh_career_path_choice");
+    if (window._hhChart) window._hhChart.destroy();
+    window.scrollTo({ top:0, behavior:"smooth" });
+  });
+
+  document.getElementById("downloadPlan").addEventListener("click", ()=> window.print());
+  document.getElementById("savePlan").addEventListener("click", ()=> alert("Saved! We’ll remember your latest result on this device."));
+
+  // Start on quiz; show “Load my last result” if saved
+  window.addEventListener("DOMContentLoaded", ()=>{
+    quizCard.classList.remove("d-none");
+    results.classList.add("d-none");
+    updateProgress();
+
+    const saved = localStorage.getItem("hh_career_path_scores");
+    const choice = localStorage.getItem("hh_career_path_choice");
+    if(saved && choice){
+      loadPrevBtn.classList.remove("d-none");
+      loadPrevBtn.addEventListener("click", ()=>{
+        quizCard.classList.add("d-none");
+        results.classList.remove("d-none");
+        renderResults(choice, JSON.parse(saved));
+        window.scrollTo({ top:0, behavior:"smooth" });
+      });
+    }
+  });
+</script>
+{% endblock javascripts %}

@@ -2117,7 +2117,9 @@ def internships(request):
 # View for Job Alerts Page
 def job_alerts(request):
     return render(request, "careers/job-alerts.html")
-
+#view for career path finder
+def career_path_finder(request):
+    return render(request, "careers/path_finder.html")
 def career_application(request,id):
     job = get_object_or_404(Job, id=id)
     complete =False
