@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-09 00:11+1000\n"
+"POT-Creation-Date: 2025-08-19 01:19+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,71 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\home\context_processors.py:59 .\home\context_processors.py:60
+#: .\home\templates\admin\home\app_index.html:7
+#: .\home\templates\includes\footer.html:50
+#: .\home\templates\includes\navigation.html:51
+msgid "Home"
+msgstr "Accueil"
+
+#: .\home\context_processors.py:61 .\home\context_processors.py:62
+#: .\home\templates\includes\footer.html:72
+msgid "About Us"
+msgstr "À propos de nous"
+
+#: .\home\context_processors.py:63 .\home\templates\pages\about.html:39
+msgid "What we do"
+msgstr "Nos services"
+
+#: .\home\context_processors.py:64 .\home\templates\includes\footer.html:74
+msgid "Contact Us"
+msgstr "Contactez-nous"
+
+#: .\home\context_processors.py:65
+#, fuzzy
+#| msgid "Projects"
+msgid "Our Projects"
+msgstr "Projets"
+
+#: .\home\context_processors.py:66
+msgid "Upload Image"
+msgstr ""
+
+#: .\home\context_processors.py:67
+#: .\home\templates\includes\navigation.html:160
+msgid "Blog"
+msgstr "Blog"
+
+#: .\home\context_processors.py:68
+#: .\home\templates\includes\navigation.html:168
+msgid "Published Blogs"
+msgstr "Blogs publiés"
+
+#: .\home\context_processors.py:69
+#: .\home\templates\includes\navigation.html:180
+msgid "Discover Hardhat"
+msgstr "Découvrir Hardhat"
+
+#: .\home\context_processors.py:70
+#: .\home\templates\includes\navigation.html:186
+msgid "Internships"
+msgstr "Stages"
+
+#: .\home\context_processors.py:71
+#: .\home\templates\includes\navigation.html:189
+msgid "Job Alerts"
+msgstr "Alertes emploi"
+
+#: .\home\context_processors.py:72
+#: .\home\templates\includes\navigation.html:199
+msgid "Cyber Challenges"
+msgstr "Défis cyber"
+
+#: .\home\context_processors.py:73
+#: .\home\templates\includes\navigation.html:211
+msgid "Quiz"
+msgstr "Quiz"
 
 #: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
 msgid "First Name"
@@ -46,7 +111,9 @@ msgstr "Confirmer le mot de passe"
 msgid ""
 "Password must be at least 8 characters long and include uppercase, lowercase "
 "letters, numbers, and special characters."
-msgstr "Le mot de passe doit comporter au moins 8 caractères et inclure des lettres majuscules, minuscules, des chiffres et des caractères spéciaux."
+msgstr ""
+"Le mot de passe doit comporter au moins 8 caractères et inclure des lettres "
+"majuscules, minuscules, des chiffres et des caractères spéciaux."
 
 #: .\home\forms.py:94
 msgid "Email must match your Deakin email."
@@ -64,7 +131,9 @@ msgstr "Nom de l'entreprise"
 msgid ""
 "Password must be at least 8 characters long and include uppercase, lawercase "
 "letters, numbers and special characters."
-msgstr "Le mot de passe doit comporter au moins 8 caractères et inclure des lettres majuscules, minuscules, des chiffres et des caractères spéciaux."
+msgstr ""
+"Le mot de passe doit comporter au moins 8 caractères et inclure des lettres "
+"majuscules, minuscules, des chiffres et des caractères spéciaux."
 
 #: .\home\forms.py:200
 msgid "Email must be valid email."
@@ -78,7 +147,8 @@ msgstr "Mot de passe"
 msgid "Too many login attempts. Please try again later."
 msgstr "Trop de tentatives de connexion. Veuillez réessayer plus tard."
 
-#: .\home\forms.py:310
+#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "Votre e-mail"
 
@@ -146,7 +216,9 @@ msgstr "actif"
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
-msgstr "Indique si cet utilisateur doit être considéré comme actif. Décochez ceci au lieu de supprimer le compte."
+msgstr ""
+"Indique si cet utilisateur doit être considéré comme actif. Décochez ceci au "
+"lieu de supprimer le compte."
 
 #: .\home\models.py:93
 msgid "verified"
@@ -186,7 +258,8 @@ msgstr "identifiant étudiant"
 
 #: .\home\models.py:254
 msgid "Required. Enter Deakin Student ID. Digits only."
-msgstr "Obligatoire. Entrez l'identifiant étudiant Deakin. Chiffres uniquement."
+msgstr ""
+"Obligatoire. Entrez l'identifiant étudiant Deakin. Chiffres uniquement."
 
 #: .\home\models.py:257
 msgid "A user with that Student ID already exists."
@@ -200,10 +273,49 @@ msgstr "trimestre"
 msgid "unit"
 msgstr "unité"
 
-#: .\home\templates\admin\home\app_index.html:7
-#: .\home\templates\includes\navigation.html:51
-msgid "Home"
-msgstr "Accueil"
+#: .\home\templates\includes\footer.html:10
+msgid ""
+"Hardhat Enterprises offers open-source protection, so it's free for everyone."
+msgstr ""
+"Hardhat Enterprises offre une protection open-source, donc c’est gratuit "
+"pour tout le monde."
+
+#: .\home\templates\includes\footer.html:49
+msgid "Blog Page"
+msgstr "Page du blog"
+
+#: .\home\templates\includes\footer.html:92
+msgid "Feedback"
+msgstr "Retour d’expérience"
+
+#: .\home\templates\includes\footer.html:99
+msgid "The OWASP Top 10"
+msgstr "Le Top 10 OWASP"
+
+#: .\home\templates\includes\footer.html:101
+msgid "Learn more about cyber security standards and applications"
+msgstr "En savoir plus sur les normes et applications de cybersécurité"
+
+#: .\home\templates\includes\footer.html:110
+msgid "OWASP Top 10"
+msgstr "Le Top 10 OWASP"
+
+#: .\home\templates\includes\footer.html:144
+msgid "This page has been visited "
+msgstr "Cette page a été visitée"
+
+#: .\home\templates\includes\footer.html:146
+msgid "times!"
+msgstr "fois !"
+
+#: .\home\templates\includes\footer.html:156
+msgid "Last Updated:"
+msgstr "Dernière mise à jour :"
+
+#: .\home\templates\includes\navigation.html:39
+#: .\home\templates\includes\navigation.html:228
+msgid "Search..."
+msgstr "Rechercher..."
 
 #: .\home\templates\includes\navigation.html:57
 msgid "Upskilling"
@@ -234,18 +346,22 @@ msgid "About"
 msgstr "À propos"
 
 #: .\home\templates\includes\navigation.html:107
+#: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "Projets"
 
 #: .\home\templates\includes\navigation.html:116
+#: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "AppAttack"
 
 #: .\home\templates\includes\navigation.html:121
+#: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
 #: .\home\templates\includes\navigation.html:126
+#: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "Détection de smishing"
 
@@ -261,49 +377,310 @@ msgstr "Le moteur de déploiement de politique (Nouveau)"
 msgid "Deakin Threat mirror (Finished)"
 msgstr "Miroir de menace Deakin (Terminé)"
 
-#: .\home\templates\includes\navigation.html:160
-msgid "Blog"
-msgstr "Blog"
-
 #: .\home\templates\includes\navigation.html:167
 msgid "Create a Blog"
 msgstr "Créer un blog"
-
-#: .\home\templates\includes\navigation.html:168
-msgid "Published Blogs"
-msgstr "Blogs publiés"
 
 #: .\home\templates\includes\navigation.html:174
 msgid "Careers"
 msgstr "Carrières"
 
-#: .\home\templates\includes\navigation.html:180
-msgid "Discover Hardhat"
-msgstr "Découvrir Hardhat"
-
 #: .\home\templates\includes\navigation.html:183
 msgid "All Jobs"
 msgstr "Tous les emplois"
-
-#: .\home\templates\includes\navigation.html:186
-msgid "Internships"
-msgstr "Stages"
-
-#: .\home\templates\includes\navigation.html:189
-msgid "Job Alerts"
-msgstr "Alertes emploi"
-
-#: .\home\templates\includes\navigation.html:199
-msgid "Cyber Challenges"
-msgstr "Défis cyber"
 
 #: .\home\templates\includes\navigation.html:206
 msgid "All Challenges"
 msgstr "Tous les défis"
 
-#: .\home\templates\includes\navigation.html:211
-msgid "Quiz"
-msgstr "Quiz"
+#: .\home\templates\includes\navigation.html:248
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: .\home\templates\includes\navigation.html:293
+msgid "Sign In"
+msgstr "Se connecter"
+
+#: .\home\templates\includes\navigation.html:326
+msgid "Sign Up"
+msgstr "S'inscrire"
+
+#: .\home\templates\includes\navigation.html:348
+msgid "Language"
+msgstr "Langue"
+
+#: .\home\templates\layouts\base.html:315
+msgid "Recently Viewed Pages"
+msgstr "Pages récemment consultées"
+
+#: .\home\templates\layouts\base.html:333
+msgid "💬 Chat with us"
+msgstr "💬 Discutez avec nous"
+
+#: .\home\templates\layouts\base.html:338
+msgid "Let's chat?"
+msgstr "On discute ?"
+
+#: .\home\templates\layouts\base.html:343
+msgid ""
+"Please fill out the form below to start chatting with the next available "
+"agent."
+msgstr ""
+"Veuillez remplir le formulaire ci-dessous pour commencer à discuter avec le "
+"prochain agent disponible."
+
+#: .\home\templates\layouts\base.html:345
+msgid "Enter your name"
+msgstr "Entrez votre nom"
+
+#: .\home\templates\layouts\base.html:346
+msgid "Enter your email"
+msgstr "Entrez votre e-mail"
+
+#: .\home\templates\layouts\base.html:347
+msgid "Type your message..."
+msgstr "Tapez votre message..."
+
+#: .\home\templates\layouts\base.html:349
+msgid "Submit"
+msgstr "Envoyer"
+
+#: .\home\templates\layouts\base.html:450
+msgid "Session Timeout Warning"
+msgstr "Avertissement d’expiration de session"
+
+#: .\home\templates\layouts\base.html:454
+msgid ""
+"Your session will expire in 1 minute due to inactivity. Any unsaved changes "
+"will be lost."
+msgstr ""
+"Votre session expirera dans 1 minute en raison d’inactivité. Toute "
+"modification non sauvegardée sera perdue."
+
+#: .\home\templates\layouts\base.html:457
+msgid "Stay Logged In"
+msgstr "Rester connecté"
+
+#: .\home\templates\pages\about.html:26
+msgid "Full-Service <br class=\"d-none d-md-inline\" />Cyber Security Agency"
+msgstr ""
+"Agence de cybersécurité <br class=\"d-none d-md-inline\" />à service complet"
+
+#: .\home\templates\pages\about.html:29
+msgid ""
+"\n"
+"            Hardhat can help you secure your webapps, review your code,\n"
+"            visualize the threats and provide an interractive UI for\n"
+"            pen-testing, that will bring your customers a peace of mind and\n"
+"            security.\n"
+"            "
+msgstr ""
+"\n"
+"            Hardhat peut vous aider à sécuriser vos applications web, à "
+"revoir votre code,\n"
+"            à visualiser les menaces et à fournir une interface interactive "
+"pour les tests de pénétration,\n"
+"            apportant ainsi à vos clients tranquillité d'esprit et "
+"sécurité.\n"
+"            "
+
+#: .\home\templates\pages\about.html:53
+msgid "Our Team's Kudoboard"
+msgstr "Le tableau d'honneur de notre équipe"
+
+#: .\home\templates\pages\about.html:55
+msgid "Share your appreciation for our team..."
+msgstr "Partagez votre appréciation pour notre équipe…"
+
+#: .\home\templates\pages\about.html:57
+msgid "Choose note color: "
+msgstr "Choisissez la couleur du mémo :"
+
+#: .\home\templates\pages\about.html:89
+msgid "Add Note"
+msgstr "Ajouter un mémo"
+
+#: .\home\templates\pages\about.html:90
+msgid "Clear Board"
+msgstr "Effacer le tableau"
+
+#: .\home\templates\pages\about.html:321
+msgid "All challenges accepted."
+msgstr "Tous les défis sont relevés."
+
+#: .\home\templates\pages\about.html:323
+msgid ""
+" \n"
+"            Hardhat is an experienced and passionate group of cybersecurity\n"
+"            specialists and developers. Every client we work with becomes a "
+"part\n"
+"            of the team. Together we face the challenges and celebrate the\n"
+"            victories.\n"
+"            "
+msgstr ""
+" \n"
+"            Hardhat est une équipe expérimentée et passionnée de "
+"spécialistes en cybersécurité et de développeurs.\n"
+"            Chaque client avec lequel nous travaillons devient une partie "
+"intégrante de l’équipe.\n"
+"            Ensemble, nous relevons les défis et célébrons les réussites.\n"
+"            "
+
+#: .\home\templates\pages\about.html:331
+msgid ""
+" \n"
+"            With a culture of collaboration and a roster of talent, the "
+"Hardhat\n"
+"            team is active in the creative community, endlessly interested "
+"in\n"
+"            what's next, and generally pleasant to be around.\n"
+"            "
+msgstr ""
+" \n"
+"            Avec une culture de collaboration et une équipe talentueuse, "
+"Hardhat\n"
+"            est actif dans la communauté créative, toujours tourné vers "
+"l’avenir\n"
+"            et reconnu pour son professionnalisme et sa convivialité.\n"
+"            "
+
+#: .\home\templates\pages\about.html:377
+msgid "Team Members"
+msgstr "Membres de l’équipe"
+
+#: .\home\templates\pages\about.html:388
+msgid "Projects Secured"
+msgstr "Projets sécurisés"
+
+#: .\home\templates\pages\about.html:401
+msgid "Threats found"
+msgstr "Menaces détectées"
+
+#: .\home\templates\pages\about.html:467
+msgid "<span class=\"fw-bold\">Our</span> history"
+msgstr "<span class=\"fw-bold\">Notre</span> histoire"
+
+#: .\home\templates\pages\about.html:476
+msgid "Present"
+msgstr "Présent"
+
+#: .\home\templates\pages\about.html:478
+msgid ""
+"\n"
+"                  Established an incident response team and provided remote "
+"work\n"
+"                  security solutions. Actively engaged with the global\n"
+"                  cybersecurity community. Continued growth, adapting to\n"
+"                  emerging threats and technologies.\n"
+"                  "
+msgstr ""
+"\n"
+"                  Mise en place d’une équipe de réponse aux incidents et "
+"fourniture de solutions de sécurité pour le télétravail.\n"
+"                  Participation active à la communauté mondiale de "
+"cybersécurité.\n"
+"                  Croissance continue et adaptation aux menaces et "
+"technologies émergentes.\n"
+"                  "
+
+#: .\home\templates\pages\about.html:488
+msgid "Technology and Innovation"
+msgstr "Technologie et innovation"
+
+#: .\home\templates\pages\about.html:490
+msgid ""
+"\n"
+"                  Introduced advanced threat detection technologies. "
+"Established\n"
+"                  a cybersecurity training academy and embraced AI "
+"integration.\n"
+"                  Released a proprietary threat intelligence platform.\n"
+"                  "
+msgstr ""
+"\n"
+"                  Introduction de technologies avancées de détection des "
+"menaces.\n"
+"                  Création d’une académie de formation en cybersécurité et "
+"adoption de l’intégration de l’IA.\n"
+"                  Lancement d’une plateforme propriétaire de renseignement "
+"sur les menaces.\n"
+"                  "
+
+#: .\home\templates\pages\about.html:499
+msgid "Growth and Recognition"
+msgstr "Croissance et reconnaissance"
+
+#: .\home\templates\pages\about.html:501
+msgid ""
+"\n"
+"                  Expanded services to include penetration testing and\n"
+"                  vulnerability assessments. Formed strategic partnerships "
+"and\n"
+"                  received industry awards. Achieved international expansion "
+"and\n"
+"                  collaborated on a major research project.\\\n"
+"                  "
+msgstr ""
+"\n"
+"                  Extension des services pour inclure les tests de "
+"pénétration et les évaluations de vulnérabilité.\n"
+"                  Établissement de partenariats stratégiques et obtention de "
+"prix sectoriels.\n"
+"                  Expansion internationale et collaboration sur un projet de "
+"recherche majeur.\n"
+"                  "
+
+#: .\home\templates\pages\about.html:511
+msgid "Establishment and Early Success"
+msgstr "Création et premiers succès"
+
+#: .\home\templates\pages\about.html:513
+msgid ""
+"\n"
+"                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
+"                  Initial focus on basic cybersecurity awareness training "
+"and\n"
+"                  consulting. Secured first clients and gained a reputation "
+"for\n"
+"                  reliable services.\n"
+"                  "
+msgstr ""
+"\n"
+"                  Fondée en 2022 par un groupe de passionnés de "
+"cybersécurité.\n"
+"                  Initialement axée sur la formation et le conseil en "
+"sensibilisation\n"
+"                  de base à la cybersécurité. A acquis ses premiers clients "
+"et s’est\n"
+"                  forgée une réputation de services fiables.\n"
+"                  "
+
+#: .\home\templates\pages\about.html:555
+msgid "Want to work with us?"
+msgstr "Vous souhaitez collaborer avec nous ?"
+
+#: .\home\templates\pages\about.html:556
+msgid "Awesome! Tell us about yourself"
+msgstr "Super ! Parlez-nous de vous"
+
+#: .\home\templates\pages\about.html:564
+#: .\home\templates\pages\what_we_do.html:79
+msgid "Your Name"
+msgstr "Votre nom"
+
+#: .\home\templates\pages\about.html:601
+#: .\home\templates\pages\what_we_do.html:96
+msgid "Your Message"
+msgstr "Votre message"
+
+#: .\home\templates\pages\about.html:604
+msgid "How can we help you?"
+msgstr "Comment pouvons-nous vous aider ?"
+
+#: .\home\templates\pages\about.html:614
+#: .\home\templates\pages\what_we_do.html:101
+msgid "Send Message"
+msgstr "Envoyer le message"
 
 #: .\home\templates\pages\index.html:20
 msgid "Hardhat Enterprises"
@@ -321,6 +698,10 @@ msgstr "Explorer les projets"
 msgid "Join Us"
 msgstr "Rejoignez-nous"
 
+#: .\home\templates\pages\index.html:97
+msgid "Company Vision"
+msgstr "Vision de l'entreprise"
+
 #: .\home\templates\pages\index.html:98
 msgid ""
 "Hardhat Enterprises is an organisation that aims to create cyber weapons and "
@@ -328,9 +709,383 @@ msgid ""
 "produced by the company will be open source so that anyone may use and "
 "benefit from them. These deliverables should either improve on existing "
 "tools or fill a market need that is not yet met."
-msgstr "Hardhat Entreprises est une organisation qui vise à créer des armes et outils cyber pouvant être utilisés pour renforcer les opérations white-hat. Tous les livrables produits par l'entreprise seront open source afin que chacun puisse les utiliser et en bénéficier. Ces livrables devraient soit améliorer les outils existants, soit répondre à un besoin du marché qui n'est pas encore satisfait."
+msgstr ""
+"Hardhat Entreprises est une organisation qui vise à créer des armes et "
+"outils cyber pouvant être utilisés pour renforcer les opérations white-hat. "
+"Tous les livrables produits par l'entreprise seront open source afin que "
+"chacun puisse les utiliser et en bénéficier. Ces livrables devraient soit "
+"améliorer les outils existants, soit répondre à un besoin du marché qui "
+"n'est pas encore satisfait."
+
+#: .\home\templates\pages\index.html:104
+msgid "Company Mission"
+msgstr "Mission de l'entreprise"
+
+#: .\home\templates\pages\index.html:105
+msgid ""
+"Achieve an engaging learning experience for students within the company. An "
+"opportunity for students to gain cross department/project experience and the "
+"opportunity to share their expertise outside of their project team."
+msgstr ""
+"Offrir une expérience d'apprentissage stimulante aux étudiants au sein de "
+"l'entreprise. Une opportunité pour eux d'acquérir une expérience inter-"
+"départements/projets et de partager leur expertise en dehors de leur équipe."
+
+#: .\home\templates\pages\index.html:158
+msgid ""
+"We deliver comprehensive reports to clients, providing actionable insights "
+"to enhance code security. With a commitment to excellence, AppAttack "
+"empowers organizations to proactively safeguard their digital assets"
+msgstr ""
+"Nous fournissons à nos clients des rapports complets avec des "
+"recommandations exploitables pour améliorer la sécurité du code. Engagé vers "
+"l'excellence, AppAttack aide les organisations à protéger proactivement "
+"leurs actifs numériques."
+
+#: .\home\templates\pages\index.html:160 .\home\templates\pages\index.html:175
+#: .\home\templates\pages\index.html:190 .\home\templates\pages\index.html:205
+#: .\home\templates\pages\index.html:220 .\home\templates\pages\index.html:235
+#: .\home\templates\pages\index.html:249
+msgid "Learn More"
+msgstr "En savoir plus"
+
+#: .\home\templates\pages\index.html:173
+msgid ""
+"Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal "
+"for modern penetration testers. Born from the innovative minds at PT-GUI, "
+"DDT is more than just a toolkit; it's a revolution in cybersecurity practice."
+msgstr ""
+"Présentation de la Deakin Detonator Toolkit (DDT) – l'arsenal de pointe pour "
+"les testeurs d'intrusion modernes. Issu des esprits innovants de PT-GUI, le "
+"DDT est plus qu'un simple outil, c'est une révolution dans la pratique de la "
+"cybersécurité."
+
+#: .\home\templates\pages\index.html:187
+msgid "CyberSafe VR"
+msgstr "CyberSafe VR"
+
+#: .\home\templates\pages\index.html:188
+msgid ""
+"Deakin CyberSafe VR revolutionises cybersecurity training for small "
+"businesses by using interactive VR technology to blend theory with practical "
+"application for owners and employees taking cybersecurity measures."
+msgstr ""
+"Deakin CyberSafe VR révolutionne la formation en cybersécurité pour les "
+"petites entreprises en utilisant la réalité virtuelle interactive pour "
+"combiner théorie et pratique pour les propriétaires et les employés."
+
+#: .\home\templates\pages\index.html:203
+msgid ""
+"Smishing Detection aims to develop an innovative smishing detection app for "
+"Android and iOS devices to moderate the risks associated with SMS phishing "
+"attacks."
+msgstr ""
+"Smishing Detection vise à développer une application innovante pour Android "
+"et iOS afin de détecter le smishing et réduire les risques liés aux attaques "
+"par SMS."
+
+#: .\home\templates\pages\index.html:217
+msgid "Threat Mirror <br>(Project Paused)"
+msgstr "Threat Mirror <br>(Projet en pause)"
+
+#: .\home\templates\pages\index.html:218
+msgid ""
+"Threat Mirror aims to investigate open-source threat intelligence platforms, "
+"assessing their suitability and adaptability for SMEs and developing "
+"economies."
+msgstr ""
+"Threat Mirror vise à étudier les plateformes open-source de renseignement "
+"sur les menaces et à évaluer leur pertinence et leur adaptabilité pour les "
+"PME et les économies en développement."
+
+#: .\home\templates\pages\index.html:232
+msgid "Malware Visualization"
+msgstr "Visualisation de logiciels malveillants"
+
+#: .\home\templates\pages\index.html:233
+msgid ""
+"The Malware Visualisation project creates a user-friendly tool that "
+"simplifies malware analysis by integrating with existing visual analytics "
+"applications."
+msgstr ""
+"Le projet de visualisation de logiciels malveillants crée un outil convivial "
+"qui simplifie l'analyse en intégrant des applications d'analyse visuelle "
+"existantes."
+
+#: .\home\templates\pages\index.html:246
+#, fuzzy
+#| msgid "The Policy Deployment Engine (New)"
+msgid "The Policy Deployment Engine"
+msgstr "Le moteur de déploiement de politique (Nouveau)"
+
+#: .\home\templates\pages\index.html:247
+msgid ""
+"The Policy Deployment Engine is a tool that allows users to deploy policies "
+"to their systems."
+msgstr ""
+"Le moteur de déploiement de politiques est un outil permettant aux "
+"utilisateurs de déployer des politiques sur leurs systèmes."
+
+#: .\home\templates\pages\index.html:329
+msgid "Cybersecurity News"
+msgstr "Actualités cybersécurité"
+
+#: .\home\templates\pages\index.html:336
+msgid "TROX Stealer Malware Spreads via Fake Updates"
+msgstr "Le malware voleur TROX se propage via de fausses mises à jour"
+
+#: .\home\templates\pages\index.html:337
+msgid ""
+"A new wave of cyberattacks spreads malware through fake software update "
+"alerts targeting unsuspecting users globally."
+msgstr ""
+"Une nouvelle vague de cyberattaques diffuse des malwares via de fausses "
+"alertes de mise à jour logicielle visant des utilisateurs non méfiants à "
+"l'échelle mondiale."
+
+#: .\home\templates\pages\index.html:338 .\home\templates\pages\index.html:349
+#: .\home\templates\pages\index.html:360
+msgid "Read More"
+msgstr "Lire la suite"
+
+#: .\home\templates\pages\index.html:347
+msgid "AI Shaping the Future of Cyber Defense"
+msgstr "L'IA façonne l'avenir de la cyberdéfense"
+
+#: .\home\templates\pages\index.html:348
+msgid ""
+"Experts explore how artificial intelligence is transforming threat detection "
+"and proactive cybersecurity measures worldwide."
+msgstr ""
+"Des experts explorent comment l'intelligence artificielle transforme la "
+"détection des menaces et les mesures proactives de cybersécurité à travers "
+"le monde."
+
+#: .\home\templates\pages\index.html:358
+msgid "Zero Trust Security: Why It Matters in 2025"
+msgstr "Sécurité Zero Trust : pourquoi c'est important en 2025"
+
+#: .\home\templates\pages\index.html:359
+msgid ""
+"With rising remote work trends, the zero-trust model becomes essential in "
+"securing networks beyond traditional perimeters."
+msgstr ""
+"Avec la montée du télétravail, le modèle Zero Trust devient essentiel pour "
+"sécuriser les réseaux au-delà des périmètres traditionnels."
+
+#: .\home\templates\pages\index.html:377
+msgid "Testimonial"
+msgstr "Témoignage"
+
+#: .\home\templates\pages\index.html:378
+msgid "What Our Clients Say"
+msgstr "Ce que disent nos clients"
+
+#: .\home\templates\pages\index.html:384
+msgid ""
+"\"We have been working with Hardhat for over a year now, and their "
+"cybersecurity services have been a game-changer for our business. From "
+"preventing ransomware attacks to securing our network infrastructure, they "
+"have given us the peace of mind to focus on our growth. Their team is "
+"responsive, professional, and always one step ahead. Highly recommend\""
+msgstr ""
+"\"Nous travaillons avec Hardhat depuis plus d'un an maintenant, et leurs "
+"services de cybersécurité ont changé la donne pour notre entreprise. De la "
+"prévention des attaques par ransomware à la sécurisation de notre "
+"infrastructure réseau, ils nous ont apporté la tranquillité d'esprit "
+"nécessaire pour nous concentrer sur notre croissance. Leur équipe est "
+"réactive, professionnelle et toujours un pas en avant. Fortement recommandé."
+"\""
+
+#: .\home\templates\pages\index.html:385
+msgid "James Thompson, CTO, Tech Innovations Ltd."
+msgstr "James Thompson, Directeur technique, Tech Innovations Ltd."
+
+#: .\home\templates\pages\index.html:388
+msgid ""
+"\"As a small business, we were initially hesitant about investing in "
+"cybersecurity. However, after partnering with Hardhat, we quickly realized "
+"how critical it is to protect our data and systems. Their tailored solutions "
+"have kept us safe from cyber threats, and their proactive approach has "
+"helped us build a secure foundation for the future. We now feel more "
+"confident than ever about our digital security.\""
+msgstr ""
+"\"En tant que petite entreprise, nous hésitions au départ à investir dans la "
+"cybersécurité. Cependant, après avoir établi un partenariat avec Hardhat, "
+"nous avons rapidement compris combien il est crucial de protéger nos données "
+"et nos systèmes. Leurs solutions sur mesure nous ont protégés contre les "
+"cybermenaces et leur approche proactive nous a aidés à bâtir une base "
+"sécurisée pour l'avenir. Nous sommes aujourd'hui plus confiants que jamais "
+"en notre sécurité numérique.\""
+
+#: .\home\templates\pages\index.html:389
+msgid "Sarah Mitchell, Founder, EcoProducts Co."
+msgstr "Sarah Mitchell, Fondatrice, EcoProducts Co."
+
+#: .\home\templates\pages\index.html:392
+msgid ""
+"\"In the fast-paced world of finance, cybersecurity is not a luxury—it's a "
+"necessity. Hardhat has been instrumental in fortifying our defenses against "
+"sophisticated cyber threats. Their expertise in threat detection, incident "
+"response, and continuous monitoring has been invaluable. They've helped us "
+"navigate through potential vulnerabilities and maintain our clients' trust. "
+"A top-tier cybersecurity partner!\""
+msgstr ""
+"\"Dans le monde de la finance, rapide et exigeant, la cybersécurité n'est "
+"pas un luxe, c'est une nécessité. Hardhat a joué un rôle essentiel dans le "
+"renforcement de nos défenses contre les cybermenaces sophistiquées. Leur "
+"expertise en détection des menaces, réponse aux incidents et surveillance "
+"continue a été inestimable. Ils nous ont aidés à naviguer parmi les "
+"vulnérabilités potentielles et à maintenir la confiance de nos clients. Un "
+"partenaire en cybersécurité de premier ordre !\""
+
+#: .\home\templates\pages\index.html:393
+msgid "David Harris, Risk Manager, FinSecure Solutions"
+msgstr "David Harris, Responsable des risques, FinSecure Solutions"
+
+#: .\home\templates\pages\index.html:405
+msgid "FAQ"
+msgstr "FAQ"
+
+#: .\home\templates\pages\index.html:406
+msgid "What Our Clients Recently ask"
+msgstr "Questions récentes de nos clients"
+
+#: .\home\templates\pages\index.html:411
+msgid "What is cybersecurity and why do I need it? "
+msgstr "Qu'est-ce que la cybersécurité et pourquoi en ai-je besoin ?"
+
+#: .\home\templates\pages\index.html:414
+msgid ""
+"Cybersecurity is the practice of protecting systems, networks, and programs "
+"from digital attacks, data breaches, and other cyber threats. It is "
+"essential for businesses and individuals to safeguard sensitive information "
+"from malicious activities."
+msgstr ""
+"La cybersécurité consiste à protéger les systèmes, réseaux et programmes "
+"contre les attaques numériques, les violations de données et autres menaces "
+"informatiques. Elle est essentielle pour que les entreprises et les "
+"particuliers protègent leurs informations sensibles contre les activités "
+"malveillantes."
+
+#: .\home\templates\pages\index.html:420
+msgid "How can I protect my business from cyber threats? "
+msgstr "Comment puis-je protéger mon entreprise contre les cybermenaces ?"
+
+#: .\home\templates\pages\index.html:423
+msgid ""
+"Our cybersecurity services offer comprehensive solutions including threat "
+"monitoring, data encryption, firewall protection, penetration testing, and "
+"employee training. These measures can help reduce the risk of cyber threats."
+msgstr ""
+"Nos services de cybersécurité offrent des solutions complètes incluant la "
+"surveillance des menaces, le chiffrement des données, la protection par pare-"
+"feu, les tests de pénétration et la formation des employés. Ces mesures "
+"peuvent contribuer à réduire les risques de cybermenaces."
+
+#: .\home\templates\pages\index.html:429
+msgid "What is a data breach and how can I prevent one? "
+msgstr "Qu'est-ce qu'une violation de données et comment puis-je l'éviter ?"
+
+#: .\home\templates\pages\index.html:432
+msgid ""
+"A data breach occurs when sensitive information is accessed or stolen by "
+"unauthorized individuals. Preventive measures include securing networks, "
+"using strong passwords, encrypting sensitive data, and regularly updating "
+"security protocols."
+msgstr ""
+"Une violation de données survient lorsque des informations sensibles sont "
+"consultées ou volées par des personnes non autorisées. Les mesures "
+"préventives incluent la sécurisation des réseaux, l'utilisation de mots de "
+"passe forts, le chiffrement des données sensibles et la mise à jour "
+"régulière des protocoles de sécurité."
+
+#: .\home\templates\pages\index.html:443
+msgid "Announcement"
+msgstr "Annonce"
+
+#: .\home\templates\pages\index.html:447
+msgid "{{ announcement_message }}"
+msgstr "{{ announcement_message }}"
+
+#: .\home\templates\pages\index.html:450
+msgid "Close"
+msgstr "Fermer"
+
+#: .\home\templates\pages\what_we_do.html:22
+#, fuzzy
+#| msgid "Cybersecurity News"
+msgid "Full-Service Cybersecurity Agency"
+msgstr "Actualités cybersécurité"
+
+#: .\home\templates\pages\what_we_do.html:24
+msgid ""
+"\n"
+"                        Hardhat Enterprises enhances white-hat cybersecurity "
+"by safeguarding assets, reducing threats, and thwarting vulnerability "
+"exploits. Our cybersecurity services, including penetration testing and open-"
+"source security tools, address market gaps and secure your digital assets.\n"
+"                        "
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:42
+#, fuzzy
+#| msgid "<span class=\"fw-bold\">Our</span> history"
+msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
+msgstr "<span class=\"fw-bold\">Notre</span> histoire"
+
+#: .\home\templates\pages\what_we_do.html:43
+msgid ""
+"Explore how Hardhat Enterprises protects your organization with advanced "
+"white-hat cybersecurity solutions."
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:48
+msgid "Penetration Testing Services"
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:49
+msgid ""
+"We provide thorough penetration testing services to identify vulnerabilities "
+"in your systems and applications, ensuring robust cybersecurity protection."
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:52
+msgid "Secure Code Review"
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:53
+msgid ""
+"Our experts offer secure code review services to ensure your code is free "
+"from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:56
+msgid "Open-Source Security Tools"
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:57
+msgid ""
+"We develop open-source security tools to address market gaps, empowering "
+"organizations with ethical hacking tools for threat mitigation."
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:72
+#, fuzzy
+#| msgid "Cybersecurity News"
+msgid "Work With Our Cybersecurity Agency"
+msgstr "Actualités cybersécurité"
+
+#: .\home\templates\pages\what_we_do.html:73
+msgid "Tell us about your cybersecurity needs!"
+msgstr ""
+
+#: .\home\templates\pages\what_we_do.html:97
+msgid "How can our cybersecurity services help you?"
+msgstr ""
 
 #: .\home\validators.py:19
 msgid "Enter a valid student ID. This value must contain 9 digits only"
-msgstr "Entrez un identifiant étudiant valide. Cette valeur doit contenir uniquement 9 chiffres"
-
+msgstr ""
+"Entrez un identifiant étudiant valide. Cette valeur doit contenir uniquement "
+"9 chiffres"

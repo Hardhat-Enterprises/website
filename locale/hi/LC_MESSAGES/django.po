@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-09 00:11+1000\n"
+"POT-Creation-Date: 2025-08-19 01:19+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,71 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\home\context_processors.py:59 .\home\context_processors.py:60
+#: .\home\templates\admin\home\app_index.html:7
+#: .\home\templates\includes\footer.html:50
+#: .\home\templates\includes\navigation.html:51
+msgid "Home"
+msgstr "होम"
+
+#: .\home\context_processors.py:61 .\home\context_processors.py:62
+#: .\home\templates\includes\footer.html:72
+msgid "About Us"
+msgstr "हमारे बारे में"
+
+#: .\home\context_processors.py:63 .\home\templates\pages\about.html:39
+msgid "What we do"
+msgstr "हम क्या करते हैं"
+
+#: .\home\context_processors.py:64 .\home\templates\includes\footer.html:74
+msgid "Contact Us"
+msgstr "संपर्क करें"
+
+#: .\home\context_processors.py:65
+#, fuzzy
+#| msgid "Projects"
+msgid "Our Projects"
+msgstr "परियोजनाएं"
+
+#: .\home\context_processors.py:66
+msgid "Upload Image"
+msgstr ""
+
+#: .\home\context_processors.py:67
+#: .\home\templates\includes\navigation.html:160
+msgid "Blog"
+msgstr "ब्लॉग"
+
+#: .\home\context_processors.py:68
+#: .\home\templates\includes\navigation.html:168
+msgid "Published Blogs"
+msgstr "प्रकाशित ब्लॉग"
+
+#: .\home\context_processors.py:69
+#: .\home\templates\includes\navigation.html:180
+msgid "Discover Hardhat"
+msgstr "हार्डहैट खोजें"
+
+#: .\home\context_processors.py:70
+#: .\home\templates\includes\navigation.html:186
+msgid "Internships"
+msgstr "इंटर्नशिप"
+
+#: .\home\context_processors.py:71
+#: .\home\templates\includes\navigation.html:189
+msgid "Job Alerts"
+msgstr "नौकरी अलर्ट"
+
+#: .\home\context_processors.py:72
+#: .\home\templates\includes\navigation.html:199
+msgid "Cyber Challenges"
+msgstr "साइबर चुनौतियां"
+
+#: .\home\context_processors.py:73
+#: .\home\templates\includes\navigation.html:211
+msgid "Quiz"
+msgstr "प्रश्नोत्तरी"
 
 #: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
 msgid "First Name"
@@ -46,7 +111,9 @@ msgstr "पासवर्ड की पुष्टि करें"
 msgid ""
 "Password must be at least 8 characters long and include uppercase, lowercase "
 "letters, numbers, and special characters."
-msgstr "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष वर्ण शामिल होने चाहिए।"
+msgstr ""
+"पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष "
+"वर्ण शामिल होने चाहिए।"
 
 #: .\home\forms.py:94
 msgid "Email must match your Deakin email."
@@ -64,7 +131,9 @@ msgstr "व्यवसाय का नाम"
 msgid ""
 "Password must be at least 8 characters long and include uppercase, lawercase "
 "letters, numbers and special characters."
-msgstr "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष वर्ण शामिल होने चाहिए।"
+msgstr ""
+"पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष "
+"वर्ण शामिल होने चाहिए।"
 
 #: .\home\forms.py:200
 msgid "Email must be valid email."
@@ -78,7 +147,8 @@ msgstr "पासवर्ड"
 msgid "Too many login attempts. Please try again later."
 msgstr "बहुत अधिक लॉगिन प्रयास। कृपया बाद में पुनः प्रयास करें।"
 
-#: .\home\forms.py:310
+#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "आपका ईमेल"
 
@@ -146,7 +216,9 @@ msgstr "सक्रिय"
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
-msgstr "निर्धारित करता है कि इस उपयोगकर्ता को सक्रिय माना जाए या नहीं। खाता हटाने के बजाय इस विकल्प को अनचेक करें।"
+msgstr ""
+"निर्धारित करता है कि इस उपयोगकर्ता को सक्रिय माना जाए या नहीं। खाता हटाने के बजाय "
+"इस विकल्प को अनचेक करें।"
 
 #: .\home\models.py:93
 msgid "verified"
@@ -200,10 +272,48 @@ msgstr "त्रैमासिक"
 msgid "unit"
 msgstr "इकाई"
 
-#: .\home\templates\admin\home\app_index.html:7
-#: .\home\templates\includes\navigation.html:51
-msgid "Home"
-msgstr "होम"
+#: .\home\templates\includes\footer.html:10
+msgid ""
+"Hardhat Enterprises offers open-source protection, so it's free for everyone."
+msgstr ""
+"हार्डहैट एंटरप्राइजेज ओपन-सोर्स सुरक्षा प्रदान करता है, इसलिए यह सभी के लिए निःशुल्क है।"
+
+#: .\home\templates\includes\footer.html:49
+msgid "Blog Page"
+msgstr "ब्लॉग पेज"
+
+#: .\home\templates\includes\footer.html:92
+msgid "Feedback"
+msgstr "प्रतिक्रिया"
+
+#: .\home\templates\includes\footer.html:99
+msgid "The OWASP Top 10"
+msgstr "ओडब्ल्यूएएसपी शीर्ष 10"
+
+#: .\home\templates\includes\footer.html:101
+msgid "Learn more about cyber security standards and applications"
+msgstr "साइबर सुरक्षा मानकों और अनुप्रयोगों के बारे में अधिक जानें"
+
+#: .\home\templates\includes\footer.html:110
+msgid "OWASP Top 10"
+msgstr "ओडब्ल्यूएएसपी शीर्ष 10"
+
+#: .\home\templates\includes\footer.html:144
+msgid "This page has been visited "
+msgstr "इस पृष्ठ को देखा गया है "
+
+#: .\home\templates\includes\footer.html:146
+msgid "times!"
+msgstr "बार!"
+
+#: .\home\templates\includes\footer.html:156
+msgid "Last Updated:"
+msgstr "अंतिम बार अद्यतन:"
+
+#: .\home\templates\includes\navigation.html:39
+#: .\home\templates\includes\navigation.html:228
+msgid "Search..."
+msgstr "खोजें..."
 
 #: .\home\templates\includes\navigation.html:57
 msgid "Upskilling"
@@ -234,18 +344,22 @@ msgid "About"
 msgstr "परिचय"
 
 #: .\home\templates\includes\navigation.html:107
+#: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "परियोजनाएं"
 
 #: .\home\templates\includes\navigation.html:116
+#: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "ऐप अटैक"
 
 #: .\home\templates\includes\navigation.html:121
+#: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "पीटी-जीयूआई"
 
 #: .\home\templates\includes\navigation.html:126
+#: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "स्मिशिंग पहचान"
 
@@ -261,49 +375,282 @@ msgstr "नीति परिनियोजन इंजन (नया)"
 msgid "Deakin Threat mirror (Finished)"
 msgstr "डीकन थ्रेट मिरर (पूर्ण)"
 
-#: .\home\templates\includes\navigation.html:160
-msgid "Blog"
-msgstr "ब्लॉग"
-
 #: .\home\templates\includes\navigation.html:167
 msgid "Create a Blog"
 msgstr "ब्लॉग बनाएं"
-
-#: .\home\templates\includes\navigation.html:168
-msgid "Published Blogs"
-msgstr "प्रकाशित ब्लॉग"
 
 #: .\home\templates\includes\navigation.html:174
 msgid "Careers"
 msgstr "करियर"
 
-#: .\home\templates\includes\navigation.html:180
-msgid "Discover Hardhat"
-msgstr "हार्डहैट खोजें"
-
 #: .\home\templates\includes\navigation.html:183
 msgid "All Jobs"
 msgstr "सभी नौकरियां"
-
-#: .\home\templates\includes\navigation.html:186
-msgid "Internships"
-msgstr "इंटर्नशिप"
-
-#: .\home\templates\includes\navigation.html:189
-msgid "Job Alerts"
-msgstr "नौकरी अलर्ट"
-
-#: .\home\templates\includes\navigation.html:199
-msgid "Cyber Challenges"
-msgstr "साइबर चुनौतियां"
 
 #: .\home\templates\includes\navigation.html:206
 msgid "All Challenges"
 msgstr "सभी चुनौतियां"
 
-#: .\home\templates\includes\navigation.html:211
-msgid "Quiz"
-msgstr "प्रश्नोत्तरी"
+#: .\home\templates\includes\navigation.html:248
+msgid "Logout"
+msgstr "लॉग आउट"
+
+#: .\home\templates\includes\navigation.html:293
+msgid "Sign In"
+msgstr "साइन इन"
+
+#: .\home\templates\includes\navigation.html:326
+msgid "Sign Up"
+msgstr "साइन अप"
+
+#: .\home\templates\includes\navigation.html:348
+msgid "Language"
+msgstr "भाषा"
+
+#: .\home\templates\layouts\base.html:315
+msgid "Recently Viewed Pages"
+msgstr "हाल ही में देखे गए पृष्ठ"
+
+#: .\home\templates\layouts\base.html:333
+msgid "💬 Chat with us"
+msgstr "💬 हमसे चैट करें"
+
+#: .\home\templates\layouts\base.html:338
+msgid "Let's chat?"
+msgstr "क्या हम बात करें?"
+
+#: .\home\templates\layouts\base.html:343
+msgid ""
+"Please fill out the form below to start chatting with the next available "
+"agent."
+msgstr "कृपया नीचे दिया गया फॉर्म भरें ताकि आप अगले उपलब्ध एजेंट से बातचीत शुरू कर सकें।"
+
+#: .\home\templates\layouts\base.html:345
+msgid "Enter your name"
+msgstr "अपना नाम दर्ज करें"
+
+#: .\home\templates\layouts\base.html:346
+msgid "Enter your email"
+msgstr "अपना ईमेल दर्ज करें"
+
+#: .\home\templates\layouts\base.html:347
+msgid "Type your message..."
+msgstr "अपना संदेश लिखें..."
+
+#: .\home\templates\layouts\base.html:349
+msgid "Submit"
+msgstr "जमा करें"
+
+#: .\home\templates\layouts\base.html:450
+msgid "Session Timeout Warning"
+msgstr "सत्र समय समाप्त होने की चेतावनी"
+
+#: .\home\templates\layouts\base.html:454
+msgid ""
+"Your session will expire in 1 minute due to inactivity. Any unsaved changes "
+"will be lost."
+msgstr ""
+"निष्क्रियता के कारण आपका सत्र 1 मिनट में समाप्त हो जाएगा। कोई भी असहेजित परिवर्तन खो "
+"जाएगा।"
+
+#: .\home\templates\layouts\base.html:457
+msgid "Stay Logged In"
+msgstr "लॉगिन स्थिति बनाए रखें"
+
+#: .\home\templates\pages\about.html:26
+msgid "Full-Service <br class=\"d-none d-md-inline\" />Cyber Security Agency"
+msgstr "पूर्ण-सेवा <br class=\"d-none d-md-inline\" />साइबर सुरक्षा एजेंसी"
+
+#: .\home\templates\pages\about.html:29
+msgid ""
+"\n"
+"            Hardhat can help you secure your webapps, review your code,\n"
+"            visualize the threats and provide an interractive UI for\n"
+"            pen-testing, that will bring your customers a peace of mind and\n"
+"            security.\n"
+"            "
+msgstr ""
+"\n"
+"Hardhat आपकी वेब एप्लिकेशन को सुरक्षित करने, कोड की समीक्षा करने,\n"
+"खतरों का दृश्य प्रस्तुत करने और पेनेट्रेशन टेस्टिंग के लिए एक इंटरैक्टिव UI प्रदान करने में मदद कर "
+"सकता है।\n"
+"यह आपके ग्राहकों को विश्वास और सुरक्षा का आश्वासन देता है।\n"
+
+#: .\home\templates\pages\about.html:53
+msgid "Our Team's Kudoboard"
+msgstr "हमारी टीम का कूडोबोर्ड"
+
+#: .\home\templates\pages\about.html:55
+msgid "Share your appreciation for our team..."
+msgstr "हमारी टीम के लिए अपना आभार साझा करें…"
+
+#: .\home\templates\pages\about.html:57
+msgid "Choose note color: "
+msgstr "नोट का रंग चुनें: "
+
+#: .\home\templates\pages\about.html:89
+msgid "Add Note"
+msgstr "नोट जोड़ें"
+
+#: .\home\templates\pages\about.html:90
+msgid "Clear Board"
+msgstr "बोर्ड साफ़ करें"
+
+#: .\home\templates\pages\about.html:321
+msgid "All challenges accepted."
+msgstr "सभी चुनौतियों को स्वीकार किया गया है।"
+
+#: .\home\templates\pages\about.html:323
+msgid ""
+" \n"
+"            Hardhat is an experienced and passionate group of cybersecurity\n"
+"            specialists and developers. Every client we work with becomes a "
+"part\n"
+"            of the team. Together we face the challenges and celebrate the\n"
+"            victories.\n"
+"            "
+msgstr ""
+"\n"
+"Hardhat अनुभवी और समर्पित साइबर सुरक्षा विशेषज्ञों और डेवलपर्स का समूह है।\n"
+"हम जिन प्रत्येक ग्राहकों के साथ काम करते हैं वे हमारी टीम का हिस्सा बन जाते हैं।\n"
+"हम साथ मिलकर चुनौतियों का सामना करते हैं और सफलताओं का जश्न मनाते हैं।\n"
+
+#: .\home\templates\pages\about.html:331
+msgid ""
+" \n"
+"            With a culture of collaboration and a roster of talent, the "
+"Hardhat\n"
+"            team is active in the creative community, endlessly interested "
+"in\n"
+"            what's next, and generally pleasant to be around.\n"
+"            "
+msgstr ""
+"\n"
+"सहयोग की संस्कृति और प्रतिभा की सूची के साथ, Hardhat टीम रचनात्मक समुदाय में सक्रिय है।\n"
+"हम हमेशा अगली संभावनाओं के प्रति उत्सुक रहते हैं और हमारे साथ काम करना हमेशा सुखद अनुभव "
+"होता है।\n"
+
+#: .\home\templates\pages\about.html:377
+msgid "Team Members"
+msgstr "टीम के सदस्य"
+
+#: .\home\templates\pages\about.html:388
+msgid "Projects Secured"
+msgstr "सुरक्षित किए गए प्रोजेक्ट्स"
+
+#: .\home\templates\pages\about.html:401
+msgid "Threats found"
+msgstr "पाई गई धमकियाँ"
+
+#: .\home\templates\pages\about.html:467
+msgid "<span class=\"fw-bold\">Our</span> history"
+msgstr "<span class=\"fw-bold\">हमारा</span> इतिहास"
+
+#: .\home\templates\pages\about.html:476
+msgid "Present"
+msgstr "वर्तमान"
+
+#: .\home\templates\pages\about.html:478
+msgid ""
+"\n"
+"                  Established an incident response team and provided remote "
+"work\n"
+"                  security solutions. Actively engaged with the global\n"
+"                  cybersecurity community. Continued growth, adapting to\n"
+"                  emerging threats and technologies.\n"
+"                  "
+msgstr ""
+"\n"
+"एक घटना प्रतिक्रिया टीम की स्थापना की गई और रिमोट कार्य सुरक्षा समाधान प्रदान किए "
+"गए।\n"
+"हम वैश्विक साइबर सुरक्षा समुदाय के साथ सक्रिय रूप से जुड़े हैं और उभरते खतरों और "
+"प्रौद्योगिकियों के अनुकूल लगातार वृद्धि कर रहे हैं।\n"
+
+#: .\home\templates\pages\about.html:488
+msgid "Technology and Innovation"
+msgstr "प्रौद्योगिकी और नवाचार"
+
+#: .\home\templates\pages\about.html:490
+msgid ""
+"\n"
+"                  Introduced advanced threat detection technologies. "
+"Established\n"
+"                  a cybersecurity training academy and embraced AI "
+"integration.\n"
+"                  Released a proprietary threat intelligence platform.\n"
+"                  "
+msgstr ""
+"\n"
+"उन्नत खतरा पहचान प्रौद्योगिकियों को पेश किया।\n"
+"साइबर सुरक्षा प्रशिक्षण अकादमी की स्थापना की और एआई एकीकरण को अपनाया।\n"
+"एक स्वामित्व वाली थ्रेट इंटेलिजेंस प्लेटफ़ॉर्म जारी किया।\n"
+
+#: .\home\templates\pages\about.html:499
+msgid "Growth and Recognition"
+msgstr "विकास और मान्यता"
+
+#: .\home\templates\pages\about.html:501
+msgid ""
+"\n"
+"                  Expanded services to include penetration testing and\n"
+"                  vulnerability assessments. Formed strategic partnerships "
+"and\n"
+"                  received industry awards. Achieved international expansion "
+"and\n"
+"                  collaborated on a major research project.\\\n"
+"                  "
+msgstr ""
+"\n"
+"हमने अपनी सेवाओं का विस्तार करते हुए पेनिट्रेशन टेस्टिंग और भेद्यता मूल्यांकन को शामिल किया।\n"
+"रणनीतिक साझेदारियाँ स्थापित कीं और उद्योग पुरस्कार प्राप्त किए।\n"
+"अंतर्राष्ट्रीय विस्तार प्राप्त किया और एक प्रमुख शोध परियोजना में सहयोग किया।\n"
+
+#: .\home\templates\pages\about.html:511
+msgid "Establishment and Early Success"
+msgstr "स्थापना और प्रारंभिक सफलता"
+
+#: .\home\templates\pages\about.html:513
+msgid ""
+"\n"
+"                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
+"                  Initial focus on basic cybersecurity awareness training "
+"and\n"
+"                  consulting. Secured first clients and gained a reputation "
+"for\n"
+"                  reliable services.\n"
+"                  "
+msgstr ""
+"\n"
+"2022 में साइबर सुरक्षा उत्साही लोगों के एक समूह द्वारा स्थापित।\n"
+"प्रारंभिक ध्यान बुनियादी साइबर सुरक्षा जागरूकता प्रशिक्षण और परामर्श पर था।\n"
+"पहले ग्राहकों को सुरक्षित किया और विश्वसनीय सेवाओं के लिए प्रतिष्ठा प्राप्त की।\n"
+
+#: .\home\templates\pages\about.html:555
+msgid "Want to work with us?"
+msgstr "क्या आप हमारे साथ काम करना चाहते हैं?"
+
+#: .\home\templates\pages\about.html:556
+msgid "Awesome! Tell us about yourself"
+msgstr "बहुत बढ़िया! कृपया हमें अपने बारे में बताएं।"
+
+#: .\home\templates\pages\about.html:564
+#: .\home\templates\pages\what_we_do.html:79
+msgid "Your Name"
+msgstr "आपका नाम"
+
+#: .\home\templates\pages\about.html:601
+#: .\home\templates\pages\what_we_do.html:96
+msgid "Your Message"
+msgstr "आपका संदेश"
+
+#: .\home\templates\pages\about.html:604
+msgid "How can we help you?"
+msgstr "हम आपकी किस प्रकार मदद कर सकते हैं?"
+
+#: .\home\templates\pages\about.html:614
+#: .\home\templates\pages\what_we_do.html:101
+msgid "Send Message"
+msgstr "संदेश भेजें"
 
 #: .\home\templates\pages\index.html:20
 msgid "Hardhat Enterprises"
@@ -321,6 +668,10 @@ msgstr "परियोजनाओं का अन्वेषण करें
 msgid "Join Us"
 msgstr "हमसे जुड़ें"
 
+#: .\home\templates\pages\index.html:97
+msgid "Company Vision"
+msgstr "कंपनी का दृष्टिकोण"
+
 #: .\home\templates\pages\index.html:98
 msgid ""
 "Hardhat Enterprises is an organisation that aims to create cyber weapons and "
@@ -328,9 +679,356 @@ msgid ""
 "produced by the company will be open source so that anyone may use and "
 "benefit from them. These deliverables should either improve on existing "
 "tools or fill a market need that is not yet met."
-msgstr "हार्डहैट एंटरप्राइजेज एक संगठन है जिसका उद्देश्य साइबर हथियार और उपकरण बनाना है जो व्हाइट-हैट कार्यों को सशक्त बनाने के लिए उपयोग किए जा सकते हैं। कंपनी द्वारा तैयार की गई सभी डिलिवरेबल्स ओपन सोर्स होंगी ताकि कोई भी उनका उपयोग कर सके और उनसे लाभ उठा सके। ये डिलिवरेबल्स या तो मौजूदा उपकरणों में सुधार करेंगी या किसी ऐसी बाजार आवश्यकता को पूरा करेंगी जो अभी तक पूरी नहीं हुई है।"
+msgstr ""
+"हार्डहैट एंटरप्राइजेज एक संगठन है जिसका उद्देश्य साइबर हथियार और उपकरण बनाना है जो "
+"व्हाइट-हैट कार्यों को सशक्त बनाने के लिए उपयोग किए जा सकते हैं। कंपनी द्वारा तैयार की गई "
+"सभी डिलिवरेबल्स ओपन सोर्स होंगी ताकि कोई भी उनका उपयोग कर सके और उनसे लाभ उठा सके। "
+"ये डिलिवरेबल्स या तो मौजूदा उपकरणों में सुधार करेंगी या किसी ऐसी बाजार आवश्यकता को पूरा "
+"करेंगी जो अभी तक पूरी नहीं हुई है।"
+
+#: .\home\templates\pages\index.html:104
+msgid "Company Mission"
+msgstr "कंपनी का मिशन"
+
+#: .\home\templates\pages\index.html:105
+msgid ""
+"Achieve an engaging learning experience for students within the company. An "
+"opportunity for students to gain cross department/project experience and the "
+"opportunity to share their expertise outside of their project team."
+msgstr ""
+"कंपनी के भीतर छात्रों के लिए एक आकर्षक सीखने का अनुभव प्राप्त करें। छात्रों के लिए विभागों/"
+"प्रोजेक्ट्स के बीच अनुभव हासिल करने और अपनी विशेषज्ञता को प्रोजेक्ट टीम के बाहर साझा करने "
+"का अवसर।"
+
+#: .\home\templates\pages\index.html:158
+msgid ""
+"We deliver comprehensive reports to clients, providing actionable insights "
+"to enhance code security. With a commitment to excellence, AppAttack "
+"empowers organizations to proactively safeguard their digital assets"
+msgstr ""
+"हम ग्राहकों को व्यापक रिपोर्ट प्रदान करते हैं, कोड सुरक्षा बढ़ाने के लिए उपयोगी अंतर्दृष्टि "
+"देते हैं। उत्कृष्टता के प्रति प्रतिबद्धता के साथ, AppAttack संगठनों को अपने डिजिटल संपत्तियों "
+"की सक्रिय रूप से रक्षा करने में सक्षम बनाता है।"
+
+#: .\home\templates\pages\index.html:160 .\home\templates\pages\index.html:175
+#: .\home\templates\pages\index.html:190 .\home\templates\pages\index.html:205
+#: .\home\templates\pages\index.html:220 .\home\templates\pages\index.html:235
+#: .\home\templates\pages\index.html:249
+msgid "Learn More"
+msgstr "और जानें"
+
+#: .\home\templates\pages\index.html:173
+msgid ""
+"Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal "
+"for modern penetration testers. Born from the innovative minds at PT-GUI, "
+"DDT is more than just a toolkit; it's a revolution in cybersecurity practice."
+msgstr ""
+"डीकन डेटोनेटर टूलकिट (DDT) पेश कर रहे हैं – आधुनिक पेनिट्रेशन टेस्टर्स के लिए अत्याधुनिक "
+"हथियार। PT-GUI के नवाचारी दिमागों से जन्मा, DDT सिर्फ एक टूलकिट नहीं है; यह साइबर "
+"सुरक्षा अभ्यास में एक क्रांति है।"
+
+#: .\home\templates\pages\index.html:187
+#, fuzzy
+#| msgid "Deakin CyberSafe VR"
+msgid "CyberSafe VR"
+msgstr "डीकन साइबरसेफ वीआर"
+
+#: .\home\templates\pages\index.html:188
+msgid ""
+"Deakin CyberSafe VR revolutionises cybersecurity training for small "
+"businesses by using interactive VR technology to blend theory with practical "
+"application for owners and employees taking cybersecurity measures."
+msgstr ""
+"डीकन साइबरसेफ वीआर इंटरैक्टिव वीआर तकनीक का उपयोग करके छोटे व्यवसायों के लिए साइबर "
+"सुरक्षा प्रशिक्षण में क्रांति लाता है, जो मालिकों और कर्मचारियों के लिए सिद्धांत और "
+"व्यावहारिक अनुप्रयोग को जोड़ता है।"
+
+#: .\home\templates\pages\index.html:203
+msgid ""
+"Smishing Detection aims to develop an innovative smishing detection app for "
+"Android and iOS devices to moderate the risks associated with SMS phishing "
+"attacks."
+msgstr ""
+"स्मिशिंग डिटेक्शन का उद्देश्य एंड्रॉइड और iOS डिवाइसों के लिए एक अभिनव स्मिशिंग डिटेक्शन ऐप "
+"विकसित करना है ताकि एसएमएस फ़िशिंग हमलों से जुड़े जोखिमों को कम किया जा सके।"
+
+#: .\home\templates\pages\index.html:217
+msgid "Threat Mirror <br>(Project Paused)"
+msgstr "थ्रेट मिरर <br>(प्रोजेक्ट रुका हुआ)"
+
+#: .\home\templates\pages\index.html:218
+msgid ""
+"Threat Mirror aims to investigate open-source threat intelligence platforms, "
+"assessing their suitability and adaptability for SMEs and developing "
+"economies."
+msgstr ""
+"थ्रेट मिरर का उद्देश्य ओपन-सोर्स थ्रेट इंटेलिजेंस प्लेटफ़ॉर्म की जांच करना है, एसएमई और "
+"विकासशील अर्थव्यवस्थाओं के लिए उनकी उपयुक्तता और अनुकूलनशीलता का आकलन करना।"
+
+#: .\home\templates\pages\index.html:232
+msgid "Malware Visualization"
+msgstr "मैलवेयर विज़ुअलाइज़ेशन"
+
+#: .\home\templates\pages\index.html:233
+msgid ""
+"The Malware Visualisation project creates a user-friendly tool that "
+"simplifies malware analysis by integrating with existing visual analytics "
+"applications."
+msgstr ""
+"मैलवेयर विज़ुअलाइज़ेशन प्रोजेक्ट एक उपयोगकर्ता-अनुकूल उपकरण बनाता है जो मौजूदा विज़ुअल "
+"एनालिटिक्स अनुप्रयोगों के साथ एकीकृत होकर मैलवेयर विश्लेषण को सरल बनाता है।"
+
+#: .\home\templates\pages\index.html:246
+#, fuzzy
+#| msgid "The Policy Deployment Engine (New)"
+msgid "The Policy Deployment Engine"
+msgstr "नीति परिनियोजन इंजन (नया)"
+
+#: .\home\templates\pages\index.html:247
+msgid ""
+"The Policy Deployment Engine is a tool that allows users to deploy policies "
+"to their systems."
+msgstr ""
+"पॉलिसी डिप्लॉयमेंट इंजन एक उपकरण है जो उपयोगकर्ताओं को अपने सिस्टम में नीतियां लागू करने "
+"की अनुमति देता है।"
+
+#: .\home\templates\pages\index.html:329
+msgid "Cybersecurity News"
+msgstr "साइबर सुरक्षा समाचार"
+
+#: .\home\templates\pages\index.html:336
+msgid "TROX Stealer Malware Spreads via Fake Updates"
+msgstr "TROX स्टीलर मैलवेयर नकली अपडेट के माध्यम से फैलता है"
+
+#: .\home\templates\pages\index.html:337
+msgid ""
+"A new wave of cyberattacks spreads malware through fake software update "
+"alerts targeting unsuspecting users globally."
+msgstr ""
+"साइबर हमलों की एक नई लहर नकली सॉफ़्टवेयर अपडेट अलर्ट के माध्यम से मैलवेयर फैलाती है, जो "
+"दुनिया भर के अनजान उपयोगकर्ताओं को निशाना बनाती है।"
+
+#: .\home\templates\pages\index.html:338 .\home\templates\pages\index.html:349
+#: .\home\templates\pages\index.html:360
+msgid "Read More"
+msgstr "अधिक पढ़ें"
+
+#: .\home\templates\pages\index.html:347
+msgid "AI Shaping the Future of Cyber Defense"
+msgstr "साइबर रक्षा के भविष्य को आकार देता एआई"
+
+#: .\home\templates\pages\index.html:348
+msgid ""
+"Experts explore how artificial intelligence is transforming threat detection "
+"and proactive cybersecurity measures worldwide."
+msgstr ""
+"विशेषज्ञ इस बात का पता लगाते हैं कि कृत्रिम बुद्धिमत्ता कैसे वैश्विक स्तर पर खतरे की पहचान "
+"और सक्रिय साइबर सुरक्षा उपायों को बदल रही है।"
+
+#: .\home\templates\pages\index.html:358
+msgid "Zero Trust Security: Why It Matters in 2025"
+msgstr "ज़ीरो ट्रस्ट सुरक्षा: 2025 में यह क्यों महत्वपूर्ण है"
+
+#: .\home\templates\pages\index.html:359
+msgid ""
+"With rising remote work trends, the zero-trust model becomes essential in "
+"securing networks beyond traditional perimeters."
+msgstr ""
+"दूरस्थ कार्य की प्रवृत्तियों में वृद्धि के साथ, ज़ीरो-ट्रस्ट मॉडल पारंपरिक परिधि से परे नेटवर्क "
+"को सुरक्षित करने में आवश्यक हो जाता है।"
+
+#: .\home\templates\pages\index.html:377
+msgid "Testimonial"
+msgstr "प्रशंसापत्र"
+
+#: .\home\templates\pages\index.html:378
+msgid "What Our Clients Say"
+msgstr "हमारे ग्राहक क्या कहते हैं"
+
+#: .\home\templates\pages\index.html:384
+msgid ""
+"\"We have been working with Hardhat for over a year now, and their "
+"cybersecurity services have been a game-changer for our business. From "
+"preventing ransomware attacks to securing our network infrastructure, they "
+"have given us the peace of mind to focus on our growth. Their team is "
+"responsive, professional, and always one step ahead. Highly recommend\""
+msgstr ""
+"“हम हार्डहैट के साथ एक साल से अधिक समय से काम कर रहे हैं, और उनकी साइबर सुरक्षा सेवाओं ने "
+"हमारे व्यवसाय के लिए खेल बदल दिया है। रैनसमवेयर हमलों को रोकने से लेकर हमारे नेटवर्क "
+"इंफ्रास्ट्रक्चर को सुरक्षित करने तक, उन्होंने हमें हमारी वृद्धि पर ध्यान केंद्रित करने के लिए मन "
+"की शांति दी है। उनकी टीम उत्तरदायी, पेशेवर है, और हमेशा एक कदम आगे रहती है। अत्यधिक "
+"अनुशंसा करता हूँ।”"
+
+#: .\home\templates\pages\index.html:385
+msgid "James Thompson, CTO, Tech Innovations Ltd."
+msgstr "जेम्स थॉम्पसन, सीटीओ, टेक इनोवेशन्स लिमिटेड"
+
+#: .\home\templates\pages\index.html:388
+msgid ""
+"\"As a small business, we were initially hesitant about investing in "
+"cybersecurity. However, after partnering with Hardhat, we quickly realized "
+"how critical it is to protect our data and systems. Their tailored solutions "
+"have kept us safe from cyber threats, and their proactive approach has "
+"helped us build a secure foundation for the future. We now feel more "
+"confident than ever about our digital security.\""
+msgstr ""
+"“एक छोटे व्यवसाय के रूप में, हम प्रारंभ में साइबर सुरक्षा में निवेश करने को लेकर हिचकिचा रहे "
+"थे। हालांकि, हार्डहैट के साथ साझेदारी करने के बाद, हमें जल्दी ही एहसास हुआ कि हमारे डेटा "
+"और सिस्टम की रक्षा करना कितना महत्वपूर्ण है। उनके अनुकूलित समाधान ने हमें साइबर खतरों से "
+"सुरक्षित रखा है, और उनके सक्रिय दृष्टिकोण ने हमें भविष्य के लिए एक सुरक्षित आधार बनाने में "
+"मदद की है। अब हम अपनी डिजिटल सुरक्षा के बारे में पहले से कहीं अधिक आत्मविश्वास महसूस करते "
+"हैं।”"
+
+#: .\home\templates\pages\index.html:389
+msgid "Sarah Mitchell, Founder, EcoProducts Co."
+msgstr "सारा मिशेल, संस्थापक, ईकोप्रोडक्ट्स कंपनी"
+
+#: .\home\templates\pages\index.html:392
+msgid ""
+"\"In the fast-paced world of finance, cybersecurity is not a luxury—it's a "
+"necessity. Hardhat has been instrumental in fortifying our defenses against "
+"sophisticated cyber threats. Their expertise in threat detection, incident "
+"response, and continuous monitoring has been invaluable. They've helped us "
+"navigate through potential vulnerabilities and maintain our clients' trust. "
+"A top-tier cybersecurity partner!\""
+msgstr ""
+"“वित्त की तेज़-तर्रार दुनिया में, साइबर सुरक्षा कोई विलासिता नहीं—यह एक आवश्यकता है। "
+"हार्डहैट ने जटिल साइबर खतरों के खिलाफ हमारी रक्षा को मजबूत करने में महत्वपूर्ण भूमिका "
+"निभाई है। खतरे का पता लगाने, घटना प्रतिक्रिया और सतत निगरानी में उनकी विशेषज्ञता अमूल्य "
+"रही है। उन्होंने हमें संभावित कमजोरियों से निपटने और हमारे ग्राहकों के विश्वास को बनाए रखने "
+"में मदद की है। एक शीर्ष स्तरीय साइबर सुरक्षा भागीदार!”"
+
+#: .\home\templates\pages\index.html:393
+msgid "David Harris, Risk Manager, FinSecure Solutions"
+msgstr "डेविड हैरिस, जोखिम प्रबंधक, फिनसिक्योर सॉल्यूशंस"
+
+#: .\home\templates\pages\index.html:405
+msgid "FAQ"
+msgstr "अक्सर पूछे जाने वाले प्रश्न"
+
+#: .\home\templates\pages\index.html:406
+msgid "What Our Clients Recently ask"
+msgstr "हमारे ग्राहकों द्वारा हाल ही में पूछे गए प्रश्न"
+
+#: .\home\templates\pages\index.html:411
+msgid "What is cybersecurity and why do I need it? "
+msgstr "साइबर सुरक्षा क्या है और मुझे इसकी आवश्यकता क्यों है?"
+
+#: .\home\templates\pages\index.html:414
+msgid ""
+"Cybersecurity is the practice of protecting systems, networks, and programs "
+"from digital attacks, data breaches, and other cyber threats. It is "
+"essential for businesses and individuals to safeguard sensitive information "
+"from malicious activities."
+msgstr ""
+"साइबर सुरक्षा प्रणालियों, नेटवर्क और प्रोग्रामों को डिजिटल हमलों, डेटा उल्लंघनों और अन्य "
+"साइबर खतरों से बचाने का अभ्यास है। संवेदनशील जानकारी को दुर्भावनापूर्ण गतिविधियों से बचाने "
+"के लिए यह व्यवसायों और व्यक्तियों दोनों के लिए आवश्यक है।"
+
+#: .\home\templates\pages\index.html:420
+msgid "How can I protect my business from cyber threats? "
+msgstr "मैं अपने व्यवसाय को साइबर खतरों से कैसे बचा सकता हूँ?"
+
+#: .\home\templates\pages\index.html:423
+msgid ""
+"Our cybersecurity services offer comprehensive solutions including threat "
+"monitoring, data encryption, firewall protection, penetration testing, and "
+"employee training. These measures can help reduce the risk of cyber threats."
+msgstr ""
+"हमारी साइबर सुरक्षा सेवाएं व्यापक समाधान प्रदान करती हैं, जिनमें खतरे की निगरानी, डेटा "
+"एन्क्रिप्शन, फ़ायरवॉल सुरक्षा, पेनिट्रेशन टेस्टिंग और कर्मचारियों का प्रशिक्षण शामिल है। ये "
+"उपाय साइबर खतरों के जोखिम को कम करने में मदद कर सकते हैं।"
+
+#: .\home\templates\pages\index.html:429
+msgid "What is a data breach and how can I prevent one? "
+msgstr "डेटा उल्लंघन क्या है और मैं इसे कैसे रोक सकता हूँ?"
+
+#: .\home\templates\pages\index.html:432
+msgid ""
+"A data breach occurs when sensitive information is accessed or stolen by "
+"unauthorized individuals. Preventive measures include securing networks, "
+"using strong passwords, encrypting sensitive data, and regularly updating "
+"security protocols."
+msgstr ""
+"डेटा उल्लंघन तब होता है जब संवेदनशील जानकारी तक अनधिकृत व्यक्तियों द्वारा पहुंच बनाई जाती "
+"है या उसे चुरा लिया जाता है। निवारक उपायों में नेटवर्क को सुरक्षित करना, मजबूत पासवर्ड का "
+"उपयोग करना, संवेदनशील डेटा को एन्क्रिप्ट करना और सुरक्षा प्रोटोकॉल को नियमित रूप से "
+"अपडेट करना शामिल है।"
+
+#: .\home\templates\pages\index.html:443
+msgid "Announcement"
+msgstr "घोषणा"
+
+#: .\home\templates\pages\index.html:447
+msgid "{{ announcement_message }}"
+msgstr "{{ announcement_message }}"
+
+#: .\home\templates\pages\index.html:450
+msgid "Close"
+msgstr "बंद करें"
+
+#: .\home\templates\pages\what_we_do.html:22
+msgid "Full-Service Cybersecurity Agency"
+msgstr "पूर्ण-सेवा साइबर सुरक्षा एजेंसी"
+
+#: .\home\templates\pages\what_we_do.html:24
+msgid ""
+"\n"
+"                        Hardhat Enterprises enhances white-hat cybersecurity "
+"by safeguarding assets, reducing threats, and thwarting vulnerability "
+"exploits. Our cybersecurity services, including penetration testing and open-"
+"source security tools, address market gaps and secure your digital assets.\n"
+"                        "
+msgstr ""
+"\n"
+"                        हार्डहैट एंटरप्राइज़ेस संपत्तियों की सुरक्षा, खतरों में कमी और कमजोरियों के दुरुपयोग को रोककर व्हाइट-हैट साइबर सुरक्षा को सुदृढ़ करता है। "
+"हमारी साइबर सुरक्षा सेवाएँ, जिनमें पेनिट्रेशन टेस्टिंग और ओपन-सोर्स सुरक्षा उपकरण शामिल हैं, बाज़ार की खामियों को दूर करती हैं और आपके डिजिटल संपत्तियों को सुरक्षित बनाती हैं।\n"
+"                        "
+
+#: .\home\templates\pages\what_we_do.html:42
+msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
+msgstr "हमारी <span class=\"fw-bold\">साइबर सुरक्षा सेवाएँ</span>"
+
+#: .\home\templates\pages\what_we_do.html:43
+msgid "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions."
+msgstr "जानें कि हार्डहैट एंटरप्राइज़ेस उन्नत व्हाइट-हैट साइबर सुरक्षा समाधान के माध्यम से आपके संगठन की कैसे रक्षा करता है।"
+
+#: .\home\templates\pages\what_we_do.html:48
+msgid "Penetration Testing Services"
+msgstr "पेनिट्रेशन टेस्टिंग सेवाएँ"
+
+#: .\home\templates\pages\what_we_do.html:49
+msgid "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection."
+msgstr "हम आपके सिस्टम और अनुप्रयोगों में कमजोरियों की पहचान करने हेतु व्यापक पेनिट्रेशन टेस्टिंग सेवाएँ प्रदान करते हैं, जिससे मजबूत साइबर सुरक्षा सुनिश्चित होती है।"
+
+#: .\home\templates\pages\what_we_do.html:52
+msgid "Secure Code Review"
+msgstr "सुरक्षित कोड समीक्षा"
+
+#: .\home\templates\pages\what_we_do.html:53
+msgid "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr "हमारे विशेषज्ञ यह सुनिश्चित करने के लिए सुरक्षित कोड समीक्षा सेवाएँ प्रदान करते हैं कि आपका कोड कमजोरियों से मुक्त है और आपके अनुप्रयोग साइबर खतरों से संरक्षित हैं।"
+
+#: .\home\templates\pages\what_we_do.html:56
+msgid "Open-Source Security Tools"
+msgstr "ओपन-सोर्स सुरक्षा उपकरण"
+
+#: .\home\templates\pages\what_we_do.html:57
+msgid "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation."
+msgstr "हम ओपन-सोर्स सुरक्षा उपकरण विकसित करते हैं जो बाज़ार की खामियों को दूर करते हैं और संगठनों को खतरे कम करने हेतु एथिकल हैकिंग टूल्स से सशक्त बनाते हैं।"
+
+#: .\home\templates\pages\what_we_do.html:72
+msgid "Work With Our Cybersecurity Agency"
+msgstr "हमारी साइबर सुरक्षा एजेंसी के साथ कार्य करें"
+
+#: .\home\templates\pages\what_we_do.html:73
+msgid "Tell us about your cybersecurity needs!"
+msgstr "हमें अपनी साइबर सुरक्षा आवश्यकताओं के बारे में बताइए!"
+
+#: .\home\templates\pages\what_we_do.html:97
+msgid "How can our cybersecurity services help you?"
+msgstr "हमारी साइबर सुरक्षा सेवाएँ आपकी किस प्रकार सहायता कर सकती हैं?"
 
 #: .\home\validators.py:19
 msgid "Enter a valid student ID. This value must contain 9 digits only"
 msgstr "मान्य छात्र आईडी दर्ज करें। इसमें केवल 9 अंक होने चाहिए।"
-

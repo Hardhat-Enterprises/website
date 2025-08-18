@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-09 01:35+1000\n"
+"POT-Creation-Date: 2025-08-19 01:16+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,71 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\home\context_processors.py:59 .\home\context_processors.py:60
+#: .\home\templates\admin\home\app_index.html:7
+#: .\home\templates\includes\footer.html:50
+#: .\home\templates\includes\navigation.html:51
+msgid "Home"
+msgstr "首页"
+
+#: .\home\context_processors.py:61 .\home\context_processors.py:62
+#: .\home\templates\includes\footer.html:72
+msgid "About Us"
+msgstr "关于我们"
+
+#: .\home\context_processors.py:63 .\home\templates\pages\about.html:39
+msgid "What we do"
+msgstr "我们的服务"
+
+#: .\home\context_processors.py:64 .\home\templates\includes\footer.html:74
+msgid "Contact Us"
+msgstr "联系我们"
+
+#: .\home\context_processors.py:65
+#, fuzzy
+#| msgid "Projects"
+msgid "Our Projects"
+msgstr "项目"
+
+#: .\home\context_processors.py:66
+msgid "Upload Image"
+msgstr ""
+
+#: .\home\context_processors.py:67
+#: .\home\templates\includes\navigation.html:160
+msgid "Blog"
+msgstr "博客"
+
+#: .\home\context_processors.py:68
+#: .\home\templates\includes\navigation.html:168
+msgid "Published Blogs"
+msgstr "已发布的博客"
+
+#: .\home\context_processors.py:69
+#: .\home\templates\includes\navigation.html:180
+msgid "Discover Hardhat"
+msgstr "探索 Hardhat"
+
+#: .\home\context_processors.py:70
+#: .\home\templates\includes\navigation.html:186
+msgid "Internships"
+msgstr "实习"
+
+#: .\home\context_processors.py:71
+#: .\home\templates\includes\navigation.html:189
+msgid "Job Alerts"
+msgstr "职位提醒"
+
+#: .\home\context_processors.py:72
+#: .\home\templates\includes\navigation.html:199
+msgid "Cyber Challenges"
+msgstr "网络挑战"
+
+#: .\home\context_processors.py:73
+#: .\home\templates\includes\navigation.html:211
+msgid "Quiz"
+msgstr "测验"
 
 #: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
 msgid "First Name"
@@ -78,7 +143,8 @@ msgstr "密码"
 msgid "Too many login attempts. Please try again later."
 msgstr "登录尝试次数过多，请稍后再试。"
 
-#: .\home\forms.py:310
+#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "您的电子邮箱"
 
@@ -200,10 +266,47 @@ msgstr "学期"
 msgid "unit"
 msgstr "单元"
 
-#: .\home\templates\admin\home\app_index.html:7
-#: .\home\templates\includes\navigation.html:51
-msgid "Home"
-msgstr "首页"
+#: .\home\templates\includes\footer.html:10
+msgid ""
+"Hardhat Enterprises offers open-source protection, so it's free for everyone."
+msgstr "Hardhat Enterprises 提供开源防护，因此对所有人都是免费的。"
+
+#: .\home\templates\includes\footer.html:49
+msgid "Blog Page"
+msgstr "博客页面"
+
+#: .\home\templates\includes\footer.html:92
+msgid "Feedback"
+msgstr "反馈"
+
+#: .\home\templates\includes\footer.html:99
+msgid "The OWASP Top 10"
+msgstr "OWASP 十大漏洞"
+
+#: .\home\templates\includes\footer.html:101
+msgid "Learn more about cyber security standards and applications"
+msgstr "了解更多关于网络安全标准和应用的内容"
+
+#: .\home\templates\includes\footer.html:110
+msgid "OWASP Top 10"
+msgstr "OWASP 十大漏洞"
+
+#: .\home\templates\includes\footer.html:144
+msgid "This page has been visited "
+msgstr "本页已经被访问"
+
+#: .\home\templates\includes\footer.html:146
+msgid "times!"
+msgstr "次！"
+
+#: .\home\templates\includes\footer.html:156
+msgid "Last Updated:"
+msgstr "最近更新："
+
+#: .\home\templates\includes\navigation.html:39
+#: .\home\templates\includes\navigation.html:228
+msgid "Search..."
+msgstr "搜索..."
 
 #: .\home\templates\includes\navigation.html:57
 msgid "Upskilling"
@@ -234,18 +337,22 @@ msgid "About"
 msgstr "关于"
 
 #: .\home\templates\includes\navigation.html:107
+#: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "项目"
 
 #: .\home\templates\includes\navigation.html:116
+#: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "应用攻击（AppAttack）"
 
 #: .\home\templates\includes\navigation.html:121
+#: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
 #: .\home\templates\includes\navigation.html:126
+#: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "短信钓鱼检测"
 
@@ -261,49 +368,286 @@ msgstr "策略部署引擎（新）"
 msgid "Deakin Threat mirror (Finished)"
 msgstr "迪肯威胁镜像（已完成）"
 
-#: .\home\templates\includes\navigation.html:160
-msgid "Blog"
-msgstr "博客"
-
 #: .\home\templates\includes\navigation.html:167
 msgid "Create a Blog"
 msgstr "创建博客"
-
-#: .\home\templates\includes\navigation.html:168
-msgid "Published Blogs"
-msgstr "已发布的博客"
 
 #: .\home\templates\includes\navigation.html:174
 msgid "Careers"
 msgstr "招聘"
 
-#: .\home\templates\includes\navigation.html:180
-msgid "Discover Hardhat"
-msgstr "探索 Hardhat"
-
 #: .\home\templates\includes\navigation.html:183
 msgid "All Jobs"
 msgstr "全部职位"
-
-#: .\home\templates\includes\navigation.html:186
-msgid "Internships"
-msgstr "实习"
-
-#: .\home\templates\includes\navigation.html:189
-msgid "Job Alerts"
-msgstr "职位提醒"
-
-#: .\home\templates\includes\navigation.html:199
-msgid "Cyber Challenges"
-msgstr "网络挑战"
 
 #: .\home\templates\includes\navigation.html:206
 msgid "All Challenges"
 msgstr "全部挑战"
 
-#: .\home\templates\includes\navigation.html:211
-msgid "Quiz"
-msgstr "测验"
+#: .\home\templates\includes\navigation.html:248
+msgid "Logout"
+msgstr "退出登录"
+
+#: .\home\templates\includes\navigation.html:293
+msgid "Sign In"
+msgstr "登录"
+
+#: .\home\templates\includes\navigation.html:326
+msgid "Sign Up"
+msgstr "注册"
+
+#: .\home\templates\includes\navigation.html:348
+msgid "Language"
+msgstr "语言"
+
+#: .\home\templates\layouts\base.html:315
+msgid "Recently Viewed Pages"
+msgstr "最近浏览的页面"
+
+#: .\home\templates\layouts\base.html:333
+msgid "💬 Chat with us"
+msgstr "💬 与我们聊天"
+
+#: .\home\templates\layouts\base.html:338
+msgid "Let's chat?"
+msgstr "要聊聊吗？"
+
+#: .\home\templates\layouts\base.html:343
+msgid ""
+"Please fill out the form below to start chatting with the next available "
+"agent."
+msgstr "请填写下方表格，以便与下一位可用客服开始聊天。"
+
+#: .\home\templates\layouts\base.html:345
+msgid "Enter your name"
+msgstr "请输入您的姓名"
+
+#: .\home\templates\layouts\base.html:346
+msgid "Enter your email"
+msgstr "请输入您的邮箱"
+
+#: .\home\templates\layouts\base.html:347
+msgid "Type your message..."
+msgstr "请输入您的留言..."
+
+#: .\home\templates\layouts\base.html:349
+msgid "Submit"
+msgstr "提交"
+
+#: .\home\templates\layouts\base.html:450
+msgid "Session Timeout Warning"
+msgstr "会话超时警告"
+
+#: .\home\templates\layouts\base.html:454
+msgid ""
+"Your session will expire in 1 minute due to inactivity. Any unsaved changes "
+"will be lost."
+msgstr ""
+"由于长时间未操作，您的会话将在 1 分钟后过期。所有未保存的更改将会丢失。"
+
+#: .\home\templates\layouts\base.html:457
+msgid "Stay Logged In"
+msgstr "保持登录"
+
+#: .\home\templates\pages\about.html:26
+msgid "Full-Service <br class=\"d-none d-md-inline\" />Cyber Security Agency"
+msgstr "全方位<br class=\"d-none d-md-inline\" />网络安全机构"
+
+#: .\home\templates\pages\about.html:29
+msgid ""
+"\n"
+"            Hardhat can help you secure your webapps, review your code,\n"
+"            visualize the threats and provide an interractive UI for\n"
+"            pen-testing, that will bring your customers a peace of mind and\n"
+"            security.\n"
+"            "
+msgstr ""
+"\n"
+"            Hardhat 可帮助您保护您的 Web 应用程序，审查代码，\n"
+"            可视化潜在威胁，并提供交互式的渗透测试界面，\n"
+"            为您的客户带来安心与安全。\n"
+"            "
+
+#: .\home\templates\pages\about.html:53
+msgid "Our Team's Kudoboard"
+msgstr "我们团队的荣誉墙"
+
+#: .\home\templates\pages\about.html:55
+msgid "Share your appreciation for our team..."
+msgstr "分享您对我们团队的赞赏…"
+
+#: .\home\templates\pages\about.html:57
+msgid "Choose note color: "
+msgstr "选择便签颜色："
+
+#: .\home\templates\pages\about.html:89
+msgid "Add Note"
+msgstr "添加便签"
+
+#: .\home\templates\pages\about.html:90
+msgid "Clear Board"
+msgstr "清空留言板"
+
+#: .\home\templates\pages\about.html:321
+msgid "All challenges accepted."
+msgstr "迎接所有挑战"
+
+#: .\home\templates\pages\about.html:323
+msgid ""
+" \n"
+"            Hardhat is an experienced and passionate group of cybersecurity\n"
+"            specialists and developers. Every client we work with becomes a "
+"part\n"
+"            of the team. Together we face the challenges and celebrate the\n"
+"            victories.\n"
+"            "
+msgstr ""
+" \n"
+"            Hardhat 是一支由经验丰富且充满热情的网络安全专家和开发人员组成的"
+"团队。\n"
+"            每一位合作的客户都成为我们团队的一部分。\n"
+"            我们共同迎接挑战，共同分享成功的喜悦。\n"
+"            "
+
+#: .\home\templates\pages\about.html:331
+msgid ""
+" \n"
+"            With a culture of collaboration and a roster of talent, the "
+"Hardhat\n"
+"            team is active in the creative community, endlessly interested "
+"in\n"
+"            what's next, and generally pleasant to be around.\n"
+"            "
+msgstr ""
+" \n"
+"            Hardhat 团队以协作为文化，汇聚多元人才，积极活跃于创新社区，\n"
+"            始终保持对未来发展的高度关注，且以友善专业的风格赢得合作伙伴的信"
+"任。\n"
+"            "
+
+#: .\home\templates\pages\about.html:377
+msgid "Team Members"
+msgstr "团队成员"
+
+#: .\home\templates\pages\about.html:388
+msgid "Projects Secured"
+msgstr "已保护的项目"
+
+#: .\home\templates\pages\about.html:401
+msgid "Threats found"
+msgstr "发现的威胁"
+
+#: .\home\templates\pages\about.html:467
+msgid "<span class=\"fw-bold\">Our</span> history"
+msgstr "<span class=\"fw-bold\">我们的</span> 历史"
+
+#: .\home\templates\pages\about.html:476
+msgid "Present"
+msgstr "当下"
+
+#: .\home\templates\pages\about.html:478
+msgid ""
+"\n"
+"                  Established an incident response team and provided remote "
+"work\n"
+"                  security solutions. Actively engaged with the global\n"
+"                  cybersecurity community. Continued growth, adapting to\n"
+"                  emerging threats and technologies.\n"
+"                  "
+msgstr ""
+"\n"
+"                  建立了事件响应团队并提供远程办公安全解决方案。\n"
+"                  积极参与全球网络安全社区活动，持续成长，\n"
+"                  并不断适应新兴的威胁与技术。\n"
+"                  "
+
+#: .\home\templates\pages\about.html:488
+msgid "Technology and Innovation"
+msgstr "技术与创新"
+
+#: .\home\templates\pages\about.html:490
+msgid ""
+"\n"
+"                  Introduced advanced threat detection technologies. "
+"Established\n"
+"                  a cybersecurity training academy and embraced AI "
+"integration.\n"
+"                  Released a proprietary threat intelligence platform.\n"
+"                  "
+msgstr ""
+"\n"
+"                  引入先进的威胁检测技术，建立网络安全培训学院，\n"
+"                  积极采用人工智能技术，并发布自主研发的威胁情报平台。\n"
+"                  "
+
+#: .\home\templates\pages\about.html:499
+msgid "Growth and Recognition"
+msgstr "发展与认可"
+
+#: .\home\templates\pages\about.html:501
+msgid ""
+"\n"
+"                  Expanded services to include penetration testing and\n"
+"                  vulnerability assessments. Formed strategic partnerships "
+"and\n"
+"                  received industry awards. Achieved international expansion "
+"and\n"
+"                  collaborated on a major research project.\\\n"
+"                  "
+msgstr ""
+"\n"
+"                  扩展服务范围至渗透测试与漏洞评估。\n"
+"                  建立战略合作关系并获得行业奖项，\n"
+"                  实现国际化发展，并参与重大研究项目合作。\n"
+"                  "
+
+#: .\home\templates\pages\about.html:511
+msgid "Establishment and Early Success"
+msgstr "成立与早期成就"
+
+#: .\home\templates\pages\about.html:513
+msgid ""
+"\n"
+"                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
+"                  Initial focus on basic cybersecurity awareness training "
+"and\n"
+"                  consulting. Secured first clients and gained a reputation "
+"for\n"
+"                  reliable services.\n"
+"                  "
+msgstr ""
+"\n"
+"                  由一群网络安全爱好者于 2022 年创立。\n"
+"                  最初专注于基础的网络安全意识培训与咨询。\n"
+"                  成功获得首批客户，并凭借可靠的服务赢得良好声誉。\n"
+"                  "
+
+#: .\home\templates\pages\about.html:555
+msgid "Want to work with us?"
+msgstr "想与我们合作吗？"
+
+#: .\home\templates\pages\about.html:556
+msgid "Awesome! Tell us about yourself"
+msgstr "太好了！请向我们介绍您自己"
+
+#: .\home\templates\pages\about.html:564
+#: .\home\templates\pages\what_we_do.html:79
+msgid "Your Name"
+msgstr "您的姓名"
+
+#: .\home\templates\pages\about.html:601
+#: .\home\templates\pages\what_we_do.html:96
+msgid "Your Message"
+msgstr "您的留言"
+
+#: .\home\templates\pages\about.html:604
+msgid "How can we help you?"
+msgstr "我们能如何帮助您？"
+
+#: .\home\templates\pages\about.html:614
+#: .\home\templates\pages\what_we_do.html:101
+msgid "Send Message"
+msgstr "发送消息"
 
 #: .\home\templates\pages\index.html:20
 msgid "Hardhat Enterprises"
@@ -346,7 +690,320 @@ msgid ""
 "Achieve an engaging learning experience for students within the company. An "
 "opportunity for students to gain cross department/project experience and the "
 "opportunity to share their expertise outside of their project team."
-msgstr "为公司内部的学生创造一个引人入胜的学习体验，让他们有机会获得跨部门/跨项目的经验，并能够在项目团队之外分享自己的专业知识。"
+msgstr ""
+"为公司内部的学生创造一个引人入胜的学习体验，让他们有机会获得跨部门/跨项目的经"
+"验，并能够在项目团队之外分享自己的专业知识。"
+
+#: .\home\templates\pages\index.html:158
+msgid ""
+"We deliver comprehensive reports to clients, providing actionable insights "
+"to enhance code security. With a commitment to excellence, AppAttack "
+"empowers organizations to proactively safeguard their digital assets"
+msgstr ""
+"我们向客户提供全面的报告，提供可行的见解以提升代码安全性。秉持卓越的承诺，"
+"AppAttack 赋能组织主动保护其数字资产。"
+
+#: .\home\templates\pages\index.html:160 .\home\templates\pages\index.html:175
+#: .\home\templates\pages\index.html:190 .\home\templates\pages\index.html:205
+#: .\home\templates\pages\index.html:220 .\home\templates\pages\index.html:235
+#: .\home\templates\pages\index.html:249
+msgid "Learn More"
+msgstr "了解更多"
+
+#: .\home\templates\pages\index.html:173
+msgid ""
+"Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal "
+"for modern penetration testers. Born from the innovative minds at PT-GUI, "
+"DDT is more than just a toolkit; it's a revolution in cybersecurity practice."
+msgstr ""
+"介绍 Deakin Detonator Toolkit（DDT）——现代渗透测试员的尖端武器库。源自 PT-"
+"GUI 的创新团队，DDT 不仅仅是一个工具包，而是网络安全实践的一场革命。"
+
+#: .\home\templates\pages\index.html:187
+#, fuzzy
+#| msgid "Deakin CyberSafe VR"
+msgid "CyberSafe VR"
+msgstr "网络安全虚拟现实"
+
+#: .\home\templates\pages\index.html:188
+msgid ""
+"Deakin CyberSafe VR revolutionises cybersecurity training for small "
+"businesses by using interactive VR technology to blend theory with practical "
+"application for owners and employees taking cybersecurity measures."
+msgstr ""
+"Deakin CyberSafe VR 通过交互式虚拟现实技术，将理论与实践相结合，革新了小型企"
+"业的网络安全培训，帮助业主和员工采取网络安全措施。"
+
+#: .\home\templates\pages\index.html:203
+msgid ""
+"Smishing Detection aims to develop an innovative smishing detection app for "
+"Android and iOS devices to moderate the risks associated with SMS phishing "
+"attacks."
+msgstr ""
+"Smishing Detection 旨在为 Android 和 iOS 设备开发创新的短信钓鱼检测应用，以降"
+"低与短信钓鱼攻击相关的风险。"
+
+#: .\home\templates\pages\index.html:217
+msgid "Threat Mirror <br>(Project Paused)"
+msgstr "威胁镜像 <br>（项目暂停）"
+
+#: .\home\templates\pages\index.html:218
+msgid ""
+"Threat Mirror aims to investigate open-source threat intelligence platforms, "
+"assessing their suitability and adaptability for SMEs and developing "
+"economies."
+msgstr ""
+"威胁镜像旨在研究开源威胁情报平台，评估其对中小企业和发展中经济体的适用性和适"
+"应性。"
+
+#: .\home\templates\pages\index.html:232
+msgid "Malware Visualization"
+msgstr "恶意软件可视化"
+
+#: .\home\templates\pages\index.html:233
+msgid ""
+"The Malware Visualisation project creates a user-friendly tool that "
+"simplifies malware analysis by integrating with existing visual analytics "
+"applications."
+msgstr ""
+"恶意软件可视化项目旨在创建一个用户友好的工具，通过与现有可视化分析应用集成来"
+"简化恶意软件分析。"
+
+#: .\home\templates\pages\index.html:246
+#, fuzzy
+#| msgid "The Policy Deployment Engine (New)"
+msgid "The Policy Deployment Engine"
+msgstr "策略部署引擎"
+
+#: .\home\templates\pages\index.html:247
+msgid ""
+"The Policy Deployment Engine is a tool that allows users to deploy policies "
+"to their systems."
+msgstr "策略部署引擎是一种允许用户将策略部署到其系统中的工具。"
+
+#: .\home\templates\pages\index.html:329
+msgid "Cybersecurity News"
+msgstr "网络安全新闻"
+
+#: .\home\templates\pages\index.html:336
+msgid "TROX Stealer Malware Spreads via Fake Updates"
+msgstr "TROX 窃取型恶意软件通过伪造更新传播"
+
+#: .\home\templates\pages\index.html:337
+msgid ""
+"A new wave of cyberattacks spreads malware through fake software update "
+"alerts targeting unsuspecting users globally."
+msgstr ""
+"新一波网络攻击通过伪造软件更新警报传播恶意软件，全球毫无防备的用户均成为目"
+"标。"
+
+#: .\home\templates\pages\index.html:338 .\home\templates\pages\index.html:349
+#: .\home\templates\pages\index.html:360
+msgid "Read More"
+msgstr "阅读更多"
+
+#: .\home\templates\pages\index.html:347
+msgid "AI Shaping the Future of Cyber Defense"
+msgstr "人工智能塑造网络防御的未来"
+
+#: .\home\templates\pages\index.html:348
+msgid ""
+"Experts explore how artificial intelligence is transforming threat detection "
+"and proactive cybersecurity measures worldwide."
+msgstr "专家探讨人工智能如何改变全球的威胁检测和主动网络安全措施。"
+
+#: .\home\templates\pages\index.html:358
+msgid "Zero Trust Security: Why It Matters in 2025"
+msgstr "零信任安全：为何在 2025 年如此重要"
+
+#: .\home\templates\pages\index.html:359
+msgid ""
+"With rising remote work trends, the zero-trust model becomes essential in "
+"securing networks beyond traditional perimeters."
+msgstr ""
+"随着远程办公趋势的上升，零信任模型在保护超越传统边界的网络中变得至关重要。"
+
+#: .\home\templates\pages\index.html:377
+msgid "Testimonial"
+msgstr "客户评价"
+
+#: .\home\templates\pages\index.html:378
+msgid "What Our Clients Say"
+msgstr "客户怎么说"
+
+#: .\home\templates\pages\index.html:384
+msgid ""
+"\"We have been working with Hardhat for over a year now, and their "
+"cybersecurity services have been a game-changer for our business. From "
+"preventing ransomware attacks to securing our network infrastructure, they "
+"have given us the peace of mind to focus on our growth. Their team is "
+"responsive, professional, and always one step ahead. Highly recommend\""
+msgstr ""
+"“我们与 Hardhat 合作已有一年多，他们的网络安全服务对我们的业务来说是一个重大"
+"改变。从防止勒索软件攻击到保护我们的网络基础设施，他们让我们安心专注于业务增"
+"长。他们的团队反应迅速、专业，并且总是领先一步。强烈推荐。”"
+
+#: .\home\templates\pages\index.html:385
+msgid "James Thompson, CTO, Tech Innovations Ltd."
+msgstr "詹姆斯·汤普森，首席技术官，Tech Innovations Ltd."
+
+#: .\home\templates\pages\index.html:388
+msgid ""
+"\"As a small business, we were initially hesitant about investing in "
+"cybersecurity. However, after partnering with Hardhat, we quickly realized "
+"how critical it is to protect our data and systems. Their tailored solutions "
+"have kept us safe from cyber threats, and their proactive approach has "
+"helped us build a secure foundation for the future. We now feel more "
+"confident than ever about our digital security.\""
+msgstr ""
+"“作为一家小型企业，我们最初对投资网络安全持犹豫态度。然而，与 Hardhat 合作"
+"后，我们很快意识到保护数据和系统的重要性。他们量身定制的解决方案让我们免受网"
+"络威胁，其主动的方式帮助我们为未来建立了安全的基础。我们现在对数字安全的信心"
+"比以往任何时候都高。”"
+
+#: .\home\templates\pages\index.html:389
+msgid "Sarah Mitchell, Founder, EcoProducts Co."
+msgstr "萨拉·米切尔，创始人，EcoProducts Co."
+
+#: .\home\templates\pages\index.html:392
+msgid ""
+"\"In the fast-paced world of finance, cybersecurity is not a luxury—it's a "
+"necessity. Hardhat has been instrumental in fortifying our defenses against "
+"sophisticated cyber threats. Their expertise in threat detection, incident "
+"response, and continuous monitoring has been invaluable. They've helped us "
+"navigate through potential vulnerabilities and maintain our clients' trust. "
+"A top-tier cybersecurity partner!\""
+msgstr ""
+"“在节奏迅速的金融领域，网络安全绝非奢侈品，而是必需品。Hardhat 在加强我们抵御复杂网络威胁的防御方面发挥了关键作用。"
+"他们在威胁检测、事件响应和持续监控方面的专业能力极为宝贵，帮助我们识别并应对潜在漏洞，维护了客户的信任。"
+"他们是真正一流的网络安全合作伙伴！”"
+
+#: .\home\templates\pages\index.html:393
+msgid "David Harris, Risk Manager, FinSecure Solutions"
+msgstr "大卫·哈里斯，风险经理，FinSecure Solutions"
+
+#: .\home\templates\pages\index.html:405
+msgid "FAQ"
+msgstr "常见问题"
+
+#: .\home\templates\pages\index.html:406
+msgid "What Our Clients Recently ask"
+msgstr "客户最近问了什么"
+
+#: .\home\templates\pages\index.html:411
+msgid "What is cybersecurity and why do I need it? "
+msgstr "什么是网络安全，我为什么需要它？"
+
+#: .\home\templates\pages\index.html:414
+msgid ""
+"Cybersecurity is the practice of protecting systems, networks, and programs "
+"from digital attacks, data breaches, and other cyber threats. It is "
+"essential for businesses and individuals to safeguard sensitive information "
+"from malicious activities."
+msgstr ""
+"网络安全是保护系统、网络和程序免受数字攻击、数据泄露和其他网络威胁的实践。对"
+"于企业和个人来说，保护敏感信息免受恶意活动侵害至关重要。"
+
+#: .\home\templates\pages\index.html:420
+msgid "How can I protect my business from cyber threats? "
+msgstr "我如何保护我的企业免受网络威胁？"
+
+#: .\home\templates\pages\index.html:423
+msgid ""
+"Our cybersecurity services offer comprehensive solutions including threat "
+"monitoring, data encryption, firewall protection, penetration testing, and "
+"employee training. These measures can help reduce the risk of cyber threats."
+msgstr ""
+"我们的网络安全服务提供全面的解决方案，包括威胁监控、数据加密、防火墙保护、渗"
+"透测试和员工培训。这些措施有助于降低网络威胁的风险。"
+
+#: .\home\templates\pages\index.html:429
+msgid "What is a data breach and how can I prevent one? "
+msgstr "什么是数据泄露，我该如何防止？"
+
+#: .\home\templates\pages\index.html:432
+msgid ""
+"A data breach occurs when sensitive information is accessed or stolen by "
+"unauthorized individuals. Preventive measures include securing networks, "
+"using strong passwords, encrypting sensitive data, and regularly updating "
+"security protocols."
+msgstr ""
+"数据泄露是指未经授权的人员访问或窃取敏感信息。预防措施包括保护网络安全、使用"
+"强密码、加密敏感数据以及定期更新安全协议。"
+
+#: .\home\templates\pages\index.html:443
+msgid "Announcement"
+msgstr "公告"
+
+#: .\home\templates\pages\index.html:447
+msgid "{{ announcement_message }}"
+msgstr "{{ announcement_message }}"
+
+#: .\home\templates\pages\index.html:450
+msgid "Close"
+msgstr "关闭"
+
+#: .\home\templates\pages\what_we_do.html:22
+msgid "Full-Service Cybersecurity Agency"
+msgstr "全方位的网络安全服务机构"
+
+#: .\home\templates\pages\what_we_do.html:24
+msgid ""
+"\n"
+"                        Hardhat Enterprises enhances white-hat cybersecurity "
+"by safeguarding assets, reducing threats, and thwarting vulnerability "
+"exploits. Our cybersecurity services, including penetration testing and open-"
+"source security tools, address market gaps and secure your digital assets.\n"
+"                        "
+msgstr ""
+"\n"
+"                        Hardhat Enterprises 通过保护资产、降低威胁、阻止漏洞利用来全面提升白帽网络安全。"
+"我们的网络安全服务涵盖渗透测试和开源安全工具，旨在弥补市场空白，切实保障您的数字资产安全。\n"
+"                        "
+
+#: .\home\templates\pages\what_we_do.html:42
+msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
+msgstr "我们的<span class=\"fw-bold\">网络安全服务</span>"
+
+#: .\home\templates\pages\what_we_do.html:43
+msgid "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions."
+msgstr "了解 Hardhat Enterprises 如何通过先进的白帽网络安全解决方案守护您的组织。"
+
+#: .\home\templates\pages\what_we_do.html:48
+msgid "Penetration Testing Services"
+msgstr "渗透测试服务"
+
+#: .\home\templates\pages\what_we_do.html:49
+msgid "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection."
+msgstr "我们提供全面的渗透测试服务，以识别您系统和应用中的漏洞，确保强有力的网络安全防护。"
+
+#: .\home\templates\pages\what_we_do.html:52
+msgid "Secure Code Review"
+msgstr "安全代码审查"
+
+#: .\home\templates\pages\what_we_do.html:53
+msgid "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr "我们的专家提供安全代码审查服务，确保您的代码不含漏洞，从而保护应用免受网络威胁。"
+
+#: .\home\templates\pages\what_we_do.html:56
+msgid "Open-Source Security Tools"
+msgstr "开源安全工具"
+
+#: .\home\templates\pages\what_we_do.html:57
+msgid "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation."
+msgstr "我们研发开源安全工具，以填补市场空白，并为组织提供道德黑客工具，助力威胁防御。"
+
+#: .\home\templates\pages\what_we_do.html:72
+msgid "Work With Our Cybersecurity Agency"
+msgstr "与我们的网络安全机构合作"
+
+#: .\home\templates\pages\what_we_do.html:73
+msgid "Tell us about your cybersecurity needs!"
+msgstr "请告诉我们您的网络安全需求！"
+
+#: .\home\templates\pages\what_we_do.html:97
+msgid "How can our cybersecurity services help you?"
+msgstr "我们的网络安全服务如何能够帮助您？"
 
 #: .\home\validators.py:19
 msgid "Enter a valid student ID. This value must contain 9 digits only"
