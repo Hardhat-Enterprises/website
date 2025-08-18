@@ -180,7 +180,7 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
 
-    path("health", health_check, name="health-check")
+    path("health", health_check, name="health-check"),
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
 
