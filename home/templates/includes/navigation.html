@@ -36,7 +36,7 @@
                    type="search" 
                    id="mobileSearchInput" 
                    name="q" 
-                   placeholder="Search..." 
+                   placeholder="{% trans 'Search...' %}" 
                    aria-label="Search" 
                    autocomplete="off">
             <button class="search-btn-mobile" type="submit">
@@ -234,7 +234,7 @@
                      type="search" 
                      id="searchInput" 
                      name="q" 
-                     placeholder="Search..." 
+                     placeholder="{% trans 'Search...' %}" 
                      aria-label="Search" 
                      autocomplete="off">
               <button class="search-btn" type="submit">
@@ -254,7 +254,7 @@
 
         <!-- Show Logout Button if User is Authenticated -->
         <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
-            class="fas fa-sign-out-alt me-2"></span> Logout</a>
+            class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
 
        <a class="profile-container" href="{% url 'profile' %}">
         <img
@@ -288,7 +288,7 @@
           <div class="position-relative sign-up-button-inner-container">
             <button id="signUpButton" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
               <a href="{% url 'register' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
-                Sign Up
+                {% trans "Sign Up" %}
               </a>
             </button>
           </div>
@@ -300,8 +300,8 @@
             <span class="navbar-toggler-icon"></span>
           </span>
 
-
         </div>
+
         <!-- language switcher -->
         <div style="margin-left: 10px; margin-right: 5px;">
           <form action="{% url 'set_language' %}" method="post">
@@ -309,8 +309,8 @@
             <input type="hidden" name="next" value="{{ request.get_full_path }}">
             <select id="languageSelect" name="language" onchange="this.form.submit()"
                 class="form-select" 
-                style="padding: 0.3rem 1rem 0.3rem 1rem;">
-              <option value="" disabled selected>Language</option>
+                style="padding: 0.3rem 1rem 0.3rem 1rem; background: white;">
+              <option value="" disabled selected>{% trans "Language" %}</option>
               <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
               <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>Español</option>
               <option value="hi" {% if LANGUAGE_CODE == 'hi' %}selected{% endif %}>हिन्दी</option>
@@ -354,7 +354,7 @@
 <style>
   .header-profile-name { color: #1a1a1a !important; }
   body.dark-mode .header-profile-name { color: #fff !important; }
-  </style>
+</style>
 
 <style>
 .dropdown-submenu {
@@ -374,7 +374,7 @@
   display: block;
 }
 
-  </style>
+</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
