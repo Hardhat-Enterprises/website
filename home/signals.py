@@ -6,6 +6,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.db.models.signals import pre_save, post_save
+from django.utils.timezone import now
+
 
 from .models import User, KnownDevice
 from utils.email_notifications import send_account_notification
@@ -61,26 +64,37 @@ def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
 # PROFILE UPDATE SIGNAL (OPTIONAL)
 # -------------------------
 
+# Track fields we actually want to monitor
+PROFILE_FIELDS = {"first_name", "last_name", "email"}  
+
+@receiver(pre_save, sender=User)
+def cache_old_user(sender, instance, **kwargs):
+    if instance.pk:
+        try:
+            instance._old_user = User.objects.get(pk=instance.pk)
+        except User.DoesNotExist:
+            instance._old_user = None
+
+
 @receiver(post_save, sender=User)
-def notify_user_profile_update(sender, instance, created, update_fields=None, **kwargs):
-    """
-    Only send email if real profile fields changed.
-    Avoid emails on login/logout.
-    """
-    if created:
-        return  # Don't notify on account creation
+def notify_user_profile_update(sender, instance, created, **kwargs):
+    if created or not hasattr(instance, "_old_user") or not instance._old_user:
+        return
 
-    ignored_fields = {"current_session_key", "last_login", "password"}
+    # Compare only monitored fields
+    changed = [
+        field for field in PROFILE_FIELDS
+        if getattr(instance, field) != getattr(instance._old_user, field)
+    ]
 
-    if update_fields is None or set(update_fields).issubset(ignored_fields):
-        return  # Skip login/logout updates
+    if not changed:
+        return  # No real profile changes
 
     message = (
-        f"Your profile was updated on {timezone.now()}.\n\n"
+        f"Your profile was updated on {now()}.\n\n"
         "If this wasn't you, please secure your account immediately."
     )
     send_account_notification(instance, "Profile Update Notification", message)
-
 
 # -------------------------
 # NEW DEVICE DETECTION
