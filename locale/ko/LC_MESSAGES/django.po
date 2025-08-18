@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 01:20+1000\n"
+"POT-Creation-Date: 2025-08-19 03:00+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,129 +46,133 @@ msgstr "프로젝트"
 
 #: .\home\context_processors.py:66
 msgid "Upload Image"
-msgstr ""
+msgstr "이미지 업로드"
 
 #: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:160
+#: .\home\templates\includes\navigation.html:169
 msgid "Blog"
 msgstr "블로그"
 
 #: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:168
+#: .\home\templates\includes\navigation.html:177
 msgid "Published Blogs"
 msgstr "발행된 블로그"
 
 #: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:180
+#: .\home\templates\includes\navigation.html:189
 msgid "Discover Hardhat"
 msgstr "하드햇 둘러보기"
 
 #: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:186
+#: .\home\templates\includes\navigation.html:195
 msgid "Internships"
 msgstr "인턴십"
 
 #: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:189
+#: .\home\templates\includes\navigation.html:198
 msgid "Job Alerts"
 msgstr "채용 알림"
 
 #: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:199
+#: .\home\templates\includes\navigation.html:208
 msgid "Cyber Challenges"
 msgstr "사이버 챌린지"
 
 #: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:211
+#: .\home\templates\includes\navigation.html:220
 msgid "Quiz"
 msgstr "퀴즈"
 
-#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
-msgid "First Name"
-msgstr "이름"
-
-#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
-msgid "Last Name"
-msgstr "성"
-
-#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
-msgid "Deakin Email Address"
-msgstr "디킨 대학교 이메일 주소"
-
-#: .\home\forms.py:58
+#: .\home\forms.py:35
 msgid "Email"
 msgstr "이메일"
 
-#: .\home\forms.py:64 .\home\forms.py:173
+#: .\home\forms.py:41 .\home\forms.py:137
 msgid "Your Password"
 msgstr "비밀번호"
 
-#: .\home\forms.py:68 .\home\forms.py:177
+#: .\home\forms.py:45 .\home\forms.py:141
 msgid "Confirm Password"
 msgstr "비밀번호 확인"
 
-#: .\home\forms.py:79
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lowercase "
-"letters, numbers, and special characters."
-msgstr ""
-"비밀번호는 최소 8자 이상이어야 하며 대문자, 소문자, 숫자 및 특수 문자를 포함"
-"해야 합니다."
+#: .\home\forms.py:54 .\home\forms.py:150
+msgid "Password must be at least 8 characters long."
+msgstr "비밀번호는 최소 8자 이상이어야 합니다."
 
-#: .\home\forms.py:94
+#: .\home\forms.py:57 .\home\forms.py:153
+msgid "Password must include at least one lowercase letter."
+msgstr "비밀번호에는 소문자가 최소 한 글자 포함되어야 합니다."
+
+#: .\home\forms.py:60 .\home\forms.py:156
+msgid "Password must include at least one uppercase letter."
+msgstr "비밀번호에는 대문자가 최소 한 글자 포함되어야 합니다."
+
+#: .\home\forms.py:63 .\home\forms.py:159
+msgid "Password must include at least one number."
+msgstr "비밀번호에는 숫자가 최소 한 글자 포함되어야 합니다."
+
+#: .\home\forms.py:66 .\home\forms.py:162
+msgid "Password must include at least one special character (@, $, !, %, *, ?, &)."
+msgstr "비밀번호에는 특수문자(@, $, !, %, *, ?, &) 중 최소 하나가 포함되어야 합니다."
+
+#: .\home\forms.py:81
 msgid "Email must match your Deakin email."
 msgstr "이메일은 디킨 대학교 이메일과 일치해야 합니다."
 
-#: .\home\forms.py:162
+#: .\home\forms.py:91
+msgid "First Name"
+msgstr "이름"
+
+#: .\home\forms.py:92
+msgid "Last Name"
+msgstr "성"
+
+#: .\home\forms.py:93
+msgid "Deakin Email Address"
+msgstr "디킨 대학교 이메일 주소"
+
+#: .\home\forms.py:126
 msgid "Business Email"
 msgstr "업무용 이메일"
 
-#: .\home\forms.py:168
+#: .\home\forms.py:132
 msgid "Business Name"
 msgstr "회사명"
 
-#: .\home\forms.py:188
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lawercase "
-"letters, numbers and special characters."
-msgstr ""
-"비밀번호는 최소 8자 이상이어야 하며 대문자, 소문자, 숫자 및 특수 문자를 포함"
-"해야 합니다."
-
-#: .\home\forms.py:200
+#: .\home\forms.py:174
 msgid "Email must be valid email."
 msgstr "유효한 이메일 주소여야 합니다."
 
-#: .\home\forms.py:210 .\home\forms.py:274
+#: .\home\forms.py:184 .\home\forms.py:248
 msgid "Password"
 msgstr "비밀번호"
 
-#: .\home\forms.py:229 .\home\forms.py:257
+#: .\home\forms.py:203 .\home\forms.py:231
 msgid "Too many login attempts. Please try again later."
 msgstr "로그인 시도가 너무 많습니다. 나중에 다시 시도해 주세요."
 
-#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\forms.py:284 .\home\templates\pages\about.html:582
 #: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "이메일 주소"
 
-#: .\home\forms.py:315 .\home\forms.py:326
+#: .\home\forms.py:289 .\home\forms.py:300
 msgid "New Password"
 msgstr "새 비밀번호"
 
-#: .\home\forms.py:318 .\home\forms.py:329
+#: .\home\forms.py:292 .\home\forms.py:303
 msgid "Confirm New Password"
 msgstr "새 비밀번호 확인"
 
-#: .\home\forms.py:323
+#: .\home\forms.py:297
 msgid "Old Password"
 msgstr "기존 비밀번호"
 
-#: .\home\forms.py:333
+#: .\home\forms.py:307
 msgid "Deakin Student ID"
 msgstr "디킨 대학교 학번"
 
-#: .\home\forms.py:336
+#: .\home\forms.py:310
 msgid "Year"
 msgstr "연도"
 
@@ -236,39 +240,39 @@ msgstr "사용자"
 msgid "users"
 msgstr "사용자 목록"
 
-#: .\home\models.py:186
+#: .\home\models.py:191
 msgid "project title"
 msgstr "프로젝트 제목"
 
-#: .\home\models.py:195
+#: .\home\models.py:200
 msgid "course title"
 msgstr "과목명"
 
-#: .\home\models.py:196
+#: .\home\models.py:201
 msgid "course code"
 msgstr "과목 코드"
 
-#: .\home\models.py:197
+#: .\home\models.py:202
 msgid "postgraduate status"
 msgstr "대학원생 상태"
 
-#: .\home\models.py:251
+#: .\home\models.py:256
 msgid "student_id"
 msgstr "학번"
 
-#: .\home\models.py:254
+#: .\home\models.py:259
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr "필수 입력. 디킨 대학교 학번을 입력하세요. 숫자만 가능합니다."
 
-#: .\home\models.py:257
+#: .\home\models.py:262
 msgid "A user with that Student ID already exists."
 msgstr "해당 학번을 가진 사용자가 이미 존재합니다."
 
-#: .\home\models.py:262
+#: .\home\models.py:267
 msgid "trimester"
 msgstr "학기"
 
-#: .\home\models.py:263
+#: .\home\models.py:268
 msgid "unit"
 msgstr "단원"
 
@@ -312,7 +316,7 @@ msgid "Last Updated:"
 msgstr "마지막 업데이트:"
 
 #: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:228
+#: .\home\templates\includes\navigation.html:237
 msgid "Search..."
 msgstr "검색..."
 
@@ -328,83 +332,99 @@ msgstr "대시보드"
 msgid "Skills"
 msgstr "기술"
 
-#: .\home\templates\includes\navigation.html:81
+#: .\home\templates\includes\navigation.html:82
 msgid "Admin Settings"
 msgstr "관리자 설정"
 
-#: .\home\templates\includes\navigation.html:87
+#: .\home\templates\includes\navigation.html:88
+msgid "User Management"
+msgstr "사용자 관리"
+
+#: .\home\templates\includes\navigation.html:91
+msgid "Project Assignment"
+msgstr "프로젝트 배정"
+
+#: .\home\templates\includes\navigation.html:94
+msgid "Project Teams"
+msgstr "프로젝트 팀"
+
+#: .\home\templates\includes\navigation.html:97
 msgid "Review Blogs"
 msgstr "블로그 검토"
 
-#: .\home\templates\includes\navigation.html:90
+#: .\home\templates\includes\navigation.html:100
 msgid "Reports"
 msgstr "보고서"
 
-#: .\home\templates\includes\navigation.html:101
+#: .\home\templates\includes\navigation.html:110
 msgid "About"
 msgstr "소개"
 
-#: .\home\templates\includes\navigation.html:107
+#: .\home\templates\includes\navigation.html:116
 #: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "프로젝트"
 
-#: .\home\templates\includes\navigation.html:116
+#: .\home\templates\includes\navigation.html:125
 #: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "앱 공격 (AppAttack)"
 
-#: .\home\templates\includes\navigation.html:121
+#: .\home\templates\includes\navigation.html:130
 #: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
-#: .\home\templates\includes\navigation.html:126
+#: .\home\templates\includes\navigation.html:135
 #: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "스미싱 탐지"
 
-#: .\home\templates\includes\navigation.html:131
+#: .\home\templates\includes\navigation.html:140
 msgid "Deakin CyberSafe VR"
 msgstr "디킨 사이버 세이프 VR"
 
-#: .\home\templates\includes\navigation.html:136
+#: .\home\templates\includes\navigation.html:145
 msgid "The Policy Deployment Engine (New)"
 msgstr "정책 배포 엔진 (신규)"
 
-#: .\home\templates\includes\navigation.html:141
+#: .\home\templates\includes\navigation.html:150
 msgid "Deakin Threat mirror (Finished)"
 msgstr "디킨 위협 미러 (완료됨)"
 
-#: .\home\templates\includes\navigation.html:167
+#: .\home\templates\includes\navigation.html:159
+msgid "Malware (Finished)"
+msgstr "악성코드 (완료됨)"
+
+#: .\home\templates\includes\navigation.html:176
 msgid "Create a Blog"
 msgstr "블로그 작성"
 
-#: .\home\templates\includes\navigation.html:174
+#: .\home\templates\includes\navigation.html:183
 msgid "Careers"
 msgstr "채용"
 
-#: .\home\templates\includes\navigation.html:183
+#: .\home\templates\includes\navigation.html:192
 msgid "All Jobs"
 msgstr "전체 채용"
 
-#: .\home\templates\includes\navigation.html:206
+#: .\home\templates\includes\navigation.html:215
 msgid "All Challenges"
 msgstr "전체 챌린지"
 
-#: .\home\templates\includes\navigation.html:248
+#: .\home\templates\includes\navigation.html:257
 msgid "Logout"
 msgstr "로그아웃"
 
-#: .\home\templates\includes\navigation.html:293
+#: .\home\templates\includes\navigation.html:279
 msgid "Sign In"
 msgstr "로그인"
 
-#: .\home\templates\includes\navigation.html:326
+#: .\home\templates\includes\navigation.html:291
 msgid "Sign Up"
 msgstr "회원가입"
 
-#: .\home\templates\includes\navigation.html:348
+#: .\home\templates\includes\navigation.html:313
 msgid "Language"
 msgstr "언어"
 
@@ -975,8 +995,10 @@ msgid ""
 "                        "
 msgstr ""
 "\n"
-"                        Hardhat Enterprises는 자산 보호, 위협 감소 및 취약점 악용 방지를 통해 화이트 해트 사이버 보안을 강화합니다. "
-"당사의 사이버 보안 서비스는 침투 테스트와 오픈 소스 보안 도구를 포함하여 시장의 격차를 해소하고 고객의 디지털 자산을 안전하게 보호합니다.\n"
+"                        Hardhat Enterprises는 자산 보호, 위협 감소 및 취약점 "
+"악용 방지를 통해 화이트 해트 사이버 보안을 강화합니다. 당사의 사이버 보안 서"
+"비스는 침투 테스트와 오픈 소스 보안 도구를 포함하여 시장의 격차를 해소하고 고"
+"객의 디지털 자산을 안전하게 보호합니다.\n"
 "                        "
 
 #: .\home\templates\pages\what_we_do.html:42
@@ -984,32 +1006,48 @@ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
 msgstr "당사의 <span class=\"fw-bold\">사이버 보안 서비스</span>"
 
 #: .\home\templates\pages\what_we_do.html:43
-msgid "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions."
-msgstr "Hardhat Enterprises가 첨단 화이트 해트 사이버 보안 솔루션을 통해 귀사의 조직을 어떻게 보호하는지 알아보십시오."
+msgid ""
+"Explore how Hardhat Enterprises protects your organization with advanced "
+"white-hat cybersecurity solutions."
+msgstr ""
+"Hardhat Enterprises가 첨단 화이트 해트 사이버 보안 솔루션을 통해 귀사의 조직"
+"을 어떻게 보호하는지 알아보십시오."
 
 #: .\home\templates\pages\what_we_do.html:48
 msgid "Penetration Testing Services"
 msgstr "침투 테스트 서비스"
 
 #: .\home\templates\pages\what_we_do.html:49
-msgid "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection."
-msgstr "저희는 시스템과 애플리케이션의 취약점을 식별하기 위해 철저한 침투 테스트 서비스를 제공하여 강력한 사이버 보안 보호를 보장합니다."
+msgid ""
+"We provide thorough penetration testing services to identify vulnerabilities "
+"in your systems and applications, ensuring robust cybersecurity protection."
+msgstr ""
+"저희는 시스템과 애플리케이션의 취약점을 식별하기 위해 철저한 침투 테스트 서비"
+"스를 제공하여 강력한 사이버 보안 보호를 보장합니다."
 
 #: .\home\templates\pages\what_we_do.html:52
 msgid "Secure Code Review"
 msgstr "보안 코드 검토"
 
 #: .\home\templates\pages\what_we_do.html:53
-msgid "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats."
-msgstr "당사의 전문가들은 귀사의 코드에 취약점이 없도록 보장하는 보안 코드 검토 서비스를 제공하여 애플리케이션을 사이버 위협으로부터 보호합니다."
+msgid ""
+"Our experts offer secure code review services to ensure your code is free "
+"from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr ""
+"당사의 전문가들은 귀사의 코드에 취약점이 없도록 보장하는 보안 코드 검토 서비"
+"스를 제공하여 애플리케이션을 사이버 위협으로부터 보호합니다."
 
 #: .\home\templates\pages\what_we_do.html:56
 msgid "Open-Source Security Tools"
 msgstr "오픈 소스 보안 도구"
 
 #: .\home\templates\pages\what_we_do.html:57
-msgid "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation."
-msgstr "저희는 시장의 격차를 해소하기 위해 오픈 소스 보안 도구를 개발하며, 조직이 위협을 완화할 수 있도록 윤리적 해킹 도구를 제공합니다."
+msgid ""
+"We develop open-source security tools to address market gaps, empowering "
+"organizations with ethical hacking tools for threat mitigation."
+msgstr ""
+"저희는 시장의 격차를 해소하기 위해 오픈 소스 보안 도구를 개발하며, 조직이 위"
+"협을 완화할 수 있도록 윤리적 해킹 도구를 제공합니다."
 
 #: .\home\templates\pages\what_we_do.html:72
 msgid "Work With Our Cybersecurity Agency"

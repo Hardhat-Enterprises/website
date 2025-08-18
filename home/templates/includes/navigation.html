@@ -79,19 +79,19 @@
           {% if user.is_staff or user.is_superuser %}
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-              Admin Settings
+              {% trans "Admin Settings" %}
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
             <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
               <ul class="list-style-none">
                 <a class="menu-link" href="#">
-                  <li class="mb-2 menu ps-3 py-1">User Management</li>
+                  <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
                 </a>
                 <a class="menu-link" href="#">
-                  <li class="mb-2 menu ps-3 py-1">Project Assignment</li>
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
                 </a>
                 <a class="menu-link" href="#">
-                  <li class="mb-2 menu ps-3 py-1">Project Teams</li>
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
                 </a>
                 <a class="menu-link" href="{% url 'adminblogpage' %}">
                   <li class="mb-2 menu ps-3 py-1">{% trans "Review Blogs" %}</li>
@@ -156,7 +156,7 @@
                 <a class="menu-link" href="{% url 'malware_viz_main' %}">
 
                   <li class="mb-2 menu ps-3 py-1">
-                    Malware (Finished)
+                    {% trans "Malware (Finished)" %}
                   </li>
                 </a>
 
@@ -173,8 +173,8 @@
               <div class="row">
                 <div class="col">
             <ul class="list-style-none">
-              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">Create a Blog</a></li>
-              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">Published Blogs</a></li>
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">{% trans "Create a Blog" %}</a></li>
+              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">{% trans "Published Blogs" %}</a></li>
             </ul>
           </li>
 
@@ -276,7 +276,7 @@
           <div class="position-relative sign-up-button-inner-container">
             <a href="{% url 'login_with_otp' %}" class="sign-up-button" style="text-decoration: none; display: inline-block;">
               <span class="fas fa-sign-in-alt me-2">
-              Sign In
+              {% trans "Sign In" %}
               </span>
             </a>
           </div>

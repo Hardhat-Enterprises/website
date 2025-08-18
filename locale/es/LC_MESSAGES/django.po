@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 01:19+1000\n"
+"POT-Creation-Date: 2025-08-19 03:06+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,131 +46,135 @@ msgstr "Proyectos"
 
 #: .\home\context_processors.py:66
 msgid "Upload Image"
-msgstr ""
+msgstr "Subir imagen"
 
 #: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:160
+#: .\home\templates\includes\navigation.html:169
 msgid "Blog"
 msgstr "Blog"
 
 #: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:168
+#: .\home\templates\includes\navigation.html:177
 msgid "Published Blogs"
 msgstr "Blogs publicados"
 
 #: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:180
+#: .\home\templates\includes\navigation.html:189
 msgid "Discover Hardhat"
 msgstr "Descubrir Hardhat"
 
 #: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:186
+#: .\home\templates\includes\navigation.html:195
 msgid "Internships"
 msgstr "Pasantías"
 
 #: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:189
+#: .\home\templates\includes\navigation.html:198
 msgid "Job Alerts"
 msgstr "Alertas de empleo"
 
 #: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:199
+#: .\home\templates\includes\navigation.html:208
 msgid "Cyber Challenges"
 msgstr "Desafíos cibernéticos"
 
 #: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:211
+#: .\home\templates\includes\navigation.html:220
 msgid "Quiz"
 msgstr "Cuestionario"
 
-#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
-msgid "First Name"
-msgstr "Nombre"
-
-#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
-msgid "Last Name"
-msgstr "Apellido"
-
-#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
-msgid "Deakin Email Address"
-msgstr "Dirección de correo de Deakin"
-
-#: .\home\forms.py:58
+#: .\home\forms.py:35
 msgid "Email"
 msgstr "Correo electrónico"
 
-#: .\home\forms.py:64 .\home\forms.py:173
+#: .\home\forms.py:41 .\home\forms.py:137
 msgid "Your Password"
 msgstr "Tu contraseña"
 
-#: .\home\forms.py:68 .\home\forms.py:177
+#: .\home\forms.py:45 .\home\forms.py:141
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
-#: .\home\forms.py:79
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lowercase "
-"letters, numbers, and special characters."
-msgstr ""
-"La contraseña debe tener al menos 8 caracteres e incluir letras mayúsculas, "
-"minúsculas, números y caracteres especiales."
+#: .\home\forms.py:54 .\home\forms.py:150
+msgid "Password must be at least 8 characters long."
+msgstr "La contraseña debe tener al menos 8 caracteres."
 
-#: .\home\forms.py:94
+#: .\home\forms.py:57 .\home\forms.py:153
+msgid "Password must include at least one lowercase letter."
+msgstr "La contraseña debe incluir al menos una letra minúscula."
+
+#: .\home\forms.py:60 .\home\forms.py:156
+msgid "Password must include at least one uppercase letter."
+msgstr "La contraseña debe incluir al menos una letra mayúscula."
+
+#: .\home\forms.py:63 .\home\forms.py:159
+msgid "Password must include at least one number."
+msgstr "La contraseña debe incluir al menos un número."
+
+#: .\home\forms.py:66 .\home\forms.py:162
+msgid "Password must include at least one special character (@, $, !, %, *, ?, &)."
+msgstr "La contraseña debe incluir al menos un carácter especial (@, $, !, %, *, ?, &)."
+
+#: .\home\forms.py:81
 msgid "Email must match your Deakin email."
 msgstr "El correo electrónico debe coincidir con tu correo de Deakin."
 
-#: .\home\forms.py:162
+#: .\home\forms.py:91
+msgid "First Name"
+msgstr "Nombre"
+
+#: .\home\forms.py:92
+msgid "Last Name"
+msgstr "Apellido"
+
+#: .\home\forms.py:93
+msgid "Deakin Email Address"
+msgstr "Dirección de correo de Deakin"
+
+#: .\home\forms.py:126
 msgid "Business Email"
 msgstr "Correo electrónico empresarial"
 
-#: .\home\forms.py:168
+#: .\home\forms.py:132
 msgid "Business Name"
 msgstr "Nombre de la empresa"
 
-#: .\home\forms.py:188
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lawercase "
-"letters, numbers and special characters."
-msgstr ""
-"La contraseña debe tener al menos 8 caracteres e incluir letras mayúsculas, "
-"minúsculas, números y caracteres especiales."
-
-#: .\home\forms.py:200
+#: .\home\forms.py:174
 msgid "Email must be valid email."
 msgstr "Debe introducir un correo electrónico válido."
 
-#: .\home\forms.py:210 .\home\forms.py:274
+#: .\home\forms.py:184 .\home\forms.py:248
 msgid "Password"
 msgstr "Contraseña"
 
-#: .\home\forms.py:229 .\home\forms.py:257
+#: .\home\forms.py:203 .\home\forms.py:231
 msgid "Too many login attempts. Please try again later."
 msgstr ""
 "Demasiados intentos de inicio de sesión. Por favor, inténtalo de nuevo más "
 "tarde."
 
-#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\forms.py:284 .\home\templates\pages\about.html:582
 #: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "Tu correo electrónico"
 
-#: .\home\forms.py:315 .\home\forms.py:326
+#: .\home\forms.py:289 .\home\forms.py:300
 msgid "New Password"
 msgstr "Nueva contraseña"
 
-#: .\home\forms.py:318 .\home\forms.py:329
+#: .\home\forms.py:292 .\home\forms.py:303
 msgid "Confirm New Password"
 msgstr "Confirmar nueva contraseña"
 
-#: .\home\forms.py:323
+#: .\home\forms.py:297
 msgid "Old Password"
 msgstr "Contraseña anterior"
 
-#: .\home\forms.py:333
+#: .\home\forms.py:307
 msgid "Deakin Student ID"
 msgstr "ID de estudiante de Deakin"
 
-#: .\home\forms.py:336
+#: .\home\forms.py:310
 msgid "Year"
 msgstr "Año"
 
@@ -239,39 +243,39 @@ msgstr "usuario"
 msgid "users"
 msgstr "usuarios"
 
-#: .\home\models.py:186
+#: .\home\models.py:191
 msgid "project title"
 msgstr "título del proyecto"
 
-#: .\home\models.py:195
+#: .\home\models.py:200
 msgid "course title"
 msgstr "título del curso"
 
-#: .\home\models.py:196
+#: .\home\models.py:201
 msgid "course code"
 msgstr "código del curso"
 
-#: .\home\models.py:197
+#: .\home\models.py:202
 msgid "postgraduate status"
 msgstr "estado de posgrado"
 
-#: .\home\models.py:251
+#: .\home\models.py:256
 msgid "student_id"
 msgstr "número de estudiante"
 
-#: .\home\models.py:254
+#: .\home\models.py:259
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr "Obligatorio. Introduzca el ID de estudiante de Deakin. Solo dígitos."
 
-#: .\home\models.py:257
+#: .\home\models.py:262
 msgid "A user with that Student ID already exists."
 msgstr "Ya existe un usuario con ese ID de estudiante."
 
-#: .\home\models.py:262
+#: .\home\models.py:267
 msgid "trimester"
 msgstr "trimestre"
 
-#: .\home\models.py:263
+#: .\home\models.py:268
 msgid "unit"
 msgstr "unidad"
 
@@ -315,7 +319,7 @@ msgid "Last Updated:"
 msgstr "Última actualización:"
 
 #: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:228
+#: .\home\templates\includes\navigation.html:237
 msgid "Search..."
 msgstr "Buscar..."
 
@@ -331,83 +335,99 @@ msgstr "Panel de control"
 msgid "Skills"
 msgstr "Habilidades"
 
-#: .\home\templates\includes\navigation.html:81
+#: .\home\templates\includes\navigation.html:82
 msgid "Admin Settings"
 msgstr "Configuración de administrador"
 
-#: .\home\templates\includes\navigation.html:87
+#: .\home\templates\includes\navigation.html:88
+msgid "User Management"
+msgstr "Gestión de usuarios"
+
+#: .\home\templates\includes\navigation.html:91
+msgid "Project Assignment"
+msgstr "Asignación de proyectos"
+
+#: .\home\templates\includes\navigation.html:94
+msgid "Project Teams"
+msgstr "Equipos de proyecto"
+
+#: .\home\templates\includes\navigation.html:97
 msgid "Review Blogs"
 msgstr "Revisar blogs"
 
-#: .\home\templates\includes\navigation.html:90
+#: .\home\templates\includes\navigation.html:100
 msgid "Reports"
 msgstr "Informes"
 
-#: .\home\templates\includes\navigation.html:101
+#: .\home\templates\includes\navigation.html:110
 msgid "About"
 msgstr "Acerca de"
 
-#: .\home\templates\includes\navigation.html:107
+#: .\home\templates\includes\navigation.html:116
 #: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "Proyectos"
 
-#: .\home\templates\includes\navigation.html:116
+#: .\home\templates\includes\navigation.html:125
 #: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "AppAttack"
 
-#: .\home\templates\includes\navigation.html:121
+#: .\home\templates\includes\navigation.html:130
 #: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
-#: .\home\templates\includes\navigation.html:126
+#: .\home\templates\includes\navigation.html:135
 #: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "Detección de smishing"
 
-#: .\home\templates\includes\navigation.html:131
+#: .\home\templates\includes\navigation.html:140
 msgid "Deakin CyberSafe VR"
 msgstr "Deakin CyberSafe VR"
 
-#: .\home\templates\includes\navigation.html:136
+#: .\home\templates\includes\navigation.html:145
 msgid "The Policy Deployment Engine (New)"
 msgstr "Motor de despliegue de políticas (Nuevo)"
 
-#: .\home\templates\includes\navigation.html:141
+#: .\home\templates\includes\navigation.html:150
 msgid "Deakin Threat mirror (Finished)"
 msgstr "Espejo de amenazas de Deakin (Finalizado)"
 
-#: .\home\templates\includes\navigation.html:167
+#: .\home\templates\includes\navigation.html:159
+msgid "Malware (Finished)"
+msgstr "Malware (Finalizado)"
+
+#: .\home\templates\includes\navigation.html:176
 msgid "Create a Blog"
 msgstr "Crear un blog"
 
-#: .\home\templates\includes\navigation.html:174
+#: .\home\templates\includes\navigation.html:183
 msgid "Careers"
 msgstr "Carreras"
 
-#: .\home\templates\includes\navigation.html:183
+#: .\home\templates\includes\navigation.html:192
 msgid "All Jobs"
 msgstr "Todos los trabajos"
 
-#: .\home\templates\includes\navigation.html:206
+#: .\home\templates\includes\navigation.html:215
 msgid "All Challenges"
 msgstr "Todos los desafíos"
 
-#: .\home\templates\includes\navigation.html:248
+#: .\home\templates\includes\navigation.html:257
 msgid "Logout"
 msgstr "Cerrar sesión"
 
-#: .\home\templates\includes\navigation.html:293
+#: .\home\templates\includes\navigation.html:279
 msgid "Sign In"
 msgstr "Iniciar sesión"
 
-#: .\home\templates\includes\navigation.html:326
+#: .\home\templates\includes\navigation.html:291
 msgid "Sign Up"
 msgstr "Registrarse"
 
-#: .\home\templates\includes\navigation.html:348
+#: .\home\templates\includes\navigation.html:313
 msgid "Language"
 msgstr "Idioma"
 
@@ -1013,8 +1033,11 @@ msgid ""
 "                        "
 msgstr ""
 "\n"
-"                        Hardhat Enterprises refuerza la ciberseguridad de tipo white-hat protegiendo los activos, reduciendo las amenazas y evitando la explotación de vulnerabilidades. "
-"Nuestros servicios de ciberseguridad, que incluyen pruebas de penetración y herramientas de seguridad de código abierto, cubren vacíos del mercado y aseguran sus activos digitales.\n"
+"                        Hardhat Enterprises refuerza la ciberseguridad de "
+"tipo white-hat protegiendo los activos, reduciendo las amenazas y evitando "
+"la explotación de vulnerabilidades. Nuestros servicios de ciberseguridad, "
+"que incluyen pruebas de penetración y herramientas de seguridad de código "
+"abierto, cubren vacíos del mercado y aseguran sus activos digitales.\n"
 "                        "
 
 #: .\home\templates\pages\what_we_do.html:42
@@ -1022,32 +1045,51 @@ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
 msgstr "Nuestros <span class=\"fw-bold\">Servicios de Ciberseguridad</span>"
 
 #: .\home\templates\pages\what_we_do.html:43
-msgid "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions."
-msgstr "Descubra cómo Hardhat Enterprises protege su organización con soluciones avanzadas de ciberseguridad de tipo white-hat."
+msgid ""
+"Explore how Hardhat Enterprises protects your organization with advanced "
+"white-hat cybersecurity solutions."
+msgstr ""
+"Descubra cómo Hardhat Enterprises protege su organización con soluciones "
+"avanzadas de ciberseguridad de tipo white-hat."
 
 #: .\home\templates\pages\what_we_do.html:48
 msgid "Penetration Testing Services"
 msgstr "Servicios de Pruebas de Penetración"
 
 #: .\home\templates\pages\what_we_do.html:49
-msgid "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection."
-msgstr "Ofrecemos servicios exhaustivos de pruebas de penetración para identificar vulnerabilidades en sus sistemas y aplicaciones, garantizando una protección de ciberseguridad sólida."
+msgid ""
+"We provide thorough penetration testing services to identify vulnerabilities "
+"in your systems and applications, ensuring robust cybersecurity protection."
+msgstr ""
+"Ofrecemos servicios exhaustivos de pruebas de penetración para identificar "
+"vulnerabilidades en sus sistemas y aplicaciones, garantizando una protección "
+"de ciberseguridad sólida."
 
 #: .\home\templates\pages\what_we_do.html:52
 msgid "Secure Code Review"
 msgstr "Revisión Segura de Código"
 
 #: .\home\templates\pages\what_we_do.html:53
-msgid "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats."
-msgstr "Nuestros expertos ofrecen servicios de revisión segura de código para garantizar que su software esté libre de vulnerabilidades, protegiendo así sus aplicaciones frente a amenazas cibernéticas."
+msgid ""
+"Our experts offer secure code review services to ensure your code is free "
+"from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr ""
+"Nuestros expertos ofrecen servicios de revisión segura de código para "
+"garantizar que su software esté libre de vulnerabilidades, protegiendo así "
+"sus aplicaciones frente a amenazas cibernéticas."
 
 #: .\home\templates\pages\what_we_do.html:56
 msgid "Open-Source Security Tools"
 msgstr "Herramientas de Seguridad de Código Abierto"
 
 #: .\home\templates\pages\what_we_do.html:57
-msgid "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation."
-msgstr "Desarrollamos herramientas de seguridad de código abierto para cubrir vacíos del mercado, proporcionando a las organizaciones instrumentos de hacking ético para la mitigación de amenazas."
+msgid ""
+"We develop open-source security tools to address market gaps, empowering "
+"organizations with ethical hacking tools for threat mitigation."
+msgstr ""
+"Desarrollamos herramientas de seguridad de código abierto para cubrir vacíos "
+"del mercado, proporcionando a las organizaciones instrumentos de hacking "
+"ético para la mitigación de amenazas."
 
 #: .\home\templates\pages\what_we_do.html:72
 msgid "Work With Our Cybersecurity Agency"
@@ -1059,7 +1101,8 @@ msgstr "¡Cuéntenos cuáles son sus necesidades en materia de ciberseguridad!"
 
 #: .\home\templates\pages\what_we_do.html:97
 msgid "How can our cybersecurity services help you?"
-msgstr "¿Cómo pueden nuestros servicios de ciberseguridad ayudar a su organización?"
+msgstr ""
+"¿Cómo pueden nuestros servicios de ciberseguridad ayudar a su organización?"
 
 #: .\home\validators.py:19
 msgid "Enter a valid student ID. This value must contain 9 digits only"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 01:19+1000\n"
+"POT-Creation-Date: 2025-08-19 03:05+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,129 +46,133 @@ msgstr "Projets"
 
 #: .\home\context_processors.py:66
 msgid "Upload Image"
-msgstr ""
+msgstr "Télécharger une image"
 
 #: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:160
+#: .\home\templates\includes\navigation.html:169
 msgid "Blog"
 msgstr "Blog"
 
 #: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:168
+#: .\home\templates\includes\navigation.html:177
 msgid "Published Blogs"
 msgstr "Blogs publiés"
 
 #: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:180
+#: .\home\templates\includes\navigation.html:189
 msgid "Discover Hardhat"
 msgstr "Découvrir Hardhat"
 
 #: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:186
+#: .\home\templates\includes\navigation.html:195
 msgid "Internships"
 msgstr "Stages"
 
 #: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:189
+#: .\home\templates\includes\navigation.html:198
 msgid "Job Alerts"
 msgstr "Alertes emploi"
 
 #: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:199
+#: .\home\templates\includes\navigation.html:208
 msgid "Cyber Challenges"
 msgstr "Défis cyber"
 
 #: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:211
+#: .\home\templates\includes\navigation.html:220
 msgid "Quiz"
 msgstr "Quiz"
 
-#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
-msgid "First Name"
-msgstr "Prénom"
-
-#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
-msgid "Last Name"
-msgstr "Nom de famille"
-
-#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
-msgid "Deakin Email Address"
-msgstr "Adresse e-mail Deakin"
-
-#: .\home\forms.py:58
+#: .\home\forms.py:35
 msgid "Email"
 msgstr "E-mail"
 
-#: .\home\forms.py:64 .\home\forms.py:173
+#: .\home\forms.py:41 .\home\forms.py:137
 msgid "Your Password"
 msgstr "Votre mot de passe"
 
-#: .\home\forms.py:68 .\home\forms.py:177
+#: .\home\forms.py:45 .\home\forms.py:141
 msgid "Confirm Password"
 msgstr "Confirmer le mot de passe"
 
-#: .\home\forms.py:79
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lowercase "
-"letters, numbers, and special characters."
-msgstr ""
-"Le mot de passe doit comporter au moins 8 caractères et inclure des lettres "
-"majuscules, minuscules, des chiffres et des caractères spéciaux."
+#: .\home\forms.py:54 .\home\forms.py:150
+msgid "Password must be at least 8 characters long."
+msgstr "Le mot de passe doit contenir au minimum 8 caractères."
 
-#: .\home\forms.py:94
+#: .\home\forms.py:57 .\home\forms.py:153
+msgid "Password must include at least one lowercase letter."
+msgstr "Le mot de passe doit comporter au moins une lettre minuscule."
+
+#: .\home\forms.py:60 .\home\forms.py:156
+msgid "Password must include at least one uppercase letter."
+msgstr "Le mot de passe doit comporter au moins une lettre majuscule."
+
+#: .\home\forms.py:63 .\home\forms.py:159
+msgid "Password must include at least one number."
+msgstr "Le mot de passe doit comporter au moins un chiffre."
+
+#: .\home\forms.py:66 .\home\forms.py:162
+msgid "Password must include at least one special character (@, $, !, %, *, ?, &)."
+msgstr "Le mot de passe doit comporter au moins un caractère spécial (@, $, !, %, *, ?, &)."
+
+#: .\home\forms.py:81
 msgid "Email must match your Deakin email."
 msgstr "L'adresse e-mail doit correspondre à votre e-mail Deakin."
 
-#: .\home\forms.py:162
+#: .\home\forms.py:91
+msgid "First Name"
+msgstr "Prénom"
+
+#: .\home\forms.py:92
+msgid "Last Name"
+msgstr "Nom de famille"
+
+#: .\home\forms.py:93
+msgid "Deakin Email Address"
+msgstr "Adresse e-mail Deakin"
+
+#: .\home\forms.py:126
 msgid "Business Email"
 msgstr "E-mail professionnel"
 
-#: .\home\forms.py:168
+#: .\home\forms.py:132
 msgid "Business Name"
 msgstr "Nom de l'entreprise"
 
-#: .\home\forms.py:188
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lawercase "
-"letters, numbers and special characters."
-msgstr ""
-"Le mot de passe doit comporter au moins 8 caractères et inclure des lettres "
-"majuscules, minuscules, des chiffres et des caractères spéciaux."
-
-#: .\home\forms.py:200
+#: .\home\forms.py:174
 msgid "Email must be valid email."
 msgstr "L'adresse e-mail doit être valide."
 
-#: .\home\forms.py:210 .\home\forms.py:274
+#: .\home\forms.py:184 .\home\forms.py:248
 msgid "Password"
 msgstr "Mot de passe"
 
-#: .\home\forms.py:229 .\home\forms.py:257
+#: .\home\forms.py:203 .\home\forms.py:231
 msgid "Too many login attempts. Please try again later."
 msgstr "Trop de tentatives de connexion. Veuillez réessayer plus tard."
 
-#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\forms.py:284 .\home\templates\pages\about.html:582
 #: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "Votre e-mail"
 
-#: .\home\forms.py:315 .\home\forms.py:326
+#: .\home\forms.py:289 .\home\forms.py:300
 msgid "New Password"
 msgstr "Nouveau mot de passe"
 
-#: .\home\forms.py:318 .\home\forms.py:329
+#: .\home\forms.py:292 .\home\forms.py:303
 msgid "Confirm New Password"
 msgstr "Confirmer le nouveau mot de passe"
 
-#: .\home\forms.py:323
+#: .\home\forms.py:297
 msgid "Old Password"
 msgstr "Ancien mot de passe"
 
-#: .\home\forms.py:333
+#: .\home\forms.py:307
 msgid "Deakin Student ID"
 msgstr "Identifiant étudiant Deakin"
 
-#: .\home\forms.py:336
+#: .\home\forms.py:310
 msgid "Year"
 msgstr "Année"
 
@@ -236,40 +240,40 @@ msgstr "utilisateur"
 msgid "users"
 msgstr "utilisateurs"
 
-#: .\home\models.py:186
+#: .\home\models.py:191
 msgid "project title"
 msgstr "titre du projet"
 
-#: .\home\models.py:195
+#: .\home\models.py:200
 msgid "course title"
 msgstr "titre du cours"
 
-#: .\home\models.py:196
+#: .\home\models.py:201
 msgid "course code"
 msgstr "code du cours"
 
-#: .\home\models.py:197
+#: .\home\models.py:202
 msgid "postgraduate status"
 msgstr "statut de troisième cycle"
 
-#: .\home\models.py:251
+#: .\home\models.py:256
 msgid "student_id"
 msgstr "identifiant étudiant"
 
-#: .\home\models.py:254
+#: .\home\models.py:259
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr ""
 "Obligatoire. Entrez l'identifiant étudiant Deakin. Chiffres uniquement."
 
-#: .\home\models.py:257
+#: .\home\models.py:262
 msgid "A user with that Student ID already exists."
 msgstr "Un utilisateur avec cet identifiant étudiant existe déjà."
 
-#: .\home\models.py:262
+#: .\home\models.py:267
 msgid "trimester"
 msgstr "trimestre"
 
-#: .\home\models.py:263
+#: .\home\models.py:268
 msgid "unit"
 msgstr "unité"
 
@@ -313,7 +317,7 @@ msgid "Last Updated:"
 msgstr "Dernière mise à jour :"
 
 #: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:228
+#: .\home\templates\includes\navigation.html:237
 msgid "Search..."
 msgstr "Rechercher..."
 
@@ -329,83 +333,99 @@ msgstr "Tableau de bord"
 msgid "Skills"
 msgstr "Compétences"
 
-#: .\home\templates\includes\navigation.html:81
+#: .\home\templates\includes\navigation.html:82
 msgid "Admin Settings"
 msgstr "Paramètres administrateur"
 
-#: .\home\templates\includes\navigation.html:87
+#: .\home\templates\includes\navigation.html:88
+msgid "User Management"
+msgstr "Gestion des utilisateurs"
+
+#: .\home\templates\includes\navigation.html:91
+msgid "Project Assignment"
+msgstr "Attribution des projets"
+
+#: .\home\templates\includes\navigation.html:94
+msgid "Project Teams"
+msgstr "Équipes de projet"
+
+#: .\home\templates\includes\navigation.html:97
 msgid "Review Blogs"
 msgstr "Vérifier les blogs"
 
-#: .\home\templates\includes\navigation.html:90
+#: .\home\templates\includes\navigation.html:100
 msgid "Reports"
 msgstr "Rapports"
 
-#: .\home\templates\includes\navigation.html:101
+#: .\home\templates\includes\navigation.html:110
 msgid "About"
 msgstr "À propos"
 
-#: .\home\templates\includes\navigation.html:107
+#: .\home\templates\includes\navigation.html:116
 #: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "Projets"
 
-#: .\home\templates\includes\navigation.html:116
+#: .\home\templates\includes\navigation.html:125
 #: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "AppAttack"
 
-#: .\home\templates\includes\navigation.html:121
+#: .\home\templates\includes\navigation.html:130
 #: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
-#: .\home\templates\includes\navigation.html:126
+#: .\home\templates\includes\navigation.html:135
 #: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "Détection de smishing"
 
-#: .\home\templates\includes\navigation.html:131
+#: .\home\templates\includes\navigation.html:140
 msgid "Deakin CyberSafe VR"
 msgstr "Deakin CyberSafe VR"
 
-#: .\home\templates\includes\navigation.html:136
+#: .\home\templates\includes\navigation.html:145
 msgid "The Policy Deployment Engine (New)"
 msgstr "Le moteur de déploiement de politique (Nouveau)"
 
-#: .\home\templates\includes\navigation.html:141
+#: .\home\templates\includes\navigation.html:150
 msgid "Deakin Threat mirror (Finished)"
 msgstr "Miroir de menace Deakin (Terminé)"
 
-#: .\home\templates\includes\navigation.html:167
+#: .\home\templates\includes\navigation.html:159
+msgid "Malware (Finished)"
+msgstr "Logiciel malveillant (Terminé)"
+
+#: .\home\templates\includes\navigation.html:176
 msgid "Create a Blog"
 msgstr "Créer un blog"
 
-#: .\home\templates\includes\navigation.html:174
+#: .\home\templates\includes\navigation.html:183
 msgid "Careers"
 msgstr "Carrières"
 
-#: .\home\templates\includes\navigation.html:183
+#: .\home\templates\includes\navigation.html:192
 msgid "All Jobs"
 msgstr "Tous les emplois"
 
-#: .\home\templates\includes\navigation.html:206
+#: .\home\templates\includes\navigation.html:215
 msgid "All Challenges"
 msgstr "Tous les défis"
 
-#: .\home\templates\includes\navigation.html:248
+#: .\home\templates\includes\navigation.html:257
 msgid "Logout"
 msgstr "Se déconnecter"
 
-#: .\home\templates\includes\navigation.html:293
+#: .\home\templates\includes\navigation.html:279
 msgid "Sign In"
 msgstr "Se connecter"
 
-#: .\home\templates\includes\navigation.html:326
+#: .\home\templates\includes\navigation.html:291
 msgid "Sign Up"
 msgstr "S'inscrire"
 
-#: .\home\templates\includes\navigation.html:348
+#: .\home\templates\includes\navigation.html:313
 msgid "Language"
 msgstr "Langue"
 

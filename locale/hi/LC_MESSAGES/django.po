@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 01:19+1000\n"
+"POT-Creation-Date: 2025-08-19 03:03+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,129 +46,133 @@ msgstr "परियोजनाएं"
 
 #: .\home\context_processors.py:66
 msgid "Upload Image"
-msgstr ""
+msgstr "छवि अपलोड करें"
 
 #: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:160
+#: .\home\templates\includes\navigation.html:169
 msgid "Blog"
 msgstr "ब्लॉग"
 
 #: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:168
+#: .\home\templates\includes\navigation.html:177
 msgid "Published Blogs"
 msgstr "प्रकाशित ब्लॉग"
 
 #: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:180
+#: .\home\templates\includes\navigation.html:189
 msgid "Discover Hardhat"
 msgstr "हार्डहैट खोजें"
 
 #: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:186
+#: .\home\templates\includes\navigation.html:195
 msgid "Internships"
 msgstr "इंटर्नशिप"
 
 #: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:189
+#: .\home\templates\includes\navigation.html:198
 msgid "Job Alerts"
 msgstr "नौकरी अलर्ट"
 
 #: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:199
+#: .\home\templates\includes\navigation.html:208
 msgid "Cyber Challenges"
 msgstr "साइबर चुनौतियां"
 
 #: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:211
+#: .\home\templates\includes\navigation.html:220
 msgid "Quiz"
 msgstr "प्रश्नोत्तरी"
 
-#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
-msgid "First Name"
-msgstr "पहला नाम"
-
-#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
-msgid "Last Name"
-msgstr "उपनाम"
-
-#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
-msgid "Deakin Email Address"
-msgstr "डीकन ईमेल पता"
-
-#: .\home\forms.py:58
+#: .\home\forms.py:35
 msgid "Email"
 msgstr "ईमेल"
 
-#: .\home\forms.py:64 .\home\forms.py:173
+#: .\home\forms.py:41 .\home\forms.py:137
 msgid "Your Password"
 msgstr "आपका पासवर्ड"
 
-#: .\home\forms.py:68 .\home\forms.py:177
+#: .\home\forms.py:45 .\home\forms.py:141
 msgid "Confirm Password"
 msgstr "पासवर्ड की पुष्टि करें"
 
-#: .\home\forms.py:79
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lowercase "
-"letters, numbers, and special characters."
-msgstr ""
-"पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष "
-"वर्ण शामिल होने चाहिए।"
+#: .\home\forms.py:54 .\home\forms.py:150
+msgid "Password must be at least 8 characters long."
+msgstr "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए।"
 
-#: .\home\forms.py:94
+#: .\home\forms.py:57 .\home\forms.py:153
+msgid "Password must include at least one lowercase letter."
+msgstr "पासवर्ड में कम से कम एक छोटे अक्षर (लोअरकेस) का होना आवश्यक है।"
+
+#: .\home\forms.py:60 .\home\forms.py:156
+msgid "Password must include at least one uppercase letter."
+msgstr "पासवर्ड में कम से कम एक बड़े अक्षर (अपरकेस) का होना आवश्यक है।"
+
+#: .\home\forms.py:63 .\home\forms.py:159
+msgid "Password must include at least one number."
+msgstr "पासवर्ड में कम से कम एक संख्या का होना आवश्यक है।"
+
+#: .\home\forms.py:66 .\home\forms.py:162
+msgid "Password must include at least one special character (@, $, !, %, *, ?, &)."
+msgstr "पासवर्ड में कम से कम एक विशेष वर्ण (@, $, !, %, *, ?, &) होना आवश्यक है।"
+
+#: .\home\forms.py:81
 msgid "Email must match your Deakin email."
 msgstr "ईमेल आपके डीकन ईमेल से मेल खाना चाहिए।"
 
-#: .\home\forms.py:162
+#: .\home\forms.py:91
+msgid "First Name"
+msgstr "पहला नाम"
+
+#: .\home\forms.py:92
+msgid "Last Name"
+msgstr "उपनाम"
+
+#: .\home\forms.py:93
+msgid "Deakin Email Address"
+msgstr "डीकन ईमेल पता"
+
+#: .\home\forms.py:126
 msgid "Business Email"
 msgstr "व्यवसाय ईमेल"
 
-#: .\home\forms.py:168
+#: .\home\forms.py:132
 msgid "Business Name"
 msgstr "व्यवसाय का नाम"
 
-#: .\home\forms.py:188
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lawercase "
-"letters, numbers and special characters."
-msgstr ""
-"पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, अंक और विशेष "
-"वर्ण शामिल होने चाहिए।"
-
-#: .\home\forms.py:200
+#: .\home\forms.py:174
 msgid "Email must be valid email."
 msgstr "ईमेल मान्य होना चाहिए।"
 
-#: .\home\forms.py:210 .\home\forms.py:274
+#: .\home\forms.py:184 .\home\forms.py:248
 msgid "Password"
 msgstr "पासवर्ड"
 
-#: .\home\forms.py:229 .\home\forms.py:257
+#: .\home\forms.py:203 .\home\forms.py:231
 msgid "Too many login attempts. Please try again later."
 msgstr "बहुत अधिक लॉगिन प्रयास। कृपया बाद में पुनः प्रयास करें।"
 
-#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\forms.py:284 .\home\templates\pages\about.html:582
 #: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "आपका ईमेल"
 
-#: .\home\forms.py:315 .\home\forms.py:326
+#: .\home\forms.py:289 .\home\forms.py:300
 msgid "New Password"
 msgstr "नया पासवर्ड"
 
-#: .\home\forms.py:318 .\home\forms.py:329
+#: .\home\forms.py:292 .\home\forms.py:303
 msgid "Confirm New Password"
 msgstr "नए पासवर्ड की पुष्टि करें"
 
-#: .\home\forms.py:323
+#: .\home\forms.py:297
 msgid "Old Password"
 msgstr "पुराना पासवर्ड"
 
-#: .\home\forms.py:333
+#: .\home\forms.py:307
 msgid "Deakin Student ID"
 msgstr "डीकन छात्र आईडी"
 
-#: .\home\forms.py:336
+#: .\home\forms.py:310
 msgid "Year"
 msgstr "वर्ष"
 
@@ -236,39 +240,39 @@ msgstr "उपयोगकर्ता"
 msgid "users"
 msgstr "उपयोगकर्ता सूची"
 
-#: .\home\models.py:186
+#: .\home\models.py:191
 msgid "project title"
 msgstr "परियोजना का शीर्षक"
 
-#: .\home\models.py:195
+#: .\home\models.py:200
 msgid "course title"
 msgstr "पाठ्यक्रम का शीर्षक"
 
-#: .\home\models.py:196
+#: .\home\models.py:201
 msgid "course code"
 msgstr "पाठ्यक्रम कोड"
 
-#: .\home\models.py:197
+#: .\home\models.py:202
 msgid "postgraduate status"
 msgstr "स्नातकोत्तर स्थिति"
 
-#: .\home\models.py:251
+#: .\home\models.py:256
 msgid "student_id"
 msgstr "छात्र आईडी"
 
-#: .\home\models.py:254
+#: .\home\models.py:259
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr "आवश्यक। डीकन छात्र आईडी दर्ज करें, केवल अंक।"
 
-#: .\home\models.py:257
+#: .\home\models.py:262
 msgid "A user with that Student ID already exists."
 msgstr "उस छात्र आईडी वाला उपयोगकर्ता पहले से मौजूद है।"
 
-#: .\home\models.py:262
+#: .\home\models.py:267
 msgid "trimester"
 msgstr "त्रैमासिक"
 
-#: .\home\models.py:263
+#: .\home\models.py:268
 msgid "unit"
 msgstr "इकाई"
 
@@ -311,7 +315,7 @@ msgid "Last Updated:"
 msgstr "अंतिम बार अद्यतन:"
 
 #: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:228
+#: .\home\templates\includes\navigation.html:237
 msgid "Search..."
 msgstr "खोजें..."
 
@@ -327,83 +331,99 @@ msgstr "डैशबोर्ड"
 msgid "Skills"
 msgstr "कौशल"
 
-#: .\home\templates\includes\navigation.html:81
+#: .\home\templates\includes\navigation.html:82
 msgid "Admin Settings"
 msgstr "प्रशासनिक सेटिंग्स"
 
-#: .\home\templates\includes\navigation.html:87
+#: .\home\templates\includes\navigation.html:88
+msgid "User Management"
+msgstr "उपयोगकर्ता प्रबंधन"
+
+#: .\home\templates\includes\navigation.html:91
+msgid "Project Assignment"
+msgstr "परियोजना आवंटन"
+
+#: .\home\templates\includes\navigation.html:94
+msgid "Project Teams"
+msgstr "परियोजना टीमें"
+
+#: .\home\templates\includes\navigation.html:97
 msgid "Review Blogs"
 msgstr "ब्लॉग समीक्षा"
 
-#: .\home\templates\includes\navigation.html:90
+#: .\home\templates\includes\navigation.html:100
 msgid "Reports"
 msgstr "रिपोर्ट्स"
 
-#: .\home\templates\includes\navigation.html:101
+#: .\home\templates\includes\navigation.html:110
 msgid "About"
 msgstr "परिचय"
 
-#: .\home\templates\includes\navigation.html:107
+#: .\home\templates\includes\navigation.html:116
 #: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "परियोजनाएं"
 
-#: .\home\templates\includes\navigation.html:116
+#: .\home\templates\includes\navigation.html:125
 #: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "ऐप अटैक"
 
-#: .\home\templates\includes\navigation.html:121
+#: .\home\templates\includes\navigation.html:130
 #: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "पीटी-जीयूआई"
 
-#: .\home\templates\includes\navigation.html:126
+#: .\home\templates\includes\navigation.html:135
 #: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "स्मिशिंग पहचान"
 
-#: .\home\templates\includes\navigation.html:131
+#: .\home\templates\includes\navigation.html:140
 msgid "Deakin CyberSafe VR"
 msgstr "डीकन साइबरसेफ वीआर"
 
-#: .\home\templates\includes\navigation.html:136
+#: .\home\templates\includes\navigation.html:145
 msgid "The Policy Deployment Engine (New)"
 msgstr "नीति परिनियोजन इंजन (नया)"
 
-#: .\home\templates\includes\navigation.html:141
+#: .\home\templates\includes\navigation.html:150
 msgid "Deakin Threat mirror (Finished)"
 msgstr "डीकन थ्रेट मिरर (पूर्ण)"
 
-#: .\home\templates\includes\navigation.html:167
+#: .\home\templates\includes\navigation.html:159
+msgid "Malware (Finished)"
+msgstr "मैलवेयर (पूर्ण)"
+
+#: .\home\templates\includes\navigation.html:176
 msgid "Create a Blog"
 msgstr "ब्लॉग बनाएं"
 
-#: .\home\templates\includes\navigation.html:174
+#: .\home\templates\includes\navigation.html:183
 msgid "Careers"
 msgstr "करियर"
 
-#: .\home\templates\includes\navigation.html:183
+#: .\home\templates\includes\navigation.html:192
 msgid "All Jobs"
 msgstr "सभी नौकरियां"
 
-#: .\home\templates\includes\navigation.html:206
+#: .\home\templates\includes\navigation.html:215
 msgid "All Challenges"
 msgstr "सभी चुनौतियां"
 
-#: .\home\templates\includes\navigation.html:248
+#: .\home\templates\includes\navigation.html:257
 msgid "Logout"
 msgstr "लॉग आउट"
 
-#: .\home\templates\includes\navigation.html:293
+#: .\home\templates\includes\navigation.html:279
 msgid "Sign In"
 msgstr "साइन इन"
 
-#: .\home\templates\includes\navigation.html:326
+#: .\home\templates\includes\navigation.html:291
 msgid "Sign Up"
 msgstr "साइन अप"
 
-#: .\home\templates\includes\navigation.html:348
+#: .\home\templates\includes\navigation.html:313
 msgid "Language"
 msgstr "भाषा"
 
@@ -981,8 +1001,10 @@ msgid ""
 "                        "
 msgstr ""
 "\n"
-"                        हार्डहैट एंटरप्राइज़ेस संपत्तियों की सुरक्षा, खतरों में कमी और कमजोरियों के दुरुपयोग को रोककर व्हाइट-हैट साइबर सुरक्षा को सुदृढ़ करता है। "
-"हमारी साइबर सुरक्षा सेवाएँ, जिनमें पेनिट्रेशन टेस्टिंग और ओपन-सोर्स सुरक्षा उपकरण शामिल हैं, बाज़ार की खामियों को दूर करती हैं और आपके डिजिटल संपत्तियों को सुरक्षित बनाती हैं।\n"
+"                        हार्डहैट एंटरप्राइज़ेस संपत्तियों की सुरक्षा, खतरों में कमी और "
+"कमजोरियों के दुरुपयोग को रोककर व्हाइट-हैट साइबर सुरक्षा को सुदृढ़ करता है। हमारी साइबर "
+"सुरक्षा सेवाएँ, जिनमें पेनिट्रेशन टेस्टिंग और ओपन-सोर्स सुरक्षा उपकरण शामिल हैं, बाज़ार की "
+"खामियों को दूर करती हैं और आपके डिजिटल संपत्तियों को सुरक्षित बनाती हैं।\n"
 "                        "
 
 #: .\home\templates\pages\what_we_do.html:42
@@ -990,32 +1012,48 @@ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
 msgstr "हमारी <span class=\"fw-bold\">साइबर सुरक्षा सेवाएँ</span>"
 
 #: .\home\templates\pages\what_we_do.html:43
-msgid "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions."
-msgstr "जानें कि हार्डहैट एंटरप्राइज़ेस उन्नत व्हाइट-हैट साइबर सुरक्षा समाधान के माध्यम से आपके संगठन की कैसे रक्षा करता है।"
+msgid ""
+"Explore how Hardhat Enterprises protects your organization with advanced "
+"white-hat cybersecurity solutions."
+msgstr ""
+"जानें कि हार्डहैट एंटरप्राइज़ेस उन्नत व्हाइट-हैट साइबर सुरक्षा समाधान के माध्यम से आपके संगठन "
+"की कैसे रक्षा करता है।"
 
 #: .\home\templates\pages\what_we_do.html:48
 msgid "Penetration Testing Services"
 msgstr "पेनिट्रेशन टेस्टिंग सेवाएँ"
 
 #: .\home\templates\pages\what_we_do.html:49
-msgid "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection."
-msgstr "हम आपके सिस्टम और अनुप्रयोगों में कमजोरियों की पहचान करने हेतु व्यापक पेनिट्रेशन टेस्टिंग सेवाएँ प्रदान करते हैं, जिससे मजबूत साइबर सुरक्षा सुनिश्चित होती है।"
+msgid ""
+"We provide thorough penetration testing services to identify vulnerabilities "
+"in your systems and applications, ensuring robust cybersecurity protection."
+msgstr ""
+"हम आपके सिस्टम और अनुप्रयोगों में कमजोरियों की पहचान करने हेतु व्यापक पेनिट्रेशन टेस्टिंग सेवाएँ "
+"प्रदान करते हैं, जिससे मजबूत साइबर सुरक्षा सुनिश्चित होती है।"
 
 #: .\home\templates\pages\what_we_do.html:52
 msgid "Secure Code Review"
 msgstr "सुरक्षित कोड समीक्षा"
 
 #: .\home\templates\pages\what_we_do.html:53
-msgid "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats."
-msgstr "हमारे विशेषज्ञ यह सुनिश्चित करने के लिए सुरक्षित कोड समीक्षा सेवाएँ प्रदान करते हैं कि आपका कोड कमजोरियों से मुक्त है और आपके अनुप्रयोग साइबर खतरों से संरक्षित हैं।"
+msgid ""
+"Our experts offer secure code review services to ensure your code is free "
+"from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr ""
+"हमारे विशेषज्ञ यह सुनिश्चित करने के लिए सुरक्षित कोड समीक्षा सेवाएँ प्रदान करते हैं कि आपका "
+"कोड कमजोरियों से मुक्त है और आपके अनुप्रयोग साइबर खतरों से संरक्षित हैं।"
 
 #: .\home\templates\pages\what_we_do.html:56
 msgid "Open-Source Security Tools"
 msgstr "ओपन-सोर्स सुरक्षा उपकरण"
 
 #: .\home\templates\pages\what_we_do.html:57
-msgid "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation."
-msgstr "हम ओपन-सोर्स सुरक्षा उपकरण विकसित करते हैं जो बाज़ार की खामियों को दूर करते हैं और संगठनों को खतरे कम करने हेतु एथिकल हैकिंग टूल्स से सशक्त बनाते हैं।"
+msgid ""
+"We develop open-source security tools to address market gaps, empowering "
+"organizations with ethical hacking tools for threat mitigation."
+msgstr ""
+"हम ओपन-सोर्स सुरक्षा उपकरण विकसित करते हैं जो बाज़ार की खामियों को दूर करते हैं और संगठनों "
+"को खतरे कम करने हेतु एथिकल हैकिंग टूल्स से सशक्त बनाते हैं।"
 
 #: .\home\templates\pages\what_we_do.html:72
 msgid "Work With Our Cybersecurity Agency"

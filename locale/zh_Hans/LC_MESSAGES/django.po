@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 01:16+1000\n"
+"POT-Creation-Date: 2025-08-19 02:51+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,125 +46,133 @@ msgstr "项目"
 
 #: .\home\context_processors.py:66
 msgid "Upload Image"
-msgstr ""
+msgstr "上传图片"
 
 #: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:160
+#: .\home\templates\includes\navigation.html:169
 msgid "Blog"
 msgstr "博客"
 
 #: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:168
+#: .\home\templates\includes\navigation.html:177
 msgid "Published Blogs"
 msgstr "已发布的博客"
 
 #: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:180
+#: .\home\templates\includes\navigation.html:189
 msgid "Discover Hardhat"
 msgstr "探索 Hardhat"
 
 #: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:186
+#: .\home\templates\includes\navigation.html:195
 msgid "Internships"
 msgstr "实习"
 
 #: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:189
+#: .\home\templates\includes\navigation.html:198
 msgid "Job Alerts"
 msgstr "职位提醒"
 
 #: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:199
+#: .\home\templates\includes\navigation.html:208
 msgid "Cyber Challenges"
 msgstr "网络挑战"
 
 #: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:211
+#: .\home\templates\includes\navigation.html:220
 msgid "Quiz"
 msgstr "测验"
 
-#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
-msgid "First Name"
-msgstr "名字"
-
-#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
-msgid "Last Name"
-msgstr "姓氏"
-
-#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
-msgid "Deakin Email Address"
-msgstr "迪肯大学邮箱地址"
-
-#: .\home\forms.py:58
+#: .\home\forms.py:35
 msgid "Email"
 msgstr "电子邮箱"
 
-#: .\home\forms.py:64 .\home\forms.py:173
+#: .\home\forms.py:41 .\home\forms.py:137
 msgid "Your Password"
 msgstr "您的密码"
 
-#: .\home\forms.py:68 .\home\forms.py:177
+#: .\home\forms.py:45 .\home\forms.py:141
 msgid "Confirm Password"
 msgstr "确认密码"
 
-#: .\home\forms.py:79
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lowercase "
-"letters, numbers, and special characters."
-msgstr "密码必须至少包含8个字符，并包括大写字母、小写字母、数字和特殊字符。"
+#: .\home\forms.py:54 .\home\forms.py:150
+msgid "Password must be at least 8 characters long."
+msgstr "密码长度必须至少为8个字符。"
 
-#: .\home\forms.py:94
+#: .\home\forms.py:57 .\home\forms.py:153
+msgid "Password must include at least one lowercase letter."
+msgstr "密码必须包含至少一个小写字母。"
+
+#: .\home\forms.py:60 .\home\forms.py:156
+msgid "Password must include at least one uppercase letter."
+msgstr "密码必须包含至少一个大写字母。"
+
+#: .\home\forms.py:63 .\home\forms.py:159
+msgid "Password must include at least one number."
+msgstr "密码必须包含至少一个数字。"
+
+#: .\home\forms.py:66 .\home\forms.py:162
+msgid "Password must include at least one special character (@, $, !, %, *, ?, &)."
+msgstr "密码必须包含至少一个特殊字符（@、$、!、%、*、?、&）。"
+
+#: .\home\forms.py:81
 msgid "Email must match your Deakin email."
 msgstr "邮箱必须与您的迪肯大学邮箱一致。"
 
-#: .\home\forms.py:162
+#: .\home\forms.py:91
+msgid "First Name"
+msgstr "名字"
+
+#: .\home\forms.py:92
+msgid "Last Name"
+msgstr "姓氏"
+
+#: .\home\forms.py:93
+msgid "Deakin Email Address"
+msgstr "迪肯大学邮箱地址"
+
+#: .\home\forms.py:126
 msgid "Business Email"
 msgstr "企业邮箱"
 
-#: .\home\forms.py:168
+#: .\home\forms.py:132
 msgid "Business Name"
 msgstr "企业名称"
 
-#: .\home\forms.py:188
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lawercase "
-"letters, numbers and special characters."
-msgstr "密码必须至少包含8个字符，并包括大写字母、小写字母、数字和特殊字符。"
-
-#: .\home\forms.py:200
+#: .\home\forms.py:174
 msgid "Email must be valid email."
 msgstr "请输入有效的电子邮箱地址。"
 
-#: .\home\forms.py:210 .\home\forms.py:274
+#: .\home\forms.py:184 .\home\forms.py:248
 msgid "Password"
 msgstr "密码"
 
-#: .\home\forms.py:229 .\home\forms.py:257
+#: .\home\forms.py:203 .\home\forms.py:231
 msgid "Too many login attempts. Please try again later."
 msgstr "登录尝试次数过多，请稍后再试。"
 
-#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\forms.py:284 .\home\templates\pages\about.html:582
 #: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "您的电子邮箱"
 
-#: .\home\forms.py:315 .\home\forms.py:326
+#: .\home\forms.py:289 .\home\forms.py:300
 msgid "New Password"
 msgstr "新密码"
 
-#: .\home\forms.py:318 .\home\forms.py:329
+#: .\home\forms.py:292 .\home\forms.py:303
 msgid "Confirm New Password"
 msgstr "确认新密码"
 
-#: .\home\forms.py:323
+#: .\home\forms.py:297
 msgid "Old Password"
 msgstr "旧密码"
 
-#: .\home\forms.py:333
+#: .\home\forms.py:307
 msgid "Deakin Student ID"
 msgstr "迪肯大学学号"
 
-#: .\home\forms.py:336
+#: .\home\forms.py:310
 msgid "Year"
 msgstr "年份"
 
@@ -230,39 +238,39 @@ msgstr "用户"
 msgid "users"
 msgstr "用户列表"
 
-#: .\home\models.py:186
+#: .\home\models.py:191
 msgid "project title"
 msgstr "项目标题"
 
-#: .\home\models.py:195
+#: .\home\models.py:200
 msgid "course title"
 msgstr "课程标题"
 
-#: .\home\models.py:196
+#: .\home\models.py:201
 msgid "course code"
 msgstr "课程代码"
 
-#: .\home\models.py:197
+#: .\home\models.py:202
 msgid "postgraduate status"
 msgstr "研究生状态"
 
-#: .\home\models.py:251
+#: .\home\models.py:256
 msgid "student_id"
 msgstr "学生学号"
 
-#: .\home\models.py:254
+#: .\home\models.py:259
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr "必填。请输入迪肯大学学生学号，仅限数字。"
 
-#: .\home\models.py:257
+#: .\home\models.py:262
 msgid "A user with that Student ID already exists."
 msgstr "已存在使用该学生学号的用户。"
 
-#: .\home\models.py:262
+#: .\home\models.py:267
 msgid "trimester"
 msgstr "学期"
 
-#: .\home\models.py:263
+#: .\home\models.py:268
 msgid "unit"
 msgstr "单元"
 
@@ -304,7 +312,7 @@ msgid "Last Updated:"
 msgstr "最近更新："
 
 #: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:228
+#: .\home\templates\includes\navigation.html:237
 msgid "Search..."
 msgstr "搜索..."
 
@@ -320,83 +328,99 @@ msgstr "仪表盘"
 msgid "Skills"
 msgstr "技能"
 
-#: .\home\templates\includes\navigation.html:81
+#: .\home\templates\includes\navigation.html:82
 msgid "Admin Settings"
 msgstr "管理员设置"
 
-#: .\home\templates\includes\navigation.html:87
+#: .\home\templates\includes\navigation.html:88
+msgid "User Management"
+msgstr "用户管理"
+
+#: .\home\templates\includes\navigation.html:91
+msgid "Project Assignment"
+msgstr "项目分配"
+
+#: .\home\templates\includes\navigation.html:94
+msgid "Project Teams"
+msgstr "项目团队"
+
+#: .\home\templates\includes\navigation.html:97
 msgid "Review Blogs"
 msgstr "审核博客"
 
-#: .\home\templates\includes\navigation.html:90
+#: .\home\templates\includes\navigation.html:100
 msgid "Reports"
 msgstr "报告"
 
-#: .\home\templates\includes\navigation.html:101
+#: .\home\templates\includes\navigation.html:110
 msgid "About"
 msgstr "关于"
 
-#: .\home\templates\includes\navigation.html:107
+#: .\home\templates\includes\navigation.html:116
 #: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "项目"
 
-#: .\home\templates\includes\navigation.html:116
+#: .\home\templates\includes\navigation.html:125
 #: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "应用攻击（AppAttack）"
 
-#: .\home\templates\includes\navigation.html:121
+#: .\home\templates\includes\navigation.html:130
 #: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
-#: .\home\templates\includes\navigation.html:126
+#: .\home\templates\includes\navigation.html:135
 #: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "短信钓鱼检测"
 
-#: .\home\templates\includes\navigation.html:131
+#: .\home\templates\includes\navigation.html:140
 msgid "Deakin CyberSafe VR"
 msgstr "迪肯网络安全虚拟现实"
 
-#: .\home\templates\includes\navigation.html:136
+#: .\home\templates\includes\navigation.html:145
 msgid "The Policy Deployment Engine (New)"
 msgstr "策略部署引擎（新）"
 
-#: .\home\templates\includes\navigation.html:141
+#: .\home\templates\includes\navigation.html:150
 msgid "Deakin Threat mirror (Finished)"
 msgstr "迪肯威胁镜像（已完成）"
 
-#: .\home\templates\includes\navigation.html:167
+#: .\home\templates\includes\navigation.html:159
+msgid "Malware (Finished)"
+msgstr "恶意软件（已完成）"
+
+#: .\home\templates\includes\navigation.html:176
 msgid "Create a Blog"
 msgstr "创建博客"
 
-#: .\home\templates\includes\navigation.html:174
+#: .\home\templates\includes\navigation.html:183
 msgid "Careers"
 msgstr "招聘"
 
-#: .\home\templates\includes\navigation.html:183
+#: .\home\templates\includes\navigation.html:192
 msgid "All Jobs"
 msgstr "全部职位"
 
-#: .\home\templates\includes\navigation.html:206
+#: .\home\templates\includes\navigation.html:215
 msgid "All Challenges"
 msgstr "全部挑战"
 
-#: .\home\templates\includes\navigation.html:248
+#: .\home\templates\includes\navigation.html:257
 msgid "Logout"
 msgstr "退出登录"
 
-#: .\home\templates\includes\navigation.html:293
+#: .\home\templates\includes\navigation.html:279
 msgid "Sign In"
 msgstr "登录"
 
-#: .\home\templates\includes\navigation.html:326
+#: .\home\templates\includes\navigation.html:291
 msgid "Sign Up"
 msgstr "注册"
 
-#: .\home\templates\includes\navigation.html:348
+#: .\home\templates\includes\navigation.html:313
 msgid "Language"
 msgstr "语言"
 
@@ -874,9 +898,10 @@ msgid ""
 "navigate through potential vulnerabilities and maintain our clients' trust. "
 "A top-tier cybersecurity partner!\""
 msgstr ""
-"“在节奏迅速的金融领域，网络安全绝非奢侈品，而是必需品。Hardhat 在加强我们抵御复杂网络威胁的防御方面发挥了关键作用。"
-"他们在威胁检测、事件响应和持续监控方面的专业能力极为宝贵，帮助我们识别并应对潜在漏洞，维护了客户的信任。"
-"他们是真正一流的网络安全合作伙伴！”"
+"“在节奏迅速的金融领域，网络安全绝非奢侈品，而是必需品。Hardhat 在加强我们抵御"
+"复杂网络威胁的防御方面发挥了关键作用。他们在威胁检测、事件响应和持续监控方面"
+"的专业能力极为宝贵，帮助我们识别并应对潜在漏洞，维护了客户的信任。他们是真正"
+"一流的网络安全合作伙伴！”"
 
 #: .\home\templates\pages\index.html:393
 msgid "David Harris, Risk Manager, FinSecure Solutions"
@@ -957,8 +982,9 @@ msgid ""
 "                        "
 msgstr ""
 "\n"
-"                        Hardhat Enterprises 通过保护资产、降低威胁、阻止漏洞利用来全面提升白帽网络安全。"
-"我们的网络安全服务涵盖渗透测试和开源安全工具，旨在弥补市场空白，切实保障您的数字资产安全。\n"
+"                        Hardhat Enterprises 通过保护资产、降低威胁、阻止漏洞"
+"利用来全面提升白帽网络安全。我们的网络安全服务涵盖渗透测试和开源安全工具，旨"
+"在弥补市场空白，切实保障您的数字资产安全。\n"
 "                        "
 
 #: .\home\templates\pages\what_we_do.html:42
@@ -966,32 +992,47 @@ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
 msgstr "我们的<span class=\"fw-bold\">网络安全服务</span>"
 
 #: .\home\templates\pages\what_we_do.html:43
-msgid "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions."
-msgstr "了解 Hardhat Enterprises 如何通过先进的白帽网络安全解决方案守护您的组织。"
+msgid ""
+"Explore how Hardhat Enterprises protects your organization with advanced "
+"white-hat cybersecurity solutions."
+msgstr ""
+"了解 Hardhat Enterprises 如何通过先进的白帽网络安全解决方案守护您的组织。"
 
 #: .\home\templates\pages\what_we_do.html:48
 msgid "Penetration Testing Services"
 msgstr "渗透测试服务"
 
 #: .\home\templates\pages\what_we_do.html:49
-msgid "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection."
-msgstr "我们提供全面的渗透测试服务，以识别您系统和应用中的漏洞，确保强有力的网络安全防护。"
+msgid ""
+"We provide thorough penetration testing services to identify vulnerabilities "
+"in your systems and applications, ensuring robust cybersecurity protection."
+msgstr ""
+"我们提供全面的渗透测试服务，以识别您系统和应用中的漏洞，确保强有力的网络安全"
+"防护。"
 
 #: .\home\templates\pages\what_we_do.html:52
 msgid "Secure Code Review"
 msgstr "安全代码审查"
 
 #: .\home\templates\pages\what_we_do.html:53
-msgid "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats."
-msgstr "我们的专家提供安全代码审查服务，确保您的代码不含漏洞，从而保护应用免受网络威胁。"
+msgid ""
+"Our experts offer secure code review services to ensure your code is free "
+"from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr ""
+"我们的专家提供安全代码审查服务，确保您的代码不含漏洞，从而保护应用免受网络威"
+"胁。"
 
 #: .\home\templates\pages\what_we_do.html:56
 msgid "Open-Source Security Tools"
 msgstr "开源安全工具"
 
 #: .\home\templates\pages\what_we_do.html:57
-msgid "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation."
-msgstr "我们研发开源安全工具，以填补市场空白，并为组织提供道德黑客工具，助力威胁防御。"
+msgid ""
+"We develop open-source security tools to address market gaps, empowering "
+"organizations with ethical hacking tools for threat mitigation."
+msgstr ""
+"我们研发开源安全工具，以填补市场空白，并为组织提供道德黑客工具，助力威胁防"
+"御。"
 
 #: .\home\templates\pages\what_we_do.html:72
 msgid "Work With Our Cybersecurity Agency"

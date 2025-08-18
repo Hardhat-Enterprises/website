@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 01:18+1000\n"
+"POT-Creation-Date: 2025-08-19 02:57+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,129 +46,133 @@ msgstr "プロジェクト"
 
 #: .\home\context_processors.py:66
 msgid "Upload Image"
-msgstr ""
+msgstr "画像をアップロード"
 
 #: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:160
+#: .\home\templates\includes\navigation.html:169
 msgid "Blog"
 msgstr "ブログ"
 
 #: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:168
+#: .\home\templates\includes\navigation.html:177
 msgid "Published Blogs"
 msgstr "公開済みブログ"
 
 #: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:180
+#: .\home\templates\includes\navigation.html:189
 msgid "Discover Hardhat"
 msgstr "Hardhatについて知る"
 
 #: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:186
+#: .\home\templates\includes\navigation.html:195
 msgid "Internships"
 msgstr "インターンシップ"
 
 #: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:189
+#: .\home\templates\includes\navigation.html:198
 msgid "Job Alerts"
 msgstr "求人アラート"
 
 #: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:199
+#: .\home\templates\includes\navigation.html:208
 msgid "Cyber Challenges"
 msgstr "サイバー・チャレンジ"
 
 #: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:211
+#: .\home\templates\includes\navigation.html:220
 msgid "Quiz"
 msgstr "クイズ"
 
-#: .\home\forms.py:36 .\home\forms.py:104 .\home\forms.py:140
-msgid "First Name"
-msgstr "名"
-
-#: .\home\forms.py:37 .\home\forms.py:105 .\home\forms.py:141
-msgid "Last Name"
-msgstr "姓"
-
-#: .\home\forms.py:38 .\home\forms.py:106 .\home\forms.py:142
-msgid "Deakin Email Address"
-msgstr "ディーキン大学のメールアドレス"
-
-#: .\home\forms.py:58
+#: .\home\forms.py:35
 msgid "Email"
 msgstr "メールアドレス"
 
-#: .\home\forms.py:64 .\home\forms.py:173
+#: .\home\forms.py:41 .\home\forms.py:137
 msgid "Your Password"
 msgstr "パスワード"
 
-#: .\home\forms.py:68 .\home\forms.py:177
+#: .\home\forms.py:45 .\home\forms.py:141
 msgid "Confirm Password"
 msgstr "パスワードの確認"
 
-#: .\home\forms.py:79
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lowercase "
-"letters, numbers, and special characters."
-msgstr ""
-"パスワードは8文字以上で、大文字・小文字・数字・特殊文字を含める必要がありま"
-"す。"
+#: .\home\forms.py:54 .\home\forms.py:150
+msgid "Password must be at least 8 characters long."
+msgstr "パスワードは8文字以上である必要があります。"
 
-#: .\home\forms.py:94
+#: .\home\forms.py:57 .\home\forms.py:153
+msgid "Password must include at least one lowercase letter."
+msgstr "パスワードには少なくとも1つの小文字を含める必要があります。"
+
+#: .\home\forms.py:60 .\home\forms.py:156
+msgid "Password must include at least one uppercase letter."
+msgstr "パスワードには少なくとも1つの大文字を含める必要があります。"
+
+#: .\home\forms.py:63 .\home\forms.py:159
+msgid "Password must include at least one number."
+msgstr "パスワードには少なくとも1つの数字を含める必要があります。"
+
+#: .\home\forms.py:66 .\home\forms.py:162
+msgid "Password must include at least one special character (@, $, !, %, *, ?, &)."
+msgstr "パスワードには少なくとも1つの特殊文字（@、$、!、%、*、?、&）を含める必要があります。"
+
+#: .\home\forms.py:81
 msgid "Email must match your Deakin email."
 msgstr "メールアドレスはディーキン大学のものと一致する必要があります。"
 
-#: .\home\forms.py:162
+#: .\home\forms.py:91
+msgid "First Name"
+msgstr "名"
+
+#: .\home\forms.py:92
+msgid "Last Name"
+msgstr "姓"
+
+#: .\home\forms.py:93
+msgid "Deakin Email Address"
+msgstr "ディーキン大学のメールアドレス"
+
+#: .\home\forms.py:126
 msgid "Business Email"
 msgstr "ビジネスメール"
 
-#: .\home\forms.py:168
+#: .\home\forms.py:132
 msgid "Business Name"
 msgstr "会社名"
 
-#: .\home\forms.py:188
-msgid ""
-"Password must be at least 8 characters long and include uppercase, lawercase "
-"letters, numbers and special characters."
-msgstr ""
-"パスワードは8文字以上で、大文字・小文字・数字・特殊文字を含める必要がありま"
-"す。"
-
-#: .\home\forms.py:200
+#: .\home\forms.py:174
 msgid "Email must be valid email."
 msgstr "有効なメールアドレスを入力してください。"
 
-#: .\home\forms.py:210 .\home\forms.py:274
+#: .\home\forms.py:184 .\home\forms.py:248
 msgid "Password"
 msgstr "パスワード"
 
-#: .\home\forms.py:229 .\home\forms.py:257
+#: .\home\forms.py:203 .\home\forms.py:231
 msgid "Too many login attempts. Please try again later."
 msgstr "ログイン試行回数が多すぎます。後でもう一度お試しください。"
 
-#: .\home\forms.py:310 .\home\templates\pages\about.html:582
+#: .\home\forms.py:284 .\home\templates\pages\about.html:582
 #: .\home\templates\pages\what_we_do.html:88
 msgid "Your Email"
 msgstr "あなたのメールアドレス"
 
-#: .\home\forms.py:315 .\home\forms.py:326
+#: .\home\forms.py:289 .\home\forms.py:300
 msgid "New Password"
 msgstr "新しいパスワード"
 
-#: .\home\forms.py:318 .\home\forms.py:329
+#: .\home\forms.py:292 .\home\forms.py:303
 msgid "Confirm New Password"
 msgstr "新しいパスワードの確認"
 
-#: .\home\forms.py:323
+#: .\home\forms.py:297
 msgid "Old Password"
 msgstr "古いパスワード"
 
-#: .\home\forms.py:333
+#: .\home\forms.py:307
 msgid "Deakin Student ID"
 msgstr "ディーキン大学の学生ID"
 
-#: .\home\forms.py:336
+#: .\home\forms.py:310
 msgid "Year"
 msgstr "年度"
 
@@ -236,39 +240,39 @@ msgstr "ユーザー"
 msgid "users"
 msgstr "ユーザー一覧"
 
-#: .\home\models.py:186
+#: .\home\models.py:191
 msgid "project title"
 msgstr "プロジェクト名"
 
-#: .\home\models.py:195
+#: .\home\models.py:200
 msgid "course title"
 msgstr "コース名"
 
-#: .\home\models.py:196
+#: .\home\models.py:201
 msgid "course code"
 msgstr "コースコード"
 
-#: .\home\models.py:197
+#: .\home\models.py:202
 msgid "postgraduate status"
 msgstr "大学院生の状態"
 
-#: .\home\models.py:251
+#: .\home\models.py:256
 msgid "student_id"
 msgstr "学生ID"
 
-#: .\home\models.py:254
+#: .\home\models.py:259
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr "必須。ディーキン大学の学生IDを入力してください。数字のみ。"
 
-#: .\home\models.py:257
+#: .\home\models.py:262
 msgid "A user with that Student ID already exists."
 msgstr "その学生IDのユーザーはすでに存在します。"
 
-#: .\home\models.py:262
+#: .\home\models.py:267
 msgid "trimester"
 msgstr "学期"
 
-#: .\home\models.py:263
+#: .\home\models.py:268
 msgid "unit"
 msgstr "ユニット"
 
@@ -312,7 +316,7 @@ msgid "Last Updated:"
 msgstr "最終更新："
 
 #: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:228
+#: .\home\templates\includes\navigation.html:237
 msgid "Search..."
 msgstr "検索..."
 
@@ -328,83 +332,99 @@ msgstr "ダッシュボード"
 msgid "Skills"
 msgstr "スキル"
 
-#: .\home\templates\includes\navigation.html:81
+#: .\home\templates\includes\navigation.html:82
 msgid "Admin Settings"
 msgstr "管理者設定"
 
-#: .\home\templates\includes\navigation.html:87
+#: .\home\templates\includes\navigation.html:88
+msgid "User Management"
+msgstr "ユーザー管理"
+
+#: .\home\templates\includes\navigation.html:91
+msgid "Project Assignment"
+msgstr "プロジェクト割り当て"
+
+#: .\home\templates\includes\navigation.html:94
+msgid "Project Teams"
+msgstr "プロジェクトチーム"
+
+#: .\home\templates\includes\navigation.html:97
 msgid "Review Blogs"
 msgstr "ブログ審査"
 
-#: .\home\templates\includes\navigation.html:90
+#: .\home\templates\includes\navigation.html:100
 msgid "Reports"
 msgstr "レポート"
 
-#: .\home\templates\includes\navigation.html:101
+#: .\home\templates\includes\navigation.html:110
 msgid "About"
 msgstr "概要"
 
-#: .\home\templates\includes\navigation.html:107
+#: .\home\templates\includes\navigation.html:116
 #: .\home\templates\pages\index.html:147
 msgid "Projects"
 msgstr "プロジェクト"
 
-#: .\home\templates\includes\navigation.html:116
+#: .\home\templates\includes\navigation.html:125
 #: .\home\templates\pages\index.html:157
 msgid "AppAttack"
 msgstr "AppAttack"
 
-#: .\home\templates\includes\navigation.html:121
+#: .\home\templates\includes\navigation.html:130
 #: .\home\templates\pages\index.html:172
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
-#: .\home\templates\includes\navigation.html:126
+#: .\home\templates\includes\navigation.html:135
 #: .\home\templates\pages\index.html:202
 msgid "Smishing Detection"
 msgstr "スミッシング検出"
 
-#: .\home\templates\includes\navigation.html:131
+#: .\home\templates\includes\navigation.html:140
 msgid "Deakin CyberSafe VR"
 msgstr "ディーキン CyberSafe VR"
 
-#: .\home\templates\includes\navigation.html:136
+#: .\home\templates\includes\navigation.html:145
 msgid "The Policy Deployment Engine (New)"
 msgstr "ポリシー展開エンジン（新）"
 
-#: .\home\templates\includes\navigation.html:141
+#: .\home\templates\includes\navigation.html:150
 msgid "Deakin Threat mirror (Finished)"
 msgstr "ディーキン Threat Mirror（完了）"
 
-#: .\home\templates\includes\navigation.html:167
+#: .\home\templates\includes\navigation.html:159
+msgid "Malware (Finished)"
+msgstr "マルウェア（完了）"
+
+#: .\home\templates\includes\navigation.html:176
 msgid "Create a Blog"
 msgstr "ブログを作成"
 
-#: .\home\templates\includes\navigation.html:174
+#: .\home\templates\includes\navigation.html:183
 msgid "Careers"
 msgstr "採用情報"
 
-#: .\home\templates\includes\navigation.html:183
+#: .\home\templates\includes\navigation.html:192
 msgid "All Jobs"
 msgstr "全ての求人"
 
-#: .\home\templates\includes\navigation.html:206
+#: .\home\templates\includes\navigation.html:215
 msgid "All Challenges"
 msgstr "全てのチャレンジ"
 
-#: .\home\templates\includes\navigation.html:248
+#: .\home\templates\includes\navigation.html:257
 msgid "Logout"
 msgstr "ログアウト"
 
-#: .\home\templates\includes\navigation.html:293
+#: .\home\templates\includes\navigation.html:279
 msgid "Sign In"
 msgstr "ログイン"
 
-#: .\home\templates\includes\navigation.html:326
+#: .\home\templates\includes\navigation.html:291
 msgid "Sign Up"
 msgstr "サインアップ"
 
-#: .\home\templates\includes\navigation.html:348
+#: .\home\templates\includes\navigation.html:313
 msgid "Language"
 msgstr "言語"
 
@@ -988,8 +1008,11 @@ msgid ""
 "                        "
 msgstr ""
 "\n"
-"                        Hardhat Enterprisesは、資産の保護、脅威の軽減、脆弱性悪用の阻止を通じてホワイトハットサイバーセキュリティを強化しています。"
-"当社のサイバーセキュリティサービスは、ペネトレーションテストやオープンソースのセキュリティツールを含み、市場のギャップに対応し、お客様のデジタル資産を確実に保護します。\n"
+"                        Hardhat Enterprisesは、資産の保護、脅威の軽減、脆弱性"
+"悪用の阻止を通じてホワイトハットサイバーセキュリティを強化しています。当社の"
+"サイバーセキュリティサービスは、ペネトレーションテストやオープンソースのセ"
+"キュリティツールを含み、市場のギャップに対応し、お客様のデジタル資産を確実に"
+"保護します。\n"
 "                        "
 
 #: .\home\templates\pages\what_we_do.html:42
@@ -997,32 +1020,48 @@ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
 msgstr "当社の<span class=\"fw-bold\">サイバーセキュリティサービス</span>"
 
 #: .\home\templates\pages\what_we_do.html:43
-msgid "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions."
-msgstr "Hardhat Enterprisesが高度なホワイトハットサイバーセキュリティソリューションにより御社をどのように保護するかをご覧ください。"
+msgid ""
+"Explore how Hardhat Enterprises protects your organization with advanced "
+"white-hat cybersecurity solutions."
+msgstr ""
+"Hardhat Enterprisesが高度なホワイトハットサイバーセキュリティソリューションに"
+"より御社をどのように保護するかをご覧ください。"
 
 #: .\home\templates\pages\what_we_do.html:48
 msgid "Penetration Testing Services"
 msgstr "ペネトレーションテストサービス"
 
 #: .\home\templates\pages\what_we_do.html:49
-msgid "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection."
-msgstr "当社は、システムやアプリケーションの脆弱性を特定する徹底的なペネトレーションテストサービスを提供し、堅牢なサイバーセキュリティ保護を実現します。"
+msgid ""
+"We provide thorough penetration testing services to identify vulnerabilities "
+"in your systems and applications, ensuring robust cybersecurity protection."
+msgstr ""
+"当社は、システムやアプリケーションの脆弱性を特定する徹底的なペネトレーション"
+"テストサービスを提供し、堅牢なサイバーセキュリティ保護を実現します。"
 
 #: .\home\templates\pages\what_we_do.html:52
 msgid "Secure Code Review"
 msgstr "セキュアコードレビュー"
 
 #: .\home\templates\pages\what_we_do.html:53
-msgid "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats."
-msgstr "当社の専門家は、コードに脆弱性が存在しないことを保証するセキュアコードレビューサービスを提供し、アプリケーションをサイバー脅威から保護します。"
+msgid ""
+"Our experts offer secure code review services to ensure your code is free "
+"from vulnerabilities, safeguarding your applications from cyber threats."
+msgstr ""
+"当社の専門家は、コードに脆弱性が存在しないことを保証するセキュアコードレ"
+"ビューサービスを提供し、アプリケーションをサイバー脅威から保護します。"
 
 #: .\home\templates\pages\what_we_do.html:56
 msgid "Open-Source Security Tools"
 msgstr "オープンソースセキュリティツール"
 
 #: .\home\templates\pages\what_we_do.html:57
-msgid "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation."
-msgstr "当社は市場のギャップに対応するためのオープンソースセキュリティツールを開発し、組織に脅威緩和のためのエシカルハッキングツールを提供します。"
+msgid ""
+"We develop open-source security tools to address market gaps, empowering "
+"organizations with ethical hacking tools for threat mitigation."
+msgstr ""
+"当社は市場のギャップに対応するためのオープンソースセキュリティツールを開発"
+"し、組織に脅威緩和のためのエシカルハッキングツールを提供します。"
 
 #: .\home\templates\pages\what_we_do.html:72
 msgid "Work With Our Cybersecurity Agency"
@@ -1034,7 +1073,8 @@ msgstr "御社のサイバーセキュリティのニーズをぜひお聞かせ
 
 #: .\home\templates\pages\what_we_do.html:97
 msgid "How can our cybersecurity services help you?"
-msgstr "当社のサイバーセキュリティサービスは御社にどのように貢献できるでしょうか？"
+msgstr ""
+"当社のサイバーセキュリティサービスは御社にどのように貢献できるでしょうか？"
 
 #: .\home\validators.py:19
 msgid "Enter a valid student ID. This value must contain 9 digits only"
