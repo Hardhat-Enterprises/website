@@ -194,7 +194,7 @@
 
         <!-- All three strong and identical for visibility -->
         <div class="d-flex flex-wrap gap-2 mt-3">
-          <button id="savePlan" class="btn btn-warning text-dark fw-semibold">Save My Plan</button>
+          
           <button id="retake" class="btn btn-warning text-dark fw-semibold">Retake</button>
         </div>
       </div>
@@ -218,6 +218,20 @@
     governance:{label:"Governance, Risk & Compliance (GRC)",roles:["GRC Analyst","Risk Analyst","Compliance Specialist"],tools:["Risk registers","GRC platforms","Policy frameworks (NIST/ISO)"],skills:["Risk assessment","Control mapping","Audit readiness","Stakeholder communication"],certs:[{name:"ISO 27001 Foundation/Implementer",url:"https://www.iso.org/standard/27001"},{name:"CRISC (ISACA)",url:"https://www.isaca.org/credentialing/crisc"},{name:"CISM (ISACA)",url:"https://www.isaca.org/credentialing/cism"}],companies:["Deloitte","PwC","KPMG","EY","Protiviti","Consultancies/GRC vendors"],projects:["Create a risk register for a small SaaS (likelihood/impact/controls)","Map controls to ISO 27001/NIST CSF","Vendor risk assessment template & walkthrough"],salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"}
   };
 
+  /* ===== Normalization settings (reduce bias to common categories) =====
+     Each category appears in a different number of single-choice questions.
+     We normalize by 'opportunity count' so rarer categories aren’t drowned out.
+     Counts below are how many questions include that category + tools checkbox presence.
+  */
+  const OPPORTUNITIES = {
+    offensive: 5,   // Q1,Q2,Q3,Q5,Q6 (+tools)
+    defensive: 6,   // Q1,Q2,Q3,Q4,Q5,Q6 (+tools)
+    forensics: 6,   // Q1,Q2,Q3,Q4,Q5,Q6 (+tools)
+    architecture: 3,// Q1,Q2,Q4
+    cloud: 2,       // Q4 (+tools)
+    governance: 3   // Q3,Q5,Q6
+  };
+
   /* ===== Quiz scoring & rendering ===== */
   function scoreQuiz(form){
     const scores = {offensive:0, defensive:0, forensics:0, architecture:0, cloud:0, governance:0};
@@ -230,9 +244,34 @@
     });
     return scores;
   }
-  function topCategory(scores){
-    return Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
+
+  /* NEW: normalize scores by opportunity counts and return top categories (with ties) */
+  function normalizeScores(raw){
+    const norm = {};
+    const SCALE = 6; // bring normalized numbers back into a familiar range
+    for(const k of CATS){
+      const opp = OPPORTUNITIES[k] || 1;
+      norm[k] = (raw[k] || 0) / opp * SCALE;
+    }
+    return norm;
   }
+
+  /* UPDATED: returns an array of best categories, not just one.
+     - If all zero, return [] (handled upstream).
+     - Include categories within a small epsilon of max to reflect near-ties. */
+  function topCategories(scores){
+    const norm = normalizeScores(scores);
+    const values = Object.values(norm);
+    const max = Math.max(...values);
+    if (max === 0) return [];
+    const EPS = 0.6; // tolerance for "close match"
+    const tops = Object.entries(norm)
+      .filter(([k,v]) => (max - v) <= EPS)
+      .sort((a,b)=> b[1]-a[1])
+      .map(([k])=>k);
+    return tops;
+  }
+
   function fillList(id, items){
     const ul = document.getElementById(id);
     ul.innerHTML = "";
@@ -312,10 +351,34 @@
   form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const scores = scoreQuiz(form);
-    const cat = topCategory(scores);
+    const tops = topCategories(scores);
+
     quizCard.classList.add("d-none");
     results.classList.remove("d-none");
-    renderResults(cat, scores);
+
+    if (tops.length === 0) {
+      // No answers chosen
+      document.getElementById("primaryRec").innerHTML =
+        `<span class="fw-bold">Please solve the quiz</span> to get the accurate answer.`;
+
+      ["roleList","toolList","skillList","certList","companyList","projectList"].forEach(id=>{
+        document.getElementById(id).innerHTML = "";
+      });
+      document.getElementById("salaryText").textContent = "";
+      if (window._hhChart) { window._hhChart.destroy(); }
+    } else {
+      // Primary is first; render it
+      const primary = tops[0];
+      renderResults(primary, scores);
+
+      // If there are close matches, show them inline (keeps UI unchanged)
+      const alts = tops.slice(1).map(k => CATALOG[k].label);
+      if (alts.length){
+        const pr = document.getElementById("primaryRec");
+        pr.innerHTML += ` <span class="text-muted">(Close matches: ${alts.join(", ")})</span>`;
+      }
+    }
+
     window.scrollTo({ top:0, behavior:"smooth" });
   });
 
