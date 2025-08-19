@@ -260,7 +260,7 @@ USE_TZ = True
 LANGUAGES = [
     ('en', 'English'),
     ('zh-hans', 'Simplified Chinese'),
-    ("hi", "हिन्दी (Hindi)"),
+    # ("hi", "हिन्दी (Hindi)"),  DeepL api can not translate Hindi.
     ("fr", "Français"),
     ("es", "Español"),
     ("ja", "日本語"),
