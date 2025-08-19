@@ -1,0 +1,32 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Appointment Confirmed{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+  {% for m in messages %}
+    <div class="alert alert-{{ m.tags }} rounded-4 my-3">{{ m }}</div>
+  {% endfor %}
+{% endif %}
+
+<div class="container my-5">
+  <h1 class="fw-bolder">Booking Confirmed</h1>
+  <p class="text-muted">Thanks {{ appt.full_name }} — your session is booked.</p>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <ul class="list-unstyled mb-0">
+        <li><strong>Counsellor:</strong> {{ appt.counsellor.name }}{% if appt.counsellor.title %} ({{ appt.counsellor.title }}){% endif %}</li>
+        <li><strong>Date:</strong> {{ appt.date }}</li>
+        <li><strong>Time:</strong> {{ appt.time }}</li>
+        <li><strong>Email:</strong> {{ appt.email }}</li>
+        {% if appt.phone %}<li><strong>Phone:</strong> {{ appt.phone }}</li>{% endif %}
+        {% if appt.notes %}<li class="mt-2"><strong>Notes:</strong> {{ appt.notes }}</li>{% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <a class="btn btn-outline-secondary mt-3" href="{% url 'index' %}">Back to Home</a>
+</div>
+{% endblock %}
