@@ -5,6 +5,9 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
+from django.conf import settings
+from django.middleware.locale import LocaleMiddleware
+from django.utils import translation
 logger = logging.getLogger('admin_logout_logger')
 
 class AutoLogoutMiddleware(MiddlewareMixin):
@@ -91,3 +94,31 @@ class LogRequestMiddleware:
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip   
+
+
+
+        
+try:
+    from django.utils.translation import LANGUAGE_SESSION_KEY  # Django 4+
+except Exception:
+    LANGUAGE_SESSION_KEY = 'django_language'
+
+class LocaleMiddlewareDefaultEnglish(LocaleMiddleware):
+    """
+    1) If a language cookie or session exists => Respect the user's selected language
+    2) If neither exists => Ignore the browser's Accept-Language setting and force settings.LANGUAGE_CODE (English)
+    """
+    def process_request(self, request):
+        # check cookie/session
+        cookie_name = getattr(settings, "LANGUAGE_COOKIE_NAME", "django_language")
+        lang = request.COOKIES.get(cookie_name)
+
+        if not lang and hasattr(request, "session"):
+            lang = request.session.get(LANGUAGE_SESSION_KEY)
+
+        if not lang:
+            # No user selection => Force default to English, ignore Accept-Language
+            lang = settings.LANGUAGE_CODE
+
+        translation.activate(lang)
+        request.LANGUAGE_CODE = translation.get_language()
