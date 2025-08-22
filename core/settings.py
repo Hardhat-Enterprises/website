@@ -111,8 +111,7 @@ INSTALLED_APPS = [
     'theme_pixel',
 
     'corsheaders',
-
-
+   "appointments.apps.AppointmentsConfig", 
 ]
 
 MIDDLEWARE = [
