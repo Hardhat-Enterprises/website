@@ -7,58 +7,29 @@
 <div class="container my-4">
 
 <style>
-  /* === Hardhat-aligned dark card & readable text (page-local only) === */
-  .hh-card-dark{
-    background-color:#212529;      /* dark surface */
-    color:#f1f3f5;                  /* default light text */
-  }
-
-  /* Ensure ALL key text inside the dark card stays readable regardless of global theme */
+  .hh-card-dark{ background-color:#212529; color:#f1f3f5; }
   .hh-card-dark .hh-headline,
   .hh-card-dark #primaryRec,
   .hh-card-dark h1,
   .hh-card-dark h2,
-  .hh-card-dark h3{
-    color:#ffffff !important;       /* bright headings */
-  }
-
+  .hh-card-dark h3{ color:#ffffff !important; }
   .hh-card-dark p,
   .hh-card-dark li,
   .hh-card-dark label,
-  .hh-card-dark .form-check-label{
-    color:#e9ecef !important;       /* body text */
-  }
-
-  /* Muted text inside the dark card should still be legible */
+  .hh-card-dark .form-check-label{ color:#e9ecef !important; }
   .hh-card-dark .text-muted{ color:#cfd6de !important; }
-
-  /* Links keep Hardhat yellow for consistency */
-  .hh-card-dark a{ color:#ffcd11; }
-  .hh-card-dark a:hover{ color:#e6b800; }
-
-  /* “Our Recommendation” badge + headline sizing/weight (already in your page, repeated here for clarity) */
+  .hh-card-dark a{ color:#ffcd11; } .hh-card-dark a:hover{ color:#e6b800; }
   .hh-badge-lg{ font-weight:800; font-size:0.95rem; border-radius:16px; }
   .hh-headline{ font-size:1.35rem; font-weight:800; margin:0; }
-
-  /* Unify radios & checkboxes look and feel (you already had this, keeping it here) */
-  .hh-card-dark .form-check-input{
-    width:1.1rem; height:1.1rem;
-    border-color:#ffcd11; background-color:transparent; cursor:pointer;
-  }
-  .hh-card-dark .form-check-input:checked{
-    background-color:#ffcd11; border-color:#ffcd11;
-  }
-
-  /* Chart height */
-  #interestChart{ max-height:260px; }
+  .hh-card-dark .form-check-input{ width:1.1rem; height:1.1rem; border-color:#ffcd11; background-color:transparent; cursor:pointer; }
+  .hh-card-dark .form-check-input:checked{ background-color:#ffcd11; border-color:#ffcd11; }
 </style>
-
 
   <!-- Banner -->
   <div class="bg-warning bg-opacity-25 border-0 rounded-3 p-4 mb-4">
     <h1 class="h3 mb-1">Cybersecurity Career Path Finder</h1>
     <p class="mb-0 text-muted hh-hero-blurb">
-      Answer a few questions to get a personalised path: roles, skills, tools, starter projects, certs, companies, and a PDF plan.
+      Answer a few questions to get a personalised path: roles, skills, tools, starter projects, certs, companies — then download a tidy <strong>PDF report</strong>.
     </p>
   </div>
 
@@ -67,7 +38,6 @@
     <div class="card-body">
       <h2 class="h5 mb-3">Tell us what excites you</h2>
 
-      <!-- Progress -->
       <div class="progress mb-3" style="height:8px;">
         <div id="progressBar" class="progress-bar bg-warning" style="width:0%"></div>
       </div>
@@ -137,7 +107,6 @@
           <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="cloud" id="t4"><label class="form-check-label" for="t4">IAM, CloudTrail/Defender, SCC</label></div>
         </div>
 
-        <!-- Actions -->
         <div class="pt-3 mt-2 border-top d-flex flex-wrap gap-2">
           <button type="submit" id="seeResults" class="btn btn-warning text-dark fw-semibold">See my path</button>
           <button type="button" id="loadPrev" class="btn btn-outline-warning d-none">Load my last result</button>
@@ -148,7 +117,24 @@
     </div>
   </div>
 
-  <!-- RESULTS -->
+  <!-- DOWNLOAD CARD -->
+  <div id="dlCard" class="card border-0 shadow-sm hh-card-dark d-none">
+    <div class="card-body">
+      <div class="d-flex align-items-center gap-3 mb-2">
+        <span class="badge bg-warning text-dark hh-badge-lg px-3 py-2">Plan Ready</span>
+        <h2 class="hh-headline">Download your personalised report</h2>
+      </div>
+      <p class="text-muted mb-3">
+        We’ll generate a clean <strong>PDF report</strong> with your primary track, close matches, roles, tools, skills, certs (linked), starter projects, salary guidance, and a score table.
+      </p>
+      <div class="d-flex flex-wrap gap-2">
+        <button id="downloadReport" class="btn btn-warning text-dark fw-semibold">Download Report (.pdf)</button>
+        <button id="retake2" class="btn btn-outline-warning">Retake quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden results container kept for compatibility -->
   <div id="results" class="d-none">
     <div class="card border-0 shadow-sm hh-card-dark">
       <div class="card-body">
@@ -156,47 +142,14 @@
           <span class="badge bg-warning text-dark hh-badge-lg px-3 py-2">Our Recommendation</span>
           <h2 id="primaryRec" class="hh-headline"></h2>
         </div>
-
         <div class="row g-4">
-          <div class="col-md-6">
-            <h3 class="h6 text-warning hh-section-title mb-2">Suggested Roles</h3>
-            <ul id="roleList"></ul>
-          </div>
-          <div class="col-md-6">
-            <h3 class="h6 text-warning hh-section-title mb-2">Tools &amp; Platforms</h3>
-            <ul id="toolList"></ul>
-          </div>
-          <div class="col-md-6">
-            <h3 class="h6 text-warning hh-section-title mb-2">Skills to Focus On</h3>
-            <ul id="skillList"></ul>
-          </div>
-          <div class="col-md-6">
-            <h3 class="h6 text-warning hh-section-title mb-2">Certs to Start With</h3>
-            <ul id="certList"></ul>
-          </div>
-          <div class="col-12">
-            <h3 class="h6 text-warning hh-section-title mb-2">Top Companies Hiring in This Area</h3>
-            <ul id="companyList"></ul>
-          </div>
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Suggested Roles</h3><ul id="roleList"></ul></div>
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Tools &amp; Platforms</h3><ul id="toolList"></ul></div>
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Skills to Focus On</h3><ul id="skillList"></ul></div>
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Certs to Start With</h3><ul id="certList"></ul></div>
+          <div class="col-12"><h3 class="h6 text-warning hh-section-title mb-2">Top Companies Hiring in This Area</h3><ul id="companyList"></ul></div>
         </div>
-
-        <div class="mt-3">
-          <h3 class="h6 text-warning hh-section-title mb-2">Starter Projects</h3>
-          <ul id="projectList"></ul>
-        </div>
-
-        <div class="mt-3">
-          <h3 class="h6 text-warning hh-section-title mb-1">Approx. Salary (Australia)</h3>
-          <p id="salaryText" class="text-muted mb-2"></p>
-        </div>
-
-        <canvas id="interestChart" class="w-100"></canvas>
-
-        <!-- All three strong and identical for visibility -->
-        <div class="d-flex flex-wrap gap-2 mt-3">
-          
-          <button id="retake" class="btn btn-warning text-dark fw-semibold">Retake</button>
-        </div>
+        <div class="mt-3"><h3 class="h6 text-warning hh-section-title mb-1">Approx. Salary (Australia)</h3><p id="salaryText" class="text-muted mb-2"></p></div>
       </div>
     </div>
   </div>
@@ -205,9 +158,12 @@
 {% endblock content %}
 
 {% block javascripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- PDF libs -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+
 <script>
-  /* ===== Catalog data ===== */
+  /* ===== Data ===== */
   const CATS = ["offensive","defensive","forensics","architecture","cloud","governance"];
   const CATALOG = {
     offensive:{label:"Offensive Security",roles:["Penetration Tester","Red Team Operator","AppSec Engineer (Offensive)"],tools:["Kali Linux","Burp Suite","Metasploit","Nmap","OWASP ZAP","Python"],skills:["OWASP Top 10","Recon & exploitation","Scripting/automation","Reporting"],certs:[{name:"eJPT (INE/ElearnSecurity)",url:"https://elearnsecurity.com/product/ejpt-certification/"},{name:"PNPT (TCM)",url:"https://certifications.tcm-sec.com/pnpt/"},{name:"OSCP (OffSec)",url:"https://www.offsec.com/courses/pen-200/"}],companies:["NCC Group","Trustwave","Rapid7","HackerOne","Bugcrowd","Cobalt"],projects:["Exploit DVWA/Juice Shop in a lab and write a report","Bug bounty–style recon on a safe scope (your own lab)","Build a Python script to automate recon or wordlists"],salaryAU:"Junior 75–110k, Mid 110–150k, Senior 150k+ (AUD, indicative)"},
@@ -218,21 +174,8 @@
     governance:{label:"Governance, Risk & Compliance (GRC)",roles:["GRC Analyst","Risk Analyst","Compliance Specialist"],tools:["Risk registers","GRC platforms","Policy frameworks (NIST/ISO)"],skills:["Risk assessment","Control mapping","Audit readiness","Stakeholder communication"],certs:[{name:"ISO 27001 Foundation/Implementer",url:"https://www.iso.org/standard/27001"},{name:"CRISC (ISACA)",url:"https://www.isaca.org/credentialing/crisc"},{name:"CISM (ISACA)",url:"https://www.isaca.org/credentialing/cism"}],companies:["Deloitte","PwC","KPMG","EY","Protiviti","Consultancies/GRC vendors"],projects:["Create a risk register for a small SaaS (likelihood/impact/controls)","Map controls to ISO 27001/NIST CSF","Vendor risk assessment template & walkthrough"],salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"}
   };
 
-  /* ===== Normalization settings (reduce bias to common categories) =====
-     Each category appears in a different number of single-choice questions.
-     We normalize by 'opportunity count' so rarer categories aren’t drowned out.
-     Counts below are how many questions include that category + tools checkbox presence.
-  */
-  const OPPORTUNITIES = {
-    offensive: 5,   // Q1,Q2,Q3,Q5,Q6 (+tools)
-    defensive: 6,   // Q1,Q2,Q3,Q4,Q5,Q6 (+tools)
-    forensics: 6,   // Q1,Q2,Q3,Q4,Q5,Q6 (+tools)
-    architecture: 3,// Q1,Q2,Q4
-    cloud: 2,       // Q4 (+tools)
-    governance: 3   // Q3,Q5,Q6
-  };
+  const OPPORTUNITIES = { offensive:5, defensive:6, forensics:6, architecture:3, cloud:2, governance:3 };
 
-  /* ===== Quiz scoring & rendering ===== */
   function scoreQuiz(form){
     const scores = {offensive:0, defensive:0, forensics:0, architecture:0, cloud:0, governance:0};
     for(let i=1;i<=6;i++){
@@ -245,89 +188,138 @@
     return scores;
   }
 
-  /* NEW: normalize scores by opportunity counts and return top categories (with ties) */
   function normalizeScores(raw){
-    const norm = {};
-    const SCALE = 6; // bring normalized numbers back into a familiar range
+    const norm = {}; const SCALE = 6;
     for(const k of CATS){
       const opp = OPPORTUNITIES[k] || 1;
-      norm[k] = (raw[k] || 0) / opp * SCALE;
+      norm[k] = ((raw[k] || 0) / opp) * SCALE;
     }
     return norm;
   }
 
-  /* UPDATED: returns an array of best categories, not just one.
-     - If all zero, return [] (handled upstream).
-     - Include categories within a small epsilon of max to reflect near-ties. */
   function topCategories(scores){
     const norm = normalizeScores(scores);
     const values = Object.values(norm);
     const max = Math.max(...values);
     if (max === 0) return [];
-    const EPS = 0.6; // tolerance for "close match"
-    const tops = Object.entries(norm)
+    const EPS = 0.6;
+    return Object.entries(norm)
       .filter(([k,v]) => (max - v) <= EPS)
       .sort((a,b)=> b[1]-a[1])
       .map(([k])=>k);
-    return tops;
   }
 
-  function fillList(id, items){
-    const ul = document.getElementById(id);
-    ul.innerHTML = "";
-    items.forEach(t=>{
-      const li = document.createElement("li");
-      if (typeof t === "string"){ li.textContent = t; }
-      else { const a=document.createElement("a"); a.href=t.url; a.target="_blank"; a.rel="noopener"; a.textContent=t.name; li.appendChild(a); }
-      ul.appendChild(li);
-    });
+  const FIT_REASONS = {
+    offensive: "You enjoy creative problem-solving and hands-on exploitation. Offensive tracks reward curiosity, tooling, and methodical recon → exploit → report cycles.",
+    defensive: "You like fast feedback loops and protecting systems in real time. Defensive tracks emphasise detection engineering, log analysis, and incident response playbooks.",
+    forensics: "You prefer structured investigations and evidence-driven analysis. DFIR focuses on timelines, artefacts, memory/disk analysis, and reporting for stakeholders.",
+    architecture: "You value big-picture design, secure patterns, and stakeholder alignment. Architecture blends controls, standards, and practical guidance for teams.",
+    cloud: "You’re drawn to modern platforms and identity-centric security. Cloud tracks emphasise IAM, monitoring, segmentation, and IaC security at scale.",
+    governance: "You like structure, frameworks, and risk-based thinking. GRC translates business goals into controls, audits, and continuous improvement."
+  };
+
+  function buildReportMarkdown(primary, alternates, scores){
+    const data = CATALOG[primary];
+    let md = `# Cybersecurity Career Plan\n\n`;
+    md += `**Primary Track:** ${data.label}\n\n`;
+    if (alternates.length){ md += `**Close Matches:** ${alternates.map(k=>CATALOG[k].label).join(", ")}\n\n`; }
+    md += `**Why this fits:** ${FIT_REASONS[primary] || ""}\n\n`;
+    const section = (title, arr) => !arr?.length ? "" : `## ${title}\n\n${arr.map(item => (item?.name&&item?.url)?`- [${item.name}](${item.url})`:`- ${item}`).join("\n")}\n\n`;
+    md += section("Suggested Roles", data.roles);
+    md += section("Tools & Platforms", data.tools);
+    md += section("Skills to Focus On", data.skills);
+    md += section("Certifications to Start With", data.certs);
+    md += section("Top Companies Hiring", data.companies);
+    md += section("Starter Projects", data.projects);
+    md += `## Salary (Australia)\n\n${data.salaryAU}\n\n`;
+    md += `## Your Interest Profile (Normalised)\n\n| Track | Score |\n|---|---:|\n`;
+    CATS.forEach(k=>{ md += `| ${CATALOG[k]?.label || k} | ${(normalizeScores(scores)[k] || 0).toFixed(1)} |\n`; });
+    md += `\n## Suggested Next 30 Days\n\n- Week 1: Pick one starter project and set up your lab.\n- Week 2: Complete project MVP; document findings as if for stakeholders.\n- Week 3: Attempt a second project or deepen detections; draft a 1–2 page report.\n- Week 4: Sit one entry-level cert practice exam; refine CV with project evidence.\n\n`;
+    md += `---\nGenerated by **Hardhat Enterprises – Career Path Finder** on ${new Date().toLocaleString('en-AU',{hour12:false})}.\n`;
+    return md;
+  }
+  function downloadMarkdown(filename, content){
+    const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
   }
 
-  function renderResults(cat, scores){
-    const data = CATALOG[cat];
-    // Headline text with bold track name
-    document.getElementById("primaryRec").innerHTML =
-      `<span class="fw-bold">${data.label}</span> looks like the best match for you based on your answers.`;
+  /* ===== PDF with aligned table ===== */
+  function saveReportPDF(filename, primary, alternates, scores){
+    if (!window.jspdf || !window.jspdf.jsPDF) return false;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:'mm', format:'a4' });
+    const margin = 14, pageW = doc.internal.pageSize.getWidth(), pageH = doc.internal.pageSize.getHeight();
+    const contentW = pageW - margin*2, lineH = 6; let y = margin;
+    const data = CATALOG[primary]; const norm = normalizeScores(scores);
 
-    fillList("roleList", data.roles);
-    fillList("toolList", data.tools);
-    fillList("skillList", data.skills);
-    fillList("certList", data.certs);
-    fillList("companyList", data.companies);
-    fillList("projectList", data.projects);
-    document.getElementById("salaryText").textContent = data.salaryAU;
+    function ensureSpace(extra=0){ if (y + extra > pageH - margin){ doc.addPage(); y = margin; } }
+    function heading(text, size=18, bold=true, spacing=4){ ensureSpace(lineH+spacing); doc.setFont('helvetica', bold?'bold':'normal'); doc.setFontSize(size); doc.text(text, margin, y); y += lineH + spacing; }
+    function paragraph(text, size=11, spacing=3){
+      doc.setFont('helvetica','normal'); doc.setFontSize(size);
+      doc.splitTextToSize(text, contentW).forEach(line=>{ ensureSpace(lineH); doc.text(line, margin, y); y += lineH; });
+      y += spacing;
+    }
+    function bullets(items, size=11, spacing=2){
+      doc.setFont('helvetica','normal'); doc.setFontSize(size);
+      items.forEach(item=>{
+        const s = (typeof item==='string') ? item : (item?.name&&item?.url) ? `${item.name} — ${item.url}` : String(item);
+        doc.splitTextToSize('• ' + s, contentW).forEach(line=>{ ensureSpace(lineH); doc.text(line, margin, y); y += lineH; });
+      }); y += spacing;
+    }
 
-    // Theme-aligned chart
-    const ctx = document.getElementById("interestChart").getContext("2d");
-    const themeYellow = '#ffcd11';
-    const barFill = 'rgba(255, 205, 17, 0.7)';
-    const barBorder = themeYellow;
+    function scoreTable(){
+      doc.setFont('helvetica','bold'); doc.setFontSize(12);
+      doc.text('Your Interest Profile (Normalised)', margin, y); y += 4;
 
-    if (window._hhChart) window._hhChart.destroy();
-    window._hhChart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: CATS.map(k=>CATALOG[k]?.label || k),
-        datasets: [{
-          label: "Your interest profile",
-          data: CATS.map(k=>scores[k]||0),
-          backgroundColor: barFill,
-          borderColor: barBorder,
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive:true,
-        plugins:{ legend:{ display:false }},
-        scales:{
-          x: { ticks: { color: "#eaeaea", font: { size: 11 } }, grid: { color: "rgba(255,255,255,.08)" } },
-          y: { beginAtZero:true, ticks: { color: "#eaeaea", font: { size: 11 } }, grid: { color: "rgba(255,255,255,.08)" } }
+      const rows = CATS.map(k => [ CATALOG[k]?.label || k, (norm[k] || 0).toFixed(1) ]);
+      doc.autoTable({
+        startY: y,
+        margin: { left: margin, right: margin },
+        styles: { font: 'helvetica', fontSize: 11, cellPadding: 2, overflow: 'linebreak' },
+        head: [['Track', 'Score']],
+        body: rows,
+        theme: 'grid',
+        headStyles: { fillColor: [255,205,17], textColor: 0, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [245,245,245] },
+        columnStyles: {
+          0: { cellWidth: 'auto' },   // wrap long names
+          1: { cellWidth: 22, halign: 'right' } // aligned numeric column
         }
-      }
-    });
+      });
+      y = doc.lastAutoTable.finalY + 6;
+    }
 
-    localStorage.setItem("hh_career_path_scores", JSON.stringify(scores));
-    localStorage.setItem("hh_career_path_choice", cat);
+    // Compose PDF
+    heading('Cybersecurity Career Plan');
+    paragraph(`Primary Track: ${data.label}`);
+    if (alternates.length){ paragraph(`Close Matches: ${alternates.map(k=>CATALOG[k].label).join(', ')}`); }
+    paragraph(`Why this fits: ${FIT_REASONS[primary] || ''}`);
+
+    heading('Suggested Roles', 13, true, 2); bullets(data.roles);
+    heading('Tools & Platforms', 13, true, 2); bullets(data.tools);
+    heading('Skills to Focus On', 13, true, 2); bullets(data.skills);
+    heading('Certifications to Start With', 13, true, 2); bullets(data.certs);
+    heading('Top Companies Hiring', 13, true, 2); bullets(data.companies);
+    heading('Starter Projects', 13, true, 2); bullets(data.projects);
+    heading('Salary (Australia)', 13, true, 2); paragraph(data.salaryAU);
+
+    scoreTable();
+
+    heading('Suggested Next 30 Days', 13, true, 2);
+    bullets([
+      'Week 1: Pick one starter project and set up your lab.',
+      'Week 2: Complete project MVP; document findings as if for stakeholders.',
+      'Week 3: Attempt a second project or deepen detections; draft a 1–2 page report.',
+      'Week 4: Sit one entry-level cert practice exam; refine CV with project evidence.'
+    ]);
+
+    const now = new Date().toLocaleString('en-AU',{hour12:false});
+    paragraph(`Generated by Hardhat Enterprises – Career Path Finder on ${now}.`, 10, 0);
+    doc.save(filename);
+    return true;
   }
 
   /* ===== UI wiring ===== */
@@ -336,83 +328,71 @@
   const results = document.getElementById("results");
   const progress = document.getElementById("progressBar");
   const loadPrevBtn = document.getElementById("loadPrev");
+  const dlCard = document.getElementById("dlCard");
+  const downloadBtn = document.getElementById("downloadReport");
+  const retakeBtn2 = document.getElementById("retake2");
+  const retakeBtn = document.getElementById("retake");
 
   function updateProgress(){
     let answered = 0;
-    for(let i=1;i<=6;i++){
-      if(form.querySelector(`input[name="q${i}"]:checked`)) answered++;
-    }
+    for(let i=1;i<=6;i++){ if(form.querySelector(`input[name="q${i}"]:checked`)) answered++; }
     const pct = Math.round((answered/6)*100);
-    progress.style.width = pct + "%";
-    progress.setAttribute("aria-valuenow", pct);
+    progress.style.width = pct + "%"; progress.setAttribute("aria-valuenow", pct);
   }
   form.addEventListener("change", updateProgress);
+
+  window._hhLastScores = null; window._hhLastChoice = null; window._hhLastAlternates = [];
 
   form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const scores = scoreQuiz(form);
     const tops = topCategories(scores);
 
-    quizCard.classList.add("d-none");
-    results.classList.remove("d-none");
+    if (tops.length === 0) { alert("Please solve the quiz to get the accurate answer."); return; }
 
-    if (tops.length === 0) {
-      // No answers chosen
-      document.getElementById("primaryRec").innerHTML =
-        `<span class="fw-bold">Please solve the quiz</span> to get the accurate answer.`;
+    const primary = tops[0], alternates = tops.slice(1);
+    window._hhLastScores = scores; window._hhLastChoice = primary; window._hhLastAlternates = alternates;
+    localStorage.setItem("hh_career_path_scores", JSON.stringify(scores));
+    localStorage.setItem("hh_career_path_choice", primary);
+    localStorage.setItem("hh_career_path_alternates", JSON.stringify(alternates));
 
-      ["roleList","toolList","skillList","certList","companyList","projectList"].forEach(id=>{
-        document.getElementById(id).innerHTML = "";
-      });
-      document.getElementById("salaryText").textContent = "";
-      if (window._hhChart) { window._hhChart.destroy(); }
-    } else {
-      // Primary is first; render it
-      const primary = tops[0];
-      renderResults(primary, scores);
+    quizCard.classList.add("d-none"); results.classList.add("d-none"); dlCard.classList.remove("d-none");
+    window.scrollTo({ top:0, behavior:"smooth" });
+  });
 
-      // If there are close matches, show them inline (keeps UI unchanged)
-      const alts = tops.slice(1).map(k => CATALOG[k].label);
-      if (alts.length){
-        const pr = document.getElementById("primaryRec");
-        pr.innerHTML += ` <span class="text-muted">(Close matches: ${alts.join(", ")})</span>`;
-      }
+  document.getElementById("clearQuiz").addEventListener("click", ()=>{ form.reset(); updateProgress(); });
+
+  function retakeAll(){
+    results.classList.add("d-none"); dlCard.classList.add("d-none"); quizCard.classList.remove("d-none");
+    form.reset(); updateProgress(); window.scrollTo({ top:0, behavior:"smooth" });
+  }
+  if (retakeBtn) retakeBtn.addEventListener("click", retakeAll);
+  retakeBtn2.addEventListener("click", retakeAll);
+
+  downloadBtn.addEventListener("click", ()=>{
+    if(!window._hhLastScores || !window._hhLastChoice){ alert("Please complete the quiz first."); return; }
+    const datePart = new Date().toISOString().slice(0,10);
+    const filename = `Cybersecurity-Career-Plan-${datePart}.pdf`;
+    const ok = saveReportPDF(filename, window._hhLastChoice, window._hhLastAlternates, window._hhLastScores);
+    if (!ok){
+      const md = buildReportMarkdown(window._hhLastChoice, window._hhLastAlternates, window._hhLastScores);
+      alert("PDF library couldn’t load in this environment. Downloading Markdown instead.");
+      downloadMarkdown(`Cybersecurity-Career-Plan-${datePart}.md`, md);
     }
-
-    window.scrollTo({ top:0, behavior:"smooth" });
   });
 
-  document.getElementById("clearQuiz").addEventListener("click", ()=>{
-    form.reset(); updateProgress();
-  });
-
-  document.getElementById("retake").addEventListener("click", ()=>{
-    results.classList.add("d-none");
-    quizCard.classList.remove("d-none");
-    form.reset(); updateProgress();
-    localStorage.removeItem("hh_career_path_scores");
-    localStorage.removeItem("hh_career_path_choice");
-    if (window._hhChart) window._hhChart.destroy();
-    window.scrollTo({ top:0, behavior:"smooth" });
-  });
-
-  document.getElementById("downloadPlan").addEventListener("click", ()=> window.print());
-  document.getElementById("savePlan").addEventListener("click", ()=> alert("Saved! We’ll remember your latest result on this device."));
-
-  // Start on quiz; show “Load my last result” if saved
   window.addEventListener("DOMContentLoaded", ()=>{
-    quizCard.classList.remove("d-none");
-    results.classList.add("d-none");
-    updateProgress();
-
+    quizCard.classList.remove("d-none"); results.classList.add("d-none"); dlCard.classList.add("d-none"); updateProgress();
     const saved = localStorage.getItem("hh_career_path_scores");
     const choice = localStorage.getItem("hh_career_path_choice");
+    const alts = localStorage.getItem("hh_career_path_alternates");
     if(saved && choice){
       loadPrevBtn.classList.remove("d-none");
       loadPrevBtn.addEventListener("click", ()=>{
-        quizCard.classList.add("d-none");
-        results.classList.remove("d-none");
-        renderResults(choice, JSON.parse(saved));
+        window._hhLastScores = JSON.parse(saved);
+        window._hhLastChoice = choice;
+        window._hhLastAlternates = alts ? JSON.parse(alts) : [];
+        quizCard.classList.add("d-none"); results.classList.add("d-none"); dlCard.classList.remove("d-none");
         window.scrollTo({ top:0, behavior:"smooth" });
       });
     }
