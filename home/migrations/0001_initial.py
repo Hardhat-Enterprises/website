@@ -137,6 +137,9 @@ class Migration(migrations.Migration):
                 ('points', models.IntegerField(default=10)),
                 ('challenge_type', models.CharField(choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')], max_length=20)),
                 ('time_limit', models.IntegerField(default=60)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('is_active', models.BooleanField(default=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
@@ -210,7 +213,9 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated_at')),
                 ('is_active', models.BooleanField(default=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False, unique=True)),
-                ('title', models.CharField(choices=[('AppAttack', 'AppAttack'), ('Malware', 'Malware'), ('PT-GUI', 'PT-GUI'), ('Smishing_Detection', 'Smishing Detection'), ('Deakin_CyberSafe_VR', 'Deakin CyberSafe VR'), ('Deakin_Threat_Mirror', 'Deakin Threat Mirror'), ('Company_Website_Development', 'Company Website Development')], max_length=150, verbose_name='project title')),
+                ('title', models.CharField(max_length=150, verbose_name='project title')),
+                ('archived', models.BooleanField(default=False, verbose_name='archived')),
+                ('description', models.TextField(blank=True, null=True, verbose_name='project description')),
             ],
             options={
                 'abstract': False,
@@ -348,6 +353,8 @@ class Migration(migrations.Migration):
                 ('linkedin', models.URLField(blank=True, null=True)),
                 ('github', models.URLField(blank=True, null=True)),
                 ('location', models.CharField(blank=True, max_length=100, null=True)),
+                ('assigned_project', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.project')),
+                ('date_assigned', models.DateTimeField(blank=True, null=True)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -409,6 +416,24 @@ class Migration(migrations.Migration):
             ],
             options={
                 'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='AdminSession',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('session_key', models.CharField(max_length=40, unique=True)),
+                ('ip_address', models.GenericIPAddressField()),
+                ('user_agent', models.TextField()),
+                ('login_time', models.DateTimeField(auto_now_add=True)),
+                ('last_activity', models.DateTimeField(auto_now=True)),
+                ('is_active', models.BooleanField(default=True)),
+                ('logout_time', models.DateTimeField(blank=True, null=True)),
+                ('logout_reason', models.CharField(blank=True, max_length=50, null=True)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='admin_sessions', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-login_time'],
             },
         ),
         migrations.AlterUniqueTogether(

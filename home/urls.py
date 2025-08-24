@@ -2,14 +2,12 @@ from django.urls import include, path
 
 from django.contrib import admin
 
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback, policy_deployment
-
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts,career_detail,career_application, feedback_view, delete_feedback, career_discover
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts, career_detail, career_application, feedback_view, delete_feedback, career_discover, policy_deployment
 
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
-from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard
+from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
 from .views import delete_account
 # Health Endpoint Work
 from .views import health_check
@@ -144,10 +142,18 @@ urlpatterns = [
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
+    # Admin challenge management
+    path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
+    path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
-    
+    path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
+    path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
+    path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
+    path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
+    path('challenges/<int:pk>/archive/', views.ChallengeArchiveView.as_view(), name='challenge_archive'),
+    path('challenges/<int:pk>/preview/', views.ChallengePreviewView.as_view(), name='challenge_preview'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)
@@ -178,7 +184,6 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
 
-    path("health", health_check, name="health-check")
-
+    path("health", health_check, name="health-check"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

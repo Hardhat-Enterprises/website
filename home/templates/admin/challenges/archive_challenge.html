@@ -1,0 +1,115 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card border-warning">
+        <div class="card-header bg-warning text-white">
+          <h5 class="mb-0">
+            <i class="fas fa-archive"></i>
+            Confirm Archive
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <i class="fas fa-archive text-warning" style="font-size: 3rem"></i>
+          </div>
+
+          <h4 class="text-center mb-4">
+            Are you sure you want to archive this challenge?
+          </h4>
+
+          <div class="alert alert-warning" role="alert">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-info-circle"></i>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="alert-heading">Safe Archive Action</h6>
+                <p class="mb-2">
+                  Archiving this challenge is the recommended approach!
+                </p>
+                <p class="mb-2">Archiving this challenge will:</p>
+                <ul class="mb-0">
+                  <li>Hide the challenge from active challenge lists</li>
+                  <li>Preserve all user progress and submissions</li>
+                  <li>Keep challenge data intact for future reference</li>
+                  <li>Maintain user points and leaderboard history</li>
+                  <li>Allow you to reactivate the challenge later if needed</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="challenge-info p-3 bg-light rounded mb-4">
+            <h6 class="fw-bold">Challenge Details:</h6>
+            <p class="mb-1"><strong>Title:</strong> {{ object.title }}</p>
+            <p class="mb-1"><strong>Category:</strong> {{ object.category }}</p>
+            <p class="mb-1">
+              <strong>Difficulty:</strong> {{ object.get_difficulty_display }}
+            </p>
+            <p class="mb-0"><strong>Points:</strong> {{ object.points }}</p>
+          </div>
+        </div>
+
+        <div class="card-footer bg-light">
+          <form method="post" class="d-inline">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between">
+              <a
+                href="{% url 'challenge_management' %}"
+                class="btn btn-secondary"
+              >
+                <i class="fas fa-arrow-left"></i> Cancel
+              </a>
+              <div>
+                <a
+                  href="{% url 'challenge_delete' object.pk %}"
+                  class="btn btn-danger me-2"
+                >
+                  <i class="fas fa-trash"></i> Delete Instead
+                </a>
+                <button
+                  type="submit"
+                  id="confirmArchiveBtn"
+                  class="btn btn-warning"
+                >
+                  <i class="fas fa-archive"></i> Yes, Archive Challenge
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const archiveBtn = document.getElementById("confirmArchiveBtn");
+    let confirmCount = 0;
+
+    archiveBtn.addEventListener("click", function (e) {
+      if (confirmCount === 0) {
+        e.preventDefault();
+        this.innerHTML =
+          '<i class="fas fa-check-circle"></i> Click Again to Confirm';
+        this.classList.remove("btn-warning");
+        this.classList.add("btn-success");
+        confirmCount++;
+
+        // Reset after 3 seconds
+        setTimeout(() => {
+          this.innerHTML =
+            '<i class="fas fa-archive"></i> Yes, Archive Challenge';
+          this.classList.remove("btn-success");
+          this.classList.add("btn-warning");
+          confirmCount = 0;
+        }, 3000);
+      }
+      // Second click will submit the form
+    });
+  });
+</script>
+
+{% endblock %}
