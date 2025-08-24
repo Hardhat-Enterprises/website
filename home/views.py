@@ -31,7 +31,7 @@ from .models import ContactSubmission
 from django.utils.html import strip_tags
 from .models import Report
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, UserBlogPage #Feedback 
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, JobAlert, UserBlogPage #Feedback 
 
 
 from django.contrib.auth import get_user_model
@@ -1975,6 +1975,26 @@ def internships(request):
 
 # View for Job Alerts Page
 def job_alerts(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+            # Check if email already exists
+            job_alert, created = JobAlert.objects.get_or_create(email=email)
+            if created:
+                # Send confirmation email
+                job_alert.send_confirmation_email()
+                messages.success(request, 'Successfully subscribed to job alerts! Check your email for confirmation.')
+            else:
+                if job_alert.is_active:
+                    messages.info(request, 'You are already subscribed to job alerts.')
+                else:
+                    job_alert.is_active = True
+                    job_alert.save()
+                    job_alert.send_confirmation_email()
+                    messages.success(request, 'Successfully re-subscribed to job alerts! Check your email for confirmation.')
+        else:
+            messages.error(request, 'Please provide a valid email address.')
+    
     return render(request, "careers/job-alerts.html")
 
 def career_application(request,id):
@@ -2000,6 +2020,18 @@ def career_application(request,id):
         "complete":complete
     }
     return render(request,"careers/application-form.html",context)
+
+def graduate_program(request):
+    """View for the Graduate Program roadmap page"""
+    return render(request, "careers/graduate-program.html")
+
+def graduate_program_detailed(request):
+    """View for the detailed Graduate Program page with benefits and application process"""
+    return render(request, "careers/graduate-program-detailed.html")
+
+def careers_faqs(request):
+    """View for the Careers FAQ page"""
+    return render(request, "careers/faqs.html")
 
   
 #swagger-implementation
