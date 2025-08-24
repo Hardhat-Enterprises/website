@@ -1,67 +1,56 @@
 # Core
-Django==4.2.14
-asgiref==3.8.1
+Django==4.2.14                 
+asgiref==3.9.1
 django-extensions==3.2.3
 django-light==0.1.0.post3
-factory_boy==3.3.1
-Faker==27.4.0
+factory_boy==3.3.3
+Faker==37.5.3
 python-dotenv==1.0.1
-filelock==3.13.4
-six==1.16.0
+filelock==3.19.1
+six==1.17.0
 django-ratelimit==4.1.0
-django-cors-headers==4.6.0
+django-cors-headers==4.7.0
 pymemcache==4.0.0
 django-cron==0.6.0
 
 # UI
 django-crispy-forms==2.3
-crispy-bootstrap5==2024.2
-django-theme-pixel==1.0.3
+crispy-bootstrap5==2025.6
+django-theme-pixel==1.0.7
 django-tinymce==4.1.0
 
 # Deployment
-whitenoise==6.7.0
+whitenoise==6.9.0
 gunicorn==23.0.0
 
 # Utilities
-distlib==0.3.8
+distlib==0.3.8                 
 packaging==24.1
-platformdirs==4.2.0
+platformdirs==4.3.8
 python-dateutil==2.9.0.post0
-setuptools==73.0.1
-sqlparse==0.5.1
-virtualenv==20.25.1
-wheel==0.44.0
-nh3==0.2.18
-bleach==6.1.0
-
+setuptools==80.9.0
+sqlparse==0.5.3
+virtualenv==20.34.0
+wheel==0.45.1
+nh3==0.2.18                    
+bleach==6.2.0
 
 # Image Processing
-Pillow==11.0.0
-
+Pillow==11.3.0
 
 # Password Hashing
-bcrypt==4.2.1
+bcrypt==4.3.0
 
 # CAPTCHA
-django-simple-captcha==0.6.0
+django-simple-captcha==0.6.2
 
-
-djangorestframework==3.15.2
-drf-yasg==1.21.8
-
-#Cron Jobs
-django-cron==0.6.0
-
-
+# REST / API
+djangorestframework==3.16.1
+drf-yasg==1.21.10
 
 # Sentiment Analysis
-textblob==0.18.0
-
-
-
-django-cron==0.6.0
+textblob==0.19.0
 
 # tests
 webdriver-manager==4.0.2
-selenium==4.31.0
+selenium==4.35.0
