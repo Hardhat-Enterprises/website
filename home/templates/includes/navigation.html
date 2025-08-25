@@ -2,108 +2,6 @@
 
 <header class="header-global">
 
-
-
-  {% comment %}
-  <nav id="navbar-main" aria-label="Primary navigation"
-    class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
-    <div class="container position-relative">
-      <a class="navbar-brand me-lg-5" href="/">
-        <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light">
-        <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark">
-      </a>
-      <div class="navbar-collapse collapse me-auto" id="navbar_global">
-        <div class="navbar-collapse-header">
-          <div class="row">
-            <div class="col-6 collapse-brand">
-              <a href="/">
-                <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo">
-              </a>
-            </div>
-            <div class="col-6 collapse-close">
-              <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-                aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
-            </div>
-          </div>
-        </div>
-        <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-          <li class="nav-item">
-            <a href="{% url 'index' %}" class="nav-link">
-              Home
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'about_us' %}" class="nav-link">
-              About
-            </a>
-          </li>
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
-              Projects
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-              <div class="row">
-                <div class="col">
-                  <ul class="list-style-none mb-4">
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'malware_viz_main' %}">Malware</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'smishing_detection_main' %}">Smishing Detection</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'Vr_main' %}">CyberSafe VR</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'policy_deployment' %}">The Policy Deployment Engine</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="nav-item nav-mobile-link">
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'profile' %}" class="btn btn-outline-gray-100 me-md-3">
-              Profile
-            </a>
-            <a href="{% url 'logout' %}" class="nav-link">Logout</a>
-            {% else %}
-            <a href="{% url 'login' %}" class="nav-link">Sign In</a>
-            {% endif %}
-          </li>
-          <a href="{% url 'profile' %}" class="nav-link d-flex align-items-center me-3">
-
-        </ul>
-      </div>
-      <div class="d-flex align-items-center">
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span
-            class="fas fa-sign-out-alt me-2"></span> Logout</a>
-        {% else %}
-        <a href="{% url 'login' %}" class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span
-            class="fas fa-sign-in-alt me-2"></span> Sign In</a>
-        {% endif %}
-        <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-          aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-  </nav>
-  {% endcomment %}
-
-
-
   <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
     <div class="navbar-container position-relative">
       <a class="navbar-brand me-lg-5" href="/">
@@ -125,28 +23,28 @@
             </div>
             <div class="col-2 collapse-close">
               <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-                aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
+                aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation">
+              </a>
             </div>
           </div>
         </div>
 
-          <form class="mobile-search-bar" 
-                method="POST" 
-                action="{% url 'pages/search-results' %}">
-            {% csrf_token %}
-            <input class="form-control search-box-mobile" 
-                   type="search" 
-                   id="mobileSearchInput" 
-                   name="q" 
-                   placeholder="Search..." 
-                   aria-label="Search" 
-                   autocomplete="off">
-            <button class="search-btn-mobile" type="submit">
-              <i class="fas fa-search search-icon"></i>
-            </button>
-          </form>
-          <div class="mobile-result-box d-none"></div>
- 
+        <form class="mobile-search-bar" 
+              method="POST" 
+              action="{% url 'pages/search-results' %}">
+          {% csrf_token %}
+          <input class="form-control search-box-mobile" 
+                 type="search" 
+                 id="mobileSearchInput" 
+                 name="q" 
+                 placeholder="Search..." 
+                 aria-label="Search" 
+                 autocomplete="off">
+          <button class="search-btn-mobile" type="submit">
+            <i class="fas fa-search search-icon"></i>
+          </button>
+        </form>
+        <div class="mobile-result-box d-none"></div>
 
         <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
           <li class="nav-item">
@@ -174,17 +72,26 @@
               </ul>
             </div>
           </li>
-          
           {% endif %}
 
           {% if user.is_authenticated %}
+          {% if user.is_staff or user.is_superuser %}
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-              Admin Settings
+              Admin Dashboard
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
             <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
               <ul class="list-style-none">
+                <a class="menu-link" href="#">
+                  <li class="mb-2 menu ps-3 py-1">User Management</li>
+                </a>
+                <a class="menu-link" href="#">
+                  <li class="mb-2 menu ps-3 py-1">Project Assignment</li>
+                </a>
+                <a class="menu-link" href="#">
+                  <li class="mb-2 menu ps-3 py-1">Project Teams</li>
+                </a>
                 <a class="menu-link" href="{% url 'adminblogpage' %}">
                   <li class="mb-2 menu ps-3 py-1">Review Blogs</li>
                 </a>
@@ -194,10 +101,8 @@
               </ul>
             </div>
           </li>
-          
-                 
           {% endif %}
-
+          {% endif %}
 
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
@@ -210,8 +115,6 @@
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
             <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
-
-
               <ul class="list-style-none">
                 <a class="menu-link" href="{% url 'appattack' %}">
                   <li class="mb-2 menu ps-3 py-1">
@@ -243,16 +146,11 @@
                     Deakin Threat mirror (Finished)
                   </li>
                 </a>
-
-                <a class="menu-link" href="{% url 'policy_deployment' %}">
-
                 <a class="menu-link" href="{% url 'malware_viz_main' %}">
-
                   <li class="mb-2 menu ps-3 py-1">
                     Malware (Finished)
                   </li>
                 </a>
-
               </ul>
             </div>
           </li>
@@ -265,12 +163,14 @@
             <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
               <div class="row">
                 <div class="col">
-            <ul class="list-style-none">
-              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">Create a Blog</a></li>
-              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">Published Blogs</a></li>
-            </ul>
-            </div>
-            </div>
+                  <ul class="list-style-none">
+                    {% if user.is_authenticated %}
+                    <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">Create a Blog</a></li>
+                    {% endif %}
+                    <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">Published Blogs</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </li>
 
@@ -302,7 +202,6 @@
               </ul>
             </div>
           </li>
-          
 
           <li class="nav-item dropdown">
             <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
@@ -326,7 +225,6 @@
             </div>
           </li>
 
-          
           <div class="search-container position-relative">
             <form class="desktop-search-bar" 
                   method="POST" 
@@ -350,7 +248,6 @@
 
       </div>
 
-
       <div class="d-flex align-items-center justify-content-center">
         {% if request.user.is_authenticated %}
 
@@ -365,7 +262,6 @@
           <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
       </a>
 
-
         {% else %}
         <div class="sign-up-button-container">
 
@@ -373,57 +269,25 @@
 
           <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
 
-          <!-- Sign In Dropdown for Team/Client when User is Not Logged In -->
+          <!-- Sign In Button for when User is Not Logged In -->
           {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
-            <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
-              class="sign-up-button">
-              <span href="#" class="fas fa-sign-in-alt me-2">
+            <a href="{% url 'login_with_otp' %}" class="sign-up-button" style="text-decoration: none; display: inline-block;">
+              <span class="fas fa-sign-in-alt me-2">
               Sign In
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </span>
-            </button>
-            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'login' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    Team Sign In
-                  </li>
-                </a>
-                <a class="menu-link" href="#">
-                  <li class="mb-2 menu ps-3 py-1">
-                    Client Sign In
-                  </li>
-                </a>
-              </ul>
-            </div>
+            </a>
           </div>
           {% endif %}
 
-
-          <!-- Sign Up Dropdown for Team/Client -->
+          <!-- Sign Up Button - Unified -->
           {% if not user.is_authenticated %}
           <div class="position-relative sign-up-button-inner-container">
-            <button id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" type="button"
-              class="sign-up-button"><span href="#" class="fas fa-sign-in-alt me-2">
+            <button id="signUpButton" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
+              <a href="{% url 'register' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
                 Sign Up
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </span></button>
-            <div class="dropdown-menu pt-2" style="border: 1px solid #ffcd11;" aria-labelledby="frontPagesDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'register' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    Team Sign Up
-                  </li>
-                </a>
-                <a class="menu-link" href="#">
-                  <li class="mb-2 menu ps-3 py-1">
-                    Client Sign Up
-                  </li>
-                </a>
-
-              </ul>
-            </div>
+              </a>
+            </button>
           </div>
           {% endif %}
 
@@ -432,7 +296,6 @@
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </span>
-
 
         </div>
         <div style="margin-left: 6px;">
