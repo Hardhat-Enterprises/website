@@ -9,9 +9,10 @@ from .views import Index, DetailArticleView, LikeArticle, UpskillingView, Upskil
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
-from .views import UserLoginView, rate_limit_exceeded
+from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard
 from .views import delete_account
-
+# Health Endpoint Work
+from .views import health_check
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
@@ -114,7 +115,7 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')), 
     path('post-otp-captcha/', views.post_otp_login_captcha, name='post_otp_login_captcha'),
     path('accounts/passkey-login/', views.login_with_passkey, name='passkey_login'),
-
+    path('admin-dashboard/', admin_dashboard, name='admin_dashboard'),
     path("passkeys/reset/", views.reset_passkeys_request, name="reset_passkeys_request"),
     path("passkeys/reset/verify/", views.reset_passkeys_verify, name="reset_passkeys_verify"),
 
@@ -144,6 +145,7 @@ urlpatterns = [
     path('reported/download/', views.download_reported_blogs, name='download_reported_blogs'),
 
     path('challenges/', views.challenge_list, name='challenge_list'),
+    path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
@@ -158,7 +160,8 @@ urlpatterns = [
 
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
- 
+  path('accounts/admin/', AdminLoginView.as_view(), name='admin_login'),
+    path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
     
 
     #swagger-new-implementation
@@ -176,7 +179,9 @@ urlpatterns = [
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
-    path('account/delete/', delete_account, name='delete-account')
+    path('account/delete/', delete_account, name='delete-account'),
+
+    path("health", health_check, name="health-check")
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
