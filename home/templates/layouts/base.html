@@ -16,6 +16,10 @@
 -->
 
 {% load static %}
+{% load breadcrumbs %}
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -85,7 +89,41 @@
           position: relative;
           flex: 1;
       }
-      
+
+      /* --- Breadcrumbs (scoped) --- */
+      .breadcrumb-container{
+        background: rgba(255,255,255,0.98);
+        border-bottom: 1px solid rgba(0,0,0,.08);
+        box-shadow: 0 1px 0 rgba(0,0,0,.03);
+        position: relative;
+        z-index: 1020; /* above content; under navbar if fixed */
+      }
+
+      .breadcrumb-container .breadcrumb {
+        --bs-breadcrumb-divider: "›";
+        margin-bottom: 0;
+      }
+
+      .breadcrumb-container .breadcrumb .breadcrumb-item a {
+       text-decoration: none;
+         color: #1c2540;
+       font-weight: 600;
+      }
+
+      .breadcrumb-container .breadcrumb .breadcrumb-item a:hover {
+        text-decoration: underline;
+      }
+
+      .breadcrumb-container .breadcrumb .breadcrumb-item.active {
+       color: #6c757d;
+      }
+
+          /* Dark mode */
+      .dark-mode .breadcrumb-container { background:#2b2b2b; border-color: rgba(255,255,255,.12); }
+      .dark-mode .breadcrumb-container .breadcrumb .breadcrumb-item a { color:#f8f9fa; }
+      .dark-mode .breadcrumb-container .breadcrumb .breadcrumb-item.active { color:#adb5bd; }
+
+
       .password-toggle-btn {
           position: absolute;
           right: 10px;
@@ -98,6 +136,7 @@
           padding: 0;
           z-index: 2;
       }
+      
       
       .password-toggle-btn:hover {
           color: #495057;
@@ -295,13 +334,102 @@
           z-index: 1000;
       }
 
+      /* --- Breadcrumbs reset & layout --- */
+      .breadcrumb {
+          --bs-breadcrumb-divider: "›";
+          margin-bottom: 0;
+          padding: 0 !important;           /* remove pill padding from theme */
+          background: transparent !important;
+          border-radius: 0 !important;
+      }
+      .breadcrumb .breadcrumb-item a { text-decoration: none; color: #1c2540 !important; font-weight: 600; }
+      .breadcrumb .breadcrumb-item a:hover { text-decoration: underline; }
+      .breadcrumb .breadcrumb-item.active { color: #6c757d; }
+
+      .breadcrumb-container{
+          background: rgba(255,255,255,0.98);
+          border-bottom: 1px solid rgba(0,0,0,.08);
+          box-shadow: 0 1px 0 rgba(0,0,0,.03);
+          position: relative;
+          z-index: 900; /* below navbar, above content */
+      }
+
+      /* Fallback spacing if navbar is fixed/sticky */
+      .navbar.fixed-top + #breadcrumbs-bar,
+      .navbar.sticky-top + #breadcrumbs-bar { margin-top: 64px; }
+
+      /* Dark mode (optional) */
+      .dark-mode .breadcrumb-container { background:#2b2b2b; border-color: rgba(255,255,255,.12); }
+      .dark-mode .breadcrumb .breadcrumb-item a { color:#f8f9fa !important; }
+      .dark-mode .breadcrumb .breadcrumb-item.active { color:#adb5bd; }
+
+
       /* Ensure the dropdown stays visible when hovering over the parent */
       .dropdown-submenu:hover .dropdown-menu {
           opacity: 1;
           visibility: visible;
           display: block;
       }
+
+      /* --- Breadcrumbs --- */
+      .breadcrumb { --bs-breadcrumb-divider: "›"; margin-bottom: 0; background: transparent; }
+      .breadcrumb .breadcrumb-item a { text-decoration: none; color: #1c2540 !important; font-weight: 600; }
+      .breadcrumb .breadcrumb-item a:hover { text-decoration: underline; }
+      .breadcrumb .breadcrumb-item.active { color: #6c757d; }
+
+      .breadcrumb-container{
+        background: rgba(255,255,255,0.98);
+        border-bottom: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 0 rgba(0,0,0,.03);
+          position: relative;
+         z-index: 900; /* keep this below sticky/fixed navbar */
+      }
+
+      /* Dark mode (optional) */
+      .dark-mode .breadcrumb-container { background:#2b2b2b; border-color: rgba(255,255,255,.12); }
+      .dark-mode .breadcrumb .breadcrumb-item a { color:#f8f9fa !important; }
+      .dark-mode .breadcrumb .breadcrumb-item.active { color:#adb5bd; }
+
+      /* Class-based version if you prefer not to use an ID */
+      .breadcrumbs-bar {
+         position: relative;
+         z-index: 1;
+      }
+
+      .breadcrumbs-bar .breadcrumb {
+          --bs-breadcrumb-divider: "›";
+          margin: 0;
+          padding: 0 !important;
+          background: transparent !important;
+          border-radius: 0 !important;
+      }
+      .breadcrumbs-bar .breadcrumb .breadcrumb-item a {
+          text-decoration: none;
+          color: #1c2540 !important;
+          font-weight: 600;
+      }
+      .breadcrumbs-bar .breadcrumb .breadcrumb-item a:hover { text-decoration: underline; }
+      .breadcrumbs-bar .breadcrumb .breadcrumb-item.active { color: #6c757d; }
+
+      .breadcrumb-container {
+          background: rgba(255,255,255,0.98);
+          border-bottom: 1px solid rgba(0,0,0,.08);
+          box-shadow: 0 1px 0 rgba(0,0,0,.03);
+      }
+
+      /* Dark mode */
+      .dark-mode .breadcrumbs-bar { background:#2b2b2b; }
+      .dark-mode .breadcrumbs-bar .breadcrumb .breadcrumb-item a { color:#f8f9fa !important; }
+      .dark-mode .breadcrumbs-bar .breadcrumb .breadcrumb-item.active { color:#adb5bd; }
+
+
+
+      
   </style>
+
+  
+
+
   
 </head>
 
@@ -325,6 +453,20 @@
     {% include 'includes/navigation.html' %}
   
   {% endblock header %}
+
+  <!-- Breadcrumbs -->
+  <div id="breadcrumbs-bar" class="breadcrumb-container">
+     <div class="container py-2">
+    {% breadcrumbs %}
+     </div>
+  </div>
+
+
+
+  
+
+
+ 
 
   <div id="chat-button">
     <button id="chatOpenButton">💬 Chat with us</button>
@@ -498,7 +640,37 @@ crossorigin="anonymous"></script>
     document.addEventListener('keypress', resetTimer);
     document.addEventListener('touchmove', resetTimer);
     document.addEventListener('scroll', resetTimer);
+
   </script>
+  <script>
+    (function () {
+      function alignBreadcrumbsUnderNav() {
+        const bar = document.getElementById('breadcrumbs-bar');
+        const nav = document.querySelector('.navbar'); // change if your nav uses a different selector
+        if (!bar || !nav) return;
+    
+        const cs = getComputedStyle(nav);
+        const pos = cs.position;
+        const z = parseInt(cs.zIndex || '1020', 10);
+    
+        // Keep breadcrumbs visually under the nav
+        bar.style.zIndex = Math.max(1, z - 1);
+    
+        const isFixed = pos === 'fixed';
+        const isSticky = pos === 'sticky' || nav.classList.contains('sticky-top');
+        const isPinned = isFixed || (isSticky && nav.getBoundingClientRect().top <= 0);
+    
+        // Add space only when the navbar is actually covering the top
+        bar.style.marginTop = isPinned ? nav.offsetHeight + 'px' : '0';
+      }
+    
+      window.addEventListener('load', alignBreadcrumbsUnderNav);
+      window.addEventListener('resize', alignBreadcrumbsUnderNav);
+      window.addEventListener('scroll', alignBreadcrumbsUnderNav);
+    })();
+
+  </script>
+    
 
 </body>
 

@@ -1,0 +1,22 @@
+{# includes/breadcrumbs.html #}
+{% if breadcrumbs %}
+<div class="breadcrumb-container">
+  <div class="container py-2">
+    <nav aria-label="breadcrumb" class="mb-0 small">
+      <ol class="breadcrumb mb-0">
+        {% for c in breadcrumbs %}
+          {% if c.url and not forloop.last %}
+            <li class="breadcrumb-item">
+              <a href="{{ c.url }}">{{ c.label }}</a>
+            </li>
+          {% else %}
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ c.label }}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ol>
+    </nav>
+  </div>
+</div>
+{% endif %}
