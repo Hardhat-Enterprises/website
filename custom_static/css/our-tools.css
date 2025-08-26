@@ -1,0 +1,197 @@
+/* --- Navbar offset --- */
+main.our-tools-page {
+    margin-top: 80px;
+}
+
+/* --- Hero Section --- */
+.hero-section-tools {
+    background: linear-gradient(180deg, #ffc107, #ffca2c);
+    color: #212529;
+    padding: 80px 0 60px;
+}
+
+.hero-section-tools h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-section-tools .lead {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    color: #343a40;
+}
+
+.hero-section-tools .quote {
+    margin-top: 15px;
+    font-style: italic;
+    font-size: 1rem;
+    color: #212529;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.hero-section-tools .quote i {
+    color: #212529;
+}
+
+/* --- Section Headers --- */
+.tools-section, .comparison-section {
+    padding: 80px 0;
+}
+
+.section-header h2 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #212529;
+}
+
+.section-header p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* --- Tools Grid --- */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 30px;
+}
+
+.tool-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.tool-icon-circle {
+    width: 45px;
+    height: 45px;
+    background-color: #fff3cd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-icon-circle i {
+    font-size: 22px;
+    color: #ffc107;
+}
+
+.tool-title h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #212529;
+}
+
+.category-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #fff3cd;
+    color: #d39e00;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-top: 4px;
+}
+
+/* Description */
+.tool-description {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Details */
+.tool-details h5 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    color: #343a40;
+}
+
+.tool-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+}
+
+.tool-details ul li {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.tool-details ul li i {
+    color: #ffc107;
+    margin-right: 8px;
+}
+
+/* Feature tags */
+.features-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.features-tags .tag {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    color: #495057;
+    font-weight: 500;
+}
+
+.features-tags .tag-more {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+/* --- Comparison Section --- */
+.comparison-section {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.comparison-specifications {
+    margin-top: 25px;
+}
+
+.comparison-specifications h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #343a40;
+}
+
+.comparison-specifications p {
+    font-size: 1rem;
+    color: #6c757d;
+    max-width: 600px;
+    margin: 0 auto;
+}

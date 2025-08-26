@@ -178,6 +178,104 @@ def error_404_view(request,exception):
 def about_us(request):
     return render(request, 'pages/about.html')
  
+def security_tools(request):
+    """
+    View to display the Security Tools Arsenal page.
+    """
+    tools_data = [
+        {
+            'name': 'CyberArk PAM',
+            'category': 'Identity Security',
+            'icon_class': 'fas fa-shield-alt',  
+            'description': 'Enterprise-grade privileged access management solution for securing critical credentials and preventing cyber attacks.',
+            'key_benefits': [
+                'Reduces privileged account vulnerabilities by 95%',
+                'Automated credential rotation and discovery',
+                'Real-time threat detection and response',
+                'Compliance with major security frameworks',
+            ],
+            'features': ['Zero Trust Architecture', 'AI-Powered Analytics', 'Session Recording', 'Just-in-Time Access'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Splunk SIEM',
+            'category': 'Security Analytics',
+            'icon_class': 'fas fa-chart-line', 
+            'description': 'Advanced security information and event management platform for comprehensive threat detection and incident response.',
+            'key_benefits': [
+                'Faster threat detection and response times',
+                'Centralized security monitoring across all systems',
+                'Advanced analytics with machine learning',
+                'Scalable cloud-native architecture',
+            ],
+            'features': ['Real-Time Monitoring', 'Machine Learning', 'Custom Dashboards', 'Automated Alerting'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Nessus Scanner',
+            'category': 'Vulnerability Management',
+            'icon_class': 'fas fa-search', 
+            'description': 'Industry-leading vulnerability assessment tool for identifying security weaknesses across your infrastructure.',
+            'key_benefits': [
+                'Comprehensive vulnerability coverage',
+                'Accurate scanning with low false positives',
+                'Regulatory compliance reporting',
+                'Integration with existing security tools',
+            ],
+            'features': ['Network Scanning', 'Web App Testing', 'Configuration Auditing', 'Compliance Checks'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Wireshark Analyzer',
+            'category': 'Network Security',
+            'icon_class': 'fas fa-wifi', 
+            'description': 'Open-source network protocol analyzer for deep packet inspection and network troubleshooting.',
+            'key_benefits': [
+                'Deep network visibility and analysis',
+                'Real-time packet capture and inspection',
+                'Extensive protocol support',
+                'Cost-effective open-source solution',
+            ],
+            'features': ['Packet Capture', 'Protocol Analysis', 'Traffic Filtering', 'Export Capabilities'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Metasploit Framework',
+            'category': 'Penetration Testing',
+            'icon_class': 'fas fa-terminal',  
+            'description': 'Comprehensive penetration testing platform for identifying and exploiting security vulnerabilities.',
+            'key_benefits': [
+                'Validate security defenses effectively',
+                'Extensive exploit database and payloads',
+                'Automated exploitation capabilities',
+                'Professional reporting and documentation',
+            ],
+            'features': ['Exploit Database', 'Payload Generation', 'Post-Exploitation', 'Social Engineering'],
+            'service_url': '/pen-testing'
+        },
+        {
+            'name': 'Burp Suite Pro',
+            'category': 'Web Application Security',
+            'icon_class': 'fas fa-wrench', 
+            'description': 'Leading web application security testing platform for finding and exploiting web vulnerabilities.',
+            'key_benefits': [
+                'Comprehensive web app security testing',
+                'Advanced scanning and manual testing tools',
+                'Extensible through custom plugins',
+                'Industry-standard security testing platform',
+            ],
+            'features': ['Automated Scanning', 'Manual Testing Tools', 'Extensibility', 'Session Management'],
+            'service_url': '/pen-testing'
+        }
+    ]
+
+    context = {
+        'title': 'Our Security Tools',
+        'tools': tools_data
+    }
+    return render(request, 'pages/our_tools.html', context)
+
+
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
 

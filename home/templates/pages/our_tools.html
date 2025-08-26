@@ -1,0 +1,89 @@
+{% extends 'layouts/base.html' %}
+\{% load static %}
+
+{% block title %}{{ title }} - Hardhat Enterprises{% endblock %}
+
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/our-tools.css' %}">
+</head>
+<main class="our-tools-page">
+    <!-- Hero Section -->
+    <section class="hero-section-tools">
+        <div class="container text-center">
+            <h1>Security Tools Arsenal</h1>
+            <p class="lead">
+                Explore our comprehensive suite of cybersecurity tools designed to protect, detect, and respond to modern threats.
+                Each tool is carefully selected and deployed to ensure maximum security coverage.
+            </p>
+            <div class="quote">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Security is a necessity. Not a choice</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Grid Section -->
+    <section class="tools-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Our Security Tools</h2>
+                <p>A comprehensive overview of the cybersecurity tools we utilize to maintain enterprise-grade security standards.</p>
+            </div>
+
+            <div class="tools-grid">
+                {% for tool in tools %}
+                <div class="tool-card">
+                    <div class="card-header">
+                        <div class="tool-icon-circle">
+                            <i class="{{ tool.icon_class }}"></i>
+                        </div>
+                        <div class="tool-title">
+                            <h3>{{ tool.name }}</h3>
+                            <span class="category-badge">{{ tool.category }}</span>
+                        </div>
+                    </div>
+
+                    <p class="tool-description">{{ tool.description }}</p>
+
+                    <div class="details-wrapper">
+                        <div class="tool-details">
+                            <h5>Key Benefits</h5>
+                            <ul>
+                                {% for benefit in tool.key_benefits %}
+                                <li><i class="fa-solid fa-circle-check"></i> {{ benefit }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="tool-details">
+                            <h5>Features</h5>
+                            <div class="features-tags">
+                                {% for feature in tool.features %}
+                                    <span class="tag">{{ feature }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section
+    <section class="comparison-section">
+        <div class="container text-center">
+            <div class="section-header">
+                <h2>Detailed Tool Comparison</h2>
+                <p>Compare features, capabilities, and specifications of our security tools at a glance.</p>
+            </div>
+            <div class="comparison-specifications">
+                <h3>Tool Specifications & Features</h3>
+                <p>Comprehensive comparison table showing pricing, features, and compliance information for each security tool.</p>
+            </div>
+        </div>
+    </section>
+</main> -->
+{% endblock %}
