@@ -1,11 +1,24 @@
 #!/bin/bash
 # ==================================================
-# 🔐 Universal TruffleHog Secrets Scanner
+# Universal TruffleHog Secrets Scanner
 # Cross-platform pre-push hook installer
 # Auto-detects install paths and permissions
 # ==================================================
 
 HOOK_FILE=".git/hooks/pre-push"
+
+# --- Colors ---
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+error()   { echo -e "${RED}${BOLD}ERROR:${RESET} $*"; }
+success() { echo -e "${GREEN}${BOLD}SUCCESS:${RESET} $*"; }
+warn()    { echo -e "${YELLOW}${BOLD}WARNING:${RESET} $*"; }
+info()    { echo -e "${BLUE}${BOLD}INFO:${RESET} $*"; }
 
 # --- Determine platform ---
 OS=$(uname | tr '[:upper:]' '[:lower:]')
@@ -13,15 +26,14 @@ OS=$(uname | tr '[:upper:]' '[:lower:]')
 # --- Install TruffleHog ---
 install_trufflehog() {
     if command -v trufflehog &>/dev/null; then
-        echo "✅ TruffleHog already installed."
+        success "TruffleHog already installed."
         return
     fi
 
-    echo "⚠️  Installing TruffleHog..."
+    warn "Installing TruffleHog..."
 
     # --- Linux/macOS ---
     if [[ "$OS" == "linux" || "$OS" == "darwin" ]]; then
-        # Check if /usr/local/bin is writable
         if [ -w /usr/local/bin ]; then
             INSTALL_DIR="/usr/local/bin"
         else
@@ -41,14 +53,14 @@ install_trufflehog() {
             | sudo sh -s -- -b "$INSTALL_DIR"
         export PATH=$PATH:$INSTALL_DIR
     else
-        echo "❌ Unsupported OS: $OS"
+        error "Unsupported OS: $OS"
         exit 1
     fi
 
     if command -v trufflehog &>/dev/null; then
-        echo "✅ TruffleHog installed in $INSTALL_DIR."
+        success "TruffleHog installed in $INSTALL_DIR."
     else
-        echo "❌ Failed to install TruffleHog."
+        error "Failed to install TruffleHog."
         exit 1
     fi
 }
@@ -58,17 +70,22 @@ install_hook() {
     install_trufflehog
 
     if [ -f "$HOOK_FILE" ]; then
-        echo "⚠️  Pre-push hook already exists."
+        warn "Pre-push hook already exists."
         return
     fi
 
     cat > "$HOOK_FILE" <<'EOF'
 #!/bin/bash
-echo "🔍 Running TruffleHog on staged files..."
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[0;33m'; BOLD='\033[1m'; RESET='\033[0m'
+error()   { echo -e "${RED}${BOLD}ERROR:${RESET} $*"; }
+success() { echo -e "${GREEN}${BOLD}SUCCESS:${RESET} $*"; }
+warn()    { echo -e "${YELLOW}${BOLD}WARNING:${RESET} $*"; }
+info()    { echo -e "${BOLD}INFO:${RESET} $*"; }
 
+info "Running TruffleHog on staged files..."
 STAGED_FILES=$(git diff --cached --name-only)
 if [ -z "$STAGED_FILES" ]; then
-    echo "ℹ️  No staged files."
+    info "No staged files."
     exit 0
 fi
 
@@ -80,23 +97,23 @@ for file in $STAGED_FILES; do
 done
 
 if [ $FAILED -ne 0 ]; then
-    echo "❌ Secrets detected! Push blocked."
+    error "Secrets detected! Push blocked."
     exit 1
 fi
 
-echo "✅ No secrets detected."
+success "No secrets detected."
 EOF
 
     chmod +x "$HOOK_FILE"
-    echo "✅ Pre-push hook installed."
+    success "Pre-push hook installed."
 }
 
 # --- Status check ---
 status_hook() {
     if [ -f "$HOOK_FILE" ]; then
-        echo "✅ Pre-push hook is installed."
+        success "Pre-push hook is installed."
     else
-        echo "❌ No pre-push hook found."
+        error "No pre-push hook found."
     fi
 }
 
@@ -105,9 +122,9 @@ uninstall_hook() {
     if [ -f "$HOOK_FILE" ]; then
         rm "$HOOK_FILE"
         sudo rm /usr/local/bin/trufflehog
-        echo "✅ Pre-push hook removed."
+        success "Pre-push hook removed."
     else
-        echo "⚠️  No pre-push hook to remove."
+        warn "No pre-push hook to remove."
     fi
 }
 
@@ -115,7 +132,7 @@ uninstall_hook() {
 scan_path() {
     TARGET="${1:-.}"
     install_trufflehog
-    echo "🔍 Scanning $TARGET for secrets..."
+    info "Scanning $TARGET for secrets..."
     trufflehog filesystem "$TARGET" --no-update
 }
 
