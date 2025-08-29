@@ -265,10 +265,11 @@
       .project-track {
         display: flex;
         gap: 20px;
-        transition: transform 0.5s ease;
+        transition: transform 0.5s ease-in-out;
       }
       .project-card {
-        width: calc(100% / 3);
+        flex: 0 0 33.3333%; /* 3 items visible by default */
+        box-sizing: border-box;
       }
       .slider-btn {
         position: absolute;
@@ -294,29 +295,58 @@
       }
     </style>
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const track = document.querySelector('.project-track');
-        const prevBtn = document.querySelector('.prev');
-        const nextBtn = document.querySelector('.next');
-        const cardWidth = document.querySelector('.project-card').offsetWidth + 20;
-        let currentPosition = 0;
+document.addEventListener('DOMContentLoaded', function () {
+    const track = document.querySelector('.project-track');
+    const cards = Array.from(document.querySelectorAll('.project-card'));
+    const cardCount = cards.length;
+    const visibleCards = 3;  // number of cards visible
+    const gap = 20;          // your gap
+    const cardWidth = cards[0].offsetWidth + gap;
 
-        nextBtn.addEventListener('click', () => {
-          const maxScroll = track.scrollWidth - track.clientWidth;
-          if (currentPosition + cardWidth <= maxScroll) {
-            currentPosition += cardWidth;
-            track.style.transform = `translateX(-${currentPosition}px)`;
-          }
-        });
+    // --- Clone first and last visibleCards ---
+    const startClones = cards.slice(-visibleCards).map(card => card.cloneNode(true));
+    const endClones = cards.slice(0, visibleCards).map(card => card.cloneNode(true));
+    startClones.forEach(clone => track.insertBefore(clone, track.firstChild));
+    endClones.forEach(clone => track.appendChild(clone));
 
-        prevBtn.addEventListener('click', () => {
-          if (currentPosition - cardWidth >= 0) {
-            currentPosition -= cardWidth;
-            track.style.transform = `translateX(-${currentPosition}px)`;
-          }
-        });
-      });
-    </script>
+    let index = visibleCards; // start from first real set
+    track.style.transform = `translateX(-${cardWidth * index}px)`;
+
+    function slideTo(newIndex) {
+        track.style.transition = "transform 0.5s ease-in-out";
+        track.style.transform = `translateX(-${cardWidth * newIndex}px)`;
+        index = newIndex;
+    }
+
+    document.querySelector('.next').addEventListener('click', () => {
+        slideTo(index + 1);
+    });
+
+    document.querySelector('.prev').addEventListener('click', () => {
+        slideTo(index - 1);
+    });
+
+    track.addEventListener('transitionend', () => {
+        if (index >= cardCount + visibleCards) {
+            track.style.transition = "none";
+            index = visibleCards;
+            track.style.transform = `translateX(-${cardWidth * index}px)`;
+        }
+        if (index < visibleCards) {
+            track.style.transition = "none";
+            index = cardCount + visibleCards - 1;
+            track.style.transform = `translateX(-${cardWidth * index}px)`;
+        }
+    });
+
+    // Auto-slide every 4 seconds
+    setInterval(() => {
+        slideTo(index + 1);
+    }, 4000);
+});
+</script>
+
+
   </section>
 
 
@@ -375,28 +405,28 @@
     <div class="container">
         <p class="text-center testimonial-sub-header">Testimonial</p>
         <h2 class="fw-bolder testimonials-title  text-center mb-lg-2">What Our Clients Say</h2>
-        <!-- <button class="prev-btn">❮</button> -->
+        
         <div class="testimonial-slider-container">
-
-          <div class="testimonial-slider">
-            <div class="testimonial-item">
-              <p class="testimonial-contentp">"We have been working with Hardhat for over a year now, and their cybersecurity services have been a game-changer for our business. From preventing ransomware attacks to securing our network infrastructure, they have given us the peace of mind to focus on our growth. Their team is responsive, professional, and always one step ahead. Highly recommend"</p>
-              <h3 class="testimonial-content">James Thompson, CTO, Tech Innovations Ltd.</h3>
+            <button class="prev-btn">❮</button>
+            <div class="testimonial-slider">
+                <div class="testimonial-item active">
+                    <p class="testimonial-contentp">"We have been working with Hardhat for over a year now, and their cybersecurity services have been a game-changer for our business. From preventing ransomware attacks to securing our network infrastructure, they have given us the peace of mind to focus on our growth. Their team is responsive, professional, and always one step ahead. Highly recommend"</p>
+                    <h3 class="testimonial-content">James Thompson, CTO, Tech Innovations Ltd.</h3>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-contentp">"As a small business, we were initially hesitant about investing in cybersecurity. However, after partnering with Hardhat, we quickly realized how critical it is to protect our data and systems. Their tailored solutions have kept us safe from cyber threats, and their proactive approach has helped us build a secure foundation for the future. We now feel more confident than ever about our digital security."</p>
+                    <h3 class="testimonial-content">Sarah Mitchell, Founder, EcoProducts Co.</h3>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-contentp">"In the fast-paced world of finance, cybersecurity is not a luxury—it's a necessity. Hardhat has been instrumental in fortifying our defenses against sophisticated cyber threats. Their expertise in threat detection, incident response, and continuous monitoring has been invaluable. They've helped us navigate through potential vulnerabilities and maintain our clients' trust. A top-tier cybersecurity partner!"</p>
+                    <h3 class="testimonial-content">David Harris, Risk Manager, FinSecure Solutions</h3>
+                </div>
             </div>
-            <div class="testimonial-item">
-              <p class="testimonial-contentp">"As a small business, we were initially hesitant about investing in cybersecurity. However, after partnering with Hardhat, we quickly realized how critical it is to protect our data and systems. Their tailored solutions have kept us safe from cyber threats, and their proactive approach has helped us build a secure foundation for the future. We now feel more confident than ever about our digital security."</p>
-              <h3 class="testimonial-content">Sarah Mitchell, Founder, EcoProducts Co.</h3>
-            </div>
-            <div class="testimonial-item">
-              <p class="testimonial-contentp">"In the fast-paced world of finance, cybersecurity is not a luxury—it's a necessity. Hardhat has been instrumental in fortifying our defenses against sophisticated cyber threats. Their expertise in threat detection, incident response, and continuous monitoring has been invaluable. They've helped us navigate through potential vulnerabilities and maintain our clients' trust. A top-tier cybersecurity partner!"</p>
-              <h3 class="testimonial-content">David Harris, Risk Manager, FinSecure Solutions</h3>
-            </div>
-          </div>
-         
+            <button class="next-btn">❯</button>
         </div>
-        <!-- <button class="next-btn">❯</button> -->
     </div>
 </section>
+
 <!-- FAQ -->
 
   <section id="faq" class="faq-section section-lg">
@@ -483,8 +513,8 @@
       }
     });
 
-    // Auto slide every 2 seconds
-    setInterval(moveNext, 2000);
+    // Auto slide every 3 seconds
+    setInterval(moveNext, 3000);
   });
 </script>
 
@@ -497,6 +527,51 @@
     display: block;
     animation: fadeIn 0.5s ease-in;
 }
+
+.testimonial-slider-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.testimonial-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+.testimonial-item {
+    flex: 0 0 100%;
+    box-sizing: border-box;
+}
+
+
+.testimonial-item.active {
+    display: block;
+}
+
+.prev-btn, .next-btn {
+    background: #333;
+    color: #fff;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    opacity: 0.7;
+}
+
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+
+.prev-btn:hover, .next-btn:hover {
+    opacity: 1;
+}
+
+
 
 @keyframes fadeIn {
     from {
@@ -572,7 +647,61 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const slider = document.querySelector('.testimonial-slider');
+    const items = document.querySelectorAll('.testimonial-item');
+    const totalItems = items.length;
+    let index = 1; // start from first actual slide
+
+    // Clone first and last for infinite effect
+    const firstClone = items[0].cloneNode(true);
+    const lastClone = items[totalItems - 1].cloneNode(true);
+    slider.appendChild(firstClone);
+    slider.insertBefore(lastClone, slider.firstChild);
+
+    const allItems = slider.querySelectorAll('.testimonial-item');
+    const itemWidth = allItems[0].clientWidth;
+    slider.style.transform = `translateX(-${itemWidth}px)`; // shift to first real item
+
+    function slideTo(newIndex) {
+        slider.style.transition = "transform 0.5s ease-in-out";
+        slider.style.transform = `translateX(-${newIndex * itemWidth}px)`;
+        index = newIndex;
+    }
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+        if (index >= allItems.length - 1) return;
+        slideTo(index + 1);
+    });
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+        if (index <= 0) return;
+        slideTo(index - 1);
+    });
+
+    slider.addEventListener('transitionend', () => {
+        // Jump instantly when reaching cloned slides
+        if (index === allItems.length - 1) {
+            slider.style.transition = "none";
+            index = 1;
+            slider.style.transform = `translateX(-${itemWidth}px)`;
+        }
+        if (index === 0) {
+            slider.style.transition = "none";
+            index = allItems.length - 2;
+            slider.style.transform = `translateX(-${index * itemWidth}px)`;
+        }
+    });
+
+    // Auto-slide every 3 seconds
+    setInterval(() => {
+        slideTo(index + 1);
+    }, 3000);
+});
 </script>
+
 
 </main>
 
