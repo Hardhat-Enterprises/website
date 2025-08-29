@@ -2,105 +2,334 @@
 {% block content %}
 
 <style>
-  .card-title, .card-text, label, h2, h5, p {
-    color: #f8f9fa;
+  body {
+    background-color: #ffd700;
   }
 
-  .badge-jobtype {
-    background-color: #ffc107;
+  .career-container {
+    padding: 2rem 1rem;
+    background-color: #ffd700;
+  }
+
+  .search-filter-section {
+    background-color: #ffd700;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+  }
+
+  .search-filter-section h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
     color: #212529;
+    text-align: center;
+    margin-bottom: 2rem;
   }
 
-  .badge-location {
-    background-color: #17a2b8;
+  .filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 300px;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+  }
+
+  .filter-select {
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    min-width: 150px;
+  }
+
+  .clear-filters-btn {
+    padding: 12px 24px;
+    background-color: white;
+    color: #212529;
+    border: 1px solid #212529;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .clear-filters-btn:hover {
+    background-color: #212529;
     color: white;
   }
 
-  .career-card {
-    background-color: #343a40;
-    border-radius: 10px;
-  }
-
-  .btn-view {
-    background-color: #ffffff;
-    color: #212529;
+  .recently-viewed-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background-color: #0066cc;
+    color: white;
     border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
   }
 
-  .btn-view:hover {
-    background-color: #e2e6ea;
+  .recently-viewed-btn::after {
+    content: "▼";
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .job-listings {
+    background-color: white;
+    padding: 2rem 0;
+    min-height: 400px;
+  }
+
+  .job-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .job-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .job-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin: 0;
+  }
+
+  .category-tag {
+    background-color: #ffd700;
+    color: #212529;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .save-job-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .save-job-btn:hover {
+    color: #ff6b6b;
+  }
+
+  .job-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+
+  .job-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .job-detail i {
+    width: 16px;
+    color: #6c757d;
+  }
+
+  .job-description {
+    color: #212529;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .job-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn-view-details {
+    padding: 10px 20px;
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-view-details:hover {
+    opacity: 0.9;
+  }
+
+  .btn-apply-now {
+    padding: 10px 20px;
+    background-color: white;
+    color: #212529;
+    border: 1px solid #212529;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-apply-now:hover {
+    background-color: #212529;
+    color: white;
+  }
+
+  .no-jobs {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #6c757d;
+  }
+
+  .no-jobs .emoji {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .no-jobs h5 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
     color: #212529;
   }
 
-  .closing-text {
-    color: #adb5bd; /* soft grey */
+  .no-jobs p {
+    font-size: 1rem;
+    color: #6c757d;
   }
 
-  body {
-    background-color: #212529;
+  @media (max-width: 768px) {
+    .filter-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .search-input,
+    .filter-select {
+      min-width: auto;
+    }
+    
+    .job-actions {
+      flex-direction: column;
+    }
   }
 </style>
 
-
-<div class="container mt-5">
-  <h2 class="fw-bold text-center mb-4">Explore Job Opportunities</h2>
-
-  <!-- 🔍 Search & Filter -->
-  <form method="GET" id="filterForm" class="row g-3 mb-4">
-    <!-- Search bar -->
-    <div class="col-md-4">
-      <input type="text" name="search" class="form-control" placeholder="Search by title or description..." value="{{ request.GET.search }}" oninput="submitFilterForm()">
-    </div>
-  
-    <!-- Job Type dropdown -->
-    <div class="col-md-3">
-      <select name="job_type" class="form-select" onchange="submitFilterForm()">
+<div class="career-container">
+  <div class="search-filter-section position-relative">
+    <!-- Recently Viewed Pages Button -->
+    <button class="recently-viewed-btn">Recently Viewed Pages</button>
+    
+    <h2>Explore Job Opportunities</h2>
+    
+    <!-- Search & Filter Form -->
+    <form method="GET" id="filterForm" class="filter-form">
+      <input type="text" name="search" class="search-input" placeholder="Search by title or description..." value="{{ request.GET.search }}" oninput="submitFilterForm()">
+      
+      <select name="job_type" class="filter-select" onchange="submitFilterForm()">
         <option value="" {% if not request.GET.job_type %}selected{% endif %}>All Job Types</option>
         <option value="FT" {% if request.GET.job_type == 'FT' %}selected{% endif %}>Full-Time</option>
         <option value="PT" {% if request.GET.job_type == 'PT' %}selected{% endif %}>Part-Time</option>
         <option value="CT" {% if request.GET.job_type == 'CT' %}selected{% endif %}>Contract</option>
+        <option value="internship" {% if request.GET.job_type == 'internship' %}selected{% endif %}>Internship</option>
       </select>
-    </div>
-  
-    <!-- Location dropdown -->
-    <div class="col-md-3">
-      <select name="location" class="form-select" onchange="submitFilterForm()">
+      
+      <select name="location" class="filter-select" onchange="submitFilterForm()">
         <option value="" {% if not request.GET.location %}selected{% endif %}>All Locations</option>
         <option value="Remote" {% if request.GET.location == 'Remote' %}selected{% endif %}>Remote</option>
         <option value="OnSite" {% if request.GET.location == 'OnSite' %}selected{% endif %}>OnSite</option>
+        <option value="Hybrid" {% if request.GET.location == 'Hybrid' %}selected{% endif %}>Hybrid</option>
       </select>
-    </div>
-    <!-- 🧹 Clear Button -->
-    <div class="col-md-2">
-      <button type="button" class="btn btn-secondary w-100" onclick="clearFilters()">Clear Filters</button>
-    </div>
-  </form>
+      
+      <button type="button" class="clear-filters-btn" onclick="clearFilters()">Clear Filters</button>
+    </form>
+  </div>
   
-  <!-- 🧾 Job Listings -->
-  <div id="job-listings" class="row">
-    {% if jobs %}
-      {% for job in jobs %}
-        <div class="col-md-6 mb-4">
-          <div class="card career-card shadow-sm h-100">
-            <div class="card-body">
-              <h5 class="card-title">{{ job.title }}</h5>
-              <p>
-                <span class="badge badge-jobtype">{{ job.get_job_type_display }}</span>
-                <span class="badge badge-location">{{ job.location }}</span>
-              </p>
-              <p class="closing-text mb-1">Closing: {{ job.closing_date }}</p>
-              <a href="{% url 'career-detail' job.id %}" class="btn btn-view btn-sm mt-2">View Details</a>
+  <!-- Job Listings -->
+  <div class="job-listings">
+    <div class="container">
+      <div id="job-listings">
+        {% if jobs %}
+          {% for job in jobs %}
+            <div class="job-card">
+              <div class="job-header">
+                <div>
+                  <h3 class="job-title">{{ job.title }}</h3>
+                  <span class="category-tag">{{ job.get_job_type_display }}</span>
+                </div>
+                <button class="save-job-btn" title="Save Job">♡</button>
+              </div>
+              
+              <div class="job-details">
+                <div class="job-detail">
+                  <i>📍</i>
+                  <span>{{ job.location }}</span>
+                </div>
+                <div class="job-detail">
+                  <i>🕒</i>
+                  <span>{{ job.get_job_type_display }}</span>
+                </div>
+                {% if job.salary_range %}
+                <div class="job-detail">
+                  <i>💰</i>
+                  <span>{{ job.salary_range }}</span>
+                </div>
+                {% endif %}
+                <div class="job-detail">
+                  <i>📅</i>
+                  <span>Posted {{ job.posted_date|date:"Y-m-d" }}</span>
+                </div>
+              </div>
+              
+              <p class="job-description">{{ job.description|striptags|truncatewords:30 }}</p>
+              
+              <div class="job-actions">
+                <a href="{% url 'career-detail' job.id %}" class="btn-view-details">View Details</a>
+                <a href="{% url 'career-application' job.id %}" class="btn-apply-now">Apply Now</a>
+              </div>
             </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-jobs">
+            <div class="emoji">😔</div>
+            <h5>No jobs found.</h5>
+            <p>Try adjusting the filters or check back later.</p>
           </div>
-        </div>
-      {% endfor %}
-    {% else %}    
-    <div class="text-center my-5">
-      <div style="font-size: 2rem;">🥺</div>
-      <h5 class="mt-2" style="color: var(--text-color, #ffffff);">No jobs found.</h5>
-      <p style="color: var(--text-color, #ffffff);">Try adjusting the filters or check back later.</p>
+        {% endif %}
+      </div>
     </div>
-    {% endif %}
   </div>
 </div>
 
@@ -115,13 +344,13 @@
     })
     .then(response => response.text())
     .then(data => {
-      // Parse response and update only the job listing section
       const parser = new DOMParser();
       const html = parser.parseFromString(data, 'text/html');
       const updatedListings = html.querySelector("#job-listings");
       document.getElementById("job-listings").innerHTML = updatedListings.innerHTML;
     });
   }
+  
   function clearFilters() {
     document.querySelector('input[name="search"]').value = '';
     document.querySelector('select[name="job_type"]').value = '';

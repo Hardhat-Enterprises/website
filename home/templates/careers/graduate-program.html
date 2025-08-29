@@ -1,0 +1,745 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<style>
+  body {
+    background-color: #ffd700;
+  }
+
+  .graduate-program-section {
+    background-color: #ffd700;
+    padding: 8rem 1rem 2rem; /* increased top padding from 6rem to 8rem to avoid header obstruction */
+    min-height: 100vh;
+  }
+
+  .program-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .program-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  .program-header p {
+    font-size: 1.1rem;
+    color: #212529;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .roadmap-section {
+    margin-bottom: 4rem;
+  }
+
+  .roadmap-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 3rem;
+  }
+
+  .roadmap-timeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    flex-wrap: wrap;
+  }
+
+  .roadmap-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #212529; /* solid connecting line */
+    z-index: 1;
+  }
+
+  .roadmap-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .step-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #212529; /* uniform dark style */
+    color: #ffffff;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+
+  .step-circle:hover,
+  .step-circle:focus {
+    outline: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    border-color: #ffd700;
+  }
+
+  .step-circle[aria-pressed="true"] {
+    border-color: #ffd700;
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.25);
+  }
+
+  .step-description {
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  /* Features Section */
+  .features-section {
+    margin-bottom: 4rem;
+  }
+
+  .features-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 3rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    border-color: #ffd700;
+  }
+
+  .feature-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: #ffffff;
+  }
+
+  .feature-icon.placement {
+    background: linear-gradient(135deg, #28a745, #20c997);
+  }
+
+  .feature-icon.duration {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+  }
+
+  .feature-icon.mentorship {
+    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+  }
+
+  .feature-icon.certification {
+    background: linear-gradient(135deg, #fd7e14, #ffc107);
+  }
+
+  .feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card p {
+    color: #6c757d;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Technologies Section */
+  .technologies-section {
+    margin-bottom: 4rem;
+  }
+
+  .technologies-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 3rem;
+  }
+
+  .technologies-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .technologies-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .technology-tag {
+    background: #ffffff;
+    color: #212529;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 2px solid #ffd700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .technology-tag:hover {
+    background: #ffd700;
+    color: #212529;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .recently-viewed-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .recently-viewed-btn::after {
+    content: "▼";
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .roadmap-timeline {
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .roadmap-line {
+      display: none;
+    }
+    
+    .roadmap-step {
+      min-width: auto;
+    }
+
+    .graduate-program-section {
+      padding-top: 9rem; /* increased from 7rem to 9rem for mobile */
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .technologies-grid {
+      gap: 0.75rem;
+    }
+
+    .technology-tag {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  /* Stage details panel */
+  .stage-details {
+    max-width: 1000px;
+    margin: 2rem auto 0;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    border: 2px solid #ffd700;
+  }
+
+  .stage-details.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+  }
+
+  .stage-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #f8f9fa;
+  }
+
+  .stage-details h3 {
+    margin-bottom: 0.75rem;
+    color: #212529;
+    font-weight: 800;
+    font-size: 1.75rem;
+  }
+
+  .stage-meta {
+    color: #6c757d;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .stage-content {
+    margin-top: 1rem;
+  }
+
+  .stage-section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: 100%;
+    border-left: 4px solid #ffd700;
+  }
+
+  .stage-section-title {
+    color: #212529;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .stage-list {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  .stage-list li {
+    color: #495057;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    position: relative;
+  }
+
+  .stage-list li:before {
+    content: "•";
+    color: #ffd700;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    font-size: 1.2em;
+  }
+
+  .stage-list li:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .feature-card {
+      background: #2d3748;
+      color: #e2e8f0;
+    }
+
+    .feature-card h3 {
+      color: #e2e8f0;
+    }
+
+    .feature-card p {
+      color: #a0aec0;
+    }
+
+    .technology-tag {
+      background: #2d3748;
+      color: #e2e8f0;
+      border-color: #ffd700;
+    }
+
+    .technology-tag:hover {
+      background: #ffd700;
+      color: #2d3748;
+    }
+
+    .stage-details {
+      background: #2d3748;
+      color: #e2e8f0;
+      border-color: #ffd700;
+    }
+
+    .stage-details h3,
+    .stage-details .stage-meta {
+      color: #e2e8f0;
+    }
+
+    .stage-header {
+      border-bottom-color: #4a5568;
+    }
+
+    .stage-section {
+      background: #4a5568;
+      color: #e2e8f0;
+    }
+
+    .stage-section-title {
+      color: #e2e8f0;
+    }
+
+    .stage-list li {
+      color: #a0aec0;
+    }
+
+    .stage-list li:before {
+      color: #ffd700;
+    }
+  }
+</style>
+
+<div class="graduate-program-section position-relative">
+  <div class="container">
+    <!-- Recently Viewed Pages Button -->
+    <button class="recently-viewed-btn">Recently Viewed Pages</button>
+    
+    <div class="program-header">
+      <h1>Graduate Development Program</h1>
+      <p>A comprehensive 12-month journey designed to accelerate your career in cybersecurity and technology, with guaranteed placement opportunities.</p>
+    </div>
+
+    <div class="roadmap-section">
+      <h2 class="roadmap-title">12-Month Program Roadmap</h2>
+      
+      <div class="roadmap-timeline">
+        <div class="roadmap-line"></div>
+        
+        <!-- Month 1 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="1" aria-label="Stage 1: Onboarding and Fundamentals" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 1"
+            data-activities="Company orientation and culture immersion; Cybersecurity fundamentals introduction; Basic tools and software setup; Team introductions and networking; Security policies and procedures training; Initial assessment and skill gap analysis"
+            data-outcomes="Strong foundation in cybersecurity principles; Complete understanding of company culture and values; Proficiency in essential tools and software; Established professional relationships; Comprehensive knowledge of security protocols; Clear understanding of personal development areas">1</button>
+          <div class="step-description">Onboarding & Fundamentals</div>
+        </div>
+        
+        <!-- Month 2 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="2" aria-label="Stage 2: Core Skills Development" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 2"
+            data-activities="Intensive technical skill building workshops; Hands-on laboratory exercises; Mentorship assignment and relationship building; Industry-standard tool training; Security framework understanding; Practical problem-solving scenarios"
+            data-outcomes="Advanced technical competencies in core areas; Practical hands-on experience with real tools; Strong mentor-mentee relationship; Proficiency in industry-standard security tools; Deep understanding of security frameworks; Enhanced analytical and problem-solving skills">2</button>
+          <div class="step-description">Core Skills Development</div>
+        </div>
+        
+        <!-- Month 3 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="3" aria-label="Stage 3: Project Deep Dive" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 3"
+            data-activities="First major project assignment and planning; Collaborative team development; Real-world application of learned skills; Project management methodology training; Stakeholder communication practice; Technical implementation and testing"
+            data-outcomes="Comprehensive project management skills; Strong teamwork and collaboration abilities; Real-world problem-solving experience; Understanding of project lifecycle; Professional communication skills; Technical implementation expertise">3</button>
+          <div class="step-description">Project Deep Dive</div>
+        </div>
+        
+        <!-- Month 4 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="4" aria-label="Stage 4: Cross-Team Collaboration" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 4"
+            data-activities="Cross-departmental project involvement; Business process understanding; Inter-team communication workshops; Stakeholder management training; Process optimization projects; Cross-functional team leadership"
+            data-outcomes="Enhanced communication skills across teams; Comprehensive business acumen; Strong stakeholder management abilities; Process improvement expertise; Cross-functional leadership capabilities; Broader organizational perspective">4</button>
+          <div class="step-description">Cross-Team Collaboration</div>
+        </div>
+        
+        <!-- Month 5 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="5" aria-label="Stage 5: Advanced Specialization" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 5"
+            data-activities="Specialization track selection and focus; Advanced training modules in chosen area; Expert-level skill development; Specialized tool mastery; Industry best practices deep dive; Advanced certification preparation"
+            data-outcomes="Expert-level knowledge in specialization area; Mastery of specialized tools and techniques; Industry-recognized expertise; Advanced certification credentials; Specialized problem-solving abilities; Competitive advantage in chosen field">5</button>
+          <div class="step-description">Advanced Specialization</div>
+        </div>
+        
+        <!-- Month 6 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="6" aria-label="Stage 6: Leadership Development" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 6"
+            data-activities="Leadership training and workshops; Junior team member mentoring; Presentation and public speaking practice; Team management simulations; Conflict resolution training; Strategic thinking exercises"
+            data-outcomes="Strong leadership capabilities and presence; Effective mentoring and coaching skills; Confident public speaking abilities; Team management expertise; Conflict resolution proficiency; Strategic thinking and planning skills">6</button>
+          <div class="step-description">Leadership Development</div>
+        </div>
+        
+        <!-- Month 7 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="7" aria-label="Stage 7: Client-Facing Experience" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 7"
+            data-activities="Direct client interactions and meetings; Customer service excellence training; Stakeholder relationship management; Business development involvement; Client presentation delivery; Customer feedback handling"
+            data-outcomes="Professional client relationship skills; Excellent customer service abilities; Strong stakeholder management; Business development understanding; Confident presentation delivery; Effective feedback processing">7</button>
+          <div class="step-description">Client-Facing Experience</div>
+        </div>
+        
+        <!-- Month 8 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="8" aria-label="Stage 8: Innovation and Research" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 8"
+            data-activities="Research project development and execution; Innovation initiative participation; Emerging technology exploration; Patent and IP understanding; Research methodology training; Innovation presentation and pitching"
+            data-outcomes="Strong research and analytical skills; Innovation mindset and creativity; Knowledge of emerging technologies; Understanding of intellectual property; Research methodology expertise; Innovation presentation abilities">8</button>
+          <div class="step-description">Innovation & Research</div>
+        </div>
+        
+        <!-- Month 9 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="9" aria-label="Stage 9: Teaching and Knowledge Share" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 9"
+            data-activities="Knowledge transfer to new team members; Training session development and delivery; Documentation creation and maintenance; Best practices documentation; Knowledge base contribution; Training material development"
+            data-outcomes="Excellent teaching and training abilities; Strong knowledge consolidation; Comprehensive documentation skills; Best practices expertise; Knowledge management capabilities; Training material development skills">9</button>
+          <div class="step-description">Teaching & Knowledge Share</div>
+        </div>
+        
+        <!-- Month 10 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="10" aria-label="Stage 10: Strategic Contribution" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 10"
+            data-activities="Strategic project involvement and leadership; Business impact analysis and measurement; Strategic planning participation; ROI calculation and analysis; Long-term planning exercises; Strategic decision-making practice"
+            data-outcomes="Strategic thinking and planning abilities; Business impact understanding and measurement; ROI analysis expertise; Long-term planning skills; Strategic decision-making capabilities; Business value creation understanding">10</button>
+          <div class="step-description">Strategic Contribution</div>
+        </div>
+        
+        <!-- Month 11 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="11" aria-label="Stage 11: Capstone Project" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 11"
+            data-activities="Independent major project development; End-to-end solution creation; Comprehensive testing and validation; Stakeholder presentation preparation; Project documentation completion; Final deliverables preparation"
+            data-outcomes="Independent project management capabilities; Comprehensive solution development skills; Testing and validation expertise; Professional presentation abilities; Complete project documentation skills; Deliverable management expertise">11</button>
+          <div class="step-description">Capstone Project</div>
+        </div>
+        
+        <!-- Month 12 -->
+        <div class="roadmap-step">
+          <button type="button" class="step-circle" data-stage="12" aria-label="Stage 12: Graduation and Transition" aria-controls="stage-details-panel" aria-pressed="false"
+            data-duration="Month 12"
+            data-activities="Final program assessments and evaluations; Career transition planning and preparation; Role placement and onboarding; Professional development plan creation; Alumni network integration; Graduation ceremony and celebration"
+            data-outcomes="Complete program mastery and certification; Clear career transition pathway; Successful role placement; Comprehensive professional development plan; Strong alumni network connections; Program completion recognition">12</button>
+          <div class="step-description">Graduation & Transition</div>
+        </div>
+      </div>
+      
+      <!-- Interactive Stage Details Panel -->
+      <section id="stage-details-panel" class="stage-details hidden" role="region" aria-live="polite" aria-label="Stage details">
+        <div class="stage-header">
+          <h3 id="stage-title">Explore the roadmap</h3>
+          <div class="stage-meta" id="stage-duration">Hover, focus, or click a stage to view details.</div>
+        </div>
+        
+        <div class="stage-content">
+          <div class="row g-4">
+            <div class="col-12 col-lg-6">
+              <div class="stage-section">
+                <h6 class="stage-section-title">
+                  <i class="fas fa-tasks text-primary me-2"></i>
+                  Key Activities
+                </h6>
+                <ul id="stage-activities" class="stage-list"></ul>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="stage-section">
+                <h6 class="stage-section-title">
+                  <i class="fas fa-star text-warning me-2"></i>
+                  Learning Outcomes
+                </h6>
+                <ul id="stage-outcomes" class="stage-list"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <h2 class="features-title">Program Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon placement">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3>Guaranteed Placement</h3>
+          <p>100% placement guarantee upon successful completion of the program</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon duration">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>12-Month Duration</h3>
+          <p>Comprehensive training program spanning a full year of intensive learning</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon mentorship">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Expert Mentorship</h3>
+          <p>Learn from industry veterans with years of cybersecurity experience</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon certification">
+            <i class="fas fa-certificate"></i>
+          </div>
+          <h3>Industry Certification</h3>
+          <p>Earn recognized certifications and credentials valued by employers</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technologies Section -->
+    <div class="technologies-section">
+      <h2 class="technologies-title">Technologies You'll Master</h2>
+      <div class="technologies-container">
+        <div class="technologies-grid">
+          <div class="technology-tag">Cybersecurity</div>
+          <div class="technology-tag">Cloud Computing</div>
+          <div class="technology-tag">DevOps</div>
+          <div class="technology-tag">Data Analytics</div>
+          <div class="technology-tag">Machine Learning</div>
+          <div class="technology-tag">Network Security</div>
+          <div class="technology-tag">Ethical Hacking</div>
+          <div class="technology-tag">Risk Management</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const circles = Array.from(document.querySelectorAll('.step-circle'));
+    const panel = document.getElementById('stage-details-panel');
+    const title = document.getElementById('stage-title');
+    const duration = document.getElementById('stage-duration');
+    const activitiesList = document.getElementById('stage-activities');
+    const outcomesList = document.getElementById('stage-outcomes');
+    let selectedIndex = -1; // persist clicked selection
+
+    function populateList(listEl, itemsString) {
+      listEl.innerHTML = '';
+      const items = (itemsString || '').split(';').map(s => s.trim()).filter(Boolean);
+      for (const item of items) {
+        const li = document.createElement('li');
+        li.textContent = item;
+        listEl.appendChild(li);
+      }
+    }
+
+    function showDetailsFrom(el) {
+      if (!el) return;
+      const stageNum = el.getAttribute('data-stage');
+      const label = el.getAttribute('aria-label') || `Stage ${stageNum}`;
+      const stageDuration = el.getAttribute('data-duration');
+      const activities = el.getAttribute('data-activities');
+      const outcomes = el.getAttribute('data-outcomes');
+
+      title.textContent = label;
+      duration.textContent = `Duration: ${stageDuration}`;
+      populateList(activitiesList, activities);
+      populateList(outcomesList, outcomes);
+      panel.classList.remove('hidden');
+    }
+
+    function clearPressed() {
+      circles.forEach(c => c.setAttribute('aria-pressed', 'false'));
+    }
+
+    // Hover/focus preview
+    circles.forEach((circle, index) => {
+      circle.addEventListener('mouseenter', () => {
+        if (selectedIndex === -1) {
+          showDetailsFrom(circle);
+        }
+      });
+      circle.addEventListener('focus', () => {
+        if (selectedIndex === -1) {
+          showDetailsFrom(circle);
+        }
+      });
+
+      // Click/tap to persist selection
+      circle.addEventListener('click', () => {
+        if (selectedIndex === index) {
+          // toggle off
+          selectedIndex = -1;
+          clearPressed();
+          title.textContent = 'Explore the roadmap';
+          duration.textContent = 'Hover, focus, or click a stage to view details.';
+          activitiesList.innerHTML = '';
+          outcomesList.innerHTML = '';
+          panel.classList.add('hidden');
+          return;
+        }
+        selectedIndex = index;
+        clearPressed();
+        circle.setAttribute('aria-pressed', 'true');
+        showDetailsFrom(circle);
+      });
+
+      // Keyboard navigation
+      circle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          circle.click();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          const next = circles[index + 1] || circles[0];
+          next.focus();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const prev = circles[index - 1] || circles[circles.length - 1];
+          prev.focus();
+        }
+      });
+    });
+  })();
+</script>
+
+{% endblock %}
+
