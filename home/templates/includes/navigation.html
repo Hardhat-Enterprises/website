@@ -2,6 +2,8 @@
 {% load i18n %}
 <header class="header-global">
 
+
+
   <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
     <div class="navbar-container position-relative">
       <a class="navbar-brand me-lg-5" href="/">
@@ -301,40 +303,106 @@
           </span>
 
         </div>
-
+        
+        
         <!-- language switcher -->
-        <div style="margin-left: 10px; margin-right: 5px;">
-          <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.get_full_path }}">
-            <select id="languageSelect" name="language" onchange="this.form.submit()"
-                class="form-select" 
-                style="padding: 0.3rem 1rem 0.3rem 1rem; background: white;">
-              <option value="" disabled selected>{% trans "Language" %}</option>
-              <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-              <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>Español</option>
-              <!-- <option value="hi" {% if LANGUAGE_CODE == 'hi' %}selected{% endif %}>हिन्दी</option> -->
-              <option value="zh-hans" {% if LANGUAGE_CODE == 'zh-hans' %}selected{% endif %}>简体中文</option>
-              <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>Français</option>
-              <option value="ja" {% if LANGUAGE_CODE == 'ja' %}selected{% endif %}>日本語</option>
-              <option value="ko" {% if LANGUAGE_CODE == 'ko' %}selected{% endif %}>한국어</option>
-            </select>
-            <script>
-              document.addEventListener('DOMContentLoaded', function() {
-                  const select = document.getElementById('languageSelect');
-                  const firstOption = select.options[0];
+        <div class="dropdown" style="margin-left:10px;margin-right:5px;">
+          <button class="nav-link dropdown-toggle btn btn-link p-0" id="langDropdown"
+                  data-bs-toggle="dropdown" aria-expanded="false" title="{% trans 'Language' %}">🌐
+          </button>
 
-                  console.log("hello")
-                  select.addEventListener('mousedown', function() {
-                      firstOption.style.display = 'none';
-                  });
-                  select.addEventListener('blur', function() {
-                      firstOption.style.display = '';
-                  });
-              });
-            </script>
-          </form>
+          <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
+              <img class="flag-icon me-2" src="{% static 'images/flags/us.png' %}" alt="English"> English
+            </a></li>
+            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="es">
+              <img class="flag-icon me-2" src="{% static 'images/flags/es.png' %}" alt="Español"> Español
+            </a></li>
+            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="zh-hans">
+              <img class="flag-icon me-2" src="{% static 'images/flags/cn.png' %}" alt="简体中文"> 简体中文
+            </a></li>
+            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="fr">
+              <img class="flag-icon me-2" src="{% static 'images/flags/fr.png' %}" alt="Français"> Français
+            </a></li>
+            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ja">
+              <img class="flag-icon me-2" src="{% static 'images/flags/jp.png' %}" alt="日本語"> 日本語
+            </a></li>
+            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ko">
+              <img class="flag-icon me-2" src="{% static 'images/flags/kr.png' %}" alt="한국어"> 한국어
+            </a></li>
+          </ul>
         </div>
+
+        <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <input type="hidden" name="language" id="lang-input">
+        </form>
+
+        <style>
+          .flag-icon{
+            width: 30px;          
+            height: 21px;          
+            object-fit: cover;    
+            flex-shrink: 0;         
+            margin-right: 10px;       
+            display: inline-block;    
+            vertical-align: middle;
+            border-radius: 2px;
+          }
+
+          
+          .dropdown-menu#lang_menu {
+            background-color: #fff !important;     
+            border: 1px solid #ccc !important;     
+            border-radius: 4px !important;       
+            box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
+            padding: 0 !important;
+            margin-top: 0.5rem !important;
+            min-width: auto !important;
+            width: auto !important;
+          }
+
+          .dropdown-menu#lang_menu .dropdown-item {
+            color: #4B5868 !important;          
+            font-weight: 500;
+            padding: 0.5rem 0.8rem !important;
+            padding-right: 1.2rem !important;
+            background-color: transparent !important;
+            border-bottom: 1px solid #eee;
+            display: flex !important;         
+            align-items: center;
+            justify-content: flex-start;
+          }
+
+          .dropdown-menu#lang_menu .dropdown-item:last-child {
+            border-bottom: none;
+          }
+
+          .dropdown-menu#lang_menu .dropdown-item:hover,
+          .dropdown-menu#lang_menu .dropdown-item:focus {
+            background-color: #1967D2 !important;
+            color: #fff !important;
+          }
+
+          .dropdown-menu#lang_menu .dropdown-item.active {
+            background-color: #ffcd11 !important;
+            color: #fff !important;
+          }
+        </style>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const form  = document.getElementById('set-lang-form');
+            const input = document.getElementById('lang-input');
+            document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
+              a.addEventListener('click', function (e) {
+                e.preventDefault();
+                input.value = this.dataset.lang;  
+                form.submit();                    
+              });
+            });
+          });
+        </script>
         
 
         <!-- dark mode toggle -->
