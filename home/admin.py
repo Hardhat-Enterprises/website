@@ -191,7 +191,14 @@ class JobApplicationAdmin(admin.ModelAdmin):
     
 @admin.register(LeaderBoardTable)
 class LeaderboardTableAdmin(admin.ModelAdmin):
-    list_display = ('user', 'category', 'total_points')
+    list_display = ('user', 'category', 'total_points', 'rank', 'last_updated')
+    list_filter = ('category', 'rank')
+    search_fields = ('user__email', 'user__first_name', 'user__last_name')
+    ordering = ('category', 'rank')
+    readonly_fields = ('rank', 'last_updated')
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user')
 
 
 

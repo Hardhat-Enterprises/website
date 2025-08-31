@@ -85,5 +85,1605 @@
         "isActive": true,
         "created_at": "2024-01-01T00:00:00Z"
     }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 1,
+    "fields": {
+        "title": "Network Port Scanning Basics",
+        "description": "Learn about common network ports and their security implications",
+        "question": "Which port is commonly used for HTTP traffic?",
+        "choices": ["80", "443", "21", "25"],
+        "correct_answer": "80",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Port 80 is the default port for HTTP traffic. Port 443 is for HTTPS, 21 for FTP, and 25 for SMTP.",
+        "difficulty": "easy",
+        "category": "network",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 2,
+    "fields": {
+        "title": "Firewall Configuration",
+        "description": "Understand basic firewall rules and network security",
+        "question": "What is the purpose of a firewall in network security?",
+        "choices": ["To speed up internet connection", "To block unauthorized access", "To encrypt data", "To compress files"],
+        "correct_answer": "To block unauthorized access",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A firewall acts as a barrier between trusted and untrusted networks, blocking unauthorized access attempts.",
+        "difficulty": "easy",
+        "category": "network",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 3,
+    "fields": {
+        "title": "VPN Security",
+        "description": "Learn about Virtual Private Networks and their security benefits",
+        "question": "What does VPN stand for?",
+        "choices": ["Virtual Private Network", "Very Private Network", "Virtual Public Network", "Verified Private Network"],
+        "correct_answer": "Virtual Private Network",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "VPN stands for Virtual Private Network, which creates a secure, encrypted connection over a public network.",
+        "difficulty": "easy",
+        "category": "network",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 4,
+    "fields": {
+        "title": "Network Protocol Security",
+        "description": "Understand secure vs insecure network protocols",
+        "question": "Which protocol is more secure: HTTP or HTTPS?",
+        "choices": ["HTTP", "HTTPS", "Both are equally secure", "Neither is secure"],
+        "correct_answer": "HTTPS",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "HTTPS is more secure because it encrypts data using SSL/TLS, while HTTP sends data in plain text.",
+        "difficulty": "easy",
+        "category": "network",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 5,
+    "fields": {
+        "title": "Network Topology Security",
+        "description": "Learn about secure network design principles",
+        "question": "What is a DMZ in network security?",
+        "choices": ["A type of firewall", "A demilitarized zone for public services", "A virus scanner", "An encryption tool"],
+        "correct_answer": "A demilitarized zone for public services",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A DMZ (Demilitarized Zone) is a network segment that contains public-facing services, isolated from the internal network.",
+        "difficulty": "easy",
+        "category": "network",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 6,
+    "fields": {
+        "title": "SQL Injection Prevention",
+        "description": "Learn about protecting web applications from SQL injection attacks",
+        "question": "What is the best way to prevent SQL injection attacks?",
+        "choices": ["Using strong passwords", "Input validation and parameterized queries", "Installing antivirus software", "Using HTTPS"],
+        "correct_answer": "Input validation and parameterized queries",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Input validation and parameterized queries prevent SQL injection by treating user input as data, not executable code.",
+        "difficulty": "easy",
+        "category": "web",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 7,
+    "fields": {
+        "title": "Cross-Site Scripting (XSS)",
+        "description": "Understand XSS attacks and prevention methods",
+        "question": "What is Cross-Site Scripting (XSS)?",
+        "choices": ["A type of virus", "An attack that injects malicious scripts", "A firewall feature", "An encryption method"],
+        "correct_answer": "An attack that injects malicious scripts",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "XSS is an attack where malicious scripts are injected into trusted websites, executed by users' browsers.",
+        "difficulty": "easy",
+        "category": "web",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 8,
+    "fields": {
+        "title": "HTTPS and SSL/TLS",
+        "description": "Learn about secure web communication protocols",
+        "question": "What does the 'S' in HTTPS represent?",
+        "choices": ["Speed", "Security", "Simple", "Standard"],
+        "correct_answer": "Security",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "The 'S' in HTTPS stands for Security, indicating the use of SSL/TLS encryption for secure communication.",
+        "difficulty": "easy",
+        "category": "web",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 9,
+    "fields": {
+        "title": "Session Management",
+        "description": "Understand secure session handling in web applications",
+        "question": "What is a session token used for?",
+        "choices": ["To store passwords", "To identify user sessions", "To encrypt data", "To compress files"],
+        "correct_answer": "To identify user sessions",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Session tokens are used to identify and maintain user sessions, allowing the application to track user state.",
+        "difficulty": "easy",
+        "category": "web",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 10,
+    "fields": {
+        "title": "Web Application Firewall",
+        "description": "Learn about WAFs and their role in web security",
+        "question": "What does WAF stand for in web security?",
+        "choices": ["Web Application Firewall", "Web Access Filter", "Web Authentication Form", "Web Attack Finder"],
+        "correct_answer": "Web Application Firewall",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A WAF (Web Application Firewall) protects web applications by filtering and monitoring HTTP traffic.",
+        "difficulty": "easy",
+        "category": "web",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 11,
+    "fields": {
+        "title": "Caesar Cipher Basics",
+        "description": "Learn about the classic Caesar cipher encryption method",
+        "question": "In a Caesar cipher with shift 3, what does 'A' become?",
+        "choices": ["B", "C", "D", "E"],
+        "correct_answer": "D",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "In a Caesar cipher with shift 3, each letter is shifted 3 positions forward. A becomes D, B becomes E, etc.",
+        "difficulty": "easy",
+        "category": "crypto",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 12,
+    "fields": {
+        "title": "Hash Functions",
+        "description": "Understand cryptographic hash functions and their properties",
+        "question": "What is a characteristic of a good hash function?",
+        "choices": ["Reversible", "Deterministic", "Predictable", "Variable length output"],
+        "correct_answer": "Deterministic",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A good hash function is deterministic, meaning the same input always produces the same output.",
+        "difficulty": "easy",
+        "category": "crypto",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 13,
+    "fields": {
+        "title": "Symmetric vs Asymmetric Encryption",
+        "description": "Learn the difference between symmetric and asymmetric encryption",
+        "question": "Which type of encryption uses the same key for encryption and decryption?",
+        "choices": ["Asymmetric", "Symmetric", "Both", "Neither"],
+        "correct_answer": "Symmetric",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Symmetric encryption uses the same key for both encryption and decryption, while asymmetric uses different keys.",
+        "difficulty": "easy",
+        "category": "crypto",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 14,
+    "fields": {
+        "title": "Digital Signatures",
+        "description": "Understand how digital signatures provide authentication and integrity",
+        "question": "What does a digital signature verify?",
+        "choices": ["File size", "File authenticity and integrity", "File creation date", "File location"],
+        "correct_answer": "File authenticity and integrity",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Digital signatures verify both the authenticity of the sender and the integrity of the message/file.",
+        "difficulty": "easy",
+        "category": "crypto",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 15,
+    "fields": {
+        "title": "Public Key Infrastructure",
+        "description": "Learn about PKI and certificate authorities",
+        "question": "What does PKI stand for in cryptography?",
+        "choices": ["Public Key Infrastructure", "Private Key Information", "Public Key Information", "Private Key Infrastructure"],
+        "correct_answer": "Public Key Infrastructure",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "PKI (Public Key Infrastructure) is a framework for managing digital certificates and public key encryption.",
+        "difficulty": "easy",
+        "category": "crypto",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 16,
+    "fields": {
+        "title": "Password Security",
+        "description": "Learn about strong password practices and security",
+        "question": "What makes a password strong?",
+        "choices": ["Using only letters", "Using only numbers", "Using a mix of letters, numbers, and symbols", "Using your name"],
+        "correct_answer": "Using a mix of letters, numbers, and symbols",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Strong passwords include a mix of uppercase letters, lowercase letters, numbers, and special symbols.",
+        "difficulty": "easy",
+        "category": "general",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 17,
+    "fields": {
+        "title": "Social Engineering",
+        "description": "Understand social engineering attacks and prevention",
+        "question": "What is social engineering?",
+        "choices": ["A type of computer virus", "Manipulating people to gain information", "A firewall technique", "An encryption method"],
+        "correct_answer": "Manipulating people to gain information",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Social engineering is the art of manipulating people to gain confidential information or access to systems.",
+        "difficulty": "easy",
+        "category": "general",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 18,
+    "fields": {
+        "title": "Malware Types",
+        "description": "Learn about different types of malicious software",
+        "question": "What is ransomware?",
+        "choices": ["A type of antivirus", "Malware that encrypts files and demands payment", "A firewall", "A backup tool"],
+        "correct_answer": "Malware that encrypts files and demands payment",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Ransomware is malicious software that encrypts files and demands payment (ransom) to restore access.",
+        "difficulty": "easy",
+        "category": "general",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 19,
+    "fields": {
+        "title": "Two-Factor Authentication",
+        "description": "Understand the importance of multi-factor authentication",
+        "question": "What is 2FA?",
+        "choices": ["Two passwords", "Two-Factor Authentication", "Two usernames", "Two email addresses"],
+        "correct_answer": "Two-Factor Authentication",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "2FA (Two-Factor Authentication) requires two different forms of verification to access an account.",
+        "difficulty": "easy",
+        "category": "general",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 20,
+    "fields": {
+        "title": "Data Breach Response",
+        "description": "Learn about responding to security incidents and data breaches",
+        "question": "What should you do first when you discover a data breach?",
+        "choices": ["Delete all data", "Ignore it", "Document and report it immediately", "Wait and see"],
+        "correct_answer": "Document and report it immediately",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "When a data breach is discovered, it should be documented and reported immediately to contain the incident.",
+        "difficulty": "easy",
+        "category": "general",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 21,
+    "fields": {
+        "title": "Network Traffic Analysis",
+        "description": "Learn about analyzing network traffic for security threats",
+        "question": "What tool is commonly used for network packet analysis?",
+        "choices": ["Wireshark", "Norton Antivirus", "Windows Firewall", "Chrome Browser"],
+        "correct_answer": "Wireshark",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Wireshark is a popular network protocol analyzer that captures and displays network traffic in real-time.",
+        "difficulty": "medium",
+        "category": "network",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 22,
+    "fields": {
+        "title": "Intrusion Detection Systems",
+        "description": "Understand how IDS systems monitor network security",
+        "question": "What is the difference between IDS and IPS?",
+        "choices": ["IDS detects, IPS prevents", "IDS prevents, IPS detects", "Both do the same thing", "Neither exists"],
+        "correct_answer": "IDS detects, IPS prevents",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "IDS (Intrusion Detection System) detects threats, while IPS (Intrusion Prevention System) actively blocks them.",
+        "difficulty": "medium",
+        "category": "network",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 23,
+    "fields": {
+        "title": "Network Segmentation",
+        "description": "Learn about dividing networks for security",
+        "question": "What is the purpose of VLANs in network security?",
+        "choices": ["To increase internet speed", "To separate network traffic", "To reduce costs", "To add more devices"],
+        "correct_answer": "To separate network traffic",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "VLANs (Virtual Local Area Networks) separate network traffic for security and performance reasons.",
+        "difficulty": "medium",
+        "category": "network",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 24,
+    "fields": {
+        "title": "Network Access Control",
+        "description": "Understand NAC systems for network security",
+        "question": "What does NAC stand for in network security?",
+        "choices": ["Network Access Control", "Network Attack Control", "Network Admin Control", "Network Access Code"],
+        "correct_answer": "Network Access Control",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "NAC (Network Access Control) ensures only authorized devices can access the network.",
+        "difficulty": "medium",
+        "category": "network",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 25,
+    "fields": {
+        "title": "Network Monitoring Tools",
+        "description": "Learn about tools for monitoring network security",
+        "question": "Which tool is used for network monitoring and alerting?",
+        "choices": ["Nagios", "Microsoft Word", "Adobe Photoshop", "Google Chrome"],
+        "correct_answer": "Nagios",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Nagios is a popular open-source network monitoring tool that provides alerting and reporting capabilities.",
+        "difficulty": "medium",
+        "category": "network",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 26,
+    "fields": {
+        "title": "Advanced Network Attacks",
+        "description": "Learn about sophisticated network-based attacks",
+        "question": "What is a Man-in-the-Middle attack?",
+        "choices": ["A virus that spreads quickly", "An attacker intercepting communication", "A firewall failure", "A network upgrade"],
+        "correct_answer": "An attacker intercepting communication",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A Man-in-the-Middle attack occurs when an attacker secretly intercepts and relays communication between two parties.",
+        "difficulty": "hard",
+        "category": "network",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 27,
+    "fields": {
+        "title": "Network Forensics",
+        "description": "Understand network forensics and incident response",
+        "question": "What is network forensics used for?",
+        "choices": ["To speed up networks", "To investigate security incidents", "To install software", "To backup data"],
+        "correct_answer": "To investigate security incidents",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Network forensics involves capturing and analyzing network traffic to investigate security incidents and attacks.",
+        "difficulty": "hard",
+        "category": "network",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 28,
+    "fields": {
+        "title": "Advanced Firewall Rules",
+        "description": "Learn about complex firewall configurations",
+        "question": "What is a stateful firewall?",
+        "choices": ["A firewall that remembers connections", "A firewall that blocks everything", "A firewall that only works at night", "A firewall for states"],
+        "correct_answer": "A firewall that remembers connections",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A stateful firewall tracks the state of network connections and makes decisions based on connection context.",
+        "difficulty": "hard",
+        "category": "network",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 29,
+    "fields": {
+        "title": "Network Protocol Vulnerabilities",
+        "description": "Understand vulnerabilities in network protocols",
+        "question": "What is ARP spoofing?",
+        "choices": ["A type of virus", "Manipulating ARP tables", "A firewall technique", "An encryption method"],
+        "correct_answer": "Manipulating ARP tables",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "ARP spoofing involves sending fake ARP messages to associate an attacker's MAC address with a legitimate IP address.",
+        "difficulty": "hard",
+        "category": "network",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 30,
+    "fields": {
+        "title": "Advanced Network Defense",
+        "description": "Learn about sophisticated network security measures",
+        "question": "What is honeypot technology used for?",
+        "choices": ["To attract hackers", "To store honey", "To speed up networks", "To backup data"],
+        "correct_answer": "To attract hackers",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Honeypots are decoy systems designed to attract and study hackers, helping security professionals understand attack methods.",
+        "difficulty": "hard",
+        "category": "network",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 31,
+    "fields": {
+        "title": "XSS Attack Prevention",
+        "description": "Learn about preventing Cross-Site Scripting attacks",
+        "question": "What is the best defense against XSS attacks?",
+        "choices": ["Using HTTPS", "Input sanitization", "Strong passwords", "Antivirus software"],
+        "correct_answer": "Input sanitization",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Input sanitization removes or encodes potentially dangerous characters to prevent XSS attacks.",
+        "difficulty": "medium",
+        "category": "web",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 32,
+    "fields": {
+        "title": "CSRF Protection",
+        "description": "Understand Cross-Site Request Forgery attacks",
+        "question": "What is a CSRF token used for?",
+        "choices": ["To encrypt data", "To prevent unauthorized requests", "To speed up websites", "To backup data"],
+        "correct_answer": "To prevent unauthorized requests",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "CSRF tokens prevent attackers from making unauthorized requests on behalf of authenticated users.",
+        "difficulty": "medium",
+        "category": "web",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 33,
+    "fields": {
+        "title": "Session Management",
+        "description": "Learn about secure session handling",
+        "question": "What is session hijacking?",
+        "choices": ["Stealing session cookies", "Creating new sessions", "Deleting sessions", "Backing up sessions"],
+        "correct_answer": "Stealing session cookies",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Session hijacking involves stealing or guessing session tokens to impersonate legitimate users.",
+        "difficulty": "medium",
+        "category": "web",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 34,
+    "fields": {
+        "title": "Web Application Firewalls",
+        "description": "Understand WAF protection for web apps",
+        "question": "What does WAF stand for?",
+        "choices": ["Web Application Firewall", "Web Attack Firewall", "Web Access Firewall", "Web Admin Firewall"],
+        "correct_answer": "Web Application Firewall",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A WAF (Web Application Firewall) protects web applications from various attacks by filtering HTTP traffic.",
+        "difficulty": "medium",
+        "category": "web",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 35,
+    "fields": {
+        "title": "Content Security Policy",
+        "description": "Learn about CSP headers for web security",
+        "question": "What is the purpose of CSP headers?",
+        "choices": ["To speed up websites", "To prevent XSS attacks", "To backup data", "To encrypt passwords"],
+        "correct_answer": "To prevent XSS attacks",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Content Security Policy headers help prevent XSS attacks by controlling which resources can be loaded.",
+        "difficulty": "medium",
+        "category": "web",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 36,
+    "fields": {
+        "title": "Advanced Web Exploitation",
+        "description": "Learn about sophisticated web application attacks",
+        "question": "What is a Server-Side Template Injection?",
+        "choices": ["A type of virus", "Injecting malicious templates", "A firewall technique", "An encryption method"],
+        "correct_answer": "Injecting malicious templates",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "SSTI occurs when user input is embedded in templates that are processed on the server side.",
+        "difficulty": "hard",
+        "category": "web",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 37,
+    "fields": {
+        "title": "Web Application Penetration Testing",
+        "description": "Understand advanced web security testing",
+        "question": "What is the OWASP Top 10?",
+        "choices": ["A list of top websites", "Top 10 web vulnerabilities", "Top 10 web browsers", "Top 10 web servers"],
+        "correct_answer": "Top 10 web vulnerabilities",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "The OWASP Top 10 is a standard awareness document for developers and web application security.",
+        "difficulty": "hard",
+        "category": "web",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 38,
+    "fields": {
+        "title": "Advanced Authentication Bypass",
+        "description": "Learn about sophisticated authentication attacks",
+        "question": "What is a JWT token?",
+        "choices": ["A type of virus", "JSON Web Token", "A firewall", "An encryption tool"],
+        "correct_answer": "JSON Web Token",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "JWT (JSON Web Token) is a compact, URL-safe means of representing claims between two parties.",
+        "difficulty": "hard",
+        "category": "web",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 39,
+    "fields": {
+        "title": "Web Application Logic Flaws",
+        "description": "Understand business logic vulnerabilities",
+        "question": "What is a race condition in web applications?",
+        "choices": ["A type of virus", "Timing-based vulnerability", "A firewall failure", "An encryption error"],
+        "correct_answer": "Timing-based vulnerability",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Race conditions occur when the outcome depends on the sequence or timing of events that are not controlled.",
+        "difficulty": "hard",
+        "category": "web",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 40,
+    "fields": {
+        "title": "Advanced Web Security Headers",
+        "description": "Learn about comprehensive web security headers",
+        "question": "What does HSTS stand for?",
+        "choices": ["HTTP Strict Transport Security", "HTTP Secure Transfer System", "HTTP Security Token Service", "HTTP Safe Transfer Security"],
+        "correct_answer": "HTTP Strict Transport Security",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "HSTS forces web browsers to use HTTPS instead of HTTP, preventing protocol downgrade attacks.",
+        "difficulty": "hard",
+        "category": "web",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 41,
+    "fields": {
+        "title": "Symmetric Encryption",
+        "description": "Learn about symmetric key cryptography",
+        "question": "What is AES encryption?",
+        "choices": ["A type of virus", "Advanced Encryption Standard", "A firewall", "An antivirus"],
+        "correct_answer": "Advanced Encryption Standard",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "AES (Advanced Encryption Standard) is a symmetric encryption algorithm widely used for securing data.",
+        "difficulty": "medium",
+        "category": "crypto",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 42,
+    "fields": {
+        "title": "Hash Functions",
+        "description": "Understand cryptographic hash functions",
+        "question": "What is SHA-256?",
+        "choices": ["A type of virus", "A hash function", "A firewall", "An encryption tool"],
+        "correct_answer": "A hash function",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "SHA-256 is a cryptographic hash function that produces a 256-bit hash value.",
+        "difficulty": "medium",
+        "category": "crypto",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 43,
+    "fields": {
+        "title": "Public Key Infrastructure",
+        "description": "Learn about PKI and digital certificates",
+        "question": "What is a Certificate Authority?",
+        "choices": ["A type of virus", "An entity that issues digital certificates", "A firewall", "An encryption tool"],
+        "correct_answer": "An entity that issues digital certificates",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A Certificate Authority (CA) is an entity that issues digital certificates to verify identities.",
+        "difficulty": "medium",
+        "category": "crypto",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 44,
+    "fields": {
+        "title": "Digital Signatures",
+        "description": "Understand digital signature technology",
+        "question": "What is a digital signature used for?",
+        "choices": ["To encrypt data", "To verify authenticity", "To speed up encryption", "To backup data"],
+        "correct_answer": "To verify authenticity",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Digital signatures verify the authenticity and integrity of digital messages or documents.",
+        "difficulty": "medium",
+        "category": "crypto",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 45,
+    "fields": {
+        "title": "Key Exchange Protocols",
+        "description": "Learn about secure key exchange methods",
+        "question": "What is Diffie-Hellman key exchange?",
+        "choices": ["A type of virus", "A method for secure key exchange", "A firewall", "An encryption tool"],
+        "correct_answer": "A method for secure key exchange",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Diffie-Hellman allows two parties to establish a shared secret key over an insecure channel.",
+        "difficulty": "medium",
+        "category": "crypto",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 46,
+    "fields": {
+        "title": "Advanced Cryptanalysis",
+        "description": "Learn about breaking cryptographic systems",
+        "question": "What is a rainbow table attack?",
+        "choices": ["A type of virus", "Pre-computed hash tables", "A firewall technique", "An encryption method"],
+        "correct_answer": "Pre-computed hash tables",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Rainbow tables are pre-computed tables for reversing cryptographic hash functions.",
+        "difficulty": "hard",
+        "category": "crypto",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 47,
+    "fields": {
+        "title": "Quantum Cryptography",
+        "description": "Understand quantum-resistant cryptography",
+        "question": "What is quantum-resistant cryptography?",
+        "choices": ["A type of virus", "Cryptography resistant to quantum computers", "A firewall", "An encryption tool"],
+        "correct_answer": "Cryptography resistant to quantum computers",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Quantum-resistant cryptography uses algorithms that are secure against attacks by quantum computers.",
+        "difficulty": "hard",
+        "category": "crypto",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 48,
+    "fields": {
+        "title": "Advanced Encryption Standards",
+        "description": "Learn about modern encryption algorithms",
+        "question": "What is RSA encryption?",
+        "choices": ["A type of virus", "Rivest-Shamir-Adleman algorithm", "A firewall", "An antivirus"],
+        "correct_answer": "Rivest-Shamir-Adleman algorithm",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "RSA is an asymmetric encryption algorithm named after its creators Rivest, Shamir, and Adleman.",
+        "difficulty": "hard",
+        "category": "crypto",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 49,
+    "fields": {
+        "title": "Cryptographic Protocol Vulnerabilities",
+        "description": "Understand weaknesses in cryptographic protocols",
+        "question": "What is a padding oracle attack?",
+        "choices": ["A type of virus", "Exploiting padding validation", "A firewall technique", "An encryption method"],
+        "correct_answer": "Exploiting padding validation",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Padding oracle attacks exploit the way cryptographic padding is validated to decrypt data.",
+        "difficulty": "hard",
+        "category": "crypto",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 50,
+    "fields": {
+        "title": "Advanced Cryptographic Implementations",
+        "description": "Learn about secure cryptographic implementations",
+        "question": "What is a side-channel attack?",
+        "choices": ["A type of virus", "Attacking through physical characteristics", "A firewall technique", "An encryption method"],
+        "correct_answer": "Attacking through physical characteristics",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Side-channel attacks exploit physical characteristics like power consumption or timing to extract cryptographic keys.",
+        "difficulty": "hard",
+        "category": "crypto",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 51,
+    "fields": {
+        "title": "Incident Response Planning",
+        "description": "Learn about planning for security incidents",
+        "question": "What is an incident response plan?",
+        "choices": ["A type of virus", "A documented procedure", "A firewall", "An encryption tool"],
+        "correct_answer": "A documented procedure",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "An incident response plan is a documented procedure for handling security incidents.",
+        "difficulty": "medium",
+        "category": "general",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 52,
+    "fields": {
+        "title": "Security Awareness Training",
+        "description": "Understand the importance of security education",
+        "question": "Why is security awareness training important?",
+        "choices": ["To speed up computers", "To educate users about threats", "To install software", "To backup data"],
+        "correct_answer": "To educate users about threats",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Security awareness training educates users about security threats and best practices.",
+        "difficulty": "medium",
+        "category": "general",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 53,
+    "fields": {
+        "title": "Risk Assessment",
+        "description": "Learn about evaluating security risks",
+        "question": "What is risk assessment in cybersecurity?",
+        "choices": ["A type of virus", "Evaluating potential threats", "A firewall", "An encryption tool"],
+        "correct_answer": "Evaluating potential threats",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Risk assessment involves identifying, analyzing, and evaluating potential security threats and vulnerabilities.",
+        "difficulty": "medium",
+        "category": "general",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 54,
+    "fields": {
+        "title": "Compliance and Regulations",
+        "description": "Understand cybersecurity compliance requirements",
+        "question": "What is GDPR in cybersecurity?",
+        "choices": ["A type of virus", "General Data Protection Regulation", "A firewall", "An encryption tool"],
+        "correct_answer": "General Data Protection Regulation",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "GDPR (General Data Protection Regulation) is a regulation on data protection and privacy in the EU.",
+        "difficulty": "medium",
+        "category": "general",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 55,
+    "fields": {
+        "title": "Security Metrics and KPIs",
+        "description": "Learn about measuring security effectiveness",
+        "question": "What is a KPI in cybersecurity?",
+        "choices": ["A type of virus", "Key Performance Indicator", "A firewall", "An encryption tool"],
+        "correct_answer": "Key Performance Indicator",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "KPIs (Key Performance Indicators) measure the effectiveness of security programs and controls.",
+        "difficulty": "medium",
+        "category": "general",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 56,
+    "fields": {
+        "title": "Advanced Threat Intelligence",
+        "description": "Learn about sophisticated threat analysis",
+        "question": "What is threat intelligence?",
+        "choices": ["A type of virus", "Information about threats", "A firewall", "An encryption tool"],
+        "correct_answer": "Information about threats",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Threat intelligence is information about threats that helps organizations make informed security decisions.",
+        "difficulty": "hard",
+        "category": "general",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 57,
+    "fields": {
+        "title": "Advanced Security Architecture",
+        "description": "Understand enterprise security design",
+        "question": "What is zero-trust security?",
+        "choices": ["A type of virus", "A security model", "A firewall", "An encryption tool"],
+        "correct_answer": "A security model",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Zero-trust security assumes no user or device should be trusted by default.",
+        "difficulty": "hard",
+        "category": "general",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 58,
+    "fields": {
+        "title": "Advanced Incident Response",
+        "description": "Learn about sophisticated incident handling",
+        "question": "What is digital forensics?",
+        "choices": ["A type of virus", "Investigating digital evidence", "A firewall", "An encryption tool"],
+        "correct_answer": "Investigating digital evidence",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Digital forensics involves collecting and analyzing digital evidence for legal or investigative purposes.",
+        "difficulty": "hard",
+        "category": "general",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 59,
+    "fields": {
+        "title": "Advanced Security Operations",
+        "description": "Learn about SOC operations and management",
+        "question": "What is a SOC in cybersecurity?",
+        "choices": ["A type of virus", "Security Operations Center", "A firewall", "An encryption tool"],
+        "correct_answer": "Security Operations Center",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A SOC (Security Operations Center) monitors and responds to security incidents in real-time.",
+        "difficulty": "hard",
+        "category": "general",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 60,
+    "fields": {
+        "title": "Advanced Security Governance",
+        "description": "Learn about security policy and governance",
+        "question": "What is security governance?",
+        "choices": ["A type of virus", "Security policy framework", "A firewall", "An encryption tool"],
+        "correct_answer": "Security policy framework",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Security governance establishes the framework for managing security policies and procedures.",
+        "difficulty": "hard",
+        "category": "general",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 61,
+    "fields": {
+        "title": "Cloud Security Basics",
+        "description": "Learn about securing cloud computing environments",
+        "question": "What is the shared responsibility model in cloud security?",
+        "choices": ["Cloud provider handles everything", "Customer handles everything", "Shared security responsibilities", "No security needed"],
+        "correct_answer": "Shared security responsibilities",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "The shared responsibility model means both cloud provider and customer have security responsibilities.",
+        "difficulty": "easy",
+        "category": "general",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 62,
+    "fields": {
+        "title": "Mobile Device Security",
+        "description": "Understand mobile security threats and protection",
+        "question": "What is jailbreaking in mobile security?",
+        "choices": ["Installing antivirus", "Removing security restrictions", "Updating software", "Backing up data"],
+        "correct_answer": "Removing security restrictions",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Jailbreaking removes manufacturer security restrictions, making devices vulnerable to attacks.",
+        "difficulty": "easy",
+        "category": "general",
+        "points": 10,
+        "challenge_type": "mcq",
+        "time_limit": 60
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 63,
+    "fields": {
+        "title": "IoT Security Challenges",
+        "description": "Learn about Internet of Things security",
+        "question": "Why are IoT devices often vulnerable to attacks?",
+        "choices": ["They are too expensive", "They lack security updates", "They are too small", "They use too much power"],
+        "correct_answer": "They lack security updates",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Many IoT devices lack regular security updates and have weak default passwords.",
+        "difficulty": "medium",
+        "category": "general",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 64,
+    "fields": {
+        "title": "Blockchain Security",
+        "description": "Understand blockchain technology security",
+        "question": "What makes blockchain transactions secure?",
+        "choices": ["Centralized control", "Cryptographic hashing", "Simple passwords", "Fast processing"],
+        "correct_answer": "Cryptographic hashing",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Blockchain uses cryptographic hashing to ensure transaction integrity and security.",
+        "difficulty": "medium",
+        "category": "crypto",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 65,
+    "fields": {
+        "title": "API Security Testing",
+        "description": "Learn about testing API security",
+        "question": "What is API rate limiting used for?",
+        "choices": ["To speed up APIs", "To prevent abuse", "To reduce costs", "To add features"],
+        "correct_answer": "To prevent abuse",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "API rate limiting prevents abuse by limiting the number of requests a user can make.",
+        "difficulty": "medium",
+        "category": "web",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 66,
+    "fields": {
+        "title": "Wireless Network Security",
+        "description": "Learn about securing wireless networks",
+        "question": "What is WPA3?",
+        "choices": ["A type of virus", "WiFi security protocol", "A firewall", "An encryption tool"],
+        "correct_answer": "WiFi security protocol",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "WPA3 is the latest WiFi security protocol that provides stronger encryption and protection.",
+        "difficulty": "medium",
+        "category": "network",
+        "points": 20,
+        "challenge_type": "mcq",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 67,
+    "fields": {
+        "title": "Advanced Malware Analysis",
+        "description": "Learn about analyzing sophisticated malware",
+        "question": "What is a sandbox in malware analysis?",
+        "choices": ["A type of virus", "Isolated testing environment", "A firewall", "An antivirus"],
+        "correct_answer": "Isolated testing environment",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "A sandbox is an isolated environment for safely analyzing malware without affecting the system.",
+        "difficulty": "hard",
+        "category": "general",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 68,
+    "fields": {
+        "title": "Advanced Network Protocols",
+        "description": "Learn about secure network protocols",
+        "question": "What is IPsec?",
+        "choices": ["A type of virus", "Internet Protocol Security", "A firewall", "An encryption tool"],
+        "correct_answer": "Internet Protocol Security",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "IPsec provides security at the IP packet level, ensuring data confidentiality and integrity.",
+        "difficulty": "hard",
+        "category": "network",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 69,
+    "fields": {
+        "title": "Advanced Web Security",
+        "description": "Learn about sophisticated web security measures",
+        "question": "What is SameSite cookie attribute?",
+        "choices": ["A type of virus", "Cookie security feature", "A firewall", "An encryption tool"],
+        "correct_answer": "Cookie security feature",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "SameSite prevents cookies from being sent in cross-site requests, protecting against CSRF attacks.",
+        "difficulty": "hard",
+        "category": "web",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 70,
+    "fields": {
+        "title": "Advanced Cryptography",
+        "description": "Learn about modern cryptographic techniques",
+        "question": "What is elliptic curve cryptography?",
+        "choices": ["A type of virus", "Modern encryption method", "A firewall", "An antivirus"],
+        "correct_answer": "Modern encryption method",
+        "starter_code": "",
+        "sample_input": "",
+        "expected_output": "",
+        "explanation": "Elliptic curve cryptography provides strong security with smaller key sizes than traditional methods.",
+        "difficulty": "hard",
+        "category": "crypto",
+        "points": 30,
+        "challenge_type": "mcq",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 71,
+    "fields": {
+        "title": "Python Password Validation",
+        "description": "Write a function to validate password security requirements",
+        "question": "Implement a function that checks if a password meets security standards: at least 8 characters, uppercase, lowercase, number, and special character.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Medium",
+        "starter_code": "def validate_password(password):\n    # Your code here\n    pass",
+        "sample_input": "SecurePass123!",
+        "expected_output": "True",
+        "explanation": "This challenge tests your understanding of string manipulation and security validation in Python.",
+        "difficulty": "medium",
+        "category": "python",
+        "points": 20,
+        "challenge_type": "fix_code",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 72,
+    "fields": {
+        "title": "JavaScript XSS Prevention",
+        "description": "Create a function to sanitize user input and prevent XSS attacks",
+        "question": "Write a function that removes potentially dangerous HTML tags and scripts from user input.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Medium",
+        "starter_code": "function sanitizeInput(input) {\n    // Your code here\n}",
+        "sample_input": "<script>alert('xss')</script>Hello World!",
+        "expected_output": "Hello World!",
+        "explanation": "This challenge focuses on web security and preventing cross-site scripting attacks.",
+        "difficulty": "medium",
+        "category": "javascript",
+        "points": 20,
+        "challenge_type": "fix_code",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 73,
+    "fields": {
+        "title": "SQL Injection Prevention",
+        "description": "Write secure SQL queries using parameterized statements",
+        "question": "Create a secure SQL query that prevents SQL injection by using parameterized queries.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Medium",
+        "starter_code": "-- Your secure SQL query here\n-- Use parameterized queries to prevent SQL injection",
+        "sample_input": "admin",
+        "expected_output": "SELECT * FROM users WHERE username = ?",
+        "explanation": "This challenge teaches database security and preventing SQL injection attacks.",
+        "difficulty": "medium",
+        "category": "databases",
+        "points": 20,
+        "challenge_type": "fix_code",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 74,
+    "fields": {
+        "title": "Python Encryption",
+        "description": "Implement basic encryption and decryption functions",
+        "question": "Create functions to encrypt and decrypt text using a simple substitution cipher.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Hard",
+        "starter_code": "def encrypt(text, key):\n    # Your encryption code here\n    pass\n\ndef decrypt(text, key):\n    # Your decryption code here\n    pass",
+        "sample_input": "Hello World",
+        "expected_output": "Encrypted: Khoor Zruog",
+        "explanation": "This challenge covers cryptography basics and string manipulation in Python.",
+        "difficulty": "hard",
+        "category": "python",
+        "points": 30,
+        "challenge_type": "fix_code",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 75,
+    "fields": {
+        "title": "JavaScript Security Hash",
+        "description": "Implement a simple hash function for data integrity",
+        "question": "Create a function that generates a simple hash value for input data to verify integrity.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Hard",
+        "starter_code": "function generateHash(input) {\n    // Your hash function here\n    // Return a hash value\n}",
+        "sample_input": "Hello World",
+        "expected_output": "Hash: 72caa9",
+        "explanation": "This challenge tests understanding of hashing algorithms and data security.",
+        "difficulty": "hard",
+        "category": "javascript",
+        "points": 30,
+        "challenge_type": "fix_code",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 76,
+    "fields": {
+        "title": "Python Network Scanner",
+        "description": "Create a basic network port scanner",
+        "question": "Implement a function that scans for open ports on a given IP address.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Hard",
+        "starter_code": "import socket\n\ndef scan_ports(ip, start_port, end_port):\n    # Your port scanning code here\n    pass",
+        "sample_input": "127.0.0.1",
+        "expected_output": "Open ports: [80, 443, 8080]",
+        "explanation": "This challenge covers network programming and security scanning techniques.",
+        "difficulty": "hard",
+        "category": "network",
+        "points": 30,
+        "challenge_type": "fix_code",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 77,
+    "fields": {
+        "title": "JavaScript Secure Storage",
+        "description": "Implement secure local storage with encryption",
+        "question": "Create functions to securely store and retrieve data from localStorage with encryption.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Hard",
+        "starter_code": "function secureStore(key, value, password) {\n    // Your secure storage code here\n}\n\nfunction secureRetrieve(key, password) {\n    // Your secure retrieval code here\n}",
+        "sample_input": "user_data",
+        "expected_output": "Data stored/retrieved securely",
+        "explanation": "This challenge focuses on client-side security and data protection.",
+        "difficulty": "hard",
+        "category": "javascript",
+        "points": 30,
+        "challenge_type": "fix_code",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 78,
+    "fields": {
+        "title": "Python Web Scraper Security",
+        "description": "Build a secure web scraper with rate limiting",
+        "question": "Create a web scraper that respects robots.txt and implements rate limiting for ethical scraping.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Hard",
+        "starter_code": "import requests\nimport time\n\ndef secure_scrape(url):\n    # Your secure scraping code here\n    pass",
+        "sample_input": "https://example.com",
+        "expected_output": "Content scraped securely",
+        "explanation": "This challenge teaches ethical web scraping and respecting website policies.",
+        "difficulty": "hard",
+        "category": "web",
+        "points": 30,
+        "challenge_type": "fix_code",
+        "time_limit": 120
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 79,
+    "fields": {
+        "title": "JavaScript Input Validation",
+        "description": "Create comprehensive input validation functions",
+        "question": "Implement functions to validate email, phone, and credit card inputs with proper error handling.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Medium",
+        "starter_code": "function validateEmail(email) {\n    // Your email validation code here\n}\n\nfunction validatePhone(phone) {\n    // Your phone validation code here\n}",
+        "sample_input": "test@example.com",
+        "expected_output": "Valid email format",
+        "explanation": "This challenge covers input validation and security best practices.",
+        "difficulty": "medium",
+        "category": "javascript",
+        "points": 20,
+        "challenge_type": "fix_code",
+        "time_limit": 90
+    }
+},
+{
+    "model": "home.cyberchallenge",
+    "pk": 80,
+    "fields": {
+        "title": "Python File Security",
+        "description": "Implement secure file operations with validation",
+        "question": "Create functions to safely read and write files with proper path validation and error handling.",
+        "choices": ["Easy", "Medium", "Hard", "Expert"],
+        "correct_answer": "Medium",
+        "starter_code": "import os\n\ndef secure_read_file(filepath):\n    # Your secure file reading code here\n    pass\n\ndef secure_write_file(filepath, content):\n    # Your secure file writing code here\n    pass",
+        "sample_input": "data.txt",
+        "expected_output": "File operations completed securely",
+        "explanation": "This challenge focuses on file system security and preventing path traversal attacks.",
+        "difficulty": "medium",
+        "category": "python",
+        "points": 20,
+        "challenge_type": "fix_code",
+        "time_limit": 90
+    }
 }
 ]

@@ -544,12 +544,26 @@ class LeaderBoardTable(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
+    rank = models.IntegerField(default=0)  # Added ranking field
+    last_updated = models.DateTimeField(auto_now=True)  # Track when ranking was last updated
     
     class Meta:
-        ordering = ['-total_points']  
+        ordering = ['-total_points', 'rank']  # Order by points first, then rank
+        unique_together = ['user', 'category']  # One entry per user per category
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
+        return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS - Rank #{self.rank}"
+    
+    def save(self, *args, **kwargs):
+        # Auto-calculate rank before saving
+        if self.total_points > 0:
+            # Get rank based on total points in this category
+            higher_scores = LeaderBoardTable.objects.filter(
+                category=self.category,
+                total_points__gt=self.total_points
+            ).count()
+            self.rank = higher_scores + 1
+        super().save(*args, **kwargs)
         
 class Experience(models.Model):
     name = models.CharField(max_length=100)

@@ -5,9 +5,9 @@
 {% include 'includes/pre-loader.html' %}
 
 <div class="content-container container mt-10">
-    <h1 class="mb-4 text-center">Cybersecurity Quiz</h1>
+    <h1 class="mb-4 text-center">Cybersecurity Quiz & Code Challenges</h1>
     <p class="text-center mb-5">
-        Test your knowledge with our interactive cybersecurity quiz. Answer questions and track your progress!
+        Test your knowledge with our interactive cybersecurity quiz and coding challenges. Answer questions, write code, and track your progress!
     </p>
 
     <!-- Quiz Section -->
@@ -36,134 +36,246 @@
                 </div>
 
                 <div id="result-container" class="text-center" style="display: none;">
-                    <div class="cyber-trophy">
+                    <div class="cyber-trophy mb-4">
                         <div class="trophy-cup"></div>
                         <div class="trophy-base"></div>
                     </div>
-                    <h3 class="mb-4 cyber-text">Quiz Complete!</h3>
-                    <p class="cyber-text">Your final score: <span id="final-score" class="h4">0</span>/<span id="max-score">25</span></p>
-                    <div id="feedback" class="mb-4 cyber-text"></div>
-                    <button id="restart-btn" class="btn btn-primary cyber-btn">Try Again</button>
+                    <h3 class="cyber-text">Quiz Complete!</h3>
+                    <p class="cyber-text">Your final score: <span id="final-score">0</span> out of <span id="max-score">0</span></p>
+                    <div id="feedback" class="mb-4"></div>
+                    <div class="result-actions mb-4">
+                        <button id="restart-btn" class="btn btn-primary cyber-btn me-3">
+                            <i class="fas fa-redo me-1"></i>Restart Quiz
+                        </button>
+                        <a href="{% url 'leaderboard' %}" class="btn btn-success cyber-btn">
+                            <i class="fas fa-trophy me-1"></i>View Leaderboard
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <p class="text-center mb-5">
-        Check out your ranking on the leaderboard!
-        <br>
-        <a href="{% url 'leaderboard' %}" class="btn btn-primary">View Leaderboard</a>
-    </p>
+    <!-- Code Challenge Section -->
+    <div class="code-challenge-container mb-5">
+        <div class="card shadow-lg cyber-card">
+            <div class="card-header bg-success text-white cyber-header">
+                <h3 class="mb-0">Code Challenge</h3>
+                <div class="cyber-particles"></div>
+            </div>
+            <div class="card-body cyber-body">
+                <div class="challenge-selector mb-4">
+                    <label for="challenge-type" class="form-label cyber-text">Select Challenge Type:</label>
+                    <select id="challenge-type" class="form-select cyber-select">
+                        <option value="python">Python Challenge</option>
+                        <option value="javascript">JavaScript Challenge</option>
+                        <option value="sql">SQL Challenge</option>
+                    </select>
+                </div>
+
+                <div id="code-challenge-content">
+                    <div class="challenge-description mb-3">
+                        <h5 class="cyber-text">Challenge Description:</h5>
+                        <p id="challenge-desc" class="cyber-text"></p>
+                    </div>
+
+                    <div class="code-editor-container mb-3">
+                        <div class="editor-header mb-2">
+                            <label class="form-label cyber-text">Write Your Code:</label>
+                            <div class="editor-controls">
+                                <button id="run-code-btn" class="btn btn-success cyber-btn me-2">
+                                    <i class="fas fa-play me-1"></i>Run Code
+                                </button>
+                                <button id="reset-code-btn" class="btn btn-warning cyber-btn">
+                                    <i class="fas fa-undo me-1"></i>Reset
+                                </button>
+                            </div>
+                        </div>
+                        <div id="code-editor" class="code-editor"></div>
+                    </div>
+
+                    <div class="output-container mb-3">
+                        <label class="form-label cyber-text">Output:</label>
+                        <div id="output-console" class="output-console"></div>
+                    </div>
+
+                    <div class="test-cases mb-3">
+                        <h6 class="cyber-text">Test Cases:</h6>
+                        <div id="test-results"></div>
+                    </div>
+
+                    <div class="challenge-actions">
+                        <button id="submit-challenge-btn" class="btn btn-primary cyber-btn" disabled>
+                            <i class="fas fa-check me-1"></i>Submit Solution
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
-/* Copy all the existing styles from challenge_list.html */
-.quiz-container {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden;
+.cyber-card {
+    border: 2px solid #00ff00;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    color: #ffffff;
+    transition: all 0.3s ease;
 }
 
-.cyber-card {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border: 2px solid #00ff00;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+.cyber-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 255, 0, 0.3);
 }
 
 .cyber-header {
-    position: relative;
-    background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #00ff00, #00cc00) !important;
     border-bottom: 2px solid #00ff00;
 }
 
 .cyber-body {
-    background: rgba(26, 26, 46, 0.9);
-    color: #fff;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
 }
 
 .cyber-text {
-    color: #fff;
-    text-shadow: 0 0 5px #00ff00;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
 .cyber-btn {
-    background: linear-gradient(45deg, #00ff00, #00b300);
-    border: none;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    border: 2px solid #00ff00;
+    color: #000000;
+    font-weight: bold;
     transition: all 0.3s ease;
 }
 
 .cyber-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+    background: linear-gradient(135deg, #00cc00, #009900);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 255, 0, 0.4);
+}
+
+.cyber-select {
+    background: #2d2d2d;
+    border: 2px solid #00ff00;
+    color: #ffffff;
+}
+
+.cyber-select:focus {
+    background: #2d2d2d;
+    border-color: #00ff00;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
 .cyber-progress {
-    background: linear-gradient(90deg, #00ff00, #00b300);
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    background: linear-gradient(90deg, #00ff00, #00cc00);
+    height: 8px;
+    border-radius: 4px;
 }
 
 .cyber-score {
-    background: linear-gradient(45deg, #00ff00, #00b300);
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    background: linear-gradient(135deg, #00ff00, #00cc00) !important;
+    color: #000000 !important;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
 }
 
 .option-btn {
-    background: rgba(0, 255, 0, 0.1);
+    background: linear-gradient(135deg, #2d2d2d, #3d3d3d);
     border: 2px solid #00ff00;
-    color: #fff;
+    color: #ffffff;
+    padding: 15px 20px;
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
     transition: all 0.3s ease;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    text-align: left;
-    border-radius: 5px;
+    font-weight: bold;
 }
 
 .option-btn:hover {
-    background: rgba(0, 255, 0, 0.2);
-    transform: translateX(5px);
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    color: #000000;
+    transform: scale(1.05);
+}
+
+.option-btn.selected {
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    color: #000000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
 }
 
 .option-btn.correct {
-    background: linear-gradient(45deg, #00ff00, #00b300);
-    animation: correct-answer 0.5s ease;
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    color: #000000;
+    animation: correct-answer 0.5s;
 }
 
 .option-btn.incorrect {
-    background: linear-gradient(45deg, #ff0000, #b30000);
-    animation: incorrect-answer 0.5s ease;
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    color: #ffffff;
+    animation: incorrect-answer 0.5s;
 }
 
-.cyber-trophy {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 20px;
+.code-editor {
+    background: #1e1e1e;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    min-height: 300px;
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-y: auto;
 }
 
-.trophy-cup {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(45deg, #ffd700, #ffa500);
-    border-radius: 50% 50% 0 0;
+.output-console {
+    background: #1e1e1e;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    min-height: 150px;
+    font-family: 'Courier New', monospace;
+    color: #00ff00;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-y: auto;
+}
+
+.test-results {
+    background: #2d2d2d;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.test-pass {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.test-fail {
+    border-color: #ff0000;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.celebration {
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    animation: celebration-bounce 1s ease;
 }
 
-.trophy-base {
-    width: 30px;
-    height: 20px;
-    background: linear-gradient(45deg, #ffd700, #ffa500);
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 5px;
+@keyframes celebration-bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translate(-50%, -50%) scale(1); }
+    40% { transform: translate(-50%, -50%) scale(1.2); }
+    60% { transform: translate(-50%, -50%) scale(1.1); }
 }
 
 @keyframes correct-answer {
@@ -216,10 +328,48 @@
         opacity: 0;
     }
 }
+
+.cyber-trophy {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.trophy-cup {
+    width: 40px;
+    height: 50px;
+    background: linear-gradient(45deg, #ffd700, #ffa500);
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.trophy-base {
+    width: 30px;
+    height: 20px;
+    background: linear-gradient(45deg, #ffd700, #ffa500);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+}
 </style>
 
+<!-- Include CodeMirror for syntax highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
+
 <script>
-// Copy all the existing JavaScript from challenge_list.html
+// Quiz Data
 const quizData = [
     {
         question: "What is the most common type of cyber attack?",
@@ -278,10 +428,87 @@ const quizData = [
     }
 ];
 
+// Code Challenge Data
+const codeChallenges = {
+    python: {
+        title: "Python Security Challenge",
+        description: "Write a function to validate if a password meets security requirements. The password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+        starterCode: `def validate_password(password):
+    # Your code here
+    pass
+
+# Test your function
+test_password = "SecurePass123!"
+result = validate_password(test_password)
+print(f"Password validation result: {result}")`,
+        testCases: [
+            { input: "SecurePass123!", expected: true },
+            { input: "weak", expected: false },
+            { input: "NoSpecialChar123", expected: false },
+            { input: "nouppercase123!", expected: false }
+        ],
+        solution: `def validate_password(password):
+    if len(password) < 8:
+        return False
+    
+    has_upper = any(c.isupper() for c in password)
+    has_lower = any(c.islower() for c in password)
+    has_digit = any(c.isdigit() for c in password)
+    has_special = any(c in "!@#$%^&*()_+-=[]{}|;':\",./<>?" for c in password)
+    
+    return has_upper and has_lower and has_digit and has_special`
+    },
+    javascript: {
+        title: "JavaScript Security Challenge",
+        description: "Create a function to sanitize user input by removing potentially dangerous HTML tags and scripts.",
+        starterCode: `function sanitizeInput(input) {
+    // Your code here
+}
+
+// Test your function
+const testInput = '<script>console.log("xss")</script>Hello World!';
+const result = sanitizeInput(testInput);
+console.log(result);`,
+        testCases: [
+            { input: '<script>console.log("xss")</script>Hello World!', expected: 'Hello World!' },
+            { input: '<p>Safe text</p>', expected: 'Safe text' },
+            { input: 'Normal text without tags', expected: 'Normal text without tags' },
+            { input: '<img src="x" onerror="console.log(1)">', expected: '' }
+        ],
+        solution: `function sanitizeInput(input) {
+    return input.replace(/<[^>]*>/g, '');
+}`
+    },
+    sql: {
+        title: "SQL Security Challenge",
+        description: "Write a secure SQL query that prevents SQL injection by using parameterized queries. Create a function that safely retrieves user data by username.",
+        starterCode: `-- Your secure SQL query here
+-- Use parameterized queries to prevent SQL injection
+
+-- Example unsafe query (DO NOT USE):
+-- SELECT * FROM users WHERE username = '${username}'
+
+-- Your secure query:`,
+        testCases: [
+            { input: "admin", expected: "SELECT * FROM users WHERE username = ?" },
+            { input: "'; DROP TABLE users; --", expected: "SELECT * FROM users WHERE username = ?" },
+            { input: "user123", expected: "SELECT * FROM users WHERE username = ?" }
+        ],
+        solution: `-- Secure parameterized query
+SELECT * FROM users WHERE username = ?`
+    }
+};
+
+// Quiz Variables
 let currentQuestion = 0;
 let score = 0;
 let selectedOption = null;
 
+// Code Editor Variables
+let codeEditor;
+let currentLanguage = 'python';
+
+// DOM Elements
 const questionText = document.getElementById('question-text');
 const optionsContainer = document.getElementById('options-container');
 const nextButton = document.getElementById('next-btn');
@@ -295,6 +522,43 @@ const maxScoreSpan = document.getElementById('max-score');
 const feedbackDiv = document.getElementById('feedback');
 const restartButton = document.getElementById('restart-btn');
 
+// Code Challenge Elements
+const challengeTypeSelect = document.getElementById('challenge-type');
+const challengeDesc = document.getElementById('challenge-desc');
+const runCodeBtn = document.getElementById('run-code-btn');
+const resetCodeBtn = document.getElementById('reset-code-btn');
+const outputConsole = document.getElementById('output-console');
+const testResults = document.getElementById('test-results');
+const submitChallengeBtn = document.getElementById('submit-challenge-btn');
+
+// Initialize Quiz
+function initQuiz() {
+    loadQuestion();
+    createParticles();
+}
+
+// Initialize Code Editor
+function initCodeEditor() {
+    codeEditor = CodeMirror(document.getElementById('code-editor'), {
+        mode: 'python',
+        theme: 'monokai',
+        lineNumbers: true,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        indentUnit: 4,
+        tabSize: 4,
+        lineWrapping: true,
+        extraKeys: {
+            "Tab": function(cm) {
+                cm.replaceSelection("    ", "end");
+            }
+        }
+    });
+    
+    loadCodeChallenge('python');
+}
+
+// Load Quiz Question
 function loadQuestion() {
     const question = quizData[currentQuestion];
     questionText.textContent = question.question;
@@ -314,6 +578,7 @@ function loadQuestion() {
     updateProgress();
 }
 
+// Select Quiz Option
 function selectOption(e) {
     const selectedButton = e.target;
     const option = selectedButton.dataset.option;
@@ -327,6 +592,7 @@ function selectOption(e) {
     nextButton.disabled = false;
 }
 
+// Check Quiz Answer
 function checkAnswer() {
     const question = quizData[currentQuestion];
     const isCorrect = selectedOption === question.correct;
@@ -353,6 +619,7 @@ function checkAnswer() {
     });
 }
 
+// Show Quiz Result
 function showResult() {
     questionText.style.display = 'none';
     optionsContainer.style.display = 'none';
@@ -377,6 +644,7 @@ function showResult() {
     feedbackDiv.textContent = feedback;
 }
 
+// Update Quiz Progress
 function updateProgress() {
     const progress = ((currentQuestion + 1) / quizData.length) * 100;
     progressBar.style.width = `${progress}%`;
@@ -384,6 +652,165 @@ function updateProgress() {
     totalQuestionsSpan.textContent = quizData.length;
 }
 
+// Load Code Challenge
+function loadCodeChallenge(language) {
+    currentLanguage = language;
+    const challenge = codeChallenges[language];
+    
+    challengeDesc.textContent = challenge.description;
+    
+    // Set CodeMirror mode
+    const modeMap = {
+        'python': 'python',
+        'javascript': 'javascript',
+        'sql': 'sql'
+    };
+    
+    codeEditor.setOption('mode', modeMap[language]);
+    codeEditor.setValue(challenge.starterCode);
+    
+    // Clear previous output
+    outputConsole.innerHTML = '';
+    testResults.innerHTML = '';
+    submitChallengeBtn.disabled = true;
+}
+
+// Run Code
+function runCode() {
+    const code = codeEditor.getValue();
+    const challenge = codeChallenges[currentLanguage];
+    
+    outputConsole.innerHTML = '';
+    
+    try {
+        if (currentLanguage === 'python') {
+            runPythonCode(code, challenge);
+        } else if (currentLanguage === 'javascript') {
+            runJavaScriptCode(code, challenge);
+        } else if (currentLanguage === 'sql') {
+            runSQLCode(code, challenge);
+        }
+    } catch (error) {
+        outputConsole.innerHTML += `<div class="text-danger">Error: ${error.message}</div>`;
+    }
+}
+
+// Run Python Code
+function runPythonCode(code, challenge) {
+    // Simulate Python execution (in real implementation, this would be sent to backend)
+    outputConsole.innerHTML += '<div class="text-info">Running Python code...</div>';
+    
+    // Simple validation for demonstration
+    if (code.includes('def validate_password') && code.includes('return')) {
+        outputConsole.innerHTML += '<div class="text-success">Code structure looks good!</div>';
+        runTestCases(challenge.testCases, code);
+    } else {
+        outputConsole.innerHTML += '<div class="text-warning">Please implement the validate_password function</div>';
+    }
+}
+
+// Run JavaScript Code
+function runJavaScriptCode(code, challenge) {
+    outputConsole.innerHTML += '<div class="text-info">Running JavaScript code...</div>';
+    
+    if (code.includes('function sanitizeInput') && code.includes('return')) {
+        outputConsole.innerHTML += '<div class="text-success">Code structure looks good!</div>';
+        runTestCases(challenge.testCases, code);
+    } else {
+        outputConsole.innerHTML += '<div class="text-warning">Please implement the sanitizeInput function</div>';
+    }
+}
+
+// Run SQL Code
+function runSQLCode(code, challenge) {
+    outputConsole.innerHTML += '<div class="text-info">Running SQL code...</div>';
+    
+    if (code.includes('SELECT') && code.includes('?')) {
+        outputConsole.innerHTML += '<div class="text-success">Secure parameterized query detected!</div>';
+        runTestCases(challenge.testCases, code);
+    } else {
+        outputConsole.innerHTML += '<div class="text-warning">Please use parameterized queries to prevent SQL injection</div>';
+    }
+}
+
+// Run Test Cases
+function runTestCases(testCases, code) {
+    testResults.innerHTML = '<h6 class="cyber-text">Test Results:</h6>';
+    
+    let passedTests = 0;
+    
+    testCases.forEach((testCase, index) => {
+        const testDiv = document.createElement('div');
+        testDiv.className = 'test-results';
+        
+        // Simple validation for demonstration
+        let passed = false;
+        if (currentLanguage === 'python') {
+            passed = code.includes('def validate_password') && code.includes('return');
+        } else if (currentLanguage === 'javascript') {
+            passed = code.includes('function sanitizeInput') && code.includes('return');
+        } else if (currentLanguage === 'sql') {
+            passed = code.includes('SELECT') && code.includes('?');
+        }
+        
+        if (passed) {
+            passedTests++;
+            testDiv.classList.add('test-pass');
+            testDiv.innerHTML = `<span class="text-success">✓ Test ${index + 1} PASSED</span>`;
+        } else {
+            testDiv.classList.add('test-fail');
+            testDiv.innerHTML = `<span class="text-danger">✗ Test ${index + 1} FAILED</span>`;
+        }
+        
+        testResults.appendChild(testDiv);
+    });
+    
+    if (passedTests === testCases.length) {
+        submitChallengeBtn.disabled = false;
+        outputConsole.innerHTML += '<div class="text-success">All tests passed! You can submit your solution.</div>';
+    }
+}
+
+// Reset Code
+function resetCode() {
+    const challenge = codeChallenges[currentLanguage];
+    codeEditor.setValue(challenge.starterCode);
+    outputConsole.innerHTML = '';
+    testResults.innerHTML = '';
+    submitChallengeBtn.disabled = true;
+}
+
+// Submit Challenge
+function submitChallenge() {
+    const code = codeEditor.getValue();
+    const challenge = codeChallenges[currentLanguage];
+    
+    // In real implementation, this would be sent to backend for evaluation
+    outputConsole.innerHTML += '<div class="text-success">🎉 Challenge completed successfully!</div>';
+    outputConsole.innerHTML += '<div class="text-info">Your solution has been submitted and evaluated.</div>';
+    
+    // Show solution
+    setTimeout(() => {
+        outputConsole.innerHTML += '<div class="text-warning">--- Solution ---</div>';
+        outputConsole.innerHTML += `<pre class="text-light">${challenge.solution}</pre>`;
+    }, 2000);
+}
+
+// Create Particles
+function createParticles() {
+    const particlesContainer = document.querySelector('.cyber-particles');
+    if (!particlesContainer) return;
+    
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 3 + 's';
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Event Listeners
 nextButton.addEventListener('click', () => {
     checkAnswer();
     
@@ -409,21 +836,18 @@ restartButton.addEventListener('click', () => {
     loadQuestion();
 });
 
-function createParticles() {
-    const particlesContainer = document.querySelector('.cyber-particles');
-    for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.animationDelay = `${Math.random() * 3}s`;
-        particlesContainer.appendChild(particle);
-    }
-}
+challengeTypeSelect.addEventListener('change', (e) => {
+    loadCodeChallenge(e.target.value);
+});
 
+runCodeBtn.addEventListener('click', runCode);
+resetCodeBtn.addEventListener('click', resetCode);
+submitChallengeBtn.addEventListener('click', submitChallenge);
+
+// Initialize everything when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    createParticles();
-    loadQuestion();
+    initQuiz();
+    initCodeEditor();
 });
 </script>
-
-{% endblock content %} 
+{% endblock %} 

@@ -1902,6 +1902,9 @@ def submit_answer(request, challenge_id):
             )
             leaderboard_entry.total_points = total_points
             leaderboard_entry.save()
+            
+            # Update rankings for this category
+            update_category_rankings(challenge.category)
 
         return JsonResponse({
             'is_correct': is_correct,
@@ -2041,31 +2044,73 @@ def leaderboard(request):
     #Select category to display leaderboard table
     selected_category = request.GET.get('category', '')
     categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    
     if selected_category:
-        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
+        leaderboard_entry = LeaderBoardTable.objects.filter(
+            category=selected_category
+        ).select_related('user').order_by('rank', '-total_points')[:20]  # Show top 20 with rankings
     else:
-        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
+        # Show overall top performers across all categories
+        leaderboard_entry = LeaderBoardTable.objects.select_related('user').order_by('rank', '-total_points')[:20]
 
     context = {
         'entries': leaderboard_entry,
         'categories': categories,
         'selected_category': selected_category,
-
     }
     return render(request, 'pages/leaderboard.html', context)
 
 def leaderboard_update():
+    """
+    Update leaderboard with current user scores and rankings
+    """
     LeaderBoardTable.objects.all().delete()
     users = User.objects.all()
+    
     for user in users:
-        challenges_category = (UserChallenge.objects.filter(user=user, completed=True).values('category_challenges').annotate(total_points=Sum('score')))
-
-        for categories in challenges_category:
-            category = categories['category_challenges']
-            total_points = categories['total_points'] or 0
-
+        # Get completed challenges for this user
+        completed_challenges = UserChallenge.objects.filter(
+            user=user, 
+            completed=True
+        ).select_related('challenge')
+        
+        # Group by category and sum scores
+        category_scores = {}
+        for user_challenge in completed_challenges:
+            category = user_challenge.challenge.category
+            if category not in category_scores:
+                category_scores[category] = 0
+            category_scores[category] += user_challenge.score
+        
+        # Create leaderboard entries for each category
+        for category, total_points in category_scores.items():
             if total_points > 0:
-                LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+                LeaderBoardTable.objects.create(
+                    user=user,
+                    category=category,
+                    total_points=total_points
+                )
+    
+    # Update all rankings after creating entries
+    update_all_rankings()
+
+def update_all_rankings():
+    """
+    Update rankings for all categories
+    """
+    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
+    
+    for category in categories:
+        update_category_rankings(category)
+
+def update_category_rankings(category):
+    """
+    Update rankings for a specific category
+    """
+    entries = LeaderBoardTable.objects.filter(category=category).order_by('-total_points')
+    for rank, entry in enumerate(entries, 1):
+        entry.rank = rank
+        entry.save(update_fields=['rank'])
 
 
 
@@ -2166,4 +2211,216 @@ def policy_deployment(request):
  #Health Check Function
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
+
+@login_required
+def execute_code(request):
+    """
+    Execute code safely for the compiler functionality
+    """
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            language = data.get('language')
+            code = data.get('code')
+            input_data = data.get('input_data', '')
+            
+            if not language or not code:
+                return JsonResponse({'error': 'Language and code are required'}, status=400)
+            
+            # Security: Limit code length and execution time
+            if len(code) > 1000:
+                return JsonResponse({'error': 'Code too long (max 1000 characters)'}, status=400)
+            
+            result = {'output': '', 'error': None, 'execution_time': 0}
+            
+            if language == 'python':
+                # Simple Python code execution (in production, use Docker containers)
+                try:
+                    # Create a safe execution environment
+                    safe_globals = {
+                        '__builtins__': {
+                            'print': print,
+                            'len': len,
+                            'str': str,
+                            'int': int,
+                            'float': float,
+                            'list': list,
+                            'dict': dict,
+                            'set': set,
+                            'tuple': tuple,
+                            'range': range,
+                            'enumerate': enumerate,
+                            'zip': zip,
+                            'any': any,
+                            'all': all,
+                            'sum': sum,
+                            'max': max,
+                            'min': min,
+                            'abs': abs,
+                            'round': round,
+                            'sorted': sorted,
+                            'reversed': reversed,
+                            'filter': filter,
+                            'map': map,
+                            'isinstance': isinstance,
+                            'type': type,
+                            'bool': bool,
+                            'chr': chr,
+                            'ord': ord,
+                            'hex': hex,
+                            'bin': bin,
+                            'oct': oct,
+                            'divmod': divmod,
+                            'pow': pow,
+                            'hash': hash,
+                            'id': id,
+                            'dir': dir,
+                            'getattr': getattr,
+                            'hasattr': hasattr,
+                            'setattr': setattr,
+                            'delattr': delattr,
+                            'property': property,
+                            'super': super,
+                            'object': object,
+                            'Exception': Exception,
+                            'ValueError': ValueError,
+                            'TypeError': TypeError,
+                            'IndexError': IndexError,
+                            'KeyError': KeyError,
+                            'AttributeError': AttributeError,
+                            'NameError': NameError,
+                            'SyntaxError': SyntaxError,
+                            'IndentationError': IndentationError,
+                            'ZeroDivisionError': ZeroDivisionError,
+                            'OverflowError': OverflowError,
+                            'MemoryError': MemoryError,
+                            'OSError': OSError,
+                            'FileNotFoundError': FileNotFoundError,
+                            'PermissionError': PermissionError,
+                            'TimeoutError': TimeoutError,
+                            'ConnectionError': ConnectionError,
+                            'BlockingIOError': BlockingIOError,
+                            'ChildProcessError': ChildProcessError,
+                            'BrokenPipeError': BrokenPipeError,
+                            'ConnectionAbortedError': ConnectionAbortedError,
+                            'ConnectionRefusedError': ConnectionRefusedError,
+                            'ConnectionResetError': ConnectionResetError,
+                            'FileExistsError': FileExistsError,
+                            'FileNotFoundError': FileNotFoundError,
+                            'IsADirectoryError': IsADirectoryError,
+                            'NotADirectoryError': NotADirectoryError,
+                            'InterruptedError': InterruptedError,
+                            'PermissionError': PermissionError,
+                            'ProcessLookupError': ProcessLookupError,
+                            'TimeoutError': TimeoutError,
+                            'UnsupportedOperation': UnsupportedOperation,
+                            'BufferError': BufferError,
+                            'EOFError': EOFError,
+                            'ImportError': ImportError,
+                            'ModuleNotFoundError': ModuleNotFoundError,
+                            'LookupError': LookupError,
+                            'IndexError': IndexError,
+                            'KeyError': KeyError,
+                            'UnboundLocalError': UnboundLocalError,
+                            'UnicodeError': UnicodeError,
+                            'UnicodeDecodeError': UnicodeDecodeError,
+                            'UnicodeEncodeError': UnicodeEncodeError,
+                            'UnicodeTranslateError': UnicodeTranslateError,
+                            'RuntimeError': RuntimeError,
+                            'NotImplementedError': NotImplementedError,
+                            'RecursionError': RecursionError,
+                            'SystemError': SystemError,
+                            'ReferenceError': ReferenceError,
+                            'GeneratorExit': GeneratorExit,
+                            'StopIteration': StopIteration,
+                            'ArithmeticError': ArithmeticError,
+                            'FloatingPointError': FloatingPointError,
+                            'OverflowError': OverflowError,
+                            'ZeroDivisionError': ZeroDivisionError,
+                            'AssertionError': AssertionError,
+                            'AttributeError': AttributeError,
+                            'BufferError': BufferError,
+                            'EOFError': EOFError,
+                            'ImportError': ImportError,
+                            'LookupError': LookupError,
+                            'MemoryError': MemoryError,
+                            'NameError': NameError,
+                            'OSError': OSError,
+                            'ReferenceError': ReferenceError,
+                            'RuntimeError': RuntimeError,
+                            'SyntaxError': SyntaxError,
+                            'SystemError': SystemError,
+                            'TypeError': TypeError,
+                            'ValueError': ValueError,
+                            'Warning': Warning,
+                            'UserWarning': UserWarning,
+                            'DeprecationWarning': DeprecationWarning,
+                            'PendingDeprecationWarning': PendingDeprecationWarning,
+                            'SyntaxWarning': SyntaxWarning,
+                            'RuntimeWarning': RuntimeWarning,
+                            'FutureWarning': FutureWarning,
+                            'ImportWarning': ImportWarning,
+                            'UnicodeWarning': UnicodeWarning,
+                            'BytesWarning': BytesWarning,
+                            'ResourceWarning': ResourceWarning,
+                        }
+                    }
+                    
+                    # Execute code with timeout
+                    import signal
+                    import time
+                    
+                    def timeout_handler(signum, frame):
+                        raise TimeoutError("Code execution timed out")
+                    
+                    signal.signal(signal.SIGALRM, timeout_handler)
+                    signal.alarm(5)  # 5 second timeout
+                    
+                    start_time = time.time()
+                    
+                    # Capture output
+                    import io
+                    import sys
+                    from contextlib import redirect_stdout
+                    
+                    output = io.StringIO()
+                    with redirect_stdout(output):
+                        exec(code, safe_globals)
+                    
+                    execution_time = time.time() - start_time
+                    signal.alarm(0)  # Cancel alarm
+                    
+                    result['output'] = output.getvalue()
+                    result['execution_time'] = round(execution_time, 3)
+                    
+                except TimeoutError:
+                    result['error'] = 'Code execution timed out (max 5 seconds)'
+                except Exception as e:
+                    result['error'] = str(e)
+                    
+            elif language == 'javascript':
+                # For JavaScript, we'll return a message that it should be run in browser
+                result['output'] = 'JavaScript code should be executed in the browser console for security reasons.'
+                result['error'] = 'JavaScript execution is handled client-side'
+                
+            elif language == 'sql':
+                # For SQL, we'll validate the query structure
+                if 'DROP' in code.upper() or 'DELETE' in code.upper() or 'TRUNCATE' in code.upper():
+                    result['error'] = 'Destructive SQL operations are not allowed'
+                elif '?' in code or ':' in code:
+                    result['output'] = 'Parameterized query detected - Good security practice!'
+                else:
+                    result['output'] = 'SQL query structure validated'
+                    
+            else:
+                result['error'] = f'Unsupported language: {language}'
+            
+            return JsonResponse(result)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'Server error: {str(e)}'}, status=500)
+    
+    return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
 

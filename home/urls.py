@@ -143,6 +143,7 @@ urlpatterns = [
 
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
+    path('challenges/execute-code/', views.execute_code, name='execute_code'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
