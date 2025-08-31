@@ -1,12 +1,12 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
 
-
 <style>
   .job-alerts-wrapper {
     padding: 10rem 1rem 6rem 1rem;
-    background-color: #ffc107;
+    background-color: #ffd700;
     text-align: center;
+    min-height: 100vh;
   }
 
   .job-alerts-wrapper h2 {
@@ -17,7 +17,7 @@
   }
 
   .job-alerts-wrapper p {
-    color: #495057;
+    color: #212529;
     font-size: 1rem;
     margin-bottom: 2rem;
   }
@@ -27,17 +27,19 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    max-width: 480px;
+    margin: 0 auto;
   }
 
   .job-alerts-form input[type="email"] {
     width: 100%;
-    max-width: 480px;
     padding: 14px 20px;
-    border: 2px solid #ffc107;
+    border: none;
     border-radius: 30px;
     font-size: 1rem;
     color: #212529;
     background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
   .job-alerts-form button {
@@ -48,39 +50,78 @@
     color: white;
     font-weight: 600;
     font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
   }
 
   .job-alerts-form button:hover {
     opacity: 0.9;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .job-alerts-wrapper {
-      background-color: #ffc107;
-    }
+  .alert {
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-    .job-alerts-wrapper h2,
-    .job-alerts-wrapper p {
-      color: #212529;
-    }
+  .alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+  }
 
-    .job-alerts-form input[type="email"] {
-      background-color: #fff;
-      color: #212529;
-      border: 2px solid #212529;
-    }
+  .alert-info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+  }
 
-    .job-alerts-form button {
-      background-color: #212529;
-      color: #fff;
-    }
+  .alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+  }
+
+  .recently-viewed-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .recently-viewed-btn::after {
+    content: "▼";
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
   }
 </style>
 
 <section class="job-alerts-wrapper">
-  <div class="container">
+  <div class="container position-relative">
+    <!-- Recently Viewed Pages Button -->
+    <button class="recently-viewed-btn">Recently Viewed Pages</button>
+    
     <h2>Subscribe to Job Alerts</h2>
     <p>Be the first to know about new job openings at Hardhat.</p>
+    
+    <!-- Display Messages -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    
     <form method="post" class="job-alerts-form">
       {% csrf_token %}
       <input type="email" name="email" placeholder="Enter your email" required>
