@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import RegexValidator
 from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
@@ -439,7 +440,45 @@ class UserUpdateForm(forms.ModelForm):
             }),
         }
 
-class ProfileUpdateForm(forms.ModelForm):  
+# Strict LinkedIn personal profile: https://www.linkedin.com/in/<slug>[/]
+linkedin_validator = RegexValidator(
+    regex=r"^https:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9\-_%]+\/?$",
+    message="Enter a valid LinkedIn personal profile URL (e.g., https://www.linkedin.com/in/your-handle).",
+    flags=re.IGNORECASE,
+)
+
+# GitHub username rules: 1–39 chars, alnum or hyphen, cannot start/end with hyphen
+# URL form: https://github.com/<username>[/]
+github_validator = RegexValidator(
+    regex=r"^https:\/\/(www\.)?github\.com\/([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})\/?$",
+    message="Enter a valid GitHub profile URL (e.g., https://github.com/username).",
+    flags=re.IGNORECASE,
+)
+
+class ProfileUpdateForm(forms.ModelForm):
+    # Override model fields so we can attach validators + widgets
+    linkedin = forms.URLField(
+        required=False,
+        validators=[linkedin_validator],
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'LinkedIn Profile URL',
+            'pattern': r'https://(www\.)?linkedin\.com/in/[A-Za-z0-9\-_%]+/?',
+            'title': 'e.g., https://www.linkedin.com/in/your-handle'
+        })
+    )
+
+    github = forms.URLField(
+        required=False,
+        validators=[github_validator],
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'GitHub Profile URL',
+            'pattern': r'https://(www\.)?github\.com/([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})/?',
+            'title': 'e.g., https://github.com/yourname'
+        })
+    )
+
     class Meta:
         model = Profile
         fields = ['avatar', 'bio', 'linkedin', 'github', 'location']
@@ -448,18 +487,10 @@ class ProfileUpdateForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Tell us about yourself'
             }),
-            'linkedin': forms.URLInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'LinkedIn Profile URL'
-            }),
-            'github': forms.URLInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'GitHub Profile URL'
-            }),
             'location': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'City, Country'
-            })
+            }),
         }
 
 class CaptchaForm(forms.Form):
