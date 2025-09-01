@@ -7,20 +7,19 @@ from django.contrib.auth import get_user_model
 from captcha.fields import CaptchaField
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 from datetime import timedelta
 import logging
-import re
 import nh3
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience,UserBlogPage, SecurityEvent, JobApplication
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, UserBlogPage, SecurityEvent, JobApplication
 from .models import PenTestingRequest, SecureCodeReviewRequest
 from .validators import xss_detection
+from utils.sanitizer import clean_text, clean_email, clean_url, clean_html, clean_numeric
 
 logger = logging.getLogger(__name__)
-
 User = get_user_model()
+
 
 def possible_years(first_year_in_scroll, last_year_in_scroll):
     p_year = []
@@ -28,6 +27,7 @@ def possible_years(first_year_in_scroll, last_year_in_scroll):
         p_year_tuple = str(i), i
         p_year.append(p_year_tuple)
     return p_year
+
 
 class RegistrationForm(UserCreationForm):
     # Newly added...........................
@@ -48,29 +48,29 @@ class RegistrationForm(UserCreationForm):
     # Newly added................................................
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
-        
+
         # Check individual requirements - this matches the frontend validation
         if len(password) < 8:
             raise ValidationError(_("Password must be at least 8 characters long."))
-        
+
         if not re.search(r'[a-z]', password):
             raise ValidationError(_("Password must include at least one lowercase letter."))
-            
+
         if not re.search(r'[A-Z]', password):
             raise ValidationError(_("Password must include at least one uppercase letter."))
-            
+
         if not re.search(r'\d', password):
             raise ValidationError(_("Password must include at least one number."))
-            
+
         if not re.search(r'[@$!%*?&]', password):
             raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
-        
-        return password
-    # ...........................................................
 
-    # Newly added...........................
+        return password
+    # .........................................................
+
+    # Keep strict Deakin email validation with debug logs
     def clean_email(self):
-        email = self.cleaned_data.get('email', '').strip()  # Normalize email
+        email = self.cleaned_data.get('email', '').strip()
         print(f"Validating email: {email}")  # Debugging log
 
         # Regex pattern for validating Deakin email addresses
@@ -86,30 +86,16 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', )
-
         labels = {
             'first_name': _('First Name'),
             'last_name': _('Last Name'),
             'email': _('Deakin Email Address'),
         }
         widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'First Name'
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Last Name'
-            }),
-            'email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'example@deakin.edu.au'
-            })
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@deakin.edu.au'})
         }
-
-
-
-    # .......................................
 
     def save(self, commit=True):
         """
@@ -119,6 +105,7 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
 
 class ClientRegistrationForm(UserCreationForm):
     # Newly added...........................
@@ -144,37 +131,47 @@ class ClientRegistrationForm(UserCreationForm):
     # Newly added................................................
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
-        
+
         # Check individual requirements - this matches the frontend validation
         if len(password) < 8:
             raise ValidationError(_("Password must be at least 8 characters long."))
-        
+
         if not re.search(r'[a-z]', password):
             raise ValidationError(_("Password must include at least one lowercase letter."))
-            
+
         if not re.search(r'[A-Z]', password):
             raise ValidationError(_("Password must include at least one uppercase letter."))
-            
+
         if not re.search(r'\d', password):
             raise ValidationError(_("Password must include at least one number."))
-            
+
         if not re.search(r'[@$!%*?&]', password):
             raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
-        
-        return password
-    # ...........................................................
 
-    # Newly added...........................
+        return password
+    # .........................................................
+
+    # Sanitized general email (business)
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        # Define the regex pattern for the required email format
-        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        
-        if not re.match(pattern, email):
-            raise ValidationError(_("Email must be valid email."))
-        
-        return email
-    # .......................................
+        return clean_email(self.cleaned_data.get('email', ''))
+
+    def clean_business_name(self):
+        return clean_text(self.cleaned_data.get('business_name', ''))
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', )
+        labels = {
+            'first_name': _('First Name'),
+            'last_name': _('Last Name'),
+            'email': _('Business Email Address'),
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@business.com'})
+        }
+
 
 class UserLoginForm(AuthenticationForm):
     username = UsernameField(
@@ -192,20 +189,16 @@ class UserLoginForm(AuthenticationForm):
 
     def confirm_login_allowed(self, user):
         failure_count_time = timezone.now() - timedelta(minutes=15)
-
         login_failures_count = SecurityEvent.objects.filter(
             event_type='login_failure',
             timestamp__gte=failure_count_time
         ).count()
 
         if login_failures_count > 2:
-            raise ValidationError(
-                _("Too many login attempts. Please try again later."),
-                code='too_many_attempts',
-            )
+            raise ValidationError(_("Too many login attempts. Please try again later."), code='too_many_attempts')
         else:
             super().confirm_login_allowed(user)
-            
+
             # Log successful login event
             ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
             SecurityEvent.objects.create(
@@ -216,21 +209,16 @@ class UserLoginForm(AuthenticationForm):
             )
             print(f'User {user} logged in successfully.')
 
-
     def get_invalid_login_error(self):
         # Log failed login event
         faliure_count_time = timezone.now() - timedelta(minutes=15)
-
         login_failures_count = SecurityEvent.objects.filter(
             event_type='login_failure',
             timestamp__gte=faliure_count_time
         ).count()
 
         if login_failures_count > 2:
-            raise ValidationError(
-            _("Too many login attempts. Please try again later."),
-            code='too_many_attempts',
-            )
+            raise ValidationError(_("Too many login attempts. Please try again later."), code='too_many_attempts')
 
         ip_address = self.request.META.get('REMOTE_ADDR') if self.request else 'Unknown IP'
         SecurityEvent.objects.create(
@@ -242,13 +230,16 @@ class UserLoginForm(AuthenticationForm):
         print(f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}')
         return super().get_invalid_login_error()
 
+
 class ClientLoginForm(AuthenticationForm):
-    username = UsernameField(label='Client Email Address',widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@gmail.com"}))
+    username = UsernameField(label='Client Email Address',
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "example@gmail.com"}))
     password = forms.CharField(
-            label=_("Password"),
-            strip=False,
-            widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
-        )
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}),
+    )
+
     def __init__(self, request=None, *args, **kwargs):
         super().__init__(request, *args, **kwargs)
         self.request = request
@@ -277,12 +268,14 @@ class ClientLoginForm(AuthenticationForm):
         print(f'Failed login attempt for username: {self.cleaned_data.get("username", "Unknown")}')
         return super().get_invalid_login_error()
 
+
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
         'placeholder': 'example@deakin.edu.au'
     }), label=_("Your Email"))
-  
+
+
 class UserSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
         'class': 'form-control', 'placeholder': 'New Password'
@@ -290,6 +283,7 @@ class UserSetPasswordForm(SetPasswordForm):
     new_password2 = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
         'class': 'form-control', 'placeholder': 'Confirm New Password'
     }), label=_("Confirm New Password"))
+
 
 class UserPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={
@@ -302,14 +296,16 @@ class UserPasswordChangeForm(PasswordChangeForm):
         'class': 'form-control', 'placeholder': 'Confirm New Password'
     }), label=_("Confirm New Password"))
 
-
 class StudentForm(forms.ModelForm):
     id = forms.IntegerField(label=_('Deakin Student ID'))
     year = forms.ChoiceField(
         choices=possible_years(((timezone.now()).year), 2020),
         label=_("Year")
     )
-    
+
+    def clean_id(self):
+        return clean_numeric(self.cleaned_data.get('id'))
+
     class Meta:
         model = Student
         fields = ("id", "year", "trimester", "unit", "course", "p1", "p2", "p3", )
@@ -319,17 +315,40 @@ class StudentForm(forms.ModelForm):
             'p3': '3rd Priority',
         }
 
+
 class sd_JoinUsForm(forms.ModelForm):
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_email(self):
+        return clean_email(self.cleaned_data.get('email', ''))
+
+    def clean_message(self):
+        return clean_text(self.cleaned_data.get('message', ''))
+
     class Meta:
         model = Smishingdetection_join_us
         fields = ['name', 'email', 'message']
 
 
 class projects_JoinUsForm(forms.ModelForm):
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_email(self):
+        return clean_email(self.cleaned_data.get('email', ''))
+
+    def clean_message(self):
+        return clean_text(self.cleaned_data.get('message', ''))
+
+    def clean_page_name(self):
+        return clean_text(self.cleaned_data.get('page_name', ''))
+
     class Meta:
         model = Projects_join_us
-        fields = ['name', 'email', 'message','page_name']
-    
+        fields = ['name', 'email', 'message', 'page_name']
+
+
 class Upskilling_JoinProjectForm(forms.ModelForm):
     p1 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
     p2 = forms.ModelChoiceField(queryset=Project.objects.all(), required=True)
@@ -356,10 +375,17 @@ class Upskilling_JoinProjectForm(forms.ModelForm):
 
 
 class NewWebURL(forms.ModelForm):
+    def clean_url(self):
+        return clean_url(self.cleaned_data.get('url', ''))
+
+    def clean_title(self):
+        return clean_text(self.cleaned_data.get('title', ''))
+
     class Meta:
         model = Webpage
         fields = ['id', 'url', 'title']
-            
+
+
 class FeedbackForm(forms.Form):
     name = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -367,11 +393,10 @@ class FeedbackForm(forms.Form):
             'style': 'width: 100%;',
             'placeholder': 'Your Name'
         }),
-        max_length=100, 
-        required=True, 
+        max_length=100,
+        required=True,
         label='Name'
     )
-    
     feedback = forms.CharField(
         widget=forms.Textarea(attrs={
             'class': 'form-control',
@@ -381,20 +406,26 @@ class FeedbackForm(forms.Form):
         required=True,
         label='Customer Feedback'
     )
-    
     rating = forms.ChoiceField(
-        choices=[
-            ('Excellent', 'Excellent'),
-            ('Good', 'Good'),
-            ('Poor', 'Poor'),
-            ('Disappointing', 'Disappointing')
-        ],
+        choices=[('Excellent', 'Excellent'), ('Good', 'Good'), ('Poor', 'Poor'), ('Disappointing', 'Disappointing')],
         required=True,
         label='Rating'
     )
-User = get_user_model()
+
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_feedback(self):
+        return clean_text(self.cleaned_data.get('feedback', ''))
+
 
 class UserUpdateForm(forms.ModelForm):
+    def clean_first_name(self):
+        return clean_text(self.cleaned_data.get('first_name', ''))
+
+    def clean_last_name(self):
+        return clean_text(self.cleaned_data.get('last_name', ''))
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name']
@@ -403,46 +434,48 @@ class UserUpdateForm(forms.ModelForm):
             'last_name': 'Last Name',
         }
         widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'First Name'
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Last Name'
-            }),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
         }
 
-class ProfileUpdateForm(forms.ModelForm):  
+
+class ProfileUpdateForm(forms.ModelForm):
+    def clean_bio(self):
+        return clean_html(self.cleaned_data.get('bio', ''))
+
+    def clean_linkedin(self):
+        return clean_url(self.cleaned_data.get('linkedin', ''))
+
+    def clean_github(self):
+        return clean_url(self.cleaned_data.get('github', ''))
+
+    def clean_location(self):
+        return clean_text(self.cleaned_data.get('location', ''))
+
     class Meta:
         model = Profile
         fields = ['avatar', 'bio', 'linkedin', 'github', 'location']
         widgets = {
-            'bio': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Tell us about yourself'
-            }),
-            'linkedin': forms.URLInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'LinkedIn Profile URL'
-            }),
-            'github': forms.URLInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'GitHub Profile URL'
-            }),
-            'location': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'City, Country'
-            })
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Tell us about yourself'}),
+            'linkedin': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'LinkedIn Profile URL'}),
+            'github': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'GitHub Profile URL'}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City, Country'})
         }
+
 
 class CaptchaForm(forms.Form):
     captcha = CaptchaField()
-        
 
 
 class UserBlogPageForm(ModelForm):
-    file = forms.FileField(required=False)
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_title(self):
+        return clean_text(self.cleaned_data.get('title', ''))
+
+    def clean_description(self):
+        return clean_html(self.cleaned_data.get('description', ''))
 
     class Meta:
         model = UserBlogPage
@@ -453,24 +486,26 @@ class UserBlogPageForm(ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': _('Your description')}),
         }
 
-#Newly Added
+
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
 
     def clean_name(self):
-        name = self.cleaned_data['name']
-        name = xss_detection(name)
-        return nh3.clean(name, tags=set(), attributes={}, link_rel=None)
+        return clean_text(self.cleaned_data.get('name', ''))
 
     def clean_message(self):
-        message = self.cleaned_data['message']
-        message = xss_detection(message)
-        return nh3.clean(message, tags=set(), attributes={}, link_rel=None)
-        
-# Experience Form
+        return clean_text(self.cleaned_data.get('message', ''))
+
+
 class ExperienceForm(forms.ModelForm):
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_feedback(self):
+        return clean_text(self.cleaned_data.get('feedback', ''))
+
     class Meta:
         model = Experience
         fields = ['name', 'feedback']
@@ -487,35 +522,53 @@ class ExperienceForm(forms.ModelForm):
         cleaned_data = super().clean()
         name = cleaned_data.get('name')
         anonymous = self.data.get('anonymous')  # Read from raw POST data (checkbox input)
-
         if not anonymous and not name:
             self.add_error('name', 'Please enter your name or check "Make it anonymous".')
 
 
-# class JobApplicationForm(forms.ModelForm):
-    
-#     class Meta:
-#         model = JobApplication
-#         fields = ['name', 'email', 'resume', 'cover_letter']
-    
 class JobApplicationForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}))
     resume = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
-
     cover_letter = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_email(self):
+        return clean_email(self.cleaned_data.get('email', ''))
+
+
 class PenTestingRequestForm(forms.ModelForm):
-    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+    terms_accepted = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_email(self):
+        return clean_email(self.cleaned_data.get('email', ''))
+
+    def clean_github_repo_link(self):
+        return clean_url(self.cleaned_data.get('github_repo_link', ''))
 
     class Meta:
         model = PenTestingRequest
-        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+        fields = ['name', 'email', 'github_repo_link', 'terms_accepted']
+
 
 class SecureCodeReviewRequestForm(forms.ModelForm):
-    terms_agreed = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+    terms_accepted = forms.BooleanField(required=True, label="I agree to the terms and conditions")
+
+    def clean_name(self):
+        return clean_text(self.cleaned_data.get('name', ''))
+
+    def clean_email(self):
+        return clean_email(self.cleaned_data.get('email', ''))
+
+    def clean_github_repo_link(self):
+        return clean_url(self.cleaned_data.get('github_repo_link', ''))
 
     class Meta:
         model = SecureCodeReviewRequest
-        fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
+        fields = ['name', 'email', 'github_repo_link', 'terms_accepted']
 
