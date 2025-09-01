@@ -1,0 +1,401 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}Cybersecurity Career Path Finder | Hardhat Enterprises{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+<style>
+  .hh-card-dark{ background-color:#212529; color:#f1f3f5; }
+  .hh-card-dark .hh-headline,
+  .hh-card-dark #primaryRec,
+  .hh-card-dark h1,
+  .hh-card-dark h2,
+  .hh-card-dark h3{ color:#ffffff !important; }
+  .hh-card-dark p,
+  .hh-card-dark li,
+  .hh-card-dark label,
+  .hh-card-dark .form-check-label{ color:#e9ecef !important; }
+  .hh-card-dark .text-muted{ color:#cfd6de !important; }
+  .hh-card-dark a{ color:#ffcd11; } .hh-card-dark a:hover{ color:#e6b800; }
+  .hh-badge-lg{ font-weight:800; font-size:0.95rem; border-radius:16px; }
+  .hh-headline{ font-size:1.35rem; font-weight:800; margin:0; }
+  .hh-card-dark .form-check-input{ width:1.1rem; height:1.1rem; border-color:#ffcd11; background-color:transparent; cursor:pointer; }
+  .hh-card-dark .form-check-input:checked{ background-color:#ffcd11; border-color:#ffcd11; }
+</style>
+
+  <!-- Banner -->
+  <div class="bg-warning bg-opacity-25 border-0 rounded-3 p-4 mb-4">
+    <h1 class="h3 mb-1">Cybersecurity Career Path Finder</h1>
+    <p class="mb-0 text-muted hh-hero-blurb">
+      Answer a few questions to get a personalised path: roles, skills, tools, starter projects, certs, companies — then download a tidy <strong>PDF report</strong>.
+    </p>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizCard" class="card shadow-sm hh-card-dark mb-4">
+    <div class="card-body">
+      <h2 class="h5 mb-3">Tell us what excites you</h2>
+
+      <div class="progress mb-3" style="height:8px;">
+        <div id="progressBar" class="progress-bar bg-warning" style="width:0%"></div>
+      </div>
+
+      <form id="careerQuiz" class="vstack gap-3">
+
+        <!-- Q1 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">1) Which work style sounds most fun?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="offensive" id="q1a"><label class="form-check-label" for="q1a">Breaking apps to find weaknesses</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="defensive" id="q1b"><label class="form-check-label" for="q1b">Watching dashboards & stopping threats live</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="forensics" id="q1c"><label class="form-check-label" for="q1c">Investigating incidents & evidence</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q1" value="architecture" id="q1d"><label class="form-check-label" for="q1d">Designing secure systems & policies</label></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">2) Your comfort with coding/scripting?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="offensive" id="q2a"><label class="form-check-label" for="q2a">Love writing scripts/tools</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="defensive" id="q2b"><label class="form-check-label" for="q2b">Comfortable with queries & parsers</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="forensics" id="q2c"><label class="form-check-label" for="q2c">Prefer tools; light scripting OK</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q2" value="architecture" id="q2d"><label class="form-check-label" for="q2d">Minimal coding; focus on design/policy</label></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">3) Pick a theme:</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="offensive" id="q3a"><label class="form-check-label" for="q3a">Red Team / Exploitation</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="defensive" id="q3b"><label class="form-check-label" for="q3b">Blue Team / Detection & Response</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="forensics" id="q3c"><label class="form-check-label" for="q3c">Incident Response & Forensics</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q3" value="governance" id="q3d"><label class="form-check-label" for="q3d">GRC (Governance, Risk, Compliance)</label></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">4) Cloud, networking, or management?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="cloud" id="q4a"><label class="form-check-label" for="q4a">Cloud security (AWS/Azure/GCP)</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="defensive" id="q4b"><label class="form-check-label" for="q4b">Network defense / SOC</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="forensics" id="q4c"><label class="form-check-label" for="q4c">DFIR (response + evidence)</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q4" value="architecture" id="q4d"><label class="form-check-label" for="q4d">Security architecture / policy</label></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">5) Team vibe?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="defensive" id="q5a"><label class="form-check-label" for="q5a">Fast-paced team operations</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="offensive" id="q5b"><label class="form-check-label" for="q5b">Small team, creative exploits</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="forensics" id="q5c"><label class="form-check-label" for="q5c">Task-focused investigations</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q5" value="governance" id="q5d"><label class="form-check-label" for="q5d">Stakeholder management & reporting</label></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">6) Preferred learning path to start?</h3>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="offensive" id="q6a"><label class="form-check-label" for="q6a">Labs & CTFs</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="defensive" id="q6b"><label class="form-check-label" for="q6b">Home SOC lab & log hunting</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="forensics" id="q6c"><label class="form-check-label" for="q6c">Disk/network analysis practice</label></div>
+          <div class="form-check"><input class="form-check-input" type="radio" name="q6" value="governance" id="q6d"><label class="form-check-label" for="q6d">Frameworks & risk methods</label></div>
+        </div>
+
+        <!-- Q7 (checkboxes) -->
+        <div class="p-3 border rounded-3 bg-dark">
+          <h3 class="h6 mb-2">7) Which tools sound exciting? <span class="text-muted">(choose any)</span></h3>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="offensive" id="t1"><label class="form-check-label" for="t1">Kali, Burp Suite, Metasploit</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="defensive" id="t2"><label class="form-check-label" for="t2">Splunk, Wazuh, Suricata</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="forensics" id="t3"><label class="form-check-label" for="t3">Autopsy, Volatility, Wireshark</label></div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="tools" value="cloud" id="t4"><label class="form-check-label" for="t4">IAM, CloudTrail/Defender, SCC</label></div>
+        </div>
+
+        <div class="pt-3 mt-2 border-top d-flex flex-wrap gap-2">
+          <button type="submit" id="seeResults" class="btn btn-warning text-dark fw-semibold">See my path</button>
+          <button type="button" id="loadPrev" class="btn btn-outline-warning d-none">Load my last result</button>
+          <button type="button" id="clearQuiz" class="btn btn-outline-warning">Clear</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD CARD -->
+  <div id="dlCard" class="card border-0 shadow-sm hh-card-dark d-none">
+    <div class="card-body">
+      <div class="d-flex align-items-center gap-3 mb-2">
+        <span class="badge bg-warning text-dark hh-badge-lg px-3 py-2">Plan Ready</span>
+        <h2 class="hh-headline">Download your personalised report</h2>
+      </div>
+      <p class="text-muted mb-3">
+        We’ll generate a clean <strong>PDF report</strong> with your primary track, close matches, roles, tools, skills, certs (linked), starter projects, salary guidance, and a score table.
+      </p>
+      <div class="d-flex flex-wrap gap-2">
+        <button id="downloadReport" class="btn btn-warning text-dark fw-semibold">Download Report (.pdf)</button>
+        <button id="retake2" class="btn btn-outline-warning">Retake quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden results container kept for compatibility -->
+  <div id="results" class="d-none">
+    <div class="card border-0 shadow-sm hh-card-dark">
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <span class="badge bg-warning text-dark hh-badge-lg px-3 py-2">Our Recommendation</span>
+          <h2 id="primaryRec" class="hh-headline"></h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Suggested Roles</h3><ul id="roleList"></ul></div>
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Tools &amp; Platforms</h3><ul id="toolList"></ul></div>
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Skills to Focus On</h3><ul id="skillList"></ul></div>
+          <div class="col-md-6"><h3 class="h6 text-warning hh-section-title mb-2">Certs to Start With</h3><ul id="certList"></ul></div>
+          <div class="col-12"><h3 class="h6 text-warning hh-section-title mb-2">Top Companies Hiring in This Area</h3><ul id="companyList"></ul></div>
+        </div>
+        <div class="mt-3"><h3 class="h6 text-warning hh-section-title mb-1">Approx. Salary (Australia)</h3><p id="salaryText" class="text-muted mb-2"></p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<!-- PDF libs -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+  /* ===== Data ===== */
+  const CATS = ["offensive","defensive","forensics","architecture","cloud","governance"];
+  const CATALOG = {
+    offensive:{label:"Offensive Security",roles:["Penetration Tester","Red Team Operator","AppSec Engineer (Offensive)"],tools:["Kali Linux","Burp Suite","Metasploit","Nmap","OWASP ZAP","Python"],skills:["OWASP Top 10","Recon & exploitation","Scripting/automation","Reporting"],certs:[{name:"eJPT (INE/ElearnSecurity)",url:"https://elearnsecurity.com/product/ejpt-certification/"},{name:"PNPT (TCM)",url:"https://certifications.tcm-sec.com/pnpt/"},{name:"OSCP (OffSec)",url:"https://www.offsec.com/courses/pen-200/"}],companies:["NCC Group","Trustwave","Rapid7","HackerOne","Bugcrowd","Cobalt"],projects:["Exploit DVWA/Juice Shop in a lab and write a report","Bug bounty–style recon on a safe scope (your own lab)","Build a Python script to automate recon or wordlists"],salaryAU:"Junior 75–110k, Mid 110–150k, Senior 150k+ (AUD, indicative)"},
+    defensive:{label:"Defensive Security",roles:["SOC Analyst","Security Engineer","Threat Hunter"],tools:["Splunk","Elastic/Wazuh SIEM","Suricata","Sysmon","Sigma","Python"],skills:["Log analysis","Detection engineering","IR playbooks","Windows/Linux internals"],certs:[{name:"CompTIA Security+",url:"https://www.comptia.org/certifications/security"},{name:"Blue Team Level 1 (BTL1)",url:"https://securityblue.team/collections/certifications/products/blue-team-level-1"},{name:"Splunk Core User",url:"https://education.splunk.com/"}],companies:["CrowdStrike","Palo Alto Networks","Microsoft","Splunk","Elastic","Darktrace"],projects:["Home SOC lab with Wazuh/Elastic and detect a simulated attack","Write Sigma rules and validate detections","Create an incident triage/runbook"],salaryAU:"Junior 70–100k, Mid 100–140k, Senior 140k+"},
+    forensics:{label:"Digital Forensics & Incident Response",roles:["DFIR Analyst","Forensics Investigator","Malware Analyst (junior)"],tools:["Autopsy","FTK Imager","Volatility","Wireshark","YARA"],skills:["Disk & memory forensics","Timeline analysis","Windows artefacts","Chain of custody"],certs:[{name:"CompTIA CySA+",url:"https://www.comptia.org/certifications/cybersecurity-analyst"},{name:"SANS DFIR (various)",url:"https://www.sans.org/cyber-security-skills/dfir/"},{name:"CHFI (EC-Council)",url:"https://www.eccouncil.org/train-certify/computer-hacking-forensic-investigator-chfi/"}],companies:["Mandiant (Google)","Kroll","CrowdStrike Services","PwC Incident Response","Cellebrite"],projects:["Analyze a memory image with Volatility and document findings","Create a Windows artefact cheat sheet","Packet analysis case study in Wireshark"],salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"},
+    architecture:{label:"Security Architecture",roles:["Security Architect","Security Consultant","Compliance Manager"],tools:["Threat modeling (STRIDE)","Security frameworks (NIST/ISO)","Design reviews"],skills:["Secure design patterns","Policy & standards","Stakeholder communication"],certs:[{name:"CISSP (experience required)",url:"https://www.isc2.org/Certifications/CISSP"},{name:"SABSA Foundation",url:"https://www.sabsa.org/"},{name:"ISO 27001 Lead Implementer",url:"https://pecb.com/certified-iso-iec-27001-lead-implementer"}],companies:["AWS","Microsoft","IBM","Accenture","Deloitte","Consultancies/SIs"],projects:["Threat model a 3-tier web app and propose mitigations","Write a minimal security standard for APIs","Design a secure reference architecture diagram"],salaryAU:"Mid 160–200k, Senior 200k+"},
+    cloud:{label:"Cloud Security",roles:["Cloud Security Engineer","SecOps (Cloud)","DevSecOps Engineer"],tools:["AWS IAM/GuardDuty/Config","Azure Defender","GCP SCC","Terraform","Kubernetes"],skills:["Identity & access","Logging/monitoring","Network segmentation","IaC security"],certs:[{name:"AWS CCP",url:"https://aws.amazon.com/certification/certified-cloud-practitioner/"},{name:"AWS Security Specialty",url:"https://aws.amazon.com/certification/certified-security-specialty/"},{name:"Microsoft AZ-500",url:"https://learn.microsoft.com/certifications/exams/az-500/"}],companies:["AWS","Microsoft Azure","Google Cloud","HashiCorp","Palo Alto Networks","Wiz"],projects:["Enable GuardDuty + CloudTrail + Config in a sandbox account","Write least-privilege IAM policies","Scan Terraform with tfsec/Checkov and fix findings"],salaryAU:"Junior 100–130k, Mid 130–170k, Senior 170k+"},
+    governance:{label:"Governance, Risk & Compliance (GRC)",roles:["GRC Analyst","Risk Analyst","Compliance Specialist"],tools:["Risk registers","GRC platforms","Policy frameworks (NIST/ISO)"],skills:["Risk assessment","Control mapping","Audit readiness","Stakeholder communication"],certs:[{name:"ISO 27001 Foundation/Implementer",url:"https://www.iso.org/standard/27001"},{name:"CRISC (ISACA)",url:"https://www.isaca.org/credentialing/crisc"},{name:"CISM (ISACA)",url:"https://www.isaca.org/credentialing/cism"}],companies:["Deloitte","PwC","KPMG","EY","Protiviti","Consultancies/GRC vendors"],projects:["Create a risk register for a small SaaS (likelihood/impact/controls)","Map controls to ISO 27001/NIST CSF","Vendor risk assessment template & walkthrough"],salaryAU:"Junior 90–120k, Mid 120–150k, Senior 150k+"}
+  };
+
+  const OPPORTUNITIES = { offensive:5, defensive:6, forensics:6, architecture:3, cloud:2, governance:3 };
+
+  function scoreQuiz(form){
+    const scores = {offensive:0, defensive:0, forensics:0, architecture:0, cloud:0, governance:0};
+    for(let i=1;i<=6;i++){
+      const ans = form.querySelector(`input[name="q${i}"]:checked`);
+      if(ans) scores[ans.value] = (scores[ans.value]||0)+2;
+    }
+    form.querySelectorAll('input[name="tools"]:checked').forEach(cb=>{
+      scores[cb.value] = (scores[cb.value]||0)+1;
+    });
+    return scores;
+  }
+
+  function normalizeScores(raw){
+    const norm = {}; const SCALE = 6;
+    for(const k of CATS){
+      const opp = OPPORTUNITIES[k] || 1;
+      norm[k] = ((raw[k] || 0) / opp) * SCALE;
+    }
+    return norm;
+  }
+
+  function topCategories(scores){
+    const norm = normalizeScores(scores);
+    const values = Object.values(norm);
+    const max = Math.max(...values);
+    if (max === 0) return [];
+    const EPS = 0.6;
+    return Object.entries(norm)
+      .filter(([k,v]) => (max - v) <= EPS)
+      .sort((a,b)=> b[1]-a[1])
+      .map(([k])=>k);
+  }
+
+  const FIT_REASONS = {
+    offensive: "You enjoy creative problem-solving and hands-on exploitation. Offensive tracks reward curiosity, tooling, and methodical recon → exploit → report cycles.",
+    defensive: "You like fast feedback loops and protecting systems in real time. Defensive tracks emphasise detection engineering, log analysis, and incident response playbooks.",
+    forensics: "You prefer structured investigations and evidence-driven analysis. DFIR focuses on timelines, artefacts, memory/disk analysis, and reporting for stakeholders.",
+    architecture: "You value big-picture design, secure patterns, and stakeholder alignment. Architecture blends controls, standards, and practical guidance for teams.",
+    cloud: "You’re drawn to modern platforms and identity-centric security. Cloud tracks emphasise IAM, monitoring, segmentation, and IaC security at scale.",
+    governance: "You like structure, frameworks, and risk-based thinking. GRC translates business goals into controls, audits, and continuous improvement."
+  };
+
+  function buildReportMarkdown(primary, alternates, scores){
+    const data = CATALOG[primary];
+    let md = `# Cybersecurity Career Plan\n\n`;
+    md += `**Primary Track:** ${data.label}\n\n`;
+    if (alternates.length){ md += `**Close Matches:** ${alternates.map(k=>CATALOG[k].label).join(", ")}\n\n`; }
+    md += `**Why this fits:** ${FIT_REASONS[primary] || ""}\n\n`;
+    const section = (title, arr) => !arr?.length ? "" : `## ${title}\n\n${arr.map(item => (item?.name&&item?.url)?`- [${item.name}](${item.url})`:`- ${item}`).join("\n")}\n\n`;
+    md += section("Suggested Roles", data.roles);
+    md += section("Tools & Platforms", data.tools);
+    md += section("Skills to Focus On", data.skills);
+    md += section("Certifications to Start With", data.certs);
+    md += section("Top Companies Hiring", data.companies);
+    md += section("Starter Projects", data.projects);
+    md += `## Salary (Australia)\n\n${data.salaryAU}\n\n`;
+    md += `## Your Interest Profile (Normalised)\n\n| Track | Score |\n|---|---:|\n`;
+    CATS.forEach(k=>{ md += `| ${CATALOG[k]?.label || k} | ${(normalizeScores(scores)[k] || 0).toFixed(1)} |\n`; });
+    md += `\n## Suggested Next 30 Days\n\n- Week 1: Pick one starter project and set up your lab.\n- Week 2: Complete project MVP; document findings as if for stakeholders.\n- Week 3: Attempt a second project or deepen detections; draft a 1–2 page report.\n- Week 4: Sit one entry-level cert practice exam; refine CV with project evidence.\n\n`;
+    md += `---\nGenerated by **Hardhat Enterprises – Career Path Finder** on ${new Date().toLocaleString('en-AU',{hour12:false})}.\n`;
+    return md;
+  }
+  function downloadMarkdown(filename, content){
+    const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+  }
+
+  /* ===== PDF with aligned table ===== */
+  function saveReportPDF(filename, primary, alternates, scores){
+    if (!window.jspdf || !window.jspdf.jsPDF) return false;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:'mm', format:'a4' });
+    const margin = 14, pageW = doc.internal.pageSize.getWidth(), pageH = doc.internal.pageSize.getHeight();
+    const contentW = pageW - margin*2, lineH = 6; let y = margin;
+    const data = CATALOG[primary]; const norm = normalizeScores(scores);
+
+    function ensureSpace(extra=0){ if (y + extra > pageH - margin){ doc.addPage(); y = margin; } }
+    function heading(text, size=18, bold=true, spacing=4){ ensureSpace(lineH+spacing); doc.setFont('helvetica', bold?'bold':'normal'); doc.setFontSize(size); doc.text(text, margin, y); y += lineH + spacing; }
+    function paragraph(text, size=11, spacing=3){
+      doc.setFont('helvetica','normal'); doc.setFontSize(size);
+      doc.splitTextToSize(text, contentW).forEach(line=>{ ensureSpace(lineH); doc.text(line, margin, y); y += lineH; });
+      y += spacing;
+    }
+    function bullets(items, size=11, spacing=2){
+      doc.setFont('helvetica','normal'); doc.setFontSize(size);
+      items.forEach(item=>{
+        const s = (typeof item==='string') ? item : (item?.name&&item?.url) ? `${item.name} — ${item.url}` : String(item);
+        doc.splitTextToSize('• ' + s, contentW).forEach(line=>{ ensureSpace(lineH); doc.text(line, margin, y); y += lineH; });
+      }); y += spacing;
+    }
+
+    function scoreTable(){
+      doc.setFont('helvetica','bold'); doc.setFontSize(12);
+      doc.text('Your Interest Profile (Normalised)', margin, y); y += 4;
+
+      const rows = CATS.map(k => [ CATALOG[k]?.label || k, (norm[k] || 0).toFixed(1) ]);
+      doc.autoTable({
+        startY: y,
+        margin: { left: margin, right: margin },
+        styles: { font: 'helvetica', fontSize: 11, cellPadding: 2, overflow: 'linebreak' },
+        head: [['Track', 'Score']],
+        body: rows,
+        theme: 'grid',
+        headStyles: { fillColor: [255,205,17], textColor: 0, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [245,245,245] },
+        columnStyles: {
+          0: { cellWidth: 'auto' },   // wrap long names
+          1: { cellWidth: 22, halign: 'right' } // aligned numeric column
+        }
+      });
+      y = doc.lastAutoTable.finalY + 6;
+    }
+
+    // Compose PDF
+    heading('Cybersecurity Career Plan');
+    paragraph(`Primary Track: ${data.label}`);
+    if (alternates.length){ paragraph(`Close Matches: ${alternates.map(k=>CATALOG[k].label).join(', ')}`); }
+    paragraph(`Why this fits: ${FIT_REASONS[primary] || ''}`);
+
+    heading('Suggested Roles', 13, true, 2); bullets(data.roles);
+    heading('Tools & Platforms', 13, true, 2); bullets(data.tools);
+    heading('Skills to Focus On', 13, true, 2); bullets(data.skills);
+    heading('Certifications to Start With', 13, true, 2); bullets(data.certs);
+    heading('Top Companies Hiring', 13, true, 2); bullets(data.companies);
+    heading('Starter Projects', 13, true, 2); bullets(data.projects);
+    heading('Salary (Australia)', 13, true, 2); paragraph(data.salaryAU);
+
+    scoreTable();
+
+    heading('Suggested Next 30 Days', 13, true, 2);
+    bullets([
+      'Week 1: Pick one starter project and set up your lab.',
+      'Week 2: Complete project MVP; document findings as if for stakeholders.',
+      'Week 3: Attempt a second project or deepen detections; draft a 1–2 page report.',
+      'Week 4: Sit one entry-level cert practice exam; refine CV with project evidence.'
+    ]);
+
+    const now = new Date().toLocaleString('en-AU',{hour12:false});
+    paragraph(`Generated by Hardhat Enterprises – Career Path Finder on ${now}.`, 10, 0);
+    doc.save(filename);
+    return true;
+  }
+
+  /* ===== UI wiring ===== */
+  const form = document.getElementById("careerQuiz");
+  const quizCard = document.getElementById("quizCard");
+  const results = document.getElementById("results");
+  const progress = document.getElementById("progressBar");
+  const loadPrevBtn = document.getElementById("loadPrev");
+  const dlCard = document.getElementById("dlCard");
+  const downloadBtn = document.getElementById("downloadReport");
+  const retakeBtn2 = document.getElementById("retake2");
+  const retakeBtn = document.getElementById("retake");
+
+  function updateProgress(){
+    let answered = 0;
+    for(let i=1;i<=6;i++){ if(form.querySelector(`input[name="q${i}"]:checked`)) answered++; }
+    const pct = Math.round((answered/6)*100);
+    progress.style.width = pct + "%"; progress.setAttribute("aria-valuenow", pct);
+  }
+  form.addEventListener("change", updateProgress);
+
+  window._hhLastScores = null; window._hhLastChoice = null; window._hhLastAlternates = [];
+
+  form.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const scores = scoreQuiz(form);
+    const tops = topCategories(scores);
+
+    if (tops.length === 0) { alert("Please solve the quiz to get the accurate answer."); return; }
+
+    const primary = tops[0], alternates = tops.slice(1);
+    window._hhLastScores = scores; window._hhLastChoice = primary; window._hhLastAlternates = alternates;
+    localStorage.setItem("hh_career_path_scores", JSON.stringify(scores));
+    localStorage.setItem("hh_career_path_choice", primary);
+    localStorage.setItem("hh_career_path_alternates", JSON.stringify(alternates));
+
+    quizCard.classList.add("d-none"); results.classList.add("d-none"); dlCard.classList.remove("d-none");
+    window.scrollTo({ top:0, behavior:"smooth" });
+  });
+
+  document.getElementById("clearQuiz").addEventListener("click", ()=>{ form.reset(); updateProgress(); });
+
+  function retakeAll(){
+    results.classList.add("d-none"); dlCard.classList.add("d-none"); quizCard.classList.remove("d-none");
+    form.reset(); updateProgress(); window.scrollTo({ top:0, behavior:"smooth" });
+  }
+  if (retakeBtn) retakeBtn.addEventListener("click", retakeAll);
+  retakeBtn2.addEventListener("click", retakeAll);
+
+  downloadBtn.addEventListener("click", ()=>{
+    if(!window._hhLastScores || !window._hhLastChoice){ alert("Please complete the quiz first."); return; }
+    const datePart = new Date().toISOString().slice(0,10);
+    const filename = `Cybersecurity-Career-Plan-${datePart}.pdf`;
+    const ok = saveReportPDF(filename, window._hhLastChoice, window._hhLastAlternates, window._hhLastScores);
+    if (!ok){
+      const md = buildReportMarkdown(window._hhLastChoice, window._hhLastAlternates, window._hhLastScores);
+      alert("PDF library couldn’t load in this environment. Downloading Markdown instead.");
+      downloadMarkdown(`Cybersecurity-Career-Plan-${datePart}.md`, md);
+    }
+  });
+
+  window.addEventListener("DOMContentLoaded", ()=>{
+    quizCard.classList.remove("d-none"); results.classList.add("d-none"); dlCard.classList.add("d-none"); updateProgress();
+    const saved = localStorage.getItem("hh_career_path_scores");
+    const choice = localStorage.getItem("hh_career_path_choice");
+    const alts = localStorage.getItem("hh_career_path_alternates");
+    if(saved && choice){
+      loadPrevBtn.classList.remove("d-none");
+      loadPrevBtn.addEventListener("click", ()=>{
+        window._hhLastScores = JSON.parse(saved);
+        window._hhLastChoice = choice;
+        window._hhLastAlternates = alts ? JSON.parse(alts) : [];
+        quizCard.classList.add("d-none"); results.classList.add("d-none"); dlCard.classList.remove("d-none");
+        window.scrollTo({ top:0, behavior:"smooth" });
+      });
+    }
+  });
+</script>
+{% endblock javascripts %}
