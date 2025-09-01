@@ -430,6 +430,90 @@ document.addEventListener('DOMContentLoaded', function() {
   </section>
   <!-- End of section -->
 
+<!-- Meet Our Team Section Starts -->
+<link rel="stylesheet" href="{% static 'custom_static/css/kudoboard.css' %}">
+
+<section id="team" class="team-section">
+  <h2>Meet Our Team</h2>
+  <div class="team-slider-container">
+    <button class="slider-arrow left" onclick="scrollTeam(-1)">&#8249;</button>
+
+    <div class="team-slider" id="team-slider">
+      <div class="team-card">
+        <img src="{% static 'assets/img/pages/about/yesha_1.jpg' %}" alt="Yesha Shah">
+        <h3>Yesha Shah</h3>
+        <p>Full-Stack Developer</p>
+        <div class="social-icons">
+          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'assets/img/pages/about/will_2.jpg' %}" alt="Will Buyers">
+        <h3>Will Buyers</h3>
+        <p>Software Developer</p>
+        <div class="social-icons">
+          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'assets/img/pages/about/steve_3.jpg' %}" alt="Steve Harrington">
+        <h3>Steve Harrington</h3>
+        <p>Security Architect</p>
+        <div class="social-icons">
+          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'assets/img/pages/about/yesha_1.jpg' %}" alt="Yesha Shah">
+        <h3>Yesha Shah</h3>
+        <p>Full-Stack Developer</p>
+        <div class="social-icons">
+          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'assets/img/pages/about/will_2.jpg' %}" alt="Will Buyers">
+        <h3>Will Buyers</h3>
+        <p>Software Developer</p>
+        <div class="social-icons">
+          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'assets/img/pages/about/steve_3.jpg' %}" alt="Steve Harrington">
+        <h3>Steve Harrington</h3>
+        <p>Security Architect</p>
+        <div class="social-icons">
+          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <button class="slider-arrow right" onclick="scrollTeam(1)">&#8250;</button>
+  </div>
+</section>
+
+<script>
+  function scrollTeam(direction) {
+    const slider = document.getElementById("team-slider");
+    const cardWidth = slider.querySelector('.team-card').offsetWidth + 20;
+    slider.scrollBy({ left: direction * cardWidth * 1.1, behavior: 'smooth' });
+  }
+</script>
+
+<!-- Meet Our Team Section Ends -->
+
   <!-- Section -->
   <section class="section section-lg bg-gray-200">
     <figure
