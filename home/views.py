@@ -101,6 +101,8 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 from django.core.paginator import Paginator
 from .models import BlogPost
 from django.template.loader import render_to_string
+from google.oauth2 import id_token as google_id_token
+from google.auth.transport import requests as google_requests
 
 #from .models import Student, Project, Progress
  
@@ -1230,6 +1232,75 @@ def get_client_ip(request):
     if x_forwarded_for:
         return x_forwarded_for.split(',')[0].strip()
     return request.META.get('REMOTE_ADDR')
+
+
+@require_POST
+@csrf_protect
+def google_login(request):
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        credential = data.get('credential')
+        if not credential:
+            return JsonResponse({'error': 'Missing credential'}, status=400)
+
+        # Verify token with Google
+        idinfo = google_id_token.verify_oauth2_token(
+            credential,
+            google_requests.Request(),
+            settings.GOOGLE_OAUTH_CLIENT_ID or None,
+        )
+
+        if idinfo.get('iss') not in ['accounts.google.com', 'https://accounts.google.com']:
+            return JsonResponse({'error': 'Invalid token issuer'}, status=401)
+
+        user_email = idinfo.get('email')
+        if not user_email:
+            return JsonResponse({'error': 'Email not present in token'}, status=400)
+
+        first_name = idinfo.get('given_name', '')
+        last_name = idinfo.get('family_name', '')
+
+        UserModel = get_user_model()
+        user, created = UserModel.objects.get_or_create(
+            email=user_email,
+            defaults={
+                'first_name': first_name,
+                'last_name': last_name,
+                'is_active': True,
+                'is_verified': True,
+            }
+        )
+
+        if created:
+            # Set an unusable password for social-only accounts
+            user.set_unusable_password()
+            user.save()
+
+        login(request, user)
+
+        # Track login metadata
+        try:
+            user.last_login_ip = get_client_ip(request)
+            user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
+            user.save(update_fields=['last_login_ip', 'last_login_browser'])
+        except Exception:
+            pass
+
+        redirect_url = reverse('dashboard') if 'dashboard' in [p.name for p in request.resolver_match._func_path_patterns] else '/dashboard/'
+        # Fallback to home if dashboard route is not available at runtime
+        try:
+            redirect_url = reverse('dashboard')
+        except Exception:
+            redirect_url = '/'
+
+        return JsonResponse({'redirect_url': redirect_url})
+
+    except ValueError:
+        return JsonResponse({'error': 'Invalid request body'}, status=400)
+    except Exception as e:
+        if settings.DEBUG:
+            print('Google login error:', str(e))
+        return JsonResponse({'error': 'Authentication failed'}, status=401)
 
 def login_with_tracking(request):
     if request.method == 'POST':

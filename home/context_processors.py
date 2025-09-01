@@ -9,7 +9,7 @@
 #         page_title = "Home"
 #     else:
 #         page_title = capfirst(path)
-
+# 
 #     # Add your site name to the title
 #     full_title = f"{page_title} - Hardhat Enterprises"
 #     return {"dynamic_title": full_title}
@@ -24,9 +24,9 @@
 # #     page_title = custom_titles.get(path, capfirst(path.strip("/").replace("-", " ").replace("_", " ")))
 # #     if not page_title or page_title == "Index":
 # #         page_title = "Home"
-
+# 
 # #     full_title = f"{page_title} - Hardhat Enterprises"
-# #     return {"dynamic_title": full_title}
+#     return {"dynamic_title": full_title}
 
 # def recaptcha_site_key(request):
 #     return {
@@ -86,3 +86,8 @@ def dynamic_page_title(request):
 
 def recaptcha_site_key(request):
     return {'RECAPTCHA_SITE_KEY': settings.RECAPTCHA_SITE_KEY}
+
+def google_client_id(request):
+    return {
+        'GOOGLE_OAUTH_CLIENT_ID': getattr(settings, 'GOOGLE_OAUTH_CLIENT_ID', '')
+    }

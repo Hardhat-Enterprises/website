@@ -133,6 +133,7 @@ urlpatterns = [
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
     path('accounts/login/', views.login_with_otp, name='login_with_otp'),
     path('accounts/verify-otp/', views.verify_otp, name='verify_otp'),
+    path('accounts/google-login/', views.google_login, name='google_login'),
     # Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
