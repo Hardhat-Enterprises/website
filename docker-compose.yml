@@ -51,14 +51,15 @@ services:
     # Wait for database to install then run migrations and start server
     command: >
       sh -c "echo 'Waiting for database...' &&
-             until python -c 'import psycopg2; psycopg2.connect(host=\"db\", port=5432, user=\"hardhat_user\", password=\"hardhat_password\", database=\"hardhat_db\")' 2>/dev/null; do
-               echo 'Database is unavailable - sleeping';
-               sleep 2;
-             done &&
-             echo 'Database is ready!' &&
-             python manage.py migrate &&
-             python manage.py collectstatic --noinput --clear &&
-             gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 core.wsgi"
+         until python -c \"import psycopg; psycopg.connect(host='db', port=5432, dbname='hardhat_db', user='hardhat_user', password='hardhat_password').close()\" 2>/dev/null; do
+           echo 'Database is unavailable - sleeping';
+           sleep 2;
+         done &&
+         echo 'Database is ready!' &&
+         python manage.py migrate &&
+         python manage.py collectstatic --noinput --clear &&
+         gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 core.wsgi"
+
 
   nginx:
     container_name: nginx
