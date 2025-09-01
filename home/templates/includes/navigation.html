@@ -307,9 +307,31 @@
         
         <!-- language switcher -->
         <div class="dropdown" style="margin-left:10px;margin-right:5px;">
-          <button class="nav-link dropdown-toggle btn btn-link p-0" id="langDropdown"
-                  data-bs-toggle="dropdown" aria-expanded="false" title="{% trans 'Language' %}">🌐
+          {% get_current_language as CURRENT_LANG %}
+          {% with code=CURRENT_LANG|lower|slice:":2" %}
+          <button class="nav-link dropdown-toggle btn btn-link p-0"
+                  id="langDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  title="{% trans 'Language' %}"
+                  type="button">
+            {% if code == "en" %}
+              🌐
+            {% elif code == "es" %}
+              <img class="flag-icon" src="{% static 'images/flags/es.png' %}" alt="Español">
+            {% elif code == "zh" %}
+              <img class="flag-icon" src="{% static 'images/flags/cn.png' %}" alt="简体中文">
+            {% elif code == "fr" %}
+              <img class="flag-icon" src="{% static 'images/flags/fr.png' %}" alt="Français">
+            {% elif code == "ja" %}
+              <img class="flag-icon" src="{% static 'images/flags/jp.png' %}" alt="日本語">
+            {% elif code == "ko" %}
+              <img class="flag-icon" src="{% static 'images/flags/kr.png' %}" alt="한국어">
+            {% else %}
+              🌐
+            {% endif %}
           </button>
+          {% endwith %}
 
           <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
             <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
@@ -351,7 +373,6 @@
             border-radius: 2px;
           }
 
-          
           .dropdown-menu#lang_menu {
             background-color: #fff !important;     
             border: 1px solid #ccc !important;     
@@ -388,6 +409,11 @@
           .dropdown-menu#lang_menu .dropdown-item.active {
             background-color: #ffcd11 !important;
             color: #fff !important;
+          }
+
+          #langDropdown img.flag-icon {
+            filter: none !important;
+            opacity: 1 !important;
           }
         </style>
         <script>
