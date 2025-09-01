@@ -109,9 +109,12 @@ Page is for admin to manage challenges within main app
       <div
         class="card h-100 w-100{% if not challenge.is_active %} border-danger{% else %} border-success{% endif %}"
       >
-        <!-- Action buttons -->
+        <!-- Title and Action buttons -->
         <div class="card-header bg-white border-0 pb-0">
-          <div class="d-flex justify-content-end">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              {{ challenge.title|truncatechars:50}}
+            </h5>
             <div class="btn-group btn-group-sm" role="group">
               <a
                 href="{% url 'challenge_detail' challenge.id %}"
@@ -155,8 +158,6 @@ Page is for admin to manage challenges within main app
             >
           </div>
           {% endif %}
-
-          <h5 class="card-title mb-2">{{ challenge.title|truncatechars:50}}</h5>
           <p class="card-text text-muted mb-3">
             {{ challenge.description|truncatechars:150}}
           </p>
@@ -196,13 +197,6 @@ Page is for admin to manage challenges within main app
                 <span class="badge bg-info"
                   >{{ challenge.get_challenge_type_display }}</span
                 >
-                {% if not challenge.is_active %}
-                <span
-                  class="badge"
-                  style="background-color: #8b4513; color: white"
-                  >Archived</span
-                >
-                {% endif %}
               </small>
             </div>
           </div>
@@ -233,7 +227,6 @@ Page is for admin to manage challenges within main app
     );
 
     function filterChallenges(filterValue) {
-      // Get the challenges grid container
       const challengesGrid = document.querySelector(
         ".row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-3"
       );
@@ -242,7 +235,6 @@ Page is for admin to manage challenges within main app
         return;
       }
 
-      // Get ALL col elements (including hidden ones) by selecting all direct children
       const allChallengeCards =
         challengesGrid.querySelectorAll(":scope > .col");
 
@@ -263,7 +255,6 @@ Page is for admin to manage challenges within main app
       let activeCount = 0;
       let archivedCount = 0;
 
-      // Now apply the filter to all cards
       allChallengeCards.forEach(function (card, index) {
         const challengeCard = card.querySelector(".card");
         if (!challengeCard) {
@@ -271,7 +262,6 @@ Page is for admin to manage challenges within main app
           return;
         }
 
-        // Check multiple ways to detect archived status
         const hasBorderDanger =
           challengeCard.classList.contains("border-danger");
         const hasArchivedBadge = card.innerHTML.includes("Archived</span>");
@@ -294,22 +284,20 @@ Page is for admin to manage challenges within main app
             shouldShow = true;
             break;
           case "active":
-            shouldShow = !isArchived; // Show only non-archived (active)
+            shouldShow = !isArchived;
             break;
           case "archived":
-            shouldShow = isArchived; // Show only archived
+            shouldShow = isArchived;
             break;
         }
 
         if (shouldShow) {
-          // Remove any inline display style and use classes
           card.style.removeProperty("display");
           card.classList.remove("d-none");
           card.classList.add("d-flex");
           shownCount++;
           console.log(`Card ${index}: SHOWING`);
         } else {
-          // Use Bootstrap's d-none class for hiding
           card.classList.add("d-none");
           card.classList.remove("d-flex");
           hiddenCount++;
@@ -323,7 +311,6 @@ Page is for admin to manage challenges within main app
       console.log(`Filter result: ${shownCount} shown, ${hiddenCount} hidden`);
     }
 
-    // Add event listeners to filter buttons
     filterButtons.forEach(function (button) {
       button.addEventListener("change", function () {
         if (this.checked) {
@@ -333,7 +320,6 @@ Page is for admin to manage challenges within main app
       });
     });
 
-    // Small delay to ensure DOM is fully ready
     setTimeout(function () {
       const checkedFilter = document.querySelector(
         'input[name="challengeFilter"]:checked'
