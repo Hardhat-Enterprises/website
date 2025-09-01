@@ -293,58 +293,113 @@
           width: calc(100% / 1.1);
         }
       }
-    </style>
-    <script>
+    </style><script>
 document.addEventListener('DOMContentLoaded', function () {
-    const track = document.querySelector('.project-track');
-    const cards = Array.from(document.querySelectorAll('.project-card'));
-    const cardCount = cards.length;
-    const visibleCards = 3;  // number of cards visible
-    const gap = 20;          // your gap
-    const cardWidth = cards[0].offsetWidth + gap;
+  // Elements
+  const container = document.querySelector('.project-slider');
+  const track     = document.querySelector('.project-track');
+  const cards     = Array.from(document.querySelectorAll('.project-card'));
+  const nextBtn   = document.querySelector('.slider-btn.next');
+  const prevBtn   = document.querySelector('.slider-btn.prev'); // will also act as "next"
 
-    // --- Clone first and last visibleCards ---
-    const startClones = cards.slice(-visibleCards).map(card => card.cloneNode(true));
-    const endClones = cards.slice(0, visibleCards).map(card => card.cloneNode(true));
-    startClones.forEach(clone => track.insertBefore(clone, track.firstChild));
-    endClones.forEach(clone => track.appendChild(clone));
+  if (!container || !track || cards.length === 0) return;
 
-    let index = visibleCards; // start from first real set
-    track.style.transform = `translateX(-${cardWidth * index}px)`;
+  // Helpers
+  function gapPx() {
+    // read the CSS flex gap from .project-track (e.g. "20px")
+    const g = getComputedStyle(track).gap || '0px';
+    return parseFloat(g) || 0;
+  }
+  function cardWidthPx() {
+    // include the visible width of a card (without the gap)
+    return cards[0].getBoundingClientRect().width;
+  }
+  function stepPx() {
+    // how far to move per slide: card width + flex gap
+    return cardWidthPx() + gapPx();
+  }
+  function visibleCount() {
+    // estimate how many cards are visible in the container
+    return Math.max(1, Math.round((container.clientWidth + gapPx()) / stepPx()));
+  }
 
-    function slideTo(newIndex) {
-        track.style.transition = "transform 0.5s ease-in-out";
-        track.style.transform = `translateX(-${cardWidth * newIndex}px)`;
-        index = newIndex;
+  // Clone first/last N for seamless loop
+  const N = visibleCount(); // number of clones at each end
+  const headClones = cards.slice(0, N).map(c => c.cloneNode(true));
+  const tailClones = cards.slice(-N).map(c => c.cloneNode(true));
+  tailClones.forEach(cl => track.insertBefore(cl, track.firstChild));
+  headClones.forEach(cl => track.appendChild(cl));
+
+  // State
+  const allSlides = Array.from(track.querySelectorAll('.project-card'));
+  const realCount = cards.length;
+  let index = N;                 // start on first real slide position
+  let animMs = 500;
+  let timer  = null;
+  const intervalMs = 6000;
+
+  function translate(noTransition = false) {
+    if (noTransition) track.style.transition = 'none';
+    const x = index * stepPx();
+    track.style.transform = `translateX(-${x}px)`;
+    if (noTransition) { void track.offsetHeight; } // reflow to lock "none"
+  }
+
+  // Initial position
+  translate(true);
+
+  function goForward() {
+    track.style.transition = `transform ${animMs}ms ease-in-out`;
+    index += 1;
+    translate(false);
+  }
+
+  // Seamless wrap when we hit the head clones
+  track.addEventListener('transitionend', () => {
+    // If we've moved onto the first head clone (past the last real slide)
+    if (index >= realCount + N) {
+      index = N;           // jump back to the first real slide
+      translate(true);     // jump without animation
     }
+    // (we never move backward, so no need to handle left-side clones)
+  });
 
-    document.querySelector('.next').addEventListener('click', () => {
-        slideTo(index + 1);
+  // Buttons: both act as NEXT (forward only)
+  function resetTimer() { stop(); start(); }
+  nextBtn && nextBtn.addEventListener('click', () => { goForward(); resetTimer(); });
+  prevBtn && prevBtn.addEventListener('click', () => { goForward(); resetTimer(); });
+
+  // Auto-slide forward only
+  function tick() {
+    // If next forward step would put us onto the head clone, do a seamless snap then animate
+    if (index + 1 > realCount + N) {
+      index = N;
+      translate(true);
+      requestAnimationFrame(() => requestAnimationFrame(goForward));
+    } else {
+      goForward();
+    }
+  }
+  function start() { timer = setInterval(tick, intervalMs); }
+  function stop()  { if (timer) clearInterval(timer); }
+
+  // Pause on hover (nice UX)
+  container.addEventListener('mouseenter', stop);
+  container.addEventListener('mouseleave', start);
+
+  // Handle resize: recompute positions using new widths/gaps
+  let resizeRAF = null;
+  window.addEventListener('resize', () => {
+    if (resizeRAF) cancelAnimationFrame(resizeRAF);
+    resizeRAF = requestAnimationFrame(() => {
+      translate(true); // snap to correct computed position with new step width
     });
+  });
 
-    document.querySelector('.prev').addEventListener('click', () => {
-        slideTo(index - 1);
-    });
-
-    track.addEventListener('transitionend', () => {
-        if (index >= cardCount + visibleCards) {
-            track.style.transition = "none";
-            index = visibleCards;
-            track.style.transform = `translateX(-${cardWidth * index}px)`;
-        }
-        if (index < visibleCards) {
-            track.style.transition = "none";
-            index = cardCount + visibleCards - 1;
-            track.style.transform = `translateX(-${cardWidth * index}px)`;
-        }
-    });
-
-    // Auto-slide every 4 seconds
-    setInterval(() => {
-        slideTo(index + 1);
-    }, 4000);
+  start();
 });
 </script>
+
 
 
   </section>
@@ -514,7 +569,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Auto slide every 3 seconds
-    setInterval(moveNext, 3000);
+    setInterval(moveNext, 4000);
   });
 </script>
 
@@ -539,15 +594,6 @@ document.addEventListener('DOMContentLoaded', function () {
 .testimonial-slider {
     display: flex;
     transition: transform 0.5s ease-in-out;
-}
-.testimonial-item {
-    flex: 0 0 100%;
-    box-sizing: border-box;
-}
-
-
-.testimonial-item.active {
-    display: block;
 }
 
 .prev-btn, .next-btn {
@@ -608,97 +654,112 @@ document.addEventListener('DOMContentLoaded', function () {
     transition: transform 0.3s ease;
 }
 </style>
-
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const viewMoreBtn = document.getElementById('viewMoreBtn');
-    const buttonText = viewMoreBtn.querySelector('span');
-    const projectCards = document.querySelectorAll('.col');
-    const initialVisibleCount = 6;
-    
-    // Hide projects beyond the initial count
-    projectCards.forEach((card, index) => {
-        if (index >= initialVisibleCount) {
-            card.classList.add('hidden-project');
-        }
-    });
+document.addEventListener("DOMContentLoaded", function () {
+  const slider    = document.querySelector(".testimonial-slider");
+  const container = document.querySelector(".testimonial-slider-container");
+  const baseItems = Array.from(document.querySelectorAll(".testimonial-item"));
+  const nextBtn   = document.querySelector(".next-btn");
+  const prevBtn   = document.querySelector(".prev-btn"); // also "next"
+  if (!slider || baseItems.length === 0) return;
 
-    viewMoreBtn.addEventListener('click', function() {
-        const hiddenProjects = document.querySelectorAll('.hidden-project');
-        
-        if (hiddenProjects.length > 0) {
-            // Show hidden projects
-            hiddenProjects.forEach(project => {
-                project.classList.remove('hidden-project');
-                project.classList.add('visible');
-            });
-            viewMoreBtn.classList.add('rotated');
-            buttonText.textContent = 'Show Less';
-        } else {
-            // Hide projects beyond initial count
-            projectCards.forEach((card, index) => {
-                if (index >= initialVisibleCount) {
-                    card.classList.remove('visible');
-                    card.classList.add('hidden-project');
-                }
-            });
-            viewMoreBtn.classList.remove('rotated');
-            buttonText.textContent = 'Show More';
-        }
-    });
-});
+  // --- Build infinite loop with clones
+  const firstClone = baseItems[0].cloneNode(true);
+  const lastClone  = baseItems[baseItems.length - 1].cloneNode(true);
+  slider.appendChild(firstClone);
+  slider.insertBefore(lastClone, slider.firstChild);
 
+  let allItems = Array.from(slider.querySelectorAll(".testimonial-item"));
+  let index = 1;                // start at first real slide
+  let isAnimating = false;
+  let queue = 0;                // queued forward steps
+  const durationMs = 500;
+  const intervalMs = 6000;
+  let timer = null;
 
-document.addEventListener("DOMContentLoaded", function() {
-    const slider = document.querySelector('.testimonial-slider');
-    const items = document.querySelectorAll('.testimonial-item');
-    const totalItems = items.length;
-    let index = 1; // start from first actual slide
+  function width() { return container.clientWidth; } // each slide is 100% width
+  function setTranslate(noTransition = false) {
+    if (noTransition) slider.style.transition = "none";
+    slider.style.transform = `translate3d(-${index * width()}px, 0, 0)`;
+    if (noTransition) { void slider.offsetHeight; } // reflow to apply "none"
+  }
 
-    // Clone first and last for infinite effect
-    const firstClone = items[0].cloneNode(true);
-    const lastClone = items[totalItems - 1].cloneNode(true);
-    slider.appendChild(firstClone);
-    slider.insertBefore(lastClone, slider.firstChild);
+  // Initial position
+  setTranslate(true);
 
-    const allItems = slider.querySelectorAll('.testimonial-item');
-    const itemWidth = allItems[0].clientWidth;
-    slider.style.transform = `translateX(-${itemWidth}px)`; // shift to first real item
+  function jumpToFirstReal() {
+    index = 1;
+    setTranslate(true); // snap without animation
+  }
 
-    function slideTo(newIndex) {
-        slider.style.transition = "transform 0.5s ease-in-out";
-        slider.style.transform = `translateX(-${newIndex * itemWidth}px)`;
-        index = newIndex;
+  function animateTo(newIndex) {
+    isAnimating = true;
+    slider.style.transition = `transform ${durationMs}ms ease-in-out`;
+    index = newIndex;
+    setTranslate(false);
+  }
+
+  // Forward step that handles clone edge cleanly
+  function stepForward() {
+    // If the next step would land on the firstClone (past last real), snap then animate
+    if (index + 1 >= allItems.length) {
+      jumpToFirstReal();
+      // Next frame, animate forward one
+      requestAnimationFrame(() => requestAnimationFrame(() => animateTo(index + 1)));
+    } else {
+      animateTo(index + 1);
     }
+  }
 
-    document.querySelector('.next-btn').addEventListener('click', () => {
-        if (index >= allItems.length - 1) return;
-        slideTo(index + 1);
-    });
+  // Queue-based advance: smooth even with rapid clicks
+  function requestAdvance(steps = 1) {
+    queue += steps;
+    if (!isAnimating) advance();
+  }
 
-    document.querySelector('.prev-btn').addEventListener('click', () => {
-        if (index <= 0) return;
-        slideTo(index - 1);
-    });
+  function advance() {
+    if (queue <= 0 || isAnimating) return;
+    queue--;
+    stepForward();
+  }
 
-    slider.addEventListener('transitionend', () => {
-        // Jump instantly when reaching cloned slides
-        if (index === allItems.length - 1) {
-            slider.style.transition = "none";
-            index = 1;
-            slider.style.transform = `translateX(-${itemWidth}px)`;
-        }
-        if (index === 0) {
-            slider.style.transition = "none";
-            index = allItems.length - 2;
-            slider.style.transform = `translateX(-${index * itemWidth}px)`;
-        }
-    });
+  // Transition end: finish this step, handle wrap, then run next in queue
+  slider.addEventListener("transitionend", () => {
+    // If we arrived on the firstClone (index === allItems.length - 1), snap back to first real
+    if (index >= allItems.length - 1) {
+      jumpToFirstReal();
+    }
+    isAnimating = false;
+    // Continue queued steps (if any)
+    if (queue > 0) {
+      // microtask to ensure style is settled
+      Promise.resolve().then(advance);
+    }
+  });
 
-    // Auto-slide every 3 seconds
-    setInterval(() => {
-        slideTo(index + 1);
-    }, 3000);
+  // Buttons — both move forward only
+  const onClick = () => { requestAdvance(1); resetTimer(); };
+  nextBtn && nextBtn.addEventListener("click", onClick);
+  prevBtn && prevBtn.addEventListener("click", onClick);
+
+  // Auto-forward
+  function tick() { requestAdvance(1); }
+  function start() { timer = setInterval(tick, intervalMs); }
+  function stop()  { if (timer) clearInterval(timer); }
+  function resetTimer() { stop(); start(); }
+
+  // Pause on hover (optional)
+  container.addEventListener("mouseenter", stop);
+  container.addEventListener("mouseleave", start);
+
+  // Keep alignment perfect on resize
+  let resizeRAF = null;
+  window.addEventListener("resize", () => {
+    if (resizeRAF) cancelAnimationFrame(resizeRAF);
+    resizeRAF = requestAnimationFrame(() => setTranslate(true));
+  });
+
+  start();
 });
 </script>
 
