@@ -1,0 +1,55 @@
+name: i18n-auto-translate
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  i18n:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Install gettext
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gettext
+
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install Django polib deepl
+
+      - name: Make messages (django & djangojs)
+        run: |
+          python manage.py makemessages -l zh_Hans -l fr -l es -l ja -l ko
+          python manage.py makemessages -l zh_Hans -l fr -l es -l ja -l ko -d djangojs
+
+      - name: Auto translate (DeepL)
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+        run: |
+          python manage.py auto_translate_messages --locale_dir=locale
+
+      - name: Compile messages
+        run: |
+          django-admin compilemessages
+
+      - name: Commit & Create PR
+        run: |
+          git config user.name "i18n-bot"
+          git config user.email "i18n-bot@example.com"
+          branch="chore/i18n-auto-$(date +%Y%m%d%H%M)"
+          git checkout -b "$branch"
+          git add locale/**/LC_MESSAGES/*.po locale/**/LC_MESSAGES/*.mo
+          git commit -m "chore(i18n): auto-translate via DeepL & compile"
+          git push -u origin "$branch"
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          title: "chore(i18n): auto-translate via DeepL"
+          body: "Automated pipeline. No manual msgstr. Languages: zh_Hans, fr, es, ja, ko."
+          branch: ""

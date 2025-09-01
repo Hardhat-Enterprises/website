@@ -481,9 +481,9 @@ class UserBlogPageForm(ModelForm):
         model = UserBlogPage
         fields = ['name', 'title', 'description', 'file']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),
-            'title': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your title', 'rows': 2}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your description'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Your name')}),
+            'title': forms.Textarea(attrs={'class': 'form-control', 'placeholder': _('Your title'), 'rows': 2}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': _('Your description')}),
         }
 
 

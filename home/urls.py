@@ -13,6 +13,8 @@ from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_das
 from .views import delete_account
 # Health Endpoint Work
 from .views import health_check
+from django.views.i18n import set_language
+
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
@@ -181,7 +183,9 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
 
-    path("health", health_check, name="health-check")
+    path("health", health_check, name="health-check"),
+    # internationalization
+    path('i18n/setlang/', set_language, name='set_language'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
