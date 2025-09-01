@@ -1,6 +1,22 @@
 -{% extends 'layouts/base.html' %} {% load static %} {% block content %}
 
-<div class="container my-5 py-4">
+<style>
+  /* spacing to navbar */
+  .admin-content-wrapper {
+    position: relative;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 992px) {
+    .admin-content-wrapper {
+      padding-top: 10rem;
+      padding-bottom: 3rem;
+    }
+  }
+</style>
+
+<div class="container admin-content-wrapper">
   <a href="{% url 'challenge_management' %}">Back to Challenge Management</a>
   <h1>Edit Challenge</h1>
 

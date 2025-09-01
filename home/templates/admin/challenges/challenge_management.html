@@ -1,20 +1,42 @@
 {% extends 'layouts/base.html' %} {% load static %} {% block content %}
 <style>
-  /* Ensure d-none properly hides elements */
   .d-none {
     display: none !important;
   }
 
-  /* Ensure proper flex display for visible cards */
   .col.d-flex {
     display: flex !important;
+  }
+  /* dark mode styling for h2 color */
+  body.dark-mode h2 {
+    color: #ffc107 !important;
+  }
+
+  /* dark mode styling for challenge details */
+  body.dark-mode .fw-bold,
+  body.dark-mode .text-muted {
+    color: #ffffff !important;
+  }
+
+  /* spacing to navbar */
+  .admin-content-wrapper {
+    position: relative;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 992px) {
+    .admin-content-wrapper {
+      padding-top: 10rem;
+      padding-bottom: 3rem;
+    }
   }
 </style>
 <!-- Created by Bryce Bacon, 14/8/2025
 Started using prettier to format the code.
 Page is for admin to manage challenges within main app
 -->
-<div class="container-fluid py-5 mt-5">
+<div class="container-fluid admin-content-wrapper">
   <div class="row mb-4">
     <div class="col-12">
       <div class="card">
@@ -38,7 +60,7 @@ Page is for admin to manage challenges within main app
                   value="all"
                   checked
                 />
-                <label class="btn btn-outline-primary" for="filterAll"
+                <label class="btn btn-outline-warning" for="filterAll"
                   >All</label
                 >
 
@@ -194,7 +216,7 @@ Page is for admin to manage challenges within main app
           <!-- Filter/Search empty state here-->
           <h5>No challenges found</h5>
           <p class="text-muted">Create your first challenge to get started.</p>
-          <a href="#" class="btn btn-success">
+          <a href="{% url 'add_challenge' %}" class="btn btn-success">
             <i class="fas fa-plus"></i> Create Your First Challenge
           </a>
         </div>

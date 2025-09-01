@@ -17,32 +17,10 @@
           <h4 class="text-center mb-4">
             Are you sure you want to delete this challenge?
           </h4>
-
-          <div class="alert alert-danger" role="alert">
-            <div class="d-flex">
-              <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-circle"></i>
-              </div>
-              <br class="flex-grow-1 ms-3">
-                <h6 class="alert-heading">
-                  This action cannot be undone!
-                </h6>
-                <p class="mb-2">Its Strongly Recommended to Archive the Challenge Instead</p>
-                <p class="mb-2">Deleting this challenge will:</p>
-                <ul class="mb-0">
-                  <li>Permanently remove the challenge from the database</li>
-                  <li>Delete all associated user progress and submissions</li>
-                  <li>
-                    Remove it from all associated website content including
-                    leaderboards and challenge lists
-                  </li>
-
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
+          <p class="text-center mb-4">
+            Deleting this challenge will permanently remove it from the
+            database. And remove all associated user progress and submissions.
+          </p>
           <div class="challenge-info p-3 bg-light rounded mb-4">
             <h6 class="fw-bold">Challenge Details:</h6>
             <p class="mb-1"><strong>Title:</strong> {{ object.title }}</p>
