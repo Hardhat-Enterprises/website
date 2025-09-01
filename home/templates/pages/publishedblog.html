@@ -1,11 +1,11 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-
+{% load i18n %}
 {% block content %}
 <main>
 <section class="section section-lg">
   <div class="container">
-    <h4 class="mb-4">Published Blogs</h4>
+    <h4 class="mb-4">{% trans "Published Blogs" %}</h4>
 
     <div class="row justify-content-center">
       {% for blog in blogpages %}
@@ -54,7 +54,7 @@
           </div>
         </div>
       {% empty %}
-        <p>No blogs have been published yet.</p>
+        <p>{% trans "No blogs have been published yet." %}</p>
       {% endfor %}
     </div>
   </div>

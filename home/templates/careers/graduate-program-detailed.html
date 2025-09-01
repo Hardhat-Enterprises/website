@@ -1,0 +1,266 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<style>
+  body {
+    background-color: #ffd700;
+  }
+
+  .graduate-program-section {
+    background-color: #ffd700;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+  }
+
+  .program-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .program-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  .program-header p {
+    font-size: 1.1rem;
+    color: #212529;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 3rem;
+  }
+
+  .benefits-section {
+    margin-bottom: 4rem;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .benefit-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .benefit-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #212529;
+  }
+
+  .benefit-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  .benefit-description {
+    color: #6c757d;
+    line-height: 1.6;
+  }
+
+  .application-section {
+    margin-bottom: 4rem;
+  }
+
+  .application-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .application-step {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .step-number {
+    width: 80px;
+    height: 80px;
+    background-color: #ffd700;
+    color: #212529;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 auto 1.5rem;
+  }
+
+  .step-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  .step-description {
+    color: #6c757d;
+    line-height: 1.6;
+  }
+
+  .cta-section {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .apply-btn {
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .apply-btn:hover {
+    opacity: 0.9;
+  }
+
+  .recently-viewed-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .recently-viewed-btn::after {
+    content: "▼";
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .benefits-grid,
+    .application-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="graduate-program-section position-relative">
+  <div class="container">
+    <!-- Recently Viewed Pages Button -->
+    <button class="recently-viewed-btn">Recently Viewed Pages</button>
+    
+    <div class="program-header">
+      <h1>Graduate Development Program</h1>
+      <p>A comprehensive 12-month journey designed to accelerate your career in cybersecurity and technology, with guaranteed placement opportunities.</p>
+    </div>
+
+    <!-- Program Benefits Section -->
+    <div class="benefits-section">
+      <h2 class="section-title">Program Benefits</h2>
+      
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🎓</div>
+          <h3 class="benefit-title">Comprehensive Training</h3>
+          <p class="benefit-description">12-month structured program with industry-leading curriculum</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">👥</div>
+          <h3 class="benefit-title">Dedicated Mentorship</h3>
+          <p class="benefit-description">1:1 mentoring from senior professionals throughout the program</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">📈</div>
+          <h3 class="benefit-title">Accelerated Growth</h3>
+          <p class="benefit-description">Fast-track your career with hands-on experience and real projects</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">📚</div>
+          <h3 class="benefit-title">Learning Budget</h3>
+          <p class="benefit-description">$5,000 annual budget for conferences, courses, and certifications</p>
+        </div>
+        
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <h3 class="benefit-title">Guaranteed Placement</h3>
+          <p class="benefit-description">95% of graduates receive full-time offers upon completion</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Process Section -->
+    <div class="application-section">
+      <h2 class="section-title">Application Process</h2>
+      
+      <div class="application-steps">
+        <div class="application-step">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Online Application</h3>
+          <p class="step-description">Submit your resume, cover letter, and complete our assessment</p>
+        </div>
+        
+        <div class="application-step">
+          <div class="step-number">2</div>
+          <h3 class="step-title">Technical Interview</h3>
+          <p class="step-description">1-hour technical interview with our engineering team</p>
+        </div>
+        
+        <div class="application-step">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Final Interview</h3>
+          <p class="step-description">Meet with program directors and potential mentors</p>
+        </div>
+        
+        <div class="application-step">
+          <div class="step-number">4</div>
+          <h3 class="step-title">Welcome Aboard</h3>
+          <p class="step-description">Receive your offer and start your journey with us</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <button class="apply-btn">Apply for Graduate Program</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

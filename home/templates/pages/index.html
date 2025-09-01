@@ -1,7 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-
-
+{% load i18n %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-q67YRD4QG2hHsm7K9U+xsP/fiY5NVR1F2Sc65XVfKwEYJBnp51BdehUGlNlAHzps" crossorigin="anonymous"></script>
 <script src="{% static 'js/vivus-fix.js' %}" defer></script>
 
@@ -26,11 +25,11 @@
           <img class="blink-animation" src="{% static 'assets/img/pages/home/hero-image.svg' %}" alt="Hero image">
         </div>
         <div class="col-lg-6 glass-card" style="position: relative; z-index: 99;">
-          <h1 class="fw-bolder display-2 text-center-head">Hardhat Enterprises</h1>
-          <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">Security is a necessity. Not a choice</h2>
+          <h1 class="fw-bolder display-2 text-center-head">{% trans "Hardhat Enterprises" %}</h1>
+          <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">{% trans "Security is a necessity. Not a choice" %}</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">Explore Projects</a>
-            <a type="button" href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">Join Us</a>
+            <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">{% trans "Explore Projects" %}</a>
+            <a type="button" href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">{% trans "Join Us" %}</a>
           </div>
         </div>
       </div>
@@ -103,15 +102,15 @@
                   <div class="carousel-item active">
                       <img class="d-block w-100 img-fluid" src="{% static 'assets/img/pages/home/company-vision.svg' %}" alt="Company Vision">
                       <div class="carousel-text-container glass-card">
-                          <h2 class="h1">Company Vision</h2>
-                          <p class="mb-4 lead fw-bold">Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company will be open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met.</p>
+                          <h2 class="h1">{% trans "Company Vision" %}</h2>
+                          <p class="mb-4 lead fw-bold">{% trans "Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company will be open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met." %}</p>
                       </div>
                   </div>
                   <div class="carousel-item">
                       <img class="d-block w-100 img-fluid" src="{% static 'assets/img/pages/home/company-mission.svg' %}" alt="Company Mission">
                       <div class="carousel-text-container glass-card">
-                          <h2 class="h1">Company Mission</h2>
-                          <p class="mb-4 lead fw-bold">Achieve an engaging learning experience for students within the company. An opportunity for students to gain cross department/project experience and the opportunity to share their expertise outside of their project team.</p>
+                          <h2 class="h1">{% trans "Company Mission" %}</h2>
+                          <p class="mb-4 lead fw-bold">{% trans "Achieve an engaging learning experience for students within the company. An opportunity for students to gain cross department/project experience and the opportunity to share their expertise outside of their project team." %}</p>
                       </div>
                   </div>
               </div>
@@ -153,7 +152,7 @@
   <!-- Projects -->
   <section id="projects" class="section section-lg bg-tertiary">
     <div class="container">
-      <h1 class="fw-bolder display-2 text-center mb-lg-2">Projects</h1>
+      <h1 class="fw-bolder display-2 text-center mb-lg-2">{% trans "Projects" %}</h1>
       <div class="project-slider overflow-hidden position-relative">
         <div class="project-track d-flex transition">
           <!-- Begin Project Cards -->
@@ -162,11 +161,11 @@
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/appattack-card.svg' %}" class="card-img-top" alt="AppAttack">
               </div>
-              <div class="card-body position-relative mt-n6 mx-2 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">AppAttack</h3>
-                <p class="mt-3">We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets</p>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">{% trans "AppAttack" %}</h3>
+                <p class="mt-3">{% trans "We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets" %}</p>
                 <a href="{% url 'appattack' %}">
-                  <div class="btn neomorph-btn mt-auto">Learn More</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -177,11 +176,11 @@
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/pt-gui-card-2.svg' %}" class="card-img-top" alt="PT-GUI">
               </div>
-              <div class="card-body position-relative mt-n6 mx-2 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">PT-GUI</h3>
-                <p class="mt-3">Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a revolution in cybersecurity practice.</p>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">{% trans "PT-GUI" %}</h3>
+                <p class="mt-3">{% trans "Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a revolution in cybersecurity practice." %}</p>
                 <a href="{% url 'ptgui_viz_main' %}">
-                  <div class="btn neomorph-btn mt-auto">Learn More</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -192,11 +191,11 @@
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="CyberSafe VR">
               </div>
-              <div class="card-body position-relative mt-n6 mx-2 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">CyberSafe VR</h3>
-                <p class="mt-3">Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using interactive VR technology to blend theory with practical application for owners and employees taking cybersecurity measures.</p>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">{% trans "CyberSafe VR" %}</h3>
+                <p class="mt-3">{% trans "Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using interactive VR technology to blend theory with practical application for owners and employees taking cybersecurity measures." %}</p>
                 <a href="{% url 'Vr_main' %}">
-                  <div class="btn neomorph-btn mt-auto">Learn More</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -207,11 +206,11 @@
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/cards/icon2.svg' %}" class="card-img-top" alt="Smishing Detection">
               </div>
-              <div class="card-body position-relative mt-n6 mx-2 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">Smishing Detection</h3>
-                <p class="mt-3">Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to moderate the risks associated with SMS phishing attacks.</p>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">{% trans "Smishing Detection" %}</h3>
+                <p class="mt-3">{% trans "Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to moderate the risks associated with SMS phishing attacks." %}</p>
                 <a href="{% url 'smishing_detection_main' %}">
-                  <div class="btn neomorph-btn mt-auto">Learn More</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -222,11 +221,11 @@
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Threat Mirror">
               </div>
-              <div class="card-body position-relative mt-n6 mx-2 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">Threat Mirror <br>(Project Paused)</h3>
-                <p class="mt-3">Threat Mirror aims to investigate open-source threat intelligence platforms, assessing their suitability and adaptability for SMEs and developing economies.</p>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">{% trans "Threat Mirror <br>(Project Paused)" %}</h3>
+                <p class="mt-3">{% trans "Threat Mirror aims to investigate open-source threat intelligence platforms, assessing their suitability and adaptability for SMEs and developing economies." %}</p>
                 <a href="{% url 'Deakin_Threat_mirror_main' %}">
-                  <div class="btn neomorph-btn mt-auto">Learn More</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -237,11 +236,11 @@
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Malware Visualization">
               </div>
-              <div class="card-body position-relative mt-n6 mx-2 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">Malware Visualization</h3>
-                <p class="mt-3">The Malware Visualisation project creates a user-friendly tool that simplifies malware analysis by integrating with existing visual analytics applications.</p>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">{% trans "Malware Visualization" %}</h3>
+                <p class="mt-3">{% trans "The Malware Visualisation project creates a user-friendly tool that simplifies malware analysis by integrating with existing visual analytics applications." %}</p>
                 <a href="{% url 'malware_viz_main' %}">
-                  <div class="btn neomorph-btn mt-auto">Learn More</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -252,11 +251,11 @@
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Malware Visualization">
               </div>
-              <div class="card-body position-relative mt-n6 mx-2 text-center rounded d-flex flex-column">
-                <h3 class="h5 card-title">The Policy Deployment Engine</h3>
-                <p class="mt-3">The Policy Deployment Engine is a tool that allows users to deploy policies to their systems.</p>
+              <div class="card-body position-relative mt-n6 mx-2 bg-white border border-gray-300 text-center rounded d-flex flex-column">
+                <h3 class="h5 card-title">{% trans "The Policy Deployment Engine" %}</h3>
+                <p class="mt-3">{% trans "The Policy Deployment Engine is a tool that allows users to deploy policies to their systems." %}</p>
                 <a href="{% url 'policy_deployment' %}">
-                  <div class="btn neomorph-btn mt-auto">Learn More</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -336,7 +335,7 @@
     <!-- News Section -->
     <section id="news" class="section section-lg">
       <div class="container">
-        <h2 class="fw-bolder display-4 text-center mb-5">Cybersecurity News</h2>
+        <h2 class="fw-bolder display-4 text-center mb-5">{% trans "Cybersecurity News" %}</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
           
           <!-- News Card 1 -->
@@ -344,9 +343,9 @@
             <div class="card h-100 border-0 shadow-sm rounded-3 neomorph-card">
               <img src="{% static 'assets/img/pages/News/img.jpg' %}" class="card-img-top img-fluid rounded-top" alt="TROX Stealer Malware">
               <div class="card-body d-flex flex-column rounded-bottom">
-                <h5 class="card-title">TROX Stealer Malware Spreads via Fake Updates</h5>
-                <p class="card-text">A new wave of cyberattacks spreads malware through fake software update alerts targeting unsuspecting users globally.</p>
-                <a href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">Read More</a>
+                <h5 class="card-title">{% trans "TROX Stealer Malware Spreads via Fake Updates" %}</h5>
+                <p class="card-text">{% trans "A new wave of cyberattacks spreads malware through fake software update alerts targeting unsuspecting users globally." %}</p>
+                <a href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">{% trans "Read More" %}</a>
               </div>
             </div>
           </div>
@@ -356,9 +355,9 @@
             <div class="card h-100 border-0 shadow-sm rounded-3 neomorph-card">
               <img src="{% static 'assets/img/pages/News/imgg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="AI in Cybersecurity">
               <div class="card-body d-flex flex-column rounded-bottom">
-                <h5 class="card-title">AI Shaping the Future of Cyber Defense</h5>
-                <p class="card-text">Experts explore how artificial intelligence is transforming threat detection and proactive cybersecurity measures worldwide.</p>
-                <a href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">Read More</a>
+                <h5 class="card-title">{% trans "AI Shaping the Future of Cyber Defense" %}</h5>
+                <p class="card-text">{% trans "Experts explore how artificial intelligence is transforming threat detection and proactive cybersecurity measures worldwide." %}</p>
+                <a href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">{% trans "Read More" %}</a>
               </div>
             </div>
           </div>
@@ -368,9 +367,9 @@
             <div class="card h-100 border-0 shadow-sm rounded-3 neomorph-card">
               <img src="{% static 'assets/img/pages/News/imggg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="Zero Trust Model">
               <div class="card-body d-flex flex-column rounded-bottom">
-                <h5 class="card-title">Zero Trust Security: Why It Matters in 2025</h5>
-                <p class="card-text">With rising remote work trends, the zero-trust model becomes essential in securing networks beyond traditional perimeters.</p>
-                <a href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">Read More</a>
+                <h5 class="card-title">{% trans "Zero Trust Security: Why It Matters in 2025" %}</h5>
+                <p class="card-text">{% trans "With rising remote work trends, the zero-trust model becomes essential in securing networks beyond traditional perimeters." %}</p>
+                <a href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">{% trans "Read More" %}</a>
               </div>
             </div>
           </div>
@@ -387,33 +386,24 @@
 
     <!-- Testimonials  -->
 
-    <section id="testimonials" class="testimonial-section section section-lg bg-tertiary">
-      <div class="container">
-        <p class="text-center testimonial-sub-header">Testimonial</p>
-        <h2 class="fw-bolder testimonials-title text-center mb-lg-2">What Our Clients Say</h2>
-        
+<section id="testimonials" class="testimonial-section section section-lg bg-tertiary">
+    <div class="container">
+        <p class="text-center testimonial-sub-header">{% trans "Testimonial" %}</p>
+        <h2 class="fw-bolder testimonials-title  text-center mb-lg-2">{% trans "What Our Clients Say" %}</h2>
+        <!-- <button class="prev-btn">❮</button> -->
         <div class="testimonial-slider-container">
           <div class="testimonial-slider">
-            
             <div class="testimonial-item neomorph-card">
-              <p class="testimonial-contentp">
-                "We have been working with Hardhat for over a year now, and their cybersecurity services have been a game-changer for our business. From preventing ransomware attacks to securing our network infrastructure, they have given us the peace of mind to focus on our growth. Their team is responsive, professional, and always one step ahead. Highly recommend"
-              </p>
-              <h3 class="testimonial-content">James Thompson, CTO, Tech Innovations Ltd.</h3>
+              <p class="testimonial-contentp">{% blocktrans %}"We have been working with Hardhat for over a year now, and their cybersecurity services have been a game-changer for our business. From preventing ransomware attacks to securing our network infrastructure, they have given us the peace of mind to focus on our growth. Their team is responsive, professional, and always one step ahead. Highly recommend"{% endblocktrans %}</p>
+              <h3 class="testimonial-content">{% trans "James Thompson, CTO, Tech Innovations Ltd." %}</h3>
             </div>
-    
             <div class="testimonial-item neomorph-card">
-              <p class="testimonial-contentp">
-                "As a small business, we were initially hesitant about investing in cybersecurity. However, after partnering with Hardhat, we quickly realized how critical it is to protect our data and systems. Their tailored solutions have kept us safe from cyber threats, and their proactive approach has helped us build a secure foundation for the future. We now feel more confident than ever about our digital security."
-              </p>
-              <h3 class="testimonial-content">Sarah Mitchell, Founder, EcoProducts Co.</h3>
+              <p class="testimonial-contentp">{% blocktrans %}"As a small business, we were initially hesitant about investing in cybersecurity. However, after partnering with Hardhat, we quickly realized how critical it is to protect our data and systems. Their tailored solutions have kept us safe from cyber threats, and their proactive approach has helped us build a secure foundation for the future. We now feel more confident than ever about our digital security."{% endblocktrans %}</p>
+              <h3 class="testimonial-content">{% trans "Sarah Mitchell, Founder, EcoProducts Co." %}</h3>
             </div>
-    
             <div class="testimonial-item neomorph-card">
-              <p class="testimonial-contentp">
-                "In the fast-paced world of finance, cybersecurity is not a luxury—it's a necessity. Hardhat has been instrumental in fortifying our defenses against sophisticated cyber threats. Their expertise in threat detection, incident response, and continuous monitoring has been invaluable. They've helped us navigate through potential vulnerabilities and maintain our clients' trust. A top-tier cybersecurity partner!"
-              </p>
-              <h3 class="testimonial-content">David Harris, Risk Manager, FinSecure Solutions</h3>
+              <p class="testimonial-contentp">{% blocktrans %}"In the fast-paced world of finance, cybersecurity is not a luxury—it's a necessity. Hardhat has been instrumental in fortifying our defenses against sophisticated cyber threats. Their expertise in threat detection, incident response, and continuous monitoring has been invaluable. They've helped us navigate through potential vulnerabilities and maintain our clients' trust. A top-tier cybersecurity partner!"{% endblocktrans %}</p>
+              <h3 class="testimonial-content">{% trans "David Harris, Risk Manager, FinSecure Solutions" %}</h3>
             </div>
     
           </div>
@@ -423,38 +413,36 @@
     
 <!-- FAQ -->
 
-<section id="faq" class="faq-section section-lg">
-  <div class="container">
-    <p class="text-center faq-sub-header">FAQ</p>
-    <h2 class="fw-bolder faq-title text-center mb-lg-2">What Our Clients Recently Ask</h2>
+  <section id="faq" class="faq-section section-lg">
+    <div class="container">
+      <p class="text-center faq-sub-header">{% trans "FAQ" %}</p>
+        <h2 class="fw-bolder faq-title  text-center mb-lg-2">{% trans "What Our Clients Recently ask" %}</h2>
        
-    <div class="faq-container neomorph-card">
-      <h2 class="text-center">Frequently Asked Questions</h2>
-
-      <div class="faq-item">
+<div class="faq-container neomorph-card">
+    <div class="faq-item">
         <button class="faq-button neomorph-btn d-flexf space-betweenf">
-          What is cybersecurity and why do I need it? <span class="icon">+</span>
+             {% trans "What is cybersecurity and why do I need it? " %}<span class="icon">+</span>
         </button>
         <div class="faq-content">
-          <p>Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks, data breaches, and other cyber threats. It is essential for businesses and individuals to safeguard sensitive information from malicious activities.</p>
+            <p>{% trans "Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks, data breaches, and other cyber threats. It is essential for businesses and individuals to safeguard sensitive information from malicious activities." %}</p>
         </div>
       </div>
 
-      <div class="faq-item">
+    <div class="faq-item">
         <button class="faq-button neomorph-btn d-flexf space-betweenf">
-          How can I protect my business from cyber threats? <span class="icon">+</span>
+            {% trans "How can I protect my business from cyber threats? " %}<span class="icon">+</span>
         </button>
         <div class="faq-content">
-          <p>Our cybersecurity services offer comprehensive solutions including threat monitoring, data encryption, firewall protection, penetration testing, and employee training. These measures can help reduce the risk of cyber threats.</p>
+            <p>{% trans "Our cybersecurity services offer comprehensive solutions including threat monitoring, data encryption, firewall protection, penetration testing, and employee training. These measures can help reduce the risk of cyber threats." %}</p>
         </div>
       </div>
 
-      <div class="faq-item">
+    <div class="faq-item">
         <button class="faq-button neomorph-btn d-flexf space-betweenf">
-          What is a data breach and how can I prevent one? <span class="icon">+</span> 
+            {% trans "What is a data breach and how can I prevent one? " %}<span class="icon">+</span> 
         </button>
         <div class="faq-content">
-          <p>A data breach occurs when sensitive information is accessed or stolen by unauthorized individuals. Preventive measures include securing networks, using strong passwords, encrypting sensitive data, and regularly updating security protocols.</p>
+            <p>{% trans "A data breach occurs when sensitive information is accessed or stolen by unauthorized individuals. Preventive measures include securing networks, using strong passwords, encrypting sensitive data, and regularly updating security protocols." %}</p>
         </div>
       </div>
     </div>
@@ -467,14 +455,14 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content shadow-lg border-0 glass-card">
         <div class="modal-header text-center">
-          <h5 class="modal-title w-100 fw-bold" id="announcementModalLabel">🌟 Announcement 🌟</h5>
+          <h5 class="modal-title w-100 fw-bold" id="announcementModalLabel">🌟 {% trans "Announcement" %} 🌟</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
-          <p class="fs-4">{{ announcement_message }}</p>
+          <p class="fs-4">{% trans "{{ announcement_message }}" %}</p>
         </div>
         <div class="modal-footer justify-content-center border-top-0">
-          <button type="button" class="btn btn-primary px-5" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary px-5" data-bs-dismiss="modal">{% trans "Close" %}</button>
         </div>
       </div>
     </div>
@@ -777,43 +765,43 @@ body.dark-mode #faq .faq-title {
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const viewMoreBtn = document.getElementById('viewMoreBtn');
-    const buttonText = viewMoreBtn.querySelector('span');
-    const projectCards = document.querySelectorAll('.col');
-    const initialVisibleCount = 6;
-    
-    // Hide projects beyond the initial count
-    projectCards.forEach((card, index) => {
-        if (index >= initialVisibleCount) {
-            card.classList.add('hidden-project');
-        }
-    });
+  document.addEventListener("DOMContentLoaded", function() {
+      const viewMoreBtn = document.getElementById('viewMoreBtn');
+      const buttonText = viewMoreBtn.querySelector('span');
+      const projectCards = document.querySelectorAll('.col');
+      const initialVisibleCount = 6;
+      
+      // Hide projects beyond the initial count
+      projectCards.forEach((card, index) => {
+          if (index >= initialVisibleCount) {
+              card.classList.add('hidden-project');
+          }
+      });
 
-    viewMoreBtn.addEventListener('click', function() {
-        const hiddenProjects = document.querySelectorAll('.hidden-project');
-        
-        if (hiddenProjects.length > 0) {
-            // Show hidden projects
-            hiddenProjects.forEach(project => {
-                project.classList.remove('hidden-project');
-                project.classList.add('visible');
-            });
-            viewMoreBtn.classList.add('rotated');
-            buttonText.textContent = 'Show Less';
-        } else {
-            // Hide projects beyond initial count
-            projectCards.forEach((card, index) => {
-                if (index >= initialVisibleCount) {
-                    card.classList.remove('visible');
-                    card.classList.add('hidden-project');
-                }
-            });
-            viewMoreBtn.classList.remove('rotated');
-            buttonText.textContent = 'Show More';
-        }
-    });
-});
+      viewMoreBtn.addEventListener('click', function() {
+          const hiddenProjects = document.querySelectorAll('.hidden-project');
+          
+          if (hiddenProjects.length > 0) {
+              // Show hidden projects
+              hiddenProjects.forEach(project => {
+                  project.classList.remove('hidden-project');
+                  project.classList.add('visible');
+              });
+              viewMoreBtn.classList.add('rotated');
+              buttonText.textContent = 'Show Less';
+          } else {
+              // Hide projects beyond initial count
+              projectCards.forEach((card, index) => {
+                  if (index >= initialVisibleCount) {
+                      card.classList.remove('visible');
+                      card.classList.add('hidden-project');
+                  }
+              });
+              viewMoreBtn.classList.remove('rotated');
+              buttonText.textContent = 'Show More';
+          }
+      });
+  });
 </script>
 
 </main>
