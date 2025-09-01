@@ -102,6 +102,7 @@ urlpatterns = [
     path("careers/internships/", internships, name="internships"),
     path("careers/job-alerts/", job_alerts, name="job-alerts"),
     path("careers/discover/", career_discover, name="career-discover"),
+    path("careers/path-finder/", views.career_path_finder, name="career_path_finder"),
     path("careers/graduate-program/", views.graduate_program, name="graduate-program"),
     path("careers/graduate-program/detailed/", views.graduate_program_detailed, name="graduate-program-detailed"),
     path("careers/faqs/", views.careers_faqs, name="careers-faqs"),
