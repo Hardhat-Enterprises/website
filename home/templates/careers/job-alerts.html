@@ -84,32 +84,10 @@
     border: 1px solid #f5c6cb;
     color: #721c24;
   }
-
-  .recently-viewed-btn {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    background-color: #212529;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-  }
-
-  .recently-viewed-btn::after {
-    content: "▼";
-    margin-left: 0.5rem;
-    font-size: 0.8rem;
-  }
 </style>
 
 <section class="job-alerts-wrapper">
-  <div class="container position-relative">
-    <!-- Recently Viewed Pages Button -->
-    <button class="recently-viewed-btn">Recently Viewed Pages</button>
-    
+  <div class="container">
     <h2>Subscribe to Job Alerts</h2>
     <p>Be the first to know about new job openings at Hardhat.</p>
     
@@ -131,4 +109,3 @@
 </section>
 
 {% endblock %}
-
