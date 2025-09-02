@@ -1,4 +1,5 @@
 from django.urls import include, path
+from django.conf.urls.i18n import set_language
 
 from django.contrib import admin
 
@@ -11,6 +12,8 @@ from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_das
 from .views import delete_account
 # Health Endpoint Work
 from .views import health_check
+from django.views.i18n import set_language
+
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
@@ -98,6 +101,7 @@ urlpatterns = [
     path("careers/internships/", internships, name="internships"),
     path("careers/job-alerts/", job_alerts, name="job-alerts"),
     path("careers/discover/", career_discover, name="career-discover"),
+    path("careers/path-finder/", views.career_path_finder, name="career_path_finder"),
     path("careers/graduate-program/", views.graduate_program, name="graduate-program"),
     path("careers/graduate-program/detailed/", views.graduate_program_detailed, name="graduate-program-detailed"),
     path("careers/faqs/", views.careers_faqs, name="careers-faqs"),
@@ -188,5 +192,7 @@ urlpatterns = [
     path('account/delete/', delete_account, name='delete-account'),
 
     path("health", health_check, name="health-check"),
+    # internationalization
+    path('i18n/setlang/', set_language, name='set_language'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
