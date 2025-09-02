@@ -2,6 +2,8 @@ name: i18n-auto-translate
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch: {}
 
 jobs:
@@ -27,29 +29,65 @@ jobs:
 
       - name: Make messages (django & djangojs)
         run: |
-          python manage.py makemessages -l zh_Hans -l fr -l es -l ja -l ko
-          python manage.py makemessages -l zh_Hans -l fr -l es -l ja -l ko -d djangojs
+          python manage.py makemessages --no-wrap -l zh_Hans -l fr -l es -l ja -l ko
+          python manage.py makemessages --no-wrap -l zh_Hans -l fr -l es -l ja -l ko -d djangojs
 
       - name: Auto translate (DeepL)
+        if: ${{ github.event_name != 'pull_request' && secrets.DEEPL_API_KEY != '' }}
         env:
           DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
         run: |
           python manage.py auto_translate_messages --locale_dir=locale
 
+      - name: Skip DeepL (PR build or no secret)
+        if: ${{ github.event_name == 'pull_request' || secrets.DEEPL_API_KEY == '' }}
+        run: echo "Skipping DeepL (pull_request build or no DEEPL_API_KEY)."
+
+      - name: Normalize PO newline parity
+        run: |
+          python - <<'PY'
+          import polib, pathlib
+          base = pathlib.Path("locale")
+          for po_path in base.rglob("*/LC_MESSAGES/*.po"):
+              po = polib.pofile(str(po_path))
+              changed = False
+              def align(msgid, s):
+                  if s is None: return s
+                  out = s
+                  if msgid.startswith('\n') and not out.startswith('\n'): out = '\n' + out
+                  if not msgid.startswith('\n') and out.startswith('\n'): out = out.lstrip('\n')
+                  if msgid.endswith('\n') and not out.endswith('\n'): out = out + '\n'
+                  if not msgid.endswith('\n') and out.endswith('\n'): out = out.rstrip('\n')
+                  return out
+              for e in po:
+                  if e.msgstr:
+                      e.msgstr = align(e.msgid, e.msgstr); changed = True
+                  if e.msgstr_plural:
+                      for k,v in e.msgstr_plural.items():
+                          e.msgstr_plural[k] = align(e.msgid, v); changed = True
+              if changed:
+                  po.save(str(po_path))
+          PY
+
       - name: Compile messages
         run: |
-          django-admin compilemessages
+          python manage.py compilemessages \
+            -l zh_Hans -l fr -l es -l ja -l ko \
+            -i venv -i .git -i node_modules -i "**/site-packages/**"
 
-      - name: Commit & Create PR
+      - name: Commit & Create PR (from main push)
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           git config user.name "i18n-bot"
           git config user.email "i18n-bot@example.com"
           branch="chore/i18n-auto-$(date +%Y%m%d%H%M)"
           git checkout -b "$branch"
           git add locale/**/LC_MESSAGES/*.po locale/**/LC_MESSAGES/*.mo
-          git commit -m "chore(i18n): auto-translate via DeepL & compile"
+          git commit -m "chore(i18n): auto-translate & normalize & compile"
           git push -u origin "$branch"
+          
       - uses: peter-evans/create-pull-request@v6
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           title: "chore(i18n): auto-translate via DeepL"
           body: "Automated pipeline. No manual msgstr. Languages: zh_Hans, fr, es, ja, ko."

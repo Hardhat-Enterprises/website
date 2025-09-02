@@ -5,6 +5,7 @@ Auto-translate .po/.po(djangojs) using DeepL only (no manual msgstr).
 - Preserves %(placeholders)s
 - Handles plurals
 - Adds tcomment "[auto-translated provider=DeepL]"
+- Aligns leading/trailing newlines of msgstr to match msgid
 """
 
 import os, re
@@ -15,7 +16,7 @@ import deepl
 
 # Django locale -> DeepL target language code
 DEEPL_LOCALES = {
-    "zh_Hans": "ZH",   # 简体中文
+    "zh_Hans": "ZH",
     "fr":      "FR",
     "es":      "ES",
     "ja":      "JA",
@@ -48,6 +49,20 @@ def _defuzz(entry):
     # Clear old msgids that were previously guessed to be matches to avoid them being marked as fuzzy again
     if getattr(entry, "previous_msgid", None):
         entry.previous_msgid = ""
+
+def _align_newlines(msgid: str, s: str) -> str:
+    if s is None:
+        return s
+    out = s
+    if msgid.startswith('\n') and not out.startswith('\n'):
+        out = '\n' + out
+    if not msgid.startswith('\n') and out.startswith('\n'):
+        out = out.lstrip('\n')
+    if msgid.endswith('\n') and not out.endswith('\n'):
+        out = out + '\n'
+    if not msgid.endswith('\n') and out.endswith('\n'):
+        out = out.rstrip('\n')
+    return out
 
 class Command(BaseCommand):
     help = "Auto-translate .po via DeepL (no manual msgstr)."
@@ -89,7 +104,8 @@ class Command(BaseCommand):
                         s1 = self._tx(translator, e.msgid, target)
                         s2 = self._tx(translator, e.msgid_plural, target)
                         for i in range(npl):
-                            e.msgstr_plural[i] = s1 if i == 0 else s2
+                            out = s1 if i == 0 else s2
+                            e.msgstr_plural[i] = _align_newlines(e.msgid, out)
                         e.tcomment = ((e.tcomment or "") + " [auto-translated provider=DeepL]").strip()
                         _defuzz(e)
                         changed = True
@@ -102,7 +118,7 @@ class Command(BaseCommand):
                         continue
 
                     out = self._tx(translator, e.msgid, target)
-                    e.msgstr = out
+                    e.msgstr = _align_newlines(e.msgid, out)
                     e.tcomment = ((e.tcomment or "") + " [auto-translated provider=DeepL]").strip()
                     _defuzz(e)
                     changed = True
@@ -120,5 +136,10 @@ class Command(BaseCommand):
         if not text.strip():
             return text
         masked, mp = _mask(text)
-        res = translator.translate_text(masked, target_lang=target, preserve_formatting=True)
+        res = translator.translate_text(
+            masked,
+            target_lang=target,
+            preserve_formatting=True,
+            split_sentences="nonewlines",
+        )
         return _unmask(res.text, mp)
