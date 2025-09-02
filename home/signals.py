@@ -4,6 +4,9 @@ from django.dispatch import receiver
 from django.utils.timezone import now
 from django.contrib.auth.signals import user_login_failed
 from django.core.signals import request_finished
+from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from .models import PasswordHistory
 
 @receiver(user_logged_in)
 def set_session_last_activity_on_login(sender, request, user, **kwargs):
@@ -62,3 +65,13 @@ def clear_user_sessions(user, current_session_key=None):
         if str(user.id) == session_data.get('_auth_user_id'):
             session.delete()
 
+
+User = get_user_model()
+
+@receiver(post_save, sender=User)
+def add_initial_password_to_history(sender, instance, created, **kwargs):
+    if not created:
+        return
+    encoded = getattr(instance, "password", "")
+    if encoded.strip():
+        PasswordHistory.objects.create(user=instance, encoded_password=encoded)
