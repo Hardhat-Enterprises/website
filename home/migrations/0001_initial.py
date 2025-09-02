@@ -221,18 +221,6 @@ class Migration(migrations.Migration):
                 ('responsibilities', tinymce.models.HTMLField(blank=True, null=True)),
                 ('qualifications', tinymce.models.HTMLField(blank=True, null=True)),
                 ('benefits', tinymce.models.HTMLField(blank=True, null=True)),
-<<<<<<< HEAD
-                ('salary_range', models.CharField(max_length=100, blank=True, null=True)),
-                ('experience_level', models.CharField(max_length=50, choices=[
-                    ('entry', 'Entry Level'),
-                    ('mid', 'Mid Level'),
-                    ('senior', 'Senior Level'),
-                    ('lead', 'Lead'),
-                    ('intern', 'Internship')
-                ], default='entry')),
-                ('department', models.CharField(max_length=100, blank=True, null=True)),
-                ('skills_required', models.TextField(blank=True, null=True)),
-=======
                 ('salary_range', models.CharField(blank=True, max_length=100, null=True)),
                 ('experience_level', models.CharField(choices=[('entry', 'Entry Level'), ('mid', 'Mid Level'), ('senior', 'Senior Level'), ('lead', 'Lead'), ('intern', 'Internship')], default='entry', max_length=50)),
                 ('department', models.CharField(blank=True, max_length=100, null=True)),
@@ -247,7 +235,6 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('last_notification', models.DateTimeField(blank=True, null=True)),
->>>>>>> main
             ],
         ),
         migrations.CreateModel(
