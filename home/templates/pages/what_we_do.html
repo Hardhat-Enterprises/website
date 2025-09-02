@@ -1,121 +1,678 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-{% load i18n %}
+
 {% block seo %}
-    <title>What We Do - Cybersecurity Services by Hardhat Enterprises</title>
-    <meta name="description" content="Hardhat Enterprises offers cybersecurity services, including penetration testing, code review, and threat visualization, to enhance white-hat operations and secure digital assets.">
-    <meta name="keywords" content="cybersecurity services, white-hat cybersecurity, open-source security tools, penetration testing services, ethical hacking tools, Hardhat Enterprises">
-    <meta property="og:title" content="What We Do - Cybersecurity Services by Hardhat Enterprises">
-    <meta property="og:description" content="Discover Hardhat Enterprises' cybersecurity services, from penetration testing to open-source security tools, designed to protect your organization.">
-    <meta property="og:image" content="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}">
+<title>What We Do - Cybersecurity Services | Hardhat Enterprises</title>
+<meta name="description" content="Explore Hardhat Enterprises' cybersecurity services, how we work, and a quick contact form." />
 {% endblock %}
 
 {% block content %}
 <main>
-    {% include 'includes/pre-loader.html' %}
+  {% include 'includes/pre-loader.html' %}
 
-    <!-- Hero -->
-    <section class="section-header bg-tertiary text-black">
-        <div class="container">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
-                    <h1 class="display-2 mb-4">{% trans "Full-Service Cybersecurity Agency" %}</h1>
-                    <p class="lead mb-4 text-muted">
-                        {% blocktrans %}
-                        Hardhat Enterprises enhances white-hat cybersecurity by safeguarding assets, reducing threats, and thwarting vulnerability exploits. Our cybersecurity services, including penetration testing and open-source security tools, address market gaps and secure your digital assets.
-                        {% endblocktrans %}
-                    </p>
-                </div>
-                <div class="col-12 col-md-5 d-none d-md-block text-center">
-                    <img src="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}" alt="Hardhat Enterprises team providing cybersecurity services" class="img-fluid" loading="lazy">
-                </div>
-            </div>
+  <!-- ================= HERO (unchanged palette) ================= -->
+  <section class="section-header bg-tertiary text-black">
+    <div class="container">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-12 col-md-7 col-lg-6 text-center text-md-start">
+          <h1 class="display-2 mb-4">Full-Service Cybersecurity Agency</h1>
+          <p class="lead mb-4 text-muted">
+            We safeguard assets, reduce threats, and thwart vulnerability exploits through penetration testing,
+            secure engineering, and incident response.
+          </p>
         </div>
-    </section>
-    <!-- End of Hero section -->
+        <div class="col-12 col-md-5 d-none d-md-block text-center">
+          <img src="{% static 'assets/img/pages/home/mvp-Team goals-pana.svg' %}" class="img-fluid" alt="Cybersecurity team" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+ <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('bs-theme') || 'dark';
+        document.documentElement.setAttribute('data-bs-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+      }
+    })();
+  </script>
 
-    <!-- Services Section -->
-    <section class="section section-lg">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col">
-                    <h2 class="h1 fw-light">{% blocktrans %}Our <span class="fw-bold">Cybersecurity Services</span>{% endblocktrans %}</h2>
-                    <p class="lead mb-5">{% trans "Explore how Hardhat Enterprises protects your organization with advanced white-hat cybersecurity solutions." %}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <h3>{% trans "Penetration Testing Services" %}</h3>
-                    <p>{% trans "We provide thorough penetration testing services to identify vulnerabilities in your systems and applications, ensuring robust cybersecurity protection." %}</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>{% trans "Secure Code Review" %}</h3>
-                    <p>{% trans "Our experts offer secure code review services to ensure your code is free from vulnerabilities, safeguarding your applications from cyber threats." %}</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>{% trans "Open-Source Security Tools" %}</h3>
-                    <p>{% trans "We develop open-source security tools to address market gaps, empowering organizations with ethical hacking tools for threat mitigation." %}</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End of Services Section -->
+  <!-- ================= PAGE STYLES (scoped + theme-aware) ================= -->
+<style>
+/* ===================== THEME TOKENS ===================== */
+:root{
+  /* Default (light follows app) */
+  --bg: var(--bs-body-bg);                  /* page background */
+  --ink: var(--bs-body-color);              /* text color */
+  --muted: var(--bs-secondary-color, #6a7380);
+  --card: var(--bs-body-bg);
+  --card-2: var(--bs-tertiary-bg, var(--bs-body-bg));
+  --border: var(--bs-border-color, #e6e8ef);
+  --accent:#f5c400;
+  --shadow: var(--bs-box-shadow, 0 10px 24px rgba(3,7,18,.10));
+  --radius:18px;
+  --radius-lg:22px;
 
-    <!-- Contact Section -->
-    <section class="section section-lg">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-lg-8">
-                    <!-- Contact Card -->
-                    <div class="card border-0 p-2 p-md-3 p-lg-5">
-                        <div class="card-header bg-white border-0 text-center">
-                            <h2 style="color: antiquewhite;">{% trans "Work With Our Cybersecurity Agency" %}</h2>
-                            <p>{% trans "Tell us about your cybersecurity needs!" %}</p>
-                        </div>
-                        <div class="card-body pt-0">
-                            <form id="contactForm" onsubmit="return handleSubmit(event)">
-                                <!-- Form -->
-                                <div class="mb-4 mt-4">
-                                    <label for="name">{% trans "Your Name" %}</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon3"><span class="fas fa-user-circle"></span></span>
-                                        <input type="text" class="form-control" placeholder="e.g. Bonnie Green" id="name" required>
-                                    </div>
-                                </div>
-                                <!-- End of Form -->
-                                <!-- Form -->
-                                <div class="mb-4">
-                                    <label for="email">{% trans "Your Email" %}</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon4"><span class="fas fa-envelope"></span></span>
-                                        <input type="email" class="form-control" placeholder="example@company.com" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" size="30" id="email" required>
-                                    </div>
-                                </div>
-                                <!-- End of Form -->
-                                <div class="mb-4">
-                                    <label for="message">{% trans "Your Message" %}</label>
-                                    <textarea placeholder="{% trans 'How can our cybersecurity services help you?' %}" class="form-control" id="message" rows="4" required></textarea>
-                                </div>
-                                <!-- End of Form -->
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-secondary">{% trans "Send Message" %}</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- End of Contact Card -->
-                </div>
-            </div>
+  /* This will be filled with the navbar's *computed* bg by JS below;
+     leaving a safe fallback so CSS still works without JS. */
+  --hh-navbar-computed: initial;
+}
+/* ====== LIGHT MODE: explicit tokens so text stays strong ====== */
+html[data-bs-theme="light"],
+body[data-bs-theme="light"]{
+  --bg:     var(--bs-body-bg, #ffffff);
+  --ink:    var(--bs-emphasis-color, #212529);
+  --muted:  var(--bs-secondary-color, #6c757d);
+  --card:   var(--bs-body-bg, #ffffff);
+  --card-2: var(--bs-tertiary-bg, #f8f9fa);
+  --border: var(--bs-border-color, #dee2e6);
+  --shadow: var(--bs-box-shadow, 0 8px 24px rgba(0,0,0,.07));
+}
+
+
+/* Export a guess of the navbar bg using Bootstrap tokens (CSS-only fallback) */
+.navbar{
+  --hh-navbar-bg: var(--bs-navbar-bg, var(--bs-dark, #212529));
+}
+
+/* ====== DARK MODE: match navbar exactly ======
+   1) Prefer the *computed* navbar color (if JS populated it).
+   2) Else use the navbar bg token (if present).
+   3) Else fall back to Bootstrap dark. */
+html[data-bs-theme="dark"],
+body[data-bs-theme="dark"],
+html.dark,
+body.dark-mode{
+  --bg: var(--hh-navbar-computed, var(--hh-navbar-bg, var(--bs-dark, #212529)));
+  --ink: var(--bs-body-color, #e9ecef);
+  --muted: var(--bs-secondary-color, #adb5bd);
+  --card: var(--hh-navbar-computed, var(--hh-navbar-bg, var(--bs-dark, #212529)));
+  --card-2: var(--hh-navbar-computed, var(--hh-navbar-bg, var(--bs-dark, #212529)));
+  --border: rgba(255,255,255,.12);
+  --shadow: 0 14px 36px rgba(0,0,0,.55);
+}
+
+/* ===================== LAYOUT ===================== */
+.hh-sec{
+  background: var(--bg) !important;
+  color: var(--ink) !important;
+  padding: 64px 0;
+}
+.hh-sub{ color: var(--muted); }
+
+/* ===================== TITLES ===================== */
+.fig-title{ font-weight:800; font-size: clamp(28px, 3.4vw, 40px); letter-spacing:.2px; margin-bottom:8px; }
+.fig-title .our{ font-style: italic; font-weight:700; opacity:.95; margin-right:.25rem; }
+.fig-title .yellow{ color: var(--accent); }
+.fig-title .rest{ color: var(--ink); }
+
+/* ===================== GRID ===================== */
+.grid-4{ display:grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+@media (max-width: 1200px){ .grid-4{ grid-template-columns: repeat(3,1fr);} }
+@media (max-width: 992px){ .grid-4{ grid-template-columns: repeat(2,1fr);} }
+@media (max-width: 576px){ .grid-4{ grid-template-columns: 1fr; } }
+
+/* ===================== SERVICE CARD ===================== */
+.svc{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display:flex; flex-direction:column; min-height:260px;
+}
+.svc-head{
+  position:relative; height:98px;
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 55%),
+    linear-gradient(135deg, #ffd84f 0%, #f5c400 36%, #a88800 100%);
+}
+.svc-dot{
+  position:absolute; top:56%; transform:translateY(-50%);
+  width:34px;height:34px;border-radius:999px;
+  background: rgba(0,0,0,.38); border:1px solid rgba(255,255,255,.12);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-weight:700; line-height:0; backdrop-filter: blur(2px);
+}
+.svc-dot.left{ left:12px; } .svc-dot.right{ right:12px; }
+.svc-body{ padding:16px; display:flex; flex-direction:column; gap:6px; }
+.svc-title{ font-weight:800; font-size:1.02rem; color: var(--ink); }
+.svc-text{ color: var(--muted); font-size:.92rem; }
+
+.pill-btn{
+  margin-top:auto; display:inline-flex; align-items:center; gap:10px;
+  border-radius:999px; padding:10px 16px;
+  border:1px solid var(--border);
+  background: linear-gradient(180deg, var(--card-2), var(--card));
+  color: var(--ink); font-weight:700; font-size:.92rem;
+}
+.pill-btn .tri{
+  width:0;height:0;border-left:6px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent;
+}
+
+/* ===================== STEPS ===================== */
+.step{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 18px 20px;
+  position:relative; min-height:132px;
+}
+.step .ghost{ position:absolute; right:14px; top:10px; font-size:28px; font-weight:800; color:var(--muted); opacity:.25; }
+.step .icon{ font-size:18px; margin-right:8px; opacity:.9; }
+.step h4{ font-weight:800; font-size:1rem; margin:0 0 4px 0; color: var(--ink); }
+.step p{ color: var(--muted); margin:0; font-size:.92rem; }
+
+/* ===================== FORM ===================== */
+.hh-form.card{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+.hh-form .form-label{ color: var(--ink); font-weight:700; }
+.hh-form .form-control, .hh-form textarea{
+  background: var(--card-2);
+  border:1px solid var(--border);
+  color: var(--ink);
+  border-radius:12px;
+}
+.hh-form .form-control::placeholder, .hh-form textarea::placeholder{ color: var(--muted); }
+.hh-form .btn-accent{
+  display:inline-block; width:100%;
+  border:none; border-radius:999px; padding:12px 18px; font-weight:800;
+  background: linear-gradient(180deg, #ffd84f 0%, #f5c400 100%); color:#111;
+}
+/* ===== Make section use the SAME background as the contact form (dark mode only) ===== */
+:root{ --hh-form-bg: initial; }  /* will be filled from JS below */
+
+/* Light mode stays as-is; dark mode forces the section to the form color */
+html[data-bs-theme="dark"] .hh-sec,
+body[data-bs-theme="dark"] .hh-sec,
+html.dark .hh-sec,
+body.dark-mode .hh-sec {
+  background: var(--hh-form-bg, var(--card)) !important; /* use computed form bg first, else --card */
+  color: var(--ink) !important;
+}
+/* ===== 1) Improve heading contrast in dark mode ===== */
+html[data-bs-theme="dark"] .fig-title .our,
+body[data-bs-theme="dark"] .fig-title .our,
+html.dark .fig-title .our,
+body.dark-mode .fig-title .our {
+  /* make "Our" / "Get in" clearly visible */
+  color: var(--ink) !important;
+  opacity: 0.9 !important;
+}
+
+/* Some installs used .fig-title .rest for the non-yellow word in contact */
+html[data-bs-theme="dark"] .fig-title .rest,
+body[data-bs-theme="dark"] .fig-title .rest,
+html.dark .fig-title .rest,
+body.dark-mode .fig-title .rest {
+  color: var(--ink) !important;
+  opacity: 1 !important;
+}
+
+/* ===== 2) Make service cards slide (scroll-snap), remove arrows ===== */
+
+/* Hide the small circular arrow/dots on card headers */
+.svc-dot { display: none !important; }
+
+/* Turn the card row into a horizontal slider (works mouse drag & touch) */
+.grid-4 {
+  display: flex !important;
+  gap: 18px;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;          /* space for scrollbar if visible */
+}
+
+/* Each card becomes a snap slide */
+.svc {
+  min-width: clamp(280px, 32vw, 360px);  /* responsive card width */
+  scroll-snap-align: start;
+}
+
+/* Optional: subtle scrollbar styling */
+.grid-4::-webkit-scrollbar { height: 8px; }
+.grid-4::-webkit-scrollbar-thumb {
+  background: rgba(128,128,128,.35);
+  border-radius: 8px;
+}
+html[data-bs-theme="dark"] .grid-4::-webkit-scrollbar-thumb,
+body[data-bs-theme="dark"] .grid-4::-webkit-scrollbar-thumb,
+html.dark .grid-4::-webkit-scrollbar-thumb,
+body.dark-mode .grid-4::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.18);
+}
+/* 1) Hide the thin grey scrollbar line (cross-browser) */
+.grid-4{ 
+  /* keep flex+gap you already set for sliding */
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;        /* Firefox */
+}
+.grid-4::-webkit-scrollbar{     /* WebKit/Chromium */
+  display: none;
+}
+
+/* 2) Slider arrows (injected by JS) */
+.cards-slider{ position: relative; }
+.hh-slider-btn{
+  position:absolute; top: 40%; transform: translateY(-50%);
+  width:44px; height:44px; border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  z-index: 2;
+}
+.hh-slider-btn.prev{ left:-8px; }
+.hh-slider-btn.next{ right:-8px; }
+.hh-slider-btn:hover{ filter:brightness(1.05); transform: translateY(-50%) scale(1.06); }
+
+/* SVG icon size */
+.hh-slider-btn svg{ width:20px; height:20px; }
+
+/* 3) Card hover effect */
+.svc{
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.svc:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 22px 40px rgba(0,0,0,.35);
+  border-color: rgba(245,196,0,.35);
+}
+
+/* keep the decorative dots hidden */
+.svc-dot{ display:none !important; }
+
+/* optional: a tiny bottom padding so lifted cards don’t clip */
+.grid-4{ padding-bottom: 6px; }
+/* --- kill the grey line under the cards (scrollbar track) --- */
+.grid-4{
+  display:flex !important;               /* your slider layout */
+  gap:18px;
+  overflow-x:auto;
+  overflow-y:visible;
+  -webkit-overflow-scrolling:touch;
+  /* hide scrollbar everywhere */
+  scrollbar-width:none;                  /* Firefox */
+  -ms-overflow-style:none;               /* IE/Edge legacy */
+  background:transparent;                /* ensure no track bg shows */
+  padding-bottom:0; margin-bottom:0;
+}
+.grid-4::-webkit-scrollbar{ height:0px; background:transparent; }  /* Chrome/Safari */
+.grid-4::-webkit-scrollbar-thumb{ background:transparent; }
+
+/* slide items */
+.svc{ min-width:clamp(280px,32vw,360px); scroll-snap-align:start;
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+.grid-4{ scroll-snap-type:x mandatory; }
+
+/* hover lift */
+.svc:hover{ transform:translateY(-6px); box-shadow:0 22px 40px rgba(0,0,0,.35);
+            border-color:rgba(245,196,0,.35); }
+
+/* hide the small header dots */
+.svc-dot{ display:none !important; }
+
+/* arrow buttons */
+.cards-slider{ position:relative; }
+.hh-slider-btn{
+  position:absolute; top:42%; transform:translateY(-50%);
+  width:44px; height:44px; border-radius:999px; z-index:2;
+  border:1px solid var(--border); background:var(--card); color:var(--ink);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  box-shadow:var(--shadow); transition:transform .2s ease, filter .2s ease;
+}
+.hh-slider-btn.prev{ left:-10px; }
+.hh-slider-btn.next{ right:-10px; }
+.hh-slider-btn:hover{ filter:brightness(1.05); transform:translateY(-50%) scale(1.06); }
+.hh-slider-btn svg{ width:20px; height:20px; }
+
+/* --- Details dropdown inside service cards --- */
+.svc-panel{
+  display: none;
+  margin-top:12px;
+  padding:14px 16px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background: var(--card-2);
+  color: var(--ink);
+}
+.svc-panel[hidden]{ display:none !important; }
+.svc-panel:not([hidden]){ display:block; }
+
+/* keep your caret rotation tied to aria-expanded */
+.svc-toggle[aria-expanded="true"] .tri { transform: rotate(90deg); }
+.svc-panel p{ margin:0 0 10px 0; color: var(--muted); font-size:.92rem; }
+
+.svc-actions{ display:flex; gap:10px; }
+.svc-cancel{
+  display:inline-flex; align-items:center;
+  padding:10px 16px; border-radius:999px;
+  border:1px solid var(--border);
+  background: transparent;
+  color: var(--ink); font-weight:700; font-size:.9rem;
+  cursor:pointer;
+}
+
+/* Rotate the little triangle when open */
+.svc-toggle[aria-expanded="true"] .tri { transform: rotate(90deg);  }
+.svc-panel { display: none; }              /* baseline */
+.svc-panel[hidden] { display: none !important; }
+.svc-panel:not([hidden]) { display: block !important; }
+
+
+</style>
+
+
+
+
+
+  <!-- =================== SERVICES (Figma) =================== -->
+  <section class="hh-sec">
+    <div class="container">
+      <div class="row mb-3">
+        <div class="col text-center">
+          <h2 class="fig-title">
+            <span class="our">Our</span>
+            <span class="yellow">Cybersecurity</span>
+            <span class="rest">Services</span>
+          </h2>
+          <p class="hh-sub">Explore how Hardhat protects your organization with advanced, white-hat solutions.</p>
         </div>
-    </section>
-    <!-- End of Contact Section -->
+      </div>
+
+      <div class="grid-4">
+       <!-- Example for Card 1 -->
+<article class="svc" data-svc-card>
+  <div class="svc-head"></div>
+  <div class="svc-body">
+    <div class="svc-title">Penetration Testing</div>
+    <div class="svc-text">Find exploitable weaknesses across networks, apps, and APIs before attackers do.</div>
+
+    <!-- Toggle -->
+    <button type="button" class="pill-btn svc-toggle" aria-expanded="false" aria-controls="svc-panel-1">
+      <span class="tri"></span> Details
+    </button>
+
+    <!-- Hidden details panel -->
+    <div id="svc-panel-1" class="svc-panel" hidden role="region" aria-label="Penetration Testing details">
+      <p>
+        • External & internal assessments<br>
+        • Web, mobile & API testing (OWASP ASVS)<br>
+        • Prioritized remediation roadmap<br>
+        • Executive summary + technical report
+      </p>
+      <div class="svc-actions">
+        <button type="button" class="svc-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+</article>
+
+        <!-- Card 2 -->
+<article class="svc" data-svc-card>
+  <div class="svc-head"></div>
+  <div class="svc-body">
+    <div class="svc-title">Cloud Security & Hardening</div>
+    <div class="svc-text">Secure AWS/Azure/GCP configs, identities, and workloads with best-practice guardrails.</div>
+
+    <!-- Toggle -->
+    <button type="button" class="pill-btn svc-toggle" aria-expanded="false" aria-controls="svc-panel-2">
+  <span class="tri"></span> Details
+</button>
+<div id="svc-panel-2" class="svc-panel" hidden role="region" aria-label="Penetration Testing details">
+      <p>
+       • CIS benchmark config audit (AWS/Azure/GCP)<br>
+• IAM least-privilege, SSO & MFA setup<br>
+• Network segmentation, WAF, private endpoints<br>
+• Secrets/KMS key management & logging<br>
+• IaC guardrails (Terraform/ARM) and drift checks
+      </p>
+      <div class="svc-actions">
+        <button type="button" class="svc-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+</article>
+
+     <!-- Card 3 -->
+<article class="svc" data-svc-card>
+  <div class="svc-head"></div>
+  <div class="svc-body">
+    <div class="svc-title">Incident Response & DFIR</div>
+    <div class="svc-text">24/7 triage, containment, and forensics to limit damage and speed recovery.</div>
+
+    <button type="button" class="pill-btn svc-toggle" aria-expanded="false" aria-controls="svc-panel-3">
+      <span class="tri"></span> Details
+    </button>
+
+    <!-- MUST have class="svc-panel" + id -->
+   <div id="svc-panel-3" class="svc-panel" hidden role="region" aria-label="Penetration Testing details">
+  <p>• First-hour actions & containment plan<br>
+• Forensic acquisition & timeline analysis<br>
+• Threat eradication & recovery support<br>
+• Regulator/insurer-ready documentation<br>
+• Post-incident hardening & lessons learned
+</p>
+  <div class="svc-actions"><button type="button" class="svc-cancel">Cancel</button></div>
+</div>
+  </div>
+</article>
+
+<!-- Card 4 -->
+<article class="svc" data-svc-card>
+  <div class="svc-head"></div>
+  <div class="svc-body">
+    <div class="svc-title">DevSecOps & App Security</div>
+    <div class="svc-text">Bake security into the SDLC tooling, reviews, and training that scale with delivery.</div>
+
+    <button type="button" class="pill-btn svc-toggle" aria-expanded="false" aria-controls="svc-panel-4">
+      <span class="tri"></span> Details
+    </button>
+
+    <!-- MUST have class="svc-panel" + id (not class="svc-panel-4") -->
+   <div id="svc-panel-4" class="svc-panel" hidden role="region" aria-label="Penetration Testing details">
+  <p>• Threat modeling & abuse-case workshops<br>
+• SAST/DAST/SCA pipelines + secrets scanning<br>
+• SBOM generation & dependency risk gating<br>
+• Secure code reviews & developer training<br>
+• SDLC policy, metrics, and governance
+</p>
+  <div class="svc-actions"><button type="button" class="svc-cancel">Cancel</button></div>
+</div>
+  </div>
+</article>
+
+    
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== HOW WE WORK (Figma) =================== -->
+  <section class="hh-sec" style="padding-top: 32px;">
+    <div class="container">
+      <div class="row mb-3">
+        <div class="col text-center">
+          <h2 class="fig-title"><span class="rest">How</span> <span class="yellow">We Work</span></h2>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="step">
+          <div class="ghost">1</div>
+          <h4><span class="icon"></span>Assess</h4>
+          <p>Baseline risk with discovery & threat analysis.</p>
+        </div>
+        <div class="step">
+          <div class="ghost">2</div>
+          <h4><span class="icon"></span>Secure</h4>
+          <p>Implement controls, hardening & fixes.</p>
+        </div>
+        <div class="step">
+          <div class="ghost">3</div>
+          <h4><span class="icon"></span>Train</h4>
+          <p>Phishing drills and developer enablement.</p>
+        </div>
+        <div class="step">
+          <div class="ghost">4</div>
+          <h4><span class="icon"></span>Support</h4>
+          <p>Monitoring, IR and continuous improvement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CONTACT (Figma) =================== -->
+  <section class="hh-sec" style="padding-top: 24px;">
+    <div class="container">
+      <div class="row mb-3">
+        <div class="col text-center">
+          <h2 class="fig-title">Get in <span class="yellow">Touch</span></h2>
+          <p class="hh-sub">Tell us about your cybersecurity needs, and we'll get back to you.</p>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-9">
+          <div class="card hh-form p-3 p-md-4 p-lg-5">
+            <form id="contactForm" onsubmit="return handleSubmit(event)">
+              <div class="mb-3">
+                <label class="form-label" for="name">Your Name</label>
+                <input class="form-control" id="name" type="text" placeholder="e.g. Bonnie Green" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="email">Your Email</label>
+                <input class="form-control" id="email" type="email" placeholder="example@company.com" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="message">Your Message</label>
+                <textarea class="form-control" id="message" rows="4" placeholder="How can we help?" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-accent">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+<script>
+(function(){
+  /* ---------- THEME: recompute derived colors immediately ---------- */
+  function computeNavbarColor(){
+    var nav = document.querySelector('.navbar');
+    if (!nav) return;
+    var bg = getComputedStyle(nav).backgroundColor;
+    document.documentElement.style.setProperty('--hh-navbar-computed', bg);
+  }
+  function setFormBgVar(){
+    var form = document.querySelector('.hh-form.card');
+    if (!form) return;
+    var bg = getComputedStyle(form).backgroundColor;
+    document.documentElement.style.setProperty('--hh-form-bg', bg);
+  }
+  function applyTheme(theme){
+    var t = theme || localStorage.getItem('bs-theme') || 'dark';
+    document.documentElement.setAttribute('data-bs-theme', t);
+    document.body.setAttribute('data-bs-theme', t);
+    localStorage.setItem('bs-theme', t);
+    // recompute tokens that depend on computed styles
+    computeNavbarColor();
+    setFormBgVar();
+  }
+  // expose for your toggle button: setTheme('light') / setTheme('dark')
+  window.setTheme = applyTheme;
+
+  // react when theme flips (attribute/class changes)
+  [document.documentElement, document.body].forEach(el=>{
+    new MutationObserver(() => { computeNavbarColor(); setFormBgVar(); })
+      .observe(el, { attributes:true, attributeFilter:['data-bs-theme','class'] });
+  });
+  // also react to system/theme storage changes
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    (mq.addEventListener || mq.addListener).call(mq, 'change', () => applyTheme());
+  }
+  window.addEventListener('storage', e => { if (e.key === 'bs-theme') applyTheme(e.newValue); });
+
+  // init after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyTheme);
+  } else {
+    applyTheme();
+  }
+
+  /* ---------- DETAILS: open just one, close others ---------- */
+  document.addEventListener('click', function(e){
+    const toggle = e.target.closest('.svc-toggle');
+    if (toggle) {
+      e.preventDefault();
+      const id    = toggle.getAttribute('aria-controls');
+      const panel = id ? document.getElementById(id) : null;
+      if (!panel) return;
+
+      const willOpen = panel.hasAttribute('hidden');
+
+      // close other open panels first
+      document.querySelectorAll('.svc-panel:not([hidden])').forEach(p => {
+        if (p !== panel) {
+          p.setAttribute('hidden','');
+          const c = p.closest('[data-svc-card]');
+          if (c) c.classList.remove('open');
+          const t = c && c.querySelector('.svc-toggle');
+          if (t) t.setAttribute('aria-expanded','false');
+        }
+      });
+
+      // toggle this one
+      const card = toggle.closest('[data-svc-card]');
+      if (willOpen) {
+        panel.removeAttribute('hidden');
+        if (card) card.classList.add('open');
+        toggle.setAttribute('aria-expanded','true');
+      } else {
+        panel.setAttribute('hidden','');
+        if (card) card.classList.remove('open');
+        toggle.setAttribute('aria-expanded','false');
+      }
+      return;
+    }
+
+    // Cancel → only its own panel/card
+    const cancel = e.target.closest('.svc-cancel');
+    if (cancel) {
+      const card  = cancel.closest('[data-svc-card]');
+      const panel = card ? card.querySelector('.svc-panel:not([hidden])') : null;
+      if (panel) panel.setAttribute('hidden','');
+      if (card) card.classList.remove('open');
+      const t = card && card.querySelector('.svc-toggle');
+      if (t) t.setAttribute('aria-expanded','false');
+    }
+  });
+})();
+</script>
+
+
+
 </main>
 
 <script>
-    function handleSubmit(event) {
-        event.preventDefault();
-        alert("Your details are entered!");
-        document.getElementById("contactForm").reset();
-    }
+  function handleSubmit(e){
+    e.preventDefault();
+    alert('Thanks! Your message has been sent.');
+    e.target.reset();
+    return false;
+  }
 </script>
 {% endblock content %}
