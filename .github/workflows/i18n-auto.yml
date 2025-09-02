@@ -1,7 +1,8 @@
 name: i18n-auto-translate
+
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/**, chore/** ]
   pull_request:
     branches: [ main ]
   workflow_dispatch: {}
@@ -9,9 +10,14 @@ on:
 jobs:
   i18n:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
 
       - name: Install gettext
         run: |
@@ -19,7 +25,8 @@ jobs:
           sudo apt-get install -y gettext
 
       - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
+        with:
+          python-version: "3.11"
 
       - name: Install Python deps
         run: |
@@ -32,15 +39,22 @@ jobs:
           python manage.py makemessages --no-wrap -l zh_Hans -l fr -l es -l ja -l ko
           python manage.py makemessages --no-wrap -l zh_Hans -l fr -l es -l ja -l ko -d djangojs
 
+      - name: Decide whether DeepL is available
+        id: deepl_guard
+        env:
+          HAS_DEEPL: ${{ secrets.DEEPL_API_KEY != '' }}
+        run: |
+          echo "has_deepl=${HAS_DEEPL}" >> "$GITHUB_OUTPUT"
+
       - name: Auto translate (DeepL)
-        if: ${{ github.event_name != 'pull_request' && secrets.DEEPL_API_KEY != '' }}
+        if: ${{ github.event_name != 'pull_request' && steps.deepl_guard.outputs.has_deepl == 'true' }}
         env:
           DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
         run: |
           python manage.py auto_translate_messages --locale_dir=locale
 
       - name: Skip DeepL (PR build or no secret)
-        if: ${{ github.event_name == 'pull_request' || secrets.DEEPL_API_KEY == '' }}
+        if: ${{ !(github.event_name != 'pull_request' && steps.deepl_guard.outputs.has_deepl == 'true') }}
         run: echo "Skipping DeepL (pull_request build or no DEEPL_API_KEY)."
 
       - name: Normalize PO newline parity
@@ -85,7 +99,7 @@ jobs:
           git add locale/**/LC_MESSAGES/*.po locale/**/LC_MESSAGES/*.mo
           git commit -m "chore(i18n): auto-translate & normalize & compile"
           git push -u origin "$branch"
-          
+
       - uses: peter-evans/create-pull-request@v6
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
