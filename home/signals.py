@@ -6,6 +6,7 @@ from django.contrib.auth.signals import user_login_failed
 from django.core.signals import request_finished
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
+from django.db.models.signals import pre_save
 from .models import PasswordHistory
 
 @receiver(user_logged_in)
@@ -75,3 +76,29 @@ def add_initial_password_to_history(sender, instance, created, **kwargs):
     encoded = getattr(instance, "password", "")
     if encoded.strip():
         PasswordHistory.objects.create(user=instance, encoded_password=encoded)
+
+
+@receiver(pre_save, sender=User)
+def store_old_password_before_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return
+
+    try:
+        old = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    old_encoded = (old.password or "").strip()
+    new_encoded = (instance.password or "").strip()
+
+    # Only store if password actually changed
+    if old_encoded and new_encoded and old_encoded != new_encoded:
+        PasswordHistory.objects.create(user=instance, encoded_password=old_encoded)
+
+        KEEP_LAST = 2
+        ids_to_keep = list(
+            PasswordHistory.objects.filter(user=instance)
+            .order_by("-created_at")
+            .values_list("id", flat=True)[:KEEP_LAST]
+        )
+        PasswordHistory.objects.filter(user=instance).exclude(id__in=ids_to_keep).delete()

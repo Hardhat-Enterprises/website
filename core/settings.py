@@ -246,7 +246,7 @@ AUTH_PASSWORD_VALIDATORS = [
     # Prevent reusing last N passwords
     {
         "NAME": "home.validators.PasswordHistoryValidator",
-        "OPTIONS": {"keep_last": 1, "include_current": True},
+        "OPTIONS": {"keep_last": 2, "include_current": True},
     },
 ]
 

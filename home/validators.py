@@ -28,7 +28,7 @@ class PasswordHistoryValidator:
     """
     Prevents reusing recent passwords.
     """
-    def __init__(self, keep_last=1, include_current=True):
+    def __init__(self, keep_last=2, include_current=True):
         self.keep_last = int(keep_last)
         self.include_current = bool(include_current)
 
@@ -62,18 +62,23 @@ class PasswordHistoryValidator:
         """
         Store the new encoded password and prune to keep_last.
         """
-        if user is None or not getattr(user, "pk", None) or not user.password:
-            return
 
-        PasswordHistory = apps.get_model("home", "PasswordHistory")
-        PasswordHistory.objects.create(user=user, encoded_password=user.password)
+        # We store history via signals (pre_save)
 
-        if self.keep_last <= 0:
-            return
+        #if user is None or not getattr(user, "pk", None) or not user.password:
+            #return
 
-        ids_to_keep = list(
-            PasswordHistory.objects.filter(user=user)
-            .order_by("-created_at")
-            .values_list("id", flat=True)[: self.keep_last]
-        )
-        PasswordHistory.objects.filter(user=user).exclude(id__in=ids_to_keep).delete()
+        #PasswordHistory = apps.get_model("home", "PasswordHistory")
+        #PasswordHistory.objects.create(user=user, encoded_password=user.password)
+
+        #if self.keep_last <= 0:
+            #return
+
+        #ids_to_keep = list(
+            #PasswordHistory.objects.filter(user=user)
+            #.order_by("-created_at")
+            #.values_list("id", flat=True)[: self.keep_last]
+        #)
+        #PasswordHistory.objects.filter(user=user).exclude(id__in=ids_to_keep).delete()
+
+        pass
