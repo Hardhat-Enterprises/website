@@ -313,9 +313,12 @@
                     $, !, %, *, ?, &)</li>
                 </ul>
               </div>
-
+              <!-- Google reCAPTCHA -->
+              <div class="form-group mb-4">
+                <div class="g-recaptcha" data-sitekey="6LesBKsrAAAAADwwja7GKS33AEC7ktIuJlcYpBDf" data-callback="enableSignup"></div>
+              </div>
               <div class="d-grid">
-                <button type="submit" class="btn btn-warning btn-primary">
+                <button id="signup-btn" type="submit" class="btn btn-warning btn-primary" disabled>
                   Sign up
                 </button>
               </div>
@@ -332,6 +335,15 @@
     </div>
 
   </section>
+
+  <script>
+  function enableSignup() {
+    document.getElementById("signup-btn").disabled = false;
+  }
+  </script>
+  
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
   {% include 'includes/footer.html' %}
 </main>
 
