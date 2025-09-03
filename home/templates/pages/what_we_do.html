@@ -123,12 +123,25 @@ body.dark-mode{
   display:flex; flex-direction:column; min-height:260px;
 }
 .svc-head{
-  position:relative; height:98px;
+  position:relative; height:98px; 
   background:
     radial-gradient(120% 160% at 0% 0%, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 55%),
     linear-gradient(135deg, #ffd84f 0%, #f5c400 36%, #a88800 100%);
+    display: flex;
+    justify-content: center;       /* horizontal centering */
+  align-items: center;    
+   padding: 2rem 1rem;            /* add gap inside */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  text-align: center;
 }
-.svc-dot{
+.svc-head .svc-title {
+  font-size: 1.4rem;       /* bigger text */
+  font-weight: 800;        /* extra bold */
+  color: #fff;             /* white text for contrast */
+  letter-spacing: 1px;     /* slight spacing for modern look */
+  text-transform: uppercase; /* optional: ALL CAPS */
+}.svc-dot{
   position:absolute; top:56%; transform:translateY(-50%);
   width:34px;height:34px;border-radius:999px;
   background: rgba(0,0,0,.38); border:1px solid rgba(255,255,255,.12);
@@ -395,9 +408,9 @@ body.dark-mode .grid-4::-webkit-scrollbar-thumb {
       <div class="grid-4">
        <!-- Example for Card 1 -->
 <article class="svc" data-svc-card>
-  <div class="svc-head"></div>
+  <div class="svc-head"> <div class="svc-title">Penetration Testing</div></div>
   <div class="svc-body">
-    <div class="svc-title">Penetration Testing</div>
+    
     <div class="svc-text">Find exploitable weaknesses across networks, apps, and APIs before attackers do.</div>
 
     <!-- Toggle -->
@@ -422,9 +435,9 @@ body.dark-mode .grid-4::-webkit-scrollbar-thumb {
 
         <!-- Card 2 -->
 <article class="svc" data-svc-card>
-  <div class="svc-head"></div>
+  <div class="svc-head"> <div class="svc-title">Cloud Security & Hardening</div></div>
   <div class="svc-body">
-    <div class="svc-title">Cloud Security & Hardening</div>
+   
     <div class="svc-text">Secure AWS/Azure/GCP configs, identities, and workloads with best-practice guardrails.</div>
 
     <!-- Toggle -->
@@ -448,9 +461,9 @@ body.dark-mode .grid-4::-webkit-scrollbar-thumb {
 
      <!-- Card 3 -->
 <article class="svc" data-svc-card>
-  <div class="svc-head"></div>
+  <div class="svc-head"> <div class="svc-title">Incident Response & DFIR</div></div>
   <div class="svc-body">
-    <div class="svc-title">Incident Response & DFIR</div>
+   
     <div class="svc-text">24/7 triage, containment, and forensics to limit damage and speed recovery.</div>
 
     <button type="button" class="pill-btn svc-toggle" aria-expanded="false" aria-controls="svc-panel-3">
@@ -472,9 +485,9 @@ body.dark-mode .grid-4::-webkit-scrollbar-thumb {
 
 <!-- Card 4 -->
 <article class="svc" data-svc-card>
-  <div class="svc-head"></div>
+  <div class="svc-head"><div class="svc-title">DevSecOps & App Security</div></div>
   <div class="svc-body">
-    <div class="svc-title">DevSecOps & App Security</div>
+    
     <div class="svc-text">Bake security into the SDLC tooling, reviews, and training that scale with delivery.</div>
 
     <button type="button" class="pill-btn svc-toggle" aria-expanded="false" aria-controls="svc-panel-4">
