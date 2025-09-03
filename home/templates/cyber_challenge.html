@@ -12,6 +12,18 @@
                 <div class="col-md-8 mx-auto text-center">
                     <h1 class="challenge-title">Cyber Security Challenge</h1>
                     <p class="challenge-subtitle">Test your knowledge and earn your security badge!</p>
+                    
+                    <!-- Button to add or manage challenges, only visible to admin/staff users -->
+                    {% if show_admin_controls %}
+                    <div class="text-center mb-4">
+                        <a href="#" class="btn btn-success btn-lg admin-add-challenge-btn me-2">
+                            <i class="fas fa-plus"></i> Add New Challenge
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-cogs"></i> Manage Challenges
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -132,6 +132,19 @@ from .models import Passkey
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
+def get_login_redirect_url(user):
+    """
+    Determine where to redirect user after login based on join-us completion status.
+    If user hasn't completed join-us form, redirect to /join-us/
+    If user has completed it, redirect to profile page
+    """
+    if Student.objects.filter(user=user).exists():
+        # User has completed join-us form, redirect to profile
+        return '/profile/'
+    else:
+        # User hasn't completed join-us form, redirect to join-us page
+        return '/join-us/'
+
 
 def index(request):
     recent_announcement = Announcement.objects.filter(isActive=True).order_by('-created_at').first()
@@ -165,6 +178,104 @@ def error_404_view(request,exception):
 def about_us(request):
     return render(request, 'pages/about.html')
  
+def security_tools(request):
+    """
+    View to display the Security Tools Arsenal page.
+    """
+    tools_data = [
+        {
+            'name': 'CyberArk PAM',
+            'category': 'Identity Security',
+            'icon_class': 'fas fa-shield-alt',  
+            'description': 'Enterprise-grade privileged access management solution for securing critical credentials and preventing cyber attacks.',
+            'key_benefits': [
+                'Reduces privileged account vulnerabilities by 95%',
+                'Automated credential rotation and discovery',
+                'Real-time threat detection and response',
+                'Compliance with major security frameworks',
+            ],
+            'features': ['Zero Trust Architecture', 'AI-Powered Analytics', 'Session Recording', 'Just-in-Time Access'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Splunk SIEM',
+            'category': 'Security Analytics',
+            'icon_class': 'fas fa-chart-line', 
+            'description': 'Advanced security information and event management platform for comprehensive threat detection and incident response.',
+            'key_benefits': [
+                'Faster threat detection and response times',
+                'Centralized security monitoring across all systems',
+                'Advanced analytics with machine learning',
+                'Scalable cloud-native architecture',
+            ],
+            'features': ['Real-Time Monitoring', 'Machine Learning', 'Custom Dashboards', 'Automated Alerting'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Nessus Scanner',
+            'category': 'Vulnerability Management',
+            'icon_class': 'fas fa-search', 
+            'description': 'Industry-leading vulnerability assessment tool for identifying security weaknesses across your infrastructure.',
+            'key_benefits': [
+                'Comprehensive vulnerability coverage',
+                'Accurate scanning with low false positives',
+                'Regulatory compliance reporting',
+                'Integration with existing security tools',
+            ],
+            'features': ['Network Scanning', 'Web App Testing', 'Configuration Auditing', 'Compliance Checks'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Wireshark Analyzer',
+            'category': 'Network Security',
+            'icon_class': 'fas fa-wifi', 
+            'description': 'Open-source network protocol analyzer for deep packet inspection and network troubleshooting.',
+            'key_benefits': [
+                'Deep network visibility and analysis',
+                'Real-time packet capture and inspection',
+                'Extensive protocol support',
+                'Cost-effective open-source solution',
+            ],
+            'features': ['Packet Capture', 'Protocol Analysis', 'Traffic Filtering', 'Export Capabilities'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Metasploit Framework',
+            'category': 'Penetration Testing',
+            'icon_class': 'fas fa-terminal',  
+            'description': 'Comprehensive penetration testing platform for identifying and exploiting security vulnerabilities.',
+            'key_benefits': [
+                'Validate security defenses effectively',
+                'Extensive exploit database and payloads',
+                'Automated exploitation capabilities',
+                'Professional reporting and documentation',
+            ],
+            'features': ['Exploit Database', 'Payload Generation', 'Post-Exploitation', 'Social Engineering'],
+            'service_url': '/pen-testing'
+        },
+        {
+            'name': 'Burp Suite Pro',
+            'category': 'Web Application Security',
+            'icon_class': 'fas fa-wrench', 
+            'description': 'Leading web application security testing platform for finding and exploiting web vulnerabilities.',
+            'key_benefits': [
+                'Comprehensive web app security testing',
+                'Advanced scanning and manual testing tools',
+                'Extensible through custom plugins',
+                'Industry-standard security testing platform',
+            ],
+            'features': ['Automated Scanning', 'Manual Testing Tools', 'Extensibility', 'Session Management'],
+            'service_url': '/pen-testing'
+        }
+    ]
+
+    context = {
+        'title': 'Our Security Tools',
+        'tools': tools_data
+    }
+    return render(request, 'pages/our_tools.html', context)
+
+
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
 
@@ -517,7 +628,7 @@ def verify_otp(request):
                 request.session.pop('otp_attempts', None)
                 request.session.pop('otp_timestamp', None)
                 messages.success(request, "Login successful!")
-                return redirect('/')
+                return redirect(get_login_redirect_url(user))
             except User.DoesNotExist:
                 messages.error(request, "User does not exist.")
         else:
@@ -672,6 +783,11 @@ class UserLoginView(LoginView):
 
         return response
 
+    def get_success_url(self):
+        """Override to implement conditional redirect based on join-us completion"""
+        user = self.request.user
+        return get_login_redirect_url(user)
+
     def form_invalid(self, form):
         # Increment the failed login attempts
         failed_attempts = cache.get('failed_login_attempts', 0) + 1
@@ -686,6 +802,84 @@ class UserLoginView(LoginView):
             return redirect(reverse('rate_limit_exceeded'))  # Redirect to a rate limit exceeded page
 
         return super().form_invalid(form)
+
+    def get_client_ip(self, request):
+        # Using x_forwarded_for allows for proxy bypass to give the true IP of a user
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            return x_forwarded_for.split(',')[0].strip()
+        return request.META.get('REMOTE_ADDR')
+
+class AdminLoginView(LoginView):
+    """Specialised login view for admin users via /accounts/admin"""
+    template_name = 'accounts/sign-in.html'
+    form_class = UserLoginForm
+
+    def form_valid(self, form):
+        user = form.get_user()
+
+        # Check if user has admin privileges (staff or superuser - treated the same)
+        if not user.is_admin_user():
+            messages.error(self.request, 'Access denied. Admin privileges required.')
+            return redirect('login')
+
+        # Force new session to rotate session key (prevents fixation)
+        self.request.session.flush()
+
+        # Successful login, proceed as normal
+        response = super().form_valid(form)
+
+        # Enhanced admin session tracking
+        request = self.request
+        client_ip = self.get_client_ip(request)
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+
+        # Store regular session info for hijack protection
+        request.session['ip_address'] = client_ip
+        request.session['user_agent'] = user_agent
+        request.session['session_token'] = request.session.session_key
+
+        # Mark this as an admin session
+        request.session['is_admin_session'] = True
+        request.session['admin_login_time'] = timezone.now().isoformat()
+
+        # Create AdminSession record for tracking
+        from .models import AdminSession
+
+        # End any existing active admin sessions for this user
+        AdminSession.objects.filter(user=user, is_active=True).update(
+            is_active=False, 
+            logout_time=timezone.now(),
+            logout_reason='new_session'
+        )
+
+        # Create new admin session record
+        admin_session = AdminSession.objects.create(
+            user=user,
+            session_key=request.session.session_key,
+            ip_address=client_ip,
+            user_agent=user_agent
+        )
+
+        # Store admin session ID in session for tracking
+        request.session['admin_session_id'] = admin_session.id
+
+        # Log admin login
+        import logging
+        logger = logging.getLogger('audit_logger')
+        logger.info(f"Admin login: {user.email} from IP {client_ip}")
+
+        messages.success(request, f'Welcome back, {user.get_full_name()}! Admin session started.')
+
+        return response
+
+    def get_client_ip(self, request):
+        # Using x_forwarded_for allows for proxy bypass to give the true IP of a user
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            return x_forwarded_for.split(',')[0].strip()
+        return request.META.get('REMOTE_ADDR')
+
 
 def rate_limit_exceeded(request):
     remaining_time = 60  # Use the helper function
@@ -788,7 +982,7 @@ def login_with_passkey(request):
 
                 messages.success(request, "Passkey verified! Please complete CAPTCHA verification.")
                 request.session['is_otp_verified'] = True  # Mark OTP as verified
-                return redirect("/")
+                return redirect(get_login_redirect_url(user))
             else:
                 messages.error(request, "Invalid passkey. Please try again.")
         except get_user_model().DoesNotExist:
@@ -1002,7 +1196,7 @@ def post_otp_login_captcha(request):
                 del request.session['user_id']
                 del request.session['is_otp_verified']  # Clean up session data
                 messages.success(request, "Login successful!")
-                return redirect('dashboard')  # Redirect to the user's dashboard
+                return redirect(get_login_redirect_url(user))  # Conditional redirect based on join-us completion
             except User.DoesNotExist:
                 messages.error(request, "User not found. Please log in again.")
                 return redirect('login_with_otp')
@@ -1032,81 +1226,87 @@ def login_with_tracking(request):
             user.last_login_ip = get_client_ip(request)
             user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
             user.save(update_fields=['last_login_ip', 'last_login_browser'])
-            return redirect('home')
+            return redirect(get_login_redirect_url(user))
     return render(request, 'accounts/sign-in.html')
 
-# Email Verification 
-# def verify_email(request, first_name):
-#     user = get_user_model().objects.get(username=first_name)
-#     user_otp = OtpToken.objects.filter(user=user).last()
+# Email Verification (OtpToken model missing - commented out until model is created)
+def verify_email(request, first_name):
+    # user = get_user_model().objects.get(username=first_name)
+    # user_otp = OtpToken.objects.filter(user=user).last()
     
+    messages.info(request, "Email verification temporarily unavailable - OTP model missing")
+    return redirect("login")
     
-#     if request.method == 'POST':
-#         # valid token
-#         if user_otp.otp_code == request.POST['otp_code']:
-            
-#             # checking for expired token
-#             if user_otp.otp_expires_at > timezone.now():
-#                 user.is_active=True
-#                 user.save()
-#                 messages.success(request, "Account activated successfully!! You can Login.")
-#                 return redirect("signin")
-            
-#             # expired token
-#             else:
-#                 messages.warning(request, "The OTP has expired, get a new OTP!")
-#                 return redirect("verify-email", username=user.first_name)
-        
-        
-#         # invalid otp code
-#         else:
-#             messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
-#             return redirect("verify-email", username=user.first_name)
-        
-#     context = {}
-#     return render(request, "verify_token.html", context)
+    # if request.method == 'POST':
+    #     # valid token
+    #     if user_otp.otp_code == request.POST['otp_code']:
+    #         
+    #         # checking for expired token
+    #         if user_otp.otp_expires_at > timezone.now():
+    #             user.is_active=True
+    #             user.save()
+    #             messages.success(request, "Account activated successfully!! You can Login.")
+    #             return redirect("signin")
+    #         
+    #         # expired token
+    #         else:
+    #             messages.warning(request, "The OTP has expired, get a new OTP!")
+    #             return redirect("verify-email", username=user.first_name)
+    #     
+    #     
+    #     # invalid otp code
+    #     else:
+    #         messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
+    #         return redirect("verify-email", username=user.first_name)
+    #     
+    # context = {}
+    # return render(request, "verify_token.html", context)
 
 
-# def resend_otp(request):
-#     if request.method == 'POST':
-#         user_email = request.POST["otp_email"]
-        
-#         if get_user_model().objects.filter(email=user_email).exists():
-#             user = get_user_model().objects.get(email=user_email)
-#             otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
-            
-            
-#             # email variables
-#             subject="Email Verification"
-#             message = f"""
-#                                 Hi {user.username}, here is your OTP {otp.otp_code} 
-#                                 it expires in 5 minute, use the url below to redirect back to the website
-#                                 http://127.0.0.1:8000/verify-email/{user.username}
-                                
-#                                 """
-#             sender = "kaviuln@gmail.com"
-#             receiver = [user.email, ]
-        
-        
-#             # send email
-#             send_mail(
-#                     subject,
-#                     message,
-#                     sender,
-#                     receiver,
-#                     fail_silently=False,
-#                 )
-            
-#             messages.success(request, "A new OTP has been sent to your email-address")
-#             return redirect("verify-email", username=user.first_name)
-
-#         else:
-#             messages.warning(request, "This email dosen't exist in the database")
-#             return redirect("resend-otp")
-        
-           
-#     context = {}
-#     return render(request, "resend_otp.html", context)
+def resend_otp(request):
+    # OtpToken model missing - function disabled until model is created
+    messages.info(request, "OTP resend temporarily unavailable - OTP model missing")
+    return redirect("login")
+    
+    # if request.method == 'POST':
+    #     user_email = request.POST["otp_email"]
+    #     
+    #     if get_user_model().objects.filter(email=user_email).exists():
+    #         user = get_user_model().objects.get(email=user_email)
+    #         otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
+    #         
+    #         
+    #         # email variables
+    #         subject="Email Verification"
+    #         message = f"""
+    #                             Hi {user.username}, here is your OTP {otp.otp_code} 
+    #                             it expires in 5 minute, use the url below to redirect back to the website
+    #                             {request.build_absolute_uri(reverse('verify-email', args=[user.username]))}
+    #                            
+    #                             """
+    #         sender = "kaviuln@gmail.com"
+    #         receiver = [user.email, ]
+    #     
+    #     
+    #         # send email
+    #         send_mail(
+    #                 subject,
+    #                 message,
+    #                 sender,
+    #                 receiver,
+    #                 fail_silently=False,
+    #             )
+    #         
+    #         messages.success(request, "A new OTP has been sent to your email-address")
+    #         return redirect("verify-email", username=user.first_name)
+    # 
+    #     else:
+    #         messages.warning(request, "This email dosen't exist in the database")
+    #         return redirect("resend-otp")
+    #     
+    #        
+    # context = {}
+    # return render(request, "resend_otp.html", context)
 
 
 
@@ -1133,6 +1333,28 @@ def resources_view(request):
 def package_plan(request):
     return render(request, 'pages/package-plan.html')
  
+@staff_member_required  
+def admin_dashboard(request):
+    """
+    Admin dashboard view with session management.
+    """
+    # Verify user has admin privileges
+    if not request.user.is_admin_user():
+        messages.error(request, 'Access denied. Admin privileges required.')
+        return redirect('login')
+
+    # Check if this is a valid admin session
+    is_admin_session = request.session.get('is_admin_session', False)
+    if not is_admin_session:
+        messages.warning(request, 'Please log in through the admin portal.')
+        return redirect('admin_login')
+
+    return render(request, 'admin/dashboard.html', {
+        'user': request.user,
+        'admin_session_active': True
+    })
+
+
 # Chart Views
  
 @staff_member_required
@@ -1774,8 +1996,25 @@ def delete_feedback(request, id):
 
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
-    return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
+    
+    # Check if user is staff or superuser
+    show_admin_controls = request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)
 
+    return render(request, 'pages/challenges/challenge_list.html', {
+        'categories': categories,
+        'show_admin_controls': show_admin_controls
+    })
+
+def cyber_challenge(request):
+    """
+    View for the cyber challenge page with admin controls.
+    """
+    # Check if user is staff or superuser
+    show_admin_controls = request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)
+
+    return render(request, 'cyber_challenge.html', {
+        'show_admin_controls': show_admin_controls
+    })
 
 
 @login_required
@@ -1997,6 +2236,9 @@ def job_alerts(request):
     
     return render(request, "careers/job-alerts.html")
 
+def career_path_finder(request):
+    return render(request, "careers/path_finder.html")
+
 def career_application(request,id):
     job = get_object_or_404(Job, id=id)
     complete =False
@@ -2193,4 +2435,7 @@ def arpaname_view(request):
 
 def policy_deployment(request):
     return render(request, 'pages/policy_deployment.html')
+ #Health Check Function
+def health_check(request):
+    return JsonResponse({"status": "ok"}, status=200) 
 

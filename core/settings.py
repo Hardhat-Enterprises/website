@@ -120,6 +120,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "core.middleware.LocaleMiddlewareDefaultEnglish",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -128,7 +129,9 @@ MIDDLEWARE = [
     "home.idle.LogoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    'core.middleware.AutoLogoutMiddleware'
+    "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
+    'core.middleware.AutoLogoutMiddleware',
+
 ]
 
 LOGGING = {
@@ -245,15 +248,29 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
+LANGUAGE_COOKIE_AGE = 60 
 
 # TIME_ZONE = "UTC"
 TIME_ZONE = "Australia/Melbourne"
 
 USE_I18N = True
-
 USE_TZ = True
 
+LANGUAGES = [
+    ('en', 'English'),
+    ('zh-hans', 'Simplified Chinese'),
+    # ("hi", "हिन्दी (Hindi)"),  DeepL api can not translate Hindi.
+    ("fr", "Français"),
+    ("es", "Español"),
+    ("ja", "日本語"),
+    ("ko", "한국어"),
+]
+
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
