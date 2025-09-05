@@ -81,8 +81,8 @@ CSRF_COOKIE_SECURE = not DEBUG              # Ensure CSRF cookie is sent over HT
 CSRF_COOKIE_SAMESITE = 'Strict'             # Restrict CSRF cookie from cross-origin requests
 
 # ---------------- Idle Session Timeout Configuration ----------------
-# Automatically logs out users after 5 minutes of inactivity, resets on every user request
-SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+# Automatically logs out users after 10 minutes of inactivity, resets on every user request
+SESSION_COOKIE_AGE = 600  # 10 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
@@ -451,8 +451,8 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
 
 # ---------------- Idle Session Timeout Configuration ----------------
-# Automatically logs out users after 5 minutes of inactivity, resets on every user request
-SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+# Automatically logs out users after 10 minutes of inactivity, resets on every user request
+SESSION_COOKIE_AGE = 600  # 10 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
