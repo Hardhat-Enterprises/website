@@ -541,35 +541,24 @@ def login_with_otp(request):
     For Login
     """
     if request.method == 'POST':
+        # First, verify reCAPTCHA
         token = request.POST.get('g-recaptcha-response')
-        host = request.get_host().split(':')[0]
-        is_local = host in ('localhost', '127.0.0.1')
+        secret_key = settings.RECAPTCHA_SECRET_KEY
 
-        recaptcha_ok = False
-        if is_local:
-            recaptcha_ok = True
-        else:
-            secret_key = settings.RECAPTCHA_SECRET_KEY
-            try:
-                recaptcha_response = requests.post(
-                    'https://www.google.com/recaptcha/api/siteverify',
-                    data={'secret': secret_key, 'response': token}
-                )
-                result = recaptcha_response.json()
-            except Exception as e:
-                result = {'success': False, 'error': str(e)}
+        recaptcha_response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={'secret': secret_key, 'response': token}
+        )
 
-            if settings.DEBUG:
-                print("DEBUG MODE: reCAPTCHA result:", result)
+        result = recaptcha_response.json()
 
-            success = bool(result.get('success'))
-            score = result.get('score')
-            recaptcha_ok = success and (score is None or float(score) >= 0.5)
+        if settings.DEBUG:
+            print("DEBUG MODE: reCAPTCHA result:", result)
 
-        if not recaptcha_ok:
+        if not result.get('success') or result.get('score', 0) < 0.5:
             messages.error(request, "reCAPTCHA verification failed. Please try again.")
             if settings.DEBUG:
-                print("DEBUG MODE: reCAPTCHA failed.")
+                print("DEBUG MODE: reCAPTCHA failed with response:", result)
             return render(request, 'accounts/sign-in.html')
 
         # reCAPTCHA passed — continue login logic
