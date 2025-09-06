@@ -1,112 +1,78 @@
 {% load static %}
 
+{% block content %}
+
 <div class="preloader bg-primary flex-column">
   <svg viewBox="0 0 100 120">
     <!-- LOGO -->
-    <image
-      xlink:href="{% static 'assets/img/brand/logo.svg' %}"
-      width="40"
-      height="40"
-      x="30"
-      y="20"
-    />
+    <image xlink:href="{% static 'assets/img/brand/logo.svg' %}" width="40" height="40" x="30" y="20" />
 
     <!-- Rectangle 1-->
-    <rect
-      x="50"
-      fill="#ffcc00"
-      width="3"
-      height="10"
-      transform="translate(0) rotate(180 45 50)"
-    >
-      <animate
+    <rect x="50" fill="#ffcc00" width="3" height="10" transform="translate(0) rotate(180 45 50)">
+    <animate
         attributeName="height"
         attributeType="XML"
         dur="1s"
         values="10; 40; 10"
-        repeatCount="indefinite"
-      />
+        repeatCount="indefinite"/>
     </rect>
     <!-- Rectangle 2-->
-    <rect
-      x="55"
-      fill="#000"
-      width="3"
-      height="10"
-      transform="translate(0) rotate(180 50 50)"
-    >
-      <animate
+    <rect x="55" fill="#000" width="3" height="10" transform="translate(0) rotate(180 50 50)">
+    <animate
         attributeName="height"
         attributeType="XML"
         dur="2s"
         values="10; 40; 10"
         repeatCount="indefinite"
-        begin="0.1s"
-      />
+        begin="0.1s"/>
     </rect>
     <!-- Rectangle 3 -->
-    <rect
-      x="60"
-      fill="#ffcc00"
-      width="3"
-      height="10"
-      transform="translate(0) rotate(180 55 50)"
-    >
-      <animate
+    <rect x="60" fill="#ffcc00" width="3" height="10" transform="translate(0) rotate(180 55 50)">
+    <animate
         attributeName="height"
         attributeType="XML"
         dur="1s"
         values="10; 40; 10"
         repeatCount="indefinite"
-        begin="0.3s"
-      />
+        begin="0.3s"/>
     </rect>
     <!-- Rectangle 4 -->
-    <rect
-      x="65"
-      fill="#000"
-      width="3"
-      height="10"
-      transform="translate(0) rotate(180 60 50)"
-    >
-      <animate
+    <rect x="65" fill="#000" width="3" height="10" transform="translate(0) rotate(180 60 50)">
+    <animate
         attributeName="height"
         attributeType="XML"
         dur="1s"
         values="10; 40; 10"
         repeatCount="indefinite"
-        begin="0.5s"
-      />
+        begin="0.5s"/>
     </rect>
     <!-- Rectangle 5 -->
-    <rect
-      x="70"
-      fill="#ffcc00"
-      width="3"
-      height="10"
-      transform="translate(0) rotate(180 65 50)"
-    >
-      <animate
+    <rect x="70" fill="#ffcc00" width="3" height="10" transform="translate(0) rotate(180 65 50)">
+    <animate
         attributeName="height"
         attributeType="XML"
         dur="1s"
         values="10; 40; 10"
         repeatCount="indefinite"
-        begin="0.1s"
-      />
+        begin="0.1s"/>
     </rect>
   </svg>
+     
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     // Get the preloader element
-    var preloader = document.querySelector(".preloader");
+    var preloader = document.querySelector('.preloader');
 
     // Wait for 2 seconds before hiding the preloader
-    setTimeout(function () {
+    setTimeout(function() {
       // Hide the preloader
-      preloader.style.display = "none";
+      preloader.style.display = 'none';
     }, 2000); // 2000 milliseconds = 2 seconds
   });
 </script>
+
+
+
+{% endblock content %}  
