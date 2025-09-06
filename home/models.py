@@ -423,7 +423,7 @@ class CyberChallenge(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     points = models.IntegerField(default=10)
     challenge_type = models.CharField(max_length=20, choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')])
-    time_limit = models.IntegerField(default=60)
+    time_limit = models.IntegerField(default=60)  
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)
