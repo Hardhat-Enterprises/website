@@ -1084,7 +1084,6 @@ def reset_passkeys_verify(request):
     return render(request, "accounts/reset_passkeys_verify.html")
 
 def register_client(request):
-    form = ClientRegistrationForm()
     if request.method == 'POST':
         email = request.POST.get('email')
         business_name = request.POST.get('business_name')
