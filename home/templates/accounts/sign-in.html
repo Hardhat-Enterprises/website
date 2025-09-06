@@ -1,122 +1,224 @@
+<!-- prettier-ignore -->
 {% extends 'layouts/base.html' %}
-{% load add_input_validation %}
+<!-- prettier-ignore -->
 {% load static %}
-
-{% block header %}
-  
-{% include 'includes/navigation.html' %}
-
-{% endblock header %}
-
+<!-- prettier-ignore -->
+{% load add_input_validation %}
+<!-- prettier-ignore -->
+{% block header %} {% include 'includes/navigation.html' %} {% endblock header %}
+<!-- prettier-ignore -->
 {% block content %}
 
 <main>
+  {% include 'includes/pre-loader.html' %}
 
-    {% include 'includes/pre-loader.html' %} 
-
-    <section class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark" data-background="{% static 'assets/img/pages/login/login-bg.svg' %}">
-        <div class="container mb mt-md-6">
-            <div class="row justify-content-center">
-                <div class="col-12 d-flex align-items-center justify-content-center">
-                    <div class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500">
-                        <div class="text-center text-md-center mb-4 mt-md-0">
-                            <img src="{% static 'assets/img/pages/login/favicon.ico' %}" alt="Logo" class="mb-3">
-                            <h1 class="mb-0 h3">Sign in to our platform</h1>
-                        </div>
-
-                        <form method="post" class="mt-4" action="{% url 'login_with_otp' %}">
-                            {% csrf_token %}
-                            <div class="form-group mb-4">
-                                <label for="username">Username</label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <span class="fas fa-user"></span>
-                                    </span>
-                                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username">
-                                </div>  
-                                <span class="text-danger"> {{ form.username.errors|default_if_none:"" }} </span>
-                            </div>
-
-
-                            <div class="form-group mb-4">
-                                <label for="password">Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon2">
-                                        <span class="fas fa-unlock-alt"></span>
-                                    </span>
-                                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password">
-                                    <span class="input-group-text toggle-password" id="togglePassword">
-                                        <span class="fas fa-eye"></span>
-                                    </span>
-                                </div>  
-                                <span class="text-danger"> {{ form.password.errors|default_if_none:"" }} </span>
-                            </div>
-
-                            <!-- Hidden Recaptcha Input-->
-
-                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <div class="form-check mb-0">
-                                    <input class="form-check-input" type="checkbox" value="" id="remember">
-                                    <label class="form-check-label mb-0" for="remember">
-                                        Remember me
-                                    </label>
-                                </div>
-                                <div><a href="{% url 'password_reset' %}" class="small text-right lost-password">Lost password?</a></div>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-warning btn-primary">Sign in</button>
-                            </div>
-                        </form>
-
-                        <div class="text-center mt-3">
-                            <a href="{% url 'passkey_login' %}" class="btn btn-secondary">Login with Passkey</a>
-                        </div>
-
-                        <div class="d-flex justify-content-center align-items-center mt-4">
-                            <span class="fw-normal">
-                                Not registered?
-                                <a href="{% url 'signup' %}" class="fw-bold text-underline create-account">Create account</a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+  <section
+    class="min-vh-100 d-flex align-items-center section-image overlay-soft-dark"
+    data-background="{% static 'assets/img/pages/login/login-bg.svg' %}"
+  >
+    <div class="container mb mt-md-6">
+      <div class="row justify-content-center">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+          <div
+            class="signin-inner my-4 my-lg-0 bg-white shadow-soft border rounded border-gray-300 p-4 p-lg-5 w-100 fmxw-500"
+          >
+            <div class="text-center text-md-center mb-4 mt-md-0">
+              <img
+                src="{% static 'assets/img/pages/login/favicon.ico' %}"
+                alt="Logo"
+                class="mb-3"
+              />
+              <h1 class="mb-0 h3">Sign in to our platform</h1>
             </div>
+
+            {% if messages %}
+            <div class="mb-3">
+              {% for message in messages %}
+              <div
+                class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                role="alert"
+              >
+                {{ message }}
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <form
+              id="login-form"
+              method="post"
+              class="mt-4"
+              action="{% url 'login_with_otp' %}"
+            >
+              {% csrf_token %}
+              <div class="form-group mb-4">
+                <label for="username">Username</label>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon1">
+                    <span class="fas fa-user"></span>
+                  </span>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-control"
+                    placeholder="Enter your username"
+                  />
+                </div>
+                <span class="text-danger">
+                  {{ form.username.errors|default_if_none:"" }}
+                </span>
+              </div>
+
+              <div class="form-group mb-4">
+                <label for="password">Password</label>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon2">
+                    <span class="fas fa-unlock-alt"></span>
+                  </span>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Enter your password"
+                  />
+                  <span
+                    class="input-group-text toggle-password"
+                    id="togglePassword"
+                  >
+                    <span class="fas fa-eye"></span>
+                  </span>
+                </div>
+                <span class="text-danger">
+                  {{ form.password.errors|default_if_none:"" }}
+                </span>
+              </div>
+
+              <!-- Hidden Recaptcha Input-->
+
+              <input
+                type="hidden"
+                name="g-recaptcha-response"
+                id="g-recaptcha-response"
+              />
+
+              <div
+                class="d-flex justify-content-between align-items-center mb-4"
+              >
+                <div class="form-check mb-0">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="remember"
+                  />
+                  <label class="form-check-label mb-0" for="remember">
+                    Remember me
+                  </label>
+                </div>
+                <div>
+                  <a
+                    href="{% url 'password_reset' %}"
+                    class="small text-right lost-password"
+                    >Lost password?</a
+                  >
+                </div>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-warning btn-primary">
+                  Sign in
+                </button>
+              </div>
+            </form>
+
+            <div class="text-center mt-3">
+              <a href="{% url 'passkey_login' %}" class="btn btn-secondary"
+                >Login with Passkey</a
+              >
+            </div>
+
+            <div class="d-flex justify-content-center align-items-center mt-4">
+              <span class="fw-normal">
+                Not registered?
+                <a
+                  href="{% url 'signup' %}"
+                  class="fw-bold text-underline create-account"
+                  >Create account</a
+                >
+              </span>
+            </div>
+          </div>
         </div>
-    </section>
-    
-    {% include 'includes/footer.html' %}
+      </div>
+    </div>
+  </section>
+
+  {% include 'includes/footer.html' %}
 </main>
 
 <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_SITE_KEY }}"></script>
 
 <!-- Add JavaScript for password toggle -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-    
-    togglePassword.addEventListener('click', function() {
-        // Toggle the password field type
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        
-        // Toggle the eye icon
-        this.querySelector('span').classList.toggle('fa-eye');
-        this.querySelector('span').classList.toggle('fa-eye-slash');
-    });
-});
+  document.addEventListener("DOMContentLoaded", function () {
+    const togglePassword = document.getElementById("togglePassword");
+    const password = document.getElementById("password");
 
-grecaptcha.ready(function () {
-        grecaptcha.execute('{{ RECAPTCHA_SITE_KEY }}', {action: 'submit'})
-        .then(function (token) {
-            console.log("reCAPTCHA token generated onload:", token);
-            document.getElementById('g-recaptcha-response').value = token;
-        });
+    if (togglePassword && password) {
+      togglePassword.addEventListener("click", function () {
+        // Toggle the password field type
+        const type =
+          password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        // Toggle the eye icon
+        this.querySelector("span").classList.toggle("fa-eye");
+        this.querySelector("span").classList.toggle("fa-eye-slash");
+      });
+    }
+  });
+
+  // reCAPTCHA handling with error checking
+  function refreshRecaptchaToken() {
+    return new Promise(function (resolve, reject) {
+      if (typeof grecaptcha === "undefined") {
+        console.warn("reCAPTCHA not loaded");
+        return resolve(null);
+      }
+      grecaptcha.ready(function () {
+        grecaptcha
+          .execute("{{ RECAPTCHA_SITE_KEY }}", { action: "submit" })
+          .then(function (token) {
+            const field = document.getElementById("g-recaptcha-response");
+            if (field && token) field.value = token;
+            resolve(token);
+          })
+          .catch(function (err) {
+            console.error("reCAPTCHA error:", err);
+            resolve(null);
+          });
+      });
     });
+  }
+
+  // Initial token
+  refreshRecaptchaToken();
+
+  // Refresh token right before submit to avoid expiry
+  const form = document.getElementById("login-form");
+  if (form) {
+    form.addEventListener("submit", async function (e) {
+      await refreshRecaptchaToken();
+    });
+  }
 </script>
 
-{% endblock content %}
-
-{% block footer %}{% endblock footer %}
+<!-- prettier-ignore -->
+{% endblock content %} {% block footer %} {% endblock footer %}

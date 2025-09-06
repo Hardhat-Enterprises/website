@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %} {% load static %} {% block header %} 
-{% include 'includes/navigation.html' %} {% endblock header %} {% block content %}
+{%include 'includes/navigation.html' %} {% endblock header %} {% block content %}
 
 <main>
   {% include 'includes/pre-loader.html' %}
@@ -42,7 +42,7 @@
                 class="mb-3"
               />
               <h3 class="mb-0 h3">Verify OTP</h3>
-              <p>Please enter the OTP sent to your email.</p>
+              <p>Please enter the OTP sent to your email.<br>Check Spam Folder if you don't see it.</p>
             </div>
 
             <form action="" method="POST">
@@ -104,7 +104,6 @@
                 </button>
               </a>
             </div>
-
           </div>
         </div>
       </div>

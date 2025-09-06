@@ -3,8 +3,10 @@ const testimonials = document.querySelectorAll('.testimonial-item');
 const totalTestimonials = testimonials.length;
 
 function updateSlider() {
-
-  document.querySelector('.testimonial-slider').style.transform = `translateX(-${currentIndex * 100}%)`;
+  const slider = document.querySelector('.testimonial-slider');
+  if (slider) {
+    slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
 }
 
 
@@ -19,10 +21,12 @@ function updateSlider() {
 // });
 
 
-setInterval(() => {
-  currentIndex = (currentIndex + 1) % totalTestimonials;
+// Only start the interval if testimonials exist
+if (totalTestimonials > 0) {
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % totalTestimonials;
+    updateSlider();
+  }, 6000); 
+  
   updateSlider();
-}, 6000); 
-
-
-updateSlider();
+}
