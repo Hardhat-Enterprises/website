@@ -209,6 +209,8 @@ class Project(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     title = models.CharField(_("project title"), max_length=150, choices=PROJECT_CHOICES, blank=False)
+    archived = models.BooleanField(_("archived"), default=False)
+    description = models.TextField(_("project description"), blank=True, null=True)
 
     def __str__(self) -> str:
         return self.get_title_display()
@@ -442,6 +444,9 @@ class CyberChallenge(models.Model):
     points = models.IntegerField(default=10)
     challenge_type = models.CharField(max_length=20, choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')])
     time_limit = models.IntegerField(default=60)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -754,7 +759,7 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
-class AdninSesssion(models.Model):
+class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
     ip_address = models.GenericIPAddressField()
@@ -765,28 +770,25 @@ class AdninSesssion(models.Model):
     logout_time = models.DateTimeField(null=True, blank=True)
     logout_reason = models.CharField(max_length=50, blank=True, null=True) 
 
-class Meta:
+    class Meta:
         ordering = ['-login_time']
 
-def __str__(self):
-    admin_type = "Superuser" if self.user.is_superuser else "Staff"
-    return f"{admin_type} session for {self.user.email} - {self.login_time}"
+    def __str__(self):
+        admin_type = "Superuser" if self.user.is_superuser else "Staff"
+        return f"{admin_type} session for {self.user.email} - {self.login_time}"
 
-def mark_logout(self, reason="manual"):
-
+    def mark_logout(self, reason="manual"):
         self.is_active = False
         self.logout_time = now()
         self.logout_reason = reason
         self.save()
 
-def is_expired(self, timeout_minutes=30):
+    def is_expired(self, timeout_minutes=30):
+        if not self.is_active:
+            return True
+        expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
+        return now() > expiry_time
 
-    if not self.is_active:
-        return True
-    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-    return now() > expiry_time
-
-def update_activity(self):
-
-    self.last_activity = now()
-    self.save(update_fields=['last_activity'])
+    def update_activity(self):
+        self.last_activity = now()
+        self.save(update_fields=['last_activity'])
