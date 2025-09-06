@@ -159,6 +159,26 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
 
+# Keep a short history of password hashes per user
+class PasswordHistory(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="password_history"
+    )
+    # Store the full encoded hash
+    encoded_password = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "created_at"]),
+        ]
+
+    def __str__(self):
+        return f"PasswordHistory(user={self.user_id}, created_at={self.created_at})"
+
 #checking if admin/staff user
 
     def is_admin_user(self):

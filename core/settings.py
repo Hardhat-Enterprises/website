@@ -107,7 +107,7 @@ INSTALLED_APPS = [
     'rest_framework',  
     'drf_yasg', 
 
-    'home',
+    'home.apps.HomeConfig',
     'theme_pixel',
 
     'corsheaders',
@@ -241,6 +241,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+    
+    # Prevent reusing last N passwords
+    {
+        "NAME": "home.validators.PasswordHistoryValidator",
+        "OPTIONS": {"keep_last": 2, "include_current": True},
     },
 ]
 
