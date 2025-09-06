@@ -396,9 +396,8 @@
         </ul>
       </div>
     </div>
-
-    {% block header %} {% include 'includes/navigation.html' %} {% endblock
-    header %}
+    <!-- prettier-ignore -->
+    {% block header %} {% include 'includes/navigation.html' %} {% endblock header %}
 
     <div id="chat-button">
       <button id="chatOpenButton">{% trans "💬 Chat with us" %}</button>
@@ -450,8 +449,10 @@
       </div>
     </div>
 
-    {% block content %}{% endblock content %} {% block footer %} {% include
-    'includes/footer.html' %} {% endblock footer %}
+    <!-- prettier-ignore -->
+    {% block content %}{% endblock content %}
+    <!-- prettier-ignore -->
+    {% block footer %} {% include 'includes/footer.html' %} {% endblock footer %}
 
     <button
       id="backToTop"
@@ -480,9 +481,9 @@
     >
       &#8593;
     </button>
-
-    {% include 'includes/scripts.html' %} {% block javascripts %}{% endblock
-    javascripts %}
+    {% include 'includes/scripts.html' %}
+    <!-- prettier-ignore -->
+    {% block javascripts %}{% endblock javascripts %}
     <!--Subresource Integrity-->
     <script
       type="module"

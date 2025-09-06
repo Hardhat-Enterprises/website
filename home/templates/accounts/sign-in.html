@@ -1,6 +1,13 @@
-{% extends 'layouts/base.html' %} {% load add_input_validation %} {% load static
-%} {% block header %} {% include 'includes/navigation.html' %} {% endblock
-header %} {% block content %}
+<!-- prettier-ignore -->
+{% extends 'layouts/base.html' %}
+<!-- prettier-ignore -->
+{% load static %}
+<!-- prettier-ignore -->
+{% load add_input_validation %}
+<!-- prettier-ignore -->
+{% block header %} {% include 'includes/navigation.html' %} {% endblock header %}
+<!-- prettier-ignore -->
+{% block content %}
 
 <main>
   {% include 'includes/pre-loader.html' %}
@@ -213,4 +220,5 @@ header %} {% block content %}
   }
 </script>
 
-{% endblock content %} {% block footer %}{% endblock footer %}
+<!-- prettier-ignore -->
+{% endblock content %} {% block footer %} {% endblock footer %}
