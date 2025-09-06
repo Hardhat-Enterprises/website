@@ -71,8 +71,10 @@ SESSION_COOKIE_SECURE = False
 RECAPTCHA_SITE_KEY = '6LesBKsrAAAAADwwja7GKS33AEC7ktIuJlcYpBDf'
 RECAPTCHA_SECRET_KEY = '6LesBKsrAAAAANii1CrJeF_C679-5vRMgGNC6htZ'
 
-# Google OAuth Client (set via environment in production)
-GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID', '')
+# Microsoft OAuth Client (set via environment in production)
+MICROSOFT_CLIENT_ID = os.getenv('MICROSOFT_CLIENT_ID', '')
+MICROSOFT_CLIENT_SECRET = os.getenv('MICROSOFT_CLIENT_SECRET', '')
+MICROSOFT_TENANT_ID = os.getenv('MICROSOFT_TENANT_ID', 'common')
 
 # ---------------- Secure Session Cookie Settings ----------------
 # These settings ensure cookies are securely transmitted over HTTPS and protected from JS and CSRF attacks
@@ -182,7 +184,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
                 'home.context_processors.recaptcha_site_key',
-                'home.context_processors.google_client_id',
+                'home.context_processors.microsoft_client_id',
 
 
             ],

@@ -87,7 +87,9 @@ def dynamic_page_title(request):
 def recaptcha_site_key(request):
     return {'RECAPTCHA_SITE_KEY': settings.RECAPTCHA_SITE_KEY}
 
-def google_client_id(request):
+def microsoft_client_id(request):
     return {
-        'GOOGLE_OAUTH_CLIENT_ID': getattr(settings, 'GOOGLE_OAUTH_CLIENT_ID', '')
+        'MICROSOFT_CLIENT_ID': getattr(settings, 'MICROSOFT_CLIENT_ID', ''),
+        'MICROSOFT_TENANT_ID': getattr(settings, 'MICROSOFT_TENANT_ID', 'deakin.edu.au'),
+        'DEAKIN_DOMAIN': 'deakin.edu.au'
     }

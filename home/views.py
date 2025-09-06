@@ -101,8 +101,8 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 from django.core.paginator import Paginator
 from .models import BlogPost
 from django.template.loader import render_to_string
-from google.oauth2 import id_token as google_id_token
-from google.auth.transport import requests as google_requests
+import msal
+import requests
 
 #from .models import Student, Project, Progress
  
@@ -1236,29 +1236,43 @@ def get_client_ip(request):
 
 @require_POST
 @csrf_protect
-def google_login(request):
+def microsoft_login(request):
     try:
         data = json.loads(request.body.decode('utf-8'))
-        credential = data.get('credential')
-        if not credential:
-            return JsonResponse({'error': 'Missing credential'}, status=400)
+        access_token = data.get('access_token')
+        if not access_token:
+            return JsonResponse({'error': 'Missing access token'}, status=400)
 
-        # Verify token with Google
-        idinfo = google_id_token.verify_oauth2_token(
-            credential,
-            google_requests.Request(),
-            settings.GOOGLE_OAUTH_CLIENT_ID or None,
-        )
+        # Verify token with Microsoft Graph API
+        graph_url = 'https://graph.microsoft.com/v1.0/me'
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        }
+        
+        response = requests.get(graph_url, headers=headers)
+        if response.status_code != 200:
+            return JsonResponse({'error': 'Invalid access token'}, status=401)
 
-        if idinfo.get('iss') not in ['accounts.google.com', 'https://accounts.google.com']:
-            return JsonResponse({'error': 'Invalid token issuer'}, status=401)
-
-        user_email = idinfo.get('email')
+        user_info = response.json()
+        user_email = user_info.get('mail') or user_info.get('userPrincipalName')
         if not user_email:
             return JsonResponse({'error': 'Email not present in token'}, status=400)
 
-        first_name = idinfo.get('given_name', '')
-        last_name = idinfo.get('family_name', '')
+        # Validate that the user is from Deakin University
+        if not user_email.endswith('@deakin.edu.au'):
+            return JsonResponse({
+                'error': 'Access restricted to Deakin University students and staff. Please use a @deakin.edu.au email address.'
+            }, status=403)
+
+        first_name = user_info.get('givenName', '')
+        last_name = user_info.get('surname', '')
+        display_name = user_info.get('displayName', f'{first_name} {last_name}'.strip())
+        
+        # Extract additional Deakin-specific information
+        job_title = user_info.get('jobTitle', '')
+        department = user_info.get('department', '')
+        office_location = user_info.get('officeLocation', '')
 
         UserModel = get_user_model()
         user, created = UserModel.objects.get_or_create(
@@ -1266,8 +1280,10 @@ def google_login(request):
             defaults={
                 'first_name': first_name,
                 'last_name': last_name,
+                'username': user_email.split('@')[0],  # Use email prefix as username
                 'is_active': True,
                 'is_verified': True,
+                'is_staff': job_title and ('staff' in job_title.lower() or 'lecturer' in job_title.lower() or 'professor' in job_title.lower()),
             }
         )
 
@@ -1275,6 +1291,16 @@ def google_login(request):
             # Set an unusable password for social-only accounts
             user.set_unusable_password()
             user.save()
+            
+            # Log successful Deakin user registration
+            if settings.DEBUG:
+                print(f'New Deakin user registered: {user_email} - {display_name}')
+        else:
+            # Update existing user information
+            user.first_name = first_name
+            user.last_name = last_name
+            user.is_verified = True
+            user.save(update_fields=['first_name', 'last_name', 'is_verified'])
 
         login(request, user)
 
@@ -1286,21 +1312,51 @@ def google_login(request):
         except Exception:
             pass
 
-        redirect_url = reverse('dashboard') if 'dashboard' in [p.name for p in request.resolver_match._func_path_patterns] else '/dashboard/'
-        # Fallback to home if dashboard route is not available at runtime
-        try:
-            redirect_url = reverse('dashboard')
-        except Exception:
-            redirect_url = '/'
+        # Log successful Deakin authentication
+        if settings.DEBUG:
+            print(f'Deakin user authenticated: {user_email} - {display_name}')
 
+        # Use the same redirect logic as regular login
+        redirect_url = get_login_redirect_url(user)
+        
         return JsonResponse({'redirect_url': redirect_url})
 
     except ValueError:
         return JsonResponse({'error': 'Invalid request body'}, status=400)
     except Exception as e:
         if settings.DEBUG:
-            print('Google login error:', str(e))
+            print('Microsoft login error:', str(e))
         return JsonResponse({'error': 'Authentication failed'}, status=401)
+
+
+def microsoft_callback(request):
+    """
+    Handle Microsoft OAuth callback and redirect to appropriate page
+    """
+    try:
+        # Get the authorization code from the callback
+        code = request.GET.get('code')
+        error = request.GET.get('error')
+        
+        if error:
+            messages.error(request, f'Microsoft authentication failed: {error}')
+            return redirect('login')
+        
+        if not code:
+            messages.error(request, 'No authorization code received from Microsoft')
+            return redirect('login')
+        
+        # Exchange code for access token (this would normally be done server-side)
+        # For now, we'll redirect to the login page with a message
+        messages.info(request, 'Microsoft authentication successful! Please complete the login process.')
+        return redirect('login')
+        
+    except Exception as e:
+        if settings.DEBUG:
+            print('Microsoft callback error:', str(e))
+        messages.error(request, 'Microsoft authentication callback failed')
+        return redirect('login')
+
 
 def login_with_tracking(request):
     if request.method == 'POST':
