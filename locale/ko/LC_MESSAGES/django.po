@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-20 00:50+1000\n"
+"POT-Creation-Date: 2025-09-06 12:19+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,593 +19,605 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:59 .\home\context_processors.py:60
-#: .\home\templates\admin\home\app_index.html:7
-#: .\home\templates\includes\footer.html:50
-#: .\home\templates\includes\navigation.html:51
+#: home/context_processors.py:59 home/context_processors.py:60
+#: home/templates/admin/home/app_index.html:7
+#: home/templates/includes/footer.html:50
+#: home/templates/includes/navigation.html:52
 msgid "Home"
 msgstr "홈"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:61 .\home\context_processors.py:62
-#: .\home\templates\includes\footer.html:72
+#: home/context_processors.py:61 home/context_processors.py:62
+#: home/templates/includes/footer.html:72
 msgid "About Us"
 msgstr "회사 소개"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:63 .\home\templates\pages\about.html:39
+#: home/context_processors.py:63 home/templates/pages/about.html:40
 msgid "What we do"
 msgstr "우리가 하는 일"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:64 .\home\templates\includes\footer.html:74
+#: home/context_processors.py:64 home/templates/includes/footer.html:74
 msgid "Contact Us"
 msgstr "문의하기"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:65
-#| msgid ""
+#: home/context_processors.py:65
 msgid "Our Projects"
 msgstr "프로젝트"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:66
+#: home/context_processors.py:66
 msgid "Upload Image"
 msgstr "이미지 업로드"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:169
+#: home/context_processors.py:67 home/templates/includes/navigation.html:170
 msgid "Blog"
 msgstr "블로그"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:177
-#: .\home\templates\pages\publishedblog.html:8
+#: home/context_processors.py:68 home/templates/includes/navigation.html:178
+#: home/templates/pages/publishedblog.html:8
 msgid "Published Blogs"
 msgstr "게시된 블로그"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:189
+#: home/context_processors.py:69 home/templates/includes/navigation.html:190
 msgid "Discover Hardhat"
 msgstr "하드햇 알아보기"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:195
+#: home/context_processors.py:70 home/templates/includes/navigation.html:196
 msgid "Internships"
 msgstr "인턴십"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:198
+#: home/context_processors.py:71 home/templates/includes/navigation.html:199
 msgid "Job Alerts"
 msgstr "작업 알림"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:208
+#: home/context_processors.py:72 home/templates/includes/navigation.html:212
 msgid "Cyber Challenges"
 msgstr "사이버 챌린지"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:220
+#: home/context_processors.py:73 home/templates/includes/navigation.html:224
 msgid "Quiz"
 msgstr "퀴즈"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:35
+#: home/forms.py:35
 msgid "Email"
 msgstr "이메일"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:41 .\home\forms.py:137
+#: home/forms.py:41 home/forms.py:124
 msgid "Your Password"
 msgstr "비밀번호"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:45 .\home\forms.py:141
+#: home/forms.py:45 home/forms.py:128
 msgid "Confirm Password"
 msgstr "비밀번호 확인"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:54 .\home\forms.py:150
+#: home/forms.py:54 home/forms.py:137
 msgid "Password must be at least 8 characters long."
 msgstr "비밀번호는 8자 이상이어야 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:57 .\home\forms.py:153
+#: home/forms.py:57 home/forms.py:140
 msgid "Password must include at least one lowercase letter."
 msgstr "비밀번호는 소문자 하나 이상을 포함해야 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:60 .\home\forms.py:156
+#: home/forms.py:60 home/forms.py:143
 msgid "Password must include at least one uppercase letter."
 msgstr "비밀번호는 대문자 하나 이상을 포함해야 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:63 .\home\forms.py:159
+#: home/forms.py:63 home/forms.py:146
 msgid "Password must include at least one number."
 msgstr "비밀번호에는 숫자가 하나 이상 포함되어야 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:66 .\home\forms.py:162
+#: home/forms.py:66 home/forms.py:149
 msgid ""
 "Password must include at least one special character (@, $, !, %, *, ?, &)."
 msgstr "비밀번호에는 특수 문자(@, $, !, %, *, ?, &)가 하나 이상 포함되어야 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:81
+#: home/forms.py:81
 msgid "Email must match your Deakin email."
 msgstr "이메일은 디킨 이메일과 일치해야 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:91
+#: home/forms.py:90 home/forms.py:165
 msgid "First Name"
 msgstr "이름"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:92
+#: home/forms.py:91 home/forms.py:166
 msgid "Last Name"
 msgstr "성"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:93
+#: home/forms.py:92
 msgid "Deakin Email Address"
 msgstr "디킨 이메일 주소"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:126
+#: home/forms.py:113
 msgid "Business Email"
 msgstr "비즈니스 이메일"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:132
+#: home/forms.py:119
 msgid "Business Name"
 msgstr "비즈니스 이름"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:174
-msgid "Email must be valid email."
-msgstr "이메일은 유효한 이메일이어야 합니다."
+#: home/forms.py:167
+#, fuzzy
+#| msgid "Business Email"
+msgid "Business Email Address"
+msgstr "비즈니스 이메일"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:184 .\home\forms.py:248
+#: home/forms.py:181 home/forms.py:238
 msgid "Password"
 msgstr "비밀번호"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:203 .\home\forms.py:231
+#: home/forms.py:198 home/forms.py:221
 msgid "Too many login attempts. Please try again later."
 msgstr "로그인 시도 횟수가 너무 많습니다. 나중에 다시 시도해 주세요."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:284 .\home\templates\pages\about.html:582
-#: .\home\templates\pages\what_we_do.html:88
+#: home/forms.py:276
 msgid "Your Email"
 msgstr "이메일"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:289 .\home\forms.py:300
+#: home/forms.py:282 home/forms.py:294
 msgid "New Password"
 msgstr "새 비밀번호"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:292 .\home\forms.py:303
+#: home/forms.py:285 home/forms.py:297
 msgid "Confirm New Password"
 msgstr "새 비밀번호 확인"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:297
+#: home/forms.py:291
 msgid "Old Password"
 msgstr "이전 비밀번호"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:307
+#: home/forms.py:300
 msgid "Deakin Student ID"
 msgstr "디킨 학생증"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:310
+#: home/forms.py:303
 msgid "Year"
 msgstr "연도"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:451
-#| msgid ""
+#: home/forms.py:484
 msgid "Your name"
 msgstr "사용자 이름"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:452
-#| msgid ""
+#: home/forms.py:485
 msgid "Your title"
 msgstr "제목"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\forms.py:453
+#: home/forms.py:486
 msgid "Your description"
 msgstr "설명"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:27
+#: home/mixins.py:27
 msgid "Superuser must have is_superuser = True"
 msgstr "수퍼유저는 is_superuser = True여야 합니다"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:29
+#: home/mixins.py:29
 msgid "Superuser must have is_staff = True"
 msgstr "수퍼유저에게 is_staff = True가 있어야 합니다"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:39 .\home\models.py:97
+#: home/mixins.py:39 home/models.py:97
 msgid "created_at"
 msgstr "created_at"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:40 .\home\models.py:98
+#: home/mixins.py:40 home/models.py:98
 msgid "updated_at"
 msgstr "updated_at"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:74
+#: home/models.py:74
 msgid "first name"
 msgstr "이름"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:75
+#: home/models.py:75
 msgid "last name"
 msgstr "성"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:76
+#: home/models.py:76
 msgid "deakin email address"
 msgstr "디킨 이메일 주소"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:80
+#: home/models.py:80
 msgid "staff status"
 msgstr "직원 상태"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:82
+#: home/models.py:82
 msgid "Designates whether the user can log into this admin site."
 msgstr "사용자가 이 관리자 사이트에 로그인할 수 있는지 여부를 지정합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:85
+#: home/models.py:85
 msgid "active"
 msgstr "활성"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:88
+#: home/models.py:88
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr "이 사용자를 활성 상태로 처리할지 여부를 지정합니다. 계정을 삭제하는 대신 이 옵션을 선택 취소합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:93
+#: home/models.py:93
 msgid "verified"
 msgstr "확인됨"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:95
+#: home/models.py:95
 msgid "Designates whether the user has verified their account."
 msgstr "사용자가 계정을 인증했는지 여부를 지정합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:114
+#: home/models.py:114
 msgid "user"
 msgstr "사용자"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:115
+#: home/models.py:115
 msgid "users"
 msgstr "사용자"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:191
+#: home/models.py:191
 msgid "project title"
 msgstr "프로젝트 제목"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:200
+#: home/models.py:192
+msgid "archived"
+msgstr "아카이브"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/models.py:193
+#, fuzzy
+#| msgid "Your description"
+msgid "project description"
+msgstr "설명"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:202
 msgid "course title"
 msgstr "코스 제목"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:201
+#: home/models.py:203
 msgid "course code"
 msgstr "코스 코드"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:202
+#: home/models.py:204
 msgid "postgraduate status"
 msgstr "대학원 상태"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:256
+#: home/models.py:258
 msgid "student_id"
 msgstr "student_id"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:259
+#: home/models.py:261
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr "필수입니다. 디킨 학생 ID를 입력합니다. 숫자만 입력합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:262
+#: home/models.py:264
 msgid "A user with that Student ID already exists."
 msgstr "해당 학생 ID를 가진 사용자가 이미 존재합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:267
+#: home/models.py:269
 msgid "trimester"
 msgstr "임신"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:268
+#: home/models.py:270
 msgid "unit"
 msgstr "단위"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:10
+#: home/templates/includes/footer.html:10
 msgid ""
 "Hardhat Enterprises offers open-source protection, so it's free for "
 "everyone."
 msgstr "하드햇 엔터프라이즈는 오픈 소스 보호 기능을 제공하므로 누구나 무료로 사용할 수 있습니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:49
+#: home/templates/includes/footer.html:49
 msgid "Blog Page"
 msgstr "블로그 페이지"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:92
+#: home/templates/includes/footer.html:73
+msgid "Our Tools"
+msgstr "도구"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:92
 msgid "Feedback"
 msgstr "피드백"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:99
+#: home/templates/includes/footer.html:99
 msgid "The OWASP Top 10"
 msgstr "OWASP 상위 10"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:101
+#: home/templates/includes/footer.html:101
 msgid "Learn more about cyber security standards and applications"
 msgstr "사이버 보안 표준 및 애플리케이션에 대해 자세히 알아보기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:110
+#: home/templates/includes/footer.html:110
 msgid "OWASP Top 10"
 msgstr "OWASP 상위 10위"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:144
+#: home/templates/includes/footer.html:144
 msgid "This page has been visited "
 msgstr "이 페이지가 방문되었습니다"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:146
+#: home/templates/includes/footer.html:146
 msgid "times!"
 msgstr "시간!"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:156
+#: home/templates/includes/footer.html:156
 msgid "Last Updated:"
 msgstr "마지막 업데이트:"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:237
+#: home/templates/includes/navigation.html:40
+#: home/templates/includes/navigation.html:241
 msgid "Search..."
 msgstr "검색..."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:57
+#: home/templates/includes/navigation.html:58
 msgid "Upskilling"
 msgstr "업스킬링"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:64
+#: home/templates/includes/navigation.html:65
 msgid "Dashboard"
 msgstr "대시보드"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:69
+#: home/templates/includes/navigation.html:70
 msgid "Skills"
 msgstr "기술"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:82
+#: home/templates/includes/navigation.html:83
 msgid "Admin Settings"
 msgstr "관리자 설정"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:88
+#: home/templates/includes/navigation.html:89
 msgid "User Management"
 msgstr "사용자 관리"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:91
+#: home/templates/includes/navigation.html:92
 msgid "Project Assignment"
 msgstr "프로젝트 할당"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:94
+#: home/templates/includes/navigation.html:95
 msgid "Project Teams"
 msgstr "프로젝트 팀"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:97
+#: home/templates/includes/navigation.html:98
 msgid "Review Blogs"
 msgstr "블로그 리뷰"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:100
+#: home/templates/includes/navigation.html:101
 msgid "Reports"
 msgstr "보고서"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:110
+#: home/templates/includes/navigation.html:111
 msgid "About"
 msgstr "정보"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:116
-#: .\home\templates\pages\index.html:147
+#: home/templates/includes/navigation.html:117
+#: home/templates/pages/index.html:155
 msgid "Projects"
 msgstr "프로젝트"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:125
-#: .\home\templates\pages\index.html:157
+#: home/templates/includes/navigation.html:126
+#: home/templates/pages/index.html:165
 msgid "AppAttack"
 msgstr "앱어택"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:130
-#: .\home\templates\pages\index.html:172
+#: home/templates/includes/navigation.html:131
+#: home/templates/pages/index.html:180
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:135
-#: .\home\templates\pages\index.html:202
+#: home/templates/includes/navigation.html:136
+#: home/templates/pages/index.html:210
 msgid "Smishing Detection"
 msgstr "스미싱 탐지"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:140
+#: home/templates/includes/navigation.html:141
 msgid "Deakin CyberSafe VR"
 msgstr "디킨 사이버세이프 VR"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:145
+#: home/templates/includes/navigation.html:146
 msgid "The Policy Deployment Engine (New)"
 msgstr "정책 배포 엔진(신규)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:150
+#: home/templates/includes/navigation.html:151
 msgid "Deakin Threat mirror (Finished)"
 msgstr "디킨 위협 거울 (완료)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:159
+#: home/templates/includes/navigation.html:160
 msgid "Malware (Finished)"
 msgstr "멀웨어 (완료)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:176
+#: home/templates/includes/navigation.html:177
 msgid "Create a Blog"
 msgstr "블로그 만들기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:183
+#: home/templates/includes/navigation.html:184
 msgid "Careers"
 msgstr "채용 정보"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:192
+#: home/templates/includes/navigation.html:193
 msgid "All Jobs"
 msgstr "모든 채용 정보"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:215
+#: home/templates/includes/navigation.html:202
+msgid "Career Path Finder"
+msgstr "경력 경로 찾기"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:219
 msgid "All Challenges"
 msgstr "모든 도전 과제"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:257
+#: home/templates/includes/navigation.html:261
 msgid "Logout"
 msgstr "로그아웃"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:279
+#: home/templates/includes/navigation.html:283
 msgid "Sign In"
 msgstr "로그인"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:291
+#: home/templates/includes/navigation.html:295
 msgid "Sign Up"
 msgstr "가입하기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:313
+#: home/templates/includes/navigation.html:318
 msgid "Language"
 msgstr "언어"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:315
+#: home/templates/layouts/base.html:315
 msgid "Recently Viewed Pages"
 msgstr "최근 본 페이지"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:333
+#: home/templates/layouts/base.html:333
 msgid "💬 Chat with us"
 msgstr "💬 채팅하기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:338
+#: home/templates/layouts/base.html:338
 msgid "Let's chat?"
 msgstr "채팅할까요?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:343
+#: home/templates/layouts/base.html:343
 msgid ""
 "Please fill out the form below to start chatting with the next available "
 "agent."
 msgstr "다음 이용 가능한 상담원과 채팅을 시작하려면 아래 양식을 작성하세요."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:345
+#: home/templates/layouts/base.html:345
 msgid "Enter your name"
 msgstr "이름 입력"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:346
+#: home/templates/layouts/base.html:346
 msgid "Enter your email"
 msgstr "이메일 입력"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:347
+#: home/templates/layouts/base.html:347
 msgid "Type your message..."
 msgstr "메시지 입력..."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:349
-#: .\home\templates\pages\blogpage.html:57
+#: home/templates/layouts/base.html:349 home/templates/pages/blogpage.html:57
 msgid "Submit"
 msgstr "제출하기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:450
+#: home/templates/layouts/base.html:450
 msgid "Session Timeout Warning"
 msgstr "세션 시간 초과 경고"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:454
+#: home/templates/layouts/base.html:454
 msgid ""
 "Your session will expire in 1 minute due to inactivity. Any unsaved changes "
 "will be lost."
 msgstr "활동이 없어 세션이 1분 후에 만료됩니다. 저장하지 않은 변경 사항은 모두 손실됩니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:457
+#: home/templates/layouts/base.html:457
 msgid "Stay Logged In"
 msgstr "로그인 상태 유지"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:26
+#: home/templates/pages/about.html:27
 msgid "Full-Service <br class=\"d-none d-md-inline\" />Cyber Security Agency"
 msgstr "풀 서비스 <br class=\"d-none d-md-inline\" />사이버 보안 기관"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:29
+#: home/templates/pages/about.html:30
 msgid ""
 "\n"
 "            Hardhat can help you secure your webapps, review your code,\n"
@@ -622,37 +634,37 @@ msgstr ""
 "            "
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:53
+#: home/templates/pages/about.html:54
 msgid "Our Team's Kudoboard"
 msgstr "우리 팀의 쿠도보드"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:55
+#: home/templates/pages/about.html:56
 msgid "Share your appreciation for our team..."
 msgstr "저희 팀에 대한 감사함을 공유하세요..."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:57
+#: home/templates/pages/about.html:58
 msgid "Choose note color: "
 msgstr "노트 색상을 선택합니다:"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:89
+#: home/templates/pages/about.html:90
 msgid "Add Note"
 msgstr "메모 추가"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:90
+#: home/templates/pages/about.html:91
 msgid "Clear Board"
 msgstr "클리어 보드"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:321
+#: home/templates/pages/about.html:321
 msgid "All challenges accepted."
 msgstr "모든 도전이 받아들여집니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:323
+#: home/templates/pages/about.html:323
 msgid ""
 " \n"
 "            Hardhat is an experienced and passionate group of cybersecurity\n"
@@ -669,7 +681,7 @@ msgstr ""
 "            "
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:331
+#: home/templates/pages/about.html:331
 msgid ""
 " \n"
 "            With a culture of collaboration and a roster of talent, the Hardhat\n"
@@ -684,279 +696,147 @@ msgstr ""
 "            "
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:377
+#: home/templates/pages/about.html:377
 msgid "Team Members"
 msgstr "팀원"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:388
+#: home/templates/pages/about.html:388
 msgid "Projects Secured"
 msgstr "확보된 프로젝트"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:401
+#: home/templates/pages/about.html:401
 msgid "Threats found"
 msgstr "발견된 위협"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:467
-msgid "<span class=\"fw-bold\">Our</span> history"
-msgstr "<span class=\"fw-bold\">우리</span> 연혁"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:476
-msgid "Present"
-msgstr "현재"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:478
-msgid ""
-"\n"
-"                  Established an incident response team and provided remote work\n"
-"                  security solutions. Actively engaged with the global\n"
-"                  cybersecurity community. Continued growth, adapting to\n"
-"                  emerging threats and technologies.\n"
-"                  "
-msgstr ""
-"\n"
-"                  사고 대응팀 구축 및 원격 근무 제공\n"
-"                  보안 솔루션을 제공했습니다. 글로벌 사이버 보안 커뮤니티에 적극적으로 참여\n"
-"                  사이버 보안 커뮤니티에 적극적으로 참여. 새로운 위협과 기술에 적응하며 지속적인 성장\n"
-"                  지속적인 성장, 새로운 위협과 기술에 적응.\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:488
-msgid "Technology and Innovation"
-msgstr "기술 및 혁신"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:490
-msgid ""
-"\n"
-"                  Introduced advanced threat detection technologies. Established\n"
-"                  a cybersecurity training academy and embraced AI integration.\n"
-"                  Released a proprietary threat intelligence platform.\n"
-"                  "
-msgstr ""
-"\n"
-"                  고급 위협 탐지 기술 도입. 설립\n"
-"                  사이버 보안 교육 아카데미를 설립하고 AI 통합을 수용했습니다.\n"
-"                  독점적인 위협 인텔리전스 플랫폼 출시.\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:499
-msgid "Growth and Recognition"
-msgstr "성장과 인정"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:501
-msgid ""
-"\n"
-"                  Expanded services to include penetration testing and\n"
-"                  vulnerability assessments. Formed strategic partnerships and\n"
-"                  received industry awards. Achieved international expansion and\n"
-"                  collaborated on a major research project.\\\n"
-"                  "
-msgstr ""
-"\n"
-"                  침투 테스트 및 취약성 평가를 포함하도록 서비스 확장\n"
-"                  취약성 평가로 서비스를 확장했습니다. 전략적 파트너십을 체결하고\n"
-"                  업계 상을 수상했습니다. 국제적 확장 달성 및\n"
-"                  주요 연구 프로젝트에 협력했습니다\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:511
-msgid "Establishment and Early Success"
-msgstr "설립 및 초기 성공"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:513
-msgid ""
-"\n"
-"                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
-"                  Initial focus on basic cybersecurity awareness training and\n"
-"                  consulting. Secured first clients and gained a reputation for\n"
-"                  reliable services.\n"
-"                  "
-msgstr ""
-"\n"
-"                  사이버 보안 애호가들이 모여 2022년에 설립했습니다.\n"
-"                  초기에는 기본적인 사이버 보안 인식 교육과\n"
-"                  컨설팅. 첫 고객을 확보하고 신뢰할 수 있는 서비스로 명성을 얻었습니다\n"
-"                  신뢰할 수 있는 서비스.\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:555
-msgid "Want to work with us?"
-msgstr "함께 일하고 싶으신가요?"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:556
-msgid "Awesome! Tell us about yourself"
-msgstr "멋지네요! 자신에 대해 알려주세요"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:564
-#: .\home\templates\pages\what_we_do.html:79
-msgid "Your Name"
-msgstr "사용자 이름"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:601
-#: .\home\templates\pages\what_we_do.html:96
-msgid "Your Message"
-msgstr "귀하의 메시지"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:604
-msgid "How can we help you?"
-msgstr "무엇을 도와드릴까요?"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:614
-#: .\home\templates\pages\what_we_do.html:101
-msgid "Send Message"
-msgstr "메시지 보내기"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:24
-#| msgid ""
+#: home/templates/pages/blogpage.html:24
 msgid "User Blogs"
 msgstr "사용자 블로그"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:26
+#: home/templates/pages/blogpage.html:26
 msgid "Please provide your blog details with our company."
 msgstr "블로그 세부 정보를 당사에 제공해 주세요."
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:32
+#: home/templates/pages/blogpage.html:32
 msgid "Share Your Blog"
 msgstr "블로그 공유"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:35
+#: home/templates/pages/blogpage.html:35
 msgid "Name:"
 msgstr "이름:"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:41
-#| msgid ""
+#: home/templates/pages/blogpage.html:41
 msgid "Blog Title:"
 msgstr "블로그 제목:"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:46
+#: home/templates/pages/blogpage.html:46
 msgid "Blog Description:"
 msgstr "블로그 설명:"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:51
+#: home/templates/pages/blogpage.html:51
 msgid "Image Upload (optional):"
 msgstr "이미지 업로드(선택 사항):"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:55
+#: home/templates/pages/blogpage.html:55
 msgid "Reset"
 msgstr "초기화"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:64
-#| msgid ""
+#: home/templates/pages/blogpage.html:64
 msgid "Recent Blog Pages"
 msgstr "최근 블로그 페이지"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:77
-#| msgid ""
+#: home/templates/pages/blogpage.html:77
 msgid "No Image"
 msgstr "이미지 없음"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:88
+#: home/templates/pages/blogpage.html:88
 msgid "Edit"
 msgstr "편집"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:92
+#: home/templates/pages/blogpage.html:92
 msgid "Delete"
 msgstr "삭제"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:100
+#: home/templates/pages/blogpage.html:100
 msgid "No Blogs Yet"
 msgstr "아직 블로그가 없습니다"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:112
-#| msgid ""
+#: home/templates/pages/blogpage.html:112
 msgid "Edit Blog"
 msgstr "블로그 편집"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:120
-#| msgid ""
+#: home/templates/pages/blogpage.html:120
 msgid "Name"
 msgstr "이름"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:125
-#| msgid ""
+#: home/templates/pages/blogpage.html:125
 msgid "Blog Title"
 msgstr "블로그 제목"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:130
+#: home/templates/pages/blogpage.html:130
 msgid "Blog Description"
 msgstr "블로그 설명"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:135
+#: home/templates/pages/blogpage.html:135
 msgid "Change Image (optional)"
 msgstr "이미지 변경(선택 사항)"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:141
+#: home/templates/pages/blogpage.html:141
 msgid "Cancel"
 msgstr "취소"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:142
-#| msgid ""
+#: home/templates/pages/blogpage.html:142
 msgid "Save Changes"
 msgstr "변경 사항 저장"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:20
+#: home/templates/pages/index.html:28
 msgid "Hardhat Enterprises"
 msgstr "하드햇 엔터프라이즈"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:21
+#: home/templates/pages/index.html:29
 msgid "Security is a necessity. Not a choice"
 msgstr "보안은 필수입니다. 선택이 아닌 필수"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:23
+#: home/templates/pages/index.html:31
 msgid "Explore Projects"
 msgstr "프로젝트 살펴보기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:24
+#: home/templates/pages/index.html:32
 msgid "Join Us"
 msgstr "가입하기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:97
+#: home/templates/pages/index.html:105
 msgid "Company Vision"
 msgstr "회사 비전"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:98
+#: home/templates/pages/index.html:106
 msgid ""
 "Hardhat Enterprises is an organisation that aims to create cyber weapons and"
 " tools that can be used to empower white-hat operations. All deliverables "
@@ -969,12 +849,12 @@ msgstr ""
 "개선하거나 아직 충족되지 않은 시장의 요구를 충족해야 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:104
+#: home/templates/pages/index.html:112
 msgid "Company Mission"
 msgstr "회사 사명"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:105
+#: home/templates/pages/index.html:113
 msgid ""
 "Achieve an engaging learning experience for students within the company. An "
 "opportunity for students to gain cross department/project experience and the"
@@ -984,7 +864,7 @@ msgstr ""
 "자신의 전문 지식을 공유할 수 있는 기회를 제공합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:158
+#: home/templates/pages/index.html:166
 msgid ""
 "We deliver comprehensive reports to clients, providing actionable insights "
 "to enhance code security. With a commitment to excellence, AppAttack "
@@ -994,15 +874,15 @@ msgstr ""
 "AppAttack은 조직이 디지털 자산을 선제적으로 보호할 수 있도록 지원합니다"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:160 .\home\templates\pages\index.html:175
-#: .\home\templates\pages\index.html:190 .\home\templates\pages\index.html:205
-#: .\home\templates\pages\index.html:220 .\home\templates\pages\index.html:235
-#: .\home\templates\pages\index.html:249
+#: home/templates/pages/index.html:168 home/templates/pages/index.html:183
+#: home/templates/pages/index.html:198 home/templates/pages/index.html:213
+#: home/templates/pages/index.html:228 home/templates/pages/index.html:243
+#: home/templates/pages/index.html:258
 msgid "Learn More"
 msgstr "자세히 알아보기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:173
+#: home/templates/pages/index.html:181
 msgid ""
 "Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal "
 "for modern penetration testers. Born from the innovative minds at PT-GUI, "
@@ -1013,13 +893,12 @@ msgstr ""
 "DDT는 단순한 툴킷이 아니라 사이버 보안 관행의 혁명입니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:187
-#| msgid ""
+#: home/templates/pages/index.html:195
 msgid "CyberSafe VR"
 msgstr "CyberSafe VR"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:188
+#: home/templates/pages/index.html:196
 msgid ""
 "Deakin CyberSafe VR revolutionises cybersecurity training for small "
 "businesses by using interactive VR technology to blend theory with practical"
@@ -1029,7 +908,7 @@ msgstr ""
 "소규모 기업을 위한 사이버 보안 교육에 혁신을 가져왔습니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:203
+#: home/templates/pages/index.html:211
 msgid ""
 "Smishing Detection aims to develop an innovative smishing detection app for "
 "Android and iOS devices to moderate the risks associated with SMS phishing "
@@ -1039,12 +918,12 @@ msgstr ""
 "개발하는 것을 목표로 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:217
+#: home/templates/pages/index.html:225
 msgid "Threat Mirror <br>(Project Paused)"
 msgstr "위협 미러 <br>(프로젝트 일시 중지됨)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:218
+#: home/templates/pages/index.html:226
 msgid ""
 "Threat Mirror aims to investigate open-source threat intelligence platforms,"
 " assessing their suitability and adaptability for SMEs and developing "
@@ -1053,12 +932,12 @@ msgstr ""
 "위협 미러는 오픈 소스 위협 인텔리전스 플랫폼을 조사하여 중소기업과 개발도상국에 대한 적합성과 적응성을 평가하는 것을 목표로 합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:232
+#: home/templates/pages/index.html:240
 msgid "Malware Visualization"
 msgstr "멀웨어 시각화"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:233
+#: home/templates/pages/index.html:241
 msgid ""
 "The Malware Visualisation project creates a user-friendly tool that "
 "simplifies malware analysis by integrating with existing visual analytics "
@@ -1067,30 +946,29 @@ msgstr ""
 "멀웨어 시각화 프로젝트는 기존의 시각적 분석 애플리케이션과 통합하여 멀웨어 분석을 간소화하는 사용자 친화적인 도구를 만듭니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:246
-#| msgid ""
+#: home/templates/pages/index.html:255
 msgid "The Policy Deployment Engine"
 msgstr "정책 배포 엔진"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:247
+#: home/templates/pages/index.html:256
 msgid ""
 "The Policy Deployment Engine is a tool that allows users to deploy policies "
 "to their systems."
 msgstr "정책 배포 엔진은 사용자가 자신의 시스템에 정책을 배포할 수 있는 도구입니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:329
+#: home/templates/pages/index.html:338
 msgid "Cybersecurity News"
 msgstr "사이버 보안 뉴스"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:336
+#: home/templates/pages/index.html:346
 msgid "TROX Stealer Malware Spreads via Fake Updates"
 msgstr "가짜 업데이트를 통해 확산되는 트록스 스틸러 멀웨어"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:337
+#: home/templates/pages/index.html:347
 msgid ""
 "A new wave of cyberattacks spreads malware through fake software update "
 "alerts targeting unsuspecting users globally."
@@ -1098,30 +976,30 @@ msgstr ""
 "새로운 사이버 공격의 물결은 의심하지 않는 전 세계 사용자를 대상으로 가짜 소프트웨어 업데이트 알림을 통해 멀웨어를 유포합니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:338 .\home\templates\pages\index.html:349
-#: .\home\templates\pages\index.html:360
+#: home/templates/pages/index.html:348 home/templates/pages/index.html:360
+#: home/templates/pages/index.html:372
 msgid "Read More"
 msgstr "자세히 보기"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:347
+#: home/templates/pages/index.html:358
 msgid "AI Shaping the Future of Cyber Defense"
 msgstr "사이버 방어의 미래를 만들어가는 AI"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:348
+#: home/templates/pages/index.html:359
 msgid ""
 "Experts explore how artificial intelligence is transforming threat detection"
 " and proactive cybersecurity measures worldwide."
 msgstr "전문가들이 인공지능이 전 세계적으로 위협 탐지와 선제적 사이버 보안 조치를 어떻게 변화시키고 있는지 살펴봅니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:358
+#: home/templates/pages/index.html:370
 msgid "Zero Trust Security: Why It Matters in 2025"
 msgstr "제로 트러스트 보안: 2025년에 제로 트러스트 보안이 중요한 이유"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:359
+#: home/templates/pages/index.html:371
 msgid ""
 "With rising remote work trends, the zero-trust model becomes essential in "
 "securing networks beyond traditional perimeters."
@@ -1129,17 +1007,17 @@ msgstr ""
 "원격 근무가 증가하는 추세에 따라 제로 트러스트 모델은 기존의 경계를 넘어 네트워크를 보호하는 데 필수적인 요소가 되었습니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:377
+#: home/templates/pages/index.html:391
 msgid "Testimonial"
 msgstr "고객 평가"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:378
+#: home/templates/pages/index.html:392
 msgid "What Our Clients Say"
 msgstr "고객의 의견"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:384
+#: home/templates/pages/index.html:397
 msgid ""
 "\"We have been working with Hardhat for over a year now, and their "
 "cybersecurity services have been a game-changer for our business. From "
@@ -1152,12 +1030,12 @@ msgstr ""
 " 팀입니다. 적극 추천합니다.\""
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:385
+#: home/templates/pages/index.html:398
 msgid "James Thompson, CTO, Tech Innovations Ltd."
 msgstr "제임스 톰슨, CTO, Tech Innovations Ltd."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:388
+#: home/templates/pages/index.html:401
 msgid ""
 "\"As a small business, we were initially hesitant about investing in "
 "cybersecurity. However, after partnering with Hardhat, we quickly realized "
@@ -1172,12 +1050,12 @@ msgstr ""
 "되었습니다.\""
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:389
+#: home/templates/pages/index.html:402
 msgid "Sarah Mitchell, Founder, EcoProducts Co."
 msgstr "사라 미첼, 에코프로덕트 설립자, 에코프로덕트(주)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:392
+#: home/templates/pages/index.html:405
 msgid ""
 "\"In the fast-paced world of finance, cybersecurity is not a luxury—it's a "
 "necessity. Hardhat has been instrumental in fortifying our defenses against "
@@ -1191,27 +1069,27 @@ msgstr ""
 "고객의 신뢰를 유지하는 데 큰 도움이 되었습니다. 최고의 사이버 보안 파트너입니다!\""
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:393
+#: home/templates/pages/index.html:406
 msgid "David Harris, Risk Manager, FinSecure Solutions"
 msgstr "David Harris, 위험 관리자, FinSecure Solutions"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:405
+#: home/templates/pages/index.html:418
 msgid "FAQ"
 msgstr "자주 묻는 질문"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:406
+#: home/templates/pages/index.html:419
 msgid "What Our Clients Recently ask"
 msgstr "최근 고객이 자주 묻는 질문"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:411
+#: home/templates/pages/index.html:424
 msgid "What is cybersecurity and why do I need it? "
 msgstr "사이버 보안이란 무엇이며 왜 필요한가요?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:414
+#: home/templates/pages/index.html:427
 msgid ""
 "Cybersecurity is the practice of protecting systems, networks, and programs "
 "from digital attacks, data breaches, and other cyber threats. It is "
@@ -1222,12 +1100,12 @@ msgstr ""
 " 악의적인 활동으로부터 민감한 정보를 보호하는 것은 필수적입니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:420
+#: home/templates/pages/index.html:433
 msgid "How can I protect my business from cyber threats? "
 msgstr "사이버 위협으로부터 비즈니스를 보호하려면 어떻게 해야 하나요?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:423
+#: home/templates/pages/index.html:436
 msgid ""
 "Our cybersecurity services offer comprehensive solutions including threat "
 "monitoring, data encryption, firewall protection, penetration testing, and "
@@ -1237,12 +1115,12 @@ msgstr ""
 "이러한 조치를 통해 사이버 위협의 위험을 줄일 수 있습니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:429
+#: home/templates/pages/index.html:442
 msgid "What is a data breach and how can I prevent one? "
 msgstr "데이터 유출이란 무엇이며 어떻게 예방할 수 있나요?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:432
+#: home/templates/pages/index.html:445
 msgid ""
 "A data breach occurs when sensitive information is accessed or stolen by "
 "unauthorized individuals. Preventive measures include securing networks, "
@@ -1253,106 +1131,203 @@ msgstr ""
 "사용, 민감한 데이터 암호화, 정기적인 보안 프로토콜 업데이트 등이 포함됩니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:443
+#: home/templates/pages/index.html:458
 msgid "Announcement"
 msgstr "공지 사항"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:447
+#: home/templates/pages/index.html:462
 msgid "{{ announcement_message }}"
 msgstr "{{ announcement_message }}"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:450
+#: home/templates/pages/index.html:465
 msgid "Close"
 msgstr "닫기"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\publishedblog.html:57
+#: home/templates/pages/publishedblog.html:57
 msgid "No blogs have been published yet."
 msgstr "아직 게시된 블로그가 없습니다."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:22
-msgid "Full-Service Cybersecurity Agency"
-msgstr "풀서비스 사이버 보안 대행사"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:24
-msgid ""
-"\n"
-"                        Hardhat Enterprises enhances white-hat cybersecurity by safeguarding assets, reducing threats, and thwarting vulnerability exploits. Our cybersecurity services, including penetration testing and open-source security tools, address market gaps and secure your digital assets.\n"
-"                        "
-msgstr ""
-"\n"
-"                        하드햇 엔터프라이즈는 자산을 보호하고, 위협을 줄이고, 취약점 악용을 차단하여 화이트햇 사이버 보안을 강화합니다. 모의 침투 테스트 및 오픈 소스 보안 도구를 포함한 당사의 사이버 보안 서비스는 시장의 격차를 해소하고 디지털 자산을 보호합니다.\n"
-"                        "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:42
-msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
-msgstr "<span class=\"fw-bold\">사이버 보안 서비스</span>"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:43
-msgid ""
-"Explore how Hardhat Enterprises protects your organization with advanced "
-"white-hat cybersecurity solutions."
-msgstr "하드햇 엔터프라이즈가 고급 화이트햇 사이버 보안 솔루션으로 조직을 보호하는 방법을 알아보세요."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:48
-msgid "Penetration Testing Services"
-msgstr "모의 침투 테스트 서비스"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:49
-msgid ""
-"We provide thorough penetration testing services to identify vulnerabilities"
-" in your systems and applications, ensuring robust cybersecurity protection."
-msgstr "저희는 철저한 모의 침투 테스트 서비스를 제공하여 시스템과 애플리케이션의 취약점을 파악하고 강력한 사이버 보안을 보장합니다."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:52
-msgid "Secure Code Review"
-msgstr "보안 코드 검토"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:53
-msgid ""
-"Our experts offer secure code review services to ensure your code is free "
-"from vulnerabilities, safeguarding your applications from cyber threats."
-msgstr ""
-"저희 전문가들이 안전한 코드 검토 서비스를 제공하여 코드에 취약점이 없는지 확인하여 사이버 위협으로부터 애플리케이션을 보호합니다."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:56
-msgid "Open-Source Security Tools"
-msgstr "오픈 소스 보안 도구"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:57
-msgid ""
-"We develop open-source security tools to address market gaps, empowering "
-"organizations with ethical hacking tools for threat mitigation."
-msgstr "저희는 시장의 격차를 해소하기 위해 오픈소스 보안 도구를 개발하여 조직에 위협 완화를 위한 윤리적 해킹 도구를 제공합니다."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:72
-msgid "Work With Our Cybersecurity Agency"
-msgstr "사이버 보안 기관과 협력"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:73
-msgid "Tell us about your cybersecurity needs!"
-msgstr "사이버 보안에 대한 요구 사항을 알려주세요!"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:97
-msgid "How can our cybersecurity services help you?"
-msgstr "사이버 보안 서비스가 어떤 도움을 줄 수 있나요?"
-
-# [auto-translated provider=DeepL]
-#: .\home\validators.py:19
+#: home/validators.py:19
 msgid "Enter a valid student ID. This value must contain 9 digits only"
 msgstr "유효한 학생 ID를 입력합니다. 이 값은 9자리 숫자만 포함해야 합니다"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Email must be valid email."
+#~ msgstr "이메일은 유효한 이메일이어야 합니다."
+
+# [auto-translated provider=DeepL]
+#~ msgid "<span class=\"fw-bold\">Our</span> history"
+#~ msgstr "<span class=\"fw-bold\">우리</span> 연혁"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Present"
+#~ msgstr "현재"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Established an incident response team and provided remote work\n"
+#~ "                  security solutions. Actively engaged with the global\n"
+#~ "                  cybersecurity community. Continued growth, adapting to\n"
+#~ "                  emerging threats and technologies.\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  사고 대응팀 구축 및 원격 근무 제공\n"
+#~ "                  보안 솔루션을 제공했습니다. 글로벌 사이버 보안 커뮤니티에 적극적으로 참여\n"
+#~ "                  사이버 보안 커뮤니티에 적극적으로 참여. 새로운 위협과 기술에 적응하며 지속적인 성장\n"
+#~ "                  지속적인 성장, 새로운 위협과 기술에 적응.\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Technology and Innovation"
+#~ msgstr "기술 및 혁신"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Introduced advanced threat detection technologies. Established\n"
+#~ "                  a cybersecurity training academy and embraced AI integration.\n"
+#~ "                  Released a proprietary threat intelligence platform.\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  고급 위협 탐지 기술 도입. 설립\n"
+#~ "                  사이버 보안 교육 아카데미를 설립하고 AI 통합을 수용했습니다.\n"
+#~ "                  독점적인 위협 인텔리전스 플랫폼 출시.\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Growth and Recognition"
+#~ msgstr "성장과 인정"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Expanded services to include penetration testing and\n"
+#~ "                  vulnerability assessments. Formed strategic partnerships and\n"
+#~ "                  received industry awards. Achieved international expansion and\n"
+#~ "                  collaborated on a major research project.\\\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  침투 테스트 및 취약성 평가를 포함하도록 서비스 확장\n"
+#~ "                  취약성 평가로 서비스를 확장했습니다. 전략적 파트너십을 체결하고\n"
+#~ "                  업계 상을 수상했습니다. 국제적 확장 달성 및\n"
+#~ "                  주요 연구 프로젝트에 협력했습니다\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Establishment and Early Success"
+#~ msgstr "설립 및 초기 성공"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
+#~ "                  Initial focus on basic cybersecurity awareness training and\n"
+#~ "                  consulting. Secured first clients and gained a reputation for\n"
+#~ "                  reliable services.\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  사이버 보안 애호가들이 모여 2022년에 설립했습니다.\n"
+#~ "                  초기에는 기본적인 사이버 보안 인식 교육과\n"
+#~ "                  컨설팅. 첫 고객을 확보하고 신뢰할 수 있는 서비스로 명성을 얻었습니다\n"
+#~ "                  신뢰할 수 있는 서비스.\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Want to work with us?"
+#~ msgstr "함께 일하고 싶으신가요?"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Awesome! Tell us about yourself"
+#~ msgstr "멋지네요! 자신에 대해 알려주세요"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Your Name"
+#~ msgstr "사용자 이름"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Your Message"
+#~ msgstr "귀하의 메시지"
+
+# [auto-translated provider=DeepL]
+#~ msgid "How can we help you?"
+#~ msgstr "무엇을 도와드릴까요?"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Send Message"
+#~ msgstr "메시지 보내기"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Full-Service Cybersecurity Agency"
+#~ msgstr "풀서비스 사이버 보안 대행사"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                        Hardhat Enterprises enhances white-hat cybersecurity by safeguarding assets, reducing threats, and thwarting vulnerability exploits. Our cybersecurity services, including penetration testing and open-source security tools, address market gaps and secure your digital assets.\n"
+#~ "                        "
+#~ msgstr ""
+#~ "\n"
+#~ "                        하드햇 엔터프라이즈는 자산을 보호하고, 위협을 줄이고, 취약점 악용을 차단하여 화이트햇 사이버 보안을 강화합니다. 모의 침투 테스트 및 오픈 소스 보안 도구를 포함한 당사의 사이버 보안 서비스는 시장의 격차를 해소하고 디지털 자산을 보호합니다.\n"
+#~ "                        "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
+#~ msgstr "<span class=\"fw-bold\">사이버 보안 서비스</span>"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "Explore how Hardhat Enterprises protects your organization with advanced "
+#~ "white-hat cybersecurity solutions."
+#~ msgstr "하드햇 엔터프라이즈가 고급 화이트햇 사이버 보안 솔루션으로 조직을 보호하는 방법을 알아보세요."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Penetration Testing Services"
+#~ msgstr "모의 침투 테스트 서비스"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "We provide thorough penetration testing services to identify vulnerabilities"
+#~ " in your systems and applications, ensuring robust cybersecurity protection."
+#~ msgstr "저희는 철저한 모의 침투 테스트 서비스를 제공하여 시스템과 애플리케이션의 취약점을 파악하고 강력한 사이버 보안을 보장합니다."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Secure Code Review"
+#~ msgstr "보안 코드 검토"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "Our experts offer secure code review services to ensure your code is free "
+#~ "from vulnerabilities, safeguarding your applications from cyber threats."
+#~ msgstr ""
+#~ "저희 전문가들이 안전한 코드 검토 서비스를 제공하여 코드에 취약점이 없는지 확인하여 사이버 위협으로부터 애플리케이션을 보호합니다."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Open-Source Security Tools"
+#~ msgstr "오픈 소스 보안 도구"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "We develop open-source security tools to address market gaps, empowering "
+#~ "organizations with ethical hacking tools for threat mitigation."
+#~ msgstr "저희는 시장의 격차를 해소하기 위해 오픈소스 보안 도구를 개발하여 조직에 위협 완화를 위한 윤리적 해킹 도구를 제공합니다."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Work With Our Cybersecurity Agency"
+#~ msgstr "사이버 보안 기관과 협력"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Tell us about your cybersecurity needs!"
+#~ msgstr "사이버 보안에 대한 요구 사항을 알려주세요!"
+
+# [auto-translated provider=DeepL]
+#~ msgid "How can our cybersecurity services help you?"
+#~ msgstr "사이버 보안 서비스가 어떤 도움을 줄 수 있나요?"

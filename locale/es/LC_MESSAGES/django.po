@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-20 00:50+1000\n"
+"POT-Creation-Date: 2025-09-06 12:19+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,120 +19,112 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:59 .\home\context_processors.py:60
-#: .\home\templates\admin\home\app_index.html:7
-#: .\home\templates\includes\footer.html:50
-#: .\home\templates\includes\navigation.html:51
+#: home/context_processors.py:59 home/context_processors.py:60
+#: home/templates/admin/home/app_index.html:7
+#: home/templates/includes/footer.html:50
+#: home/templates/includes/navigation.html:52
 msgid "Home"
 msgstr "Inicio"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:61 .\home\context_processors.py:62
-#: .\home\templates\includes\footer.html:72
+#: home/context_processors.py:61 home/context_processors.py:62
+#: home/templates/includes/footer.html:72
 msgid "About Us"
 msgstr "Quiénes somos"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:63 .\home\templates\pages\about.html:39
+#: home/context_processors.py:63 home/templates/pages/about.html:40
 msgid "What we do"
 msgstr "Qué hacemos"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:64 .\home\templates\includes\footer.html:74
+#: home/context_processors.py:64 home/templates/includes/footer.html:74
 msgid "Contact Us"
 msgstr "Contacte con nosotros"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:65
-#| msgid ""
+#: home/context_processors.py:65
 msgid "Our Projects"
 msgstr "Nuestros proyectos"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:66
+#: home/context_processors.py:66
 msgid "Upload Image"
 msgstr "Cargar imagen"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:67
-#: .\home\templates\includes\navigation.html:169
+#: home/context_processors.py:67 home/templates/includes/navigation.html:170
 msgid "Blog"
 msgstr "Blog"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:68
-#: .\home\templates\includes\navigation.html:177
-#: .\home\templates\pages\publishedblog.html:8
+#: home/context_processors.py:68 home/templates/includes/navigation.html:178
+#: home/templates/pages/publishedblog.html:8
 msgid "Published Blogs"
 msgstr "Blogs publicados"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:69
-#: .\home\templates\includes\navigation.html:189
+#: home/context_processors.py:69 home/templates/includes/navigation.html:190
 msgid "Discover Hardhat"
 msgstr "Descubra el casco"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:70
-#: .\home\templates\includes\navigation.html:195
+#: home/context_processors.py:70 home/templates/includes/navigation.html:196
 msgid "Internships"
 msgstr "Prácticas"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:71
-#: .\home\templates\includes\navigation.html:198
+#: home/context_processors.py:71 home/templates/includes/navigation.html:199
 msgid "Job Alerts"
 msgstr "Alertas de empleo"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:72
-#: .\home\templates\includes\navigation.html:208
+#: home/context_processors.py:72 home/templates/includes/navigation.html:212
 msgid "Cyber Challenges"
 msgstr "Retos cibernéticos"
 
 # [auto-translated provider=DeepL]
-#: .\home\context_processors.py:73
-#: .\home\templates\includes\navigation.html:220
+#: home/context_processors.py:73 home/templates/includes/navigation.html:224
 msgid "Quiz"
 msgstr "Cuestionario"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:35
+#: home/forms.py:35
 msgid "Email"
 msgstr "Correo electrónico"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:41 .\home\forms.py:137
+#: home/forms.py:41 home/forms.py:124
 msgid "Your Password"
 msgstr "Su contraseña"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:45 .\home\forms.py:141
+#: home/forms.py:45 home/forms.py:128
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:54 .\home\forms.py:150
+#: home/forms.py:54 home/forms.py:137
 msgid "Password must be at least 8 characters long."
 msgstr "La contraseña debe tener al menos 8 caracteres."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:57 .\home\forms.py:153
+#: home/forms.py:57 home/forms.py:140
 msgid "Password must include at least one lowercase letter."
 msgstr "La contraseña debe incluir al menos una letra minúscula."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:60 .\home\forms.py:156
+#: home/forms.py:60 home/forms.py:143
 msgid "Password must include at least one uppercase letter."
 msgstr "La contraseña debe incluir al menos una letra mayúscula."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:63 .\home\forms.py:159
+#: home/forms.py:63 home/forms.py:146
 msgid "Password must include at least one number."
 msgstr "La contraseña debe incluir al menos un número."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:66 .\home\forms.py:162
+#: home/forms.py:66 home/forms.py:149
 msgid ""
 "Password must include at least one special character (@, $, !, %, *, ?, &)."
 msgstr ""
@@ -140,152 +132,151 @@ msgstr ""
 "&)."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:81
+#: home/forms.py:81
 msgid "Email must match your Deakin email."
 msgstr ""
 "El correo electrónico debe coincidir con su correo electrónico de Deakin."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:91
+#: home/forms.py:90 home/forms.py:165
 msgid "First Name"
 msgstr "Nombre"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:92
+#: home/forms.py:91 home/forms.py:166
 msgid "Last Name"
 msgstr "Apellido"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:93
+#: home/forms.py:92
 msgid "Deakin Email Address"
 msgstr "Dirección de correo electrónico de Deakin"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:126
+#: home/forms.py:113
 msgid "Business Email"
 msgstr "Correo electrónico profesional"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:132
+#: home/forms.py:119
 msgid "Business Name"
 msgstr "Nombre comercial"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:174
-msgid "Email must be valid email."
-msgstr "El correo electrónico debe ser válido."
+#: home/forms.py:167
+#, fuzzy
+#| msgid "Business Email"
+msgid "Business Email Address"
+msgstr "Correo electrónico profesional"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:184 .\home\forms.py:248
+#: home/forms.py:181 home/forms.py:238
 msgid "Password"
 msgstr "Contraseña"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:203 .\home\forms.py:231
+#: home/forms.py:198 home/forms.py:221
 msgid "Too many login attempts. Please try again later."
 msgstr "Demasiados intentos de conexión. Vuelva a intentarlo más tarde."
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:284 .\home\templates\pages\about.html:582
-#: .\home\templates\pages\what_we_do.html:88
+#: home/forms.py:276
 msgid "Your Email"
 msgstr "Su correo electrónico"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:289 .\home\forms.py:300
+#: home/forms.py:282 home/forms.py:294
 msgid "New Password"
 msgstr "Nueva contraseña"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:292 .\home\forms.py:303
+#: home/forms.py:285 home/forms.py:297
 msgid "Confirm New Password"
 msgstr "Confirmar nueva contraseña"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:297
+#: home/forms.py:291
 msgid "Old Password"
 msgstr "Contraseña antigua"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:307
+#: home/forms.py:300
 msgid "Deakin Student ID"
 msgstr "Carné de estudiante de Deakin"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:310
+#: home/forms.py:303
 msgid "Year"
 msgstr "Año"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:451
-#| msgid ""
+#: home/forms.py:484
 msgid "Your name"
 msgstr "Su nombre"
 
 # [auto-translated provider=DeepL]
-#: .\home\forms.py:452
-#| msgid ""
+#: home/forms.py:485
 msgid "Your title"
 msgstr "Su título"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\forms.py:453
+#: home/forms.py:486
 msgid "Your description"
 msgstr "Su descripción"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:27
+#: home/mixins.py:27
 msgid "Superuser must have is_superuser = True"
 msgstr "El superusuario debe tener is_superuser = True"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:29
+#: home/mixins.py:29
 msgid "Superuser must have is_staff = True"
 msgstr "El superusuario debe tener is_staff = True"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:39 .\home\models.py:97
+#: home/mixins.py:39 home/models.py:97
 msgid "created_at"
 msgstr "fecha_de_creación"
 
 # [auto-translated provider=DeepL]
-#: .\home\mixins.py:40 .\home\models.py:98
+#: home/mixins.py:40 home/models.py:98
 msgid "updated_at"
 msgstr "actualizado_a"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:74
+#: home/models.py:74
 msgid "first name"
 msgstr "nombre de pila"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:75
+#: home/models.py:75
 msgid "last name"
 msgstr "apellido"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:76
+#: home/models.py:76
 msgid "deakin email address"
 msgstr "dirección de correo electrónico de deakin"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:80
+#: home/models.py:80
 msgid "staff status"
 msgstr "estatuto del personal"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:82
+#: home/models.py:82
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 "Indica si el usuario puede iniciar sesión en este sitio de administración."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:85
+#: home/models.py:85
 msgid "active"
 msgstr "activo"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:88
+#: home/models.py:88
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
@@ -294,72 +285,84 @@ msgstr ""
 "opción en lugar de eliminar cuentas."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:93
+#: home/models.py:93
 msgid "verified"
 msgstr "verificado"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:95
+#: home/models.py:95
 msgid "Designates whether the user has verified their account."
 msgstr "Indica si el usuario ha verificado su cuenta."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:114
+#: home/models.py:114
 msgid "user"
 msgstr "usuario"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:115
+#: home/models.py:115
 msgid "users"
 msgstr "usuarios"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:191
+#: home/models.py:191
 msgid "project title"
 msgstr "título del proyecto"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:200
+#: home/models.py:192
+msgid "archived"
+msgstr "archivado"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/models.py:193
+#, fuzzy
+#| msgid "Your description"
+msgid "project description"
+msgstr "Su descripción"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:202
 msgid "course title"
 msgstr "título del curso"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:201
+#: home/models.py:203
 msgid "course code"
 msgstr "código del curso"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:202
+#: home/models.py:204
 msgid "postgraduate status"
 msgstr "estatuto de postgraduado"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:256
+#: home/models.py:258
 msgid "student_id"
 msgstr "student_id"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:259
+#: home/models.py:261
 msgid "Required. Enter Deakin Student ID. Digits only."
 msgstr "Obligatorio. Introduzca el ID de estudiante de Deakin. Sólo dígitos."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:262
+#: home/models.py:264
 msgid "A user with that Student ID already exists."
 msgstr "Ya existe un usuario con ese ID de estudiante."
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:267
+#: home/models.py:269
 msgid "trimester"
 msgstr "trimestre"
 
 # [auto-translated provider=DeepL]
-#: .\home\models.py:268
+#: home/models.py:270
 msgid "unit"
 msgstr "unidad"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:10
+#: home/templates/includes/footer.html:10
 msgid ""
 "Hardhat Enterprises offers open-source protection, so it's free for "
 "everyone."
@@ -368,202 +371,212 @@ msgstr ""
 "gratuita para todos."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:49
+#: home/templates/includes/footer.html:49
 msgid "Blog Page"
 msgstr "Página del blog"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:92
+#: home/templates/includes/footer.html:73
+msgid "Our Tools"
+msgstr "Nuestras herramientas"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:92
 msgid "Feedback"
 msgstr "Comentarios"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:99
+#: home/templates/includes/footer.html:99
 msgid "The OWASP Top 10"
 msgstr "Los 10 mejores de OWASP"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:101
+#: home/templates/includes/footer.html:101
 msgid "Learn more about cyber security standards and applications"
 msgstr "Más información sobre normas y aplicaciones de ciberseguridad"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:110
+#: home/templates/includes/footer.html:110
 msgid "OWASP Top 10"
 msgstr "Top 10 de OWASP"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:144
+#: home/templates/includes/footer.html:144
 msgid "This page has been visited "
 msgstr "Esta página ha sido visitada"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:146
+#: home/templates/includes/footer.html:146
 msgid "times!"
 msgstr "¡tiempos!"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\footer.html:156
+#: home/templates/includes/footer.html:156
 msgid "Last Updated:"
 msgstr "Última actualización:"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:39
-#: .\home\templates\includes\navigation.html:237
+#: home/templates/includes/navigation.html:40
+#: home/templates/includes/navigation.html:241
 msgid "Search..."
 msgstr "Busca..."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:57
+#: home/templates/includes/navigation.html:58
 msgid "Upskilling"
 msgstr "Perfeccionamiento"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:64
+#: home/templates/includes/navigation.html:65
 msgid "Dashboard"
 msgstr "Cuadro de mandos"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:69
+#: home/templates/includes/navigation.html:70
 msgid "Skills"
 msgstr "Habilidades"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:82
+#: home/templates/includes/navigation.html:83
 msgid "Admin Settings"
 msgstr "Configuración de administración"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:88
+#: home/templates/includes/navigation.html:89
 msgid "User Management"
 msgstr "Gestión de usuarios"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:91
+#: home/templates/includes/navigation.html:92
 msgid "Project Assignment"
 msgstr "Asignación de proyectos"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:94
+#: home/templates/includes/navigation.html:95
 msgid "Project Teams"
 msgstr "Equipos de proyecto"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:97
+#: home/templates/includes/navigation.html:98
 msgid "Review Blogs"
 msgstr "Blogs de revisión"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:100
+#: home/templates/includes/navigation.html:101
 msgid "Reports"
 msgstr "Informes"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:110
+#: home/templates/includes/navigation.html:111
 msgid "About"
 msgstr "Acerca de"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:116
-#: .\home\templates\pages\index.html:147
+#: home/templates/includes/navigation.html:117
+#: home/templates/pages/index.html:155
 msgid "Projects"
 msgstr "Proyectos"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:125
-#: .\home\templates\pages\index.html:157
+#: home/templates/includes/navigation.html:126
+#: home/templates/pages/index.html:165
 msgid "AppAttack"
 msgstr "AppAttack"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:130
-#: .\home\templates\pages\index.html:172
+#: home/templates/includes/navigation.html:131
+#: home/templates/pages/index.html:180
 msgid "PT-GUI"
 msgstr "PT-GUI"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:135
-#: .\home\templates\pages\index.html:202
+#: home/templates/includes/navigation.html:136
+#: home/templates/pages/index.html:210
 msgid "Smishing Detection"
 msgstr "Detección de Smishing"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:140
+#: home/templates/includes/navigation.html:141
 msgid "Deakin CyberSafe VR"
 msgstr "Deakin CyberSafe VR"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:145
+#: home/templates/includes/navigation.html:146
 msgid "The Policy Deployment Engine (New)"
 msgstr "El motor de despliegue de políticas (Nuevo)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:150
+#: home/templates/includes/navigation.html:151
 msgid "Deakin Threat mirror (Finished)"
 msgstr "Espejo de amenazas Deakin (Finalizado)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:159
+#: home/templates/includes/navigation.html:160
 msgid "Malware (Finished)"
 msgstr "Malware (Finalizado)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:176
+#: home/templates/includes/navigation.html:177
 msgid "Create a Blog"
 msgstr "Crear un blog"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:183
+#: home/templates/includes/navigation.html:184
 msgid "Careers"
 msgstr "Carreras profesionales"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:192
+#: home/templates/includes/navigation.html:193
 msgid "All Jobs"
 msgstr "Todos los empleos"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:215
+#: home/templates/includes/navigation.html:202
+msgid "Career Path Finder"
+msgstr "Buscador de carreras profesionales"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:219
 msgid "All Challenges"
 msgstr "Todos los retos"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:257
+#: home/templates/includes/navigation.html:261
 msgid "Logout"
 msgstr "Cierre de sesión"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:279
+#: home/templates/includes/navigation.html:283
 msgid "Sign In"
 msgstr "Iniciar sesión"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:291
+#: home/templates/includes/navigation.html:295
 msgid "Sign Up"
 msgstr "Inscribirse"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\includes\navigation.html:313
+#: home/templates/includes/navigation.html:318
 msgid "Language"
 msgstr "Idioma"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:315
+#: home/templates/layouts/base.html:315
 msgid "Recently Viewed Pages"
 msgstr "Páginas vistas recientemente"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:333
+#: home/templates/layouts/base.html:333
 msgid "💬 Chat with us"
 msgstr "💬 Chatea con nosotros"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:338
+#: home/templates/layouts/base.html:338
 msgid "Let's chat?"
 msgstr "¿Charlamos?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:343
+#: home/templates/layouts/base.html:343
 msgid ""
 "Please fill out the form below to start chatting with the next available "
 "agent."
@@ -572,33 +585,32 @@ msgstr ""
 "agente disponible."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:345
+#: home/templates/layouts/base.html:345
 msgid "Enter your name"
 msgstr "Introduzca su nombre"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:346
+#: home/templates/layouts/base.html:346
 msgid "Enter your email"
 msgstr "Introduzca su dirección de correo electrónico"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:347
+#: home/templates/layouts/base.html:347
 msgid "Type your message..."
 msgstr "Escribe tu mensaje..."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:349
-#: .\home\templates\pages\blogpage.html:57
+#: home/templates/layouts/base.html:349 home/templates/pages/blogpage.html:57
 msgid "Submit"
 msgstr "Enviar"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:450
+#: home/templates/layouts/base.html:450
 msgid "Session Timeout Warning"
 msgstr "Advertencia de tiempo de espera de la sesión"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:454
+#: home/templates/layouts/base.html:454
 msgid ""
 "Your session will expire in 1 minute due to inactivity. Any unsaved changes "
 "will be lost."
@@ -607,19 +619,19 @@ msgstr ""
 "guardado se perderá."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\layouts\base.html:457
+#: home/templates/layouts/base.html:457
 msgid "Stay Logged In"
 msgstr "Permanecer conectado"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:26
+#: home/templates/pages/about.html:27
 msgid "Full-Service <br class=\"d-none d-md-inline\" />Cyber Security Agency"
 msgstr ""
 "Servicio completo <br class=\"d-none d-md-inline\" />Agencia de "
 "ciberseguridad"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:29
+#: home/templates/pages/about.html:30
 msgid ""
 "\n"
 "            Hardhat can help you secure your webapps, review your code,\n"
@@ -636,37 +648,37 @@ msgstr ""
 "            "
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:53
+#: home/templates/pages/about.html:54
 msgid "Our Team's Kudoboard"
 msgstr "Kudoboard de nuestro equipo"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:55
+#: home/templates/pages/about.html:56
 msgid "Share your appreciation for our team..."
 msgstr "Comparte tu aprecio por nuestro equipo..."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:57
+#: home/templates/pages/about.html:58
 msgid "Choose note color: "
 msgstr "Elige el color de la nota:"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:89
+#: home/templates/pages/about.html:90
 msgid "Add Note"
 msgstr "Añadir nota"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:90
+#: home/templates/pages/about.html:91
 msgid "Clear Board"
 msgstr "Tablero transparente"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:321
+#: home/templates/pages/about.html:321
 msgid "All challenges accepted."
 msgstr "Se aceptan todos los retos."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:323
+#: home/templates/pages/about.html:323
 msgid ""
 " \n"
 "            Hardhat is an experienced and passionate group of cybersecurity\n"
@@ -683,7 +695,7 @@ msgstr ""
 "            "
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:331
+#: home/templates/pages/about.html:331
 msgid ""
 " \n"
 "            With a culture of collaboration and a roster of talent, the Hardhat\n"
@@ -698,279 +710,147 @@ msgstr ""
 "            "
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:377
+#: home/templates/pages/about.html:377
 msgid "Team Members"
 msgstr "Miembros del equipo"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:388
+#: home/templates/pages/about.html:388
 msgid "Projects Secured"
 msgstr "Proyectos asegurados"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:401
+#: home/templates/pages/about.html:401
 msgid "Threats found"
 msgstr "Amenazas detectadas"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:467
-msgid "<span class=\"fw-bold\">Our</span> history"
-msgstr "<span class=\"fw-bold\">Nuestra</span> historia"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:476
-msgid "Present"
-msgstr "Presente"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:478
-msgid ""
-"\n"
-"                  Established an incident response team and provided remote work\n"
-"                  security solutions. Actively engaged with the global\n"
-"                  cybersecurity community. Continued growth, adapting to\n"
-"                  emerging threats and technologies.\n"
-"                  "
-msgstr ""
-"\n"
-"                  Estableció un equipo de respuesta a incidentes y proporcionó trabajo a distancia\n"
-"                  soluciones de seguridad. Participación activa en la comunidad\n"
-"                  mundial de ciberseguridad. Crecimiento continuado, adaptándose a\n"
-"                  amenazas y tecnologías emergentes.\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:488
-msgid "Technology and Innovation"
-msgstr "Tecnología e innovación"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:490
-msgid ""
-"\n"
-"                  Introduced advanced threat detection technologies. Established\n"
-"                  a cybersecurity training academy and embraced AI integration.\n"
-"                  Released a proprietary threat intelligence platform.\n"
-"                  "
-msgstr ""
-"\n"
-"                  Introdujo tecnologías avanzadas de detección de amenazas. Creó\n"
-"                  una academia de formación en ciberseguridad y adoptó la integración de la IA.\n"
-"                  Lanzó una plataforma propia de inteligencia sobre amenazas.\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:499
-msgid "Growth and Recognition"
-msgstr "Crecimiento y reconocimiento"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:501
-msgid ""
-"\n"
-"                  Expanded services to include penetration testing and\n"
-"                  vulnerability assessments. Formed strategic partnerships and\n"
-"                  received industry awards. Achieved international expansion and\n"
-"                  collaborated on a major research project.\\\n"
-"                  "
-msgstr ""
-"\n"
-"                  Servicios ampliados para incluir pruebas de penetración y\n"
-"                  y evaluaciones de vulnerabilidad. Formó asociaciones estratégicas y\n"
-"                  premios del sector. Expansión internacional y\n"
-"                  colaboró en un importante proyecto de investigación\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:511
-msgid "Establishment and Early Success"
-msgstr "Establecimiento y primeros éxitos"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:513
-msgid ""
-"\n"
-"                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
-"                  Initial focus on basic cybersecurity awareness training and\n"
-"                  consulting. Secured first clients and gained a reputation for\n"
-"                  reliable services.\n"
-"                  "
-msgstr ""
-"\n"
-"                  Fundada en 2022 por un grupo de entusiastas de la ciberseguridad.\n"
-"                  Enfoque inicial en formación básica de concienciación sobre ciberseguridad y\n"
-"                  ciberseguridad. Se asegura los primeros clientes y se gana una reputación de\n"
-"                  servicios fiables.\n"
-"                  "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:555
-msgid "Want to work with us?"
-msgstr "¿Quiere trabajar con nosotros?"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:556
-msgid "Awesome! Tell us about yourself"
-msgstr "¡Impresionante! Háblanos de ti"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:564
-#: .\home\templates\pages\what_we_do.html:79
-msgid "Your Name"
-msgstr "Su nombre"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:601
-#: .\home\templates\pages\what_we_do.html:96
-msgid "Your Message"
-msgstr "Su mensaje"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:604
-msgid "How can we help you?"
-msgstr "¿En qué podemos ayudarle?"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\about.html:614
-#: .\home\templates\pages\what_we_do.html:101
-msgid "Send Message"
-msgstr "Enviar mensaje"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:24
-#| msgid ""
+#: home/templates/pages/blogpage.html:24
 msgid "User Blogs"
 msgstr "Blogs de usuarios"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:26
+#: home/templates/pages/blogpage.html:26
 msgid "Please provide your blog details with our company."
 msgstr "Facilite los datos de su blog a nuestra empresa."
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:32
+#: home/templates/pages/blogpage.html:32
 msgid "Share Your Blog"
 msgstr "Comparte tu blog"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:35
+#: home/templates/pages/blogpage.html:35
 msgid "Name:"
 msgstr "Nombre:"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:41
-#| msgid ""
+#: home/templates/pages/blogpage.html:41
 msgid "Blog Title:"
 msgstr "Título del blog:"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:46
+#: home/templates/pages/blogpage.html:46
 msgid "Blog Description:"
 msgstr "Descripción del blog:"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:51
+#: home/templates/pages/blogpage.html:51
 msgid "Image Upload (optional):"
 msgstr "Carga de imágenes (opcional):"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:55
+#: home/templates/pages/blogpage.html:55
 msgid "Reset"
 msgstr "Restablecer"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:64
-#| msgid ""
+#: home/templates/pages/blogpage.html:64
 msgid "Recent Blog Pages"
 msgstr "Páginas recientes del blog"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:77
-#| msgid ""
+#: home/templates/pages/blogpage.html:77
 msgid "No Image"
 msgstr "Sin imagen"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:88
+#: home/templates/pages/blogpage.html:88
 msgid "Edit"
 msgstr "Editar"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:92
+#: home/templates/pages/blogpage.html:92
 msgid "Delete"
 msgstr "Borrar"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:100
+#: home/templates/pages/blogpage.html:100
 msgid "No Blogs Yet"
 msgstr "Aún no hay blogs"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:112
-#| msgid ""
+#: home/templates/pages/blogpage.html:112
 msgid "Edit Blog"
 msgstr "Editar blog"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:120
-#| msgid ""
+#: home/templates/pages/blogpage.html:120
 msgid "Name"
 msgstr "Nombre"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:125
-#| msgid ""
+#: home/templates/pages/blogpage.html:125
 msgid "Blog Title"
 msgstr "Título del blog"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:130
+#: home/templates/pages/blogpage.html:130
 msgid "Blog Description"
 msgstr "Descripción del blog"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:135
+#: home/templates/pages/blogpage.html:135
 msgid "Change Image (optional)"
 msgstr "Cambiar imagen (opcional)"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:141
+#: home/templates/pages/blogpage.html:141
 msgid "Cancel"
 msgstr "Cancelar"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\blogpage.html:142
-#| msgid ""
+#: home/templates/pages/blogpage.html:142
 msgid "Save Changes"
 msgstr "Guardar cambios"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:20
+#: home/templates/pages/index.html:28
 msgid "Hardhat Enterprises"
 msgstr "Empresas con casco"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:21
+#: home/templates/pages/index.html:29
 msgid "Security is a necessity. Not a choice"
 msgstr "La seguridad es una necesidad. No una elección"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:23
+#: home/templates/pages/index.html:31
 msgid "Explore Projects"
 msgstr "Explorar proyectos"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:24
+#: home/templates/pages/index.html:32
 msgid "Join Us"
 msgstr "Únete a nosotros"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:97
+#: home/templates/pages/index.html:105
 msgid "Company Vision"
 msgstr "Visión de la empresa"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:98
+#: home/templates/pages/index.html:106
 msgid ""
 "Hardhat Enterprises is an organisation that aims to create cyber weapons and"
 " tools that can be used to empower white-hat operations. All deliverables "
@@ -986,12 +866,12 @@ msgstr ""
 "satisfacer una necesidad del mercado que aún no está cubierta."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:104
+#: home/templates/pages/index.html:112
 msgid "Company Mission"
 msgstr "Misión de la empresa"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:105
+#: home/templates/pages/index.html:113
 msgid ""
 "Achieve an engaging learning experience for students within the company. An "
 "opportunity for students to gain cross department/project experience and the"
@@ -1003,7 +883,7 @@ msgstr ""
 "conocimientos fuera de su equipo de proyecto."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:158
+#: home/templates/pages/index.html:166
 msgid ""
 "We deliver comprehensive reports to clients, providing actionable insights "
 "to enhance code security. With a commitment to excellence, AppAttack "
@@ -1015,15 +895,15 @@ msgstr ""
 "proactiva sus activos digitales"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:160 .\home\templates\pages\index.html:175
-#: .\home\templates\pages\index.html:190 .\home\templates\pages\index.html:205
-#: .\home\templates\pages\index.html:220 .\home\templates\pages\index.html:235
-#: .\home\templates\pages\index.html:249
+#: home/templates/pages/index.html:168 home/templates/pages/index.html:183
+#: home/templates/pages/index.html:198 home/templates/pages/index.html:213
+#: home/templates/pages/index.html:228 home/templates/pages/index.html:243
+#: home/templates/pages/index.html:258
 msgid "Learn More"
 msgstr "Más información"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:173
+#: home/templates/pages/index.html:181
 msgid ""
 "Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal "
 "for modern penetration testers. Born from the innovative minds at PT-GUI, "
@@ -1036,13 +916,12 @@ msgstr ""
 "revolución en la práctica de la ciberseguridad."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:187
-#| msgid ""
+#: home/templates/pages/index.html:195
 msgid "CyberSafe VR"
 msgstr "CyberSafe VR"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:188
+#: home/templates/pages/index.html:196
 msgid ""
 "Deakin CyberSafe VR revolutionises cybersecurity training for small "
 "businesses by using interactive VR technology to blend theory with practical"
@@ -1054,7 +933,7 @@ msgstr ""
 "empleados que toman medidas de ciberseguridad."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:203
+#: home/templates/pages/index.html:211
 msgid ""
 "Smishing Detection aims to develop an innovative smishing detection app for "
 "Android and iOS devices to moderate the risks associated with SMS phishing "
@@ -1065,12 +944,12 @@ msgstr ""
 "los riesgos asociados a los ataques de phishing por SMS."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:217
+#: home/templates/pages/index.html:225
 msgid "Threat Mirror <br>(Project Paused)"
 msgstr "Amenaza Espejo <br>(Proyecto Pausado)"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:218
+#: home/templates/pages/index.html:226
 msgid ""
 "Threat Mirror aims to investigate open-source threat intelligence platforms,"
 " assessing their suitability and adaptability for SMEs and developing "
@@ -1081,12 +960,12 @@ msgstr ""
 "para las PYME y las economías en desarrollo."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:232
+#: home/templates/pages/index.html:240
 msgid "Malware Visualization"
 msgstr "Visualización de malware"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:233
+#: home/templates/pages/index.html:241
 msgid ""
 "The Malware Visualisation project creates a user-friendly tool that "
 "simplifies malware analysis by integrating with existing visual analytics "
@@ -1097,13 +976,12 @@ msgstr ""
 "aplicaciones de análisis visual existentes."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:246
-#| msgid ""
+#: home/templates/pages/index.html:255
 msgid "The Policy Deployment Engine"
 msgstr "El motor de despliegue de políticas"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:247
+#: home/templates/pages/index.html:256
 msgid ""
 "The Policy Deployment Engine is a tool that allows users to deploy policies "
 "to their systems."
@@ -1112,17 +990,17 @@ msgstr ""
 "usuarios desplegar políticas en sus sistemas."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:329
+#: home/templates/pages/index.html:338
 msgid "Cybersecurity News"
 msgstr "Noticias sobre ciberseguridad"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:336
+#: home/templates/pages/index.html:346
 msgid "TROX Stealer Malware Spreads via Fake Updates"
 msgstr "El malware TROX Stealer se propaga a través de actualizaciones falsas"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:337
+#: home/templates/pages/index.html:347
 msgid ""
 "A new wave of cyberattacks spreads malware through fake software update "
 "alerts targeting unsuspecting users globally."
@@ -1132,18 +1010,18 @@ msgstr ""
 "desprevenidos de todo el mundo."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:338 .\home\templates\pages\index.html:349
-#: .\home\templates\pages\index.html:360
+#: home/templates/pages/index.html:348 home/templates/pages/index.html:360
+#: home/templates/pages/index.html:372
 msgid "Read More"
 msgstr "Seguir leyendo"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:347
+#: home/templates/pages/index.html:358
 msgid "AI Shaping the Future of Cyber Defense"
 msgstr "La IA perfila el futuro de la ciberdefensa"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:348
+#: home/templates/pages/index.html:359
 msgid ""
 "Experts explore how artificial intelligence is transforming threat detection"
 " and proactive cybersecurity measures worldwide."
@@ -1153,12 +1031,12 @@ msgstr ""
 "mundo."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:358
+#: home/templates/pages/index.html:370
 msgid "Zero Trust Security: Why It Matters in 2025"
 msgstr "Seguridad de confianza cero: Por qué es importante en 2025"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:359
+#: home/templates/pages/index.html:371
 msgid ""
 "With rising remote work trends, the zero-trust model becomes essential in "
 "securing networks beyond traditional perimeters."
@@ -1168,17 +1046,17 @@ msgstr ""
 "los perímetros tradicionales."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:377
+#: home/templates/pages/index.html:391
 msgid "Testimonial"
 msgstr "Testimonio"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:378
+#: home/templates/pages/index.html:392
 msgid "What Our Clients Say"
 msgstr "Lo que dicen nuestros clientes"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:384
+#: home/templates/pages/index.html:397
 msgid ""
 "\"We have been working with Hardhat for over a year now, and their "
 "cybersecurity services have been a game-changer for our business. From "
@@ -1194,12 +1072,12 @@ msgstr ""
 "siempre va un paso por delante. Muy recomendable\""
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:385
+#: home/templates/pages/index.html:398
 msgid "James Thompson, CTO, Tech Innovations Ltd."
 msgstr "James Thompson, Director Técnico, Tech Innovations Ltd."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:388
+#: home/templates/pages/index.html:401
 msgid ""
 "\"As a small business, we were initially hesitant about investing in "
 "cybersecurity. However, after partnering with Hardhat, we quickly realized "
@@ -1217,12 +1095,12 @@ msgstr ""
 "seguridad digital.\""
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:389
+#: home/templates/pages/index.html:402
 msgid "Sarah Mitchell, Founder, EcoProducts Co."
 msgstr "Sarah Mitchell, fundadora de EcoProducts Co."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:392
+#: home/templates/pages/index.html:405
 msgid ""
 "\"In the fast-paced world of finance, cybersecurity is not a luxury—it's a "
 "necessity. Hardhat has been instrumental in fortifying our defenses against "
@@ -1240,27 +1118,27 @@ msgstr ""
 "primer nivel\""
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:393
+#: home/templates/pages/index.html:406
 msgid "David Harris, Risk Manager, FinSecure Solutions"
 msgstr "David Harris, Director de Riesgos, FinSecure Solutions"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:405
+#: home/templates/pages/index.html:418
 msgid "FAQ"
 msgstr "PREGUNTAS FRECUENTES"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:406
+#: home/templates/pages/index.html:419
 msgid "What Our Clients Recently ask"
 msgstr "Lo que preguntan nuestros clientes"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:411
+#: home/templates/pages/index.html:424
 msgid "What is cybersecurity and why do I need it? "
 msgstr "¿Qué es la ciberseguridad y por qué la necesito?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:414
+#: home/templates/pages/index.html:427
 msgid ""
 "Cybersecurity is the practice of protecting systems, networks, and programs "
 "from digital attacks, data breaches, and other cyber threats. It is "
@@ -1273,12 +1151,12 @@ msgstr ""
 " actividades maliciosas."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:420
+#: home/templates/pages/index.html:433
 msgid "How can I protect my business from cyber threats? "
 msgstr "¿Cómo puedo proteger mi empresa de las ciberamenazas?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:423
+#: home/templates/pages/index.html:436
 msgid ""
 "Our cybersecurity services offer comprehensive solutions including threat "
 "monitoring, data encryption, firewall protection, penetration testing, and "
@@ -1290,12 +1168,12 @@ msgstr ""
 "pueden ayudar a reducir el riesgo de ciberamenazas."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:429
+#: home/templates/pages/index.html:442
 msgid "What is a data breach and how can I prevent one? "
 msgstr "¿Qué es una violación de datos y cómo puedo prevenirla?"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:432
+#: home/templates/pages/index.html:445
 msgid ""
 "A data breach occurs when sensitive information is accessed or stolen by "
 "unauthorized individuals. Preventive measures include securing networks, "
@@ -1308,118 +1186,215 @@ msgstr ""
 "confidenciales y la actualización periódica de los protocolos de seguridad."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:443
+#: home/templates/pages/index.html:458
 msgid "Announcement"
 msgstr "Anuncio"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:447
+#: home/templates/pages/index.html:462
 msgid "{{ announcement_message }}"
 msgstr "{{ mensaje_anuncio }}"
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\index.html:450
+#: home/templates/pages/index.html:465
 msgid "Close"
 msgstr "Cerrar"
 
 # [auto-translated provider=DeepL] [auto-translated provider=DeepL]
-#: .\home\templates\pages\publishedblog.html:57
+#: home/templates/pages/publishedblog.html:57
 msgid "No blogs have been published yet."
 msgstr "Aún no se ha publicado ningún blog."
 
 # [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:22
-msgid "Full-Service Cybersecurity Agency"
-msgstr "Agencia de ciberseguridad de servicio completo"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:24
-msgid ""
-"\n"
-"                        Hardhat Enterprises enhances white-hat cybersecurity by safeguarding assets, reducing threats, and thwarting vulnerability exploits. Our cybersecurity services, including penetration testing and open-source security tools, address market gaps and secure your digital assets.\n"
-"                        "
-msgstr ""
-"\n"
-"                        Hardhat Enterprises mejora la ciberseguridad de sombrero blanco protegiendo los activos, reduciendo las amenazas y frustrando los ataques a las vulnerabilidades. Nuestros servicios de ciberseguridad, que incluyen pruebas de penetración y herramientas de seguridad de código abierto, abordan las carencias del mercado y protegen sus activos digitales.\n"
-"                        "
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:42
-msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
-msgstr "Nuestros <span class=\"fw-bold\">Servicios de Ciberseguridad</span>"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:43
-msgid ""
-"Explore how Hardhat Enterprises protects your organization with advanced "
-"white-hat cybersecurity solutions."
-msgstr ""
-"Descubra cómo Hardhat Enterprises protege su organización con soluciones "
-"avanzadas de ciberseguridad de sombrero blanco."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:48
-msgid "Penetration Testing Services"
-msgstr "Servicios de pruebas de penetración"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:49
-msgid ""
-"We provide thorough penetration testing services to identify vulnerabilities"
-" in your systems and applications, ensuring robust cybersecurity protection."
-msgstr ""
-"Ofrecemos servicios exhaustivos de pruebas de penetración para identificar "
-"vulnerabilidades en sus sistemas y aplicaciones, garantizando una sólida "
-"protección de la ciberseguridad."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:52
-msgid "Secure Code Review"
-msgstr "Revisión segura del código"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:53
-msgid ""
-"Our experts offer secure code review services to ensure your code is free "
-"from vulnerabilities, safeguarding your applications from cyber threats."
-msgstr ""
-"Nuestros expertos ofrecen servicios de revisión de código seguro para "
-"garantizar que su código está libre de vulnerabilidades, salvaguardando sus "
-"aplicaciones de las ciberamenazas."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:56
-msgid "Open-Source Security Tools"
-msgstr "Herramientas de seguridad de código abierto"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:57
-msgid ""
-"We develop open-source security tools to address market gaps, empowering "
-"organizations with ethical hacking tools for threat mitigation."
-msgstr ""
-"Desarrollamos herramientas de seguridad de código abierto para colmar las "
-"lagunas del mercado, dotando a las organizaciones de herramientas de hacking"
-" ético para mitigar las amenazas."
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:72
-msgid "Work With Our Cybersecurity Agency"
-msgstr "Trabaje con nuestra Agencia de Ciberseguridad"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:73
-msgid "Tell us about your cybersecurity needs!"
-msgstr "Háblenos de sus necesidades de ciberseguridad"
-
-# [auto-translated provider=DeepL]
-#: .\home\templates\pages\what_we_do.html:97
-msgid "How can our cybersecurity services help you?"
-msgstr "¿Cómo pueden ayudarle nuestros servicios de ciberseguridad?"
-
-# [auto-translated provider=DeepL]
-#: .\home\validators.py:19
+#: home/validators.py:19
 msgid "Enter a valid student ID. This value must contain 9 digits only"
 msgstr ""
 "Introduzca una identificación de estudiante válida. Este valor debe contener"
 " sólo 9 dígitos"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Email must be valid email."
+#~ msgstr "El correo electrónico debe ser válido."
+
+# [auto-translated provider=DeepL]
+#~ msgid "<span class=\"fw-bold\">Our</span> history"
+#~ msgstr "<span class=\"fw-bold\">Nuestra</span> historia"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Present"
+#~ msgstr "Presente"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Established an incident response team and provided remote work\n"
+#~ "                  security solutions. Actively engaged with the global\n"
+#~ "                  cybersecurity community. Continued growth, adapting to\n"
+#~ "                  emerging threats and technologies.\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  Estableció un equipo de respuesta a incidentes y proporcionó trabajo a distancia\n"
+#~ "                  soluciones de seguridad. Participación activa en la comunidad\n"
+#~ "                  mundial de ciberseguridad. Crecimiento continuado, adaptándose a\n"
+#~ "                  amenazas y tecnologías emergentes.\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Technology and Innovation"
+#~ msgstr "Tecnología e innovación"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Introduced advanced threat detection technologies. Established\n"
+#~ "                  a cybersecurity training academy and embraced AI integration.\n"
+#~ "                  Released a proprietary threat intelligence platform.\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  Introdujo tecnologías avanzadas de detección de amenazas. Creó\n"
+#~ "                  una academia de formación en ciberseguridad y adoptó la integración de la IA.\n"
+#~ "                  Lanzó una plataforma propia de inteligencia sobre amenazas.\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Growth and Recognition"
+#~ msgstr "Crecimiento y reconocimiento"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Expanded services to include penetration testing and\n"
+#~ "                  vulnerability assessments. Formed strategic partnerships and\n"
+#~ "                  received industry awards. Achieved international expansion and\n"
+#~ "                  collaborated on a major research project.\\\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  Servicios ampliados para incluir pruebas de penetración y\n"
+#~ "                  y evaluaciones de vulnerabilidad. Formó asociaciones estratégicas y\n"
+#~ "                  premios del sector. Expansión internacional y\n"
+#~ "                  colaboró en un importante proyecto de investigación\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Establishment and Early Success"
+#~ msgstr "Establecimiento y primeros éxitos"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
+#~ "                  Initial focus on basic cybersecurity awareness training and\n"
+#~ "                  consulting. Secured first clients and gained a reputation for\n"
+#~ "                  reliable services.\n"
+#~ "                  "
+#~ msgstr ""
+#~ "\n"
+#~ "                  Fundada en 2022 por un grupo de entusiastas de la ciberseguridad.\n"
+#~ "                  Enfoque inicial en formación básica de concienciación sobre ciberseguridad y\n"
+#~ "                  ciberseguridad. Se asegura los primeros clientes y se gana una reputación de\n"
+#~ "                  servicios fiables.\n"
+#~ "                  "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Want to work with us?"
+#~ msgstr "¿Quiere trabajar con nosotros?"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Awesome! Tell us about yourself"
+#~ msgstr "¡Impresionante! Háblanos de ti"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Your Name"
+#~ msgstr "Su nombre"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Your Message"
+#~ msgstr "Su mensaje"
+
+# [auto-translated provider=DeepL]
+#~ msgid "How can we help you?"
+#~ msgstr "¿En qué podemos ayudarle?"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Send Message"
+#~ msgstr "Enviar mensaje"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Full-Service Cybersecurity Agency"
+#~ msgstr "Agencia de ciberseguridad de servicio completo"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                        Hardhat Enterprises enhances white-hat cybersecurity by safeguarding assets, reducing threats, and thwarting vulnerability exploits. Our cybersecurity services, including penetration testing and open-source security tools, address market gaps and secure your digital assets.\n"
+#~ "                        "
+#~ msgstr ""
+#~ "\n"
+#~ "                        Hardhat Enterprises mejora la ciberseguridad de sombrero blanco protegiendo los activos, reduciendo las amenazas y frustrando los ataques a las vulnerabilidades. Nuestros servicios de ciberseguridad, que incluyen pruebas de penetración y herramientas de seguridad de código abierto, abordan las carencias del mercado y protegen sus activos digitales.\n"
+#~ "                        "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
+#~ msgstr "Nuestros <span class=\"fw-bold\">Servicios de Ciberseguridad</span>"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "Explore how Hardhat Enterprises protects your organization with advanced "
+#~ "white-hat cybersecurity solutions."
+#~ msgstr ""
+#~ "Descubra cómo Hardhat Enterprises protege su organización con soluciones "
+#~ "avanzadas de ciberseguridad de sombrero blanco."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Penetration Testing Services"
+#~ msgstr "Servicios de pruebas de penetración"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "We provide thorough penetration testing services to identify vulnerabilities"
+#~ " in your systems and applications, ensuring robust cybersecurity protection."
+#~ msgstr ""
+#~ "Ofrecemos servicios exhaustivos de pruebas de penetración para identificar "
+#~ "vulnerabilidades en sus sistemas y aplicaciones, garantizando una sólida "
+#~ "protección de la ciberseguridad."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Secure Code Review"
+#~ msgstr "Revisión segura del código"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "Our experts offer secure code review services to ensure your code is free "
+#~ "from vulnerabilities, safeguarding your applications from cyber threats."
+#~ msgstr ""
+#~ "Nuestros expertos ofrecen servicios de revisión de código seguro para "
+#~ "garantizar que su código está libre de vulnerabilidades, salvaguardando sus "
+#~ "aplicaciones de las ciberamenazas."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Open-Source Security Tools"
+#~ msgstr "Herramientas de seguridad de código abierto"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "We develop open-source security tools to address market gaps, empowering "
+#~ "organizations with ethical hacking tools for threat mitigation."
+#~ msgstr ""
+#~ "Desarrollamos herramientas de seguridad de código abierto para colmar las "
+#~ "lagunas del mercado, dotando a las organizaciones de herramientas de hacking"
+#~ " ético para mitigar las amenazas."
+
+# [auto-translated provider=DeepL]
+#~ msgid "Work With Our Cybersecurity Agency"
+#~ msgstr "Trabaje con nuestra Agencia de Ciberseguridad"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Tell us about your cybersecurity needs!"
+#~ msgstr "Háblenos de sus necesidades de ciberseguridad"
+
+# [auto-translated provider=DeepL]
+#~ msgid "How can our cybersecurity services help you?"
+#~ msgstr "¿Cómo pueden ayudarle nuestros servicios de ciberseguridad?"
