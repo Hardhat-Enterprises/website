@@ -367,6 +367,21 @@ body.dark-mode .form-control:focus {
   width: 30px;
 }
 
+/* Fix dropdown z-index issues on profile page */
+.navbar .dropdown-menu {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+.navbar .dropdown:hover .dropdown-menu {
+  display: block !important;
+}
+
+/* Ensure navbar stays on top */
+.navbar {
+  z-index: 1050 !important;
+}
+
 /* Section Headers */
 h4 {
   color: #1a1a1a;
@@ -542,6 +557,36 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </div>
+<!-- Fix dropdown functionality on profile page -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure Bootstrap dropdowns work properly
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        return new bootstrap.Dropdown(dropdownToggleEl);
+    });
+    
+    // Add hover functionality for better UX
+    document.querySelectorAll('.navbar .dropdown').forEach(function(dropdown) {
+        dropdown.addEventListener('mouseenter', function() {
+            var dropdownMenu = this.querySelector('.dropdown-menu');
+            if (dropdownMenu) {
+                dropdownMenu.classList.add('show');
+                this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'true');
+            }
+        });
+        
+        dropdown.addEventListener('mouseleave', function() {
+            var dropdownMenu = this.querySelector('.dropdown-menu');
+            if (dropdownMenu) {
+                dropdownMenu.classList.remove('show');
+                this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
+});
+</script>
+
 <!-- Bootstrap JS (for modal to work) -->
 
 
