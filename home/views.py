@@ -14,7 +14,7 @@ from django.urls import reverse
 from .forms import ExperienceForm
 from .models import Experience
 from django.db.models import Avg, Count
-
+from .models import Tip, TipRotationState
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 
@@ -73,7 +73,7 @@ from home.models import Announcement, JobApplication
 from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
-
+from datetime import timedelta
  
 # import os
  
@@ -2633,3 +2633,24 @@ class ChallengePreviewView(StaffRequiredMixin, View):
         
         return JsonResponse(data)
 
+def tip_today(request):
+    texts = list(Tip.objects.filter(is_active=True).values_list("text", flat=True))
+    if not texts:
+        return JsonResponse({"tip": "Stay safe online!"})
+
+    state, _ = TipRotationState.objects.get_or_create(lock="default")
+
+    now = timezone.now()
+    needs_rotate = (
+        state.rotated_at is None
+        or (now - state.rotated_at) >= timedelta(hours=24)
+        or state.last_index >= len(texts)  # handle when you add/remove tips
+        or state.last_index < -1
+    )
+
+    if needs_rotate:
+        state.last_index = (state.last_index + 1) % len(texts)
+        state.rotated_at = now
+        state.save(update_fields=["last_index", "rotated_at"])
+
+    return JsonResponse({"tip": texts[state.last_index]})

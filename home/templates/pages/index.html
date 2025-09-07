@@ -27,6 +27,13 @@
         <div class="col-lg-6 glass-card" style="position: relative; z-index: 99;">
           <h1 class="fw-bolder display-2 text-center-head">{% trans "Hardhat Enterprises" %}</h1>
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">{% trans "Security is a necessity. Not a choice" %}</h2>
+                     <!-- Today's Tip (centered) -->
+          <div class="hh-tip-wrap my-3">
+          <div class="hh-tip-grid hh-elevated">
+             <span class="hh-tip-badge">Today’s Tip</span>
+             <span id="hhTipText" class="hh-tip-text">Loading tip…</span>
+          </div>
+          </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">{% trans "Explore Projects" %}</a>
             <a type="button" href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">{% trans "Join Us" %}</a>
@@ -46,6 +53,75 @@
           0%, 100% { opacity: 1; }
           50% { opacity: 0.3; }
         }
+        .hh-tip-wrap{
+    display:flex;
+    justify-content:center;
+  }
+
+  .hh-tip-grid{
+    display:grid;
+    grid-template-columns: auto 1fr;   /* badge | text */
+    align-items:center;
+    gap:14px;
+    width:100%;
+    max-width:780px;
+  }
+
+  .hh-elevated{
+    background: rgba(33,37,41,.04);
+    border:1px solid rgba(33,37,41,.08);
+    border-radius:16px;
+    padding:12px 16px;
+  }
+
+  .hh-tip-badge{
+    background:#212529;
+    color:#ffcd11;
+    font-weight:700;
+    border-radius:999px;
+    padding:.55rem 1rem;
+    white-space:nowrap;
+    font-size:1rem;
+  }
+
+  /* Desktop/tablet: keep a tidy 2-line clamp */
+  .hh-tip-text{
+    font-weight:600;
+    font-size:clamp(1rem, 1.4vw, 1.35rem);
+    line-height:1.35;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    max-height:calc(1.35em * 2);
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+
+  /* Mobile: stack vertically and show full text */
+  @media (max-width: 576px){
+    .hh-tip-grid{
+      grid-template-columns: 1fr;      /* single column: badge above text */
+      gap:8px;
+      max-width:92vw;
+      align-items:start;
+    }
+    .hh-tip-badge{
+      justify-self:start;
+      padding:.45rem .85rem;
+      font-size:.95rem;
+    }
+    .hh-tip-text{
+      display:block;                   /* remove clamp */
+      -webkit-line-clamp:unset;
+      max-height:none;
+      overflow:visible;
+      white-space:normal;
+      word-break:normal;
+      font-size:clamp(.95rem, 4.2vw, 1.15rem);
+      line-height:1.4;
+    }
+  }
       </style>
   </section>
 
@@ -803,7 +879,7 @@ body.dark-mode #faq .faq-title {
       });
   });
 </script>
-
+<script src="{% static 'js/utils/daily-tips.js' %}?v=2"></script>
 </main>
 
 {% endblock content %}

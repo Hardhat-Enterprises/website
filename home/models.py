@@ -792,3 +792,22 @@ class AdminSession(models.Model):
     def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
+
+class Tip(models.Model):
+    text = models.CharField(max_length=280, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Security Awareness Quote"
+        verbose_name_plural = "Security Awareness Quotes"
+
+    def __str__(self):
+        return self.text[:60]
+class TipRotationState(models.Model):
+    lock = models.CharField(max_length=16, default="default", unique=True)
+    last_index = models.IntegerField(default=-1)
+    rotated_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Rotation {self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"

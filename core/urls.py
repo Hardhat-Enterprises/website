@@ -93,5 +93,6 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('i18n/', include('django.conf.urls.i18n')),
     path('', include('home.urls')),
+    path("api/tip/today/", views.tip_today, name="tip_today"),
 
    ]

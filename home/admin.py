@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import AdminNotification
 
 from django.utils.html import format_html
-
+from .models import Tip , TipRotationState
 from .models import (
     User,
     Student,
@@ -257,7 +257,14 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     search_fields = ['name', 'email', 'github_repo_link']
     readonly_fields = ['submitted_at']
 
-
+@admin.register(Tip)
+class TipAdmin(admin.ModelAdmin):
+    list_display = ("text", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("text",)
+@admin.register(TipRotationState)
+class TipRotationStateAdmin(admin.ModelAdmin):
+    list_display = ("lock", "last_index", "rotated_at")
 
 
 
