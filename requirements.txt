@@ -40,6 +40,8 @@ bleach==6.2.0
 
 # Image Processing
 Pillow==11.3.0
+svglib>=1.5.0
+reportlab>=4.0.0
 
 # Password Hashing
 bcrypt==4.3.0

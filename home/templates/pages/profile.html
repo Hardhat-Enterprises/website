@@ -19,7 +19,7 @@
         <div class="card profile-card shadow p-4 h-100">
           <div class="text-center mb-4">
             <img id="avatar-preview"
-                src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+                src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
                 alt="Profile Picture" class="rounded-circle profile-image">
           </div>
           
@@ -529,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('clear-avatar').addEventListener('click', function() {
     var avatarInput = document.getElementById('avatar-input');
     var avatarPreview = document.getElementById('avatar-preview');
-    var defaultAvatar = "{% static 'assets/img/pages/home/profile_icon.jpeg' %}";
+    var defaultAvatar = "{% static 'assets/img/pages/home/profile_icon.webp' %}";
     avatarInput.value = '';
     avatarPreview.src = defaultAvatar;
   });
