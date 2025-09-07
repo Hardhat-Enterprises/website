@@ -2288,9 +2288,7 @@ def graduate_program(request):
     """View for the Graduate Program roadmap page"""
     return render(request, "careers/graduate-program.html")
 
-def graduate_program_detailed(request):
-    """View for the detailed Graduate Program page with benefits and application process"""
-    return render(request, "careers/graduate-program-detailed.html")
+
 
 def careers_faqs(request):
     """View for the Careers FAQ page"""
