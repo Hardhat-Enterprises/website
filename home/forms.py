@@ -468,6 +468,10 @@ class CaptchaForm(forms.Form):
 
 
 class UserBlogPageForm(ModelForm):
+    image_url = forms.URLField(required=False, widget=forms.URLInput(attrs={
+        'class': 'form-control',
+        'placeholder': _('Image URL (Dropbox/shared link, optional)')
+    }))
     def clean_name(self):
         return clean_text(self.cleaned_data.get('name', ''))
 
@@ -484,6 +488,7 @@ class UserBlogPageForm(ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Your name')}),
             'title': forms.Textarea(attrs={'class': 'form-control', 'placeholder': _('Your title'), 'rows': 2}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': _('Your description')}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
         }
 
 

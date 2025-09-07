@@ -48,7 +48,7 @@
       </div>
       <br/>
       <div class="form-group">
-        <label for="id_file">{% trans "Image Upload (optional):" %}</label>
+        <label for="id_file">{% trans "Image Upload" %}</label>
         {{ form.file }}
       </div>
       <br/>
@@ -132,8 +132,8 @@
               </div>
               <br/>
               <div class="form-group">
-                <label for="editFile" style="color: black;">{% trans "Change Image (optional)" %}</label>
-                <input style="color: black;" type="file" class="form-control-file" id="editFile" name="file">
+                <label for="editFile" style="color: black;">{% trans "Change Image (from your computer, optional)" %}</label>
+                <input style="color: black;" type="file" class="form-control-file" id="editFile" name="file" accept="image/*">
               </div>
             </div>           
             <br/>
