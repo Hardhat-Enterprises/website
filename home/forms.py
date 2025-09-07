@@ -12,11 +12,11 @@ from datetime import timedelta
 import logging
 import nh3
 
-from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, UserBlogPage, SecurityEvent, JobApplication
+from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, UserBlogPage, SecurityEvent, JobApplication, CyberChallenge
 from .models import PenTestingRequest, SecureCodeReviewRequest
 from .validators import xss_detection
 from utils.sanitizer import clean_text, clean_email, clean_url, clean_html, clean_numeric
-
+import json
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
@@ -572,3 +572,131 @@ class SecureCodeReviewRequestForm(forms.ModelForm):
         model = SecureCodeReviewRequest
         fields = ['name', 'email', 'github_repo_link', 'terms_accepted']
 
+# Cyber Challenge Forms ------------------------------------------------------------
+
+class ChallengeForm(forms.ModelForm):
+    choices_text = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter choices separated by newlines', 'class': 'form-control'}), required=False, help_text="for Multiple Choice Questions, Enter each choice per line"
+    )
+    class Meta:
+        model = CyberChallenge
+        fields = [
+            'title', 'description', 'question', 'explanation', 
+            'difficulty', 'category', 'points', 'challenge_type', 
+            'time_limit', 'correct_answer', 'starter_code', 
+            'sample_input', 'expected_output'
+        ]
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ' Enter challenge title'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'brief description of the challenge'}),
+            'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter the challenge question'}),
+            'explanation': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Explanation for the correct answer'}),
+            'difficulty': forms.Select(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'points': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 100}),
+            'challenge_type': forms.Select(attrs={'class': 'form-control', 'id': 'challenge-type-select'}),
+            'time_limit': forms.NumberInput(attrs={'class': 'form-control', 'min': 30, 'max': 333600, 'placeholder': 'Time in seconds'}),
+            'correct_answer': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter the full correct code, not just what user inputs to fix'}),
+            'starter_code': forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'placeholder': 'def solution():\n    # Your code here\n    pass'}),
+            'sample_input': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Sample input for code challenges'}),
+            'expected_output': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter Complete Expected Output'}),
+        }
+        
+        labels = {
+            'title': 'Challenge Title',
+            'description': 'Description',
+            'question': 'Question/Problem Statement',
+            'explanation': 'Explanation',
+            'difficulty': 'Difficulty Level',
+            'category': 'Category',
+            'points': 'Points',
+            'challenge_type': 'Challenge Type',
+            'time_limit': 'Time Limit (seconds)',
+            'correct_answer': 'Correct Answer',
+            'starter_code': 'Starter Code (for Fix the Code challenges)',
+            'sample_input': 'Sample Input into code before running',
+            'expected_output': 'Expected Output of code after running',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # If editing an existing challenge, populate choices_text
+        if self.instance and self.instance.pk and self.instance.choices:
+            if isinstance(self.instance.choices, list):
+                self.fields['choices_text'].initial = '\n'.join(self.instance.choices)
+            elif isinstance(self.instance.choices, str):
+                try:
+                    choices_list = json.loads(self.instance.choices)
+                    self.fields['choices_text'].initial = '\n'.join(choices_list)
+                except (json.JSONDecodeError, TypeError):
+                    self.fields['choices_text'].initial = self.instance.choices
+
+    def clean_choices_text(self):
+        choices_text = self.cleaned_data.get('choices_text', '').strip()
+        challenge_type = self.cleaned_data.get('challenge_type')
+        
+        if challenge_type == 'mcq' and not choices_text:
+            raise forms.ValidationError("Choices are required for Multiple Choice questions.")
+        
+        return choices_text
+
+    def clean_correct_answer(self):
+        correct_answer = self.cleaned_data.get('correct_answer', '').strip()
+        challenge_type = self.cleaned_data.get('challenge_type')
+        
+        print(f"DEBUG: clean_correct_answer called")
+        print(f"DEBUG: challenge_type = {challenge_type}")
+        print(f"DEBUG: correct_answer (before processing) = {repr(correct_answer)}")
+        
+        if not correct_answer:
+            raise forms.ValidationError("Correct answer is required.")
+        
+        # Only MCQ challenges need JSON array format
+        if challenge_type == 'mcq':
+            try:
+                # Try to parse as JSON
+                parsed = json.loads(correct_answer)
+                if not isinstance(parsed, list):
+                    # If it's not a list, convert single answer to list format
+                    result = json.dumps([correct_answer])
+                    print(f"DEBUG: MCQ - converted to JSON array: {result}")
+                    return result
+                # check list not empty
+                if not parsed:
+                    raise forms.ValidationError("At least one correct answer is required.")
+                print(f"DEBUG: MCQ - already JSON array: {correct_answer}")
+                return correct_answer
+            except json.JSONDecodeError:
+                # If not json treat as single answer and convert to json list
+                result = json.dumps([correct_answer])
+                print(f"DEBUG: MCQ - JSON decode error, converted to array: {result}")
+                return result
+        
+        # For fix_code challenges, return the answer without JSON wrapping
+        print(f"DEBUG: fix_code - returning as-is: {repr(correct_answer)}")
+        return correct_answer
+
+    def clean_starter_code(self):
+        starter_code = self.cleaned_data.get('starter_code', '').strip()
+        challenge_type = self.cleaned_data.get('challenge_type')
+        
+        if challenge_type == 'fix_code' and not starter_code:
+            raise forms.ValidationError("Starter code is required for Fix the Code challenges.")
+        
+        return starter_code
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        
+        # Convert choices_text to JSON for multiple choice questions
+        choices_text = self.cleaned_data.get('choices_text', '').strip()
+        if choices_text and instance.challenge_type == 'mcq':
+            choices_list = [choice.strip() for choice in choices_text.split('\n') if choice.strip()]
+            instance.choices = choices_list
+        else:
+            instance.choices = None
+            
+        if commit:
+            instance.save()
+        return instance

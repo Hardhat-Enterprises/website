@@ -5,7 +5,7 @@
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
- 
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
@@ -16,6 +16,7 @@ from .models import Experience
 from django.db.models import Avg, Count
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,7 +25,7 @@ from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from .models import ContactSubmission
@@ -45,7 +46,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm, ChallengeForm
 
 from .forms import CaptchaForm
 
@@ -131,6 +132,8 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+
+
 
 def get_login_redirect_url(user):
     """
@@ -1084,7 +1087,6 @@ def reset_passkeys_verify(request):
     return render(request, "accounts/reset_passkeys_verify.html")
 
 def register_client(request):
-    form = ClientRegistrationForm()
     if request.method == 'POST':
         email = request.POST.get('email')
         business_name = request.POST.get('business_name')
@@ -2043,29 +2045,38 @@ def challenge_detail(request, challenge_id):
             selected = request.POST.get("selected_choice", "").strip()
             correct_answer = challenge.correct_answer.strip()
 
-            # Check if the answer is correct
-            is_correct = selected == correct_answer
+            # Handle JSON array format for correct_answer
+            try:
+                import json
+                parsed_correct = json.loads(correct_answer)
+                if isinstance(parsed_correct, list):
+                    # If correct_answer is a JSON array, check if user_answer matches any element
+                    is_correct = selected in parsed_correct
+                else:
+                    # If it's not a list, compare directly
+                    is_correct = selected == correct_answer
+            except (json.JSONDecodeError, TypeError):
+                # If it's not valid JSON, compare directly
+                is_correct = selected == correct_answer
+            
             user_challenge.completed = is_correct
             user_challenge.score = challenge.points if is_correct else 0
-            output = correct_answer  # just to include something in response
+            
+            if is_correct:
+                output = "Correct!"
+            else:
+                output = "Incorrect. The correct answer is: " + correct_answer
 
         # For Fix the Code challenges
         elif challenge.challenge_type == 'fix_code':
             user_code = request.POST.get("code_input", "").strip()
-            expected_output = challenge.expected_output.strip()
-
-            f = io.StringIO()
-            with contextlib.redirect_stdout(f):
-                try:
-                    exec(user_code, {"input": lambda: next(iter(challenge.sample_input.split('\n')))})
-                    output = f.getvalue().strip()
-                    is_correct = output == expected_output
-                    user_challenge.completed = is_correct
-                    user_challenge.score = challenge.points if is_correct else 0
-                except Exception as e:
-                    output = str(e)
-                    user_challenge.completed = False
-                    user_challenge.score = 0
+            correct_code = challenge.correct_answer.strip()
+            
+            # Compare the user's code directly with the correct answer code
+            is_correct = user_code.strip() == correct_code.strip()
+            output = "Code comparison completed"
+            user_challenge.completed = is_correct
+            user_challenge.score = challenge.points if is_correct else 0
 
         user_challenge.save()
 
@@ -2096,26 +2107,36 @@ def submit_answer(request, challenge_id):
 
         if challenge.challenge_type == 'mcq':
             correct_answer = challenge.correct_answer.strip()
-            if user_answer.strip() == correct_answer:
-                is_correct = True
+            user_answer = user_answer.strip()
+            
+            # Handle JSON array format for correct_answer
+            try:
+                import json
+                parsed_correct = json.loads(correct_answer)
+                if isinstance(parsed_correct, list):
+                    # If correct_answer is a JSON array, check if user_answer matches any element
+                    is_correct = user_answer in parsed_correct
+                else:
+                    # If it's not a list, compare directly
+                    is_correct = user_answer == correct_answer
+            except (json.JSONDecodeError, TypeError):
+                # If it's not valid JSON, compare directly
+                is_correct = user_answer == correct_answer
+            
+            if is_correct:
                 output = "Correct!"
             else:
                 output = "Incorrect. The correct answer is: " + correct_answer
 
         elif challenge.challenge_type == 'fix_code':
-            f = io.StringIO()
-            try:
-                with contextlib.redirect_stdout(f):
-                    inputs = challenge.sample_input.strip().split('\n')
-                    input_iter = iter(inputs)
-                    exec(user_code, {"input": lambda: next(input_iter)})
-
-                result_output = f.getvalue().strip()
-                is_correct = result_output == challenge.expected_output.strip()
-                output = result_output
-            except Exception as e:
-                output = str(e)
-                is_correct = False
+            user_code = request.POST.get('code_input', '').strip()
+            correct_code = challenge.correct_answer.strip()
+            
+            # Compare the user's code directly with the correct answer code
+            is_correct = user_code.strip() == correct_code.strip()
+            output = "Code comparison completed"
+            user_challenge.completed = is_correct
+            user_challenge.score = challenge.points if is_correct else 0
 
         user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
 
@@ -2267,9 +2288,7 @@ def graduate_program(request):
     """View for the Graduate Program roadmap page"""
     return render(request, "careers/graduate-program.html")
 
-def graduate_program_detailed(request):
-    """View for the detailed Graduate Program page with benefits and application process"""
-    return render(request, "careers/graduate-program-detailed.html")
+
 
 def careers_faqs(request):
     """View for the Careers FAQ page"""
@@ -2440,4 +2459,177 @@ def policy_deployment(request):
  #Health Check Function
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
+
+# Challenge Management Views
+
+class StaffRequiredMixin(UserPassesTestMixin):
+    #Check if user is staff
+    
+    def test_func(self):
+        return self.request.user.is_authenticated and (self.request.user.is_staff or self.request.user.is_superuser)
+    
+    def handle_no_permission(self):
+        print(f"DEBUG: Access denied for user {self.request.user}")
+        from django.shortcuts import redirect
+        # Redirect to login page instead of raising 403
+        return redirect('login')
+    
+class ChallengeManagementView(StaffRequiredMixin, ListView):
+    model = CyberChallenge
+    template_name = 'admin/challenges/challenge_management.html'
+    context_object_name = 'challenges'
+    
+    
+    def get_queryset(self):
+        queryset = CyberChallenge.objects.all().order_by('-created_at')
+        print(f"DEBUG: Found {queryset.count()} challenges in queryset")
+        return queryset
+
+class ChallengeCreateView(StaffRequiredMixin, CreateView):
+    
+    model = CyberChallenge
+    form_class = ChallengeForm
+    template_name = 'admin/challenges/add_challenge.html'
+    success_url = reverse_lazy('challenge_management')
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'Challenge "{form.instance.title}" was created successfully!')
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_title'] = 'Create New Challenge'
+        context['submit_text'] = 'Create Challenge'
+        return context
+    
+class ChallengeUpdateView(StaffRequiredMixin, UpdateView):
+  #edit challenge 
+    model = CyberChallenge
+    form_class = ChallengeForm
+    template_name = 'admin/challenges/edit_challenge.html'
+    success_url = reverse_lazy('challenge_management')
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'Challenge "{form.instance.title}" was updated successfully!')
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_title'] = f'Edit Challenge: {self.object.title}'
+        context['submit_text'] = 'Update Challenge'
+        context['is_edit'] = True
+        return context
+class ChallengeDeleteView(StaffRequiredMixin, DeleteView):
+    model = CyberChallenge
+    template_name = 'admin/challenges/confirm_delete.html'
+    success_url = reverse_lazy('challenge_management')
+    
+    def delete(self, request, *args, **kwargs):
+        challenge = self.get_object()
+        challenge_title = challenge.title
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, f'Challenge "{challenge_title}" was permanently deleted.')
+        return response
+
+
+class ChallengeArchiveView(StaffRequiredMixin, View):
+    def get(self, request, pk):
+        challenge = get_object_or_404(CyberChallenge, pk=pk)
+        return render(request, 'admin/challenges/archive_challenge.html', {'object': challenge})
+
+    def post(self, request, pk):
+        challenge = get_object_or_404(CyberChallenge, pk=pk)
+        
+        # Handle JSON request body for AJAX
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            try:
+                import json
+                data = json.loads(request.body.decode('utf-8'))
+                action = data.get('action', '')
+                
+                if action == 'archive':
+                    challenge.is_active = False
+                elif action == 'unarchive':
+                    challenge.is_active = True
+                else:
+                    # Default toggle behavior
+                    challenge.is_active = not challenge.is_active
+            except (json.JSONDecodeError, KeyError):
+                # Default toggle behavior if no valid JSON
+                challenge.is_active = not challenge.is_active
+        else:
+            # Default toggle behavior for non-AJAX requests
+            challenge.is_active = not challenge.is_active
+            
+        challenge.save()
+        
+        status = "archived" if not challenge.is_active else "unarchived"
+        messages.success(request, f'Challenge "{challenge.title}" was {status} successfully!')
+        
+        # Return JSON response for AJAX requests
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'is_active': challenge.is_active,
+                'message': f'Challenge "{challenge.title}" was {status} successfully!'
+            })
+        
+        return redirect('challenge_management')
+
+
+class ChallengePreviewView(StaffRequiredMixin, View):
+    
+    
+    def _format_correct_answer(self, challenge):
+        
+        if not challenge.correct_answer:
+            return None
+            
+        try:
+           
+            parsed = json.loads(challenge.correct_answer)
+            if isinstance(parsed, list):
+                return parsed
+            return challenge.correct_answer
+        except (json.JSONDecodeError, TypeError):
+        
+            return challenge.correct_answer
+    
+    def get(self, request, pk):
+        challenge = get_object_or_404(CyberChallenge, pk=pk)
+        
+        choices_display = None
+        if challenge.choices and challenge.challenge_type == 'mcq':
+            if isinstance(challenge.choices, list):
+                choices_display = challenge.choices
+            else:
+                try:
+                    import json
+                    choices_display = json.loads(challenge.choices)
+                except (json.JSONDecodeError, TypeError):
+                    choices_display = [challenge.choices]
+        
+        data = {
+            'id': challenge.id,
+            'title': challenge.title,
+            'description': challenge.description,
+            'question': challenge.question,
+            'explanation': challenge.explanation,
+            'difficulty': challenge.get_difficulty_display(),
+            'category': challenge.get_category_display(),
+            'points': challenge.points,
+            'challenge_type': challenge.challenge_type,  
+            'challenge_type_display': challenge.get_challenge_type_display(), 
+            'time_limit': challenge.time_limit,
+            'correct_answer': self._format_correct_answer(challenge),
+            'choices': choices_display,
+            'starter_code': challenge.starter_code,
+            'sample_input': challenge.sample_input,
+            'expected_output': challenge.expected_output,
+            'is_active': challenge.is_active,
+            'created_at': challenge.created_at.strftime('%B %d, %Y at %I:%M %p'),
+            'updated_at': challenge.updated_at.strftime('%B %d, %Y at %I:%M %p'),
+        }
+        
+        return JsonResponse(data)
 

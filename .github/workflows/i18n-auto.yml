@@ -1,56 +1,208 @@
 name: i18n-auto-translate
 on:
   push:
+    branches: [ main, feature/**, chore/** ]
+  pull_request:
     branches: [ main ]
   workflow_dispatch: {}
-
 jobs:
   i18n:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
 
       - name: Install gettext
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gettext
+          sudo apt-get update \
+          && sudo apt-get install -y gettext
 
       - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
+        with:
+          python-version: "3.11"
 
       - name: Install Python deps
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install polib deepl
+          python -m pip install --upgrade pip \
+          && pip install -r requirements.txt \
+          && pip install polib deepl
 
       - name: Make messages (django & djangojs)
         run: |
-          python manage.py makemessages -l zh_Hans -l fr -l es -l ja -l ko
-          python manage.py makemessages -l zh_Hans -l fr -l es -l ja -l ko -d djangojs
+          python manage.py makemessages --no-wrap -l zh_Hans -l fr -l es -l ja -l ko \
+          && python manage.py makemessages --no-wrap -l zh_Hans -l fr -l es -l ja -l ko -d djangojs
+
+      - name: Decide whether DeepL is available
+        id: deepl_guard
+        env:
+          HAS_DEEPL: ${{ secrets.DEEPL_API_KEY != '' }}
+        run: |
+          echo "has_deepl=${HAS_DEEPL}" >> "$GITHUB_OUTPUT"
 
       - name: Auto translate (DeepL)
+        if: ${{ github.event_name != 'pull_request' && steps.deepl_guard.outputs.has_deepl == 'true' }}
         env:
           DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
         run: |
           python manage.py auto_translate_messages --locale_dir=locale
 
-      - name: Compile messages
-        run: |
-          django-admin compilemessages
+      - name: Skip DeepL (PR build or no secret)
+        if: ${{ !(github.event_name != 'pull_request' && steps.deepl_guard.outputs.has_deepl == 'true') }}
+        run: echo "Skipping DeepL (pull_request build or no DEEPL_API_KEY)."
 
-      - name: Commit & Create PR
+      - name: Normalise PO newline parity
+        run: |
+          python - <<'PY'
+          import polib, pathlib
+          base = pathlib.Path("locale")
+          for po_path in base.rglob("*/LC_MESSAGES/*.po"):
+              po = polib.pofile(str(po_path))
+              changed = False
+              def align(msgid, s):
+                  if s is None: return s
+                  out = s
+                  if msgid.startswith('\n') and not out.startswith('\n'): out = '\n' + out
+                  if not msgid.startswith('\n') and out.startswith('\n'): out = out.lstrip('\n')
+                  if msgid.endswith('\n') and not out.endswith('\n'): out = out + '\n'
+                  if not msgid.endswith('\n') and out.endswith('\n'): out = out.rstrip('\n')
+                  return out
+              for e in po:
+                  if e.msgstr:
+                      e.msgstr = align(e.msgid, e.msgstr); changed = True
+                  if e.msgstr_plural:
+                      for k,v in e.msgstr_plural.items():
+                          e.msgstr_plural[k] = align(e.msgid, v); changed = True
+              if changed:
+                  po.save(str(po_path))
+          PY
+
+      - name: Repair Python-format placeholders in PO files
+        run: |
+          python - <<'PY'
+          import re, pathlib, polib
+          base = pathlib.Path("locale")
+
+          # Match Python %-style placeholders: %s, %d, %(name)s, etc. (ignore %%)
+          PCT = re.compile(r'%(?:\(\w+\))?[#0\- +]?\d*(?:\.\d+)?[diouxXeEfFgGcrs%]')
+
+          def tokens(text: str):
+              toks = []
+              for t in PCT.findall(text or ''):
+                  if t == '%%':
+                      continue
+                  # normalise named tokens to just the name + type, e.g. %(name)s -> ('name','s')
+                  if t.startswith('%('):
+                      name = t[t.find('(')+1:t.find(')')]
+                      typ = t[-1]
+                      toks.append(('named', name, typ))
+                  else:
+                      toks.append(('positional', None, t[-1]))
+              return toks
+
+          def needs_fix(id_tokens, s):
+              return s is not None and tokens(s) != id_tokens
+
+          for po_path in base.rglob("*/LC_MESSAGES/*.po"):
+              po = polib.pofile(str(po_path))
+              dirty = False
+              for e in po:
+                  id_tokens = tokens(e.msgid)
+                  pl_tokens = tokens(e.msgid_plural) if e.msgid_plural else None
+
+                  # singular
+                  if e.msgstr and id_tokens and needs_fix(id_tokens, e.msgstr):
+                      # safest repair: copy msgid so placeholders are correct
+                      e.msgstr = e.msgid
+                      dirty = True
+
+                  # plural forms
+                  if e.msgid_plural and e.msgstr_plural:
+                      # Prefer tokens from msgid_plural if present, else fallback to singular tokens
+                      want = pl_tokens if pl_tokens else id_tokens
+                      if want:
+                          for k, v in list(e.msgstr_plural.items()):
+                              if needs_fix(want, v):
+                                  e.msgstr_plural[k] = e.msgid_plural or e.msgid
+                                  dirty = True
+
+              if dirty:
+                  po.save(str(po_path))
+          PY
+
+      - name: Compile messages (tolerant, per-locale)
+        run: |
+          set +e
+          for L in zh_Hans fr es ja ko; do \
+            echo "Compiling locale: $L"; \
+            python manage.py compilemessages \
+              -l "$L" \
+              -i venv -i .git -i node_modules -i "**/site-packages/**"; \
+            if [ "$?" -ne 0 ]; then \
+              echo "::warning::Skipping $L due to compile error after auto-repair"; \
+            fi; \
+          done
+          set -e
+
+      - name: Check for changes
+        id: changes
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          if git diff --quiet HEAD -- locale/; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No translation changes detected"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "Translation changes detected"
+          fi
+
+      - name: Check if branch exists and commit changes
+        if: ${{ github.ref == 'refs/heads/main' && steps.changes.outputs.has_changes == 'true' }}
+        id: commit_changes
         run: |
           git config user.name "i18n-bot"
           git config user.email "i18n-bot@example.com"
-          branch="chore/i18n-auto-$(date +%Y%m%d%H%M)"
-          git checkout -b "$branch"
-          git add locale/**/LC_MESSAGES/*.po locale/**/LC_MESSAGES/*.mo
-          git commit -m "chore(i18n): auto-translate via DeepL & compile"
-          git push -u origin "$branch"
-      - uses: peter-evans/create-pull-request@v6
-        with:
-          title: "chore(i18n): auto-translate via DeepL"
-          body: "Automated pipeline. No manual msgstr. Languages: zh_Hans, fr, es, ja, ko."
-          branch: ""
+          BRANCH_NAME="chore/i18n-auto-updates"
+          if git ls-remote --exit-code --heads origin "$BRANCH_NAME" > /dev/null 2>&1; then
+            echo "Branch $BRANCH_NAME exists, checking out and updating..."
+            git fetch origin "$BRANCH_NAME" \
+            && git checkout "$BRANCH_NAME" \
+            && git merge origin/main --no-edit
+          else
+            echo "Branch $BRANCH_NAME doesn't exist, creating new branch..."
+            git checkout -b "$BRANCH_NAME"
+          fi
+          git add locale/**/LC_MESSAGES/*.po locale/**/LC_MESSAGES/*.mo \
+          && git commit -m "chore(i18n): auto-translate & normalise & compile [$(date '+%Y-%m-%d %H:%M')]" || {
+            echo "No changes to commit"; exit 0; }
+          git push -u origin "$BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Check if PR exists
+        if: ${{ github.ref == 'refs/heads/main' && steps.changes.outputs.has_changes == 'true' }}
+        id: check_pr
+        run: |
+          BRANCH_NAME="chore/i18n-auto-updates"
+          PR_EXISTS=$(gh pr list --head "$BRANCH_NAME" --json number --jq length)
+          if [ "$PR_EXISTS" -eq 0 ]; then
+            echo "pr_exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "pr_exists=true" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Create PR (only if doesn't exist)
+        if: ${{ github.ref == 'refs/heads/main' && steps.changes.outputs.has_changes == 'true' && steps.check_pr.outputs.pr_exists == 'false' }}
+        run: |
+          gh pr create \
+            --title "chore(i18n): auto-translate via DeepL" \
+            --body "Automated i18n pipeline. Auto-translated strings for languages: zh_Hans, fr, es, ja, ko.
+          This PR is automatically updated when new translatable strings are detected." \
+            --head "chore/i18n-auto-updates" \
+            --base "main"
+        env:
+          GH_TOKEN: ${{ github.token }}

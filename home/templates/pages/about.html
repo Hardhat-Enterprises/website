@@ -21,7 +21,8 @@
   <section class="section-header bg-tertiary text-black">
     <div class="container">
       <div class="row justify-content-between align-items-center">
-        <div class="col-12 col-md-7 col-lg-6 text-center text-md-left">
+        <div class="col-12 col-md-7 col-lg-6 text-center text-md-left glass-card">
+
           <h1 class="display-2 mb-4">
             {% blocktrans %}Full-Service <br class="d-none d-md-inline" />Cyber Security Agency{% endblocktrans %}
           </h1>
@@ -86,8 +87,8 @@
     </datalist>
   </div>
   <div class="button-container">
-    <button id="submitReview">{% trans "Add Note" %}</button>
-    <button id="clearReviews" disabled>{% trans "Clear Board" %}</button>
+    <button id="submitReview" class="neomorph-btn">{% trans "Add Note" %}</button>
+    <button id="clearReviews" class="neomorph-btn" disabled>{% trans "Clear Board" %}</button>
   </div>
 </div>
 
@@ -235,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Kudoboard Section Ends Here -->
  <!-- Section -->
 
-
   <style>
   .whiteboard-container {
       max-width: 1200px;
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="row">
         {% comment %} <div class="col-md-4 col-lg-4 text-center">
           <!-- Visit Box -->
-          <div class="icon-box mb-4">
+          <div class="icon-box mb-4 neomorph-card">
             <div class="icon icon-primary mb-4">
               <span class="fas fa-user"></span>
             </div>
@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="row">
                     <div class="col-md-4 col-lg-4 text-center">
                         <!-- Visit Box -->
-                        <div class="icon-box mb-4">
+                        <div class="icon-box mb-4 neomorph-card">
                             <div class="icon icon-primary mb-4">
                                 <span class="fas fa-user"></span>
                             </div>
@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="col-md-4 col-lg-4 text-center">
                         <!-- Call Box -->
-                        <div class="icon-box mb-4">
+                        <div class="icon-box mb-4 neomorph-card">
                             <div class="icon icon-primary mb-4">
                                 <span class="fas fa-money-check"></span>
                             </div>
@@ -391,10 +391,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="col-md-4 col-lg-4 text-center">
                         <!-- Email Box -->
-                        <div class="icon-box mb-4">
+                        <div class="icon-box mb-4 neomorph-card">
                             <div class="icon icon-primary mb-4">
                                 {% comment %} <span class="fa-solid fa-triangle-exclamation"></span> {% endcomment %}
-                                <svg xmlns="http://www.w3.org/2000/svg" height="35.75" width="36" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="35.75" width="36" viewBox="0 0 512 512"><!-- Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#FFCD11" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
                             </div>
                             <h3 class="h5">{% trans "Threats found" %}</h3>
                             <span class="counter display-3 d-block">150+</span>
@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         {% comment %} <div class="col-md-4 col-lg-4 text-center">
           <!-- Email Box -->
-          <div class="icon-box mb-4">
+          <div class="icon-box mb-4 neomorph-card">
             <div class="icon icon-primary mb-4">
               <span class="fa-solid fa-triangle-exclamation"></span>
               <svg
@@ -419,21 +419,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 width="36"
                 viewBox="0 0 512 512"
               >
-                <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+                <!--Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
                 <path
                   fill="#FFCD11"
                   d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
                 />
               </svg>
             </div>
-            <h3 class="h5">Threats found</h3>
-            <span class="counter display-3  d-block">150+</span>
           </div>
-          <!-- End of Email Box -->
-        </div> {% endcomment %}
-      </div>
-    </div>
-  </section>
+        </section> {% endcomment %}
+        
   <!-- End of section -->
 
   <!-- Section -->
@@ -466,7 +461,9 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="row justify-content-center mt-6">
         <div class="row justify-content-center">
           <div class="col-md-12 col-lg-8">
-            <div class="timeline timeline-one dark px-3 px-sm-0">
+            <!-- Glassmorphism Wrapper for Timeline -->
+            <div class="glass-timeline">
+              <div class="timeline timeline-one dark px-3 px-sm-0">
               <!-- Timeline Item 1 -->
               <div class="timeline-item">
                 <h3 class="h4 mb-4">{% trans "Present" %}</h3>
@@ -516,6 +513,8 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
 
             </div>
+            <!-- End Glassmorphism Wrapper -->
+    
           </div>
         </div>
       </div>
@@ -523,6 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <figure
       class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2"
     >
+    
       <svg
         class="fill-white"
         version="1.1"
@@ -546,7 +546,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
           <!-- Contact Card -->
-          <div class="card border-0 p-2 p-md-3 p-lg-5">
+          <div class="card border-0 p-2 p-md-3 p-lg-5 glass-card">
+
             <div id="form-header" class="card-header bg-white border-0 text-center">
               <h2 style="color: antiquewhite;">{% trans "Want to work with us?" %}</h2>
               <p>{% trans "Awesome! Tell us about yourself" %}</p>
@@ -675,6 +676,23 @@ document.addEventListener('DOMContentLoaded', function() {
     box-shadow: none;
 }
 
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 36px rgba(31, 38, 135, 0.25);
+}
+
+
 .whiteboard {
     min-height: 300px;
     background-color: #f8f9fa;
@@ -737,6 +755,124 @@ document.addEventListener('DOMContentLoaded', function() {
 input[type="password"] {
     background-color: white !important;
 }
+
+/* Neomorphism for Buttons */
+.neomorph-btn {
+    background: #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 6px 6px 10px #bebebe,
+                -6px -6px 10px #ffffff;
+    border: none;
+    padding: 10px 30px;
+    font-weight: 600;
+    color: #1c2540;
+    transition: 0.3s ease;
+}
+
+.neomorph-btn:hover {
+    box-shadow: inset 4px 4px 8px #bebebe,
+                inset -4px -4px 8px #ffffff;
+}
+
+/* Neomorphism for Cards */
+.neomorph-card {
+    background: #e0e0e0;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #bebebe,
+                -10px -10px 20px #ffffff;
+    padding: 20px;
+    transition: 0.3s ease-in-out;
+}
+
+.neomorph-card:hover {
+    box-shadow: inset 5px 5px 10px #bebebe,
+                inset -5px -5px 10px #ffffff;
+}
+
+.glass-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom right, rgba(0,0,0,0.05), rgba(0,0,0,0.15));
+    z-index: 0;
+    border-radius: inherit;
+}
+
+.glass-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.dark-mode .neomorph-card {
+    background: #2b2b2b;
+    box-shadow: 10px 10px 20px #1c1c1c,
+                -10px -10px 20px #3a3a3a;
+}
+
+.dark-mode .neomorph-btn {
+    background: #2b2b2b;
+    box-shadow: 6px 6px 10px #1c1c1c,
+                -6px -6px 10px #3a3a3a;
+    color: #f5f5f5;
+}
+
+.neomorph-card {
+    background: #e0e0e0;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #bebebe,
+                -10px -10px 20px #ffffff;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.neomorph-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: inset 5px 5px 10px #bebebe,
+                inset -5px -5px 10px #ffffff;
+}
+
+.glass-timeline {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-timeline::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom right, rgba(0,0,0,0.05), rgba(0,0,0,0.12));
+    border-radius: inherit;
+    z-index: 0;
+}
+
+.glass-timeline > * {
+    position: relative;
+    z-index: 1;
+}
+
+
 </style>
 
 {% endblock content %}
+

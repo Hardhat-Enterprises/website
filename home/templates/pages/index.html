@@ -6,7 +6,15 @@
 
 {% block content %}
 
-<main style="padding-top: 80px;">
+<main style="padding-top: 100px;">
+
+
+
+
+ 
+
+  
+
 
   {% include 'includes/pre-loader.html' %}
   <!-- Hero -->
@@ -16,7 +24,7 @@
         <div class="col-10 col-sm-8 col-lg-6">
           <img class="blink-animation" src="{% static 'assets/img/pages/home/hero-image.svg' %}" alt="Hero image">
         </div>
-        <div class="col-lg-6" style="position: relative; z-index: 99;">
+        <div class="col-lg-6 glass-card" style="position: relative; z-index: 99;">
           <h1 class="fw-bolder display-2 text-center-head">{% trans "Hardhat Enterprises" %}</h1>
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">{% trans "Security is a necessity. Not a choice" %}</h2>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
@@ -93,14 +101,14 @@
               <div class="carousel-inner">
                   <div class="carousel-item active">
                       <img class="d-block w-100 img-fluid" src="{% static 'assets/img/pages/home/company-vision.svg' %}" alt="Company Vision">
-                      <div class="carousel-text-container">
+                      <div class="carousel-text-container glass-card">
                           <h2 class="h1">{% trans "Company Vision" %}</h2>
                           <p class="mb-4 lead fw-bold">{% trans "Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company will be open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met." %}</p>
                       </div>
                   </div>
                   <div class="carousel-item">
                       <img class="d-block w-100 img-fluid" src="{% static 'assets/img/pages/home/company-mission.svg' %}" alt="Company Mission">
-                      <div class="carousel-text-container">
+                      <div class="carousel-text-container glass-card">
                           <h2 class="h1">{% trans "Company Mission" %}</h2>
                           <p class="mb-4 lead fw-bold">{% trans "Achieve an engaging learning experience for students within the company. An opportunity for students to gain cross department/project experience and the opportunity to share their expertise outside of their project team." %}</p>
                       </div>
@@ -149,7 +157,7 @@
         <div class="project-track d-flex transition">
           <!-- Begin Project Cards -->
           <div class="project-card flex-shrink-0">
-            <div class="card border-0 overflow-hidden h-100">
+            <div class="card border-0 overflow-hidden h-100 neomorph-card">
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/appattack-card.svg' %}" class="card-img-top" alt="AppAttack">
               </div>
@@ -157,14 +165,14 @@
                 <h3 class="h5 card-title">{% trans "AppAttack" %}</h3>
                 <p class="mt-3">{% trans "We deliver comprehensive reports to clients, providing actionable insights to enhance code security. With a commitment to excellence, AppAttack empowers organizations to proactively safeguard their digital assets" %}</p>
                 <a href="{% url 'appattack' %}">
-                  <div class="btn btn-secondary mt-auto">{% trans "Learn More" %}</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
           </div>
 
           <div class="project-card flex-shrink-0">
-            <div class="card border-0 overflow-hidden h-100">
+            <div class="card border-0 overflow-hidden h-100 neomorph-card">
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/pt-gui-card-2.svg' %}" class="card-img-top" alt="PT-GUI">
               </div>
@@ -172,14 +180,14 @@
                 <h3 class="h5 card-title">{% trans "PT-GUI" %}</h3>
                 <p class="mt-3">{% trans "Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal for modern penetration testers. Born from the innovative minds at PT-GUI, DDT is more than just a toolkit; it's a revolution in cybersecurity practice." %}</p>
                 <a href="{% url 'ptgui_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">{% trans "Learn More" %}</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
           </div>
 
           <div class="project-card flex-shrink-0">
-            <div class="card border-0 overflow-hidden h-100">
+            <div class="card border-0 overflow-hidden h-100 neomorph-card">
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/cards/icon1.svg' %}" class="card-img-top" alt="CyberSafe VR">
               </div>
@@ -187,14 +195,14 @@
                 <h3 class="h5 card-title">{% trans "CyberSafe VR" %}</h3>
                 <p class="mt-3">{% trans "Deakin CyberSafe VR revolutionises cybersecurity training for small businesses by using interactive VR technology to blend theory with practical application for owners and employees taking cybersecurity measures." %}</p>
                 <a href="{% url 'Vr_main' %}">
-                  <div class="btn btn-secondary mt-auto">{% trans "Learn More" %}</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
           </div>
 
           <div class="project-card flex-shrink-0">
-            <div class="card border-0 overflow-hidden h-100">
+            <div class="card border-0 overflow-hidden h-100 neomorph-card">
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/cards/icon2.svg' %}" class="card-img-top" alt="Smishing Detection">
               </div>
@@ -202,14 +210,14 @@
                 <h3 class="h5 card-title">{% trans "Smishing Detection" %}</h3>
                 <p class="mt-3">{% trans "Smishing Detection aims to develop an innovative smishing detection app for Android and iOS devices to moderate the risks associated with SMS phishing attacks." %}</p>
                 <a href="{% url 'smishing_detection_main' %}">
-                  <div class="btn btn-secondary mt-auto">{% trans "Learn More" %}</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
           </div>
 
           <div class="project-card flex-shrink-0">
-            <div class="card border-0 overflow-hidden h-100">
+            <div class="card border-0 overflow-hidden h-100 neomorph-card">
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/cards/icon8.svg' %}" class="card-img-top" alt="Threat Mirror">
               </div>
@@ -217,14 +225,14 @@
                 <h3 class="h5 card-title">{% trans "Threat Mirror <br>(Project Paused)" %}</h3>
                 <p class="mt-3">{% trans "Threat Mirror aims to investigate open-source threat intelligence platforms, assessing their suitability and adaptability for SMEs and developing economies." %}</p>
                 <a href="{% url 'Deakin_Threat_mirror_main' %}">
-                  <div class="btn btn-secondary mt-auto">{% trans "Learn More" %}</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
           </div>
 
           <div class="project-card flex-shrink-0">
-            <div class="card border-0 overflow-hidden h-100">
+            <div class="card border-0 overflow-hidden h-100 neomorph-card">
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Malware Visualization">
               </div>
@@ -232,13 +240,14 @@
                 <h3 class="h5 card-title">{% trans "Malware Visualization" %}</h3>
                 <p class="mt-3">{% trans "The Malware Visualisation project creates a user-friendly tool that simplifies malware analysis by integrating with existing visual analytics applications." %}</p>
                 <a href="{% url 'malware_viz_main' %}">
-                  <div class="btn btn-secondary mt-auto">{% trans "Learn More" %}</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
           </div>
+
           <div class="project-card flex-shrink-0">
-            <div class="card border-0 overflow-hidden h-100">
+            <div class="card border-0 overflow-hidden h-100 neomorph-card">
               <div class="position-relative">
                 <img src="{% static 'assets/img/pages/home/threat-intel-card.svg' %}" class="card-img-top" alt="Malware Visualization">
               </div>
@@ -246,7 +255,7 @@
                 <h3 class="h5 card-title">{% trans "The Policy Deployment Engine" %}</h3>
                 <p class="mt-3">{% trans "The Policy Deployment Engine is a tool that allows users to deploy policies to their systems." %}</p>
                 <a href="{% url 'policy_deployment' %}">
-                  <div class="btn btn-secondary mt-auto">{% trans "Learn More" %}</div>
+                  <div class="btn neomorph-btn mt-auto">{% trans "Learn More" %}</div>
                 </a>
               </div>
             </div>
@@ -328,39 +337,43 @@
       <div class="container">
         <h2 class="fw-bolder display-4 text-center mb-5">{% trans "Cybersecurity News" %}</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          
           <!-- News Card 1 -->
           <div class="col">
-            <div class="card h-100 border-0 shadow-sm rounded-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 neomorph-card">
               <img src="{% static 'assets/img/pages/News/img.jpg' %}" class="card-img-top img-fluid rounded-top" alt="TROX Stealer Malware">
               <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">{% trans "TROX Stealer Malware Spreads via Fake Updates" %}</h5>
                 <p class="card-text">{% trans "A new wave of cyberattacks spreads malware through fake software update alerts targeting unsuspecting users globally." %}</p>
-                <a href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">{% trans "Read More" %}</a>
+                <a href="https://cybersecuritynews.com/chinese-ecrime-hacker-group-attacking-users/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">{% trans "Read More" %}</a>
               </div>
             </div>
           </div>
+          
           <!-- News Card 2 -->
           <div class="col">
-            <div class="card h-100 border-0 shadow-sm rounded-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 neomorph-card">
               <img src="{% static 'assets/img/pages/News/imgg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="AI in Cybersecurity">
               <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">{% trans "AI Shaping the Future of Cyber Defense" %}</h5>
                 <p class="card-text">{% trans "Experts explore how artificial intelligence is transforming threat detection and proactive cybersecurity measures worldwide." %}</p>
-                <a href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">{% trans "Read More" %}</a>
+                <a href="https://cybersecuritynews.com/why-cisos-are-betting-big-on-ai-automation-zero-trust/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">{% trans "Read More" %}</a>
               </div>
             </div>
           </div>
+          
           <!-- News Card 3 -->
           <div class="col">
-            <div class="card h-100 border-0 shadow-sm rounded-3">
+            <div class="card h-100 border-0 shadow-sm rounded-3 neomorph-card">
               <img src="{% static 'assets/img/pages/News/imggg.jpg' %}" class="card-img-top img-fluid rounded-top" alt="Zero Trust Model">
               <div class="card-body d-flex flex-column rounded-bottom">
                 <h5 class="card-title">{% trans "Zero Trust Security: Why It Matters in 2025" %}</h5>
                 <p class="card-text">{% trans "With rising remote work trends, the zero-trust model becomes essential in securing networks beyond traditional perimeters." %}</p>
-                <a href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mt-auto">{% trans "Read More" %}</a>
+                <a href="https://cybersecuritynews.com/trox-stealer-exfiltrate-sensitive-data/" target="_blank" rel="noopener noreferrer" class="btn neomorph-btn mt-auto">{% trans "Read More" %}</a>
               </div>
             </div>
           </div>
+    
         </div>
       </div>
       <style>
@@ -369,6 +382,7 @@
         }
       </style>
     </section>
+    
 
     <!-- Testimonials  -->
 
@@ -378,26 +392,25 @@
         <h2 class="fw-bolder testimonials-title  text-center mb-lg-2">{% trans "What Our Clients Say" %}</h2>
         <!-- <button class="prev-btn">❮</button> -->
         <div class="testimonial-slider-container">
-
           <div class="testimonial-slider">
-            <div class="testimonial-item">
+            <div class="testimonial-item neomorph-card">
               <p class="testimonial-contentp">{% blocktrans %}"We have been working with Hardhat for over a year now, and their cybersecurity services have been a game-changer for our business. From preventing ransomware attacks to securing our network infrastructure, they have given us the peace of mind to focus on our growth. Their team is responsive, professional, and always one step ahead. Highly recommend"{% endblocktrans %}</p>
               <h3 class="testimonial-content">{% trans "James Thompson, CTO, Tech Innovations Ltd." %}</h3>
             </div>
-            <div class="testimonial-item">
+            <div class="testimonial-item neomorph-card">
               <p class="testimonial-contentp">{% blocktrans %}"As a small business, we were initially hesitant about investing in cybersecurity. However, after partnering with Hardhat, we quickly realized how critical it is to protect our data and systems. Their tailored solutions have kept us safe from cyber threats, and their proactive approach has helped us build a secure foundation for the future. We now feel more confident than ever about our digital security."{% endblocktrans %}</p>
               <h3 class="testimonial-content">{% trans "Sarah Mitchell, Founder, EcoProducts Co." %}</h3>
             </div>
-            <div class="testimonial-item">
+            <div class="testimonial-item neomorph-card">
               <p class="testimonial-contentp">{% blocktrans %}"In the fast-paced world of finance, cybersecurity is not a luxury—it's a necessity. Hardhat has been instrumental in fortifying our defenses against sophisticated cyber threats. Their expertise in threat detection, incident response, and continuous monitoring has been invaluable. They've helped us navigate through potential vulnerabilities and maintain our clients' trust. A top-tier cybersecurity partner!"{% endblocktrans %}</p>
               <h3 class="testimonial-content">{% trans "David Harris, Risk Manager, FinSecure Solutions" %}</h3>
             </div>
+    
           </div>
-         
         </div>
-        <!-- <button class="next-btn">❯</button> -->
-    </div>
-</section>
+      </div>
+    </section>
+    
 <!-- FAQ -->
 
   <section id="faq" class="faq-section section-lg">
@@ -405,40 +418,42 @@
       <p class="text-center faq-sub-header">{% trans "FAQ" %}</p>
         <h2 class="fw-bolder faq-title  text-center mb-lg-2">{% trans "What Our Clients Recently ask" %}</h2>
        
-<div class="faq-container">
+<div class="faq-container neomorph-card">
     <div class="faq-item">
-        <button class="faq-button d-flexf space-betweenf">
+        <button class="faq-button neomorph-btn d-flexf space-betweenf">
              {% trans "What is cybersecurity and why do I need it? " %}<span class="icon">+</span>
         </button>
         <div class="faq-content">
             <p>{% trans "Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks, data breaches, and other cyber threats. It is essential for businesses and individuals to safeguard sensitive information from malicious activities." %}</p>
         </div>
-    </div>
+      </div>
 
     <div class="faq-item">
-        <button class="faq-button d-flexf space-betweenf">
+        <button class="faq-button neomorph-btn d-flexf space-betweenf">
             {% trans "How can I protect my business from cyber threats? " %}<span class="icon">+</span>
         </button>
         <div class="faq-content">
             <p>{% trans "Our cybersecurity services offer comprehensive solutions including threat monitoring, data encryption, firewall protection, penetration testing, and employee training. These measures can help reduce the risk of cyber threats." %}</p>
         </div>
-    </div>
+      </div>
 
     <div class="faq-item">
-        <button class="faq-button d-flexf space-betweenf">
+        <button class="faq-button neomorph-btn d-flexf space-betweenf">
             {% trans "What is a data breach and how can I prevent one? " %}<span class="icon">+</span> 
         </button>
         <div class="faq-content">
             <p>{% trans "A data breach occurs when sensitive information is accessed or stolen by unauthorized individuals. Preventive measures include securing networks, using strong passwords, encrypting sensitive data, and regularly updating security protocols." %}</p>
         </div>
+      </div>
     </div>
-    </div>
+  </div>
 </section>
+
 
   {% if show_announcement %}
   <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content shadow-lg border-0">
+      <div class="modal-content shadow-lg border-0 glass-card">
         <div class="modal-header text-center">
           <h5 class="modal-title w-100 fw-bold" id="announcementModalLabel">🌟 {% trans "Announcement" %} 🌟</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -531,6 +546,222 @@
 #viewMoreBtn .fas {
     transition: transform 0.3s ease;
 }
+
+/* Glassmorphism Style */
+.glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom right, rgba(0,0,0,0.05), rgba(0,0,0,0.15));
+    border-radius: inherit;
+    z-index: 0;
+}
+
+.glass-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Glass effect for Carousel text */
+.carousel-text-container {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Neomorphic Cards */
+.neomorph-card {
+    background: #e0e0e0;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px #bebebe,
+                -10px -10px 20px #ffffff;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.neomorph-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: inset 5px 5px 10px #bebebe,
+                inset -5px -5px 10px #ffffff;
+}
+
+/* Neomorphic Buttons */
+.neomorph-btn {
+    background: #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 6px 6px 10px #bebebe,
+                -6px -6px 10px #ffffff;
+    border: none;
+    padding: 10px 30px;
+    font-weight: 600;
+    color: #1c2540;
+    transition: 0.3s ease;
+}
+
+.neomorph-btn:hover {
+    box-shadow: inset 4px 4px 8px #bebebe,
+                inset -4px -4px 8px #ffffff;
+}
+
+.dark-mode .neomorph-card {
+    background: #2b2b2b;
+    box-shadow: 10px 10px 20px #1c1c1c,
+                -10px -10px 20px #3a3a3a;
+}
+
+.dark-mode .neomorph-btn {
+    background: #2b2b2b;
+    box-shadow: 6px 6px 10px #1c1c1c,
+                -6px -6px 10px #3a3a3a;
+    color: #f5f5f5;
+}
+
+/* Dark Mode Adjustments for Neomorphism */
+.dark-mode .neomorph-card {
+    background: #2b2b2b;
+    box-shadow: 10px 10px 20px #1c1c1c,
+                -10px -10px 20px #3a3a3a;
+    color: #f5f5f5; /* Makes text readable */
+}
+
+.dark-mode .neomorph-btn {
+    background: #2b2b2b;
+    box-shadow: 6px 6px 10px #1c1c1c,
+                -6px -6px 10px #3a3a3a;
+    color: #f5f5f5;
+}
+
+.dark-mode .testimonial-content,
+.dark-mode .testimonial-contentp {
+    color: #f5f5f5; /* Ensures testimonial text is visible */
+}
+
+/* Force dark mode style for testimonials */
+body.dark-mode #testimonials .testimonial-item {
+    background: #2b2b2b !important; /* dark grey background */
+    box-shadow: 10px 10px 20px #1c1c1c,
+                -10px -10px 20px #3a3a3a !important;
+    color: #f5f5f5 !important; /* light text */
+}
+
+body.dark-mode #testimonials .testimonial-item p,
+body.dark-mode #testimonials .testimonial-item h3 {
+    color: #f5f5f5 !important; /* light color for all text */
+}
+
+/* Dark mode fix for FAQ heading text */
+body.dark-mode #faq,
+body.dark-mode #faq h2,
+body.dark-mode #faq p,
+body.dark-mode #faq .faq-sub-header,
+body.dark-mode #faq .faq-title {
+    color: #f5f5f5 !important; /* light text for visibility */
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+
+    /* Added soft & inset shadows for depth */
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2),
+                inset 0 1px 3px rgba(255, 255, 255, 0.1);
+
+    /* Smooth transition for movement & shadows */
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), 
+                box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-8px) scale(1.05); /* bigger lift effect */
+    box-shadow: 0 20px 40px rgba(31, 38, 135, 0.35),
+                0 0 15px rgba(255, 255, 255, 0.25),
+                inset 0 1px 3px rgba(255, 255, 255, 0.15); /* keeps glass feel */
+}
+
+/* Breadcrumbs */
+.breadcrumb { 
+  --bs-breadcrumb-divider: "›";
+  margin-bottom: 0;
+}
+.breadcrumb .breadcrumb-item a {
+  text-decoration: none;
+  color: #1c2540;
+  font-weight: 600;
+}
+.breadcrumb .breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+.breadcrumb .breadcrumb-item.active {
+  color: #6c757d; /* muted */
+}
+.breadcrumb-container {
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  position: relative;
+  z-index: 2;      /* keeps it above the hero bg */
+  /* optional subtle shadow for separation */
+  box-shadow: 0 1px 0 rgba(0,0,0,.02);
+}
+
+/* Dark mode (optional, if you use .dark-mode on <body>) */
+.dark-mode .breadcrumb-container { background: #2b2b2b; }
+.dark-mode .breadcrumb .breadcrumb-item a { color: #f8f9fa; }
+.dark-mode .breadcrumb .breadcrumb-item.active { color: #adb5bd; }
+
+/* Breadcrumbs */
+.breadcrumb { 
+  --bs-breadcrumb-divider: "›";
+  margin-bottom: 0;
+}
+.breadcrumb .breadcrumb-item a {
+  text-decoration: none;
+  color: #1c2540;
+  font-weight: 600;
+}
+.breadcrumb .breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+.breadcrumb .breadcrumb-item.active {
+  color: #6c757d; /* muted */
+}
+
+/* The bar itself */
+.breadcrumb-container{
+  background: rgba(255,255,255,0.98);
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  min-height: 40px;               /* makes it visibly tall */
+  position: relative;
+  z-index: 1100;                  /* keep above hero art */
+  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+}
+
+/* Optional dark mode support */
+.dark-mode .breadcrumb-container { background: #2b2b2b; }
+.dark-mode .breadcrumb .breadcrumb-item a { color: #f8f9fa; }
+.dark-mode .breadcrumb .breadcrumb-item.active { color: #adb5bd; }
+
 </style>
 
 <script>

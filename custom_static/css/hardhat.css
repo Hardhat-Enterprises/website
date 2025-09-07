@@ -19153,6 +19153,12 @@ fieldset:disabled .btn {
   background-size: cover;
 }
 
+.profile-img-fit {
+    width: 180px;
+    height: 180px;
+    object-fit: cover; 
+    object-position: top;
+}
 /**
  * = Floating animations
  */
