@@ -172,6 +172,18 @@ urlpatterns = [
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
   path('accounts/admin/', AdminLoginView.as_view(), name='admin_login'),
     path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('staff/user-management/', views.user_management, name='user_management'),
+    path('staff/assign-user-project/', views.assign_user_project, name='assign_user_project'),
+    path('staff/update-user/', views.update_user, name='update_user'),
+    path('staff/bulk-assign-users-project/', views.bulk_assign_users_project, name='bulk_assign_users_project'),
+    path('staff/bulk-update-user-status/', views.bulk_update_user_status, name='bulk_update_user_status'),
+    path('staff/bulk-update-student-info/', views.bulk_update_student_info, name='bulk_update_student_info'),
+    # Project Teams Management URLs
+    path('staff/project-teams/', views.project_teams, name='project_teams'),
+    path('staff/projects/add/', views.add_project, name='add_project'),
+    path('staff/projects/<str:pk>/edit/', views.edit_project, name='edit_project'),
+    path('staff/projects/<str:pk>/delete/', views.delete_project, name='delete_project'),
+    path('staff/get-available-users/', views.get_available_users, name='get_available_users'),
     
 
     #swagger-new-implementation

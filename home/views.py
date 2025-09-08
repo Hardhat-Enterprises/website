@@ -2646,3 +2646,632 @@ class ChallengePreviewView(StaffRequiredMixin, View):
         
         return JsonResponse(data)
 
+# User Management Views
+
+@staff_member_required
+@require_POST
+def unassign_users(request, project_id):
+    """Handle unassigning users from a project."""
+    print(f"DEBUG: unassign_users called with project_id: {project_id}")
+    print(f"DEBUG: request.body: {request.body}")
+    
+    try:
+        data = json.loads(request.body)
+        user_ids = data.get('user_ids', [])
+        
+        print(f"DEBUG: user_ids: {user_ids}")
+        
+        if not user_ids:
+            return JsonResponse({'success': False, 'error': 'No users selected.'}, status=400)
+        
+        # Unassign users by setting their allocated project to null in the Student model
+        students = Student.objects.filter(user_id__in=user_ids, allocated_id=project_id)
+        print(f"DEBUG: Found {students.count()} students to unassign")
+        students_updated = students.update(allocated=None)
+        print(f"DEBUG: Updated {students_updated} students")
+        
+        # Also clear the assigned_project from the Profile model for consistency
+        profiles = Profile.objects.filter(user_id__in=user_ids, assigned_project_id=project_id)
+        print(f"DEBUG: Found {profiles.count()} profiles to unassign")
+        profiles_updated = profiles.update(assigned_project=None)
+        print(f"DEBUG: Updated {profiles_updated} profiles")
+        
+        return JsonResponse({'success': True, 'message': f'{len(user_ids)} user(s) unassigned successfully.'})
+    
+    except json.JSONDecodeError:
+        print("DEBUG: JSON decode error")
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        print(f"DEBUG: Exception: {str(e)}")
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@staff_member_required
+def user_management(request):
+    """User management page with editing and bulk operations."""
+    # Start with all users, ordered by date joined (newest first)
+    users = User.objects.all().select_related().prefetch_related('users').order_by('-created_at')
+
+    # Handle search functionality
+    search_query = request.GET.get('search', '').strip()
+    if search_query:
+        users = users.filter(
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(users__id__icontains=search_query)
+        ).distinct()
+
+    # Handle filtering
+    filter_type = request.GET.get('filter', '')
+    if filter_type == 'preferences_no_assignment':
+        # Users who have preferences but no project assignment
+        users = users.filter(
+            Q(users__p1__isnull=False) | Q(users__p2__isnull=False) | Q(users__p3__isnull=False)
+        ).filter(
+            Q(users__allocated__isnull=True)
+        ).distinct()
+    elif filter_type == 'no_preferences':
+        # Users with no preferences
+        users = users.filter(
+            users__p1__isnull=True,
+            users__p2__isnull=True,
+            users__p3__isnull=True
+        ).distinct()
+    elif filter_type == 'assigned':
+        # Users with project assignments
+        users = users.filter(users__allocated__isnull=False).distinct()
+    elif filter_type == 'unassigned':
+        # Users without project assignments
+        users = users.filter(
+            Q(users__allocated__isnull=True) | Q(users__isnull=True)
+        ).distinct()
+    elif filter_type == 'verified':
+        # Verified users
+        users = users.filter(is_verified=True)
+    elif filter_type == 'unverified':
+        # Unverified users
+        users = users.filter(is_verified=False)
+    elif filter_type == 'staff':
+        # Staff users (including admins)
+        users = users.filter(is_staff=True)
+    elif filter_type == 'admin':
+        # Admin users only
+        users = users.filter(is_superuser=True)
+    elif filter_type == 'regular_users':
+        # Regular users (not staff or admin)
+        users = users.filter(is_staff=False, is_superuser=False)
+    elif filter_type == 'active':
+        # Active users
+        users = users.filter(is_active=True)
+    elif filter_type == 'inactive':
+        # Inactive users
+        users = users.filter(is_active=False)
+
+    # Handle additional filters that can be combined
+    unit_filter = request.GET.get('unit', '')
+    if unit_filter:
+        users = users.filter(users__unit=unit_filter)
+    
+    trimester_filter = request.GET.get('trimester', '')
+    if trimester_filter:
+        users = users.filter(users__trimester=trimester_filter)
+    
+    year_filter = request.GET.get('year', '')
+    if year_filter:
+        users = users.filter(users__year=year_filter)
+
+    # Get all active projects for the dropdown
+    projects = Project.objects.filter(is_active=True, archived=False).order_by('title')
+
+    # Store total count before pagination
+    total_users = users.count()
+
+    # Pagination
+    paginator = Paginator(users, 50)  # Show 50 users per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Generate year options
+    year_options = list(range(2020, 2031))  # 2020-2030
+    
+    context = {
+        'users': page_obj,
+        'total_users': total_users,
+        'projects': projects,
+        'units': Student.UNITS,
+        'trimesters': Student.TRIMESTERS,
+        'courses': Student.COURSES,
+        'year_options': year_options,
+        'search_query': search_query,
+        'current_filter': filter_type,
+        'unit_filter': unit_filter,
+        'trimester_filter': trimester_filter,
+        'year_filter': year_filter,
+    }
+    return render(request, 'admin/user-management/assignment.html', context)
+
+@staff_member_required
+@require_POST
+def assign_user_project(request):
+    """Handle assigning a user to a project via AJAX."""
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        project_id = data.get('project_id')
+        
+        if not user_id:
+            return JsonResponse({'success': False, 'error': 'User ID is required.'}, status=400)
+        
+        # Get the user
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User not found.'}, status=404)
+        
+        # Get or create student profile, preserving existing data
+        student, created = Student.objects.get_or_create(
+            user=user,
+            defaults={'id': 220000000 + user.id}  # Only set ID for new records
+        )
+        
+        if project_id and project_id != 'unassigned':
+            # Assign to project
+            try:
+                project = Project.objects.get(id=project_id)
+                student.allocated = project
+                student.save()
+                
+                message = f'User {user.get_full_name() or user.email} assigned to {project.title}'
+            except Project.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Project not found.'}, status=404)
+        else:
+            # Unassign from project (either empty value or 'unassigned')
+            student.allocated = None
+            student.save()
+            message = f'User {user.get_full_name() or user.email} unassigned from project'
+        
+        return JsonResponse({'success': True, 'message': message})
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@staff_member_required
+@require_POST
+def update_user(request):
+    """Handle updating user information via AJAX."""
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        
+        if not user_id:
+            return JsonResponse({'success': False, 'error': 'User ID is required.'}, status=400)
+        
+        # Get the user
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User not found.'}, status=404)
+        
+        # Update user fields
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
+        user.email = data.get('email', user.email)
+        user.is_active = data.get('is_active', user.is_active)
+        user.is_staff = data.get('is_staff', user.is_staff)
+        user.is_verified = data.get('is_verified', user.is_verified)
+        user.save()
+        
+        # Get or create student profile
+        student, created = Student.objects.get_or_create(
+            user=user,
+            defaults={'id': data.get('student_id', 220000000 + user.id)}
+        )
+        
+        # Update student fields
+        if data.get('student_id'):
+            student.id = data.get('student_id')
+        if data.get('year'):
+            student.year = data.get('year')
+        student.trimester = data.get('trimester', student.trimester)
+        student.unit = data.get('unit', student.unit)
+        student.course = data.get('course', student.course)
+        
+        # Update project preferences - only update if explicitly provided
+        if 'p1' in data:
+            if data.get('p1'):
+                try:
+                    student.p1 = Project.objects.get(id=data.get('p1'))
+                except Project.DoesNotExist:
+                    student.p1 = None
+            else:
+                student.p1 = None
+            
+        if 'p2' in data:
+            if data.get('p2'):
+                try:
+                    student.p2 = Project.objects.get(id=data.get('p2'))
+                except Project.DoesNotExist:
+                    student.p2 = None
+            else:
+                student.p2 = None
+            
+        if 'p3' in data:
+            if data.get('p3'):
+                try:
+                    student.p3 = Project.objects.get(id=data.get('p3'))
+                except Project.DoesNotExist:
+                    student.p3 = None
+            else:
+                student.p3 = None
+        
+        # Update assigned project - only update if explicitly provided
+        if 'assigned_project' in data:
+            if data.get('assigned_project') and data.get('assigned_project') != 'unassigned':
+                try:
+                    student.allocated = Project.objects.get(id=data.get('assigned_project'))
+                except Project.DoesNotExist:
+                    student.allocated = None
+            else:
+                student.allocated = None
+        
+        student.save()
+        
+        return JsonResponse({
+            'success': True, 
+            'message': f'User {user.get_full_name() or user.email} updated successfully.'
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@staff_member_required
+@require_POST
+def bulk_assign_users_project(request):
+    """Handle bulk assignment of multiple users to a project via AJAX."""
+    try:
+        data = json.loads(request.body)
+        user_ids = data.get('user_ids', [])
+        project_id = data.get('project_id')
+        
+        if not user_ids:
+            return JsonResponse({'success': False, 'error': 'No users selected.'}, status=400)
+        
+        if not isinstance(user_ids, list):
+            return JsonResponse({'success': False, 'error': 'User IDs must be a list.'}, status=400)
+            
+        # Validate all users exist
+        users = User.objects.filter(id__in=user_ids)
+        if users.count() != len(user_ids):
+            return JsonResponse({'success': False, 'error': 'Some users not found.'}, status=404)
+        
+        success_count = 0
+        errors = []
+        
+        for user in users:
+            try:
+                # Get or create student profile, preserving existing data
+                student, created = Student.objects.get_or_create(
+                    user=user,
+                    defaults={'id': 220000000 + user.id}
+                )
+                
+                if project_id and project_id != 'unassigned':
+                    # Assign to project
+                    try:
+                        project = Project.objects.get(id=project_id)
+                        student.allocated = project
+                        student.save()
+                        success_count += 1
+                    except Project.DoesNotExist:
+                        errors.append(f'Project not found for user {user.get_full_name() or user.email}')
+                else:
+                    # Unassign from project
+                    student.allocated = None
+                    student.save()
+                    success_count += 1
+                    
+            except Exception as e:
+                errors.append(f'Error updating {user.get_full_name() or user.email}: {str(e)}')
+        
+        if success_count > 0:
+            if project_id and project_id != 'unassigned':
+                project_name = Project.objects.get(id=project_id).title
+                message = f'Successfully assigned {success_count} user(s) to {project_name}'
+            else:
+                message = f'Successfully unassigned {success_count} user(s) from projects'
+                
+            if errors:
+                message += f'. {len(errors)} error(s) occurred.'
+                
+            return JsonResponse({'success': True, 'message': message, 'errors': errors})
+        else:
+            return JsonResponse({'success': False, 'error': 'No users were updated. ' + '; '.join(errors)})
+            
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@staff_member_required
+@require_POST
+def bulk_update_user_status(request):
+    """Handle bulk activation/deactivation of multiple users via AJAX."""
+    try:
+        data = json.loads(request.body)
+        user_ids = data.get('user_ids', [])
+        action = data.get('action')
+        
+        if not user_ids:
+            return JsonResponse({'success': False, 'error': 'No users selected.'}, status=400)
+            
+        if not isinstance(user_ids, list):
+            return JsonResponse({'success': False, 'error': 'User IDs must be a list.'}, status=400)
+            
+        if action not in ['activate', 'deactivate']:
+            return JsonResponse({'success': False, 'error': 'Invalid action. Must be "activate" or "deactivate".'}, status=400)
+        
+        # Validate all users exist
+        users = User.objects.filter(id__in=user_ids)
+        if users.count() != len(user_ids):
+            return JsonResponse({'success': False, 'error': 'Some users not found.'}, status=404)
+        
+        # Prevent deactivating superusers
+        if action == 'deactivate':
+            superusers = users.filter(is_superuser=True)
+            if superusers.exists():
+                superuser_names = [u.get_full_name() or u.email for u in superusers]
+                return JsonResponse({
+                    'success': False, 
+                    'error': f'Cannot deactivate admin users: {", ".join(superuser_names)}'
+                }, status=400)
+        
+        # Update user status
+        is_active = action == 'activate'
+        updated_count = users.update(is_active=is_active)
+        
+        action_text = 'activated' if is_active else 'deactivated'
+        message = f'Successfully {action_text} {updated_count} user(s)'
+        
+        return JsonResponse({'success': True, 'message': message})
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@staff_member_required
+@require_POST
+def bulk_update_student_info(request):
+    """Handle bulk updates of student information (unit, trimester, year) via AJAX."""
+    try:
+        data = json.loads(request.body)
+        user_ids = data.get('user_ids', [])
+        unit = data.get('unit')
+        trimester = data.get('trimester')
+        year = data.get('year')
+        
+        if not user_ids:
+            return JsonResponse({'success': False, 'error': 'No users selected.'}, status=400)
+            
+        if not isinstance(user_ids, list):
+            return JsonResponse({'success': False, 'error': 'User IDs must be a list.'}, status=400)
+            
+        if not unit and not trimester and not year:
+            return JsonResponse({'success': False, 'error': 'At least one field (unit, trimester, year) must be provided.'}, status=400)
+        
+        # Validate all users exist
+        users = User.objects.filter(id__in=user_ids)
+        if users.count() != len(user_ids):
+            return JsonResponse({'success': False, 'error': 'Some users not found.'}, status=404)
+        
+        success_count = 0
+        errors = []
+        updated_fields = []
+        
+        if unit:
+            updated_fields.append(f'Unit: {dict(Student.UNITS).get(unit, unit)}')
+        if trimester:
+            updated_fields.append(f'Trimester: {dict(Student.TRIMESTERS).get(trimester, trimester)}')
+        if year:
+            updated_fields.append(f'Year: {year}')
+        
+        for user in users:
+            try:
+                # Get or create student profile
+                student, created = Student.objects.get_or_create(
+                    user=user,
+                    defaults={'id': 220000000 + user.id}
+                )
+                
+                # Update fields if provided
+                if unit:
+                    student.unit = unit
+                if trimester:
+                    student.trimester = trimester
+                if year:
+                    student.year = int(year)
+                
+                student.save()
+                success_count += 1
+                    
+            except Exception as e:
+                errors.append(f'Error updating {user.get_full_name() or user.email}: {str(e)}')
+        
+        if success_count > 0:
+            message = f'Successfully updated {success_count} student(s) with: {", ".join(updated_fields)}'
+            
+            if errors:
+                message += f'. {len(errors)} error(s) occurred.'
+                
+            return JsonResponse({'success': True, 'message': message, 'errors': errors})
+        else:
+            return JsonResponse({'success': False, 'error': 'No students were updated. ' + '; '.join(errors)})
+            
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+# Project Teams Management Views
+
+@staff_member_required
+def project_teams(request):
+    """Project teams management page displaying projects and their assigned members."""
+    # Get all active projects
+    projects = Project.objects.filter(is_active=True, archived=False).order_by('title')
+    
+    # For each project, get assigned team members (staff first)
+    projects_with_members = []
+    for project in projects:
+        # Get all students assigned to this project
+        assigned_students = Student.objects.filter(allocated=project).select_related('user')
+        
+        # Sort by staff status (staff first), then by name
+        team_members = sorted(assigned_students, key=lambda s: (not s.user.is_staff, s.user.get_full_name() or s.user.email))
+        
+        project.team_members = team_members
+        projects_with_members.append(project)
+    
+    context = {
+        'projects': projects_with_members,
+    }
+    
+    return render(request, 'admin/user-management/project_teams.html', context)
+
+
+@staff_member_required
+@require_POST
+def add_project(request):
+    """Handle adding a new project via AJAX."""
+    try:
+        title = request.POST.get('title')
+        description = request.POST.get('description', '')
+        
+        if not title:
+            return JsonResponse({'success': False, 'error': 'Project title is required.'}, status=400)
+        
+        # Check if project with this title already exists
+        if Project.objects.filter(title=title, is_active=True, archived=False).exists():
+            return JsonResponse({'success': False, 'error': 'A project with this title already exists.'}, status=400)
+        
+        # Create new project
+        project = Project.objects.create(
+            title=title,
+            description=description,
+            is_active=True,
+            archived=False
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Project "{project.title}" created successfully.',
+            'project_id': str(project.id)
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@staff_member_required
+@require_POST
+def edit_project(request, pk):
+    """Handle editing a project via AJAX."""
+    try:
+        project = get_object_or_404(Project, id=pk)
+        
+        title = request.POST.get('title')
+        description = request.POST.get('description', '')
+        
+        if not title:
+            return JsonResponse({'success': False, 'error': 'Project title is required.'}, status=400)
+        
+        # Check if another project with this title already exists (excluding current project)
+        if Project.objects.filter(title=title, is_active=True, archived=False).exclude(id=project.id).exists():
+            return JsonResponse({'success': False, 'error': 'A project with this title already exists.'}, status=400)
+        
+        # Update project
+        project.title = title
+        project.description = description
+        project.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Project "{project.title}" updated successfully.'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@staff_member_required
+@require_POST
+def delete_project(request, pk):
+    """Handle deleting a project via AJAX."""
+    try:
+        project = get_object_or_404(Project, id=pk)
+        
+        # Unassign all users from this project before deleting
+        Student.objects.filter(allocated=project).update(allocated=None)
+        
+        # Mark project as archived instead of deleting to preserve data integrity
+        project.archived = True
+        project.is_active = False
+        project.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Project "{project.title}" deleted successfully. All users have been unassigned.'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@staff_member_required
+def get_available_users(request):
+    """Get list of users available for assignment to a project."""
+    try:
+        project_id = request.GET.get('project_id')
+        search_term = request.GET.get('search', '').strip()
+        
+        # Get all users
+        users = User.objects.filter(is_active=True)
+        
+        # If search term provided, filter by name or email
+        if search_term:
+            users = users.filter(
+                Q(first_name__icontains=search_term) |
+                Q(last_name__icontains=search_term) |
+                Q(email__icontains=search_term)
+            )
+        
+        # Exclude users already assigned to this project if project_id provided
+        if project_id:
+            assigned_user_ids = Student.objects.filter(allocated_id=project_id).values_list('user_id', flat=True)
+            users = users.exclude(id__in=assigned_user_ids)
+        
+        # Prepare user data
+        user_data = []
+        for user in users[:50]:  # Limit to 50 users for performance
+            user_data.append({
+                'id': user.id,
+                'full_name': user.get_full_name(),
+                'email': user.email,
+                'is_staff': user.is_staff
+            })
+        
+        # Sort by staff status (staff first), then by name
+        user_data.sort(key=lambda u: (not u['is_staff'], u['full_name'] or u['email']))
+        
+        return JsonResponse({
+            'success': True,
+            'users': user_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)

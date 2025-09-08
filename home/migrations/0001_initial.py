@@ -85,21 +85,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='CareerFAQ',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question', models.CharField(max_length=500)),
-                ('answer', tinymce.models.HTMLField()),
-                ('category', models.CharField(choices=[('application', 'Application'), ('benefits', 'Benefits'), ('growth', 'Growth'), ('popular', 'Popular'), ('general', 'General')], default='general', max_length=20)),
-                ('is_popular', models.BooleanField(default=False)),
-                ('order', models.IntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-            ],
-            options={
-                'ordering': ['order', 'created_at'],
-            },
-        ),
-        migrations.CreateModel(
             name='Contact',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -190,25 +175,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='GraduateProgram',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('description', tinymce.models.HTMLField()),
-                ('duration_months', models.IntegerField(default=12)),
-                ('program_type', models.CharField(choices=[('cybersecurity', 'Cybersecurity'), ('software_engineering', 'Software Engineering'), ('data_science', 'Data Science'), ('ai_ml', 'AI & Machine Learning'), ('general', 'General Technology')], max_length=50)),
-                ('start_date', models.DateField()),
-                ('application_deadline', models.DateField()),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('overview', tinymce.models.HTMLField()),
-                ('curriculum', tinymce.models.HTMLField()),
-                ('benefits', tinymce.models.HTMLField()),
-                ('requirements', tinymce.models.HTMLField()),
-                ('application_process', tinymce.models.HTMLField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='Job',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -218,23 +184,13 @@ class Migration(migrations.Migration):
                 ('job_type', models.CharField(choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract'), ('internship', 'Internship')], max_length=50)),
                 ('posted_date', models.DateField(auto_now_add=True)),
                 ('closing_date', models.DateField()),
-                ('responsibilities', tinymce.models.HTMLField(blank=True, null=True)),
-                ('qualifications', tinymce.models.HTMLField(blank=True, null=True)),
                 ('benefits', tinymce.models.HTMLField(blank=True, null=True)),
-                ('salary_range', models.CharField(blank=True, max_length=100, null=True)),
-                ('experience_level', models.CharField(choices=[('entry', 'Entry Level'), ('mid', 'Mid Level'), ('senior', 'Senior Level'), ('lead', 'Lead'), ('intern', 'Internship')], default='entry', max_length=50)),
                 ('department', models.CharField(blank=True, max_length=100, null=True)),
+                ('experience_level', models.CharField(choices=[('entry', 'Entry Level'), ('mid', 'Mid Level'), ('senior', 'Senior Level'), ('lead', 'Lead'), ('intern', 'Internship')], default='entry', max_length=50)),
+                ('qualifications', tinymce.models.HTMLField(blank=True, null=True)),
+                ('responsibilities', tinymce.models.HTMLField(blank=True, null=True)),
+                ('salary_range', models.CharField(blank=True, max_length=100, null=True)),
                 ('skills_required', models.TextField(blank=True, null=True)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='JobAlert',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=254, unique=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('last_notification', models.DateTimeField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -260,16 +216,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Project',
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created_at')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated_at')),
+                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
+                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
                 ('is_active', models.BooleanField(default=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False, unique=True)),
-                ('title', models.CharField(choices=[('AppAttack', 'AppAttack'), ('Malware', 'Malware'), ('PT-GUI', 'PT-GUI'), ('Smishing_Detection', 'Smishing Detection'), ('Deakin_CyberSafe_VR', 'Deakin CyberSafe VR'), ('Deakin_Threat_Mirror', 'Deakin Threat Mirror'), ('Company_Website_Development', 'Company Website Development')], max_length=150, verbose_name='project title')),
+                ('title', models.CharField(max_length=150, unique=True, verbose_name='project title')),
                 ('archived', models.BooleanField(default=False, verbose_name='archived')),
                 ('description', models.TextField(blank=True, null=True, verbose_name='project description')),
             ],
             options={
-                'abstract': False,
+                'ordering': ['title'], 'verbose_name': 'project', 'verbose_name_plural': 'projects',
             },
         ),
         migrations.CreateModel(
@@ -488,5 +444,49 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='progress',
             unique_together={('student', 'skill')},
+        ),
+        migrations.CreateModel(
+            name='CareerFAQ',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('question', models.CharField(max_length=500)),
+                ('answer', tinymce.models.HTMLField()),
+                ('category', models.CharField(choices=[('application', 'Application'), ('benefits', 'Benefits'), ('growth', 'Growth'), ('popular', 'Popular'), ('general', 'General')], default='general', max_length=20)),
+                ('is_popular', models.BooleanField(default=False)),
+                ('order', models.IntegerField(default=0)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'ordering': ['order', 'created_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='GraduateProgram',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=200)),
+                ('description', tinymce.models.HTMLField()),
+                ('duration_months', models.IntegerField(default=12)),
+                ('program_type', models.CharField(choices=[('cybersecurity', 'Cybersecurity'), ('software_engineering', 'Software Engineering'), ('data_science', 'Data Science'), ('ai_ml', 'AI & Machine Learning'), ('general', 'General Technology')], max_length=50)),
+                ('start_date', models.DateField()),
+                ('application_deadline', models.DateField()),
+                ('is_active', models.BooleanField(default=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('overview', tinymce.models.HTMLField()),
+                ('curriculum', tinymce.models.HTMLField()),
+                ('benefits', tinymce.models.HTMLField()),
+                ('requirements', tinymce.models.HTMLField()),
+                ('application_process', tinymce.models.HTMLField()),
+            ],
+        ),
+        migrations.CreateModel(
+            name='JobAlert',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('email', models.EmailField(max_length=254, unique=True)),
+                ('is_active', models.BooleanField(default=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('last_notification', models.DateTimeField(blank=True, null=True)),
+            ],
         ),
     ]

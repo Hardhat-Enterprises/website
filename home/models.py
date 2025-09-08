@@ -177,23 +177,20 @@ class Webpage(models.Model):
 
 class Project(AbstractBaseSet):
 
-    PROJECT_CHOICES = [
-        ('AppAttack', 'AppAttack'),
-        ('Malware', 'Malware'),
-        ('PT-GUI', 'PT-GUI'),
-        ('Smishing_Detection', 'Smishing Detection'),
-        ('Deakin_CyberSafe_VR', 'Deakin CyberSafe VR'),
-        ('Deakin_Threat_Mirror', 'Deakin Threat Mirror'),
-        ('Company_Website_Development', 'Company Website Development'),
-    ]
-
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
-    title = models.CharField(_("project title"), max_length=150, choices=PROJECT_CHOICES, blank=False)
+    title = models.CharField(_("project title"), max_length=150, blank=False, unique=True)
     archived = models.BooleanField(_("archived"), default=False)
     description = models.TextField(_("project description"), blank=True, null=True)
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("updated at"), auto_now=True)
 
     def __str__(self) -> str:
-        return self.get_title_display()
+        return self.title
+
+    class Meta:
+        ordering = ['title']
+        verbose_name = _("project")
+        verbose_name_plural = _("projects")
 
 
 class Course(AbstractBaseSet):
