@@ -8,7 +8,10 @@ APP_NAME="Hardhat Enterprises Web App"
 ENV_FILE=".env"
 ENV_SAMPLE_FILE="env.sample"
 COMPOSE_FILE="docker-compose.yml"
-HEALTHCHECK_URL="http://localhost:80/health"
+
+# Dynamic health check URLs - will try multiple combinations
+DJANGO_URLS=("http://127.0.0.1:8000/health" "http://localhost:8000/health")
+NGINX_URLS=("http://127.0.0.1:8080/health" "http://localhost:8080/health")
 
 # Colors & symbols
 GREEN="\033[0;32m"
@@ -62,15 +65,29 @@ check_file() {
   [ -f "$1" ] && printf "%-40s | %b\n" "$2" "$TICK" || printf "%-40s | %b\n" "$2" "$CROSS"
 }
 
-# Health check
+# Health check - tries Django dev server first, then nginx (both localhost and 127.0.0.1)
 check_health() {
-  if curl -s --head --request GET "$HEALTHCHECK_URL" | grep "200 OK" >/dev/null; then
-    printf "%-40s | %b\n" "Healthcheck endpoint ($HEALTHCHECK_URL)" "$TICK"
-    return 0
-  else
-    printf "%-40s | %b\n" "Healthcheck endpoint ($HEALTHCHECK_URL)" "$CROSS"
-    return 1
-  fi
+  # Try Django development server URLs first
+  for url in "${DJANGO_URLS[@]}"; do
+    if curl -s --head --request GET "$url" | grep "200 OK" >/dev/null; then
+      printf "%-40s | %b\n" "Django health endpoint ($url)" "$TICK"
+      ACTIVE_HEALTHCHECK_URL="$url"
+      return 0
+    fi
+  done
+  
+  # Try nginx URLs if Django isn't responding
+  for url in "${NGINX_URLS[@]}"; do
+    if curl -s --head --request GET "$url" | grep "200 OK" >/dev/null; then
+      printf "%-40s | %b\n" "Nginx health endpoint ($url)" "$TICK"
+      ACTIVE_HEALTHCHECK_URL="$url"
+      return 0
+    fi
+  done
+  
+  # No endpoints responded
+  printf "%-40s | %b\n" "Health endpoints (localhost/127.0.0.1)" "$CROSS"
+  return 1
 }
 
 # Perform all checks
@@ -100,7 +117,10 @@ run_setup() {
   sleep 5
 
   if check_health; then
-    echo -e "\n🎉 ${GREEN}Setup complete. Visit your app at http://localhost:80/health\n"
+    echo -e "\n🎉 ${GREEN}Setup complete. Active endpoint: $ACTIVE_HEALTHCHECK_URL${NC}"
+    echo -e "${GREEN}Available URLs:${NC}"
+    echo -e "${GREEN}  Django app: http://localhost:8000 or http://127.0.0.1:8000${NC}"
+    echo -e "${GREEN}  Nginx proxy: http://localhost:8080 or http://127.0.0.1:8080${NC}\n"
   else
     echo -e "\n${RED}❌ Setup ran but app is not healthy. Please check logs using 'docker-compose logs'.${NC}\n"
   fi
