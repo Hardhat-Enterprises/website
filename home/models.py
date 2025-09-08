@@ -799,8 +799,8 @@ class Tip(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Security Awareness Quote"
-        verbose_name_plural = "Security Awareness Quotes"
+        verbose_name = "Daily Security Tip"
+        verbose_name_plural = "Daily Security Tips"
 
     def __str__(self):
         return self.text[:60]
