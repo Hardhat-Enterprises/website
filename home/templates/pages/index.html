@@ -45,22 +45,26 @@
         <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
       </svg></figure>
       <style>
-        .blink-animation {
-          animation: blinkEffect 1.9s ease-in-out 2;
-        }
-      
-        @keyframes blinkEffect {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
-        }
-        .hh-tip-wrap{
+  /* subtle load animation */
+  .blink-animation { animation: blinkEffect 1.9s ease-in-out 2; }
+  @keyframes blinkEffect { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .hh-tip-wrap,
+  .hh-tip-grid,
+  .hh-tip-badge,
+  .hh-tip-text{
+    font-family: var(--font-sans, inherit);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .hh-tip-wrap{
     display:flex;
     justify-content:center;
   }
 
   .hh-tip-grid{
     display:grid;
-    grid-template-columns: auto 1fr;   /* badge | text */
+    grid-template-columns: auto 1fr;   
     align-items:center;
     gap:14px;
     width:100%;
@@ -78,30 +82,31 @@
     background:#212529;
     color:#ffcd11;
     font-weight:700;
+    letter-spacing:.01em;         
     border-radius:999px;
     padding:.55rem 1rem;
     white-space:nowrap;
     font-size:1rem;
   }
 
-  /* Desktop/tablet: keep a tidy 2-line clamp */
+  
   .hh-tip-text{
-    font-weight:600;
-    font-size:clamp(1rem, 1.4vw, 1.35rem);
-    line-height:1.35;
+    font-weight:500;              
+    font-size:clamp(1rem, 1.2vw, 1.25rem);
+    line-height:1.4;
     display:-webkit-box;
     -webkit-box-orient:vertical;
     -webkit-line-clamp:2;
     overflow:hidden;
-    max-height:calc(1.35em * 2);
-    overflow-wrap:anywhere;
-    word-break:break-word;
+    max-height:calc(1.4em * 2);
+    overflow-wrap:normal;
+    word-break:normal;
   }
 
-  /* Mobile: stack vertically and show full text */
+  
   @media (max-width: 576px){
     .hh-tip-grid{
-      grid-template-columns: 1fr;      /* single column: badge above text */
+      grid-template-columns: 1fr;  
       gap:8px;
       max-width:92vw;
       align-items:start;
@@ -112,17 +117,18 @@
       font-size:.95rem;
     }
     .hh-tip-text{
-      display:block;                   /* remove clamp */
+      display:block;               
       -webkit-line-clamp:unset;
       max-height:none;
       overflow:visible;
       white-space:normal;
       word-break:normal;
-      font-size:clamp(.95rem, 4.2vw, 1.15rem);
-      line-height:1.4;
+      font-size:clamp(.95rem, 4vw, 1.15rem);
+      line-height:1.45;
     }
   }
-      </style>
+</style>
+
   </section>
 
   <!-- Vision and Mission -->

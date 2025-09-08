@@ -804,10 +804,12 @@ class Tip(models.Model):
 
     def __str__(self):
         return self.text[:60]
+
+# keep this only if you implemented 24h rolling rotation
 class TipRotationState(models.Model):
     lock = models.CharField(max_length=16, default="default", unique=True)
     last_index = models.IntegerField(default=-1)
     rotated_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Rotation {self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+        return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
