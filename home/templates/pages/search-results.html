@@ -23,11 +23,54 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
-      <div class="d-flex justify-content-end mb-3">
+
+      <div class="mb-3 text-start">
         <button id="filterBtn" class="btn btn-outline-secondary">
           <i class="fas fa-filter"></i> Filters
         </button>
-      </div>      
+      </div>
+      
+      <div id="filterPanel" class="card p-3 mb-4" style="display:none;">
+        <form method="GET" action="">
+          <!-- keep the original search query -->
+          <input type="hidden" name="q" value="{{ searched }}">
+      
+          <!-- Sort options -->
+          <div class="mb-2">
+            <label><strong>Sort By:</strong></label>
+            <select name="sort" class="form-select">
+              <option value="">Relevance</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+            </select>
+          </div>
+      
+          <!-- Date range -->
+          <div class="mb-2">
+            <label><strong>Date Range:</strong></label><br>
+            <input type="date" name="start"> to <input type="date" name="end">
+          </div>
+      
+          <!-- Type filter -->
+          <div class="mb-2">
+            <label><strong>Type:</strong></label><br>
+            <label><input type="checkbox" name="type" value="projects"> Projects</label>
+            <label><input type="checkbox" name="type" value="articles"> Articles</label>
+            <label><input type="checkbox" name="type" value="users"> Users</label>
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </form>
+      </div>
+      
+      <!-- Script to toggle panel -->
+      <script>
+      document.getElementById("filterBtn").onclick = function(){
+        let panel = document.getElementById("filterPanel");
+        panel.style.display = (panel.style.display === "none") ? "block" : "none";
+      };
+      </script>      
+      
       <h1 class="fw-bolder">Search Results</h1>
       {% if searched %}
         <h5>You Searched For: "{{ searched }}"</h5>
