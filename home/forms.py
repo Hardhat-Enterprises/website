@@ -12,6 +12,7 @@ from django.utils.timezone import now
 from datetime import timedelta
 import logging
 import nh3
+from django.contrib.auth import password_validation
 
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, UserBlogPage, SecurityEvent, JobApplication, CyberChallenge
 from .models import PenTestingRequest, SecureCodeReviewRequest
@@ -49,23 +50,7 @@ class RegistrationForm(UserCreationForm):
     # Newly added................................................
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
-
-        # Check individual requirements - this matches the frontend validation
-        if len(password) < 8:
-            raise ValidationError(_("Password must be at least 8 characters long."))
-
-        if not re.search(r'[a-z]', password):
-            raise ValidationError(_("Password must include at least one lowercase letter."))
-
-        if not re.search(r'[A-Z]', password):
-            raise ValidationError(_("Password must include at least one uppercase letter."))
-
-        if not re.search(r'\d', password):
-            raise ValidationError(_("Password must include at least one number."))
-
-        if not re.search(r'[@$!%*?&]', password):
-            raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
-
+        password_validation.validate_password(password, self.instance)
         return password
     # .........................................................
 
@@ -132,23 +117,7 @@ class ClientRegistrationForm(UserCreationForm):
     # Newly added................................................
     def clean_password1(self):
         password = self.cleaned_data.get('password1')
-
-        # Check individual requirements - this matches the frontend validation
-        if len(password) < 8:
-            raise ValidationError(_("Password must be at least 8 characters long."))
-
-        if not re.search(r'[a-z]', password):
-            raise ValidationError(_("Password must include at least one lowercase letter."))
-
-        if not re.search(r'[A-Z]', password):
-            raise ValidationError(_("Password must include at least one uppercase letter."))
-
-        if not re.search(r'\d', password):
-            raise ValidationError(_("Password must include at least one number."))
-
-        if not re.search(r'[@$!%*?&]', password):
-            raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
-
+        password_validation.validate_password(password, self.instance)
         return password
     # .........................................................
 
