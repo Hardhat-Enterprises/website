@@ -677,6 +677,10 @@ def SearchSuggestions(request):
 def SearchResults(request):
     User = get_user_model()
     query = request.POST.get('q', '').strip()  # Get search query from request
+    sort = request.GET.get('sort')
+    start_date = request.GET.get('start')
+    end_date = request.GET.get('end')
+    filter_type = request.GET.getlist('type')   # multiple checkboxes
     
     if not query:
         return render(request, 'pages/search-results.html', {
@@ -722,9 +726,41 @@ def SearchResults(request):
         'users': users,
         'courses': course_results,
         'skills': Skill.objects.filter(name__icontains=query),
-        'articles': Article.objects.filter(title__icontains=query),
+        'articles': articles,
     }
     return render(request, 'pages/search-results.html', results)
+
+    # Apply type filters
+    if filter_type:
+        if 'projects' not in filter_type:
+            project_results = Project.objects.none()
+        if 'courses' not in filter_type:
+            course_results = Course.objects.none()
+        if 'users' not in filter_type:
+            users = User.objects.none()
+        if 'articles' not in filter_type:
+            articles = Article.objects.none()
+    
+    if start_date:
+        project_results = project_results.filter(created_at__gte=start_date)
+        course_results = course_results.filter(created_at__gte=start_date)
+        articles = articles.filter(created_at__gte=start_date)
+
+    if end_date:
+        project_results = project_results.filter(created_at__lte=end_date)
+        course_results = course_results.filter(created_at__lte=end_date)
+        articles = articles.filter(created_at__lte=end_date)
+
+    if sort == "newest":
+        project_results = project_results.order_by('-created_at')
+        course_results = course_results.order_by('-created_at')
+        articles = articles.order_by('-created_at')
+    elif sort == "oldest":
+        project_results = project_results.order_by('created_at')
+        course_results = course_results.order_by('created_at')
+        articles = articles.order_by('created_at')
+
+
    
 #    if request.method == 'GET':
 #        searched = request.GET.get('searched')
