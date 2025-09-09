@@ -23,6 +23,11 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+      <div class="d-flex justify-content-end mb-3">
+        <button id="filterBtn" class="btn btn-outline-secondary">
+          <i class="fas fa-filter"></i> Filters
+        </button>
+      </div>      
       <h1 class="fw-bolder">Search Results</h1>
       {% if searched %}
         <h5>You Searched For: "{{ searched }}"</h5>
