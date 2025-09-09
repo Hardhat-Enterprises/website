@@ -11,6 +11,7 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, rate_limit_exceeded
 from .views import delete_account
+from django.conf.urls.static import static
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter

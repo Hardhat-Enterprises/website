@@ -434,71 +434,26 @@ document.addEventListener('DOMContentLoaded', function() {
 <link rel="stylesheet" href="{% static 'custom_static/css/kudoboard.css' %}">
 
 <section id="team" class="team-section">
-  <h2>Meet Our Team</h2>
+  <h2 class="text-center">Meet Our Team</h2>
   <div class="team-slider-container">
     <button class="slider-arrow left" onclick="scrollTeam(-1)">&#8249;</button>
 
     <div class="team-slider" id="team-slider">
-      <div class="team-card">
-        <img src="{% static 'assets/img/pages/about/yesha_1.jpg' %}" alt="Yesha Shah">
-        <h3>Yesha Shah</h3>
-        <p>Full-Stack Developer</p>
-        <div class="social-icons">
-          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-        </div>
-      </div>
-
-      <div class="team-card">
-        <img src="{% static 'assets/img/pages/about/will_2.jpg' %}" alt="Will Buyers">
-        <h3>Will Buyers</h3>
-        <p>Software Developer</p>
-        <div class="social-icons">
-          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-        </div>
-      </div>
-
-      <div class="team-card">
-        <img src="{% static 'assets/img/pages/about/steve_3.jpg' %}" alt="Steve Harrington">
-        <h3>Steve Harrington</h3>
-        <p>Security Architect</p>
-        <div class="social-icons">
-          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-        </div>
-      </div>
-
-      <div class="team-card">
-        <img src="{% static 'assets/img/pages/about/yesha_1.jpg' %}" alt="Yesha Shah">
-        <h3>Yesha Shah</h3>
-        <p>Full-Stack Developer</p>
-        <div class="social-icons">
-          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-        </div>
-      </div>
-
-      <div class="team-card">
-        <img src="{% static 'assets/img/pages/about/will_2.jpg' %}" alt="Will Buyers">
-        <h3>Will Buyers</h3>
-        <p>Software Developer</p>
-        <div class="social-icons">
-          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-        </div>
-      </div>
-
-      <div class="team-card">
-        <img src="{% static 'assets/img/pages/about/steve_3.jpg' %}" alt="Steve Harrington">
-        <h3>Steve Harrington</h3>
-        <p>Security Architect</p>
-        <div class="social-icons">
-          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
-        </div>
-      </div>
+    {% for member in team_members %}
+    <div class="team-card">
+      <img src="{{ member.image.url }}" alt="{{ member.name }}">
+      <h3>{{ member.name }}</h3>
+      <p>{{ member.role }}</p>
+      <div class="social-icons">
+    {% if member.linkedin %}
+    <a href="{{ member.linkedin }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+  {% endif %}
+    {% if member.github %}
+    <a href="{{ member.github }}" target="_blank"><i class="fab fa-github"></i></a>
+  {% endif %}
+</div>
     </div>
+  {% endfor %}
 
     <button class="slider-arrow right" onclick="scrollTeam(1)">&#8250;</button>
   </div>
