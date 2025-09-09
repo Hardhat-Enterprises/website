@@ -47,12 +47,6 @@ class RegistrationForm(UserCreationForm):
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
     )
-    # Newly added................................................
-    def clean_password1(self):
-        password = self.cleaned_data.get('password1')
-        password_validation.validate_password(password, self.instance)
-        return password
-    # .........................................................
 
     # Keep strict Deakin email validation with debug logs
     def clean_email(self):
@@ -114,12 +108,6 @@ class ClientRegistrationForm(UserCreationForm):
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
     )
-    # Newly added................................................
-    def clean_password1(self):
-        password = self.cleaned_data.get('password1')
-        password_validation.validate_password(password, self.instance)
-        return password
-    # .........................................................
 
     # Sanitized general email (business)
     def clean_email(self):
