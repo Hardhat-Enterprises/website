@@ -139,18 +139,6 @@
         <li class="nav-item">
           <a class="nav-link" href="#">About</a>
         </li>
-
-        {% if request.user.is_authenticated %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'vault' %}">Vault</a>
-  </li>
-{% endif %}
-
-
-        
-        
-
-
         {% comment %}
         <li class="nav-item">
           <a class="nav-link" href="#">Projects</a>

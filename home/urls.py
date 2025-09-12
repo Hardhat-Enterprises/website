@@ -192,10 +192,7 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
 
-    path("health", health_check, name="health-check"),
-<<<<<<< HEAD
-    path("vault/", views.vault, name="vault"),
-    path("vault/delete/<int:doc_id>/", views.vault_delete, name="vault_delete")
+    path("health", health_check, name="health-check")
 
 =======
     # internationalization
