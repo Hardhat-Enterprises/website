@@ -31,6 +31,11 @@ from django.views.decorators.csrf import csrf_protect
 from .models import ContactSubmission
 from django.utils.html import strip_tags
 from .models import Report
+from django.contrib.auth.decorators import login_required
+from .forms import VaultUploadForm
+from .models import VaultDocument
+from django.contrib.auth.models import Group
+
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, JobAlert, UserBlogPage #Feedback 
 
@@ -132,8 +137,6 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
-
-
 
 def get_login_redirect_url(user):
     """
@@ -2459,177 +2462,4 @@ def policy_deployment(request):
  #Health Check Function
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
-
-# Challenge Management Views
-
-class StaffRequiredMixin(UserPassesTestMixin):
-    #Check if user is staff
-    
-    def test_func(self):
-        return self.request.user.is_authenticated and (self.request.user.is_staff or self.request.user.is_superuser)
-    
-    def handle_no_permission(self):
-        print(f"DEBUG: Access denied for user {self.request.user}")
-        from django.shortcuts import redirect
-        # Redirect to login page instead of raising 403
-        return redirect('login')
-    
-class ChallengeManagementView(StaffRequiredMixin, ListView):
-    model = CyberChallenge
-    template_name = 'admin/challenges/challenge_management.html'
-    context_object_name = 'challenges'
-    
-    
-    def get_queryset(self):
-        queryset = CyberChallenge.objects.all().order_by('-created_at')
-        print(f"DEBUG: Found {queryset.count()} challenges in queryset")
-        return queryset
-
-class ChallengeCreateView(StaffRequiredMixin, CreateView):
-    
-    model = CyberChallenge
-    form_class = ChallengeForm
-    template_name = 'admin/challenges/add_challenge.html'
-    success_url = reverse_lazy('challenge_management')
-    
-    def form_valid(self, form):
-        messages.success(self.request, f'Challenge "{form.instance.title}" was created successfully!')
-        return super().form_valid(form)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_title'] = 'Create New Challenge'
-        context['submit_text'] = 'Create Challenge'
-        return context
-    
-class ChallengeUpdateView(StaffRequiredMixin, UpdateView):
-  #edit challenge 
-    model = CyberChallenge
-    form_class = ChallengeForm
-    template_name = 'admin/challenges/edit_challenge.html'
-    success_url = reverse_lazy('challenge_management')
-    
-    def form_valid(self, form):
-        messages.success(self.request, f'Challenge "{form.instance.title}" was updated successfully!')
-        return super().form_valid(form)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form_title'] = f'Edit Challenge: {self.object.title}'
-        context['submit_text'] = 'Update Challenge'
-        context['is_edit'] = True
-        return context
-class ChallengeDeleteView(StaffRequiredMixin, DeleteView):
-    model = CyberChallenge
-    template_name = 'admin/challenges/confirm_delete.html'
-    success_url = reverse_lazy('challenge_management')
-    
-    def delete(self, request, *args, **kwargs):
-        challenge = self.get_object()
-        challenge_title = challenge.title
-        response = super().delete(request, *args, **kwargs)
-        messages.success(request, f'Challenge "{challenge_title}" was permanently deleted.')
-        return response
-
-
-class ChallengeArchiveView(StaffRequiredMixin, View):
-    def get(self, request, pk):
-        challenge = get_object_or_404(CyberChallenge, pk=pk)
-        return render(request, 'admin/challenges/archive_challenge.html', {'object': challenge})
-
-    def post(self, request, pk):
-        challenge = get_object_or_404(CyberChallenge, pk=pk)
-        
-        # Handle JSON request body for AJAX
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            try:
-                import json
-                data = json.loads(request.body.decode('utf-8'))
-                action = data.get('action', '')
-                
-                if action == 'archive':
-                    challenge.is_active = False
-                elif action == 'unarchive':
-                    challenge.is_active = True
-                else:
-                    # Default toggle behavior
-                    challenge.is_active = not challenge.is_active
-            except (json.JSONDecodeError, KeyError):
-                # Default toggle behavior if no valid JSON
-                challenge.is_active = not challenge.is_active
-        else:
-            # Default toggle behavior for non-AJAX requests
-            challenge.is_active = not challenge.is_active
-            
-        challenge.save()
-        
-        status = "archived" if not challenge.is_active else "unarchived"
-        messages.success(request, f'Challenge "{challenge.title}" was {status} successfully!')
-        
-        # Return JSON response for AJAX requests
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'success': True,
-                'is_active': challenge.is_active,
-                'message': f'Challenge "{challenge.title}" was {status} successfully!'
-            })
-        
-        return redirect('challenge_management')
-
-
-class ChallengePreviewView(StaffRequiredMixin, View):
-    
-    
-    def _format_correct_answer(self, challenge):
-        
-        if not challenge.correct_answer:
-            return None
-            
-        try:
-           
-            parsed = json.loads(challenge.correct_answer)
-            if isinstance(parsed, list):
-                return parsed
-            return challenge.correct_answer
-        except (json.JSONDecodeError, TypeError):
-        
-            return challenge.correct_answer
-    
-    def get(self, request, pk):
-        challenge = get_object_or_404(CyberChallenge, pk=pk)
-        
-        choices_display = None
-        if challenge.choices and challenge.challenge_type == 'mcq':
-            if isinstance(challenge.choices, list):
-                choices_display = challenge.choices
-            else:
-                try:
-                    import json
-                    choices_display = json.loads(challenge.choices)
-                except (json.JSONDecodeError, TypeError):
-                    choices_display = [challenge.choices]
-        
-        data = {
-            'id': challenge.id,
-            'title': challenge.title,
-            'description': challenge.description,
-            'question': challenge.question,
-            'explanation': challenge.explanation,
-            'difficulty': challenge.get_difficulty_display(),
-            'category': challenge.get_category_display(),
-            'points': challenge.points,
-            'challenge_type': challenge.challenge_type,  
-            'challenge_type_display': challenge.get_challenge_type_display(), 
-            'time_limit': challenge.time_limit,
-            'correct_answer': self._format_correct_answer(challenge),
-            'choices': choices_display,
-            'starter_code': challenge.starter_code,
-            'sample_input': challenge.sample_input,
-            'expected_output': challenge.expected_output,
-            'is_active': challenge.is_active,
-            'created_at': challenge.created_at.strftime('%B %d, %Y at %I:%M %p'),
-            'updated_at': challenge.updated_at.strftime('%B %d, %Y at %I:%M %p'),
-        }
-        
-        return JsonResponse(data)
 

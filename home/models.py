@@ -10,6 +10,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser  
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -789,6 +792,79 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
+<<<<<<< HEAD
     def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
+=======
+    if not self.is_active:
+        return True
+    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
+    return now() > expiry_time
+
+def update_activity(self):
+
+    self.last_activity = now()
+    self.save(update_fields=['last_activity'])
+
+def vault_upload_path(instance, filename):
+    now = timezone.now()
+    return f"vault/{now:%Y/%m}/{filename}"
+
+class VaultDocument(models.Model):
+    VIS_PUBLIC  = 'public'
+    VIS_TEAMS   = 'teams'
+    VIS_PRIVATE = 'private'
+    VISIBILITY_CHOICES = [
+        (VIS_PUBLIC,  'Public'),
+        (VIS_TEAMS,   'Selected teams'),
+        (VIS_PRIVATE, 'Private (uploader only)'),
+    ]
+
+    file = models.FileField(upload_to=vault_upload_path)
+    original_name = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(max_length=120, blank=True)
+    size_bytes = models.PositiveIntegerField(default=0)
+    description = models.CharField(max_length=300, blank=True)
+    uploaded_by = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # NEW — access control
+    visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
+    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.original_name or (self.file.name.split('/')[-1] if self.file else 'Document')
+
+    def save(self, *args, **kwargs):
+        if self.file and not self.original_name:
+            self.original_name = getattr(self.file, 'name', 'document')
+        try:
+            self.size_bytes = int(getattr(self.file, 'size', 0))
+        except Exception:
+            pass
+        super().save(*args, **kwargs)
+
+    # Helper to check read access
+    def can_view(self, user):
+        if self.visibility == self.VIS_PUBLIC:
+            return True
+        if not user.is_authenticated:
+            return False
+        if self.visibility == self.VIS_PRIVATE and self.uploaded_by_id == user.id:
+            return True
+        if self.visibility == self.VIS_TEAMS:
+            if user.is_superuser or user.is_staff:
+                return True
+            user_group_ids = set(user.groups.values_list('id', flat=True))
+            doc_group_ids = set(self.allowed_teams.values_list('id', flat=True))
+            return bool(user_group_ids & doc_group_ids) or self.uploaded_by_id == user.id
+        return False
+
+    # Helper to check write/delete (uploader or admin)
+    def can_edit(self, user):
+        return user.is_authenticated and (user.is_superuser or user.is_staff or self.uploaded_by_id == user.id)
+>>>>>>> 1b4ffb4c ( Document Vault  - Initial commit)
