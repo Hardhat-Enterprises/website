@@ -1,0 +1,433 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<style>
+  .search-categories-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .search-bar {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    background-color: white;
+  }
+
+  .search-bar:focus {
+    outline: none;
+    border-color: #212529;
+    box-shadow: 0 0 0 2px rgba(33, 37, 41, 0.1);
+  }
+
+  .categories-label {
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .categories-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .category-btn {
+    padding: 10px 20px;
+    border: 1px solid #212529;
+    border-radius: 8px;
+    background-color: white;
+    color: #212529;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 120px;
+    justify-content: center;
+  }
+
+  .category-btn.active {
+    background-color: #212529;
+    color: white;
+  }
+
+  .category-btn:hover {
+    background-color: #212529;
+    color: white;
+  }
+
+  .category-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .icon-all {
+    background-color: white;
+    color: #212529;
+  }
+
+  .icon-application {
+    background-color: #87CEEB;
+    color: #212529;
+  }
+
+  .icon-benefits {
+    background-color: #90EE90;
+    color: #212529;
+  }
+
+  .icon-growth {
+    background-color: #0066CC;
+    color: white;
+  }
+
+  .icon-popular {
+    background-color: #ffd700;
+    color: #212529;
+  }
+
+  .faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .faq-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .faq-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .faq-category-tag {
+    background-color: #87CEEB;
+    color: #212529;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .faq-category-tag.benefits {
+    background-color: #90EE90;
+  }
+
+  .faq-category-tag.growth {
+    background-color: #0066CC;
+    color: white;
+  }
+
+  .faq-category-tag.popular {
+    background-color: #ffd700;
+  }
+
+  .faq-question {
+    flex: 1;
+    font-weight: 600;
+    color: #212529;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .faq-popular-indicator {
+    color: #ffd700;
+    font-size: 1.2rem;
+  }
+
+  .faq-expand-icon {
+    color: #6c757d;
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item.expanded .faq-expand-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+    color: #6c757d;
+    line-height: 1.6;
+    display: none;
+  }
+
+  .faq-item.expanded .faq-answer {
+    display: block;
+  }
+
+  .recently-viewed-btn {
+    position: absolute;
+    top: 4rem;
+    right: 2rem;
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .recently-viewed-btn::after {
+    content: "▼";
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .categories-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .category-btn {
+      min-width: 200px;
+    }
+    
+    .faq-header-row {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<!-- FAQ Section -->
+<section class="section section-lg bg-warning py-5">
+  <div class="container">
+    <!-- Recently Viewed Pages Button -->
+    <button class="recently-viewed-btn">Recently Viewed Pages</button>
+    
+    <h1 class="fw-bolder display-50 text-center text-black mb-5 mt-5 pt-5">Frequently Asked Questions</h1>
+    <h2 class="fw-bolder display-5 text-center text-black mb-5 mt-5">Find answers to common questions about working at HardHat Enterprises</h2>
+
+    <!-- Search and Categories -->
+    <div class="search-categories-container">
+      <input type="text" class="search-bar" placeholder="Search frequently asked questions..." id="faqSearch">
+      
+      <label class="categories-label">Categories:</label>
+      <div class="categories-buttons">
+        <button class="category-btn active" data-category="all">
+          <span class="category-icon icon-all">?</span>
+          All
+        </button>
+        <button class="category-btn" data-category="application">
+          <span class="category-icon icon-application">?</span>
+          Application
+        </button>
+        <button class="category-btn" data-category="benefits">
+          <span class="category-icon icon-benefits">👥</span>
+          Benefits
+        </button>
+        <button class="category-btn" data-category="growth">
+          <span class="category-icon icon-growth">📈</span>
+          Growth
+        </button>
+        <button class="category-btn" data-category="popular">
+          <span class="category-icon icon-popular">⭐</span>
+          Popular
+        </button>
+      </div>
+    </div>
+
+    <!-- FAQ List -->
+    <div class="faq-list">
+      <div class="faq-item" data-category="application" data-search="application timeline">
+        <div class="faq-header-row">
+          <span class="faq-category-tag">Application</span>
+          <h3 class="faq-question">What is the typical application timeline?</h3>
+          <span class="faq-popular-indicator">⭐</span>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          Our typical application process takes 2-3 weeks from initial submission to final decision. This includes resume review, initial screening, technical assessment, and final interviews. We'll keep you updated at each stage of the process.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="application" data-search="cybersecurity experience required">
+        <div class="faq-header-row">
+          <span class="faq-category-tag">Application</span>
+          <h3 class="faq-question">Do I need cybersecurity experience to apply?</h3>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          While cybersecurity experience is beneficial, it's not always required. We value diverse backgrounds and are looking for candidates with strong problem-solving skills, technical aptitude, and a passion for learning. We provide comprehensive training for all new hires.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="application" data-search="programming languages required">
+        <div class="faq-header-row">
+          <span class="faq-category-tag">Application</span>
+          <h3 class="faq-question">What programming languages should I know?</h3>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          We primarily work with Python, JavaScript, and SQL. However, we value strong programming fundamentals over specific language knowledge. If you're proficient in any programming language and can demonstrate problem-solving skills, we can teach you the specific technologies we use.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="application" data-search="multiple positions apply">
+        <div class="faq-header-row">
+          <span class="faq-category-tag">Application</span>
+          <h3 class="faq-question">Can I apply for multiple positions?</h3>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          Yes, you can apply for multiple positions that interest you. However, we recommend focusing on roles that best match your skills and career goals. Each application will be reviewed independently, and you may be considered for multiple roles during the interview process.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="benefits" data-search="health insurance package">
+        <div class="faq-header-row">
+          <span class="faq-category-tag benefits">Benefits</span>
+          <h3 class="faq-question">What does the health insurance package include?</h3>
+          <span class="faq-popular-indicator">⭐</span>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          Our comprehensive health insurance package includes medical, dental, and vision coverage for you and your dependents. We also offer mental health support, wellness programs, and flexible spending accounts. Coverage begins on your first day of employment.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="growth" data-search="career advancement opportunities">
+        <div class="faq-header-row">
+          <span class="faq-category-tag growth">Growth</span>
+          <h3 class="faq-question">What are the career advancement opportunities?</h3>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          We offer clear career progression paths with regular performance reviews and advancement opportunities. You can grow from individual contributor to team lead, manager, and beyond. We also support lateral moves between teams to help you explore different areas of interest.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="growth" data-search="mentorship program">
+        <div class="faq-header-row">
+          <span class="faq-category-tag growth">Growth</span>
+          <h3 class="faq-question">How does the mentorship program work?</h3>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          Our mentorship program pairs you with experienced professionals who provide guidance, career advice, and support. Mentors help you set goals, develop skills, and navigate challenges. The program is flexible and can be formal or informal based on your preferences.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="growth" data-search="switch teams departments">
+        <div class="faq-header-row">
+          <span class="faq-category-tag growth">Growth</span>
+          <h3 class="faq-question">Can I switch teams or departments?</h3>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          Yes, we encourage internal mobility and support team transfers. After 12 months in your current role, you can apply for internal positions. We believe this helps you grow professionally and brings fresh perspectives to different teams.
+        </div>
+      </div>
+
+      <div class="faq-item" data-category="growth" data-search="promotion timeline">
+        <div class="faq-header-row">
+          <span class="faq-category-tag growth">Growth</span>
+          <h3 class="faq-question">What's the typical promotion timeline?</h3>
+          <span class="faq-expand-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          Promotion timelines vary based on performance, business needs, and available opportunities. Generally, promotions are considered during annual reviews, but exceptional performance can lead to faster advancement. We have clear criteria for each level to ensure fair and transparent promotion processes.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const searchBar = document.getElementById('faqSearch');
+
+    // FAQ expansion functionality
+    faqItems.forEach(item => {
+      item.addEventListener('click', function() {
+        this.classList.toggle('expanded');
+      });
+    });
+
+    // Category filtering
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const category = this.getAttribute('data-category');
+        
+        // Update active state
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter FAQ items
+        filterFAQs();
+      });
+    });
+
+    // Search functionality
+    searchBar.addEventListener('input', function() {
+      filterFAQs();
+    });
+
+    function filterFAQs() {
+      const activeCategory = document.querySelector('.category-btn.active').getAttribute('data-category');
+      const searchTerm = searchBar.value.toLowerCase();
+
+      faqItems.forEach(item => {
+        const category = item.getAttribute('data-category');
+        const searchData = item.getAttribute('data-search');
+        const question = item.querySelector('.faq-question').textContent.toLowerCase();
+        
+        const categoryMatch = activeCategory === 'all' || category === activeCategory;
+        const searchMatch = searchTerm === '' || 
+                          question.includes(searchTerm) || 
+                          (searchData && searchData.toLowerCase().includes(searchTerm));
+
+        if (categoryMatch && searchMatch) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  });
+</script>
+
+{% endblock %}
+
