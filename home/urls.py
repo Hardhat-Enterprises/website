@@ -24,6 +24,8 @@ router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
 
+
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('client_sign-in/', views.client_sign_in, name='client_sign_in'),
@@ -178,7 +180,9 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
 
-    path("health", health_check, name="health-check")
+    path("health", health_check, name="health-check"),
+    path("vault/", views.vault, name="vault"),
+    path("vault/delete/<int:doc_id>/", views.vault_delete, name="vault_delete")
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

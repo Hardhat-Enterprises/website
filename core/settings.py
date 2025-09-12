@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     'theme_pixel',
 
     'corsheaders',
+    "django.contrib.humanize"
 
 
 ]

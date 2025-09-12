@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import Group
 from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
@@ -10,6 +11,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 from datetime import timedelta
+from .models import VaultDocument
 import logging
 import re
 import nh3
@@ -519,3 +521,27 @@ class SecureCodeReviewRequestForm(forms.ModelForm):
         model = SecureCodeReviewRequest
         fields = ['name', 'email', 'github_repo_link', 'terms_agreed']
 
+
+        
+class VaultUploadForm(forms.ModelForm):
+    class Meta:
+        model = VaultDocument
+        fields = ['file', 'description', 'visibility', 'allowed_teams']  # NEW
+        widgets = {
+            'description': forms.TextInput(attrs={'placeholder': 'Optional description', 'class':'form-control'}),
+            'visibility': forms.Select(attrs={'class': 'form-select'}),  # NEW
+            'allowed_teams': forms.SelectMultiple(attrs={'class': 'form-select', 'size': '6'}),  # NEW
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # List all groups (teams). You can restrict to certain names if you wish.
+        self.fields['allowed_teams'].queryset = Group.objects.all().order_by('name')
+
+    def clean(self):
+        cleaned = super().clean()
+        vis = cleaned.get('visibility')
+        teams = cleaned.get('allowed_teams')
+        if vis == VaultDocument.VIS_TEAMS and (not teams or teams.count() == 0):
+            raise forms.ValidationError("Select at least one team for 'Selected teams' visibility.")
+        return cleaned

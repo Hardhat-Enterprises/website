@@ -37,6 +37,10 @@
               About
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{% url 'vault' %}" class="nav-link">
+              Vault
+            </a>
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
               data-bs-toggle="dropdown">
@@ -211,6 +215,11 @@
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> About </a>
           </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a href="{% url 'vault' %}" class="nav-link">Vault</a>
+          </li>
+          {% endif %}
 
           <li class="nav-item dropdown">
             <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"

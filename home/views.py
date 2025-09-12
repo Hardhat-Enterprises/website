@@ -30,6 +30,11 @@ from django.views.decorators.csrf import csrf_protect
 from .models import ContactSubmission
 from django.utils.html import strip_tags
 from .models import Report
+from django.contrib.auth.decorators import login_required
+from .forms import VaultUploadForm
+from .models import VaultDocument
+from django.contrib.auth.models import Group
+
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, UserBlogPage #Feedback 
 
@@ -131,6 +136,11 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.db.models import Q, Sum
+
 
 def get_login_redirect_url(user):
     """
@@ -2308,3 +2318,83 @@ def policy_deployment(request):
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
 
+@login_required
+def vault(request):
+    # ---- Upload ----
+    if request.method == 'POST':
+        form = VaultUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            doc = form.save(commit=False)
+            if request.user.is_authenticated:
+                doc.uploaded_by = request.user
+            f = request.FILES.get('file')
+            if f:
+                doc.content_type = getattr(f, 'content_type', '') or ''
+                doc.size_bytes  = int(getattr(f, 'size', 0) or 0)
+                doc.original_name = getattr(f, 'name', 'document')
+            doc.save()
+            # Save M2M after instance exists
+            form.save_m2m()
+            return redirect('vault')
+    else:
+        form = VaultUploadForm()
+
+    # ---- List / Search with access filter ----
+    q = (request.GET.get('q') or '').strip()
+    type_filter = (request.GET.get('type') or '').strip()
+
+    try:
+        qs = VaultDocument.objects.all()
+
+        # Access restrictions:
+        if not request.user.is_authenticated:
+            qs = qs.filter(visibility=VaultDocument.VIS_PUBLIC)
+        else:
+            # Public OR private by self OR team-overlap (or admin/staff sees all)
+            if not (request.user.is_superuser or request.user.is_staff):
+                user_group_ids = request.user.groups.values_list('id', flat=True)
+                qs = qs.filter(
+                    Q(visibility=VaultDocument.VIS_PUBLIC) |
+                    Q(visibility=VaultDocument.VIS_PRIVATE, uploaded_by=request.user) |
+                    Q(visibility=VaultDocument.VIS_TEAMS, allowed_teams__in=user_group_ids)
+                ).distinct()
+
+        if q:
+            qs = qs.filter(Q(original_name__icontains=q) | Q(description__icontains=q))
+        if type_filter:
+            qs = qs.filter(content_type__icontains=type_filter)
+
+        totals = qs.aggregate(total_size=Sum('size_bytes'))
+        total_docs = qs.count()
+        total_size_bytes = totals['total_size'] or 0
+        docs = qs
+    except OperationalError:
+        docs = []
+        total_docs = 0
+        total_size_bytes = 0
+
+    context = {
+        'form': form,
+        'docs': docs,
+        'query': q,
+        'type_filter': type_filter,
+        'total_docs': total_docs,
+        'total_size_bytes': total_size_bytes,
+    }
+    return render(request, 'pages/vault.html', context)
+
+def vault_delete(request, doc_id):
+    doc = get_object_or_404(VaultDocument, id=doc_id)
+
+    # permission check
+    if not (request.user.is_staff or doc.uploaded_by == request.user):
+        return redirect("vault") 
+
+    if request.method == "POST":
+        try:
+            if doc.file:
+                doc.file.delete(save=False)
+        except Exception:
+            pass
+        doc.delete()
+    return redirect("vault")
