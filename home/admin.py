@@ -39,7 +39,10 @@ from .models import (
 
     AppAttackReport, 
     PenTestingRequest, 
-    SecureCodeReviewRequest
+    SecureCodeReviewRequest,
+    JobAlert,
+    GraduateProgram,
+    CareerFAQ
 
 )
 
@@ -179,6 +182,40 @@ admin.site.register(Projects_join_us)
 class JobAdmin(admin.ModelAdmin):
     list_display = ['title', 'location', 'job_type', 'posted_date', 'closing_date']
     list_filter=['location','job_type']
+
+@admin.register(JobAlert)
+class JobAlertAdmin(admin.ModelAdmin):
+    list_display = ['email', 'is_active', 'created_at', 'last_notification']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['email']
+    readonly_fields = ['created_at', 'last_notification']
+
+@admin.register(GraduateProgram)
+class GraduateProgramAdmin(admin.ModelAdmin):
+    list_display = ['title', 'program_type', 'duration_months', 'start_date', 'application_deadline', 'is_active']
+    list_filter = ['program_type', 'is_active', 'start_date', 'application_deadline']
+    search_fields = ['title', 'description']
+    readonly_fields = ['created_at']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'program_type', 'duration_months', 'start_date', 'application_deadline', 'is_active')
+        }),
+        ('Program Details', {
+            'fields': ('overview', 'curriculum', 'benefits', 'requirements', 'application_process')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+@admin.register(CareerFAQ)
+class CareerFAQAdmin(admin.ModelAdmin):
+    list_display = ['question', 'category', 'is_popular', 'order', 'created_at']
+    list_filter = ['category', 'is_popular', 'created_at']
+    search_fields = ['question', 'answer']
+    list_editable = ['order', 'is_popular']
+    readonly_fields = ['created_at']
 
 @admin.register(JobApplication)
 class JobApplicationAdmin(admin.ModelAdmin):
