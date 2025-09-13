@@ -131,6 +131,128 @@
     body:not(.dark-mode) .policy-benefit-desc {
         color: var(--muted-light);
     }
+
+    /* ===== Introduction Animation Styles ===== */
+    .policy-deployment-section {
+        opacity: 0;
+        transform: translateY(40px);
+        animation: fadeInUp 0.8s ease-out forwards;
+        animation-delay: 0.2s;
+    }
+
+    .policy-header {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.6s ease-out forwards;
+        animation-delay: 0.4s;
+    }
+
+    .policy-divider {
+        opacity: 0;
+        transform: scaleX(0);
+        animation: scaleInHorizontal 0.6s ease-out forwards;
+        animation-delay: 0.7s;
+        transform-origin: left;
+    }
+
+    .policy-overview {
+        opacity: 0;
+        transform: translateY(25px);
+        animation: fadeInUp 0.6s ease-out forwards;
+        animation-delay: 0.9s;
+    }
+
+    .policy-features {
+        opacity: 0;
+        transform: translateX(-30px);
+        animation: slideInLeft 0.6s ease-out forwards;
+        animation-delay: 1.1s;
+    }
+
+    .policy-approach {
+        opacity: 0;
+        transform: translateX(30px);
+        animation: slideInRight 0.6s ease-out forwards;
+        animation-delay: 1.3s;
+    }
+
+    .policy-benefit-card {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .policy-benefit-card:nth-child(1) {
+        animation-delay: 1.5s;
+    }
+
+    .policy-benefit-card:nth-child(2) {
+        animation-delay: 1.7s;
+    }
+
+    .policy-benefit-card:nth-child(3) {
+        animation-delay: 1.9s;
+    }
+
+    /* ===== Animation Keyframes ===== */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        0% {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        0% {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes scaleInHorizontal {
+        0% {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        100% {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+    }
+
+    /* ===== Prefers reduced motion accessibility ===== */
+    @media (prefers-reduced-motion: reduce) {
+        .policy-deployment-section,
+        .policy-header,
+        .policy-divider,
+        .policy-overview,
+        .policy-features,
+        .policy-approach,
+        .policy-benefit-card {
+            animation: none;
+            opacity: 1;
+            transform: none;
+        }
+    }
 </style>
 <section class="policy-deployment-section">
     <div class="policy-header">
@@ -138,10 +260,12 @@
         <h1 class="policy-title">Policy Deployment Engine</h1>
     </div>
     <hr class="policy-divider">
-    <div class="policy-section-title">Overview</div>
-    <p style="margin-bottom: 24px;">
-        The Policy Deployment Engine is a sophisticated solution designed to automate and streamline security policy enforcement across cloud environments. Starting with Google Cloud Platform (GCP) and expanding to AWS and Azure, our engine provides a centralized system for efficient policy deployment, management, and updates. This comprehensive approach ensures compliance while significantly reducing manual effort and operational complexity.
-    </p>
+    <div class="policy-overview">
+        <div class="policy-section-title">Overview</div>
+        <p style="margin-bottom: 24px;">
+            The Policy Deployment Engine is a sophisticated solution designed to automate and streamline security policy enforcement across cloud environments. Starting with Google Cloud Platform (GCP) and expanding to AWS and Azure, our engine provides a centralized system for efficient policy deployment, management, and updates. This comprehensive approach ensures compliance while significantly reducing manual effort and operational complexity.
+        </p>
+    </div>
     <div class="row" style="display: flex; flex-wrap: wrap; gap: 32px; margin-bottom: 32px;">
         <div class="col policy-features" style="flex: 1; min-width: 260px;">
             <div>
@@ -182,5 +306,46 @@
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Optional: Add intersection observer for scroll-triggered animations
+    // This is useful if you want animations to trigger when elements come into view
+    if ('IntersectionObserver' in window) {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe benefit cards for additional effects if needed
+        const benefitCards = document.querySelectorAll('.policy-benefit-card');
+        benefitCards.forEach(card => {
+            observer.observe(card);
+        });
+    }
+
+    // Add hover effects for enhanced interactivity
+    const benefitCards = document.querySelectorAll('.policy-benefit-card');
+    benefitCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+            this.style.boxShadow = '0 12px 24px rgba(255, 214, 0, 0.2)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
+    });
+});
+</script>
 {% endblock %} 
 
