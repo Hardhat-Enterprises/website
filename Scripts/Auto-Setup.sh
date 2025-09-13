@@ -7,7 +7,7 @@ ENV_SAMPLE_FILE="env.sample"
 # Default to development mode
 MODE="dev"
 COMPOSE_FILE="docker-compose.yml"
-HEALTHCHECK_URLS=("http://localhost:8000/health" "http://127.0.0.1:8000/health" "http://localhost:8080/health" "http://127.0.0.1:8080/health")
+HEALTHCHECK_URLS=("http://localhost:8000" "http://127.0.0.1:8000")
 
 GREEN="\033[0;32m"
 RED="\033[0;31m"
@@ -28,13 +28,13 @@ show_help() {
   echo "  - Django dev server on port 8000"
   echo "  - Nginx proxy on port 8080"
   echo "  - PostgreSQL on port 5433"
-  echo "  - Health checks: http://localhost:8000/health, http://localhost:8080/health"
+  echo "  - Health checks: http://localhost:8000, http://127.0.0.1:8000"
   echo
   echo "Production mode (--prod):"
   echo "  - Uses docker-compose-prod.yml"
   echo "  - Gunicorn server behind Nginx on port 80"
   echo "  - PostgreSQL on port 5432"
-  echo "  - Health check: http://localhost/health"
+  echo "  - Health check: http://localhost"
 }
 
 TICK="${GREEN}Passed${NC}"
@@ -43,11 +43,11 @@ CROSS="${RED}Failed${NC}"
 set_mode_config() {
   if [ "$MODE" = "prod" ]; then
     COMPOSE_FILE="docker-compose-prod.yml"
-    HEALTHCHECK_URLS=("http://localhost/health" "http://127.0.0.1/health")
+    HEALTHCHECK_URLS=("http://localhost")
     echo -e "${YELLOW}Production mode selected${NC}"
   else
     COMPOSE_FILE="docker-compose.yml"
-    HEALTHCHECK_URLS=("http://localhost:8000/health" "http://127.0.0.1:8000/health" "http://localhost:8080/health" "http://127.0.0.1:8080/health")
+    HEALTHCHECK_URLS=("http://localhost:8000" "http://127.0.0.1:8000")
     echo -e "${YELLOW}Development mode selected${NC}"
   fi
 }
@@ -146,12 +146,12 @@ run_setup() {
     if [ "$MODE" = "prod" ]; then
       echo -e "\n${GREEN}✅ Production setup complete!${NC}"
       echo -e "${GREEN}🌐 Application available at: http://localhost${NC}"
-      echo -e "${GREEN}📊 Health check: http://localhost/health${NC}\n"
+      echo -e "${GREEN}📊 Health check: http://localhost${NC}\n"
     else
       echo -e "\n${GREEN}✅ Development setup complete!${NC}"
-      echo -e "${GREEN}🌐 Django app: http://localhost:8000${NC}"
+      echo -e "${GREEN}🌐 Django app: http://localhost:8000 or http://127.0.0.1:8000${NC}"
       echo -e "${GREEN}🌐 Nginx proxy: http://localhost:8080${NC}"
-      echo -e "${GREEN}📊 Health checks available at both URLs${NC}\n"
+      echo -e "${GREEN}📊 Health checks: http://localhost:8000, http://127.0.0.1:8000${NC}\n"
     fi
   else
     echo -e "\n${RED}❌ Setup ran but app is not healthy.${NC}"
