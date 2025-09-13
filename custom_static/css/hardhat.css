@@ -5736,14 +5736,29 @@ fieldset:disabled .btn {
 
 .menu-link {
   width: 100% !important;
+   color: #ffcd11 !important;
+  text-decoration: none;
+  display: block;
+  padding: 12px 20px;
+  transition: all 0.2s ease-in-out;
+  font-weight: 600;
 }
+.menu-link:hover {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+
 .menu:hover {
   background: #ffcd11 !important;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
-  color: white !important;
-  transition: all 0.2s ease-in-out;
+  color: #fff !important;
 }
+.menu:hover .menu-link {
+  color: #fff !important;
+}
+
 
 .menu {
   font-size: 14px;
@@ -5775,6 +5790,26 @@ fieldset:disabled .btn {
 .dark-mode .dropdown-menu {
   background-color: var(--navbar-dark);
 }
+
+.dark-mode .menu-link {
+  color: #ffcd11 !important;
+}
+.dark-mode .menu-link:hover {
+  color: #fff !important;
+}
+.dark-mode .menu:hover .menu-link {
+  color: #fff !important;
+}
+
+#blogDropdown + .dropdown-menu {
+  padding: 40px 24px;
+}
+
+#blogDropdown + .dropdown-menu .menu {
+  margin: 8px 0;
+  border-radius: 0;
+}
+
 
 .dropdown-menu[data-bs-popper] {
   top: 100%;
