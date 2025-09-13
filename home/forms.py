@@ -1,5 +1,4 @@
 from django import forms
-from django.core.validators import RegexValidator
 from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
@@ -10,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.utils.timezone import now
 from datetime import timedelta
+from .models import VaultDocument
 import logging
 import nh3
 
@@ -602,6 +602,18 @@ class SecureCodeReviewRequestForm(forms.ModelForm):
         model = SecureCodeReviewRequest
         fields = ['name', 'email', 'github_repo_link', 'terms_accepted']
 
+<<<<<<< HEAD
+
+        
+class VaultUploadForm(forms.ModelForm):
+    class Meta:
+        model = VaultDocument
+        fields = ['file', 'description', 'visibility', 'allowed_teams']  # NEW
+        widgets = {
+            'description': forms.TextInput(attrs={'placeholder': 'Optional description', 'class':'form-control'}),
+            'visibility': forms.Select(attrs={'class': 'form-select'}),  # NEW
+            'allowed_teams': forms.SelectMultiple(attrs={'class': 'form-select', 'size': '6'}),  # NEW
+=======
 # Cyber Challenge Forms ------------------------------------------------------------
 
 class ChallengeForm(forms.ModelForm):
@@ -646,10 +658,23 @@ class ChallengeForm(forms.ModelForm):
             'starter_code': 'Starter Code (for Fix the Code challenges)',
             'sample_input': 'Sample Input into code before running',
             'expected_output': 'Expected Output of code after running',
+>>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+<<<<<<< HEAD
+        # List all groups (teams). You can restrict to certain names if you wish.
+        self.fields['allowed_teams'].queryset = Group.objects.all().order_by('name')
+
+    def clean(self):
+        cleaned = super().clean()
+        vis = cleaned.get('visibility')
+        teams = cleaned.get('allowed_teams')
+        if vis == VaultDocument.VIS_TEAMS and (not teams or teams.count() == 0):
+            raise forms.ValidationError("Select at least one team for 'Selected teams' visibility.")
+        return cleaned
+=======
         
         # If editing an existing challenge, populate choices_text
         if self.instance and self.instance.pk and self.instance.choices:
@@ -730,3 +755,28 @@ class ChallengeForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+>>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
+
+
+class VaultUploadForm(forms.ModelForm):
+    class Meta:
+        model = VaultDocument
+        fields = ['file', 'description', 'visibility', 'allowed_teams']  # NEW
+        widgets = {
+            'description': forms.TextInput(attrs={'placeholder': 'Optional description', 'class':'form-control'}),
+            'visibility': forms.Select(attrs={'class': 'form-select'}),  # NEW
+            'allowed_teams': forms.SelectMultiple(attrs={'class': 'form-select', 'size': '6'}),  # NEW
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # List all groups (teams). You can restrict to certain names if you wish.
+        self.fields['allowed_teams'].queryset = Group.objects.all().order_by('name')
+
+    def clean(self):
+        cleaned = super().clean()
+        vis = cleaned.get('visibility')
+        teams = cleaned.get('allowed_teams')
+        if vis == VaultDocument.VIS_TEAMS and (not teams or teams.count() == 0):
+            raise forms.ValidationError("Select at least one team for 'Selected teams' visibility.")
+        return cleaned

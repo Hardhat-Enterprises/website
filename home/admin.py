@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .models import VaultDocument
 
 from .models import AdminNotification
 
@@ -257,6 +258,7 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     search_fields = ['name', 'email', 'github_repo_link']
     readonly_fields = ['submitted_at']
 
+
 @admin.register(Tip)
 class TipAdmin(admin.ModelAdmin):
     list_display = ("text", "is_active", "created_at")
@@ -265,6 +267,14 @@ class TipAdmin(admin.ModelAdmin):
 @admin.register(TipRotationState)
 class TipRotationStateAdmin(admin.ModelAdmin):
     list_display = ("lock", "last_index", "rotated_at")
+
+@admin.register(VaultDocument)
+class VaultDocumentAdmin(admin.ModelAdmin):
+    list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
+    search_fields = ('original_name', 'description')
+
+
+
 
 
 

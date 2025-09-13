@@ -10,6 +10,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser  
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -789,6 +792,7 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
+
     def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
@@ -813,3 +817,15 @@ class TipRotationState(models.Model):
 
     def __str__(self):
         return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+
+
+    if not self.is_active:
+        return True
+    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
+    return now() > expiry_time
+
+def update_activity(self):
+
+    self.last_activity = now()
+    self.save(update_fields=['last_activity'])
+

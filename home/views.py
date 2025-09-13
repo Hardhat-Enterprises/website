@@ -32,6 +32,7 @@ from .models import ContactSubmission
 from django.utils.html import strip_tags
 from .models import Report
 
+
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, JobAlert, UserBlogPage #Feedback 
 
 
@@ -132,8 +133,6 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
-
-
 
 def get_login_redirect_url(user):
     """
@@ -2460,6 +2459,7 @@ def policy_deployment(request):
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
 
+
 # Challenge Management Views
 
 class StaffRequiredMixin(UserPassesTestMixin):
@@ -2654,3 +2654,4 @@ def tip_today(request):
         state.save(update_fields=["last_index", "rotated_at"])
 
     return JsonResponse({"tip": texts[state.last_index]})
+
