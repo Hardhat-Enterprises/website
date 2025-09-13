@@ -2,80 +2,371 @@
 {% load static %}
 
 {% block skill_content %}
+
 <div class="container">
   <div id="sections" class="my-5">
-    <!-- SECTION 1 -->
-    <section class="section card mb-3 p-3">
+
+    <!-- 1) Why Learn Docker? -->
+    <section class="section card lesson-card mb-3 p-3">
       <h2 class="card-title">Why Learn Docker?</h2>
       <p class="card-text">
-        Docker is used to containerize applications — including the Hardhat website. It ensures consistent development environments and easier deployment. You’ll use Docker for spinning up Django apps, managing services, and container orchestration.
+        Docker containerizes apps so they run the same everywhere. We use it to build and ship services (including the Hardhat site) with predictable environments and clean isolation.
+        Typical uses: spinning up Django/DB stacks, local dev parity with prod, quick CI builds, and safe dependency management.
         <br><br>
-        Reference: <a href="https://docs.docker.com/get-started/" target="_blank">Docker Official Getting Started Guide</a>
+        Reference: <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">Docker Official Getting Started</a>
       </p>
     </section>
 
-    <!-- SECTION 2 -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Basic Concepts</h2>
-      <ul>
-        <li>📦 Images: The blueprint of your container</li>
-        <li>🚢 Containers: The actual running app</li>
-        <li>📂 Dockerfile: Instructions to build your image</li>
-        <li>📜 `docker-compose.yml`: Manage multi-container apps (e.g., Django + DB)</li>
-        <li>⚙️ Commands: `build`, `run`, `exec`, `logs`, `ps`, `stop`</li>
+    <!-- 2) Core Concepts -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Core Concepts</h2>
+      <ul class="card-text">
+        <li>📦 <strong>Images</strong> — read-only templates for containers (built from a <code>Dockerfile</code>).</li>
+        <li>🚢 <strong>Containers</strong> — running instances of images (ephemeral by default).</li>
+        <li>🧱 <strong>Layers</strong> — cached filesystem layers speed up rebuilds.</li>
+        <li>📂 <strong>Volumes</strong> — persistent data storage outside container lifecycle.</li>
+        <li>🌐 <strong>Networks</strong> — connect containers (e.g., app ↔ DB) via virtual bridges.</li>
+        <li>🧩 <strong>Compose</strong> — define multi-container apps in <code>docker-compose.yml</code>.</li>
       </ul>
     </section>
 
-    <!-- SECTION 3 -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Docker Resources</h2>
-      <ul>
-        <li><a href="https://www.docker.com/resources/what-container/" target="_blank">🔍 What is a Container?</a></li>
-        <li><a href="https://docs.docker.com/get-started/" target="_blank">📘 Docker Getting Started Guide</a></li>
-        <li><a href="https://www.youtube.com/watch?v=fqMOX6JJhGo" target="_blank">🎥 Docker Tutorial for Beginners (TechWorld with Nana)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=3c-iBn73dDE" target="_blank">🎥 Docker Crash Course (Traversy Media)</a></li>
-        <li><a href="https://github.com/docker/awesome-compose" target="_blank">💡 Docker Compose Example Projects</a></li>
+    <!-- 3) Install & Quick Check -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Install &amp; Quick Check</h2>
+      <p class="card-text">After installing Docker Desktop or Engine, verify:</p>
+      <pre class="bg-light p-3 rounded border"><code># Check versions
+docker --version
+docker compose version   # v2 syntax (built into docker CLI)
+
+# Run hello-world image
+docker run --rm hello-world</code></pre>
+    </section>
+
+    <!-- 4) Essential CLI Commands -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Essential CLI Commands</h2>
+      <ul class="card-text">
+        <li><code>docker pull &lt;image[:tag]&gt;</code> — download image.</li>
+        <li><code>docker images</code> / <code>docker rmi &lt;id&gt;</code> — list/remove images.</li>
+        <li><code>docker run [opts] &lt;image&gt; [cmd]</code> — create + start a container.</li>
+        <li><code>docker ps</code> / <code>docker ps -a</code> — list running/all containers.</li>
+        <li><code>docker logs [-f] &lt;container&gt;</code> — view container logs.</li>
+        <li><code>docker exec -it &lt;container&gt; /bin/bash</code> — shell into a running container.</li>
+        <li><code>docker stop/start/restart &lt;container&gt;</code> — manage lifecycle.</li>
+        <li><code>docker cp SRC &lt;container&gt;:DEST</code> — copy files in/out.</li>
+        <li><code>docker system prune</code> — cleanup unused data (⚠ removes dangling resources).</li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-secondary">Example</span>
+        <small class="text-muted">Run Nginx and map a port</small>
+      </div>
+      <pre class="bg-light p-3 rounded border"><code># run latest nginx and bind host port 8080 to container 80
+docker run --name web -p 8080:80 -d nginx:latest</code></pre>
+    </section>
+
+    <!-- 5) Dockerfile: Build Your Image -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Dockerfile: Build Your Image</h2>
+      <ul class="card-text">
+        <li>Common instructions: <code>FROM</code>, <code>WORKDIR</code>, <code>COPY</code>, <code>RUN</code>, <code>ENV</code>, <code>EXPOSE</code>, <code>CMD</code>.</li>
+        <li>Use <code>.dockerignore</code> to skip node_modules, venvs, and build artifacts.</li>
+        <li>Prefer multi-stage builds for smaller images.</li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-secondary">Example</span>
+        <small class="text-muted">Minimal Python app</small>
+      </div>
+      <pre class="bg-light p-3 rounded border"><code># Dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 8000
+CMD ["python", "app.py"]</code></pre>
+
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-secondary">Build &amp; Run</span>
+        <small class="text-muted">Local workflow</small>
+      </div>
+      <pre class="bg-light p-3 rounded border"><code>docker build -t myapp:dev .
+docker run --rm -p 8000:8000 myapp:dev</code></pre>
+    </section>
+
+    <!-- 6) Volumes (Persist Data) -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Persisting Data with Volumes</h2>
+      <ul class="card-text">
+        <li><code>-v &lt;named-volume&gt;:/path/in/container</code> — persist data across restarts.</li>
+        <li>For dev, bind-mount source code: <code>-v $(pwd):/app</code> (Unix) or use Docker Desktop file sharing.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Create a named volume and run Postgres using it
+docker volume create pgdata
+docker run --name db -e POSTGRES_PASSWORD=secret -v pgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres:16</code></pre>
+    </section>
+
+    <!-- 7) Networks (Service-to-Service) -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Networking: Connect Containers</h2>
+      <ul class="card-text">
+        <li>Create a bridge network and attach containers to it.</li>
+        <li>Use the container name as the hostname (DNS provided by Docker).</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>docker network create appnet
+docker run --name db --network appnet -e POSTGRES_PASSWORD=secret -d postgres:16
+docker run --name api --network appnet -p 8000:8000 myapp:dev
+# The app can reach Postgres at hostname "db" on port 5432</code></pre>
+    </section>
+
+    <!-- 8) Docker Compose (Multi-Container) -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Docker Compose: Multi-Container Apps</h2>
+      <ul class="card-text">
+        <li>Define services, volumes, networks in <code>docker-compose.yml</code>.</li>
+        <li>Commands: <code>docker compose up -d</code>, <code>down</code>, <code>logs -f</code>, <code>ps</code>.</li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-secondary">Example</span>
+        <small class="text-muted">Web + Postgres stack</small>
+      </div>
+      <pre class="bg-light p-3 rounded border"><code># docker-compose.yml
+services:
+  web:
+    build: .
+    command: python app.py
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:</code></pre>
+
+      <pre class="bg-light p-3 rounded border"><code># bring it up / view logs / stop
+docker compose up -d
+docker compose logs -f
+docker compose down</code></pre>
+    </section>
+
+    <!-- 9) Django in Docker (Dev Workflow) -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Django in Docker (Dev Workflow)</h2>
+      <ul class="card-text">
+        <li>Use <code>Dockerfile</code> + <code>docker-compose.yml</code> with a DB service (e.g., Postgres).</li>
+        <li>Bind-mount your code for hot reload and run <code>python manage.py runserver 0.0.0.0:8000</code>.</li>
+        <li>Run management commands with <code>docker compose exec web</code>.</li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-secondary">Example</span>
+        <small class="text-muted">Compose for Django</small>
+      </div>
+      <pre class="bg-light p-3 rounded border"><code># docker-compose.yml
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports: ["8000:8000"]
+    volumes:
+      - .:/app
+    depends_on: [db]
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret</code></pre>
+
+      <pre class="bg-light p-3 rounded border"><code># shell, migrate, createsuperuser
+docker compose exec web bash
+python manage.py migrate
+python manage.py createsuperuser</code></pre>
+    </section>
+
+    <!-- 10) Image Size & Best Practices -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Best Practices</h2>
+      <ul class="card-text">
+        <li>Use slim bases (<code>python:3.12-slim</code>, <code>alpine</code> when compatible).</li>
+        <li>Multi-stage builds to drop dev deps from final image.</li>
+        <li>Pin versions in <code>requirements.txt</code> / <code>package.json</code>.</li>
+        <li>Don’t run as root — create a non-root user with <code>USER</code>.</li>
+        <li>Set <code>HEALTHCHECK</code> where possible.</li>
+        <li>Prefer <code>docker compose</code> for local dev orchestration.</li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-secondary">Example</span>
+        <small class="text-muted">Multi-stage Dockerfile</small>
+      </div>
+      <pre class="bg-light p-3 rounded border"><code># Builder stage
+FROM python:3.12-slim AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+
+# Final stage
+FROM python:3.12-slim
+WORKDIR /app
+COPY --from=builder /wheels /wheels
+RUN pip install --no-cache /wheels/*
+COPY . .
+USER 1000:1000
+EXPOSE 8000
+CMD ["python", "app.py"]</code></pre>
+    </section>
+
+    <!-- 11) Troubleshooting & Diagnostics -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Troubleshooting &amp; Diagnostics</h2>
+      <ul class="card-text">
+        <li>Container won’t start? Check <code>docker logs &lt;container&gt;</code>.</li>
+        <li>Networking issues? Verify networks: <code>docker network ls</code>, inspect: <code>docker network inspect &lt;net&gt;</code>.</li>
+        <li>Disk usage high? <code>docker system df</code> then <code>docker system prune</code> (careful!).</li>
+        <li>Rebuild ignoring cache: <code>docker build --no-cache -t image:tag .</code></li>
+        <li>File perms on bind mounts (Linux): match UID/GID or use <code>USER</code> in Dockerfile.</li>
       </ul>
     </section>
+
+    <!-- 12) Learning Resources -->
+    <section class="section card lesson-card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Docker Resources</h2>
+      <ul class="card-text">
+        <li><a href="https://www.docker.com/resources/what-container/" target="_blank" rel="noopener">🔍 What is a Container?</a></li>
+        <li><a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">📘 Docker Getting Started</a></li>
+        <li><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">📘 Docker Compose Docs</a></li>
+        <li><a href="https://github.com/docker/awesome-compose" target="_blank" rel="noopener">💡 Awesome Compose Examples</a></li>
+        <li><a href="https://www.youtube.com/watch?v=fqMOX6JJhGo" target="_blank" rel="noopener">🎥 TechWorld with Nana – Docker for Beginners</a></li>
+        <li><a href="https://www.youtube.com/watch?v=3c-iBn73dDE" target="_blank" rel="noopener">🎥 Traversy Media – Docker Crash Course</a></li>
+      </ul>
+    </section>
+
   </div>
+
+  <!-- Progress Header -->
+  <div class="d-flex align-items-center justify-content-between mb-3" id="lesson-progress-header">
+    <div class="fw-semibold" id="step-text" aria-live="polite">Step 1/12</div>
+    <div class="text-muted small" id="percent-text">0%</div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress mb-2" role="progressbar" aria-label="Lesson progress">
+    <div id="progress-bar" class="progress-bar" style="width: 0%;" aria-valuemin="0" aria-valuenow="0" aria-valuemax="100"></div>
+  </div>
+
+  <!-- Block Meter (matches number of sections) -->
+  <div id="block-meter" class="mb-4"></div>
+
+  <style>
+    /* Compact segmented meter that auto-matches your total card count */
+    #block-meter {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: .35rem;
+    }
+    .block-meter-seg {
+      height: 10px;
+      border-radius: 3px;
+      background: #e9ecef; /* light gray */
+    }
+    .block-meter-seg.active {
+      background: #0d6efd; /* Bootstrap primary */
+    }
+    /* Dark-mode friendly tweak if you use .dark somewhere */
+    .dark .block-meter-seg { background: #374151; }
+    .dark .block-meter-seg.active { background: #2563eb; }
+
+    .card-title { color: #EFBF2F; }
+  </style>
 
   <!-- Navigation Buttons -->
   <div class="d-flex justify-content-between mb-4">
     <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
     <button id="next-button" class="btn btn-primary">Next</button>
     <form id="finishForm" method="post" action="{% url 'complete_skill' slug='docker-basics' %}" style="display: none;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-warning">Finish</button>
+      {% csrf_token %}
+      <button type="submit" class="btn btn-warning">Finish</button>
     </form>
-      
   </div>
 
-  <!-- Section Navigation Logic -->
+  <!-- Navigation & Progress Script -->
   <script>
     let currentIndex = 0;
     const sections = document.querySelectorAll("#sections .section");
     const totalCards = sections.length;
 
+    // Progress elements
+    const stepText = document.getElementById("step-text");
+    const percentText = document.getElementById("percent-text");
+    const progressBar = document.getElementById("progress-bar");
+    const blockMeter = document.getElementById("block-meter");
+
+    // Build segmented block meter to match total cards
+    const meterFrags = document.createDocumentFragment();
+    for (let i = 0; i < totalCards; i++) {
+      const seg = document.createElement("div");
+      seg.className = "block-meter-seg";
+      seg.setAttribute("aria-hidden", "true");
+      meterFrags.appendChild(seg);
+    }
+    blockMeter.appendChild(meterFrags);
+
     function toggleButtons(index, total) {
-        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
-        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
-        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
     }
 
+    function updateProgress(index) {
+      const step = index + 1; // display as 1-based
+      const pct = Math.round((step / totalCards) * 100);
+
+      stepText.textContent = `Step ${step}/${totalCards}`;
+      percentText.textContent = `${pct}%`;
+
+      progressBar.style.width = `${pct}%`;
+      progressBar.setAttribute("aria-valuenow", String(pct));
+
+      const segs = blockMeter.children;
+      for (let i = 0; i < segs.length; i++) {
+        if (i < step) {
+          segs[i].classList.add("active");
+        } else {
+          segs[i].classList.remove("active");
+        }
+      }
+    }
 
     function showSection(index) {
       sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
       toggleButtons(index, totalCards);
+      updateProgress(index);
     }
 
+    // Init
     showSection(currentIndex);
 
-    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
-    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
+    // Nav handlers with bounds checks
+    document.getElementById("back-button").addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        showSection(currentIndex);
+      }
+    });
 
-
+    document.getElementById("next-button").addEventListener("click", () => {
+      if (currentIndex < totalCards - 1) {
+        currentIndex += 1;
+        showSection(currentIndex);
+      }
+    });
   </script>
 
   <script src="{% static 'skill_navigation.js' %}"></script>
 </div>
+
 {% endblock %}

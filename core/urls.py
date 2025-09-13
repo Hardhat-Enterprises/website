@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.i18n import i18n_patterns
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from home import views
 from rest_framework import permissions
+from home.views_securitytxt import security_txt
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.urls import path, re_path
@@ -46,6 +48,7 @@ urlpatterns = [
     path('accounts/', include('home.urls')), 
     path('', include('home.urls')),
     path('about-us/', views.about_us, name='about_us'),
+    path('our-tools/', views.security_tools, name='our_tools'),
     path('contact', views.contact, name='contact'),
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
@@ -54,6 +57,7 @@ urlpatterns = [
     path('cyber_threat_simulation/', views.cyber_threat_simulation, name='cyber_threat_simulation'),
     path('secure_digital_practices/', views.secure_digital_practices, name='secure_digital_practices'),
     path('cybersecurity_awareness_reports/', views.cybersecurity_awareness_reports, name='cybersecurity_awareness_reports'),
+    path('.well-known/security.txt', security_txt, name='security-txt'),
     
     # blog
     path('blog/', views.blog, name='blog'),
@@ -89,6 +93,7 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('', include('home.urls')),
 
    ]

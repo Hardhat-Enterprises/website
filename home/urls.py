@@ -1,16 +1,18 @@
 from django.urls import include, path
+from django.conf.urls.i18n import set_language
 
 from django.contrib import admin
 
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers,career_detail,career_application, feedback_view, delete_feedback, policy_deployment
-
-from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts,career_detail,career_application, feedback_view, delete_feedback, career_discover
+from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts, career_detail, career_application, feedback_view, delete_feedback, career_discover, policy_deployment
 
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
-from .views import UserLoginView, rate_limit_exceeded
+from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
 from .views import delete_account
+# Health Endpoint Work
+from .views import health_check
+from django.views.i18n import set_language
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
@@ -22,6 +24,8 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
+
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -99,7 +103,10 @@ urlpatterns = [
     path("careers/internships/", internships, name="internships"),
     path("careers/job-alerts/", job_alerts, name="job-alerts"),
     path("careers/discover/", career_discover, name="career-discover"),
-    
+    path("careers/path-finder/", views.career_path_finder, name="career_path_finder"),
+    path("careers/graduate-program/", views.graduate_program, name="graduate-program"),
+    path("careers/faqs/", views.careers_faqs, name="careers-faqs"),
+
     path('blog/', Index.as_view(), name = 'blog'),
     # path('blog/<int:pk>/', DetaswilArticleView.as_view(), name='blog_post'),
     path('<int:pk>/', DetailArticleView.as_view(), name='detail_article' ),
@@ -111,7 +118,7 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')), 
     path('post-otp-captcha/', views.post_otp_login_captcha, name='post_otp_login_captcha'),
     path('accounts/passkey-login/', views.login_with_passkey, name='passkey_login'),
-
+    path('admin-dashboard/', admin_dashboard, name='admin_dashboard'),
     path("passkeys/reset/", views.reset_passkeys_request, name="reset_passkeys_request"),
     path("passkeys/reset/verify/", views.reset_passkeys_verify, name="reset_passkeys_verify"),
 
@@ -141,11 +148,20 @@ urlpatterns = [
     path('reported/download/', views.download_reported_blogs, name='download_reported_blogs'),
 
     path('challenges/', views.challenge_list, name='challenge_list'),
+    path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
+    # Admin challenge management
+    path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
+    path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
-    
+    path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
+    path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
+    path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
+    path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
+    path('challenges/<int:pk>/archive/', views.ChallengeArchiveView.as_view(), name='challenge_archive'),
+    path('challenges/<int:pk>/preview/', views.ChallengePreviewView.as_view(), name='challenge_preview'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)
@@ -155,7 +171,8 @@ urlpatterns = [
 
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
- 
+  path('accounts/admin/', AdminLoginView.as_view(), name='admin_login'),
+    path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
     
 
     #swagger-new-implementation
@@ -173,7 +190,13 @@ urlpatterns = [
     path('appattack/pen-testing-form/', views.pen_testing_form_view, name='pen_testing_form'),
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
-    path('account/delete/', delete_account, name='delete-account')
+    path('account/delete/', delete_account, name='delete-account'),
 
+    path("health", health_check, name="health-check")
+
+=======
+    # internationalization
+    path('i18n/setlang/', set_language, name='set_language'),
+>>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

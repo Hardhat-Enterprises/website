@@ -3692,6 +3692,7 @@ fieldset:disabled .btn {
 }
 .mobile-search-bar {
   display: block;
+  position: relative;
 }
 @media screen and (min-width: 1280px) {
   .mobile-search-bar {
@@ -3715,21 +3716,26 @@ fieldset:disabled .btn {
 
 .search-box-mobile {
   width: 100%;
-  padding: 10px 15px;
+  padding: 10px 50px 10px 15px;
   border-radius: 25px;
 }
 
 .search-btn-mobile {
-  position: absolute;
-  right: 5px;
+  position: absolute; 
   top: 50%;
+  right: 5px;
   transform: translateY(-50%);
   background: #ffcd11;
   color: white;
   border: none;
   border-radius: 50%;
-  padding: 10px;
+  width: 40px; 
+  height: 40px; 
+  padding: 0; 
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-btn-mobile:hover {
@@ -19147,6 +19153,12 @@ fieldset:disabled .btn {
   background-size: cover;
 }
 
+.profile-img-fit {
+    width: 180px;
+    height: 180px;
+    object-fit: cover; 
+    object-position: top;
+}
 /**
  * = Floating animations
  */
