@@ -243,6 +243,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+
+    {
+    "NAME": "home.validators.ComplexityPasswordValidator",
+    "OPTIONS": {
+        "require_lower": True,
+        "require_upper": True,
+        "require_digit": True,
+        "require_symbol": True,
+        "symbols": r"[@$!%*?&]",
+    },
+},
     
     # Prevent reusing last N passwords
     {

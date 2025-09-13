@@ -82,3 +82,43 @@ class PasswordHistoryValidator:
         #PasswordHistory.objects.filter(user=user).exclude(id__in=ids_to_keep).delete()
 
         pass
+
+class ComplexityPasswordValidator:
+
+    def __init__(
+        self,
+        require_lower=True,
+        require_upper=True,
+        require_digit=True,
+        require_symbol=True,
+        symbols=r"[@$!%*?&]"
+    ):
+        self.require_lower = require_lower
+        self.require_upper = require_upper
+        self.require_digit = require_digit
+        self.require_symbol = require_symbol
+        self.symbols = symbols
+
+    def validate(self, password, user=None):
+        errors = []
+
+        if self.require_lower and not re.search(r"[a-z]", password):
+            errors.append(_("Password must include at least one lowercase letter."))
+
+        if self.require_upper and not re.search(r"[A-Z]", password):
+            errors.append(_("Password must include at least one uppercase letter."))
+
+        if self.require_digit and not re.search(r"\d", password):
+            errors.append(_("Password must include at least one number."))
+
+        if self.require_symbol and not re.search(self.symbols, password):
+            errors.append(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
+
+        if errors:
+            raise ValidationError(errors)
+
+    def get_help_text(self):
+        return _(
+            "Your password must include at least one lowercase letter, one uppercase letter, one number, "
+            "and one special character (@, $, !, %, *, ?, &)."
+        )
