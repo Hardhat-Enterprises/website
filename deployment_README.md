@@ -160,3 +160,16 @@ docker-compose exec web python manage.py shell
 
 Access database
 docker-compose exec db psql -U hardhat_user -d hardhat_db
+
+Running with Python:
+
+You can also run with Python.
+
+On MacOs (Create venv first), Linux or WSL 2
+
+chmod +x ./entrypoint.sh
+Enter
+Then
+./entrypoint.sh
+
+make sure python in installed in your system. 
