@@ -192,7 +192,14 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
 
-    path("health", health_check, name="health-check")
+    path("health", health_check, name="health-check"),
+
+    # settings page route
+    path("settings/", views.settings_view, name="settings"),
+
+
+
+
 
 =======
     # internationalization

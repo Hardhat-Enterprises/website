@@ -304,11 +304,240 @@
           visibility: visible;
           display: block;
       }
+
+      /* ========== THEME STYLES ========== */
+
+      /* Default (system/browser decides) */
+      body {
+        background-color: #fff;
+        color: #111;
+      }
+
+      /* Light Mode */
+      body.light-mode {
+        background-color: #ffffff;
+        color: #111111;
+      }
+
+      body.light-mode .navbar,
+      body.light-mode .card,
+      body.light-mode footer {
+        background-color: #f8f9fa;
+        color: #111;
+      }
+
+      body.light-mode .navbar .nav-link,
+      body.light-mode .dropdown-menu {
+        color: #111;
+        background-color: #ffffff;
+      }
+
+      /* Dark Mode */
+      body.dark-mode {
+        background-color: #1a1a1a;
+        color: #f8f9fa;
+      }
+
+      body.dark-mode .navbar,
+      body.dark-mode .card,
+      body.dark-mode footer {
+        background-color: #2a2a2a;
+        color: #f8f9fa;
+      }
+
+      body.dark-mode .navbar .nav-link,
+      body.dark-mode .dropdown-menu {
+        color: #f8f9fa;
+        background-color: #2a2a2a;
+      }
+
+      body.dark-mode a {
+        color: #ffc107; /* yellow-ish highlight for links */
+      }
+
+      /* ===== Smooth theme transition ===== */
+
+      /* Respect users who prefer less motion */
+      @media (prefers-reduced-motion: reduce) {
+        .theme-transition,
+        .theme-transition * {
+          transition: none !important;
+        }
+      }
+
+      /* Lightweight fade for key surfaces */
+      .theme-transition,
+      .theme-transition .navbar,
+      .theme-transition .card,
+      .theme-transition footer,
+      .theme-transition .dropdown-menu,
+      .theme-transition .list-group-item,
+      .theme-transition .modal-content {
+        transition:
+          background-color 220ms ease,
+          color 220ms ease,
+          border-color 220ms ease,
+          box-shadow 220ms ease;
+      }
+
   </style>
+  
   
 </head>
 
-<body>
+<body id="appBody"
+      class="theme-transition"
+      data-session-theme="{{ request.session.theme_preference|default:'system' }}">
+
+  <!-- Replace the existing theme script in base.html with this fixed version -->
+  <script>
+    (function () {
+      var html = document.documentElement;
+      var body = document.body;
+
+      // Enhanced cookie helper with error handling
+      function getCookie(name) {
+        try {
+          var match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[-.$?*|{}()[\]\\/+^]/g, '\\$&') + '=([^;]*)'));
+          return match ? decodeURIComponent(match[1]) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      // Enhanced localStorage helper with error handling
+      function getLocalStorage(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      // Determine theme preference with proper fallback chain
+      var sessionTheme = body.dataset.sessionTheme || '';
+      var localStorageTheme = getLocalStorage('theme_preference');
+      var cookieTheme = getCookie('theme_preference');
+      
+      // Priority: session -> localStorage -> cookie -> system
+      var preferredTheme = sessionTheme || localStorageTheme || cookieTheme || 'system';
+      preferredTheme = String(preferredTheme || 'system').toLowerCase();
+
+      // Validate theme value
+      if (!['system', 'light', 'dark'].includes(preferredTheme)) {
+        preferredTheme = 'system';
+      }
+
+      // Theme application function - only apply to body, not html
+      function setTheme(theme) {
+        // Remove all existing theme classes from both elements
+        html.classList.remove('dark-mode', 'light-mode');
+        body.classList.remove('dark-mode', 'light-mode');
+        
+        // Apply specific theme classes only to body
+        if (theme === 'dark') {
+          body.classList.add('dark-mode');
+          body.setAttribute('data-theme', 'dark');
+        } else if (theme === 'light') {
+          body.classList.add('light-mode');
+          body.setAttribute('data-theme', 'light');
+        } else {
+          body.setAttribute('data-theme', 'system');
+        }
+      }
+
+      // System theme detection and handling
+      function handleSystemTheme() {
+        if (window.matchMedia) {
+          var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          
+          // Function to apply system theme based on media query
+          function applySystemTheme(matches) {
+            var currentPref = getLocalStorage('theme_preference') || getCookie('theme_preference') || body.dataset.sessionTheme || 'system';
+            if (currentPref.toLowerCase() === 'system') {
+              // For system mode, we apply the actual theme classes but keep track that it's system
+              body.classList.remove('dark-mode', 'light-mode');
+              if (matches) {
+                body.classList.add('dark-mode');
+              } else {
+                body.classList.add('light-mode');
+              }
+              body.setAttribute('data-theme', 'system');
+            }
+          }
+          
+          // Set initial system theme
+          applySystemTheme(mediaQuery.matches);
+          
+          // Listen for system theme changes
+          var changeHandler = function (e) {
+            applySystemTheme(e.matches);
+          };
+          
+          // Use the appropriate method for adding the event listener
+          if (mediaQuery.addEventListener) {
+            mediaQuery.addEventListener('change', changeHandler);
+          } else if (mediaQuery.addListener) {
+            // Fallback for older browsers
+            mediaQuery.addListener(changeHandler);
+          }
+        } else {
+          // Fallback for browsers without matchMedia support
+          setTheme('light');
+        }
+      }
+
+      // Apply theme based on preference
+      if (preferredTheme === 'dark' || preferredTheme === 'light') {
+        setTheme(preferredTheme);
+      } else {
+        // Handle 'system' preference
+        handleSystemTheme();
+      }
+
+      // Sync localStorage with other storage methods if needed
+      try {
+        if (localStorageTheme !== preferredTheme && preferredTheme !== 'system') {
+          localStorage.setItem('theme_preference', preferredTheme);
+        }
+      } catch (e) {
+        // Handle localStorage quota/access errors silently
+      }
+
+      // Clean up legacy localStorage entries
+      try {
+        var oldDarkMode = getLocalStorage('darkMode');
+        if (oldDarkMode !== null) {
+          // Convert old boolean system to new unified system
+          var convertedTheme = (oldDarkMode === 'true') ? 'dark' : 'light';
+          localStorage.setItem('theme_preference', convertedTheme);
+          localStorage.removeItem('darkMode');
+          
+          // Update cookie as well
+          document.cookie = "theme_preference=" + encodeURIComponent(convertedTheme) +
+                            "; Path=/; Max-Age=31536000; SameSite=Lax";
+        }
+      } catch (e) {
+        // Handle errors silently
+      }
+
+      // Expose theme functions globally for other scripts
+      window.themeSystem = {
+        getCurrentTheme: function() {
+          return getLocalStorage('theme_preference') || getCookie('theme_preference') || body.dataset.sessionTheme || 'system';
+        },
+        setTheme: setTheme,
+        applySystemTheme: handleSystemTheme
+      };
+
+      // Development logging (remove in production)
+      if (window.console && console.log && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+        console.log('[Theme System] Applied:', preferredTheme, '| Body classes:', body.className, '| Data-theme:', body.getAttribute('data-theme'));
+      }
+    })();
+  </script>
+
+
   <div class="recently-viewed-sidebar">
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="recentlyViewedDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -364,29 +593,31 @@
   
   {% endblock footer %}
 
-  <button id="backToTop" style="
+<button id="backToTop" style="
   position: fixed;
-  bottom: 50px;
-  left: 95%;
-  transform: translateX(-50%);
-  background-color: #3a3a32;
-  color: rgb(236, 232, 2); 
-  padding: 5px; 
-  border: none;
+  right: 20px;
+  bottom: 32px;
+  background-color: #fff !important;   /* force a white pill */
+  color: #111 !important;               /* force a dark arrow */
+  padding: 5px;
+  border: 1px solid rgba(0,0,0,.25);
   border-radius: 30%;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 1050;
   display: none;
-  width: 35px; 
-  height: 35px; 
+  width: 44px;
+  height: 44px;
   display: flex;
   opacity: 0;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
-  transition: opacity 0.5s ease-in-out;"> 
-  &#8593;
+  font-size: 20px;
+  line-height: 1;
+  transition: opacity .25s ease;">
+  ↑
 </button>
+
+
 
   {% include 'includes/scripts.html' %}
   {% block javascripts %}{% endblock javascripts %}

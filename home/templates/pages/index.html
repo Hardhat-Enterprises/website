@@ -50,45 +50,140 @@
   </section>
 
   <!-- Vision and Mission -->
-  
+
   <section class="section section-lg">
+    <div class="container">
+
+      <!-- Bootstrap carousel; auto-advance every 5s and pause on hover -->
+      <div id="visionMission"
+          class="carousel slide"
+          data-bs-ride="carousel"
+          data-bs-interval="5000"
+          data-bs-pause="hover">
+
+        <div class="carousel-inner">
+          <!-- Slide 1: Vision (image left, text right on desktop) -->
+          <div class="carousel-item active">
+            <div class="row align-items-center g-5 py-5">
+              <div class="col-lg-6">
+                <img
+                  src="{% static 'assets/img/pages/home/company-vision.svg' %}"
+                  alt="Company Vision illustration"
+                  class="img-fluid rounded-3 shadow-sm">
+              </div>
+              <div class="col-lg-6">
+                <h2 class="h1 mb-3">Company Vision</h2>
+                <p class="lead fw-bold mb-0">
+                  Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower 
+                  white‑hat operations. All deliverables produced by the company will be open source so that anyone may use 
+                  and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2: Mission (image right on desktop; stacks on mobile) -->
+          <div class="carousel-item">
+            <div class="row align-items-center g-5 py-5">
+              <div class="col-lg-6 order-lg-2">
+                <img
+                  src="{% static 'assets/img/pages/home/company-mission.svg' %}"
+                  alt="Company Mission illustration"
+                  class="img-fluid rounded-3 shadow-sm">
+              </div>
+              <div class="col-lg-6 order-lg-1">
+                <h2 class="h1 mb-3">Company Mission</h2>
+                <p class="lead fw-bold mb-0">
+                  Achieve an engaging learning experience for students within the company. An opportunity for students to gain cross 
+                  department/project experience and the opportunity to share their expertise outside of their project team.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Left/right controls (kept outside the content area on large screens) -->
+        <button class="carousel-control-prev vm-control"
+                type="button"
+                data-bs-target="#visionMission"
+                data-bs-slide="prev"
+                aria-label="Previous">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+
+        <button class="carousel-control-next vm-control"
+                type="button"
+                data-bs-target="#visionMission"
+                data-bs-slide="next"
+                aria-label="Next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+
+        <!-- Dots for quick switching -->
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#visionMission" data-bs-slide-to="0"
+                  class="active" aria-current="true" aria-label="Vision"></button>
+          <button type="button" data-bs-target="#visionMission" data-bs-slide-to="1"
+                  aria-label="Mission"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative wave kept as-is -->
+    <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
+      <svg class="fill-tertiary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
+        <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
+      </svg>
+    </figure>
+
     <style>
-      /* Ensure the carousel item and its contents have correct positioning */
-.carousel-item {
-    position: relative;
-    text-align: center;
-}
+      /* Prevent layout shift on first paint */
+      #visionMission .carousel-item { min-height: 1px; }
 
-/* Hide the default Bootstrap caption */
-.carousel-caption {
-    display: none;
-}
+      /* Make controls readable on any background and slightly offset from content */
+      #visionMission .vm-control{
+        width: 3rem; height: 3rem;
+        top: 50%; transform: translateY(-50%);
+        border-radius: 9999px;
+        background-color: var(--bs-body-bg);
+        border: 1px solid var(--bs-border-color);
+        box-shadow: 0 6px 18px rgba(0,0,0,.25);
+        opacity: 1; /* keep visible */
+      }
 
-/* Custom text container */
-.carousel-text-container {
-    text-align: center;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.8); /* Optional: to make text stand out */
-}
+      /* Default positions */
+      #visionMission .carousel-control-prev { left: .25rem; }
+      #visionMission .carousel-control-next { right: .25rem; }
 
-/* Style for headings and paragraphs inside the text container */
-.carousel-text-container h2 {
-    margin-bottom: 15px;
-}
+      /* On larger screens, push arrows a bit further out so they don’t sit over the text */
+      @media (min-width: 992px) {
+        #visionMission .carousel-control-prev { left: -3.5rem; }
+        #visionMission .carousel-control-next { right: -3.5rem; }
+      }
 
-.carousel-text-container p {
-    margin: 0;
-}
+      /* Sharpen the chevrons */
+      #visionMission .carousel-control-prev-icon,
+      #visionMission .carousel-control-next-icon{
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,.5));
+        background-size: 1.25rem 1.25rem;
+      }
 
-/* Ensure carousel indicators and controls are visible and not obstructed */
-.carousel-control-prev, .carousel-control-next {
-    z-index: 10;
-}
+      /* Indicators: visible on any background */
+    #visionMission .carousel-indicators {
+      bottom: -2.2rem; /* move to bottom middle, just above wave */
+    }
 
-/* Optional: Add some margin below the text container if needed */
-.carousel-item:last-child .carousel-text-container {
-    margin-bottom: 20px;
-}
+    #visionMission .carousel-indicators [data-bs-target] {
+      width: 0.9rem;
+      height: 0.9rem;
+      border-radius: 50%;
+      background-color: rgba(0,0,0,0.6);   /* semi-dark for visibility */
+    }
+
+    #visionMission .carousel-indicators .active {
+      background-color: #fff;              /* active dot stands out */
+      border: 2px solid rgba(0,0,0,0.6);   /* contrast border */
+    }
 
     </style>
       <div class="container">
@@ -148,6 +243,8 @@
     crossorigin="anonymous">
     </script>
   </section>
+
+
   
   <!-- Projects -->
   <section id="projects" class="section section-lg bg-tertiary">
@@ -499,12 +596,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <!-- FAQ -->
 
-  <section id="faq" class="faq-section section-lg">
+  <section id="faq" class="faq-section section-lg text-body">
     <div class="container">
       <p class="text-center faq-sub-header">{% trans "FAQ" %}</p>
         <h2 class="fw-bolder faq-title  text-center mb-lg-2">{% trans "What Our Clients Recently ask" %}</h2>
        
 <div class="faq-container neomorph-card">
+
     <div class="faq-item">
         <button class="faq-button neomorph-btn d-flexf space-betweenf">
              {% trans "What is cybersecurity and why do I need it? " %}<span class="icon">+</span>
