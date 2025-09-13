@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .models import VaultDocument
 
 from .models import AdminNotification
 
@@ -256,6 +257,11 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     list_filter = ['submitted_at']
     search_fields = ['name', 'email', 'github_repo_link']
     readonly_fields = ['submitted_at']
+
+@admin.register(VaultDocument)
+class VaultDocumentAdmin(admin.ModelAdmin):
+    list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
+    search_fields = ('original_name', 'description')
 
 
 
