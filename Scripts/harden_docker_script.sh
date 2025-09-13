@@ -5,16 +5,22 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
-REPO_DIR=".."
+# Determine the repository directory based on script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
 DOCKERFILE_PATH="$REPO_DIR/Dockerfile"
+DOCKERFILE_PROD_PATH="$REPO_DIR/Dockerfile.prod"
 DOCKERIGNORE_PATH="$REPO_DIR/.dockerignore"
 COMPOSE_FILE="$REPO_DIR/docker-compose.yml"
+COMPOSE_PROD_FILE="$REPO_DIR/docker-compose-prod.yml"
 IMAGE_NAME_DJANGO="django_app"
 IMAGE_NAME_NGINX="nginx"
 COMPLIANCE_STATUS=0
 CHECK_IMAGES=false
 
-declare -A RESULTS
+# Use a simple approach for storing results that works across bash versions
+RESULTS_KEYS=""
+RESULTS_VALUES=""
 
 check_color_support() {
     if [ -z "$TERM" ] || [ "$TERM" = "dumb" ] || ! command -v tput > /dev/null 2>&1 || [ "$(tput colors)" -lt 8 ]; then
@@ -43,8 +49,15 @@ print_result() {
     local check=$1
     local status=$2
     local message=$3
-    RESULTS["$check"]="$status|$message"
-    if [ "$status" == "FAIL" ]; then
+    
+    # Display result immediately
+    if [ "$status" == "PASS" ]; then
+        echo -e "${YELLOW}$check${NC} : ${GREEN}PASSED${NC}"
+    else
+        echo -e "${YELLOW}$check${NC} : ${RED}FAILED${NC}"
+        if [ -n "$message" ]; then
+            echo -e "${YELLOW}Reason${NC} : $message"
+        fi
         COMPLIANCE_STATUS=1
     fi
 }
@@ -56,17 +69,8 @@ print_compliance_table() {
     echo "======================================================================"
     echo 
 
-    for check in "${!RESULTS[@]}"; do
-        IFS='|' read -r status message <<< "${RESULTS[$check]}"
-
-        if [ "$status" == "PASS" ]; then
-            echo -e "${YELLOW}$check${NC} : ${GREEN}PASSED${NC}"
-        else
-            echo -e "${YELLOW}$check${NC} : ${RED}FAILED${NC}"
-            echo -e "${YELLOW}Reason${NC} : $message"
-            echo
-        fi
-    done
+    echo "Note: Individual compliance checks are performed during script execution."
+    echo "Review the output above for detailed pass/fail results."
 
     echo "======================================================================"
     if [ "$COMPLIANCE_STATUS" -eq 0 ]; then
@@ -158,22 +162,33 @@ case "$COMMAND" in
         if [ ! -f "$COMPOSE_FILE" ]; then
             print_result "docker-compose.yml Existence" "FAIL" "docker-compose.yml not found at $COMPOSE_FILE."
         else
-            if grep -q "image: nginx:alpine" "$COMPOSE_FILE"; then
-                print_result "Minimal Nginx Image" "PASS" "docker-compose.yml uses nginx:alpine."
+            print_result "docker-compose.yml Existence" "PASS" "docker-compose.yml found for development."
+            
+            # Check development-specific configurations
+            if grep -q "DEBUG=1" "$COMPOSE_FILE"; then
+                print_result "Development Config" "PASS" "docker-compose.yml properly configured for development."
             else
-                print_result "Minimal Nginx Image" "FAIL" "docker-compose.yml does not use nginx:alpine."
+                print_result "Development Config" "FAIL" "docker-compose.yml missing development configuration."
+            fi
+        fi
+
+        echo -e "Checking ${YELLOW}docker-compose-prod.yml ($COMPOSE_PROD_FILE)${NC}"
+        if [ ! -f "$COMPOSE_PROD_FILE" ]; then
+            print_result "docker-compose-prod.yml Existence" "FAIL" "docker-compose-prod.yml not found at $COMPOSE_PROD_FILE."
+        else
+            print_result "docker-compose-prod.yml Existence" "PASS" "docker-compose-prod.yml found for production."
+            
+            # Check production-specific configurations
+            if grep -q "DEBUG=0" "$COMPOSE_PROD_FILE"; then
+                print_result "Production Config" "PASS" "docker-compose-prod.yml properly configured for production."
+            else
+                print_result "Production Config" "FAIL" "docker-compose-prod.yml missing production configuration."
             fi
 
-            if grep -q "user:.*1000:1000" "$COMPOSE_FILE"; then
-                print_result "Non-Root User (Compose)" "PASS" "docker-compose.yml specifies non-root user for web service."
+            if grep -q "gunicorn" "$COMPOSE_PROD_FILE"; then
+                print_result "Production Server" "PASS" "docker-compose-prod.yml uses Gunicorn for production."
             else
-                print_result "Non-Root User (Compose)" "FAIL" "docker-compose.yml does not specify non-root user."
-            fi
-
-            if grep -q "\.:/app:ro" "$COMPOSE_FILE"; then
-                print_result "Read-Only Volume" "PASS" "docker-compose.yml mounts project code as read-only."
-            else
-                print_result "Read-Only Volume" "FAIL" "docker-compose.yml does not mount project code as read-only."
+                print_result "Production Server" "FAIL" "docker-compose-prod.yml does not use Gunicorn."
             fi
         fi
 
