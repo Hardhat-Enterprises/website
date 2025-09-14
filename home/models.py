@@ -1,4 +1,5 @@
 ﻿import uuid
+import os
 
 from django.db import models
 from django.core.mail import send_mail
@@ -34,6 +35,10 @@ from .validators import StudentIdValidator
 from django.db import models
 import nh3
 from django.conf import settings
+
+def vault_upload_path(instance, filename):
+    """Generate upload path for vault documents"""
+    return os.path.join('vault_documents', filename)
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -161,6 +166,33 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.last_activity = now()
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
+
+class VaultDocument(models.Model):
+    VIS_PUBLIC = 'public'
+    VIS_TEAMS = 'teams'
+    VIS_PRIVATE = 'private'
+    
+    VISIBILITY_CHOICES = [
+        (VIS_PUBLIC, 'Public'),
+        (VIS_TEAMS, 'Selected teams'),
+        (VIS_PRIVATE, 'Private (uploader only)'),
+    ]
+    
+    file = models.FileField(upload_to=vault_upload_path)
+    original_name = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(max_length=120, blank=True)
+    size_bytes = models.PositiveIntegerField(default=0)
+    description = models.CharField(max_length=300, blank=True)
+    visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
+    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.original_name or self.file.name
 
 # Keep a short history of password hashes per user
 class PasswordHistory(models.Model):
