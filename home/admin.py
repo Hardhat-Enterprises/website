@@ -3,9 +3,10 @@
 from django.contrib import admin
 
 from .models import AdminNotification
+from .models import VaultDocument
 
 from django.utils.html import format_html
-
+from .models import Tip , TipRotationState
 from .models import (
     User,
     Student,
@@ -42,11 +43,17 @@ from .models import (
     PenTestingRequest, 
     SecureCodeReviewRequest,
 
+
     # Python Compiler Models
     CodeExecution,
     CodeTemplate,
     CodeSubmission,
     CompilerSettings,
+
+    JobAlert,
+    GraduateProgram,
+    CareerFAQ
+
 
 )
 
@@ -187,6 +194,40 @@ class JobAdmin(admin.ModelAdmin):
     list_display = ['title', 'location', 'job_type', 'posted_date', 'closing_date']
     list_filter=['location','job_type']
 
+@admin.register(JobAlert)
+class JobAlertAdmin(admin.ModelAdmin):
+    list_display = ['email', 'is_active', 'created_at', 'last_notification']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['email']
+    readonly_fields = ['created_at', 'last_notification']
+
+@admin.register(GraduateProgram)
+class GraduateProgramAdmin(admin.ModelAdmin):
+    list_display = ['title', 'program_type', 'duration_months', 'start_date', 'application_deadline', 'is_active']
+    list_filter = ['program_type', 'is_active', 'start_date', 'application_deadline']
+    search_fields = ['title', 'description']
+    readonly_fields = ['created_at']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'program_type', 'duration_months', 'start_date', 'application_deadline', 'is_active')
+        }),
+        ('Program Details', {
+            'fields': ('overview', 'curriculum', 'benefits', 'requirements', 'application_process')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )
+
+@admin.register(CareerFAQ)
+class CareerFAQAdmin(admin.ModelAdmin):
+    list_display = ['question', 'category', 'is_popular', 'order', 'created_at']
+    list_filter = ['category', 'is_popular', 'created_at']
+    search_fields = ['question', 'answer']
+    list_editable = ['order', 'is_popular']
+    readonly_fields = ['created_at']
+
 @admin.register(JobApplication)
 class JobApplicationAdmin(admin.ModelAdmin):
     list_display=['name', 'email','job__title','applied_date']
@@ -227,6 +268,7 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     list_filter = ['submitted_at']
     search_fields = ['name', 'email', 'github_repo_link']
     readonly_fields = ['submitted_at']
+
 
 
 # Python Compiler Admin Classes
@@ -293,6 +335,23 @@ class CompilerSettingsAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         # Prevent deletion of settings
         return False
+
+@admin.register(Tip)
+class TipAdmin(admin.ModelAdmin):
+    list_display = ("text", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("text",)
+@admin.register(TipRotationState)
+class TipRotationStateAdmin(admin.ModelAdmin):
+    list_display = ("lock", "last_index", "rotated_at")
+
+@admin.register(VaultDocument)
+class VaultDocumentAdmin(admin.ModelAdmin):
+    list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
+    search_fields = ('original_name', 'description')
+
+
+
 
 
 

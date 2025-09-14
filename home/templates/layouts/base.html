@@ -16,6 +16,7 @@
 -->
 
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +51,7 @@
   default-src 'self'; 
   script-src 'self' http://127.0.0.1:8000/ 'unsafe-inline' 
   https://buttons.github.io https://unpkg.com https://code.jquery.com https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://www.google.com https://www.gstatic.com;
-  style-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline' https://fonts.googleapis.com;
+  style-src 'self' {{ request.scheme }}://{{ request.get_host }}/ 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;
   font-src 'self' https://fonts.gstatic.com;
   frame-src 'self' https://www.google.com;
   img-src 'self' data:;
@@ -311,14 +312,14 @@
   <div class="recently-viewed-sidebar">
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="recentlyViewedDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            Recently Viewed Pages
+            {% trans "Recently Viewed Pages" %}
             <i class="fas fa-chevron-down"></i> <!-- FontAwesome icon -->
         </button>
         <ul id="recently-viewed-list" class="dropdown-menu" aria-labelledby="recentlyViewedDropdown">
             <!-- Pages dynamically added here -->
         </ul>
     </div>
-</div>
+  </div>
 
 
 
@@ -329,23 +330,23 @@
   {% endblock header %}
 
   <div id="chat-button">
-    <button id="chatOpenButton">💬 Chat with us</button>
+    <button id="chatOpenButton">{% trans "💬 Chat with us" %}</button>
   </div>
   
   <div id="chat-popup" class="hidden">
     <div class="chat-header">
-      <span class="chat-title">Let's chat?</span>
+      <span class="chat-title">{% trans "Let's chat?" %}</span>
       <button id="chatCloseButton" class="CloseButton">x</button>
     </div>
     <div class="chat-body">
       <form id="chatForm">
-        <div class="chat-text">Please fill out the form below to start chatting with the next available agent.</div>
+        <div class="chat-text">{% trans "Please fill out the form below to start chatting with the next available agent." %}</div>
       <div class="chat-div">
-        <input type="text" class="chatInput" id="userName" name="userName" placeholder="Enter your name" required /> 
-        <input type="email" class="chatInput" id="userEmail" name="userEmail" placeholder="Enter your email" required />
-        <textarea id="userMessage" class="chatInput chat-textarea" name="userMessage" placeholder="Type your message..." rows="4" required></textarea>
+        <input type="text" class="chatInput" id="userName" name="userName" placeholder="{% trans 'Enter your name' %}" required /> 
+        <input type="email" class="chatInput" id="userEmail" name="userEmail" placeholder="{% trans 'Enter your email' %}" required />
+        <textarea id="userMessage" class="chatInput chat-textarea" name="userMessage" placeholder="{% trans 'Type your message...' %}" rows="4" required></textarea>
         <div class="buttonChat">
-         <button class="chatSubmit" type="submit">Submit</button>
+         <button class="chatSubmit" type="submit">{% trans "Submit" %}</button>
         </div>
       </div>
   
@@ -446,14 +447,14 @@ crossorigin="anonymous"></script>
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="inactivityModalLabel">Session Timeout Warning</h5>
+          <h5 class="modal-title" id="inactivityModalLabel">{% trans "Session Timeout Warning" %}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Your session will expire in 1 minute due to inactivity. Any unsaved changes will be lost.
+          {% trans "Your session will expire in 1 minute due to inactivity. Any unsaved changes will be lost." %}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="resetTimer()">Stay Logged In</button>
+          <button type="button" class="btn btn-primary" onclick="resetTimer()">{% trans "Stay Logged In" %}</button>
         </div>
       </div>
     </div>
