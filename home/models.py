@@ -642,3 +642,96 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
+
+# Python Compiler Models
+class CodeExecution(models.Model):
+    """Model to track code executions for security and analytics"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    language = models.CharField(max_length=20, default='python')
+    code = models.TextField()
+    input_data = models.TextField(blank=True, null=True)
+    output = models.TextField(blank=True, null=True)
+    error_message = models.TextField(blank=True, null=True)
+    execution_time = models.FloatField(default=0.0)
+    memory_used = models.IntegerField(default=0)  # in bytes
+    is_successful = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Code Execution - {self.user or 'Anonymous'} - {self.created_at}"
+
+
+class CodeTemplate(models.Model):
+    """Model to store code templates for different Python concepts"""
+    DIFFICULTY_CHOICES = [
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('advanced', 'Advanced'),
+    ]
+    
+    CATEGORY_CHOICES = [
+        ('basics', 'Python Basics'),
+        ('data_structures', 'Data Structures'),
+        ('algorithms', 'Algorithms'),
+        ('oop', 'Object-Oriented Programming'),
+        ('file_handling', 'File Handling'),
+        ('web_scraping', 'Web Scraping'),
+        ('data_analysis', 'Data Analysis'),
+        ('machine_learning', 'Machine Learning'),
+        ('security', 'Security'),
+        ('networking', 'Networking'),
+    ]
+    
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    difficulty = models.CharField(max_length=15, choices=DIFFICULTY_CHOICES)
+    template_code = models.TextField()
+    expected_output = models.TextField(blank=True, null=True)
+    hints = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['category', 'difficulty', 'title']
+    
+    def __str__(self):
+        return f"{self.title} - {self.get_category_display()}"
+
+
+class CodeSubmission(models.Model):
+    """Model to store user code submissions for templates"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    template = models.ForeignKey(CodeTemplate, on_delete=models.CASCADE)
+    user_code = models.TextField()
+    is_correct = models.BooleanField(default=False)
+    execution_time = models.FloatField(default=0.0)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-submitted_at']
+        unique_together = ['user', 'template']  # One submission per user per template
+    
+    def __str__(self):
+        return f"{self.user} - {self.template.title}"
+
+
+class CompilerSettings(models.Model):
+    """Model to store compiler settings and limits"""
+    max_execution_time = models.IntegerField(default=5)  # seconds
+    max_memory_limit = models.IntegerField(default=128)  # MB
+    max_code_length = models.IntegerField(default=1000)  # characters
+    allowed_modules = models.JSONField(default=list)  # List of allowed modules
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Compiler Settings - {self.created_at}"
+
+

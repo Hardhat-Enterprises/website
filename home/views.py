@@ -21,7 +21,7 @@ from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordRes
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.db.models import Count, Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -1787,8 +1787,6 @@ def category_challenges(request, category):
 import sys
 import io
 import contextlib
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import CyberChallenge, UserChallenge
 
@@ -2212,215 +2210,289 @@ def policy_deployment(request):
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
 
+# Enhanced Python Compiler Views
+from .models import CodeExecution, CodeTemplate, CodeSubmission, CompilerSettings
+import threading
+import time
+from django.core.cache import cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.db import transaction
+
 @login_required
+@require_POST
+@csrf_exempt
 def execute_code(request):
     """
-    Execute code safely for the compiler functionality
+    Enhanced secure Python code execution with comprehensive security measures
     """
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            language = data.get('language')
-            code = data.get('code')
-            input_data = data.get('input_data', '')
-            
-            if not language or not code:
-                return JsonResponse({'error': 'Language and code are required'}, status=400)
-            
-            # Security: Limit code length and execution time
-            if len(code) > 1000:
-                return JsonResponse({'error': 'Code too long (max 1000 characters)'}, status=400)
-            
-            result = {'output': '', 'error': None, 'execution_time': 0}
-            
-            if language == 'python':
-                # Simple Python code execution (in production, use Docker containers)
-                try:
-                    # Create a safe execution environment
-                    safe_globals = {
-                        '__builtins__': {
-                            'print': print,
-                            'len': len,
-                            'str': str,
-                            'int': int,
-                            'float': float,
-                            'list': list,
-                            'dict': dict,
-                            'set': set,
-                            'tuple': tuple,
-                            'range': range,
-                            'enumerate': enumerate,
-                            'zip': zip,
-                            'any': any,
-                            'all': all,
-                            'sum': sum,
-                            'max': max,
-                            'min': min,
-                            'abs': abs,
-                            'round': round,
-                            'sorted': sorted,
-                            'reversed': reversed,
-                            'filter': filter,
-                            'map': map,
-                            'isinstance': isinstance,
-                            'type': type,
-                            'bool': bool,
-                            'chr': chr,
-                            'ord': ord,
-                            'hex': hex,
-                            'bin': bin,
-                            'oct': oct,
-                            'divmod': divmod,
-                            'pow': pow,
-                            'hash': hash,
-                            'id': id,
-                            'dir': dir,
-                            'getattr': getattr,
-                            'hasattr': hasattr,
-                            'setattr': setattr,
-                            'delattr': delattr,
-                            'property': property,
-                            'super': super,
-                            'object': object,
-                            'Exception': Exception,
-                            'ValueError': ValueError,
-                            'TypeError': TypeError,
-                            'IndexError': IndexError,
-                            'KeyError': KeyError,
-                            'AttributeError': AttributeError,
-                            'NameError': NameError,
-                            'SyntaxError': SyntaxError,
-                            'IndentationError': IndentationError,
-                            'ZeroDivisionError': ZeroDivisionError,
-                            'OverflowError': OverflowError,
-                            'MemoryError': MemoryError,
-                            'OSError': OSError,
-                            'FileNotFoundError': FileNotFoundError,
-                            'PermissionError': PermissionError,
-                            'TimeoutError': TimeoutError,
-                            'ConnectionError': ConnectionError,
-                            'BlockingIOError': BlockingIOError,
-                            'ChildProcessError': ChildProcessError,
-                            'BrokenPipeError': BrokenPipeError,
-                            'ConnectionAbortedError': ConnectionAbortedError,
-                            'ConnectionRefusedError': ConnectionRefusedError,
-                            'ConnectionResetError': ConnectionResetError,
-                            'FileExistsError': FileExistsError,
-                            'FileNotFoundError': FileNotFoundError,
-                            'IsADirectoryError': IsADirectoryError,
-                            'NotADirectoryError': NotADirectoryError,
-                            'InterruptedError': InterruptedError,
-                            'PermissionError': PermissionError,
-                            'ProcessLookupError': ProcessLookupError,
-                            'TimeoutError': TimeoutError,
-                            'UnsupportedOperation': UnsupportedOperation,
-                            'BufferError': BufferError,
-                            'EOFError': EOFError,
-                            'ImportError': ImportError,
-                            'ModuleNotFoundError': ModuleNotFoundError,
-                            'LookupError': LookupError,
-                            'IndexError': IndexError,
-                            'KeyError': KeyError,
-                            'UnboundLocalError': UnboundLocalError,
-                            'UnicodeError': UnicodeError,
-                            'UnicodeDecodeError': UnicodeDecodeError,
-                            'UnicodeEncodeError': UnicodeEncodeError,
-                            'UnicodeTranslateError': UnicodeTranslateError,
-                            'RuntimeError': RuntimeError,
-                            'NotImplementedError': NotImplementedError,
-                            'RecursionError': RecursionError,
-                            'SystemError': SystemError,
-                            'ReferenceError': ReferenceError,
-                            'GeneratorExit': GeneratorExit,
-                            'StopIteration': StopIteration,
-                            'ArithmeticError': ArithmeticError,
-                            'FloatingPointError': FloatingPointError,
-                            'OverflowError': OverflowError,
-                            'ZeroDivisionError': ZeroDivisionError,
-                            'AssertionError': AssertionError,
-                            'AttributeError': AttributeError,
-                            'BufferError': BufferError,
-                            'EOFError': EOFError,
-                            'ImportError': ImportError,
-                            'LookupError': LookupError,
-                            'MemoryError': MemoryError,
-                            'NameError': NameError,
-                            'OSError': OSError,
-                            'ReferenceError': ReferenceError,
-                            'RuntimeError': RuntimeError,
-                            'SyntaxError': SyntaxError,
-                            'SystemError': SystemError,
-                            'TypeError': TypeError,
-                            'ValueError': ValueError,
-                            'Warning': Warning,
-                            'UserWarning': UserWarning,
-                            'DeprecationWarning': DeprecationWarning,
-                            'PendingDeprecationWarning': PendingDeprecationWarning,
-                            'SyntaxWarning': SyntaxWarning,
-                            'RuntimeWarning': RuntimeWarning,
-                            'FutureWarning': FutureWarning,
-                            'ImportWarning': ImportWarning,
-                            'UnicodeWarning': UnicodeWarning,
-                            'BytesWarning': BytesWarning,
-                            'ResourceWarning': ResourceWarning,
-                        }
+    try:
+        data = json.loads(request.body)
+        language = data.get('language', 'python')
+        code = data.get('code', '')
+        input_data = data.get('input_data', '')
+        template_id = data.get('template_id')
+        
+        if not code.strip():
+            return JsonResponse({'error': 'Code is required'}, status=400)
+        
+        # Get compiler settings
+        settings = CompilerSettings.objects.first()
+        if not settings:
+            settings = CompilerSettings.objects.create()
+        
+        # Security checks
+        if len(code) > settings.max_code_length:
+            return JsonResponse({'error': f'Code too long (max {settings.max_code_length} characters)'}, status=400)
+        
+        # Rate limiting per user
+        user_key = f"code_execution_{request.user.id if request.user.is_authenticated else request.META.get('REMOTE_ADDR')}"
+        if cache.get(user_key):
+            return JsonResponse({'error': 'Too many requests. Please wait before trying again.'}, status=429)
+        cache.set(user_key, True, timeout=2)  # 2 second cooldown
+        
+        # Check for malicious patterns
+        malicious_patterns = [
+            'import os', 'import sys', 'import subprocess', 'import shutil',
+            '__import__', 'eval(', 'exec(', 'open(', 'file(', 'input(',
+            'raw_input(', 'compile(', 'reload(', 'vars(', 'globals(',
+            'locals(', 'dir(', 'getattr', 'setattr', 'delattr',
+            'hasattr', 'callable', 'isinstance', 'issubclass',
+            'type(', 'super(', 'property(', 'staticmethod', 'classmethod'
+        ]
+        
+        code_lower = code.lower()
+        for pattern in malicious_patterns:
+            if pattern in code_lower:
+                return JsonResponse({'error': f'Security violation: {pattern} is not allowed'}, status=400)
+        
+        result = {'output': '', 'error': None, 'execution_time': 0, 'memory_used': 0}
+        
+        if language == 'python':
+            result = execute_python_code(code, input_data, settings)
+        
+        # Log the execution
+        execution_log = CodeExecution.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            language=language,
+            code=code[:500],  # Store only first 500 chars for privacy
+            input_data=input_data[:200] if input_data else None,
+            output=result['output'][:1000] if result['output'] else None,
+            error_message=result['error'][:500] if result['error'] else None,
+            execution_time=result['execution_time'],
+            memory_used=result.get('memory_used', 0),
+            is_successful=result['error'] is None,
+            ip_address=get_client_ip(request)
+        )
+        
+        # If this is a template submission, check correctness
+        if template_id:
+            try:
+                template = CodeTemplate.objects.get(id=template_id, is_active=True)
+                submission, created = CodeSubmission.objects.get_or_create(
+                    user=request.user,
+                    template=template,
+                    defaults={
+                        'user_code': code,
+                        'is_correct': result['error'] is None and result['output'].strip() == template.expected_output.strip(),
+                        'execution_time': result['execution_time']
                     }
-                    
-                    # Execute code with timeout
-                    import signal
-                    import time
-                    
-                    def timeout_handler(signum, frame):
-                        raise TimeoutError("Code execution timed out")
-                    
-                    signal.signal(signal.SIGALRM, timeout_handler)
-                    signal.alarm(5)  # 5 second timeout
-                    
-                    start_time = time.time()
-                    
-                    # Capture output
-                    import io
-                    import sys
-                    from contextlib import redirect_stdout
-                    
-                    output = io.StringIO()
-                    with redirect_stdout(output):
-                        exec(code, safe_globals)
-                    
-                    execution_time = time.time() - start_time
-                    signal.alarm(0)  # Cancel alarm
-                    
-                    result['output'] = output.getvalue()
-                    result['execution_time'] = round(execution_time, 3)
-                    
-                except TimeoutError:
-                    result['error'] = 'Code execution timed out (max 5 seconds)'
-                except Exception as e:
-                    result['error'] = str(e)
-                    
-            elif language == 'javascript':
-                # For JavaScript, we'll return a message that it should be run in browser
-                result['output'] = 'JavaScript code should be executed in the browser console for security reasons.'
-                result['error'] = 'JavaScript execution is handled client-side'
+                )
+                if not created:
+                    submission.user_code = code
+                    submission.is_correct = result['error'] is None and result['output'].strip() == template.expected_output.strip()
+                    submission.execution_time = result['execution_time']
+                    submission.save()
                 
-            elif language == 'sql':
-                # For SQL, we'll validate the query structure
-                if 'DROP' in code.upper() or 'DELETE' in code.upper() or 'TRUNCATE' in code.upper():
-                    result['error'] = 'Destructive SQL operations are not allowed'
-                elif '?' in code or ':' in code:
-                    result['output'] = 'Parameterized query detected - Good security practice!'
-                else:
-                    result['output'] = 'SQL query structure validated'
-                    
-            else:
-                result['error'] = f'Unsupported language: {language}'
-            
-            return JsonResponse(result)
-            
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': f'Server error: {str(e)}'}, status=500)
+                result['is_correct'] = submission.is_correct
+                result['expected_output'] = template.expected_output
+                result['hints'] = template.hints
+                
+            except CodeTemplate.DoesNotExist:
+                pass
+        
+        return JsonResponse(result)
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': f'Server error: {str(e)}'}, status=500)
+
+
+def execute_python_code(code, input_data, settings):
+    """
+    Execute Python code in a secure environment
+    """
+    result = {'output': '', 'error': None, 'execution_time': 0, 'memory_used': 0}
     
-    return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+    try:
+        # Create a safe execution environment
+        safe_globals = {
+            '__builtins__': {
+                'print': print,
+                'len': len, 'str': str, 'int': int, 'float': float,
+                'list': list, 'dict': dict, 'set': set, 'tuple': tuple,
+                'range': range, 'enumerate': enumerate, 'zip': zip,
+                'any': any, 'all': all, 'sum': sum, 'max': max, 'min': min,
+                'abs': abs, 'round': round, 'sorted': sorted, 'reversed': reversed,
+                'filter': filter, 'map': map, 'isinstance': isinstance,
+                'type': type, 'bool': bool, 'chr': chr, 'ord': ord,
+                'hex': hex, 'bin': bin, 'oct': oct, 'divmod': divmod,
+                'pow': pow, 'hash': hash, 'id': id,
+                'Exception': Exception, 'ValueError': ValueError,
+                'TypeError': TypeError, 'IndexError': IndexError,
+                'KeyError': KeyError, 'AttributeError': AttributeError,
+                'NameError': NameError, 'SyntaxError': SyntaxError,
+                'IndentationError': IndentationError, 'ZeroDivisionError': ZeroDivisionError,
+                'OverflowError': OverflowError, 'MemoryError': MemoryError,
+                'OSError': OSError, 'FileNotFoundError': FileNotFoundError,
+                'PermissionError': PermissionError, 'TimeoutError': TimeoutError,
+                'ConnectionError': ConnectionError, 'BlockingIOError': BlockingIOError,
+                'ChildProcessError': ChildProcessError, 'BrokenPipeError': BrokenPipeError,
+                'ConnectionAbortedError': ConnectionAbortedError,
+                'ConnectionRefusedError': ConnectionRefusedError,
+                'ConnectionResetError': ConnectionResetError,
+                'FileExistsError': FileExistsError, 'IsADirectoryError': IsADirectoryError,
+                'NotADirectoryError': NotADirectoryError, 'InterruptedError': InterruptedError,
+                'ProcessLookupError': ProcessLookupError,
+                'BufferError': BufferError, 'EOFError': EOFError,
+                'ImportError': ImportError, 'ModuleNotFoundError': ModuleNotFoundError,
+                'LookupError': LookupError, 'UnboundLocalError': UnboundLocalError,
+                'UnicodeError': UnicodeError, 'UnicodeDecodeError': UnicodeDecodeError,
+                'UnicodeEncodeError': UnicodeEncodeError, 'UnicodeTranslateError': UnicodeTranslateError,
+                'RuntimeError': RuntimeError, 'NotImplementedError': NotImplementedError,
+                'RecursionError': RecursionError, 'SystemError': SystemError,
+                'ReferenceError': ReferenceError, 'GeneratorExit': GeneratorExit,
+                'StopIteration': StopIteration, 'ArithmeticError': ArithmeticError,
+                'FloatingPointError': FloatingPointError, 'AssertionError': AssertionError,
+                'Warning': Warning, 'UserWarning': UserWarning,
+                'DeprecationWarning': DeprecationWarning, 'PendingDeprecationWarning': PendingDeprecationWarning,
+                'SyntaxWarning': SyntaxWarning, 'RuntimeWarning': RuntimeWarning,
+                'FutureWarning': FutureWarning, 'ImportWarning': ImportWarning,
+                'UnicodeWarning': UnicodeWarning, 'BytesWarning': BytesWarning,
+                'ResourceWarning': ResourceWarning,
+            }
+        }
+        
+        # Add input function if input_data is provided
+        if input_data:
+            input_lines = input_data.split('\n')
+            input_iter = iter(input_lines)
+            safe_globals['input'] = lambda: next(input_iter, '')
+        
+        # Execute with timeout and memory monitoring
+        start_time = time.time()
+        
+        # Set up timeout
+        def timeout_handler():
+            raise TimeoutError("Code execution timed out")
+        
+        timer = threading.Timer(settings.max_execution_time, timeout_handler)
+        timer.start()
+        
+        try:
+            # Capture output
+            import io
+            import sys
+            from contextlib import redirect_stdout, redirect_stderr
+            
+            output = io.StringIO()
+            error_output = io.StringIO()
+            
+            with redirect_stdout(output), redirect_stderr(error_output):
+                exec(code, safe_globals)
+            
+            execution_time = time.time() - start_time
+            timer.cancel()
+            
+            result['output'] = output.getvalue()
+            result['execution_time'] = round(execution_time, 3)
+            
+            # Check for errors in stderr
+            error_msg = error_output.getvalue()
+            if error_msg:
+                result['error'] = error_msg
+                
+        except TimeoutError:
+            timer.cancel()
+            result['error'] = f'Code execution timed out (max {settings.max_execution_time} seconds)'
+        except Exception as e:
+            timer.cancel()
+            result['error'] = str(e)
+            
+    except Exception as e:
+        result['error'] = f'Execution error: {str(e)}'
+    
+    return result
+
+
+@login_required
+def compiler_home(request):
+    """
+    Main compiler interface
+    """
+    templates = CodeTemplate.objects.filter(is_active=True).order_by('category', 'difficulty')
+    categories = CodeTemplate.objects.values_list('category', flat=True).distinct()
+    
+    context = {
+        'templates': templates,
+        'categories': categories,
+    }
+    return render(request, 'pages/compiler/compiler_home.html', context)
+
+
+@login_required
+def compiler_template(request, template_id):
+    """
+    Individual template view for code practice
+    """
+    template = get_object_or_404(CodeTemplate, id=template_id, is_active=True)
+    
+    # Get user's submission if exists
+    submission = None
+    if request.user.is_authenticated:
+        try:
+            submission = CodeSubmission.objects.get(user=request.user, template=template)
+        except CodeSubmission.DoesNotExist:
+            pass
+    
+    context = {
+        'template': template,
+        'submission': submission,
+    }
+    return render(request, 'pages/compiler/template_detail.html', context)
+
+
+@login_required
+def compiler_history(request):
+    """
+    User's code execution history
+    """
+    executions = CodeExecution.objects.filter(user=request.user).order_by('-created_at')[:50]
+    
+    context = {
+        'executions': executions,
+    }
+    return render(request, 'pages/compiler/history.html', context)
+
+
+@login_required
+def compiler_leaderboard(request):
+    """
+    Leaderboard for code submissions
+    """
+    from django.db.models import Count
+    
+    # Get users with most correct submissions
+    leaderboard = CodeSubmission.objects.filter(is_correct=True).values(
+        'user__first_name', 'user__last_name', 'user__email'
+    ).annotate(
+        correct_count=Count('id')
+    ).order_by('-correct_count')[:20]
+    
+    context = {
+        'leaderboard': leaderboard,
+    }
+    return render(request, 'pages/compiler/leaderboard.html', context)
 

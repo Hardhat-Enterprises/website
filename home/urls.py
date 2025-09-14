@@ -148,6 +148,12 @@ urlpatterns = [
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
+    # Python Compiler URLs
+    path('compiler/', views.compiler_home, name='compiler_home'),
+    path('compiler/template/<int:template_id>/', views.compiler_template, name='compiler_template'),
+    path('compiler/history/', views.compiler_history, name='compiler_history'),
+    path('compiler/leaderboard/', views.compiler_leaderboard, name='compiler_leaderboard'),
+    
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)

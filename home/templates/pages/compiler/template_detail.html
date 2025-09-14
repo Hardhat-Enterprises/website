@@ -1,0 +1,265 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}{{ template.title }} - Python Compiler{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Template Info -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-book"></i> {{ template.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="badge bg-primary">{{ template.get_category_display }}</span>
+                        <span class="badge bg-secondary">{{ template.get_difficulty_display }}</span>
+                    </div>
+                    
+                    <h6>Description:</h6>
+                    <p>{{ template.description }}</p>
+                    
+                    {% if template.hints %}
+                    <h6>Hints:</h6>
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i> {{ template.hints }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if submission %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> You have completed this template!
+                        <br><small>Execution time: {{ submission.execution_time }}s</small>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'compiler_home' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Compiler
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Editor -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4><i class="fas fa-code"></i> Code Editor</h4>
+                    <div>
+                        <button class="btn btn-success" onclick="runCode()">
+                            <i class="fas fa-play"></i> Run Code
+                        </button>
+                        <button class="btn btn-info" onclick="showHint()">
+                            <i class="fas fa-lightbulb"></i> Show Hint
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetCode()">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Template Code -->
+                    <div class="mb-3">
+                        <label for="codeEditor" class="form-label">Your Python Code:</label>
+                        <textarea id="codeEditor" class="form-control" rows="15" placeholder="Write your solution here...">{{ submission.user_code|default:template.template_code }}</textarea>
+                    </div>
+
+                    <!-- Input Section -->
+                    <div class="mb-3">
+                        <label for="inputData" class="form-label">Test Input (optional):</label>
+                        <textarea id="inputData" class="form-control" rows="3" placeholder="Enter test input here..."></textarea>
+                    </div>
+
+                    <!-- Output Section -->
+                    <div class="mb-3">
+                        <label class="form-label">Output:</label>
+                        <div id="outputArea" class="form-control" style="height: 200px; background-color: #f8f9fa; overflow-y: auto;">
+                            <div class="text-muted">Click "Run Code" to see the output here...</div>
+                        </div>
+                    </div>
+
+                    <!-- Expected Output -->
+                    {% if template.expected_output %}
+                    <div class="mb-3">
+                        <label class="form-label">Expected Output:</label>
+                        <div class="form-control" style="height: 100px; background-color: #e9ecef; overflow-y: auto;">
+                            <pre>{{ template.expected_output }}</pre>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Execution Info -->
+                    <div id="executionInfo" class="row text-muted small" style="display: none;">
+                        <div class="col-md-4">
+                            <i class="fas fa-clock"></i> Execution Time: <span id="executionTime">0</span>s
+                        </div>
+                        <div class="col-md-4">
+                            <i class="fas fa-memory"></i> Memory Used: <span id="memoryUsed">0</span> bytes
+                        </div>
+                        <div class="col-md-4">
+                            <i class="fas fa-check"></i> Status: <span id="status">Unknown</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hint Modal -->
+<div class="modal fade" id="hintModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-lightbulb"></i> Hint</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if template.hints %}
+                    {{ template.hints }}
+                {% else %}
+                    No hints available for this template.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Executing code...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const templateId = {{ template.id }};
+const expectedOutput = `{{ template.expected_output|default:"" }}`;
+
+function runCode() {
+    const code = document.getElementById('codeEditor').value;
+    const inputData = document.getElementById('inputData').value;
+    
+    if (!code.trim()) {
+        alert('Please enter some code to execute.');
+        return;
+    }
+    
+    // Show loading modal
+    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
+    loadingModal.show();
+    
+    // Prepare data
+    const data = {
+        language: 'python',
+        code: code,
+        input_data: inputData,
+        template_id: templateId
+    };
+    
+    // Execute code
+    fetch('{% url "execute_code" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadingModal.hide();
+        
+        // Display output
+        const outputArea = document.getElementById('outputArea');
+        const executionInfo = document.getElementById('executionInfo');
+        
+        if (data.error) {
+            outputArea.innerHTML = `<div class="text-danger"><strong>Error:</strong> ${data.error}</div>`;
+            document.getElementById('status').textContent = 'Error';
+            document.getElementById('status').className = 'text-danger';
+        } else {
+            outputArea.innerHTML = `<div class="text-success"><pre>${data.output || 'No output'}</pre></div>`;
+            
+            // Check if correct
+            if (data.is_correct) {
+                document.getElementById('status').textContent = 'Correct!';
+                document.getElementById('status').className = 'text-success';
+                
+                // Show success message
+                setTimeout(() => {
+                    alert('Congratulations! Your solution is correct!');
+                }, 500);
+            } else {
+                document.getElementById('status').textContent = 'Incorrect';
+                document.getElementById('status').className = 'text-warning';
+            }
+        }
+        
+        // Show execution info
+        document.getElementById('executionTime').textContent = data.execution_time || 0;
+        document.getElementById('memoryUsed').textContent = data.memory_used || 0;
+        executionInfo.style.display = 'block';
+    })
+    .catch(error => {
+        loadingModal.hide();
+        console.error('Error:', error);
+        document.getElementById('outputArea').innerHTML = '<div class="text-danger">An error occurred while executing the code.</div>';
+    });
+}
+
+function showHint() {
+    const hintModal = new bootstrap.Modal(document.getElementById('hintModal'));
+    hintModal.show();
+}
+
+function resetCode() {
+    if (confirm('Are you sure you want to reset the code to the template?')) {
+        document.getElementById('codeEditor').value = `{{ template.template_code }}`;
+        document.getElementById('inputData').value = '';
+        document.getElementById('outputArea').innerHTML = '<div class="text-muted">Click "Run Code" to see the output here...</div>';
+        document.getElementById('executionInfo').style.display = 'none';
+    }
+}
+
+// CSRF token helper
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+<style>
+#codeEditor {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+#outputArea {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+</style>
+{% endblock %}
+

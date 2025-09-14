@@ -1,3 +1,5 @@
+
+
 from django.contrib import admin
 
 from .models import AdminNotification
@@ -38,7 +40,13 @@ from .models import (
 
     AppAttackReport, 
     PenTestingRequest, 
-    SecureCodeReviewRequest
+    SecureCodeReviewRequest,
+
+    # Python Compiler Models
+    CodeExecution,
+    CodeTemplate,
+    CodeSubmission,
+    CompilerSettings,
 
 )
 
@@ -191,14 +199,7 @@ class JobApplicationAdmin(admin.ModelAdmin):
     
 @admin.register(LeaderBoardTable)
 class LeaderboardTableAdmin(admin.ModelAdmin):
-    list_display = ('user', 'category', 'total_points', 'rank', 'last_updated')
-    list_filter = ('category', 'rank')
-    search_fields = ('user__email', 'user__first_name', 'user__last_name')
-    ordering = ('category', 'rank')
-    readonly_fields = ('rank', 'last_updated')
-    
-    def get_queryset(self, request):
-        return super().get_queryset(request).select_related('user')
+    list_display = ('user', 'category', 'total_points')
 
 
 
@@ -228,6 +229,70 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     readonly_fields = ['submitted_at']
 
 
+# Python Compiler Admin Classes
+@admin.register(CodeExecution)
+class CodeExecutionAdmin(admin.ModelAdmin):
+    list_display = ['user', 'language', 'is_successful', 'execution_time', 'created_at', 'ip_address']
+    list_filter = ['language', 'is_successful', 'created_at', 'ip_address']
+    search_fields = ['user__email', 'code', 'output', 'error_message']
+    readonly_fields = ['created_at', 'execution_time', 'memory_used']
+    ordering = ['-created_at']
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # If editing existing object
+            return ['user', 'language', 'code', 'input_data', 'output', 'error_message', 
+                   'execution_time', 'memory_used', 'is_successful', 'created_at', 'ip_address']
+        return self.readonly_fields
+
+
+@admin.register(CodeTemplate)
+class CodeTemplateAdmin(admin.ModelAdmin):
+    list_display = ['title', 'category', 'difficulty', 'is_active', 'created_at']
+    list_filter = ['category', 'difficulty', 'is_active', 'created_at']
+    search_fields = ['title', 'description', 'template_code']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'category', 'difficulty', 'is_active')
+        }),
+        ('Code Content', {
+            'fields': ('template_code', 'expected_output', 'hints')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(CodeSubmission)
+class CodeSubmissionAdmin(admin.ModelAdmin):
+    list_display = ['user', 'template', 'is_correct', 'execution_time', 'submitted_at']
+    list_filter = ['is_correct', 'submitted_at', 'template__category', 'template__difficulty']
+    search_fields = ['user__email', 'template__title', 'user_code']
+    readonly_fields = ['submitted_at', 'execution_time']
+    ordering = ['-submitted_at']
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # If editing existing object
+            return ['user', 'template', 'user_code', 'is_correct', 'execution_time', 'submitted_at']
+        return self.readonly_fields
+
+
+@admin.register(CompilerSettings)
+class CompilerSettingsAdmin(admin.ModelAdmin):
+    list_display = ['max_execution_time', 'max_memory_limit', 'max_code_length', 'is_active', 'updated_at']
+    list_filter = ['is_active', 'created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    def has_add_permission(self, request):
+        # Only allow one settings instance
+        return not CompilerSettings.objects.exists()
+    
+    def has_delete_permission(self, request, obj=None):
+        # Prevent deletion of settings
+        return False
 
 
 

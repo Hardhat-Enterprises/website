@@ -33,6 +33,40 @@
       </div>
     {% endfor %}
   </div>
+
+  <!-- Python Compiler Section -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card shadow-lg border-success">
+        <div class="card-header bg-success text-white">
+          <h3 class="mb-0"><i class="fas fa-code"></i> Python Programming Practice</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <h5>Secure Python Compiler</h5>
+              <p class="text-muted">Practice Python programming with our secure online compiler. Features include:</p>
+              <ul class="list-unstyled">
+                <li><i class="fas fa-check text-success me-2"></i>Sandboxed code execution</li>
+                <li><i class="fas fa-check text-success me-2"></i>Interactive code editor</li>
+                <li><i class="fas fa-check text-success me-2"></i>Practice templates and exercises</li>
+                <li><i class="fas fa-check text-success me-2"></i>Progress tracking and leaderboard</li>
+                <li><i class="fas fa-check text-success me-2"></i>Real-time code execution</li>
+              </ul>
+            </div>
+            <div class="col-md-4 text-center">
+              <div class="mb-3">
+                <i class="fas fa-code fa-3x text-success"></i>
+              </div>
+              <a href="{% url 'compiler_home' %}" class="btn btn-success btn-lg">
+                <i class="fas fa-play me-2"></i>Start Coding
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -158,11 +192,42 @@
   .sticky-wrapper {
     padding-top: 120px;
   }
+
+  /* Modal Styles */
+  .modal-content {
+    border: 2px solid #00ff00;
+    border-radius: 15px;
+  }
+
+  .modal-header {
+    border-bottom: 2px solid #00ff00;
+  }
+
+  .modal-footer {
+    border-top: 2px solid #00ff00;
+  }
+
+  /* Button Hover Effects */
+  .btn-success:hover {
+    background: #00b300;
+    border-color: #00b300;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  .btn-warning:hover {
+    background: #ff8c00;
+    border-color: #ff8c00;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+  }
+
+  .btn-info:hover {
+    background: #17a2b8;
+    border-color: #17a2b8;
+    box-shadow: 0 0 10px rgba(23, 162, 184, 0.5);
+  }
   </style>
 
 <div class="container sticky-wrapper">
-  
-
     <p class="text-center mt-5 mb-5">
       Here's the leaderboard table
       <br>
@@ -171,15 +236,4 @@
   </div>
 </div>
 
-<script>
-  const scrollContainer = document.getElementById('scrollContainer');
-  const scrollLineFill = document.getElementById('scrollLineFill');
-  
-  scrollContainer.addEventListener('scroll', () => {
-    const scrollTop = scrollContainer.scrollTop;
-    const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-    const percentScrolled = (scrollTop / scrollHeight) * 100;
-    scrollLineFill.style.height = `${percentScrolled}%`;
-  });
-</script>
 {% endblock content %}

@@ -125,10 +125,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     # "home.idle.IdleTimeoutMiddleware",
-    "home.idle.LogoutMiddleware",  
+    "home.idle.LogoutMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    'core.middleware.AutoLogoutMiddleware'
+    'core.middleware.AutoLogoutMiddleware',
 ]
 
 LOGGING = {
@@ -729,7 +729,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
 # # STATIC_URL = 'custom_static/'
 # STATIC_URL = 'static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'custom_static')
 # ]
