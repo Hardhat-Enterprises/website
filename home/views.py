@@ -14,7 +14,7 @@ from django.urls import reverse
 from .forms import ExperienceForm
 from .models import Experience
 from django.db.models import Avg, Count
-
+from .models import Tip, TipRotationState
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 
@@ -32,7 +32,8 @@ from .models import ContactSubmission
 from django.utils.html import strip_tags
 from .models import Report
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, JobAlert, UserBlogPage #Feedback 
+
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, JobAlert, UserBlogPage, VaultDocument #Feedback 
 
 
 from django.contrib.auth import get_user_model
@@ -46,7 +47,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm, ChallengeForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm, ChallengeForm, VaultUploadForm
 
 from .forms import CaptchaForm
 
@@ -73,7 +74,7 @@ from home.models import Announcement, JobApplication
 from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
-
+from datetime import timedelta
  
 # import os
  
@@ -132,8 +133,6 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
-
-
 
 def get_login_redirect_url(user):
     """
@@ -2460,6 +2459,7 @@ def policy_deployment(request):
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
 
+
 # Challenge Management Views
 
 class StaffRequiredMixin(UserPassesTestMixin):
@@ -2632,4 +2632,69 @@ class ChallengePreviewView(StaffRequiredMixin, View):
         }
         
         return JsonResponse(data)
+
+def tip_today(request):
+    texts = list(Tip.objects.filter(is_active=True).values_list("text", flat=True))
+    if not texts:
+        return JsonResponse({"tip": "Stay safe online!"})
+
+    state, _ = TipRotationState.objects.get_or_create(lock="default")
+
+    now = timezone.now()
+    needs_rotate = (
+        state.rotated_at is None
+        or (now - state.rotated_at) >= timedelta(hours=24)
+        or state.last_index >= len(texts)  # handle when you add/remove tips
+        or state.last_index < -1
+    )
+
+    if needs_rotate:
+        state.last_index = (state.last_index + 1) % len(texts)
+        state.rotated_at = now
+        state.save(update_fields=["last_index", "rotated_at"])
+
+    return JsonResponse({"tip": texts[state.last_index]})
+
+
+@login_required
+def vault_view(request):
+    """View for the document vault"""
+    documents = VaultDocument.objects.all()
+    
+    # Handle filtering
+    type_filter = request.GET.get('type', '')
+    if type_filter:
+        if type_filter == 'pdf':
+            documents = documents.filter(content_type__icontains='pdf')
+        elif type_filter == 'word':
+            documents = documents.filter(content_type__icontains='word')
+        elif type_filter == 'excel':
+            documents = documents.filter(content_type__icontains='excel')
+        elif type_filter == 'powerpoint':
+            documents = documents.filter(content_type__icontains='powerpoint')
+        elif type_filter == 'image':
+            documents = documents.filter(content_type__icontains='image')
+    
+    # Handle file upload
+    if request.method == 'POST':
+        form = VaultUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            vault_doc = form.save(commit=False)
+            vault_doc.uploaded_by = request.user
+            vault_doc.original_name = request.FILES['file'].name
+            vault_doc.content_type = request.FILES['file'].content_type
+            vault_doc.size_bytes = request.FILES['file'].size
+            vault_doc.save()
+            form.save_m2m()  # Save many-to-many relationships
+            messages.success(request, 'Document uploaded successfully!')
+            return redirect('vault')
+    else:
+        form = VaultUploadForm()
+    
+    context = {
+        'documents': documents,
+        'form': form,
+        'type_filter': type_filter,
+    }
+    return render(request, 'pages/vault.html', context)
 

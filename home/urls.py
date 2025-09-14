@@ -25,6 +25,8 @@ router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
 
+
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('client_sign-in/', views.client_sign_in, name='client_sign_in'),
@@ -189,8 +191,10 @@ urlpatterns = [
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
     path('account/delete/', delete_account, name='delete-account'),
+    path('vault/', views.vault_view, name='vault'),
 
     path("health", health_check, name="health-check"),
+    
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
 
