@@ -33,10 +33,11 @@ from .models import Report
 
 from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, JobAlert, UserBlogPage #Feedback 
 
-
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth import get_user_model
 from .models import User
 from django.utils import timezone
+from datetime import timedelta
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode
@@ -131,6 +132,8 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+from .models import UserDeletionRequest
+
 
 def get_login_redirect_url(user):
     """
@@ -2402,11 +2405,60 @@ def secure_code_review_form_view(request):
 def delete_account(request):
     if request.method == 'POST':
         user = request.user
-        user.delete()
-        logout(request)
-        messages.success(request, "Your account has been deleted.")
-        return redirect('login') 
-    return HttpResponseNotAllowed(['POST'])
+        choice = request.POST.get("choice")
+        password = request.POST.get("password")
+
+        if not password:
+            messages.error(request, "Password Required")
+            return render(request, "accounts/confirm_delete.html")
+
+        if not check_password(password, user.password):
+            messages.error(request, "Incorrect password. Please try again.")
+            return redirect('delete-account')
+
+        if choice == "deactivate":
+            logout(request)
+            send_mail(
+                "Account Deactivated",
+                "Your account has been temporarily deactivated. Log in again to reactivate.",
+                "admin@example.com",
+                [user.email],
+            )
+            messages.success(request, "Your account has been deactivated.")
+            return redirect('login')
+
+        elif choice == "delete_now":
+            email = user.email
+            user.delete()
+            send_mail(
+                "Account Deleted",
+                "Your account has been permanently deleted.",
+                "admin@example.com",
+                [email],
+            )
+            messages.success(request, "Your account has been permanently deleted.")
+            return redirect('login')
+
+        elif choice == "delete_30days":
+            UserDeletionRequest.objects.update_or_create(
+                user=user,
+                defaults={"scheduled_for": timezone.now() + timedelta(days=30)}
+            )
+            logout(request)
+            send_mail(
+                "Account Scheduled for Deletion",
+                "Your account is deactivated and will be permanently deleted in 30 days unless reactivated.",
+                "admin@example.com",
+                [user.email],
+            )
+            messages.success(request, "Your account is scheduled for deletion in 30 days.")
+            return redirect('login')
+
+        else:
+            messages.error(request, "Invalid option.")
+            return redirect('delete-account')
+
+    return render(request, "accounts/confirm_delete.html")
 
 def tools_home(request):
     return render(request, 'pages/pt_gui/tools/index.html')
