@@ -3718,6 +3718,30 @@ fieldset:disabled .btn {
   width: 100%;
   padding: 10px 50px 10px 15px;
   border-radius: 25px;
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
+/* Dark mode - keep mobile search box white */
+body.dark-mode .search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+body.dark-mode .search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
 }
 
 .search-btn-mobile {
@@ -3772,6 +3796,17 @@ fieldset:disabled .btn {
   background-color: #f0f0f0;
 }
 
+/* Dark mode - keep mobile result box styling consistent */
+body.dark-mode .mobile-result-box {
+  background: white !important;
+  border: 1px solid #ccc !important;
+  color: black !important;
+}
+
+body.dark-mode .mobile-result-box div:hover {
+  background-color: #f0f0f0 !important;
+}
+
 .search-container {
   position: relative;
   width: 300px; 
@@ -3781,6 +3816,30 @@ fieldset:disabled .btn {
 .search-box {
   border-radius: 25px;
   padding: 10px 15px;
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
+/* Dark mode - keep search box white */
+body.dark-mode .search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+body.dark-mode .search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
 }
 
 .search-btn {
@@ -3815,6 +3874,17 @@ fieldset:disabled .btn {
 
 .result-box div:hover {
   background-color: #f0f0f0;
+}
+
+/* Dark mode - keep result box styling consistent */
+body.dark-mode .result-box {
+  background: white !important;
+  border: 1px solid #ccc !important;
+  color: black !important;
+}
+
+body.dark-mode .result-box div:hover {
+  background-color: #f0f0f0 !important;
 }
 
 .btn-primary {
