@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import VaultDocument
 
 from .models import AdminNotification
 
