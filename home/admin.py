@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import VaultDocument
 
 from .models import AdminNotification
+from .models import VaultDocument
 
 from django.utils.html import format_html
 from .models import Tip , TipRotationState
