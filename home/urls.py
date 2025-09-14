@@ -176,6 +176,7 @@ urlpatterns = [
     path('staff/user-management/', views.user_management, name='user_management'),
     path('staff/assign-user-project/', views.assign_user_project, name='assign_user_project'),
     path('staff/update-user/', views.update_user, name='update_user'),
+    path('staff/delete-user/', views.delete_user, name='delete_user'),
     path('staff/bulk-assign-users-project/', views.bulk_assign_users_project, name='bulk_assign_users_project'),
     path('staff/bulk-update-user-status/', views.bulk_update_user_status, name='bulk_update_user_status'),
     path('staff/bulk-update-student-info/', views.bulk_update_student_info, name='bulk_update_student_info'),
@@ -204,6 +205,7 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
     path('vault/', views.vault_view, name='vault'),
+    path('vault/delete/<int:doc_id>/', views.vault_delete, name='vault_delete'),
 
     path("health", health_check, name="health-check"),
     

@@ -21,7 +21,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Case, When, Value, IntegerField
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views import View
@@ -117,6 +117,22 @@ from .validators import xss_detection
 from .models import Contact
 
 from rest_framework.views import APIView
+from functools import wraps
+
+# Custom decorator for admin/staff access
+def admin_or_staff_required(view_func):
+    """
+    Decorator that requires the user to be either staff or superuser.
+    """
+    @wraps(view_func)
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if not (request.user.is_staff or request.user.is_superuser):
+            messages.error(request, 'You do not have permission to access this page.')
+            return redirect('home')
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
 from rest_framework.response import Response
 from .models import APIModel
 from .serializers import APIModelSerializer
@@ -2633,10 +2649,9 @@ class ChallengePreviewView(StaffRequiredMixin, View):
         
         return JsonResponse(data)
 
-<<<<<<< HEAD
 # User Management Views
 
-@staff_member_required
+@admin_or_staff_required
 @require_POST
 def unassign_users(request, project_id):
     """Handle unassigning users from a project."""
@@ -2673,7 +2688,7 @@ def unassign_users(request, project_id):
         print(f"DEBUG: Exception: {str(e)}")
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-@staff_member_required
+@admin_or_staff_required
 def user_management(request):
     """User management page with editing and bulk operations."""
     # Start with all users, ordered by date joined (newest first)
@@ -2748,6 +2763,29 @@ def user_management(request):
     if year_filter:
         users = users.filter(users__year=year_filter)
 
+    # Filter by project preferences (P1 first, then P2, then P3)
+    pref_project = request.GET.get('pref_project', '')
+    if pref_project:
+        try:
+            # ensure project exists but don't fail if not
+            Project.objects.get(id=pref_project)
+            users = users.filter(
+                Q(users__p1_id=pref_project) |
+                Q(users__p2_id=pref_project) |
+                Q(users__p3_id=pref_project)
+            ).distinct()
+            users = users.annotate(
+                preference_rank=Case(
+                    When(users__p1_id=pref_project, then=Value(1)),
+                    When(users__p2_id=pref_project, then=Value(2)),
+                    When(users__p3_id=pref_project, then=Value(3)),
+                    default=Value(4),
+                    output_field=IntegerField()
+                )
+            ).order_by('preference_rank', 'first_name', 'last_name')
+        except Project.DoesNotExist:
+            pass
+
     # Get all active projects for the dropdown
     projects = Project.objects.filter(is_active=True, archived=False).order_by('title')
 
@@ -2775,6 +2813,7 @@ def user_management(request):
         'unit_filter': unit_filter,
         'trimester_filter': trimester_filter,
         'year_filter': year_filter,
+        'pref_project': pref_project,
     }
     return render(request, 'admin/user-management/assignment.html', context)
 
@@ -2807,7 +2846,11 @@ def assign_user_project(request):
             try:
                 project = Project.objects.get(id=project_id)
                 student.allocated = project
-                student.save()
+                try:
+                    student.full_clean()
+                    student.save()
+                except ValidationError as e:
+                    return JsonResponse({'success': False, 'error': str(e)}, status=400)
                 
                 message = f'User {user.get_full_name() or user.email} assigned to {project.title}'
             except Project.DoesNotExist:
@@ -2815,7 +2858,11 @@ def assign_user_project(request):
         else:
             # Unassign from project (either empty value or 'unassigned')
             student.allocated = None
-            student.save()
+            try:
+                student.full_clean()
+                student.save()
+            except ValidationError as e:
+                return JsonResponse({'success': False, 'error': str(e)}, status=400)
             message = f'User {user.get_full_name() or user.email} unassigned from project'
         
         return JsonResponse({'success': True, 'message': message})
@@ -2904,7 +2951,19 @@ def update_user(request):
             else:
                 student.allocated = None
         
-        student.save()
+        # Validate the student data before saving
+        try:
+            student.full_clean()
+            student.save()
+        except ValidationError as e:
+            error_messages = []
+            if hasattr(e, 'error_dict'):
+                for field, errors in e.error_dict.items():
+                    for error in errors:
+                        error_messages.append(f"{field}: {error}")
+            else:
+                error_messages = [str(e)]
+            return JsonResponse({'success': False, 'error': '; '.join(error_messages)}, status=400)
         
         return JsonResponse({
             'success': True, 
@@ -2913,6 +2972,8 @@ def update_user(request):
         
     except json.JSONDecodeError:
         return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except ValidationError as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
@@ -3108,6 +3169,37 @@ def bulk_update_student_info(request):
 # Project Teams Management Views
 
 @staff_member_required
+@require_POST
+def delete_user(request):
+    """Delete a user account via AJAX with safety checks."""
+    try:
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+
+        if not user_id:
+            return JsonResponse({'success': False, 'error': 'User ID is required.'}, status=400)
+
+        try:
+            target = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'User not found.'}, status=404)
+
+        # Safety checks: do not allow deleting superusers or own account
+        if target.is_superuser:
+            return JsonResponse({'success': False, 'error': 'Cannot delete admin users.'}, status=400)
+        if target.id == request.user.id:
+            return JsonResponse({'success': False, 'error': 'You cannot delete your own account.'}, status=400)
+
+        display_name = target.get_full_name() or target.email
+        target.delete()
+
+        return JsonResponse({'success': True, 'message': f'User {display_name} deleted successfully.'})
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@staff_member_required
 def project_teams(request):
     """Project teams management page displaying projects and their assigned members."""
     # Get all active projects
@@ -3290,9 +3382,34 @@ def tip_today(request):
 @login_required
 def vault_view(request):
     """View for the document vault"""
-    documents = VaultDocument.objects.all()
+    # Staff and superusers can see all documents
+    if request.user.is_staff or request.user.is_superuser:
+        documents = VaultDocument.objects.all()
+    else:
+        # Regular users can only see:
+        # 1. Public documents
+        # 2. Documents they uploaded (private)
+        # 3. Documents assigned to their allocated project
+        
+        # Get user's allocated project
+        user_project = None
+        try:
+            student = Student.objects.get(user=request.user)
+            user_project = student.allocated
+        except Student.DoesNotExist:
+            pass
+        
+        # Build the query
+        from django.db.models import Q
+        query = Q(visibility=VaultDocument.VIS_PUBLIC) | Q(uploaded_by=request.user)
+        
+        # Add documents from user's allocated project
+        if user_project:
+            query |= Q(visibility=VaultDocument.VIS_PROJECTS, allowed_projects=user_project)
+        
+        documents = VaultDocument.objects.filter(query).distinct()
     
-    # Handle filtering
+    # Handle filtering by file type
     type_filter = request.GET.get('type', '')
     if type_filter:
         if type_filter == 'pdf':
@@ -3328,3 +3445,31 @@ def vault_view(request):
         'type_filter': type_filter,
     }
     return render(request, 'pages/vault.html', context)
+
+@login_required
+def vault_delete(request, doc_id):
+    """Delete a document from the vault"""
+    if request.method == 'POST':
+        try:
+            document = get_object_or_404(VaultDocument, id=doc_id)
+            
+            # Check if user has permission to delete
+            # Only the uploader, staff, or superuser can delete
+            if not (request.user.is_staff or request.user.is_superuser or document.uploaded_by == request.user):
+                messages.error(request, 'You do not have permission to delete this document.')
+                return redirect('vault')
+            
+            # Delete the file from storage
+            if document.file:
+                document.file.delete()
+            
+            # Delete the database record
+            document_name = document.original_name or document.file.name
+            document.delete()
+            
+            messages.success(request, f'Document "{document_name}" has been deleted successfully.')
+            
+        except Exception as e:
+            messages.error(request, f'Error deleting document: {str(e)}')
+    
+    return redirect('vault')

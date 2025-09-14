@@ -169,12 +169,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class VaultDocument(models.Model):
     VIS_PUBLIC = 'public'
-    VIS_TEAMS = 'teams'
+    VIS_PROJECTS = 'projects'
     VIS_PRIVATE = 'private'
     
     VISIBILITY_CHOICES = [
         (VIS_PUBLIC, 'Public'),
-        (VIS_TEAMS, 'Selected teams'),
+        (VIS_PROJECTS, 'Selected projects'),
         (VIS_PRIVATE, 'Private (uploader only)'),
     ]
     
@@ -184,7 +184,7 @@ class VaultDocument(models.Model):
     size_bytes = models.PositiveIntegerField(default=0)
     description = models.CharField(max_length=300, blank=True)
     visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
-    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+    allowed_projects = models.ManyToManyField('Project', blank=True, related_name='vault_documents')
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -317,7 +317,7 @@ class Student(AbstractBaseSet):
         },
     )
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="users", blank=False, null=False)
-    year = models.PositiveIntegerField(blank=True)
+    year = models.PositiveIntegerField(blank=True, null=True)
     trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
     unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
     course = models.CharField(max_length=10, choices=COURSES, blank=True, null=True)
@@ -326,7 +326,12 @@ class Student(AbstractBaseSet):
     p3 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p3_preferences", null=True, blank=True)
 
     def clean(self):
-        if self.p1 == self.p2 or self.p1 == self.p3 or self.p2 == self.p3:
+        # Only validate uniqueness if preferences are not None
+        preferences = [self.p1, self.p2, self.p3]
+        non_null_preferences = [p for p in preferences if p is not None]
+        
+        # Check if there are duplicates among non-null preferences
+        if len(non_null_preferences) != len(set(non_null_preferences)):
             raise ValidationError("Project preferences p1, p2, and p3 must be unique.")
     allocated = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="allocated", blank=True, null=True)
     skills = models.ManyToManyField(Skill, through='Progress')

@@ -737,22 +737,23 @@ class ChallengeForm(forms.ModelForm):
 class VaultUploadForm(forms.ModelForm):
     class Meta:
         model = VaultDocument
-        fields = ['file', 'description', 'visibility', 'allowed_teams']  # NEW
+        fields = ['file', 'description', 'visibility', 'allowed_projects']
         widgets = {
             'description': forms.TextInput(attrs={'placeholder': 'Optional description', 'class':'form-control'}),
-            'visibility': forms.Select(attrs={'class': 'form-select'}),  # NEW
-            'allowed_teams': forms.SelectMultiple(attrs={'class': 'form-select', 'size': '6'}),  # NEW
+            'visibility': forms.Select(attrs={'class': 'form-select'}),
+            'allowed_projects': forms.SelectMultiple(attrs={'class': 'form-select', 'size': '6'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # List all groups (teams). You can restrict to certain names if you wish.
-        self.fields['allowed_teams'].queryset = Group.objects.all().order_by('name')
+        # List all projects
+        from .models import Project
+        self.fields['allowed_projects'].queryset = Project.objects.filter(is_active=True).order_by('title')
 
     def clean(self):
         cleaned = super().clean()
         vis = cleaned.get('visibility')
-        teams = cleaned.get('allowed_teams')
-        if vis == VaultDocument.VIS_TEAMS and (not teams or teams.count() == 0):
-            raise forms.ValidationError("Select at least one team for 'Selected teams' visibility.")
+        projects = cleaned.get('allowed_projects')
+        if vis == VaultDocument.VIS_PROJECTS and (not projects or projects.count() == 0):
+            raise forms.ValidationError("Select at least one project for 'Selected projects' visibility.")
         return cleaned
