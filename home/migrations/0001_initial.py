@@ -486,6 +486,31 @@ class Migration(migrations.Migration):
                 'ordering': ['-login_time'],
             },
         ),
+
+                migrations.CreateModel(
+            name='Tip',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('text', models.CharField(max_length=280, unique=True)),
+                ('is_active', models.BooleanField(default=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'verbose_name': 'Security Awareness Quote',
+                'verbose_name_plural': 'Security Awareness Quotes',
+            },
+        ),
+        migrations.CreateModel(
+            name='TipRotationState',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('lock', models.CharField(default='default', max_length=16, unique=True)),
+                ('last_index', models.IntegerField(default=-1)),
+                ('rotated_at', models.DateTimeField(blank=True, null=True)),
+            ],
+        ),
+
+
         migrations.CreateModel(
             name='VaultDocument',
             fields=[
@@ -504,6 +529,7 @@ class Migration(migrations.Migration):
                 'ordering': ['-created_at'],
             },
         ),
+
         migrations.AlterUniqueTogether(
             name='progress',
             unique_together={('student', 'skill')},
