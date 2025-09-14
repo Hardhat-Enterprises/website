@@ -191,6 +191,7 @@ urlpatterns = [
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
     path('account/delete/', delete_account, name='delete-account'),
+    path('vault/', views.vault_view, name='vault'),
 
     path("health", health_check, name="health-check"),
     
