@@ -25,6 +25,8 @@ router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
 
+
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('client_sign-in/', views.client_sign_in, name='client_sign_in'),
@@ -103,7 +105,6 @@ urlpatterns = [
     path("careers/discover/", career_discover, name="career-discover"),
     path("careers/path-finder/", views.career_path_finder, name="career_path_finder"),
     path("careers/graduate-program/", views.graduate_program, name="graduate-program"),
-    path("careers/graduate-program/detailed/", views.graduate_program_detailed, name="graduate-program-detailed"),
     path("careers/faqs/", views.careers_faqs, name="careers-faqs"),
 
     path('blog/', Index.as_view(), name = 'blog'),
@@ -202,8 +203,10 @@ urlpatterns = [
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
     path('account/delete/', delete_account, name='delete-account'),
+    path('vault/', views.vault_view, name='vault'),
 
     path("health", health_check, name="health-check"),
+    
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
 

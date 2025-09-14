@@ -1,4 +1,5 @@
 ﻿import uuid
+import os
 
 from django.db import models
 from django.core.mail import send_mail
@@ -10,6 +11,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser  
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -31,6 +35,10 @@ from .validators import StudentIdValidator
 from django.db import models
 import nh3
 from django.conf import settings
+
+def vault_upload_path(instance, filename):
+    """Generate upload path for vault documents"""
+    return os.path.join('vault_documents', filename)
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -158,6 +166,53 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.last_activity = now()
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
+
+class VaultDocument(models.Model):
+    VIS_PUBLIC = 'public'
+    VIS_TEAMS = 'teams'
+    VIS_PRIVATE = 'private'
+    
+    VISIBILITY_CHOICES = [
+        (VIS_PUBLIC, 'Public'),
+        (VIS_TEAMS, 'Selected teams'),
+        (VIS_PRIVATE, 'Private (uploader only)'),
+    ]
+    
+    file = models.FileField(upload_to=vault_upload_path)
+    original_name = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(max_length=120, blank=True)
+    size_bytes = models.PositiveIntegerField(default=0)
+    description = models.CharField(max_length=300, blank=True)
+    visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
+    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.original_name or self.file.name
+
+# Keep a short history of password hashes per user
+class PasswordHistory(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="password_history"
+    )
+    # Store the full encoded hash
+    encoded_password = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "created_at"]),
+        ]
+
+    def __str__(self):
+        return f"PasswordHistory(user={self.user_id}, created_at={self.created_at})"
 
 #checking if admin/staff user
 
@@ -766,6 +821,30 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
+
+
     def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
+
+class Tip(models.Model):
+    text = models.CharField(max_length=280, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Daily Security Tip"
+        verbose_name_plural = "Daily Security Tips"
+
+    def __str__(self):
+        return self.text[:60]
+
+# keep this only if you implemented 24h rolling rotation
+class TipRotationState(models.Model):
+    lock = models.CharField(max_length=16, default="default", unique=True)
+    last_index = models.IntegerField(default=-1)
+    rotated_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+

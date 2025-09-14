@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
+import home.models
 import home.validators
 import tinymce.models
 import uuid
@@ -441,6 +442,50 @@ class Migration(migrations.Migration):
                 'ordering': ['-login_time'],
             },
         ),
+
+                migrations.CreateModel(
+            name='Tip',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('text', models.CharField(max_length=280, unique=True)),
+                ('is_active', models.BooleanField(default=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'verbose_name': 'Daily Security Tip',
+                'verbose_name_plural': 'Daily Security Tips',
+            },
+        ),
+        migrations.CreateModel(
+            name='TipRotationState',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('lock', models.CharField(default='default', max_length=16, unique=True)),
+                ('last_index', models.IntegerField(default=-1)),
+                ('rotated_at', models.DateTimeField(blank=True, null=True)),
+            ],
+        ),
+
+
+        migrations.CreateModel(
+            name='VaultDocument',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('file', models.FileField(upload_to=home.models.vault_upload_path)),
+                ('original_name', models.CharField(blank=True, max_length=255)),
+                ('content_type', models.CharField(blank=True, max_length=120)),
+                ('size_bytes', models.PositiveIntegerField(default=0)),
+                ('description', models.CharField(blank=True, max_length=300)),
+                ('visibility', models.CharField(choices=[('public', 'Public'), ('teams', 'Selected teams'), ('private', 'Private (uploader only)')], default='public', max_length=16)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('allowed_teams', models.ManyToManyField(blank=True, related_name='vault_documents', to='auth.group')),
+                ('uploaded_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+
         migrations.AlterUniqueTogether(
             name='progress',
             unique_together={('student', 'skill')},
@@ -488,5 +533,18 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('last_notification', models.DateTimeField(blank=True, null=True)),
             ],
+        ),
+        migrations.CreateModel(
+            name='PasswordHistory',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('encoded_password', models.CharField(max_length=128)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='password_history', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+                'indexes': [models.Index(fields=['user', 'created_at'], name='home_passwo_user_id_4c2d2b_idx')],
+            },
         ),
     ]

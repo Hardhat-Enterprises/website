@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
 from captcha.fields import CaptchaField
@@ -9,6 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.utils.timezone import now
 from datetime import timedelta
+from .models import VaultDocument
+from django.contrib.auth.models import Group
 import logging
 import nh3
 
@@ -438,28 +441,57 @@ class UserUpdateForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
         }
 
+# Strict LinkedIn personal profile: https://www.linkedin.com/in/<slug>[/]
+linkedin_validator = RegexValidator(
+    regex=r"^https:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9\-_%]+\/?$",
+    message="Enter a valid LinkedIn personal profile URL (e.g., https://www.linkedin.com/in/your-handle).",
+    flags=re.IGNORECASE,
+)
+
+# GitHub username rules: 1–39 chars, alnum or hyphen, cannot start/end with hyphen
+# URL form: https://github.com/<username>[/]
+github_validator = RegexValidator(
+    regex=r"^https:\/\/(www\.)?github\.com\/([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})\/?$",
+    message="Enter a valid GitHub profile URL (e.g., https://github.com/username).",
+    flags=re.IGNORECASE,
+)
 
 class ProfileUpdateForm(forms.ModelForm):
-    def clean_bio(self):
-        return clean_html(self.cleaned_data.get('bio', ''))
+    # Override model fields so we can attach validators + widgets
+    linkedin = forms.URLField(
+        required=False,
+        validators=[linkedin_validator],
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'LinkedIn Profile URL',
+            'pattern': r'https://(www\.)?linkedin\.com/in/[A-Za-z0-9\-_%]+/?',
+            'title': 'e.g., https://www.linkedin.com/in/your-handle'
+        })
+    )
 
-    def clean_linkedin(self):
-        return clean_url(self.cleaned_data.get('linkedin', ''))
-
-    def clean_github(self):
-        return clean_url(self.cleaned_data.get('github', ''))
-
-    def clean_location(self):
-        return clean_text(self.cleaned_data.get('location', ''))
+    github = forms.URLField(
+        required=False,
+        validators=[github_validator],
+        widget=forms.URLInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'GitHub Profile URL',
+            'pattern': r'https://(www\.)?github\.com/([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})/?',
+            'title': 'e.g., https://github.com/yourname'
+        })
+    )
 
     class Meta:
         model = Profile
         fields = ['avatar', 'bio', 'linkedin', 'github', 'location']
         widgets = {
-            'bio': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Tell us about yourself'}),
-            'linkedin': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'LinkedIn Profile URL'}),
-            'github': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'GitHub Profile URL'}),
-            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City, Country'})
+            'bio': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Tell us about yourself'
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'City, Country'
+            }),
         }
 
 
@@ -700,3 +732,27 @@ class ChallengeForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class VaultUploadForm(forms.ModelForm):
+    class Meta:
+        model = VaultDocument
+        fields = ['file', 'description', 'visibility', 'allowed_teams']  # NEW
+        widgets = {
+            'description': forms.TextInput(attrs={'placeholder': 'Optional description', 'class':'form-control'}),
+            'visibility': forms.Select(attrs={'class': 'form-select'}),  # NEW
+            'allowed_teams': forms.SelectMultiple(attrs={'class': 'form-select', 'size': '6'}),  # NEW
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # List all groups (teams). You can restrict to certain names if you wish.
+        self.fields['allowed_teams'].queryset = Group.objects.all().order_by('name')
+
+    def clean(self):
+        cleaned = super().clean()
+        vis = cleaned.get('visibility')
+        teams = cleaned.get('allowed_teams')
+        if vis == VaultDocument.VIS_TEAMS and (not teams or teams.count() == 0):
+            raise forms.ValidationError("Select at least one team for 'Selected teams' visibility.")
+        return cleaned
