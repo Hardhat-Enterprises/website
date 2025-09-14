@@ -1,0 +1,237 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<section class="section-header bg-gray-100 pt-4 pb-2">
+  <div class="container">
+    <h2 class="h2 mb-1">Document Vault</h2>
+    <p class="text-muted mb-0">Securely store, organize, and manage your documents with search, filters, and team-based access.</p>
+  </div>
+</section>
+
+<section class="py-4">
+  <div class="container">
+
+    <!-- Upload box -->
+    {% if user.is_authenticated %}
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="row g-2 align-items-center">
+          {% csrf_token %}
+          <div class="col-12 col-lg-4">
+            <input type="file" name="file"
+                   accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
+                   class="form-control" required>
+          </div>
+          <div class="col-12 col-lg-3">
+            {{ form.description }}
+          </div>
+          <div class="col-6 col-lg-2">
+            {{ form.visibility }}
+          </div>
+          <div class="col-6 col-lg-2" id="teams-wrapper">
+            {{ form.allowed_teams }}
+          </div>
+          <div class="col-12 col-lg-1 d-grid">
+            <button type="submit" class="btn btn-warning">Upload</button>
+          </div>
+        </form>
+        <div class="small text-muted mt-2">
+          Supports: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, PNG (Max 10MB)
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+      🚫 Please <a href="{% url 'login' %}">sign in</a> to upload documents.
+    </div>
+    {% endif %}
+
+    <!-- Filters -->
+    <form method="get" class="row g-2 align-items-center mb-3">
+      <div class="col">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search documents..." class="form-control">
+      </div>
+      <div class="col-auto">
+        <select name="type" class="form-select">
+          <option value="">All Types</option>
+          <option value="pdf" {% if type_filter == 'pdf' %}selected{% endif %}>PDF</option>
+          <option value="word" {% if type_filter == 'word' %}selected{% endif %}>Word</option>
+          <option value="excel" {% if type_filter == 'excel' %}selected{% endif %}>Excel</option>
+          <option value="powerpoint" {% if type_filter == 'powerpoint' %}selected{% endif %}>PowerPoint</option>
+          <option value="image" {% if type_filter == 'image' %}selected{% endif %}>Image</option>
+        </select>
+      </div>
+      <div class="col-auto small text-muted">
+        {{ total_docs }} documents • {{ total_size_bytes|filesizeformat }}
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary">Filter</button>
+      </div>
+    </form>
+
+    <!-- Documents table -->
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>File Name</th>
+            <th>Visibility</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Uploaded By</th>
+            <th>Upload Date</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for d in docs %}
+          <tr>
+            <td>
+              <i class="fas fa-file me-2"></i>{{ d.original_name }}
+              {% if d.description %}
+                <div class="text-muted small">{{ d.description }}</div>
+              {% endif %}
+              {% if d.visibility == 'teams' and d.allowed_teams.all %}
+                <div class="text-muted small">
+                  Teams:
+                  {% for g in d.allowed_teams.all %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                </div>
+              {% endif %}
+            </td>
+
+            <!-- Visibility badge -->
+            <td>
+              {% if d.visibility == 'public' %}
+                <span class="badge bg-success">Public</span>
+              {% elif d.visibility == 'teams' %}
+                <span class="badge bg-warning text-dark">Teams</span>
+              {% else %}
+                <span class="badge bg-secondary">Private</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if 'pdf' in d.content_type %}<span class="badge bg-danger">PDF</span>
+              {% elif 'word' in d.content_type or 'msword' in d.content_type or 'officedocument.wordprocessingml' in d.content_type %}<span class="badge bg-primary">DOC</span>
+              {% elif 'excel' in d.content_type or 'spreadsheetml' in d.content_type %}<span class="badge bg-success">XLS</span>
+              {% elif 'powerpoint' in d.content_type or 'presentationml' in d.content_type %}<span class="badge bg-warning text-dark">PPT</span>
+              {% elif 'image' in d.content_type or 'jpeg' in d.content_type or 'png' in d.content_type %}<span class="badge bg-info text-dark">IMG</span>
+              {% else %}<span class="badge bg-secondary">File</span>{% endif %}
+            </td>
+
+            <td>{{ d.size_bytes|filesizeformat }}</td>
+            <td>{% if d.uploaded_by %}
+                {% firstof d.uploaded_by.get_full_name d.uploaded_by.get_username d.uploaded_by.email "-" %}
+                {% else %}-{% endif %}
+            </td>
+            <td>{{ d.created_at|date:'M d, Y' }}</td>
+            <td class="text-end">
+              <a class="btn btn-sm btn-outline-primary" href="{{ d.file.url }}" target="_blank" title="Preview">
+                <i class="fas fa-eye"></i>
+              </a>
+              <a class="btn btn-sm btn-outline-secondary" href="{{ d.file.url }}" download title="Download">
+                <i class="fas fa-download"></i>
+              </a>
+
+              {# delete only for uploader or staff #}
+{% if user.is_authenticated and user.is_staff or user.is_authenticated and d.uploaded_by_id == user.id %}
+              <button type="button"
+                      class="btn btn-sm btn-outline-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal{{ d.id }}">
+                <i class="fas fa-trash"></i>
+              </button>
+
+              <div class="modal fade" id="deleteModal{{ d.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ d.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                      <h5 class="modal-title" id="deleteModalLabel{{ d.id }}">Confirm Delete</h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure you want to delete <strong>{{ d.original_name }}</strong>? This action cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <form action="{% url 'vault_delete' d.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7" class="text-center text-muted py-4">No documents yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- Security / Validation JS -->
+<script>
+(function(){
+  // Show/Hide team picker
+  const vis = document.querySelector('select[name="visibility"]');
+  const teams = document.querySelector('select[name="allowed_teams"]');
+  const teamsWrapper = document.getElementById('teams-wrapper');
+  if (vis && teams && teamsWrapper) {
+    function toggleTeams() {
+      if (vis.value === 'teams') {
+        teamsWrapper.style.display = '';
+      } else {
+        teamsWrapper.style.display = 'none';
+        for (const opt of teams.options) opt.selected = false;
+      }
+    }
+    toggleTeams();
+    vis.addEventListener('change', toggleTeams);
+  }
+
+  // File validation
+  const uploadForm = document.querySelector('form[enctype="multipart/form-data"]');
+  if (uploadForm) {
+    uploadForm.addEventListener('submit', function(e) {
+      const fileInput = uploadForm.querySelector('input[type="file"]');
+      if (!fileInput || !fileInput.files.length) return;
+
+      const file = fileInput.files[0];
+      const allowedExts = ['pdf','doc','docx','xls','xlsx','ppt','pptx','jpg','jpeg','png'];
+      const maxSize = 10 * 1024 * 1024; // 10 MB
+
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!allowedExts.includes(ext)) {
+        alert("❌ Invalid file type. Allowed: PDF, DOC, XLS, PPT, Images.");
+        e.preventDefault();
+        return;
+      }
+      if (file.size > maxSize) {
+        alert("❌ File too large. Max size is 10 MB.");
+        e.preventDefault();
+        return;
+      }
+    });
+  }
+
+  // Description sanitization
+  const descInput = document.querySelector('textarea[name="description"], input[name="description"]');
+  if (descInput) {
+    descInput.addEventListener('input', function(){
+      if (/<script/i.test(this.value)) {
+        alert("❌ Script tags are not allowed.");
+        this.value = this.value.replace(/<script.*?>.*?<\/script>/gi, "");
+      }
+    });
+  }
+})();
+</script>
+{% endblock %}

@@ -1,23 +1,16 @@
 #!/bin/bash
 
-# One-click Developer Setup Script
-# Author: Hamza Shahid
-# Description: Performs dry-run checks and launches Dockerized Django application (There is still room for improvement)
-
 APP_NAME="Hardhat Enterprises Web App"
 ENV_FILE=".env"
 ENV_SAMPLE_FILE="env.sample"
 COMPOSE_FILE="docker-compose.yml"
 HEALTHCHECK_URL="http://localhost:80/health"
 
-# Colors & symbols
 GREEN="\033[0;32m"
 RED="\033[0;31m"
+YELLOW='\033[0;33m'
 NC="\033[0m"
-TICK="${GREEN}✅${NC}"
-CROSS="${RED}❌${NC}"
 
-# Help
 show_help() {
   echo "Usage: $0 [OPTION]"
   echo
@@ -26,54 +19,54 @@ show_help() {
   echo "  --help        Show this help message"
 }
 
-# Table headers
+TICK="${GREEN}Passed${NC}"
+CROSS="${RED}Failed${NC}"
+
 show_table_header() {
-  echo "🔧 Running checks for $APP_NAME..."
-  echo
-  printf "%-40s | %-10s\n" "Check" "Status"
-  printf "%-40s-+-%-10s\n" "$(printf '%.0s-' {1..40})" "$(printf '%.0s-' {1..10})"
+  echo -e "\n======================================================"
+  echo -e "${YELLOW}  Running checks for \"$APP_NAME\"${NC}"
+  echo -e "======================================================\n"
 }
 
-# Command check
 check_command() {
   if command -v "$1" >/dev/null 2>&1; then
-    printf "%-40s | %b\n" "$2" "$TICK"
+    echo -e "$2 : $TICK"
     return 0
   else
-    printf "%-40s | %b\n" "$2" "$CROSS"
+    echo -e "$2 : $CROSS"
     return 1
   fi
 }
 
-# Docker daemon check
 check_docker_running() {
   if docker info >/dev/null 2>&1; then
-    printf "%-40s | %b\n" "Docker daemon running" "$TICK"
+    echo -e "Docker daemon running : $TICK"
     return 0
   else
-    printf "%-40s | %b\n" "Docker daemon running" "$CROSS"
-    echo -e "${RED}❗ Docker is installed but not running. Please start Docker.${NC}"
+    echo -e "Docker daemon running : $CROSS"
+    echo -e "${YELLOW}Docker is installed but not running. Please start Docker.${NC}"
     return 1
   fi
 }
 
-# File check
 check_file() {
-  [ -f "$1" ] && printf "%-40s | %b\n" "$2" "$TICK" || printf "%-40s | %b\n" "$2" "$CROSS"
+  if [ -f "$1" ]; then
+    echo -e "$2 : $TICK"
+  else
+    echo -e "$2 : $CROSS"
+  fi
 }
 
-# Health check
 check_health() {
   if curl -s --head --request GET "$HEALTHCHECK_URL" | grep "200 OK" >/dev/null; then
-    printf "%-40s | %b\n" "Healthcheck endpoint ($HEALTHCHECK_URL)" "$TICK"
+    echo -e "Healthcheck endpoint ($HEALTHCHECK_URL) : $TICK"
     return 0
   else
-    printf "%-40s | %b\n" "Healthcheck endpoint ($HEALTHCHECK_URL)" "$CROSS"
+    echo -e "Healthcheck endpoint ($HEALTHCHECK_URL) : $CROSS"
     return 1
   fi
 }
 
-# Perform all checks
 run_checks() {
   show_table_header
 
@@ -91,22 +84,20 @@ run_checks() {
   check_health
 }
 
-# Run setup
 run_setup() {
-  echo -e "\n🔄 Starting Docker containers...\n"
+  echo -e "\n ${YELLOW}Starting Docker containers...\n${NC}"
   docker-compose up --build -d
 
-  echo -e "\n⏳ Waiting for health endpoint..."
+  echo -e "\n ${YELLOW}Waiting for health endpoint...${NC}"
   sleep 5
 
   if check_health; then
-    echo -e "\n🎉 ${GREEN}Setup complete. Visit your app at http://localhost:80/health\n"
+    echo -e "\n${GREEN}Setup complete. Visit your app at http://localhost:80/health\n"
   else
-    echo -e "\n${RED}❌ Setup ran but app is not healthy. Please check logs using 'docker-compose logs'.${NC}\n"
+    echo -e "\n${RED}Setup ran but app is not healthy. Please check logs using 'docker-compose logs'.${NC}\n"
   fi
 }
 
-# Main
 case "$1" in
   --dry-run)
     run_checks
