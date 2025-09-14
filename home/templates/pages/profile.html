@@ -19,8 +19,8 @@
         <div class="card profile-card shadow p-4 h-100">
           <div class="text-center mb-4">
             <img id="avatar-preview"
-                src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
-                alt="Profile Picture" class="rounded-circle profile-image">
+              src="{% if profile.avatar %}{{ profile.avatar_webp_80.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
+              alt="Profile Picture" class="rounded-circle profile-image" loading="lazy">
           </div>
           
           <form method="POST" enctype="multipart/form-data" id="avatar-form">

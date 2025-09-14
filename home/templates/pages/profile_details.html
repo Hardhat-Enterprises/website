@@ -1,7 +1,4 @@
-{% extends "layouts/base.html" %}
-{% load static %}
-
-{% block content %}
+{% extends "layouts/base.html" %} {% load static %} {% block content %}
 <div class="profile-details-container">
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -13,15 +10,20 @@
           </div>
           <div class="profile-avatar-wrapper-main">
             <div class="avatar-container">
-              <img src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}" 
-                   class="profile-avatar-main" alt="Profile Picture">
+              <img
+                src="{% if profile.avatar %}{{ profile.avatar_webp_80.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
+                class="profile-avatar-main"
+                alt="Profile Picture"
+                loading="lazy"
+              />
               <div class="avatar-status"></div>
             </div>
           </div>
           {% if user.first_name or user.last_name %}
-          <h1 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h1>
-          {% endif %}
-          {% if user.email %}
+          <h1 class="profile-name">
+            {{ user.first_name }} {{ user.last_name }}
+          </h1>
+          {% endif %} {% if user.email %}
           <div class="profile-email">{{ user.email }}</div>
           {% endif %}
           <div class="profile-actions">
@@ -61,8 +63,7 @@
                   <span class="stat-value">{{ skill_count }}</span>
                   <span class="stat-label">Skills</span>
                 </div>
-                {% endif %}
-                {% if achievement_count > 0 %}
+                {% endif %} {% if achievement_count > 0 %}
                 <div class="stat-item">
                   <i class="fas fa-medal"></i>
                   <span class="stat-value">{{ achievement_count }}</span>
@@ -84,13 +85,20 @@
             <div class="section-content">
               <div class="social-links">
                 {% if profile.linkedin %}
-                <a href="{{ profile.linkedin }}" target="_blank" class="social-link linkedin">
+                <a
+                  href="{{ profile.linkedin }}"
+                  target="_blank"
+                  class="social-link linkedin"
+                >
                   <i class="fab fa-linkedin"></i>
                   <span>LinkedIn Profile</span>
                 </a>
-                {% endif %}
-                {% if profile.github %}
-                <a href="{{ profile.github }}" target="_blank" class="social-link github">
+                {% endif %} {% if profile.github %}
+                <a
+                  href="{{ profile.github }}"
+                  target="_blank"
+                  class="social-link github"
+                >
                   <i class="fab fa-github"></i>
                   <span>GitHub Profile</span>
                 </a>
@@ -117,8 +125,7 @@
                     <span class="contact-value">{{ profile.phone }}</span>
                   </div>
                 </div>
-                {% endif %}
-                {% if profile.location %}
+                {% endif %} {% if profile.location %}
                 <div class="contact-item">
                   <i class="fas fa-map-marker-alt"></i>
                   <div class="contact-details">
@@ -138,345 +145,344 @@
 </div>
 
 <style>
-body {
-  background: #f7f7f7;
-}
-body.dark-mode {
-  background: #181818;
-}
+  body {
+    background: #f7f7f7;
+  }
+  body.dark-mode {
+    background: #181818;
+  }
 
-.card.profile-card.shadow {
-  margin-top: 150px;
-}
+  .card.profile-card.shadow {
+    margin-top: 150px;
+  }
 
-.profile-details-container {
-  margin-top: 0;
-  margin-bottom: 30px;
-  padding: 0;
-  max-width: 450px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.profile-card {
-  border: none;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #fff;
-  transition: transform 0.2s ease;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  margin: 0 auto;
-  border: 1px solid rgba(255, 205, 17, 0.15);
-}
-body.dark-mode .profile-card {
-  background: #232323;
-  border: 1px solid #ffcd11;
-}
-
-.profile-header {
-  position: relative;
-  text-align: center;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  background: linear-gradient(135deg, #ffcd11 0%, #ffd84c 100%);
-}
-body.dark-mode .profile-header {
-  background: linear-gradient(135deg, #232323 0%, #181818 100%);
-}
-
-.profile-cover {
-  height: 40px;
-  min-height: 0;
-  margin: 0;
-  padding: 0;
-}
-
-.profile-avatar-wrapper-main {
-  position: relative;
-  margin-top: -60px;
-  padding: 0 20px;
-}
-
-.profile-avatar-main {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 4px solid #fff;
-  box-shadow: 0 0 20px rgba(0,0,0,0.15);
-  object-fit: cover;
-  background: #fff;
-}
-body.dark-mode .profile-avatar-main {
-  border-color: #232323;
-  background: #232323;
-}
-
-.profile-name {
-  margin-top: 10px;
-  font-size: 2rem;
-  font-weight: 800;
-  color: #1a1a1a;
-}
-body.dark-mode .profile-name {
-  color: #ffcd11;
-}
-
-.profile-email {
-  color: #666;
-  font-size: 1rem;
-}
-body.dark-mode .profile-email {
-  color: #ffcd11;
-}
-
-.profile-actions {
-  margin-top: 10px;
-}
-
-.profile-body {
-  padding: 15px;
-  margin: 0;
-}
-
-.profile-section {
-  background: #fff;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid rgba(255, 205, 17, 0.2);
-}
-body.dark-mode .profile-section {
-  background: #232323;
-  border: 1px solid rgba(255, 205, 17, 0.2);
-}
-.profile-section:last-child {
-  margin-bottom: 0;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0 0 4px 0;
-  padding: 0;
-}
-
-.section-header i {
-  font-size: 0.9rem;
-  color: #ffcd11;
-}
-
-.section-header h3 {
-  color: #ffcd11;
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
-  padding: 0;
-}
-
-.section-content {
-  margin: 0;
-  padding: 4px 0 0 0;
-}
-
-.bio-text {
-  margin: 0;
-  padding: 0;
-  line-height: 1.4;
-}
-
-.stat-item {
-  background: #fff;
-  border: 1px solid #ffe082;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-  transition: transform 0.3s ease;
-  padding: 8px 0;
-}
-body.dark-mode .stat-item {
-  background: #232323;
-  border: 1px solid #ffcd11;
-}
-
-.stat-item i {
-  font-size: 1rem;
-  color: #ffcd11;
-  margin-bottom: 2px;
-}
-.stat-value {
-  display: block;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 2px 0;
-}
-body.dark-mode .stat-value {
-  color: #ffcd11;
-}
-.stat-label {
-  color: #888;
-  font-size: 0.85rem;
-}
-body.dark-mode .stat-label {
-  color: #eee;
-}
-
-.social-links {
-  display: flex;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-}
-.social-link {
-  margin: 0;
-  padding: 6px 12px;
-}
-
-.contact-info {
-  display: grid;
-  gap: 15px;
-}
-.contact-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  color: #222;
-  font-size: 1.1rem;
-}
-body.dark-mode .contact-item {
-  color: #eee;
-}
-.contact-item i {
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffcd11;
-  color: #1a1a1a;
-  border-radius: 50%;
-  font-size: 1rem;
-}
-body.dark-mode .contact-item i {
-  background: #232323;
-  color: #ffcd11;
-  border: 1px solid #ffcd11;
-}
-.contact-label {
-  color: #888;
-}
-body.dark-mode .contact-label {
-  color: #ffcd11;
-}
-.contact-value {
-  color: #1a1a1a;
-}
-body.dark-mode .contact-value {
-  color: #fff;
-}
-
-@media (max-width: 768px) {
   .profile-details-container {
-    margin: 15px auto;
-    padding: 0 10px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    padding: 0;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  
-  
+
+  .profile-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin: 0 auto;
+    border: 1px solid rgba(255, 205, 17, 0.15);
+  }
+  body.dark-mode .profile-card {
+    background: #232323;
+    border: 1px solid #ffcd11;
+  }
+
+  .profile-header {
+    position: relative;
+    text-align: center;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    background: linear-gradient(135deg, #ffcd11 0%, #ffd84c 100%);
+  }
+  body.dark-mode .profile-header {
+    background: linear-gradient(135deg, #232323 0%, #181818 100%);
+  }
+
+  .profile-cover {
+    height: 40px;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .profile-avatar-wrapper-main {
+    position: relative;
+    margin-top: -60px;
+    padding: 0 20px;
+  }
+
+  .profile-avatar-main {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+    background: #fff;
+  }
+  body.dark-mode .profile-avatar-main {
+    border-color: #232323;
+    background: #232323;
+  }
+
+  .profile-name {
+    margin-top: 10px;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+  }
+  body.dark-mode .profile-name {
+    color: #ffcd11;
+  }
+
+  .profile-email {
+    color: #666;
+    font-size: 1rem;
+  }
+  body.dark-mode .profile-email {
+    color: #ffcd11;
+  }
+
+  .profile-actions {
+    margin-top: 10px;
+  }
+
   .profile-body {
-    padding: 12px;
+    padding: 15px;
+    margin: 0;
   }
-  
+
   .profile-section {
-    padding: 8px;
-    margin-bottom: 8px;
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid rgba(255, 205, 17, 0.2);
   }
-}
+  body.dark-mode .profile-section {
+    background: #232323;
+    border: 1px solid rgba(255, 205, 17, 0.2);
+  }
+  .profile-section:last-child {
+    margin-bottom: 0;
+  }
 
-.not-set {
-  color: #bbb;
-  font-size: 0.95em;
-  margin-left: 8px;
-}
-.disabled-link {
-  pointer-events: none;
-  opacity: 0.6;
-}
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 4px 0;
+    padding: 0;
+  }
 
-.btn-edit {
-  background: #ffcd11;
-  color: #1a1a1a;
-  padding: 6px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  border: 1px solid #ffcd11;
-}
-body.dark-mode .btn-edit {
-  background: #232323;
-  color: #ffcd11;
-  border: 1px solid #ffcd11;
-}
-.btn-edit:hover {
-  background: #ffd84c;
-  color: #1a1a1a;
-}
-body.dark-mode .btn-edit:hover {
-  background: #ffcd11;
-  color: #1a1a1a;
-}
+  .section-header i {
+    font-size: 0.9rem;
+    color: #ffcd11;
+  }
 
-.btn-edit i {
-  margin-right: 4px;
-}
+  .section-header h3 {
+    color: #ffcd11;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+  }
 
-/* Header profile image (small) */
-.header-profile-avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.10);
-  object-fit: cover;
-}
-body.dark-mode .header-profile-avatar {
-  border-color: #232323;
-}
+  .section-content {
+    margin: 0;
+    padding: 4px 0 0 0;
+  }
+
+  .bio-text {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4;
+  }
+
+  .stat-item {
+    background: #fff;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease;
+    padding: 8px 0;
+  }
+  body.dark-mode .stat-item {
+    background: #232323;
+    border: 1px solid #ffcd11;
+  }
+
+  .stat-item i {
+    font-size: 1rem;
+    color: #ffcd11;
+    margin-bottom: 2px;
+  }
+  .stat-value {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 2px 0;
+  }
+  body.dark-mode .stat-value {
+    color: #ffcd11;
+  }
+  .stat-label {
+    color: #888;
+    font-size: 0.85rem;
+  }
+  body.dark-mode .stat-label {
+    color: #eee;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+  .social-link {
+    margin: 0;
+    padding: 6px 12px;
+  }
+
+  .contact-info {
+    display: grid;
+    gap: 15px;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #222;
+    font-size: 1.1rem;
+  }
+  body.dark-mode .contact-item {
+    color: #eee;
+  }
+  .contact-item i {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffcd11;
+    color: #1a1a1a;
+    border-radius: 50%;
+    font-size: 1rem;
+  }
+  body.dark-mode .contact-item i {
+    background: #232323;
+    color: #ffcd11;
+    border: 1px solid #ffcd11;
+  }
+  .contact-label {
+    color: #888;
+  }
+  body.dark-mode .contact-label {
+    color: #ffcd11;
+  }
+  .contact-value {
+    color: #1a1a1a;
+  }
+  body.dark-mode .contact-value {
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .profile-details-container {
+      margin: 15px auto;
+      padding: 0 10px;
+    }
+
+    .profile-body {
+      padding: 12px;
+    }
+
+    .profile-section {
+      padding: 8px;
+      margin-bottom: 8px;
+    }
+  }
+
+  .not-set {
+    color: #bbb;
+    font-size: 0.95em;
+    margin-left: 8px;
+  }
+  .disabled-link {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .btn-edit {
+    background: #ffcd11;
+    color: #1a1a1a;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border: 1px solid #ffcd11;
+  }
+  body.dark-mode .btn-edit {
+    background: #232323;
+    color: #ffcd11;
+    border: 1px solid #ffcd11;
+  }
+  .btn-edit:hover {
+    background: #ffd84c;
+    color: #1a1a1a;
+  }
+  body.dark-mode .btn-edit:hover {
+    background: #ffcd11;
+    color: #1a1a1a;
+  }
+
+  .btn-edit i {
+    margin-right: 4px;
+  }
+
+  /* Header profile image (small) */
+  .header-profile-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+  }
+  body.dark-mode .header-profile-avatar {
+    border-color: #232323;
+  }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Add hover effect to profile card
-  const profileCard = document.querySelector('.profile-card');
-  profileCard.addEventListener('mouseenter', function() {
-    this.style.transform = 'translateY(-5px)';
-  });
-  profileCard.addEventListener('mouseleave', function() {
-    this.style.transform = 'translateY(0)';
-  });
+  document.addEventListener("DOMContentLoaded", function () {
+    // Add hover effect to profile card
+    const profileCard = document.querySelector(".profile-card");
+    profileCard.addEventListener("mouseenter", function () {
+      this.style.transform = "translateY(-5px)";
+    });
+    profileCard.addEventListener("mouseleave", function () {
+      this.style.transform = "translateY(0)";
+    });
 
-  // Add animation to stats items
-  const statItems = document.querySelectorAll('.stat-item');
-  statItems.forEach(item => {
-    item.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-5px)';
+    // Add animation to stats items
+    const statItems = document.querySelectorAll(".stat-item");
+    statItems.forEach((item) => {
+      item.addEventListener("mouseenter", function () {
+        this.style.transform = "translateY(-5px)";
+      });
+      item.addEventListener("mouseleave", function () {
+        this.style.transform = "translateY(0)";
+      });
     });
-    item.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0)';
-    });
-  });
 
-  // Add animation to contact items
-  const contactItems = document.querySelectorAll('.contact-item');
-  contactItems.forEach(item => {
-    item.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-3px)';
-    });
-    item.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0)';
+    // Add animation to contact items
+    const contactItems = document.querySelectorAll(".contact-item");
+    contactItems.forEach((item) => {
+      item.addEventListener("mouseenter", function () {
+        this.style.transform = "translateY(-3px)";
+      });
+      item.addEventListener("mouseleave", function () {
+        this.style.transform = "translateY(0)";
+      });
     });
   });
-});
 </script>
-{% endblock %} 
+{% endblock %}
