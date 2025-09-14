@@ -2323,6 +2323,13 @@ def execute_code(request):
 def execute_python_code(code, input_data, settings):
     """
     Execute Python code in a secure environment
+    
+    Security measures implemented:
+    - Sandboxed execution with restricted built-ins
+    - Malicious pattern detection
+    - Execution timeouts
+    - Error message sanitization
+    - Input validation and length limits
     """
     result = {'output': '', 'error': None, 'execution_time': 0, 'memory_used': 0}
     
@@ -2401,7 +2408,18 @@ def execute_python_code(code, input_data, settings):
             error_output = io.StringIO()
             
             with redirect_stdout(output), redirect_stderr(error_output):
-                exec(code, safe_globals)
+                # Additional security: compile first to catch syntax errors
+                try:
+                    compiled_code = compile(code, '<user_code>', 'exec')
+                    exec(compiled_code, safe_globals)
+                except SyntaxError as e:
+                    result['error'] = f'Syntax Error: {str(e)}'
+                    return result
+                except Exception as e:
+                    # Sanitize error messages to prevent information leakage
+                    error_type = type(e).__name__
+                    result['error'] = f'{error_type}: {str(e)[:200]}'  # Limit error message length
+                    return result
             
             execution_time = time.time() - start_time
             timer.cancel()
@@ -2412,17 +2430,20 @@ def execute_python_code(code, input_data, settings):
             # Check for errors in stderr
             error_msg = error_output.getvalue()
             if error_msg:
-                result['error'] = error_msg
+                # Sanitize stderr output
+                result['error'] = error_msg[:200]  # Limit error message length
                 
         except TimeoutError:
             timer.cancel()
             result['error'] = f'Code execution timed out (max {settings.max_execution_time} seconds)'
         except Exception as e:
             timer.cancel()
-            result['error'] = str(e)
+            # Sanitize exception messages to prevent information leakage
+            result['error'] = f'Execution error: {type(e).__name__}'
             
     except Exception as e:
-        result['error'] = f'Execution error: {str(e)}'
+        # Sanitize outer exception messages
+        result['error'] = f'System error: {type(e).__name__}'
     
     return result
 
