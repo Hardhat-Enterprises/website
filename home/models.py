@@ -792,12 +792,6 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
-<<<<<<< HEAD
-    if not self.is_active:
-        return True
-    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-    return now() > expiry_time
-
 def update_activity(self):
 
     self.last_activity = now()
