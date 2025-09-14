@@ -496,8 +496,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'verbose_name': 'Security Awareness Quote',
-                'verbose_name_plural': 'Security Awareness Quotes',
+                'verbose_name': 'Daily Security Tip',
+                'verbose_name_plural': 'Daily Security Tips',
             },
         ),
         migrations.CreateModel(
