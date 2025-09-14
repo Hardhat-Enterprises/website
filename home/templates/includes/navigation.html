@@ -68,6 +68,7 @@
               Challenges
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
+ main
                         <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="challengesDropdown">
                             <li><a class="dropdown-item dropdown-item-improved" href="{% url 'challenge_list' %}">All Challenges</a></li>
                             <li><a class="dropdown-item dropdown-item-improved" href="{% url 'cyber_quiz' %}">Quiz</a></li>
@@ -78,6 +79,70 @@
                     <li class="nav-item dropdown nav-spacing">
                         <a href="#" class="nav-link dropdown-toggle nav-item-padding" id="companyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Company
+
+            <div class="dropdown-menu pt-2" aria-labelledby="upskillingDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'dashboard' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    {% trans "Dashboard" %}
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'upskilling' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    {% trans "Skills" %}
+                  </li>
+                </a>
+              </ul>
+            </div>
+          </li>
+          
+          {% endif %}
+
+          {% if user.is_authenticated %}
+          {% if user.is_staff or user.is_superuser %}
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+              {% trans "Admin Settings" %}
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+            <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="#">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
+                </a>
+                <a class="menu-link" href="#">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
+                </a>
+                <a class="menu-link" href="#">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'adminblogpage' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Review Blogs" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'reports' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Reports" %}</li>
+                </a>
+              </ul>
+            </div>
+          </li>
+          {% endif %}
+          {% endif %}
+
+
+          <li class="nav-item">
+            <a href="{% url 'about_us' %}" class="nav-link"> {% trans "About" %} </a>
+          </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a href="{% url 'vault' %}" class="nav-link">Vault</a>
+          </li>
+          {% endif %}
+
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
+              {% trans "Projects" %}
+main
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
                         <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="companyDropdown">
