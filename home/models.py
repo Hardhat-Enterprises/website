@@ -890,8 +890,8 @@ class AdminSession(models.Model):
         return now() > expiry_time
 
 def update_activity(self):
-        self.last_activity = now()
-        self.save(update_fields=['last_activity'])
+        self.last_activity = now()        self.save(update_fields=['last_activity'])
+
 
 class Resource(models.Model):
     class Category(models.TextChoices):
@@ -987,3 +987,20 @@ class Resource(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserDeletionRequest(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="deletion_request")
+    requested_at = models.DateTimeField(default=timezone.now)
+    scheduled_for = models.DateTimeField()
+    is_executed = models.BooleanField(default=False)
+    executed_at = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.scheduled_for:
+            self.scheduled_for = self.requested_at + timedelta(days=30)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        status = "Executed" if self.is_executed else "Pending"
+        return f"Deletion request for {self.user.username} ({status}), scheduled {self.scheduled_for}"
