@@ -1,0 +1,190 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/pre-loader.html' %}
+<!-- Displays header and subtitles -->
+<div class="content-container container mt-10">
+    <h1 class="mb-4 text-center">Matching Challenge</h1>
+    <p class="text-center mb-5">
+        Test your knowledge with our matching quiz! Match the terms and their definitions!
+    </p>
+    <p class="text-center mb-5">
+        Terms and definitions from 
+        <a href="https://www.sans.org/security-resources/glossary-of-terms" target="_blank" rel="noopener noreferrer">
+        SANS institute 
+    </a>.  
+    Continue your learning there!
+    </p>
+    <!-- Defines quiz and sets out terms and definitions allowing them to be selected-->
+    <div id="game-container">
+         <div id="game">
+            <div class="terms">
+            <h3>Terms</h3>
+            <ul>
+                <li class="term" data-term="Access Control">Access Control</li>
+                <li class="term" data-term="Encryption">Encryption</li>
+                <li class="term" data-term="Brute Force">Brute Force</li>
+                <li class="term" data-term="Phishing">Phishing</li>
+                <li class="term" data-term="Denial of Service">Denial of Service</li>
+            </ul>
+            </div>
+
+            <div class="definitions">
+            <h3>Definitions</h3>
+            <ul>
+                <li class="definition" data-definition="The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.">The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.</li>
+                <li class="definition" data-definition="A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one">A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one</li>
+                <li class="definition" data-definition="The prevention of authorized access to a system resource or the delaying of system operations and functions">The prevention of authorized access to a system resource or the delaying of system operations and functions</li>
+                <li class="definition" data-definition="Ensures that resources are only granted to those users who are entitled to them">Ensures that resources are only granted to those users who are entitled to them</li>
+                <li class="definition" data-definition="Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used.">Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used.</li>
+            </ul>
+            </div>
+
+            
+        </div>
+
+    </div>
+
+<style>
+/* Defines all the styles for the quiz, ensuring it does not overwrite website template*/
+ #game { display: flex; gap: 50px; }
+    #game ul { list-style: none; padding: 0; }
+    #game li { 
+      padding: 8px; 
+      border: 1px solid #ccc; 
+      margin: 5px 0; 
+      cursor: pointer; 
+      border-radius: 5px; 
+    }
+    /*Defines the colours for a matched pair*/
+    #game .term.correct, #game .definition.correct { background-color: lightgreen; }
+
+    /*Defines the colours for term selected*/
+    #game .term.selected { background-color: lightblue; }
+    
+    /*Defines the colours for incorrect flash*/
+    @keyframes flashRed {
+        0%   { background-color: salmon; }
+        50%  { background-color: rgb(247, 21, 21); }
+        100% { background-color: salmon; }
+    }
+    /*Flashes the definition red if it is incorrect*/
+    #game .definition.wrong { animation: flashRed 0.5s ease; }
+
+    /*Creates the background for the game*/
+    #game-container {
+        background-color: #222;      
+        color: white;                
+        padding: 20px;
+        border-radius: 15px;         
+        max-width: 800px;            
+        margin: 20px auto;           
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4); 
+    }
+
+    /*Creates style for the win message*/
+    #win-message {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: gold;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+
+</style>
+
+<script>
+// Makes sure page is loaded before running code
+document.addEventListener('DOMContentLoaded', () => {
+  // Defines pairing between terms and definitions
+  const pairs = {
+    "Access Control": "Ensures that resources are only granted to those users who are entitled to them",
+    "Brute Force": "A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one",
+    "Denial of Service": "The prevention of authorized access to a system resource or the delaying of system operations and functions",
+    "Phishing": "The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.",
+    "Encryption": "Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used."
+
+
+  };
+
+  const game = document.getElementById('game');
+  let selectedTerm = null; // currently selected term name
+  let matchedCount = 0; // Tracks how many pairs have been fine
+  const totalpairs = 5; // Defines how many possible pairs there are
+
+  // Use event delegation so classes can change freely and behavior stays consistent
+  game.addEventListener('click', (e) => {
+    const termEl = e.target.closest('.term');
+    const defEl = e.target.closest('.definition');
+
+    // Code determining what term is selected, ensuring already matched terms cant be selected and allows other terms to be selected
+    if (termEl) {
+      if (termEl.dataset.matched === 'true') return;
+
+      game.querySelectorAll('.term').forEach(t => t.classList.remove('selected'));
+      
+      selectedTerm = termEl.dataset.term;
+      termEl.classList.add('selected');
+      return;
+    }
+
+    // Code that allows definitions to be selected, but only if a term is selected and ignores already matched definitions
+    if (defEl) {
+
+      if (!selectedTerm) {
+        return;
+      }
+
+      if (defEl.dataset.matched === 'true') return;
+
+      const defValue = defEl.dataset.definition;
+      const termElForSelected = game.querySelector(`[data-term="${cssEscape(selectedTerm)}"]`);
+
+      if (pairs[selectedTerm] === defValue) {
+        defEl.classList.add('correct');
+        defEl.dataset.matched = 'true';
+
+        termElForSelected.classList.add('correct');
+        termElForSelected.dataset.matched = 'true';
+        termElForSelected.classList.remove('selected');
+
+        selectedTerm = null;
+
+        //Code that determines if all pairs have been completed, if yes then congratulation message is displayed, otherwise game continues
+        matchedCount++;
+        if (matchedCount === totalpairs) {     
+            if (!document.getElementById("win-message")) {
+                const winMsg = document.createElement("p");
+                winMsg.id = "win-message";                    
+                winMsg.innerText = "Congratulations, you got them all!";            
+                document.getElementById("game-container").appendChild(winMsg);
+            }
+        }
+        return;
+      }
+
+      //Allows the incorrect flash to be played multiple times
+      defEl.classList.remove('wrong');
+      void defEl.offsetWidth; 
+      defEl.classList.add('wrong');
+
+      //Resets flash animation after it has played
+      const onAnimEnd = () => {
+        defEl.classList.remove('wrong');
+        defEl.removeEventListener('animationend', onAnimEnd);
+      };
+      defEl.addEventListener('animationend', onAnimEnd);
+    }
+  });
+
+  // Helps with finding data terms
+  function cssEscape(str) {
+    if (window.CSS && CSS.escape) return CSS.escape(str);
+    return str.replace(/(["\\])/g, '\\$1');
+  }
+});
+</script>
+
+{% endblock content %} 
