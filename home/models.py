@@ -851,15 +851,3 @@ class TipRotationState(models.Model):
     def __str__(self):
         return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
 
-
-    if not self.is_active:
-        return True
-    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-    return now() > expiry_time
-
-
-def update_activity(self):
-
-    self.last_activity = now()
-    self.save(update_fields=['last_activity'])
-

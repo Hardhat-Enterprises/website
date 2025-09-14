@@ -192,11 +192,9 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
 
-    path("health", health_check, name="health-check")
-
-=======
+    path("health", health_check, name="health-check"),
+    
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
->>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
