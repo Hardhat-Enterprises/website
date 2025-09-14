@@ -76,6 +76,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
     upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
 
+    # 🔹 New fields
+    description = models.TextField(_("description"), blank=True, null=True)
+    contact_information = models.TextField(_("contact information"), blank=True, null=True)
+    connect_with_me = models.JSONField(_("connect with me"), default=dict, blank=True, null=True)
+    # Example: {"linkedin": "https://linkedin.com/in/...", "github": "https://github.com/...
+
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -670,22 +676,25 @@ def update_activity(self):
     self.last_activity = now()
     self.save(update_fields=['last_activity'])
 
-#KnownDevice Model
-class KnownDevice(models.Model):
+#Model to track known devices
+class UserDevice(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="known_devices"
+        related_name="devices"
     )
-    fingerprint = models.CharField(max_length=64, db_index=True)  # hash of user agent
-    user_agent = models.TextField(blank=True)
-    last_ip = models.GenericIPAddressField(null=True, blank=True)
-    first_seen = models.DateTimeField(auto_now_add=True)
-    last_seen = models.DateTimeField(default=timezone.now)
-    label = models.CharField(max_length=100, blank=True)
+    # Device fingerprint (unique identifier)
+    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
 
-    class Meta:
-        unique_together = ('user', 'fingerprint')
+    # User-friendly info
+    device_name = models.CharField(max_length=200) 
 
+    # Technical info
+    user_agent = models.TextField()
+    ip_address = models.GenericIPAddressField()
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True) 
+    last_seen = models.DateTimeField(auto_now=True)       
     def __str__(self):
-        return f"{self.user} - {self.fingerprint[:8]}"
+        return f"{self.user.email} - {self.device_name} ({self.ip_address})"

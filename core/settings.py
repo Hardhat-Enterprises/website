@@ -20,6 +20,8 @@ from pymemcache.client.base import Client
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -103,6 +105,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
+    "django_user_agents",
 
     'rest_framework',  
     'drf_yasg', 
@@ -130,6 +133,7 @@ MIDDLEWARE = [
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
     "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
     'core.middleware.AutoLogoutMiddleware',
+    "django_user_agents.middleware.UserAgentMiddleware",
 
 ]
 

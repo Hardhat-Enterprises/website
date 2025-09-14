@@ -1,6 +1,7 @@
 import hashlib
 from django.conf import settings
 from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -8,19 +9,22 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save, post_save
 from django.utils.timezone import now
+from django_user_agents.utils import get_user_agent
+import logging
+from .models import UserDevice
 
 
-from .models import User, KnownDevice
+from .models import User, UserDevice
 from utils.email_notifications import send_account_notification
+from utils.device_fingerprint import generate_device_fingerprint
 
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 print("✅ Signals loaded")
 
-# -------------------------
-# SESSION SECURITY SIGNALS
-# -------------------------
 
+# SESSION SECURITY SIGNALS
 @receiver(user_logged_in)
 def set_session_last_activity_on_login(sender, request, user, **kwargs):
     """
@@ -46,6 +50,39 @@ def set_session_last_activity_on_login(sender, request, user, **kwargs):
     user.current_session_key = current_session_key
     user.save(update_fields=['current_session_key'])
 
+# DEVICE RECOGNITION SIGNAL
+@receiver(user_logged_in)
+def track_login(sender, request, user, **kwargs):
+    # Get IP address from request
+    ip = request.META.get("REMOTE_ADDR", "")
+    # Get user agent string
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
+    # Create a device fingerprint
+    device_fp = generate_device_fingerprint(user_agent, ip)
+    # Simple readable device info
+    device_info = user_agent.split(")")[0] if user_agent else "Unknown device"
+    print(f"Login from {ip}, device: {device_info}") #DEBUG
+
+    # Look for existing device
+    device, created = UserDevice.objects.get_or_create(
+        user=user,
+        device_name=device_info,
+        ip_address=ip,
+        defaults={"last_seen": timezone.now()},
+    )
+    print(f"Device created? {created}") #DEBUG
+
+    if created:
+        print("Sending email notification...") #DEBUG
+        # Notify only on *new* devices
+        message = f"A login to your account was detected from {ip} using {device_info}."
+        send_account_notification(user=user, subject="New Login to Your HardHat Account", message=message)
+    else:
+        # Update last_seen timestamp
+        device.last_seen = timezone.now()
+        device.save(update_fields=["last_seen"])
+
+
 
 @receiver(user_logged_out)
 def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
@@ -60,12 +97,9 @@ def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
         user.save(update_fields=['current_session_key'])
 
 
-# -------------------------
-# PROFILE UPDATE SIGNAL (OPTIONAL)
-# -------------------------
-
+# PROFILE UPDATE SIGNAL
 # Track fields we actually want to monitor
-PROFILE_FIELDS = {"first_name", "last_name", "email"}  
+PROFILE_FIELDS = {"first_name", "last_name", "email", "description", "contact_information", "connect_with_me"}  
 
 @receiver(pre_save, sender=User)
 def cache_old_user(sender, instance, **kwargs):
@@ -96,54 +130,4 @@ def notify_user_profile_update(sender, instance, created, **kwargs):
     )
     send_account_notification(instance, "Profile Update Notification", message)
 
-# -------------------------
-# NEW DEVICE DETECTION
-# -------------------------
 
-def get_client_ip(request):
-    xff = request.META.get('HTTP_X_FORWARDED_FOR')
-    return xff.split(',')[0].strip() if xff else request.META.get('REMOTE_ADDR')
-
-
-def fingerprint_user_agent(request):
-    ua = (request.META.get('HTTP_USER_AGENT') or '').strip()
-    fp = hashlib.sha256(ua.encode('utf-8')).hexdigest()
-    return fp, ua
-
-
-@receiver(user_logged_in)
-def notify_on_new_device(sender, request, user, **kwargs):
-    """
-    Send an email ONLY when the login comes from a NEW device.
-    Track last_seen on every login from the device.
-    No emails on logout or repeated logins from known devices.
-    """
-    ip = get_client_ip(request)
-    fp, ua = fingerprint_user_agent(request)
-
-    # Get or create the device
-    device, created = KnownDevice.objects.get_or_create(
-        user=user,
-        fingerprint=fp,
-        defaults={'user_agent': ua, 'last_ip': ip}
-    )
-
-    # Update last_seen and last_ip for every login
-    device.last_seen = timezone.now()
-    if device.last_ip != ip:
-        device.last_ip = ip
-    device.save(update_fields=['last_ip', 'last_seen'])
-
-    # Send email only if this is a NEW device
-    if created:
-        subject = "New device sign-in to your Hardhat account"
-        body = (
-            f"Hi {getattr(user, 'first_name', '') or user.username},\n\n"
-            "We noticed a sign-in from a new device on your account.\n\n"
-            f"Time: {timezone.now():%Y-%m-%d %H:%M:%S %Z}\n"
-            f"IP: {ip}\n"
-            f"Device: {ua or 'Unknown'}\n\n"
-            "If this was you, no action is needed.\n"
-            "If not, please reset your password immediately and contact support."
-        )
-        send_account_notification(user, subject, body)
