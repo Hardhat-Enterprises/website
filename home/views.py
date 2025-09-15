@@ -298,6 +298,12 @@ def profile(request):
 
     achievement_count = UserChallenge.objects.filter(user=request.user, completed=True).count()
 
+    # Fetch the list of completed challenges
+    completed_challenges = UserChallenge.objects.filter(
+        user=request.user, 
+        completed=True
+    ).select_related('challenge').order_by('-challenge__points')
+
     if request.method == 'POST':
         if 'save_photo' in request.POST:
             # Only handle avatar upload
@@ -337,6 +343,7 @@ def profile(request):
         'profile': profile,
         'skill_count': skill_count,
         'achievement_count': achievement_count,
+        'completed_challenges': completed_challenges,
     }
 
     return render(request, 'pages/profile.html', context)

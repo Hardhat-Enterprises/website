@@ -49,6 +49,34 @@
               </div>
             </div>
           </div>
+
+          <div class="completed-challenges mt-4">
+            <h4 class="text-center mb-3">Completed Challenges</h4>
+            {% if completed_challenges %}
+                <ul class="list-group list-group-flush">
+                    {% for uc in completed_challenges %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0">
+                            <div>
+                                <strong>{{ uc.challenge.title }}</strong>
+                                <small class="text-muted d-block">{{ uc.challenge.get_category_display }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge 
+                                    {% if uc.challenge.difficulty == 'easy' %}bg-success
+                                    {% elif uc.challenge.difficulty == 'medium' %}bg-warning text-dark
+                                    {% else %}bg-danger{% endif %} me-2">
+                                    {{ uc.challenge.get_difficulty_display }}
+                                </span>
+                                <span class="badge bg-primary rounded-pill">{{ uc.score }} pts</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-center text-muted mt-3">You haven't completed any challenges yet. <a href="{% url 'challenge_list' %}">Get started!</a></p>
+            {% endif %}
+          </div>
+          
         </div>
       </div>
 
