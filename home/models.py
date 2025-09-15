@@ -75,8 +75,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
     upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
-
-    # 🔹 New fields
     description = models.TextField(_("description"), blank=True, null=True)
     contact_information = models.TextField(_("contact information"), blank=True, null=True)
     connect_with_me = models.JSONField(_("connect with me"), default=dict, blank=True, null=True)
