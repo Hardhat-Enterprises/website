@@ -1,0 +1,352 @@
+-{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+
+<style>
+  /* spacing to navbar */
+  .admin-content-wrapper {
+    position: relative;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 992px) {
+    .admin-content-wrapper {
+      padding-top: 10rem;
+      padding-bottom: 3rem;
+    }
+  }
+</style>
+
+<div class="container admin-content-wrapper">
+  <a href="{% url 'challenge_management' %}">Back to Challenge Management</a>
+  <h1>Add Challenge</h1>
+
+  <div class="form-card">
+    <div class="form-section">
+      <h3 class="section-title">Challenge Type</h3>
+
+      <div class="form-group" id="challenge-type-group">
+        <label class="form-label" for="{{ form.challenge_type.id_for_label }}"
+          >Challenge Type *</label
+        >
+        {{ form.challenge_type }} {% if form.challenge_type.errors %}
+        <div class="error-message">{{ form.challenge_type.errors.0 }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- MCQ Form -->
+    <form
+      id="mcq-form"
+      class="challenge-form"
+      method="post"
+      action="{% url 'add_challenge' %}"
+      style="display: none"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="challenge_type" value="mcq" />
+
+      <div class="form-section">
+        <h3 class="section-title">Challenge Details</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.title.id_for_label }}"
+            >Challenge Title</label
+          >
+          {{ form.title }} {% if form.title.errors %}
+          <div class="error-message">{{ form.title.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.description.id_for_label }}"
+            >Description</label
+          >
+          {{ form.description }} {% if form.description.errors %}
+          <div class="error-message">{{ form.description.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.category.id_for_label }}"
+            >Category</label
+          >
+          {{ form.category }} {% if form.category.errors %}
+          <div class="error-message">{{ form.category.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.difficulty.id_for_label }}"
+            >Difficulty Level</label
+          >
+          {{ form.difficulty }} {% if form.difficulty.errors %}
+          <div class="error-message">{{ form.difficulty.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.points.id_for_label }}"
+            >Points</label
+          >
+          {{ form.points }} {% if form.points.errors %}
+          <div class="error-message">{{ form.points.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.time_limit.id_for_label }}"
+            >Time Limit (seconds)</label
+          >
+          {{ form.time_limit }} {% if form.time_limit.errors %}
+          <div class="error-message">{{ form.time_limit.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Question</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.question.id_for_label }}"
+            >Question Text</label
+          >
+          {{ form.question }} {% if form.question.errors %}
+          <div class="error-message">{{ form.question.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Multiple Choice Options</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.choices_text.id_for_label }}"
+            >Choices *</label
+          >
+          <small class="text-muted d-block mb-2"
+            >Enter each choice on a new line</small
+          >
+          {{ form.choices_text }} {% if form.choices_text.errors %}
+          <div class="error-message">{{ form.choices_text.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.correct_answer.id_for_label }}"
+            >Correct Answer *</label
+          >
+          <small class="text-muted d-block mb-2"
+            >Enter the exact text of the correct choice</small
+          >
+          {{ form.correct_answer }} {% if form.correct_answer.errors %}
+          <div class="error-message">{{ form.correct_answer.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Solution & Explanation</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.explanation.id_for_label }}"
+            >Explanation (Optional)</label
+          >
+          <small style="color: #6c757d"
+            >Explain the solution or provide learning points</small
+          >
+          {{ form.explanation }} {% if form.explanation.errors %}
+          <div class="error-message">{{ form.explanation.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">
+          Create MCQ Challenge
+        </button>
+      </div>
+    </form>
+
+    <!-- Fix Code Form -->
+    <form
+      id="fix-code-form"
+      class="challenge-form"
+      method="post"
+      action="{% url 'add_challenge' %}"
+      style="display: none"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="challenge_type" value="fix_code" />
+
+      <div class="form-section">
+        <h3 class="section-title">Challenge Details</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.title.id_for_label }}"
+            >Challenge Title</label
+          >
+          {{ form.title }} {% if form.title.errors %}
+          <div class="error-message">{{ form.title.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.description.id_for_label }}"
+            >Description</label
+          >
+          {{ form.description }} {% if form.description.errors %}
+          <div class="error-message">{{ form.description.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.category.id_for_label }}"
+            >Category</label
+          >
+          {{ form.category }} {% if form.category.errors %}
+          <div class="error-message">{{ form.category.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.difficulty.id_for_label }}"
+            >Difficulty Level</label
+          >
+          {{ form.difficulty }} {% if form.difficulty.errors %}
+          <div class="error-message">{{ form.difficulty.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.points.id_for_label }}"
+            >Points</label
+          >
+          {{ form.points }} {% if form.points.errors %}
+          <div class="error-message">{{ form.points.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.time_limit.id_for_label }}"
+            >Time Limit (seconds)</label
+          >
+          {{ form.time_limit }} {% if form.time_limit.errors %}
+          <div class="error-message">{{ form.time_limit.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Question</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.question.id_for_label }}"
+            >Question Text</label
+          >
+          {{ form.question }} {% if form.question.errors %}
+          <div class="error-message">{{ form.question.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Code Challenge Details</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.starter_code.id_for_label }}"
+            >Starter Code *</label
+          >
+          {{ form.starter_code }} {% if form.starter_code.errors %}
+          <div class="error-message">{{ form.starter_code.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.sample_input.id_for_label }}"
+            >Sample Input</label
+          >
+          {{ form.sample_input }} {% if form.sample_input.errors %}
+          <div class="error-message">{{ form.sample_input.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label
+            class="form-label"
+            for="{{ form.expected_output.id_for_label }}"
+            >Expected Output</label
+          >
+          {{ form.expected_output }} {% if form.expected_output.errors %}
+          <div class="error-message">{{ form.expected_output.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.correct_answer.id_for_label }}"
+            >Correct Answer *</label
+          >
+          <small class="text-muted d-block mb-2"
+            >Enter the expected output or result</small
+          >
+          {{ form.correct_answer }} {% if form.correct_answer.errors %}
+          <div class="error-message">{{ form.correct_answer.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">Solution & Explanation</h3>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.explanation.id_for_label }}"
+            >Explanation (Optional)</label
+          >
+          <small style="color: #6c757d"
+            >Explain the solution or provide learning points</small
+          >
+          {{ form.explanation }} {% if form.explanation.errors %}
+          <div class="error-message">{{ form.explanation.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">
+          Create Fix Code Challenge
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const challengeTypeSelect = document.getElementById(
+      "{{ form.challenge_type.id_for_label }}"
+    );
+    const mcqForm = document.getElementById("mcq-form");
+    const fixCodeForm = document.getElementById("fix-code-form");
+
+    function showRelevantForm() {
+      const selectedValue = challengeTypeSelect.value;
+
+      // Hide both forms initially
+      mcqForm.style.display = "none";
+      fixCodeForm.style.display = "none";
+
+      if (selectedValue === "mcq") {
+        mcqForm.style.display = "block";
+      } else if (selectedValue === "fix_code") {
+        fixCodeForm.style.display = "block";
+      }
+    }
+
+    // Add change event listener
+    challengeTypeSelect.addEventListener("change", showRelevantForm);
+
+    // Initial form display
+    showRelevantForm();
+  });
+</script>
+
+{% endblock %}

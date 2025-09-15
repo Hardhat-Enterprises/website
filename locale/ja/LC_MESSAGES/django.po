@@ -1,0 +1,1342 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-09 16:34+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:59 home/context_processors.py:60
+#: home/templates/admin/home/app_index.html:7
+#: home/templates/includes/footer.html:50
+#: home/templates/includes/navigation.html:52
+msgid "Home"
+msgstr "ホーム"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:61 home/context_processors.py:62
+#: home/templates/includes/footer.html:72
+msgid "About Us"
+msgstr "会社概要"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:63 home/templates/pages/about.html:40
+msgid "What we do"
+msgstr "私たちの仕事"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:64 home/templates/includes/footer.html:74
+msgid "Contact Us"
+msgstr "お問い合わせ"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:65
+msgid "Our Projects"
+msgstr "プロジェクト"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:66
+msgid "Upload Image"
+msgstr "画像のアップロード"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:67 home/templates/includes/navigation.html:170
+msgid "Blog"
+msgstr "ブログ"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:68 home/templates/includes/navigation.html:178
+#: home/templates/pages/publishedblog.html:8
+msgid "Published Blogs"
+msgstr "掲載ブログ"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:69 home/templates/includes/navigation.html:190
+msgid "Discover Hardhat"
+msgstr "ハードハット"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:70 home/templates/includes/navigation.html:199
+msgid "Internships"
+msgstr "インターンシップ"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:71 home/templates/includes/navigation.html:202
+msgid "Job Alerts"
+msgstr "ジョブアラート"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:72 home/templates/includes/navigation.html:215
+msgid "Cyber Challenges"
+msgstr "サイバーチャレンジ"
+
+# [auto-translated provider=DeepL]
+#: home/context_processors.py:73 home/templates/includes/navigation.html:227
+msgid "Quiz"
+msgstr "クイズ"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:36
+msgid "Email"
+msgstr "電子メール"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:42 home/forms.py:125
+msgid "Your Password"
+msgstr "パスワード"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:46 home/forms.py:129
+msgid "Confirm Password"
+msgstr "パスワードの確認"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:55 home/forms.py:138
+msgid "Password must be at least 8 characters long."
+msgstr "パスワードは8文字以上でなければなりません。"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:58 home/forms.py:141
+msgid "Password must include at least one lowercase letter."
+msgstr "パスワードには小文字を1文字以上含めること。"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:61 home/forms.py:144
+msgid "Password must include at least one uppercase letter."
+msgstr "パスワードには少なくとも1つの大文字を含める必要があります。"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:64 home/forms.py:147
+msgid "Password must include at least one number."
+msgstr "パスワードには少なくとも1つの数字を含めること。"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:67 home/forms.py:150
+msgid ""
+"Password must include at least one special character (@, $, !, %, *, ?, &)."
+msgstr "パスワードには少なくとも1つの特殊文字（@, $, !, %, *, ?, &）を含める必要があります。"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:82
+msgid "Email must match your Deakin email."
+msgstr "EメールはDeakinのEメールと一致している必要があります。"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:91 home/forms.py:166
+msgid "First Name"
+msgstr "名前"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:92 home/forms.py:167
+msgid "Last Name"
+msgstr "ラストネーム"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:93
+msgid "Deakin Email Address"
+msgstr "ディーキンEメールアドレス"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:114
+msgid "Business Email"
+msgstr "ビジネスメール"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:120
+msgid "Business Name"
+msgstr "事業名"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:168
+#, fuzzy
+#| msgid "Business Email"
+msgid "Business Email Address"
+msgstr "ビジネスメール"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:182 home/forms.py:239
+msgid "Password"
+msgstr "パスワード"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:199 home/forms.py:222
+msgid "Too many login attempts. Please try again later."
+msgstr "ログイン試行回数が多すぎます。後で再試行してください。"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:277 home/templates/pages/about.html:583
+msgid "Your Email"
+msgstr "Eメール"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:283 home/forms.py:295
+msgid "New Password"
+msgstr "新しいパスワード"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:286 home/forms.py:298
+msgid "Confirm New Password"
+msgstr "新しいパスワードの確認"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:292
+msgid "Old Password"
+msgstr "旧パスワード"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:301
+msgid "Deakin Student ID"
+msgstr "ディーキン学生証"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:304
+msgid "Year"
+msgstr "年"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:514
+msgid "Your name"
+msgstr "お名前"
+
+# [auto-translated provider=DeepL]
+#: home/forms.py:515
+msgid "Your title"
+msgstr "肩書き"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/forms.py:516
+msgid "Your description"
+msgstr "あなたの説明"
+
+# [auto-translated provider=DeepL]
+#: home/mixins.py:27
+msgid "Superuser must have is_superuser = True"
+msgstr "スーパーユーザは is_superuser = True でなければならない。"
+
+# [auto-translated provider=DeepL]
+#: home/mixins.py:29
+msgid "Superuser must have is_staff = True"
+msgstr "スーパーユーザはis_staff = Trueでなければならない。"
+
+# [auto-translated provider=DeepL]
+#: home/mixins.py:39 home/models.py:97
+msgid "created_at"
+msgstr "作成日時"
+
+# [auto-translated provider=DeepL]
+#: home/mixins.py:40 home/models.py:98
+msgid "updated_at"
+msgstr "更新日時"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:74
+msgid "first name"
+msgstr "ファーストネーム"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:75
+msgid "last name"
+msgstr "ラストネーム"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:76
+msgid "deakin email address"
+msgstr "ディーキンのメールアドレス"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:80
+msgid "staff status"
+msgstr "スタッフステータス"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:82
+msgid "Designates whether the user can log into this admin site."
+msgstr "ユーザがこの管理サイトにログインできるかどうかを指定します。"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:85
+msgid "active"
+msgstr "アクティブ"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:88
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr "このユーザーをアクティブとして扱うかどうかを指定します。アカウントを削除する代わりに、この選択を解除してください。"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:93
+msgid "verified"
+msgstr "検証済み"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:95
+msgid "Designates whether the user has verified their account."
+msgstr "ユーザがアカウントを認証したかどうかを指定します。"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:114
+msgid "user"
+msgstr "ユーザー"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:115
+msgid "users"
+msgstr "ユーザー"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:211
+msgid "project title"
+msgstr "プロジェクト・タイトル"
+
+#: home/models.py:212
+msgid "archived"
+msgstr ""
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/models.py:213
+#, fuzzy
+#| msgid "Your description"
+msgid "project description"
+msgstr "あなたの説明"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:222
+msgid "course title"
+msgstr "コース名"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:223
+msgid "course code"
+msgstr "コースコード"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:224
+msgid "postgraduate status"
+msgstr "学位"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:278
+msgid "student_id"
+msgstr "学生ID"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:281
+msgid "Required. Enter Deakin Student ID. Digits only."
+msgstr "必須Deakin Student IDを入力してください。桁のみ。"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:284
+msgid "A user with that Student ID already exists."
+msgstr "その学生IDを持つユーザーはすでに存在しています。"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:289
+msgid "trimester"
+msgstr "学期"
+
+# [auto-translated provider=DeepL]
+#: home/models.py:290
+msgid "unit"
+msgstr "単位"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:10
+msgid ""
+"Hardhat Enterprises offers open-source protection, so it's free for "
+"everyone."
+msgstr "Hardhat Enterprisesはオープンソースのプロテクションを提供しているため、誰でも無料で利用できる。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:49
+msgid "Blog Page"
+msgstr "ブログページ"
+
+#: home/templates/includes/footer.html:73
+msgid "Our Tools"
+msgstr ""
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:92
+msgid "Feedback"
+msgstr "フィードバック"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:99
+msgid "The OWASP Top 10"
+msgstr "OWASPトップ10"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:101
+msgid "Learn more about cyber security standards and applications"
+msgstr "サイバーセキュリティの標準とアプリケーションの詳細"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:110
+msgid "OWASP Top 10"
+msgstr "OWASPトップ10"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:144
+msgid "This page has been visited "
+msgstr "このページは訪問されています"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:146
+msgid "times!"
+msgstr "回である！"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/footer.html:156
+msgid "Last Updated:"
+msgstr "最終更新日"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:40
+#: home/templates/includes/navigation.html:244
+msgid "Search..."
+msgstr "検索..."
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:58
+msgid "Upskilling"
+msgstr "アップスキリング"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:65
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:70
+msgid "Skills"
+msgstr "スキル"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:83
+msgid "Admin Settings"
+msgstr "管理者設定"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:89
+msgid "User Management"
+msgstr "ユーザー管理"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:92
+msgid "Project Assignment"
+msgstr "プロジェクト課題"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:95
+msgid "Project Teams"
+msgstr "プロジェクトチーム"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:98
+msgid "Review Blogs"
+msgstr "レビューブログ"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:101
+msgid "Reports"
+msgstr "レポート"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:111
+msgid "About"
+msgstr "について"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:117
+#: home/templates/pages/index.html:155
+msgid "Projects"
+msgstr "プロジェクト"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:126
+#: home/templates/pages/index.html:165
+msgid "AppAttack"
+msgstr "AppAttack"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:131
+#: home/templates/pages/index.html:180
+msgid "PT-GUI"
+msgstr "PT-GUI"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:136
+#: home/templates/pages/index.html:210
+msgid "Smishing Detection"
+msgstr "スミッシング検知"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:141
+msgid "Deakin CyberSafe VR"
+msgstr "ディーキン・サイバーセーフVR"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:146
+msgid "The Policy Deployment Engine (New)"
+msgstr "ポリシー展開エンジン (新)"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:151
+msgid "Deakin Threat mirror (Finished)"
+msgstr "ディーキン・スレットミラー（完成）"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:160
+msgid "Malware (Finished)"
+msgstr "マルウェア（終了）"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:177
+msgid "Create a Blog"
+msgstr "ブログの作成"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:184
+msgid "Careers"
+msgstr "採用情報"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:193
+msgid "All Jobs"
+msgstr "すべての求人"
+
+#: home/templates/includes/navigation.html:196
+msgid "Graduate Program"
+msgstr ""
+
+#: home/templates/includes/navigation.html:205
+msgid "Career Path Finder"
+msgstr ""
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:222
+msgid "All Challenges"
+msgstr "すべての挑戦"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:264
+msgid "Logout"
+msgstr "ログアウト"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:286
+msgid "Sign In"
+msgstr "サインイン"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:298
+msgid "Sign Up"
+msgstr "会員登録"
+
+# [auto-translated provider=DeepL]
+#: home/templates/includes/navigation.html:321
+msgid "Language"
+msgstr "言語"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:315
+msgid "Recently Viewed Pages"
+msgstr "最近閲覧したページ"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:333
+msgid "💬 Chat with us"
+msgstr "💬 チャットで話そう"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:338
+msgid "Let's chat?"
+msgstr "おしゃべりしましょうか？"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:343
+msgid ""
+"Please fill out the form below to start chatting with the next available "
+"agent."
+msgstr "下記のフォームに必要事項をご記入の上、送信してください。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:345
+msgid "Enter your name"
+msgstr "名前を入力"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:346
+msgid "Enter your email"
+msgstr "メールアドレスを入力してください。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:347
+msgid "Type your message..."
+msgstr "メッセージを入力してください"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:349 home/templates/pages/blogpage.html:57
+msgid "Submit"
+msgstr "投稿する"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:450
+msgid "Session Timeout Warning"
+msgstr "セッションタイムアウト警告"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:454
+msgid ""
+"Your session will expire in 1 minute due to inactivity. Any unsaved changes "
+"will be lost."
+msgstr "無操作により、セッションは1分で終了します。保存されていない変更は失われます。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/layouts/base.html:457
+msgid "Stay Logged In"
+msgstr "ログイン状態を維持する"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:27
+msgid "Full-Service <br class=\"d-none d-md-inline\" />Cyber Security Agency"
+msgstr "フルサービス<br class=\"d-none d-md-inline\" />サイバー・セキュリティ・エージェンシー"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:30
+msgid ""
+"\n"
+"            Hardhat can help you secure your webapps, review your code,\n"
+"            visualize the threats and provide an interractive UI for\n"
+"            pen-testing, that will bring your customers a peace of mind and\n"
+"            security.\n"
+"            "
+msgstr ""
+"\n"
+"            Hardhatは、Webアプリケーションのセキュア化、コードのレビュー、脅威の可視化、魅力的なUIの提供を支援します、\n"
+"            脅威を可視化し、ペンテストのための魅力的なUIを提供します。\n"
+"            を提供し、顧客に安心と安全をもたらします。\n"
+"            セキュリティを提供します。\n"
+"            "
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:54
+msgid "Our Team's Kudoboard"
+msgstr "チームのクドボード"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:56
+msgid "Share your appreciation for our team..."
+msgstr "私たちのチームへの感謝の気持ちを分かち合いましょう..."
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:58
+msgid "Choose note color: "
+msgstr "ノートの色を選ぶ："
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:90
+msgid "Add Note"
+msgstr "メモを追加"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:91
+msgid "Clear Board"
+msgstr "クリアボード"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:321
+msgid "All challenges accepted."
+msgstr "すべての挑戦を受け入れる。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:323
+msgid ""
+" \n"
+"            Hardhat is an experienced and passionate group of cybersecurity\n"
+"            specialists and developers. Every client we work with becomes a part\n"
+"            of the team. Together we face the challenges and celebrate the\n"
+"            victories.\n"
+"            "
+msgstr ""
+"            Hardhatは経験豊富で情熱的なサイバーセキュリティのスペシャリスト集団です。\n"
+"            スペシャリストと開発者の集団です。私たちが一緒に仕事をするすべてのクライアントは\n"
+"            チームの一員となります。共に困難に立ち向かい\n"
+"            勝利を祝うのです。\n"
+"            "
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:331
+msgid ""
+" \n"
+"            With a culture of collaboration and a roster of talent, the Hardhat\n"
+"            team is active in the creative community, endlessly interested in\n"
+"            what's next, and generally pleasant to be around.\n"
+"            "
+msgstr ""
+"            コラボレーションの文化と才能豊かな人材を擁するハードハット\n"
+"            ハードハット・チームは、クリエイティブ・コミュニティーに積極的に参加し\n"
+"            そして一般的に、一緒にいると楽しい。\n"
+"            "
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:377
+msgid "Team Members"
+msgstr "チームメンバー"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:388
+msgid "Projects Secured"
+msgstr "プロジェクト確保"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:401
+msgid "Threats found"
+msgstr "発見された脅威"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:462
+msgid "<span class=\"fw-bold\">Our</span> history"
+msgstr "<span class=\"fw-bold\">我々の歴史</span"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:473
+msgid "Present"
+msgstr "プレゼント"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:475
+msgid ""
+"\n"
+"                  Established an incident response team and provided remote work\n"
+"                  security solutions. Actively engaged with the global\n"
+"                  cybersecurity community. Continued growth, adapting to\n"
+"                  emerging threats and technologies.\n"
+"                  "
+msgstr ""
+"\n"
+"                  インシデントレスポンスチームを立ち上げ、リモートワーク\n"
+"                  セキュリティ・ソリューションを提供。グローバルなサイバーセキュリティコミュニティと積極的に\n"
+"                  積極的に関与。成長を続け、新たな脅威やテクノロジーに\n"
+"                  成長を続けている。\n"
+"                  "
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:485
+msgid "Technology and Innovation"
+msgstr "テクノロジーとイノベーション"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:487
+msgid ""
+"\n"
+"                  Introduced advanced threat detection technologies. Established\n"
+"                  a cybersecurity training academy and embraced AI integration.\n"
+"                  Released a proprietary threat intelligence platform.\n"
+"                  "
+msgstr ""
+"\n"
+"                  高度な脅威検知技術を導入設立\n"
+"                  サイバーセキュリティトレーニングアカデミーを設立し、AIの統合を導入。\n"
+"                  独自の脅威インテリジェンス・プラットフォームをリリース。\n"
+"                  "
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:496
+msgid "Growth and Recognition"
+msgstr "成長と評価"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:498
+msgid ""
+"\n"
+"                  Expanded services to include penetration testing and\n"
+"                  vulnerability assessments. Formed strategic partnerships and\n"
+"                  received industry awards. Achieved international expansion and\n"
+"                  collaborated on a major research project.\\\n"
+"                  "
+msgstr ""
+"\n"
+"                  ペネトレーション・テストと脆弱性評価を含む\n"
+"                  脆弱性評価戦略的パートナーシップを結び\n"
+"                  業界賞を受賞国際的な拡大を達成し\n"
+"                  主要研究プロジェクトに協力。\n"
+"                  "
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:508
+msgid "Establishment and Early Success"
+msgstr "設立と初期の成功"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:510
+msgid ""
+"\n"
+"                  Founded in 2022 by a group of cybersecurity enthusiasts.\n"
+"                  Initial focus on basic cybersecurity awareness training and\n"
+"                  consulting. Secured first clients and gained a reputation for\n"
+"                  reliable services.\n"
+"                  "
+msgstr ""
+"\n"
+"                  2022年、サイバーセキュリティの愛好家グループにより設立。\n"
+"                  当初はサイバーセキュリティに関する基本的な意識向上のためのトレーニングとコンサルティングに重点を置く。\n"
+"                  コンサルティングに注力。最初のクライアントを獲得し、信頼性の高い\n"
+"                  信頼性の高いサービスを提供。\n"
+"                  "
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:556
+msgid "Want to work with us?"
+msgstr "私たちと一緒に働きたいですか？"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:557
+msgid "Awesome! Tell us about yourself"
+msgstr "素晴らしいあなた自身について教えてください"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:565
+msgid "Your Name"
+msgstr "お名前"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:602
+msgid "Your Message"
+msgstr "あなたのメッセージ"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:605
+msgid "How can we help you?"
+msgstr "どのようなご用件でしょうか？"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/about.html:615
+msgid "Send Message"
+msgstr "メッセージを送る"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:24
+msgid "User Blogs"
+msgstr "ユーザーブログ"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:26
+msgid "Please provide your blog details with our company."
+msgstr "あなたのブログの詳細を弊社にお知らせください。"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:32
+msgid "Share Your Blog"
+msgstr "ブログを共有する"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:35
+msgid "Name:"
+msgstr "名前"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:41
+msgid "Blog Title:"
+msgstr "ブログタイトル"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:46
+msgid "Blog Description:"
+msgstr "ブログの説明"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:51
+msgid "Image Upload (optional):"
+msgstr "画像のアップロード（オプション）："
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:55
+msgid "Reset"
+msgstr "リセット"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:64
+msgid "Recent Blog Pages"
+msgstr "最近のブログページ"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:77
+msgid "No Image"
+msgstr "画像なし"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:88
+msgid "Edit"
+msgstr "編集"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:92
+msgid "Delete"
+msgstr "削除"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:100
+msgid "No Blogs Yet"
+msgstr "ブログはまだない"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:112
+msgid "Edit Blog"
+msgstr "ブログ編集"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:120
+msgid "Name"
+msgstr "名称"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:125
+msgid "Blog Title"
+msgstr "ブログタイトル"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:130
+msgid "Blog Description"
+msgstr "ブログの説明"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:135
+msgid "Change Image (optional)"
+msgstr "画像の変更（オプション）"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:141
+msgid "Cancel"
+msgstr "キャンセル"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/blogpage.html:142
+msgid "Save Changes"
+msgstr "変更を保存する"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:28
+msgid "Hardhat Enterprises"
+msgstr "ハードハット・エンタープライズ"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:29
+msgid "Security is a necessity. Not a choice"
+msgstr "セキュリティーは必要不可欠だ。選択ではない"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:31
+msgid "Explore Projects"
+msgstr "プロジェクトを探る"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:32
+msgid "Join Us"
+msgstr "参加する"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:105
+msgid "Company Vision"
+msgstr "企業ビジョン"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:106
+msgid ""
+"Hardhat Enterprises is an organisation that aims to create cyber weapons and"
+" tools that can be used to empower white-hat operations. All deliverables "
+"produced by the company will be open source so that anyone may use and "
+"benefit from them. These deliverables should either improve on existing "
+"tools or fill a market need that is not yet met."
+msgstr ""
+"Hardhat "
+"Enterprisesは、ホワイトハット・オペレーションを強化するために使用できるサイバー兵器やツールを作成することを目的とした組織である。同社が作成する成果物はすべてオープンソースとし、誰もがそれを使用し、利益を得ることができるようにする。これらの成果物は、既存のツールを改良するか、まだ満たされていない市場のニーズを満たすものでなければならない。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:112
+msgid "Company Mission"
+msgstr "会社の使命"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:113
+msgid ""
+"Achieve an engaging learning experience for students within the company. An "
+"opportunity for students to gain cross department/project experience and the"
+" opportunity to share their expertise outside of their project team."
+msgstr ""
+"社内で学生にとって魅力的な学習体験を実現する。学生が部門やプロジェクトを横断して経験を積み、プロジェクトチーム以外の専門知識を共有する機会を得る。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:166
+msgid ""
+"We deliver comprehensive reports to clients, providing actionable insights "
+"to enhance code security. With a commitment to excellence, AppAttack "
+"empowers organizations to proactively safeguard their digital assets"
+msgstr ""
+"コードセキュリティを強化するための実用的な洞察を提供する包括的なレポートをお客様にお届けします。AppAttackは、卓越性へのコミットメントにより、企業がデジタル資産をプロアクティブに保護できるよう支援します。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:168 home/templates/pages/index.html:183
+#: home/templates/pages/index.html:198 home/templates/pages/index.html:213
+#: home/templates/pages/index.html:228 home/templates/pages/index.html:243
+#: home/templates/pages/index.html:258
+msgid "Learn More"
+msgstr "さらに詳しく"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:181
+msgid ""
+"Introducing the Deakin Detonator Toolkit (DDT) – the cutting-edge arsenal "
+"for modern penetration testers. Born from the innovative minds at PT-GUI, "
+"DDT is more than just a toolkit; it's a revolution in cybersecurity "
+"practice."
+msgstr ""
+"Deakin Detonator Toolkit (DDT) のご紹介 - 現代の侵入テスターのための最先端の武器。PT-"
+"GUIの革新的な頭脳から生まれたDDTは、単なるツールキットではなく、サイバーセキュリティの実践における革命です。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:195
+msgid "CyberSafe VR"
+msgstr "サイバーセーフVR"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:196
+msgid ""
+"Deakin CyberSafe VR revolutionises cybersecurity training for small "
+"businesses by using interactive VR technology to blend theory with practical"
+" application for owners and employees taking cybersecurity measures."
+msgstr ""
+"Deakin CyberSafe "
+"VRは、インタラクティブなVR技術を使用して、サイバーセキュリティ対策を講じる経営者や従業員のための実践的なアプリケーションと理論を融合させることにより、中小企業向けのサイバーセキュリティ・トレーニングに革命をもたらします。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:211
+msgid ""
+"Smishing Detection aims to develop an innovative smishing detection app for "
+"Android and iOS devices to moderate the risks associated with SMS phishing "
+"attacks."
+msgstr ""
+"Smishing "
+"Detectionは、SMSフィッシング攻撃に関連するリスクを軽減するために、AndroidおよびiOSデバイス用の革新的なスミッシング検知アプリを開発することを目的としています。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:225
+msgid "Threat Mirror <br>(Project Paused)"
+msgstr "脅威の鏡<br>（プロジェクト休止）"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:226
+msgid ""
+"Threat Mirror aims to investigate open-source threat intelligence platforms,"
+" assessing their suitability and adaptability for SMEs and developing "
+"economies."
+msgstr ""
+"Threat Mirror "
+"は、オープンソースの脅威インテリジェンスプラットフォームを調査し、中小企業や発展途上国への適合性や適応性を評価することを目的としている。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:240
+msgid "Malware Visualization"
+msgstr "マルウェアの可視化"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:241
+msgid ""
+"The Malware Visualisation project creates a user-friendly tool that "
+"simplifies malware analysis by integrating with existing visual analytics "
+"applications."
+msgstr ""
+"Malware "
+"Visualisationプロジェクトは、既存のビジュアル分析アプリケーションと統合することで、マルウェア分析を簡素化するユーザーフレンドリーなツールを作成します。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:255
+msgid "The Policy Deployment Engine"
+msgstr "ポリシー展開エンジン"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:256
+msgid ""
+"The Policy Deployment Engine is a tool that allows users to deploy policies "
+"to their systems."
+msgstr "Policy Deployment Engineは、ユーザーがシステムにポリシーをデプロイするためのツールである。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:423
+msgid "Cybersecurity News"
+msgstr "サイバーセキュリティ・ニュース"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:431
+msgid "TROX Stealer Malware Spreads via Fake Updates"
+msgstr "TROX Stealerマルウェア、偽アップデートで拡散"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:432
+msgid ""
+"A new wave of cyberattacks spreads malware through fake software update "
+"alerts targeting unsuspecting users globally."
+msgstr "新たなサイバー攻撃の波は、世界中の無防備なユーザーを標的とした偽のソフトウェア更新アラートを通じてマルウェアを拡散させている。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:433 home/templates/pages/index.html:445
+#: home/templates/pages/index.html:457
+msgid "Read More"
+msgstr "続きを読む"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:443
+msgid "AI Shaping the Future of Cyber Defense"
+msgstr "サイバー防衛の未来を形作るAI"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:444
+msgid ""
+"Experts explore how artificial intelligence is transforming threat detection"
+" and proactive cybersecurity measures worldwide."
+msgstr "専門家は、人工知能がどのように世界中で脅威の検出とプロアクティブなサイバーセキュリティ対策を変革しているかを探る。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:455
+msgid "Zero Trust Security: Why It Matters in 2025"
+msgstr "ゼロ・トラスト・セキュリティ：2025年に重要な理由"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:456
+msgid ""
+"With rising remote work trends, the zero-trust model becomes essential in "
+"securing networks beyond traditional perimeters."
+msgstr ""
+"リモートワークのトレンドが高まる中、ゼロトラスト・モデルは、従来の境界線を越えたネットワークの安全性を確保する上で不可欠なものとなっている。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:504
+msgid "FAQ"
+msgstr "よくあるご質問"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:505
+msgid "What Our Clients Recently ask"
+msgstr "クライアントからの最近の質問"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:510
+msgid "What is cybersecurity and why do I need it? "
+msgstr "サイバーセキュリティとは何か、なぜ必要なのか？"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:513
+msgid ""
+"Cybersecurity is the practice of protecting systems, networks, and programs "
+"from digital attacks, data breaches, and other cyber threats. It is "
+"essential for businesses and individuals to safeguard sensitive information "
+"from malicious activities."
+msgstr ""
+"サイバーセキュリティとは、システム、ネットワーク、プログラムをデジタル攻撃、データ漏洩、その他のサイバー脅威から保護することである。悪意のある活動から機密情報を守ることは、企業や個人にとって不可欠である。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:519
+msgid "How can I protect my business from cyber threats? "
+msgstr "サイバー脅威からビジネスを守るには？"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:522
+msgid ""
+"Our cybersecurity services offer comprehensive solutions including threat "
+"monitoring, data encryption, firewall protection, penetration testing, and "
+"employee training. These measures can help reduce the risk of cyber threats."
+msgstr ""
+"当社のサイバーセキュリティサービスは、脅威の監視、データの暗号化、ファイアウォール保護、侵入テスト、従業員トレーニングなどの包括的なソリューションを提供します。これらの対策により、サイバー脅威のリスクを軽減することができます。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:528
+msgid "What is a data breach and how can I prevent one? "
+msgstr "データ漏えいとは何か、どうすればデータ漏えいを防ぐことができるのか？"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:531
+msgid ""
+"A data breach occurs when sensitive information is accessed or stolen by "
+"unauthorized individuals. Preventive measures include securing networks, "
+"using strong passwords, encrypting sensitive data, and regularly updating "
+"security protocols."
+msgstr ""
+"データ漏洩は、機密情報が権限のない個人によってアクセスされたり、盗まれたりすることで発生します。予防策には、ネットワークの保護、強力なパスワードの使用、機密データの暗号化、セキュリティ・プロトコルの定期的な更新などが含まれる。"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:544
+msgid "Announcement"
+msgstr "発表"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:548
+msgid "{{ announcement_message }}"
+msgstr "{{ announcement_message }}"
+
+# [auto-translated provider=DeepL]
+#: home/templates/pages/index.html:551
+msgid "Close"
+msgstr "閉じる"
+
+# [auto-translated provider=DeepL] [auto-translated provider=DeepL]
+#: home/templates/pages/publishedblog.html:57
+msgid "No blogs have been published yet."
+msgstr "まだブログは公開されていない。"
+
+# [auto-translated provider=DeepL]
+#: home/validators.py:21
+msgid "Enter a valid student ID. This value must contain 9 digits only"
+msgstr "有効な学生IDを入力してください。この値は9桁のみです。"
+
+#: home/validators.py:42
+msgid "You cannot reuse your current password."
+msgstr ""
+
+#: home/validators.py:54
+msgid "You cannot reuse one of your recent passwords."
+msgstr ""
+
+#: home/validators.py:59
+#, python-format
+msgid "You cannot reuse your last %(n)d passwords."
+msgstr ""
+
+# [auto-translated provider=DeepL]
+#~ msgid "Email must be valid email."
+#~ msgstr "電子メールは有効な電子メールでなければなりません。"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Testimonial"
+#~ msgstr "証言"
+
+# [auto-translated provider=DeepL]
+#~ msgid "What Our Clients Say"
+#~ msgstr "お客様の声"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\"We have been working with Hardhat for over a year now, and their "
+#~ "cybersecurity services have been a game-changer for our business. From "
+#~ "preventing ransomware attacks to securing our network infrastructure, they "
+#~ "have given us the peace of mind to focus on our growth. Their team is "
+#~ "responsive, professional, and always one step ahead. Highly recommend\""
+#~ msgstr ""
+#~ "「Hardhatのサイバーセキュリティ・サービスは、私たちのビジネスを大きく変えてくれました。ランサムウェア攻撃の防止からネットワーク・インフラストラクチャの安全確保まで、Hardhatのおかげで安心して当社の成長に専念することができます。同社のチームは迅速でプロフェッショナルであり、常に一歩先を進んでいます。強くお勧めします。"
+
+# [auto-translated provider=DeepL]
+#~ msgid "James Thompson, CTO, Tech Innovations Ltd."
+#~ msgstr "ジェームス・トンプソン、テックイノベーションズ社CTO"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\"As a small business, we were initially hesitant about investing in "
+#~ "cybersecurity. However, after partnering with Hardhat, we quickly realized "
+#~ "how critical it is to protect our data and systems. Their tailored solutions"
+#~ " have kept us safe from cyber threats, and their proactive approach has "
+#~ "helped us build a secure foundation for the future. We now feel more "
+#~ "confident than ever about our digital security.\""
+#~ msgstr ""
+#~ "「中小企業なので、当初はサイバーセキュリティへの投資をためらっていました。しかし、Hardhatとの提携後、当社のデータとシステムを保護することがいかに重要であるかをすぐに理解しました。Hardhatのカスタマイズされたソリューションは、サイバー脅威から当社を守り、その積極的なアプローチによって、将来に向けて安全な基盤を築くことができました。今では、デジタル・セキュリティに関して、これまで以上に自信を持っています。\""
+
+# [auto-translated provider=DeepL]
+#~ msgid "Sarah Mitchell, Founder, EcoProducts Co."
+#~ msgstr "サラ・ミッチェル、エコプロダクツ社創設者"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\"In the fast-paced world of finance, cybersecurity is not a luxury—it's a "
+#~ "necessity. Hardhat has been instrumental in fortifying our defenses against "
+#~ "sophisticated cyber threats. Their expertise in threat detection, incident "
+#~ "response, and continuous monitoring has been invaluable. They've helped us "
+#~ "navigate through potential vulnerabilities and maintain our clients' trust. "
+#~ "A top-tier cybersecurity partner!\""
+#~ msgstr ""
+#~ "「ペースの速い金融の世界では、サイバーセキュリティは贅沢品ではありません。Hardhatは、高度なサイバー脅威に対する当社の防御を強化するのに役立っています。脅威の検出、インシデント対応、継続的なモニタリングにおける彼らの専門知識は非常に貴重です。彼らのおかげで、潜在的な脆弱性を克服し、顧客の信頼を維持することができました。トップクラスのサイバーセキュリティ・パートナーです。"
+
+# [auto-translated provider=DeepL]
+#~ msgid "David Harris, Risk Manager, FinSecure Solutions"
+#~ msgstr "デビッド・ハリス、フィンセキュア・ソリューションズ、リスクマネージャー"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Full-Service Cybersecurity Agency"
+#~ msgstr "総合サイバーセキュリティ企業"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "\n"
+#~ "                        Hardhat Enterprises enhances white-hat cybersecurity by safeguarding assets, reducing threats, and thwarting vulnerability exploits. Our cybersecurity services, including penetration testing and open-source security tools, address market gaps and secure your digital assets.\n"
+#~ "                        "
+#~ msgstr ""
+#~ "\n"
+#~ "                        Hardhat Enterprisesは、資産を保護し、脅威を減らし、脆弱性の悪用を阻止することで、ホワイトハットのサイバーセキュリティを強化します。侵入テストやオープンソースセキュリティツールを含む当社のサイバーセキュリティサービスは、市場のギャップに対処し、お客様のデジタル資産を保護します。\n"
+#~ "                        "
+
+# [auto-translated provider=DeepL]
+#~ msgid "Our <span class=\"fw-bold\">Cybersecurity Services</span>"
+#~ msgstr "<span class=\"fw-bold\">サイバーセキュリティ・サービス</span"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "Explore how Hardhat Enterprises protects your organization with advanced "
+#~ "white-hat cybersecurity solutions."
+#~ msgstr ""
+#~ "Hardhat Enterprisesが高度なホワイトハット・サイバーセキュリティ・ソリューションでどのように組織を保護しているかをご覧ください。"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Penetration Testing Services"
+#~ msgstr "侵入テストサービス"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "We provide thorough penetration testing services to identify vulnerabilities"
+#~ " in your systems and applications, ensuring robust cybersecurity protection."
+#~ msgstr "お客様のシステムやアプリケーションの脆弱性を特定する徹底的な侵入テストサービスを提供し、強固なサイバーセキュリティ保護を実現します。"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Secure Code Review"
+#~ msgstr "安全なコードレビュー"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "Our experts offer secure code review services to ensure your code is free "
+#~ "from vulnerabilities, safeguarding your applications from cyber threats."
+#~ msgstr ""
+#~ "当社の専門家は、お客様のコードに脆弱性がないことを確認する安全なコードレビューサービスを提供し、お客様のアプリケーションをサイバー脅威から守ります。"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Open-Source Security Tools"
+#~ msgstr "オープンソースのセキュリティ・ツール"
+
+# [auto-translated provider=DeepL]
+#~ msgid ""
+#~ "We develop open-source security tools to address market gaps, empowering "
+#~ "organizations with ethical hacking tools for threat mitigation."
+#~ msgstr ""
+#~ "オープンソースのセキュリティツールを開発し、市場のギャップに対応することで、脅威を軽減するための倫理的ハッキングツールを企業に提供しています。"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Work With Our Cybersecurity Agency"
+#~ msgstr "サイバーセキュリティ・エージェンシーとの連携"
+
+# [auto-translated provider=DeepL]
+#~ msgid "Tell us about your cybersecurity needs!"
+#~ msgstr "サイバーセキュリティのニーズについてお聞かせください！"
+
+# [auto-translated provider=DeepL]
+#~ msgid "How can our cybersecurity services help you?"
+#~ msgstr "当社のサイバーセキュリティ・サービスはどのようにお役に立ちますか？"
