@@ -3714,19 +3714,23 @@ fieldset:disabled .btn {
   margin: 15px auto;
 }
 
-/* Override form-control styles for mobile search boxes */
-.form-control.search-box-mobile {
+/* Override form-control styles for mobile search boxes - highest specificity */
+input.form-control.search-box-mobile,
+input[type="search"].form-control.search-box-mobile {
   background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
   box-shadow: none !important;
+  background-image: none !important;
 }
 
-.form-control.search-box-mobile:focus {
+input.form-control.search-box-mobile:focus,
+input[type="search"].form-control.search-box-mobile:focus {
   background-color: white !important;
   color: #333 !important;
   border-color: #ffcd11 !important;
   box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
 }
 
 .search-box-mobile {
@@ -3745,19 +3749,23 @@ fieldset:disabled .btn {
   box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
 }
 
-/* Dark mode - keep mobile search box white */
-body.dark-mode .form-control.search-box-mobile {
+/* Dark mode - keep mobile search box white - highest specificity */
+body.dark-mode input.form-control.search-box-mobile,
+body.dark-mode input[type="search"].form-control.search-box-mobile {
   background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
   box-shadow: none !important;
+  background-image: none !important;
 }
 
-body.dark-mode .form-control.search-box-mobile:focus {
+body.dark-mode input.form-control.search-box-mobile:focus,
+body.dark-mode input[type="search"].form-control.search-box-mobile:focus {
   background-color: white !important;
   color: #333 !important;
   border-color: #ffcd11 !important;
   box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
 }
 
 body.dark-mode .search-box-mobile {
@@ -3842,19 +3850,23 @@ body.dark-mode .mobile-result-box div:hover {
   margin: 20px;
 }
 
-/* Override form-control styles for search boxes */
-.form-control.search-box {
+/* Override form-control styles for search boxes - highest specificity */
+input.form-control.search-box,
+input[type="search"].form-control.search-box {
   background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
   box-shadow: none !important;
+  background-image: none !important;
 }
 
-.form-control.search-box:focus {
+input.form-control.search-box:focus,
+input[type="search"].form-control.search-box:focus {
   background-color: white !important;
   color: #333 !important;
   border-color: #ffcd11 !important;
   box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
 }
 
 .search-box {
@@ -3872,19 +3884,23 @@ body.dark-mode .mobile-result-box div:hover {
   box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
 }
 
-/* Dark mode - keep search box white */
-body.dark-mode .form-control.search-box {
+/* Dark mode - keep search box white - highest specificity */
+body.dark-mode input.form-control.search-box,
+body.dark-mode input[type="search"].form-control.search-box {
   background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
   box-shadow: none !important;
+  background-image: none !important;
 }
 
-body.dark-mode .form-control.search-box:focus {
+body.dark-mode input.form-control.search-box:focus,
+body.dark-mode input[type="search"].form-control.search-box:focus {
   background-color: white !important;
   color: #333 !important;
   border-color: #ffcd11 !important;
   box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
 }
 
 body.dark-mode .search-box {
