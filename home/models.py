@@ -78,7 +78,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     description = models.TextField(_("description"), blank=True, null=True)
     contact_information = models.TextField(_("contact information"), blank=True, null=True)
     connect_with_me = models.JSONField(_("connect with me"), default=dict, blank=True, null=True)
-    # Example: {"linkedin": "https://linkedin.com/in/...", "github": "https://github.com/...
 
     is_staff = models.BooleanField(
         _("staff status"),
