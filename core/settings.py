@@ -20,8 +20,6 @@ from pymemcache.client.base import Client
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 

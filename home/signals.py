@@ -10,6 +10,8 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save, post_save
 from django.utils.timezone import now
 from django_user_agents.utils import get_user_agent
+from django.contrib.auth.signals import user_login_failed
+from django.core.signals import request_finished
 
 import logging
 from .models import UserDevice
@@ -112,7 +114,6 @@ def clear_user_sessions(user, current_session_key=None):
     sessions = Session.objects.filter(expire_date__gte=now())
     if current_session_key:
         sessions = sessions.exclude(session_key=current_session_key)
-
     for session in sessions:
         session_data = session.get_decoded()
         if str(user.id) == session_data.get('_auth_user_id'):
