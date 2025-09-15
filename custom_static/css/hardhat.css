@@ -3714,6 +3714,21 @@ fieldset:disabled .btn {
   margin: 15px auto;
 }
 
+/* Override form-control styles for mobile search boxes */
+.form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+}
+
+.form-control.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
 .search-box-mobile {
   width: 100%;
   padding: 10px 50px 10px 15px;
@@ -3731,6 +3746,20 @@ fieldset:disabled .btn {
 }
 
 /* Dark mode - keep mobile search box white */
+body.dark-mode .form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .form-control.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
 body.dark-mode .search-box-mobile {
   background-color: white !important;
   color: #333 !important;
@@ -3813,6 +3842,21 @@ body.dark-mode .mobile-result-box div:hover {
   margin: 20px;
 }
 
+/* Override form-control styles for search boxes */
+.form-control.search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+}
+
+.form-control.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
 .search-box {
   border-radius: 25px;
   padding: 10px 15px;
@@ -3829,6 +3873,20 @@ body.dark-mode .mobile-result-box div:hover {
 }
 
 /* Dark mode - keep search box white */
+body.dark-mode .form-control.search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .form-control.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
 body.dark-mode .search-box {
   background-color: white !important;
   color: #333 !important;
