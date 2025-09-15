@@ -27,19 +27,14 @@ print("✅ Signals loaded")
 # =========================
 @receiver(user_logged_in)
 def set_session_last_activity_on_login(sender, request, user, **kwargs):
-    """
-    Set the initial 'last_activity' in session on user login.
-    """
     request.session['last_activity'] = timezone.now().timestamp()
 
-    # Force session save if no session key available
     if not request.session.session_key:
         request.session.save()
 
     current_session_key = request.session.session_key
     logger.info(f"[Login] Current session key: {current_session_key}")
 
-    # Prevent concurrent logins
     if hasattr(user, 'current_session_key') and user.current_session_key and user.current_session_key != current_session_key:
         try:
             old_session = Session.objects.get(session_key=user.current_session_key)
@@ -48,7 +43,6 @@ def set_session_last_activity_on_login(sender, request, user, **kwargs):
         except Session.DoesNotExist:
             logger.warning("[Login] Old session not found.")
 
-    # Save new session key to user model
     user.current_session_key = current_session_key
     user.save()
 
