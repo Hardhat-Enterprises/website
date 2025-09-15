@@ -326,5 +326,23 @@ body.dark-mode textarea[name="code_input"] {
 .btn-retry:hover {
     background-color: #138496;
 }
+
+/* START: ADDED DARK MODE FIX FOR CHALLENGE FEEDBACK MODAL */
+body.dark-mode .modal-content {
+    background-color: #2c2f33; /* Dark background for the modal */
+    color: #f8f9fa;            /* Light text for the modal content */
+    border: 1px solid #555;     /* A slightly visible border */
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+    border-color: #444;         /* Darker border for header/footer sections */
+}
+
+/* Make the 'X' close button visible on dark headers */
+body.dark-mode .modal-header .btn-close {
+    filter: invert(1) grayscale(100) brightness(2);
+}
+/* END: ADDED DARK MODE FIX FOR CHALLENGE FEEDBACK MODAL */
 </style>
 {% endblock %}
