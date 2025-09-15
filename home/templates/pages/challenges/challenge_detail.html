@@ -62,15 +62,27 @@
                 </form>
             {% endif %}
         </div>
+    </div>
+</div>
 
-        <!-- Slide-Up Feedback -->
-        <div id="slide-result" class="slide-result hidden"></div>
-
-        {% if next_challenge %}
-            <div class="text-center" style="margin-top: 40px;">
-                <a href="{% url 'challenge_detail' next_challenge.id %}" class="btn btn-secondary">Next Challenge</a>
-            </div>
-        {% endif %}
+<!-- Feedback Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header" id="modalHeader">
+          <h5 class="modal-title" id="feedbackModalLabel">Result</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Content is populated by JavaScript -->
+        </div>
+        <div class="modal-footer" id="modalFooter">
+          <a href="{% url 'category_challenges' challenge.category %}" class="btn btn-secondary">Back to Category</a>
+          {% if next_challenge %}
+            <a href="{% url 'challenge_detail' next_challenge.id %}" class="btn btn-primary" id="nextChallengeBtn" style="display: none;">Next Challenge</a>
+          {% endif %}
+        </div>
+      </div>
     </div>
 </div>
 
@@ -79,11 +91,16 @@ document.addEventListener('DOMContentLoaded', function () {
     let timeLeft = parseInt("{{ challenge.time_limit|default:60 }}");
     const timerSpan = document.getElementById('timer-seconds');
     const form = document.getElementById('challenge-form');
-    const slideResult = document.getElementById('slide-result');
     const retryBtn = document.getElementById('retry-btn');
     const timerBox = document.getElementById('timer');
     let timerStopped = false;
     let timerInterval = setInterval(updateTimer, 1000);
+
+    const feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+    const modalHeader = document.getElementById('modalHeader');
+    const modalBody = document.getElementById('modalBody');
+    const modalTitle = document.getElementById('feedbackModalLabel');
+    const nextChallengeBtn = document.getElementById('nextChallengeBtn');
 
     function updateTimer() {
         if (timerStopped) return;
@@ -91,15 +108,13 @@ document.addEventListener('DOMContentLoaded', function () {
         timerSpan.textContent = timeLeft;
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            showSlideResult("⏱ Time's up! Challenge marked as incorrect.", false);
+            modalHeader.className = 'modal-header bg-warning text-dark';
+            modalTitle.textContent = "Time's Up!";
+            modalBody.innerHTML = `<p>You ran out of time. The challenge has been marked as incorrect.</p>`;
+            feedbackModal.show();
             disableForm();
+            retryBtn.style.display = 'inline-block';
         }
-    }
-
-    function showSlideResult(message, isCorrect) {
-        slideResult.textContent = message;
-        slideResult.className = 'slide-result show ' + (isCorrect ? 'correct' : 'incorrect');
-        setTimeout(() => slideResult.classList.remove('show'), 4000);
     }
 
     function disableForm() {
@@ -120,8 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (codeInput) {
             codeInput.value = `{{ challenge.starter_code|escapejs }}`;
         }
-
-        slideResult.classList.remove("show", "correct", "incorrect");
 
         timeLeft = parseInt("{{ challenge.time_limit|default:60 }}");
         timerSpan.textContent = timeLeft;
@@ -152,21 +165,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
             timerBox.classList.add("stop-pulse");
             timerBox.classList.remove("correct");
+            
             if (data.is_correct) {
+                modalHeader.className = 'modal-header bg-success text-white';
+                modalTitle.textContent = 'Correct!';
+                modalBody.innerHTML = `
+                    <p class="fs-5">${data.message}</p>
+                    <p>You earned <strong>${data.score} points!</strong></p>
+                    <hr>
+                    <p><strong>Explanation:</strong> ${data.explanation || "Well done!"}</p>
+                `;
                 timerBox.classList.add("correct");
+            } else {
+                modalHeader.className = 'modal-header bg-danger text-white';
+                modalTitle.textContent = 'Incorrect!';
+                modalBody.innerHTML = `
+                    <p class="fs-5">${data.message}</p>
+                    <hr>
+                    <p><strong>Explanation:</strong> ${data.explanation || "No explanation provided."}</p>
+                `;
             }
 
-            showSlideResult(
-                data.is_correct ? `✅ Correct! You earned ${data.score} points.` : `❌ Incorrect. ${data.explanation || "Try again."}`,
-                data.is_correct
-            );
-
+            if (nextChallengeBtn) {
+                if ("{{ next_challenge }}" && data.is_correct) {
+                    nextChallengeBtn.style.display = 'inline-block';
+                } else {
+                    nextChallengeBtn.style.display = 'none';
+                }
+            }
+            
+            feedbackModal.show();
             disableForm();
             retryBtn.style.display = "inline-block";
         })
         .catch(err => {
             console.error("Error submitting:", err);
-            showSlideResult("❌ There was an error processing your submission. Please try again.", false);
+            modalHeader.className = 'modal-header bg-warning text-dark';
+            modalTitle.textContent = 'Error';
+            modalBody.innerHTML = '<p>There was an error processing your submission. Please try again.</p>';
+            feedbackModal.show();
         });
     });
 
@@ -186,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
     max-width: 600px;
     margin: 30px auto 0;
 }
-.dark-mode .challenge-card {
+body.dark-mode .challenge-card {
     background-color: #1e1e1e;
     color: #f8f9fa;
     border-color: #555;
@@ -194,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 .challenge-title { font-size: 2.5rem; }
 .challenge-description { font-size: 1.2rem; color: #333; }
-.dark-mode .challenge-description { color: #ccc; }
+body.dark-mode .challenge-description { color: #ccc; }
 
 .challenge-timer {
     text-align: center;
@@ -261,7 +298,7 @@ textarea[name="code_input"] {
     background-color: #fff;
     border: 2px solid #ccc;
 }
-.dark-mode textarea[name="code_input"] {
+body.dark-mode textarea[name="code_input"] {
     background-color: #1e1e1e;
     color: #eee;
     border-color: #444;
@@ -289,21 +326,5 @@ textarea[name="code_input"] {
 .btn-retry:hover {
     background-color: #138496;
 }
-
-.slide-result {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.1rem;
-    padding: 15px;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: 30px auto 0;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.5s ease;
-}
-.slide-result.show { opacity: 1; transform: translateY(0); }
-.slide-result.correct { background-color: #d4edda; color: #155724; }
-.slide-result.incorrect { background-color: #f8d7da; color: #721c24; }
 </style>
 {% endblock %}
