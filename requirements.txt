@@ -38,6 +38,9 @@ wheel==0.45.1
 nh3==0.2.18                    
 bleach==6.2.0
 
+# Device Detection
+django-user-agents==0.4.0
+
 # Image Processing
 Pillow==11.3.0
 
