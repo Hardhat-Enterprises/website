@@ -1,15 +1,21 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
- 
+
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
+
+
+from home.models import TeamMember
+ 
+
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from .forms import ExperienceForm
 from .models import Experience
@@ -75,6 +81,7 @@ from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from datetime import timedelta
+
  
 # import os
  
@@ -134,6 +141,9 @@ from .models import Passkey
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
+
+from home.models import TeamMember  
+
 def get_login_redirect_url(user):
     """
     Determine where to redirect user after login based on join-us completion status.
@@ -146,6 +156,7 @@ def get_login_redirect_url(user):
     else:
         # User hasn't completed join-us form, redirect to join-us page
         return '/join-us/'
+
 
 
 def index(request):
@@ -178,6 +189,10 @@ def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)
  
 def about_us(request):
+
+    team_members = TeamMember.objects.all()
+    return render(request, 'pages/about.html', {'team_members': team_members})
+
     return render(request, 'pages/about.html')
  
 def security_tools(request):
@@ -276,6 +291,7 @@ def security_tools(request):
         'tools': tools_data
     }
     return render(request, 'pages/our_tools.html', context)
+
 
 
 def what_we_do(request):
@@ -2686,7 +2702,6 @@ def vault_view(request):
             vault_doc.size_bytes = request.FILES['file'].size
             vault_doc.save()
             form.save_m2m()  # Save many-to-many relationships
-            messages.success(request, 'Document uploaded successfully!')
             return redirect('vault')
     else:
         form = VaultUploadForm()
@@ -2698,3 +2713,19 @@ def vault_view(request):
     }
     return render(request, 'pages/vault.html', context)
 
+def delete_document(request, doc_id):
+    doc = get_object_or_404(VaultDocument, id=doc_id)
+
+    # Only staff or the uploader can delete
+    if not (request.user.is_staff or doc.uploaded_by_id == request.user.id):
+        raise PermissionDenied("You don't have permission to delete this document.")
+
+    if request.method == "POST":
+        # optionally remove the file from storage too
+        if doc.file:
+            doc.file.delete(save=False)
+        doc.delete()
+        return redirect('vault')
+
+    # if someone hits the URL with GET, just go back
+    return redirect('vault')
