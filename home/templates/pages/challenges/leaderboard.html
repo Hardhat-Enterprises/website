@@ -1,0 +1,341 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body.light-mode .navbar {
+    background-color: #000 !important;
+  }
+
+  body.light-mode {
+    background-color: #f1b100de !important;
+  }
+
+  body.dark-mode {
+    background-color: #f1b100de !important;
+  }
+
+  .leaderboard-container {
+    background-color: #1e1e1e;
+    border: 2px solid #fff;
+    border-radius: 16px;
+    padding: 30px;
+    margin: 20px 0;
+    color: #fff;
+  }
+
+  .dark-mode .leaderboard-container {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .leaderboard-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #ffa500;
+  }
+
+  .category-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .category-tab {
+    background-color: #34344a;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+  }
+
+  .category-tab:hover {
+    background-color: #ffa500;
+    color: #000;
+  }
+
+  .category-tab.active {
+    background-color: #ffa500;
+    color: #000;
+  }
+
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .leaderboard-table th {
+    background-color: #ffa500;
+    color: #000;
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .leaderboard-table td {
+    padding: 15px;
+    border-bottom: 1px solid #444;
+    font-size: 14px;
+  }
+
+  .leaderboard-table tr:hover {
+    background-color: #2d2d2d;
+  }
+
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .rank-1 { background-color: #ffd700; color: #000; }
+  .rank-2 { background-color: #c0c0c0; color: #000; }
+  .rank-3 { background-color: #cd7f32; color: #fff; }
+  .rank-other { background-color: #666; color: #fff; }
+
+  .score-display {
+    font-weight: bold;
+    color: #ffa500;
+    font-size: 16px;
+  }
+
+  .user-score-section {
+    background-color: #34344a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+  }
+
+  .user-score-title {
+    color: #ffa500;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .user-score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #555;
+  }
+
+  .user-score-item:last-child {
+    border-bottom: none;
+  }
+
+  .category-name {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+
+  .no-scores {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 20px;
+  }
+
+  .top-offset {
+    margin-top: 130px;
+  }
+
+  footer, .footer, #footer, .site-footer {
+    display: none !important;
+  }
+</style>
+
+<div class="container top-offset">
+  <div class="leaderboard-container">
+    <h1 class="leaderboard-title">🏆 Leaderboard</h1>
+    
+    <!-- User's Scores Section -->
+    {% if user.is_authenticated and user_scores %}
+    <div class="user-score-section">
+      <h3 class="user-score-title">Your Best Scores</h3>
+      {% for score in user_scores %}
+        <div class="user-score-item">
+          <span class="category-name">{{ score.category|title }}</span>
+          <span class="score-display">{{ score.score }} points</span>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+      {% for category in categories %}
+        <button class="category-tab {% if forloop.first %}active{% endif %}" 
+                onclick="showCategory('{{ category }}')">
+          {{ category|title }}
+        </button>
+      {% endfor %}
+    </div>
+
+    <!-- Leaderboard Tables -->
+    {% for category in categories %}
+      <div id="leaderboard-{{ category }}" class="leaderboard-content" 
+           style="display: {% if forloop.first %}block{% else %}none{% endif %};">
+        
+        {% if category == 'crypto' and leaderboard_data.crypto %}
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scorer in leaderboard_data.crypto %}
+                <tr>
+                  <td>
+                    <span class="rank-badge 
+                      {% if scorer.rank == 1 %}rank-1
+                      {% elif scorer.rank == 2 %}rank-2
+                      {% elif scorer.rank == 3 %}rank-3
+                      {% else %}rank-other{% endif %}">
+                      {{ scorer.rank }}
+                    </span>
+                  </td>
+                  <td>{{ scorer.first_name }} {{ scorer.last_name }}</td>
+                  <td class="score-display">{{ scorer.score }}</td>
+                  <td>{{ scorer.completed_at|date:"M d, Y" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% elif category == 'network' and leaderboard_data.network %}
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scorer in leaderboard_data.network %}
+                <tr>
+                  <td>
+                    <span class="rank-badge 
+                      {% if scorer.rank == 1 %}rank-1
+                      {% elif scorer.rank == 2 %}rank-2
+                      {% elif scorer.rank == 3 %}rank-3
+                      {% else %}rank-other{% endif %}">
+                      {{ scorer.rank }}
+                    </span>
+                  </td>
+                  <td>{{ scorer.first_name }} {{ scorer.last_name }}</td>
+                  <td class="score-display">{{ scorer.score }}</td>
+                  <td>{{ scorer.completed_at|date:"M d, Y" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% elif category == 'web' and leaderboard_data.web %}
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scorer in leaderboard_data.web %}
+                <tr>
+                  <td>
+                    <span class="rank-badge 
+                      {% if scorer.rank == 1 %}rank-1
+                      {% elif scorer.rank == 2 %}rank-2
+                      {% elif scorer.rank == 3 %}rank-3
+                      {% else %}rank-other{% endif %}">
+                      {{ scorer.rank }}
+                    </span>
+                  </td>
+                  <td>{{ scorer.first_name }} {{ scorer.last_name }}</td>
+                  <td class="score-display">{{ scorer.score }}</td>
+                  <td>{{ scorer.completed_at|date:"M d, Y" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% elif category == 'general' and leaderboard_data.general %}
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+                <th>Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scorer in leaderboard_data.general %}
+                <tr>
+                  <td>
+                    <span class="rank-badge 
+                      {% if scorer.rank == 1 %}rank-1
+                      {% elif scorer.rank == 2 %}rank-2
+                      {% elif scorer.rank == 3 %}rank-3
+                      {% else %}rank-other{% endif %}">
+                      {{ scorer.rank }}
+                    </span>
+                  </td>
+                  <td>{{ scorer.first_name }} {{ scorer.last_name }}</td>
+                  <td class="score-display">{{ scorer.score }}</td>
+                  <td>{{ scorer.completed_at|date:"M d, Y" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <div class="no-scores">
+            No scores yet for {{ category|title }} category. Be the first to take the quiz!
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function showCategory(category) {
+  // Hide all leaderboard content
+  document.querySelectorAll('.leaderboard-content').forEach(content => {
+    content.style.display = 'none';
+  });
+  
+  // Remove active class from all tabs
+  document.querySelectorAll('.category-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  // Show selected category
+  document.getElementById('leaderboard-' + category).style.display = 'block';
+  
+  // Add active class to clicked tab
+  event.target.classList.add('active');
+}
+</script>
+{% endblock %}

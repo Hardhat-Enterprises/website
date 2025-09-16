@@ -147,6 +147,12 @@ urlpatterns = [
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     
+    # Quiz URLs
+    path('quiz/start/<str:category>/', views.start_quiz, name='start_quiz'),
+    path('quiz/take/<int:quiz_id>/', views.take_quiz, name='take_quiz'),
+    path('quiz/submit/<int:quiz_id>/', views.submit_quiz_answer, name='submit_quiz_answer'),
+    path('quiz/results/<int:quiz_id>/', views.quiz_results, name='quiz_results'),
+    
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)

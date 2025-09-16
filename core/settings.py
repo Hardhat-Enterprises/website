@@ -173,8 +173,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
                 'home.context_processors.recaptcha_site_key',
-
-
+                'home.context_processors.user_scores',
             ],
         },
     },

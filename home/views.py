@@ -1790,7 +1790,10 @@ import contextlib
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import CyberChallenge, UserChallenge
+from .models import CyberChallenge, UserChallenge, Quiz, QuizQuestion, UserScore
+from django.utils import timezone
+from django.db import transaction
+import random
 
 @login_required
 def challenge_detail(request, challenge_id):
@@ -2038,21 +2041,43 @@ class EmailNotificationViewSet(ViewSet):
         return Response({"message": "Email sent successfully!"})
 
 def leaderboard(request):
-    #Select category to display leaderboard table
-    selected_category = request.GET.get('category', '')
-    categories = LeaderBoardTable.objects.values_list('category', flat=True).distinct()
-    if selected_category:
-        leaderboard_entry = LeaderBoardTable.objects.filter(category=selected_category).order_by('-total_points')[:10]
-    else:
-        leaderboard_entry = LeaderBoardTable.objects.none()  # Show nothing by default
-
+    """Display top 10 scorers for each category"""
+    categories = ['crypto', 'network', 'web', 'general']
+    leaderboard_data = {}
+    
+    print(f"=== LEADERBOARD DEBUG ===")
+    print(f"Total UserScores: {UserScore.objects.count()}")
+    
+    for category in categories:
+        # Get top 10 scorers for this category
+        top_scorers = UserScore.objects.filter(category=category).order_by('-score', '-quiz_completed_at')[:10]
+        
+        print(f"{category} category: {top_scorers.count()} scores")
+        
+        # Add rank to each scorer
+        ranked_scorers = []
+        for rank, scorer in enumerate(top_scorers, 1):
+            ranked_scorers.append({
+                'rank': rank,
+                'first_name': scorer.user.first_name,
+                'last_name': scorer.user.last_name,
+                'score': scorer.score,
+                'category': scorer.category,
+                'completed_at': scorer.quiz_completed_at
+            })
+        
+        leaderboard_data[category] = ranked_scorers
+    
+    # Get current user's best scores for comparison
+    user_scores = UserScore.objects.filter(user=request.user).order_by('-score') if request.user.is_authenticated else []
+    
     context = {
-        'entries': leaderboard_entry,
-        'categories': categories,
-        'selected_category': selected_category,
-
+        'leaderboard_data': leaderboard_data,
+        'user_scores': user_scores,
+        'categories': categories
     }
-    return render(request, 'pages/leaderboard.html', context)
+    
+    return render(request, 'pages/challenges/leaderboard.html', context)
 
 def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
@@ -2074,6 +2099,193 @@ def cyber_quiz(request):
     View for the cybersecurity quiz page.
     """
     return render(request, 'pages/challenges/quiz.html')
+
+@login_required
+def start_quiz(request, category):
+    """Start a new quiz for a specific category"""
+    # Check if user already has an active quiz for this category
+    existing_quiz = Quiz.objects.filter(user=request.user, category=category, is_completed=False).first()
+    
+    if existing_quiz:
+        return redirect('take_quiz', quiz_id=existing_quiz.id)
+    
+    # Get 15 challenges for the category (5 easy, 5 medium, 5 hard)
+    easy_challenges = list(CyberChallenge.objects.filter(category=category, difficulty='easy').order_by('?')[:5])
+    medium_challenges = list(CyberChallenge.objects.filter(category=category, difficulty='medium').order_by('?')[:5])
+    hard_challenges = list(CyberChallenge.objects.filter(category=category, difficulty='hard').order_by('?')[:5])
+    
+    # Combine and shuffle the challenges
+    all_challenges = easy_challenges + medium_challenges + hard_challenges
+    random.shuffle(all_challenges)
+    
+    if len(all_challenges) < 15:
+        return render(request, 'pages/challenges/quiz_error.html', {
+            'error': f'Not enough challenges available for {category}. Need 15 challenges (5 easy, 5 medium, 5 hard).'
+        })
+    
+    # Create quiz and quiz questions
+    with transaction.atomic():
+        quiz = Quiz.objects.create(
+            user=request.user,
+            category=category
+        )
+        
+        for i, challenge in enumerate(all_challenges):
+            QuizQuestion.objects.create(
+                quiz=quiz,
+                challenge=challenge,
+                question_order=i + 1
+            )
+    
+    return redirect('take_quiz', quiz_id=quiz.id)
+
+@login_required
+def take_quiz(request, quiz_id):
+    """Take the quiz - show current question"""
+    quiz = get_object_or_404(Quiz, id=quiz_id, user=request.user)
+    
+    if quiz.is_completed:
+        return redirect('quiz_results', quiz_id=quiz.id)
+    
+    # Get current question
+    current_question = quiz.questions.filter(question_order=quiz.current_question_index + 1).first()
+    
+    if not current_question:
+        # Quiz completed
+        quiz.is_completed = True
+        quiz.completed_at = timezone.now()
+        quiz.save()
+        return redirect('quiz_results', quiz_id=quiz.id)
+    
+    context = {
+        'quiz': quiz,
+        'question': current_question,
+        'challenge': current_question.challenge,
+        'question_number': quiz.current_question_index + 1,
+        'total_questions': 15,
+        'time_limit': current_question.challenge.time_limit
+    }
+    
+    return render(request, 'pages/challenges/take_quiz.html', context)
+
+@login_required
+def submit_quiz_answer(request, quiz_id):
+    """Submit answer for current quiz question"""
+    quiz = get_object_or_404(Quiz, id=quiz_id, user=request.user)
+    
+    if quiz.is_completed:
+        return JsonResponse({'error': 'Quiz already completed'}, status=400)
+    
+    current_question = quiz.questions.filter(question_order=quiz.current_question_index + 1).first()
+    
+    if not current_question:
+        return JsonResponse({'error': 'No current question'}, status=400)
+    
+    if request.method == 'POST':
+        user_answer = request.POST.get('answer', '').strip()
+        challenge = current_question.challenge
+        
+        # Check if answer is correct
+        is_correct = False
+        if challenge.challenge_type == 'mcq':
+            is_correct = user_answer == challenge.correct_answer.strip()
+        
+        # Update quiz question
+        current_question.user_answer = user_answer
+        current_question.is_correct = is_correct
+        current_question.answered_at = timezone.now()
+        current_question.save()
+        
+        # Update quiz progress
+        quiz.questions_answered += 1
+        if is_correct:
+            quiz.total_score += challenge.points
+        
+        # Move to next question
+        quiz.current_question_index += 1
+        
+        # Check if quiz is completed (answered all 15 questions)
+        if quiz.current_question_index >= 15:
+            quiz.is_completed = True
+            quiz.completed_at = timezone.now()
+            
+            # Save or update user score for this category
+            user_score, created = UserScore.objects.get_or_create(
+                user=request.user,
+                category=quiz.category,
+                defaults={'score': quiz.total_score}
+            )
+            
+            # Update score if this quiz has a higher score
+            if quiz.total_score > user_score.score:
+                user_score.score = quiz.total_score
+                user_score.quiz_completed_at = timezone.now()
+                user_score.save()
+            
+            print(f"Quiz completed! Score: {quiz.total_score}, UserScore: {user_score.score}")
+        
+        quiz.save()
+        
+        return JsonResponse({
+            'correct': is_correct,
+            'correct_answer': challenge.correct_answer,
+            'explanation': challenge.explanation,
+            'points_earned': challenge.points if is_correct else 0,
+            'next_question': quiz.current_question_index < 15,
+            'quiz_completed': quiz.is_completed
+        })
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def quiz_results(request, quiz_id):
+    """Show quiz results"""
+    quiz = get_object_or_404(Quiz, id=quiz_id, user=request.user)
+    
+    if not quiz.is_completed:
+        return redirect('take_quiz', quiz_id=quiz.id)
+    
+    # Get all questions with answers
+    questions = quiz.questions.all().order_by('question_order')
+    
+    # Calculate statistics
+    correct_answers = questions.filter(is_correct=True).count()
+    total_questions = questions.count()
+    percentage = (correct_answers / total_questions * 100) if total_questions > 0 else 0
+    
+    # Difficulty breakdown
+    easy_correct = questions.filter(challenge__difficulty='easy', is_correct=True).count()
+    medium_correct = questions.filter(challenge__difficulty='medium', is_correct=True).count()
+    hard_correct = questions.filter(challenge__difficulty='hard', is_correct=True).count()
+    
+    # Save or update user score for this category
+    user_score, created = UserScore.objects.get_or_create(
+        user=request.user,
+        category=quiz.category,
+        defaults={'score': quiz.total_score}
+    )
+    
+    # Update score if this quiz has a higher score
+    if quiz.total_score > user_score.score:
+        user_score.score = quiz.total_score
+        user_score.quiz_completed_at = timezone.now()
+        user_score.save()
+    
+    context = {
+        'quiz': quiz,
+        'questions': questions,
+        'correct_answers': correct_answers,
+        'total_questions': total_questions,
+        'percentage': round(percentage, 1),
+        'total_score': quiz.total_score,
+        'easy_correct': easy_correct,
+        'medium_correct': medium_correct,
+        'hard_correct': hard_correct,
+        'time_taken': quiz.completed_at - quiz.started_at if quiz.completed_at else None,
+        'user_score': user_score
+    }
+    
+    return render(request, 'pages/challenges/quiz_results.html', context)
 
 
 def comphrehensive_reports(request):

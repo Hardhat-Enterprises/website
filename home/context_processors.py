@@ -1,6 +1,7 @@
 # home/context_processors.py
 from django.utils.text import capfirst
 from django.conf import settings
+from .models import UserScore
 
 def dynamic_page_title(request):
     # Extract the path and capitalize it
@@ -32,3 +33,14 @@ def recaptcha_site_key(request):
     return {
         'RECAPTCHA_SITE_KEY': settings.RECAPTCHA_SITE_KEY
     }
+
+def user_scores(request):
+    """Add user scores to context for navigation display"""
+    if request.user.is_authenticated:
+        user_scores = UserScore.objects.filter(user=request.user).order_by('-score')
+        total_score = sum(score.score for score in user_scores)
+        return {
+            'user_scores': user_scores,
+            'user_total_score': total_score
+        }
+    return {}
