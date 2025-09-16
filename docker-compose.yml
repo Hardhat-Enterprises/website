@@ -1,34 +1,81 @@
-version: '3.8'
-
 services:
+  db:
+    container_name: postgres_db
+    image: postgres:17.5
+    restart: always
+    environment:
+      POSTGRES_DB: hardhat_db
+      POSTGRES_USER: hardhat_user
+      POSTGRES_PASSWORD: hardhat_password
+      # PostgreSQL 17.5
+      POSTGRES_INITDB_ARGS: "--auth-host=md5 --auth-local=trust"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      #note postgresql can be optimised by adding a custom config file
+    networks:
+      - web_network
+    ports:
+      - "5433:5432" # Different port to avoid conflicts with production
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hardhat_user -d hardhat_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   web:
     container_name: django_app
-    build: .
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: "no" # Don't auto-restart in development to maintain sessions
     volumes:
-      - .:/app  # Mount project code
-      - staticfiles:/app/static
+      - .:/app
+      - staticfiles:/app/static #collectstatic will only collect static folder so needs to be created from custom_static folder
       - mediafiles:/app/media
       # Keep custom_static mount if you have static files there
-      - ./custom_static:/app/custom_static 
+      - ./custom_static:/app/custom_static
+      # Mount .env file to persist SECRET_KEY across container rebuilds
+      - ./.env:/app/.env
     networks:
       - web_network
     environment:
-      - DEBUG=0
-    expose:
-      - "8000:80"
-    # Run collectstatic and migrate before starting gunicorn
+      - DEBUG=1 # Development mode
+      - DB_ENGINE=postgresql
+      - DB_NAME=hardhat_db
+      - DB_USERNAME=hardhat_user
+      - DB_PASS=hardhat_password
+      - DB_HOST=db
+      - DB_PORT=5432
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=core.settings
+    ports:
+      - "8000:8000" # Direct port mapping for development
+    depends_on:
+      db:
+        condition: service_healthy
+    # Development command - uses Django's development server with better stability
     command: >
-      sh -c "python manage.py migrate && 
+      sh -c "echo 'Waiting for database...' &&
+             until pg_isready -h db -p 5432 -U hardhat_user -d hardhat_db; do
+               echo 'Database is unavailable - sleeping';
+               sleep 2;
+             done &&
+             echo 'Database is ready!' &&
+             python manage.py migrate &&
+             echo 'Populating database with test data...' &&
+             python manage.py populate_database &&
+             echo 'Database population completed!' &&
              python manage.py collectstatic --noinput --clear &&
-             gunicorn --bind 0.0.0.0:8000 core.wsgi"
+             echo 'Starting Django development server...' &&
+             python manage.py runserver 0.0.0.0:8000 --insecure"
 
   nginx:
     container_name: nginx
     image: nginx:latest
     restart: always
     ports:
-      - "80:80"
+      - "8080:80" # Different port for development
     volumes:
       # Use named volumes (read-only)
       - staticfiles:/app/static:ro
@@ -39,13 +86,19 @@ services:
       - web_network
     depends_on:
       - web
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 networks:
   web_network:
     driver: bridge
 
-# Define named volumes
+# Define named volumes for development
 volumes:
   staticfiles: {}
   mediafiles: {}
- 
+  postgres_data: {}
