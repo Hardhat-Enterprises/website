@@ -51,7 +51,7 @@
     <!-- Filters -->
     <form method="get" class="row g-2 align-items-center mb-3">
       <div class="col">
-        <input type="text" name="q" value="{{ query }}" placeholder="Search documents..." class="form-control">
+        <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search documents..." class="form-control">
       </div>
       <div class="col-auto">
         <select name="type" class="form-select">
@@ -86,7 +86,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for d in docs %}
+        {% for d in documents %}
           <tr>
             <td>
               <i class="fas fa-file me-2"></i>{{ d.original_name }}
@@ -135,6 +135,9 @@
                 <i class="fas fa-download"></i>
               </a>
 
+              <!-- Simple delete link (kept, but fixed id & url name) -->
+            
+
               {# delete only for uploader or staff #}
 {% if user.is_authenticated and user.is_staff or user.is_authenticated and d.uploaded_by_id == user.id %}
               <button type="button"
@@ -156,7 +159,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                      <form action="{% url 'vault_delete' d.id %}" method="post" class="d-inline">
+                      <form action="{% url 'delete_document' d.id %}" method="post" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Delete</button>
                       </form>
@@ -164,7 +167,7 @@
                   </div>
                 </div>
               </div>
-              {% endif %}
+{% endif %}
             </td>
           </tr>
         {% empty %}
@@ -223,7 +226,7 @@
   }
 
   // Description sanitization
-  const descInput = document.querySelector('textarea[name="description"], input[name="description"]');
+  const descInput = document.querySelector('textarea[name=\"description\"], input[name=\"description\"]');
   if (descInput) {
     descInput.addEventListener('input', function(){
       if (/<script/i.test(this.value)) {

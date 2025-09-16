@@ -9,7 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from .forms import ExperienceForm
 from .models import Experience
@@ -75,6 +75,7 @@ from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from datetime import timedelta
+
  
 # import os
  
@@ -2686,7 +2687,6 @@ def vault_view(request):
             vault_doc.size_bytes = request.FILES['file'].size
             vault_doc.save()
             form.save_m2m()  # Save many-to-many relationships
-            messages.success(request, 'Document uploaded successfully!')
             return redirect('vault')
     else:
         form = VaultUploadForm()
@@ -2698,3 +2698,19 @@ def vault_view(request):
     }
     return render(request, 'pages/vault.html', context)
 
+def delete_document(request, doc_id):
+    doc = get_object_or_404(VaultDocument, id=doc_id)
+
+    # Only staff or the uploader can delete
+    if not (request.user.is_staff or doc.uploaded_by_id == request.user.id):
+        raise PermissionDenied("You don't have permission to delete this document.")
+
+    if request.method == "POST":
+        # optionally remove the file from storage too
+        if doc.file:
+            doc.file.delete(save=False)
+        doc.delete()
+        return redirect('vault')
+
+    # if someone hits the URL with GET, just go back
+    return redirect('vault')

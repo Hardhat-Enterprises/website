@@ -192,6 +192,8 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
     path('vault/', views.vault_view, name='vault'),
+    path('vault/delete/<int:doc_id>/', views.delete_document, name='delete_document'),
+
 
     path("health", health_check, name="health-check"),
     
