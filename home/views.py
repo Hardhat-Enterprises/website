@@ -1,11 +1,17 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
- 
+
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
+
+
+from home.models import TeamMember
+ 
+
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
@@ -135,6 +141,9 @@ from .models import Passkey
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
+
+from home.models import TeamMember  
+
 def get_login_redirect_url(user):
     """
     Determine where to redirect user after login based on join-us completion status.
@@ -147,6 +156,7 @@ def get_login_redirect_url(user):
     else:
         # User hasn't completed join-us form, redirect to join-us page
         return '/join-us/'
+
 
 
 def index(request):
@@ -179,6 +189,10 @@ def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)
  
 def about_us(request):
+
+    team_members = TeamMember.objects.all()
+    return render(request, 'pages/about.html', {'team_members': team_members})
+
     return render(request, 'pages/about.html')
  
 def security_tools(request):
@@ -277,6 +291,7 @@ def security_tools(request):
         'tools': tools_data
     }
     return render(request, 'pages/our_tools.html', context)
+
 
 
 def what_we_do(request):

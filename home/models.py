@@ -520,6 +520,18 @@ class UserChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
+    
+
+class TeamMember(models.Model):
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='team_images/')
+    created_at = models.DateTimeField(auto_now_add=True) 
+    linkedin = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 

@@ -10,9 +10,13 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
 from .views import delete_account
+
+from django.conf.urls.static import static
+
 # Health Endpoint Work
 from .views import health_check
 from django.views.i18n import set_language
+
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
