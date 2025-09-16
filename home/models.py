@@ -1,4 +1,4 @@
-﻿import uuid
+import uuid
 
 from django.db import models
 from django.core.mail import send_mail
@@ -16,7 +16,6 @@ from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 
 
-from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from django.utils.timezone import now
@@ -28,9 +27,7 @@ import string
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
-from django.db import models
 import nh3
-from django.conf import settings
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -161,11 +158,66 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.last_activity = now()
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
-
-#checking if admin/staff user
-
+        
+    #checking if admin/staff user
     def is_admin_user(self):
         return self.is_staff or self.is_superuser
+
+
+
+def vault_upload_path(instance, filename):
+    """Generate upload path for vault documents"""
+    return os.path.join('vault_documents', filename)
+
+class Folder(models.Model):
+    name = models.CharField(max_length=200)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='folders')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('name', 'parent', 'owner')
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def path_list(self):
+        # for breadcrumbs
+        node, parts = self, []
+        while node:
+            parts.append(node)
+            node = node.parent
+        return list(reversed(parts))
+
+
+class VaultDocument(models.Model):
+    VIS_PUBLIC = 'public'
+    VIS_TEAMS = 'teams'
+    VIS_PRIVATE = 'private'
+    
+    VISIBILITY_CHOICES = [
+        (VIS_PUBLIC, 'Public'),
+        (VIS_TEAMS, 'Selected teams'),
+        (VIS_PRIVATE, 'Private (uploader only)'),
+    ]
+    
+    file = models.FileField(upload_to=vault_upload_path)
+    original_name = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(max_length=120, blank=True)
+    size_bytes = models.PositiveIntegerField(default=0)
+    description = models.CharField(max_length=300, blank=True)
+    visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
+    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.original_name or self.file.name
     
 #Model to track known devices
 class UserDevice(models.Model):
@@ -461,6 +513,18 @@ class UserChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
+    
+
+class TeamMember(models.Model):
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='team_images/')
+    created_at = models.DateTimeField(auto_now_add=True) 
+    linkedin = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -659,7 +723,7 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
-class AdninSesssion(models.Model):
+class AdminSesssion(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
     ip_address = models.GenericIPAddressField()
