@@ -6241,10 +6241,16 @@ fieldset:disabled .btn {
     transition: none;
   }
 }
+
 .nav-link:hover,
 .nav-link:focus {
   color: #333333;
 }
+
+.nav-link:hover .nav-icon {
+background: #fff !important;
+}
+
 .nav-link.disabled {
   color: #6b7280;
   pointer-events: none;
@@ -27689,4 +27695,5 @@ body.dark-mode .navbar-collapse.show .nav-link {
     background-color: #222 !important;
     transition: none !important;
   }
+
 }
