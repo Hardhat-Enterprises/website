@@ -138,7 +138,7 @@ def track_login(sender, request, user, **kwargs):
 
 
 # PROFILE UPDATE SIGNAL
-PROFILE_FIELDS = {"first_name", "last_name", "email", "description", "contact_information", "connect_with_me"}  
+PROFILE_FIELDS = {"first_name", "last_name", "email"}  
 
 @receiver(pre_save, sender=User)
 def cache_old_user(sender, instance, **kwargs):
