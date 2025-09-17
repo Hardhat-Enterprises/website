@@ -258,10 +258,10 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     search_fields = ['name', 'email', 'github_repo_link']
     readonly_fields = ['submitted_at']
 
-@admin.register(VaultDocument)
-class VaultDocumentAdmin(admin.ModelAdmin):
-    list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
-    search_fields = ('original_name', 'description')
+# @admin.register(VaultDocument)
+# class VaultDocumentAdmin(admin.ModelAdmin):
+#     list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
+#     search_fields = ('original_name', 'description')
 
 
 
