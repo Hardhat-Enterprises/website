@@ -1,4 +1,5 @@
 ﻿import uuid
+import os
 
 from django.db import models
 from django.core.mail import send_mail
@@ -10,10 +11,15 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser  
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
+
+
 import os
 from django.contrib.auth.models import Group
 from django.utils import timezone
@@ -75,6 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     description = models.TextField(_("description"), blank=True, null=True)
     contact_information = models.TextField(_("contact information"), blank=True, null=True)
     connect_with_me = models.JSONField(_("connect with me"), default=dict, blank=True, null=True)
+
 
     is_staff = models.BooleanField(
         _("staff status"),
@@ -165,6 +172,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 
+        
+    #checking if admin/staff user
+    def is_admin_user(self):
+        return self.is_staff or self.is_superuser
+
+
+
 def vault_upload_path(instance, filename):
     """Generate upload path for vault documents"""
     return os.path.join('vault_documents', filename)
@@ -219,6 +233,29 @@ class VaultDocument(models.Model):
     def __str__(self):
         return self.original_name or self.file.name
     
+#Model to track known devices
+class UserDevice(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+    # Device fingerprint (unique identifier)
+    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
+
+    # User-friendly info
+    device_name = models.CharField(max_length=200) 
+
+    # Technical info
+    user_agent = models.TextField()
+    ip_address = models.GenericIPAddressField()
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True) 
+    last_seen = models.DateTimeField(auto_now=True)       
+    def __str__(self):
+        return f"{self.user.email} - {self.device_name} ({self.ip_address})"
+    
 
     
 #Search Bar Models:
@@ -246,6 +283,8 @@ class Project(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     title = models.CharField(_("project title"), max_length=150, choices=PROJECT_CHOICES, blank=False)
+    archived = models.BooleanField(_("archived"), default=False)
+    description = models.TextField(_("project description"), blank=True, null=True)
 
     def __str__(self) -> str:
         return self.get_title_display()
@@ -479,6 +518,9 @@ class CyberChallenge(models.Model):
     points = models.IntegerField(default=10)
     challenge_type = models.CharField(max_length=20, choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')])
     time_limit = models.IntegerField(default=60)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -593,14 +635,116 @@ class ContactSubmission(models.Model):
 class Job(models.Model):
     title = models.CharField(max_length=200)
     description = HTMLField()
-    location = models.CharField(max_length=100,choices=[("Remote","Remote"),("OnSite","OnSite")])
-    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract')])
+    location = models.CharField(max_length=100,choices=[("Remote","Remote"),("OnSite","OnSite"),("Hybrid","Hybrid")])
+    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract'), ('internship', 'Internship')])
     posted_date = models.DateField(auto_now_add=True)
     closing_date = models.DateField()
+    
+    # New detailed fields
+    responsibilities = HTMLField(blank=True, null=True)
+    qualifications = HTMLField(blank=True, null=True)
+    benefits = HTMLField(blank=True, null=True)
+    salary_range = models.CharField(max_length=100, blank=True, null=True)
+    experience_level = models.CharField(max_length=50, choices=[
+        ('entry', 'Entry Level'),
+        ('mid', 'Mid Level'),
+        ('senior', 'Senior Level'),
+        ('lead', 'Lead'),
+        ('intern', 'Internship')
+    ], default='entry')
+    department = models.CharField(max_length=100, blank=True, null=True)
+    skills_required = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title
+
+class JobAlert(models.Model):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_notification = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Job Alert for {self.email}"
+
+    def send_confirmation_email(self):
+        """Send confirmation email when user subscribes"""
+        from django.core.mail import send_mail
+        from django.conf import settings
+        
+        subject = "Job Alerts Subscription Confirmed - HardHat Enterprises"
+        message = f"""
+        Thank you for subscribing to job alerts from HardHat Enterprises!
+        
+        You will now receive notifications about new job openings that match your interests.
+        
+        To unsubscribe, please contact our support team.
+        
+        Best regards,
+        The HardHat Enterprises Team
+        """
+        
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[self.email],
+                fail_silently=False,
+            )
+            return True
+        except Exception as e:
+            print(f"Failed to send confirmation email: {e}")
+            return False
+
+class GraduateProgram(models.Model):
+    title = models.CharField(max_length=200)
+    description = HTMLField()
+    duration_months = models.IntegerField(default=12)
+    program_type = models.CharField(max_length=50, choices=[
+        ('cybersecurity', 'Cybersecurity'),
+        ('software_engineering', 'Software Engineering'),
+        ('data_science', 'Data Science'),
+        ('ai_ml', 'AI & Machine Learning'),
+        ('general', 'General Technology')
+    ])
+    start_date = models.DateField()
+    application_deadline = models.DateField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
+    # Program details
+    overview = HTMLField()
+    curriculum = HTMLField()
+    benefits = HTMLField()
+    requirements = HTMLField()
+    application_process = HTMLField()
+    
+    def __str__(self):
+        return self.title
+
+class CareerFAQ(models.Model):
+    CATEGORY_CHOICES = [
+        ('application', 'Application'),
+        ('benefits', 'Benefits'),
+        ('growth', 'Growth'),
+        ('popular', 'Popular'),
+        ('general', 'General')
+    ]
+    
+    question = models.CharField(max_length=500)
+    answer = HTMLField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
+    is_popular = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['order', 'created_at']
+    
+    def __str__(self):
+        return f"{self.category}: {self.question[:50]}..."
+
 class JobApplication(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
     name = models.CharField(max_length=100)
@@ -608,7 +752,6 @@ class JobApplication(models.Model):
     resume = models.FileField(upload_to="resumes/")
     cover_letter = models.FileField(upload_to="cover_letter/")
     applied_date = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self):
         return f"{self.name} - {self.job.title}"
@@ -703,6 +846,7 @@ class SecureCodeReviewRequest(models.Model):
         return f"{self.name} - Secure Code Review Request"
 
 class AdminSesssion(models.Model):
+class AdminSesssion(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
     ip_address = models.GenericIPAddressField()
@@ -713,25 +857,24 @@ class AdminSesssion(models.Model):
     logout_time = models.DateTimeField(null=True, blank=True)
     logout_reason = models.CharField(max_length=50, blank=True, null=True) 
 
-class Meta:
+    class Meta:
         ordering = ['-login_time']
 
-def __str__(self):
-    admin_type = "Superuser" if self.user.is_superuser else "Staff"
-    return f"{admin_type} session for {self.user.email} - {self.login_time}"
+    def __str__(self):
+        admin_type = "Superuser" if self.user.is_superuser else "Staff"
+        return f"{admin_type} session for {self.user.email} - {self.login_time}"
 
-def mark_logout(self, reason="manual"):
-
+    def mark_logout(self, reason="manual"):
         self.is_active = False
         self.logout_time = now()
         self.logout_reason = reason
         self.save()
 
-def is_expired(self, timeout_minutes=30):
-    if not self.is_active:
-        return True
-    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-    return now() > expiry_time
+    def is_expired(self, timeout_minutes=30):
+        if not self.is_active:
+            return True
+        expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
+        return now() > expiry_time
 
 def update_activity(self):
     self.last_activity = now()
