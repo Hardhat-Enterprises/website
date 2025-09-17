@@ -1,4 +1,6 @@
 from django import forms
+from django.core.validators import RegexValidator
+from django.contrib.auth.models import Group
 from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
@@ -18,6 +20,8 @@ from .models import PenTestingRequest, SecureCodeReviewRequest
 from .validators import xss_detection
 from utils.sanitizer import clean_text, clean_email, clean_url, clean_html, clean_numeric
 import json
+from .models import VaultDocument, CyberChallenge
+
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
@@ -602,32 +606,27 @@ class SecureCodeReviewRequestForm(forms.ModelForm):
         model = SecureCodeReviewRequest
         fields = ['name', 'email', 'github_repo_link', 'terms_accepted']
 
-<<<<<<< HEAD
-
-        
-class VaultUploadForm(forms.ModelForm):
-    class Meta:
-        model = VaultDocument
-        fields = ['file', 'description', 'visibility', 'allowed_teams']  # NEW
-        widgets = {
-            'description': forms.TextInput(attrs={'placeholder': 'Optional description', 'class':'form-control'}),
-            'visibility': forms.Select(attrs={'class': 'form-select'}),  # NEW
-            'allowed_teams': forms.SelectMultiple(attrs={'class': 'form-select', 'size': '6'}),  # NEW
-=======
 # Cyber Challenge Forms ------------------------------------------------------------
 
 class ChallengeForm(forms.ModelForm):
-    choices_text = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter choices separated by newlines', 'class': 'form-control'}), required=False, help_text="for Multiple Choice Questions, Enter each choice per line"
+    choices_text = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'rows': 3,
+            'placeholder': 'Enter choices separated by newlines',
+            'class': 'form-control'
+        }),
+        required=False,
+        help_text="for Multiple Choice Questions, Enter each choice per line"
     )
+
     class Meta:
         model = CyberChallenge
         fields = [
-            'title', 'description', 'question', 'explanation', 
-            'difficulty', 'category', 'points', 'challenge_type', 
-            'time_limit', 'correct_answer', 'starter_code', 
+            'title', 'description', 'question', 'explanation',
+            'difficulty', 'category', 'points', 'challenge_type',
+            'time_limit', 'correct_answer', 'starter_code',
             'sample_input', 'expected_output'
         ]
-
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': ' Enter challenge title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'brief description of the challenge'}),
@@ -643,7 +642,6 @@ class ChallengeForm(forms.ModelForm):
             'sample_input': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Sample input for code challenges'}),
             'expected_output': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter Complete Expected Output'}),
         }
-        
         labels = {
             'title': 'Challenge Title',
             'description': 'Description',
@@ -658,24 +656,11 @@ class ChallengeForm(forms.ModelForm):
             'starter_code': 'Starter Code (for Fix the Code challenges)',
             'sample_input': 'Sample Input into code before running',
             'expected_output': 'Expected Output of code after running',
->>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-<<<<<<< HEAD
-        # List all groups (teams). You can restrict to certain names if you wish.
-        self.fields['allowed_teams'].queryset = Group.objects.all().order_by('name')
 
-    def clean(self):
-        cleaned = super().clean()
-        vis = cleaned.get('visibility')
-        teams = cleaned.get('allowed_teams')
-        if vis == VaultDocument.VIS_TEAMS and (not teams or teams.count() == 0):
-            raise forms.ValidationError("Select at least one team for 'Selected teams' visibility.")
-        return cleaned
-=======
-        
         # If editing an existing challenge, populate choices_text
         if self.instance and self.instance.pk and self.instance.choices:
             if isinstance(self.instance.choices, list):
@@ -690,23 +675,19 @@ class ChallengeForm(forms.ModelForm):
     def clean_choices_text(self):
         choices_text = self.cleaned_data.get('choices_text', '').strip()
         challenge_type = self.cleaned_data.get('challenge_type')
-        
+
         if challenge_type == 'mcq' and not choices_text:
             raise forms.ValidationError("Choices are required for Multiple Choice questions.")
-        
+
         return choices_text
 
     def clean_correct_answer(self):
         correct_answer = self.cleaned_data.get('correct_answer', '').strip()
         challenge_type = self.cleaned_data.get('challenge_type')
-        
-        print(f"DEBUG: clean_correct_answer called")
-        print(f"DEBUG: challenge_type = {challenge_type}")
-        print(f"DEBUG: correct_answer (before processing) = {repr(correct_answer)}")
-        
+
         if not correct_answer:
             raise forms.ValidationError("Correct answer is required.")
-        
+
         # Only MCQ challenges need JSON array format
         if challenge_type == 'mcq':
             try:
@@ -714,36 +695,30 @@ class ChallengeForm(forms.ModelForm):
                 parsed = json.loads(correct_answer)
                 if not isinstance(parsed, list):
                     # If it's not a list, convert single answer to list format
-                    result = json.dumps([correct_answer])
-                    print(f"DEBUG: MCQ - converted to JSON array: {result}")
-                    return result
+                    return json.dumps([correct_answer])
                 # check list not empty
                 if not parsed:
                     raise forms.ValidationError("At least one correct answer is required.")
-                print(f"DEBUG: MCQ - already JSON array: {correct_answer}")
                 return correct_answer
             except json.JSONDecodeError:
                 # If not json treat as single answer and convert to json list
-                result = json.dumps([correct_answer])
-                print(f"DEBUG: MCQ - JSON decode error, converted to array: {result}")
-                return result
-        
+                return json.dumps([correct_answer])
+
         # For fix_code challenges, return the answer without JSON wrapping
-        print(f"DEBUG: fix_code - returning as-is: {repr(correct_answer)}")
         return correct_answer
 
     def clean_starter_code(self):
         starter_code = self.cleaned_data.get('starter_code', '').strip()
         challenge_type = self.cleaned_data.get('challenge_type')
-        
+
         if challenge_type == 'fix_code' and not starter_code:
             raise forms.ValidationError("Starter code is required for Fix the Code challenges.")
-        
+
         return starter_code
 
     def save(self, commit=True):
         instance = super().save(commit=False)
-        
+
         # Convert choices_text to JSON for multiple choice questions
         choices_text = self.cleaned_data.get('choices_text', '').strip()
         if choices_text and instance.challenge_type == 'mcq':
@@ -751,11 +726,10 @@ class ChallengeForm(forms.ModelForm):
             instance.choices = choices_list
         else:
             instance.choices = None
-            
+
         if commit:
             instance.save()
         return instance
->>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
 
 
 class VaultUploadForm(forms.ModelForm):
