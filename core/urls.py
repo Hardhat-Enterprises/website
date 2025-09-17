@@ -63,6 +63,8 @@ urlpatterns = [
     # blog
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
+    # Python Social Auth URLs (Microsoft OAuth implementation)
+    path('', include(('social_django.urls', 'social_django'), namespace='social')),
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
 
