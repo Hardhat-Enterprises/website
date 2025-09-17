@@ -984,8 +984,8 @@ def VerifyOTP(request):
                 print(f"OTP matched. Account for {user.email} has been activated and verified.")
                 print(f"Passkeys sent to {user.email}: {passkeys}") 
 
-                messages.success(request, "Your account has been successfully verified! Your passkeys have been sent via email.")
-                return redirect('/')
+                messages.success(request, "Your account has been successfully verified! Your passkeys have been sent via email. Please sign in to continue.")
+                return redirect('login_with_otp')
 
             except User.DoesNotExist:
                 messages.error(request, "User does not exist. Please register again.")
