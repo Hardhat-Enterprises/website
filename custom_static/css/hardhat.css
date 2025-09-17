@@ -22229,8 +22229,8 @@ body.dark-mode .result-box div:hover {
   align-items: center;
   position: fixed;
   top: 0;
+  z-index: 1030;
   width: 100%;
-  z-index: 100;
   padding: 12px 16px;
 }
 
@@ -22243,6 +22243,23 @@ body.dark-mode .result-box div:hover {
 @media (min-width: 1024px) {
   .navbar-main {
     padding: 12px 50px;
+  }
+}
+
+/* Fix for fixed navbar overlap on form pages like join-us */
+.min-vh-100.section-image {
+  padding-top: 100px; /* Add padding to account for fixed navbar */
+}
+
+/* Ensure form containers have proper spacing from top */
+.signin-inner {
+  margin-top: 20px;
+}
+
+/* Media query adjustments for different screen sizes */
+@media (max-width: 768px) {
+  .min-vh-100.section-image {
+    padding-top: 120px; /* More padding on mobile due to potentially taller navbar */
   }
 }
 

@@ -165,6 +165,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
 
+    def is_admin_user(self):
+        """Check if user has admin privileges (staff or superuser)"""
+        return self.is_staff or self.is_superuser
+
 def vault_upload_path(instance, filename):
     """Generate upload path for vault documents"""
     return os.path.join('vault_documents', filename)
@@ -239,11 +243,6 @@ class PasswordHistory(models.Model):
     def __str__(self):
         return f"PasswordHistory(user={self.user_id}, created_at={self.created_at})"
 
-#checking if admin/staff user
-
-    def is_admin_user(self):
-        return self.is_staff or self.is_superuser
-    
 #Search Bar Models:
 
 class Webpage(models.Model):

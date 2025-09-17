@@ -587,10 +587,13 @@ def login_with_otp(request):
             print("DEBUG MODE: reCAPTCHA result:", result)
 
         if not result.get('success') or result.get('score', 0) < 0.5:
-            messages.error(request, "reCAPTCHA verification failed. Please try again.")
             if settings.DEBUG:
                 print("DEBUG MODE: reCAPTCHA failed with response:", result)
-            return render(request, 'accounts/sign-in.html')
+                print("DEBUG MODE: Bypassing reCAPTCHA validation in debug mode")
+                # In debug mode, continue with login even if reCAPTCHA fails
+            else:
+                messages.error(request, "reCAPTCHA verification failed. Please try again.")
+                return render(request, 'accounts/sign-in.html')
 
         # reCAPTCHA passed — continue login logic
         username = request.POST.get('username')
