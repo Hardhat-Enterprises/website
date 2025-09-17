@@ -1,606 +1,941 @@
+{% load static %} {% load i18n %}
 
-  {% load static %}
-  {% load i18n %}
-  <header class="header-global">
+<header class="header-global">
+    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg navbar-light">
+        <div class="navbar-container position-relative">
+            <!-- Brand Logo -->
+            <a class="navbar-brand me-lg-5" href="{% url 'index' %}">
+                <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light" />
+                <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark" />
+            </a>
 
-    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
-      <div class="navbar-container position-relative">
-        <a class="navbar-brand me-lg-5" href="/">
-          <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light" />
-          <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark" />
-        </a>
-        <div class="navbar-collapse collapse me-auto dark-mode" id="navbar_global">
-          <div class="navbar-collapse-header">
-            <div class="row">
-              <div class="col-4 collapse-brand">
-                <a href="/">
-                  <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo" />
-                </a>
-              </div>
-              <div class="col-6 form-check form-switch dark-mode">
-                <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch"
-                  id="flexSwitchCheckChecked">
-                <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
-              </div>
-              <div class="col-2 collapse-close">
-                <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-                  aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
-              </div>
-            </div>
-          </div>
-
-            <form class="mobile-search-bar"
-                  method="POST"
-                  action="{% url 'pages/search-results' %}">
-              {% csrf_token %}
-              <input class="form-control search-box-mobile"
-                    type="search"
-                    id="mobileSearchInput"
-                    name="q"
-                    placeholder="{% trans 'Search...' %}"
-                    aria-label="Search"
-                    autocomplete="off">
-              <button class="search-btn-mobile" type="submit">
-                <i class="fas fa-search search-icon"></i>
-              </button>
-            </form>
-            <div class="mobile-result-box d-none"></div>
-
-
-          <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-            <li class="nav-item">
-              <a href="{% url 'index' %}" class="nav-link"> {% trans "Home" %} </a>
-            </li>
-
-            {% if user.is_authenticated %}
-            <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" id="upskillingDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-                {% trans "Upskilling" %}
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </a>
-              <div class="dropdown-menu pt-2" aria-labelledby="upskillingDropdown">
-                <ul class="list-style-none">
-                  <a class="menu-link" href="{% url 'dashboard' %}">
-                    <li class="mb-2 menu ps-3 py-1">
-                      {% trans "Dashboard" %}
-                    </li>
-                  </a>
-                  <a class="menu-link" href="{% url 'upskilling' %}">
-                    <li class="mb-2 menu ps-3 py-1">
-                      {% trans "Skills" %}
-                    </li>
-                  </a>
-                </ul>
-              </div>
-            </li>
-
-            {% endif %}
-
-            {% if user.is_authenticated %}
-            {% if user.is_staff or user.is_superuser %}
-            <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-                {% trans "Admin Settings" %}
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </a>
-              <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
-                <ul class="list-style-none">
-                  <a class="menu-link" href="#">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
-                  </a>
-                  <a class="menu-link" href="#">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
-                  </a>
-                  <a class="menu-link" href="#">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
-                  </a>
-                  <a class="menu-link" href="{% url 'adminblogpage' %}">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Review Blogs" %}</li>
-                  </a>
-                  <a class="menu-link" href="{% url 'reports' %}">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Reports" %}</li>
-                  </a>
-                </ul>
-              </div>
-            </li>
-            {% endif %}
-            {% endif %}
-
-
-            <li class="nav-item">
-              <a href="{% url 'about_us' %}" class="nav-link"> {% trans "About" %} </a>
-            </li>
-
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                {% trans "Projects" %}
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </a>
-              <div class="dropdown-menu pt-2" style="width: max-content !important;margin-left: 50px;" aria-labelledby="blogDropdown">
-                <div class="row">
-                  <div class="col">
-                    <ul class="list-style-none m-0 p-0">
-
-                      <li class="menu ps-3 py-2">
-                        <a class="nav-link d-block px-2 py-2" href="{% url 'appattack' %}" style="display:table;width:100%;">
-                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/appattack.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
-                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
-                            <div class="fw-semibold">{% trans "AppAttack" %}</div>
-                            <div class="small">{% trans "Offensive security assessment tool" %}</div>
-                          </span>
-                        </a>
-                      </li>
-
-                      <li class="menu ps-3 py-2">
-                        <a class="nav-link d-block px-2 py-2" href="{% url 'malware_viz_main' %}" style="display:table;width:100%;">
-                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/malware.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
-                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
-                            <div class="fw-semibold">{% trans "Malware" %}</div>
-                            <div class="small">{% trans "Malware research and visualization" %}</div>
-                          </span>
-                        </a>
-                      </li>          
-
-                      <li class="menu ps-3 py-2">
-                        <a class="nav-link d-block px-2 py-2" href="{% url 'ptgui_viz_main' %}" style="display:table;width:100%;">
-                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/pentesting.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
-                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
-                            <div class="fw-semibold">{% trans "PT-GUI" %}</div>
-                            <div class="small">{% trans "Visual penetration testing dashboard" %}</div>
-                          </span>
-                        </a>
-                      </li>
-                      
-                      <li class="menu ps-3 py-2">
-                        <a class="nav-link d-block px-2 py-2" href="{% url 'smishing_detection_main' %}" style="display:table;width:100%;">
-                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/phishing.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
-                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
-                            <div class="fw-semibold">{% trans "Smishing Detection" %}</div>
-                            <div class="small">{% trans "SMS phishing detection system" %}</div>
-                          </span>
-                        </a>
-                      </li>
-
-                      <li class="menu ps-3 py-2">
-                        <a class="nav-link d-block px-2 py-2" href="{% url 'Vr_main' %}" style="display:table;width:100%;">
-                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/vr-cyber.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
-                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
-                            <div class="fw-semibold">{% trans "Deakin CyberSafe VR" %}</div>
-                            <div class="small">{% trans "VR Cyber safety project" %}</div>
-                          </span>
-                        </a>
-                      </li>
-
-                      <li class="menu ps-3 py-2">
-                        <a class="nav-link d-block px-2 py-2" href="{% url 'Deakin_Threat_mirror_main' %}" style="display:table;width:100%;">
-                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/threat.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
-                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
-                            <div class="fw-semibold">{% trans "Threat mirror" %}</div>
-                            <div class="small">{% trans "Threat Detection Framework" %}</div>
-                          </span>
-                        </a>
-                      </li>
-
-                      <li class="menu ps-3 py-2">
-                        <a class="nav-link d-block px-2 py-2" href="{% url 'policy_deployment' %}" style="display:table;width:100%;">
-                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/policy.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
-                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
-                            <div class="fw-semibold">{% trans "The Policy Deployment Engine" %}</div>
-                            <div class="small">{% trans "Automated policy enforcement engine" %}</div>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+            <!-- Main Navigation -->
+            <div class="navbar-collapse collapse me-auto" id="navbar_global">
+                <div class="navbar-collapse-header">
+                    <div class="row">
+                        <div class="col-4 collapse-brand">
+                            <a href="{% url 'index' %}">
+                                <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Logo" />
+                            </a>
+                        </div>
+                        <div class="col-6 form-check form-switch dark-mode">
+                            <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch">
+                            <label class="form-check-label" for="darkmode-toggle">Dark Mode</label>
+                        </div>
+                        <div class="col-2 collapse-close">
+                            <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </li>
 
+                <!-- Mobile Search -->
+                <form class="mobile-search-bar" method="POST" action="{% url 'pages/search-results' %}">
+                    {% csrf_token %}
+                    <input class="form-control search-box-mobile" type="search" id="mobileSearchInput" name="q" placeholder="Search..." aria-label="Search" autocomplete="off">
+                    <button class="search-btn-mobile" type="submit">
+            <i class="fas fa-search search-icon"></i>
+          </button>
+                </form>
+                <div class="mobile-result-box d-none"></div>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                {% trans "Blog" %}
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </a>
-              <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
-                <div class="row">
-                  <div class="col">
-              <ul class="list-style-none">
-                <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">{% trans "Create a Blog" %}</a></li>
-                <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">{% trans "Published Blogs" %}</a></li>
-              </ul>
-            </li>
-
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {% trans "Careers" %}
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </a>
-              <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
-                <ul class="list-style-none">
-                  <a class="menu-link" href="{% url 'career-discover' %}">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li>
-                  </a>
-                  <a class="menu-link" href="{% url 'career-list' %}">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
-                  </a>
-                  <a class="menu-link" href="{% url 'internships' %}">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
-                  </a>
-                  <a class="menu-link" href="{% url 'job-alerts' %}">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li>
-                  </a>
-                  <a href="{% url 'career_path_finder' %}">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Career Path Finder" %}</li>
-                  </a>
-                </ul>
-              </div>
-            </li>
-
-
-            <li class="nav-item dropdown">
-              <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
-                data-bs-toggle="dropdown">
-                {% trans "Cyber Challenges" %}
-                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-              </a>
-              <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
-                <ul class="list-style-none">
-                  <a class="menu-link" href="{% url 'challenge_list' %}">
-                    <li class="mb-2 menu ps-3 py-1">
-                      {% trans "All Challenges" %}
+                <!-- Navigation Items with Enhanced Spacing -->
+                <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+                    <!-- Home -->
+                    <li class="nav-item nav-spacing">
+                        <a href="{% url 'index' %}" class="nav-link nav-item-padding">Home</a>
                     </li>
-                  </a>
-                  <a class="menu-link" href="{% url 'cyber_quiz' %}">
-                    <li class="mb-2 menu ps-3 py-1">
-                      {% trans "Quiz" %}
+
+                    <!-- Projects -->
+                    <li class="nav-item dropdown nav-spacing">
+                        <a href="#" class="nav-link dropdown-toggle nav-item-padding" id="projectsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Projects
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+                        <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="projectsDropdown">
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'appattack' %}">AppAttack</a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'ptgui_viz_main' %}">PT-GUI</a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'smishing_detection_main' %}">Smishing Detection</a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'Vr_main' %}">Deakin CyberSafe VR</a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'policy_deployment' %}">Policy Deployment Engine <span class="badge bg-primary ms-2">New</span></a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'Deakin_Threat_mirror_main' %}">Threat Mirror <span class="badge bg-secondary ms-2">Finished</span></a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'malware_viz_main' %}">Malware <span class="badge bg-secondary ms-2">Finished</span></a></li>
+                        </ul>
                     </li>
-                  </a>
-                </ul>
-              </div>
-            </li>
 
+                    <!-- Challenges -->
+                    <li class="nav-item dropdown nav-spacing">
+                        <a href="#" class="nav-link dropdown-toggle nav-item-padding" id="challengesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Challenges
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+                        <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="challengesDropdown">
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'challenge_list' %}">All Challenges</a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'cyber_quiz' %}">Quiz</a></li>
+                        </ul>
+                    </li>
 
-            <div class="search-container position-relative">
-              <form class="desktop-search-bar"
-                    method="POST"
-                    action="{% url 'pages/search-results' %}">
-                {% csrf_token %}
-                <input class="form-control me-4 search-box"
-                      type="search"
-                      id="searchInput"
-                      name="q"
-                      placeholder="{% trans 'Search...' %}"
-                      aria-label="Search"
-                      autocomplete="off">
-                <button class="search-btn" type="submit">
-                  <div><i class="fas fa-search search-icon"></i></div>
-                </button>
-              </form>
-              <div class="result-box d-none"></div>
-            </div>
-
-          </ul>
-
-        </div>
-
-
-        <div class="d-flex align-items-center justify-content-center">
-          {% if request.user.is_authenticated %}
-
-          <!-- Show Logout Button if User is Authenticated -->
-          <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
-              class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
-
-        <a class="profile-container" href="{% url 'profile' %}">
-          <img
-            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-            <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
-        </a>
-
-
-          {% else %}
-          <div class="sign-up-button-container">
-
-            {% endif %}
-
-            <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
-
-            <!-- Sign In Button for when User is Not Logged In -->
-            {% if not user.is_authenticated %}
-            <div class="position-relative sign-up-button-inner-container">
-              <a href="{% url 'login_with_otp' %}" class="sign-up-button" style="text-decoration: none; display: inline-block;">
-                <span class="fas fa-sign-in-alt me-2">
-                {% trans "Sign In" %}
-                </span>
-              </a>
-            </div>
-            {% endif %}
-
-
-            <!-- Sign Up Button - Unified -->
-            {% if not user.is_authenticated %}
-            <div class="position-relative sign-up-button-inner-container">
-              <button id="signUpButton" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
-                <a href="{% url 'register' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
-                  {% trans "Sign Up" %}
+                    <!-- NEW: Company Dropdown (Blog, Careers, About) -->
+                    <li class="nav-item dropdown nav-spacing">
+                        <a href="#" class="nav-link dropdown-toggle nav-item-padding" id="companyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Company
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+                        <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="companyDropdown">
+                            <!-- Blog Submenu -->
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-item-improved" href="#" data-submenu="blog">
+                  Blog
                 </a>
-              </button>
-            </div>
-            {% endif %}
+                                <ul class="dropdown-menu dropdown-submenu-menu dropdown-menu-improved" data-submenu-id="blog">
+                                    <li><a class="dropdown-item dropdown-item-improved" href="{% url 'blogpage' %}">Create a Blog</a></li>
+                                    <li><a class="dropdown-item dropdown-item-improved" href="{% url 'publishedblog' %}">Published Blogs</a></li>
+                                </ul>
+                            </li>
 
-            <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
-              aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </span>
+                            <!-- Careers Submenu -->
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-item-improved" href="#" data-submenu="careers">
+                  Careers
+                </a>
+                                <ul class="dropdown-menu dropdown-submenu-menu dropdown-menu-improved" data-submenu-id="careers">
+                                    <li><a class="dropdown-item dropdown-item-improved" href="{% url 'career-discover' %}">Discover Hardhat</a></li>
+                                    <li><a class="dropdown-item dropdown-item-improved" href="{% url 'career-list' %}">All Jobs</a></li>
+                                    <li><a class="dropdown-item dropdown-item-improved" href="{% url 'internships' %}">Internships</a></li>
+                                    <li><a class="dropdown-item dropdown-item-improved" href="{% url 'job-alerts' %}">Job Alerts</a></li>
+                                </ul>
+                            </li>
 
-        <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.get_full_path }}">
-          <input type="hidden" name="language" id="lang-input">
-        </form>
+                            <!-- About -->
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'about_us' %}">About</a></li>
+                        </ul>
+                    </li>
 
-        <style>
-          .flag-icon{
-            width: 30px;          
-            height: 21px;          
-            object-fit: cover;    
-            flex-shrink: 0;         
-            margin-right: 10px;       
-            display: inline-block;    
-            vertical-align: middle;
-            border-radius: 2px;
-          }
+                    <!-- Upskilling (Authenticated Users Only) -->
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown nav-spacing">
+                        <a href="#" class="nav-link dropdown-toggle nav-item-padding" id="upskillingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Upskilling
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+                        <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="upskillingDropdown">
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'dashboard' %}">Dashboard</a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'upskilling' %}">Skills</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
 
-          .dropdown-menu#lang_menu {
-            background-color: #fff !important;     
-            border: 1px solid #ccc !important;     
-            border-radius: 4px !important;       
-            box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
-            padding: 0 !important;
-            margin-top: 0.5rem !important;
-            min-width: auto !important;
-            width: auto !important;
-            z-index: 2001 !important;
-          }
-          </div>
+                    <!-- Admin Settings (Authenticated Users Only) -->
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown nav-spacing">
+                        <a href="#" class="nav-link dropdown-toggle nav-item-padding" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+            </a>
+                        <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="adminDropdown">
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'adminblogpage' %}">Review Blogs</a></li>
+                            <li><a class="dropdown-item dropdown-item-improved" href="{% url 'reports' %}">Reports</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
 
-
-          <!-- language switcher -->
-          <div class="dropdown" style="margin-left:10px;margin-right:5px;">
-            {% get_current_language as CURRENT_LANG %}
-            {% with code=CURRENT_LANG|lower|slice:":2" %}
-            <button class="nav-link dropdown-toggle btn btn-link p-0"
-                    id="langDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    title="{% trans 'Language' %}"
-                    type="button">
-              {% if code == "en" %}
-                🌐
-              {% elif code == "es" %}
-                <img class="flag-icon" src="{% static 'images/flags/es.png' %}" alt="Español">
-              {% elif code == "zh" %}
-                <img class="flag-icon" src="{% static 'images/flags/cn.png' %}" alt="简体中文">
-              {% elif code == "fr" %}
-                <img class="flag-icon" src="{% static 'images/flags/fr.png' %}" alt="Français">
-              {% elif code == "ja" %}
-                <img class="flag-icon" src="{% static 'images/flags/jp.png' %}" alt="日本語">
-              {% elif code == "ko" %}
-                <img class="flag-icon" src="{% static 'images/flags/kr.png' %}" alt="한국어">
-              {% else %}
-                🌐
-              {% endif %}
+                    <!-- Collapsed Search Icon -->
+                    <li class="nav-item nav-spacing">
+                        <button class="nav-link nav-item-padding search-toggle-btn" type="button" id="searchToggle">
+              <i class="fas fa-search"></i>
             </button>
-            {% endwith %}
+                    </li>
+                </ul>
 
-            <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
-              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
-                <img class="flag-icon me-2" src="{% static 'images/flags/us.png' %}" alt="English"> English
-              </a></li>
-              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="es">
-                <img class="flag-icon me-2" src="{% static 'images/flags/es.png' %}" alt="Español"> Español
-              </a></li>
-              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="zh-hans">
-                <img class="flag-icon me-2" src="{% static 'images/flags/cn.png' %}" alt="简体中文"> 简体中文
-              </a></li>
-              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="fr">
-                <img class="flag-icon me-2" src="{% static 'images/flags/fr.png' %}" alt="Français"> Français
-              </a></li>
-              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ja">
-                <img class="flag-icon me-2" src="{% static 'images/flags/jp.png' %}" alt="日本語"> 日本語
-              </a></li>
-              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ko">
-                <img class="flag-icon me-2" src="{% static 'images/flags/kr.png' %}" alt="한국어"> 한국어
-              </a></li>
-            </ul>
-          </div>
+                <!-- Collapsible Desktop Search -->
+                <div class="search-container-desktop position-relative d-none" id="searchContainer">
+                    <form class="desktop-search-bar" method="POST" action="{% url 'pages/search-results' %}">
+                        {% csrf_token %}
+                        <input class="form-control search-box" type="search" id="searchInput" name="q" placeholder="Search..." aria-label="Search" autocomplete="off">
+                        <button class="search-btn" type="submit">
+              <i class="fas fa-search search-icon"></i>
+            </button>
+                    </form>
+                    <div class="result-box d-none"></div>
+                </div>
+            </div>
 
-          <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.get_full_path }}">
-            <input type="hidden" name="language" id="lang-input">
-          </form>
+            <!-- Right Side Actions -->
+            <div class="d-flex align-items-center">
+                {% if user.is_authenticated %}
+                <!-- Combined User Dropdown (Profile + Logout + Theme) -->
+                <div class="dropdown user-dropdown-container">
+                    <button class="btn btn-link user-dropdown-toggle p-0 d-flex align-items-center" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'assets/img/pages/home/profile_icon.jpeg' %}" class="rounded-circle profile-avatar me-2" width="32" height="32" alt="Profile Picture">
+              <span class="d-none d-lg-inline header-profile-name me-1">{{ user.username }}</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+                    <div class="dropdown-menu dropdown-menu-end user-dropdown-menu" id="userDropdownMenu">
+                        <a class="dropdown-item" href="{% url 'profile' %}">
+                            <i class="fas fa-user me-2"></i>Profile
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="darkModeToggle" type="button">
+                <i class="fas fa-sun me-2" id="darkModeIcon"></i>Theme
+              </button>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Sign In Dropdown for Non-authenticated Users -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-outline-primary dropdown-toggle" id="signInDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-sign-in-alt me-1"></i>Sign In
+            </button>
+                    <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="signInDropdown">
+                        <li><a class="dropdown-item dropdown-item-improved" href="{% url 'login' %}">Student Sign In</a></li>
+                        <li><a class="dropdown-item dropdown-item-improved" href="#">Client Sign In</a></li>
+                    </ul>
+                </div>
 
-          <style>
-            .flag-icon{
-              width: 30px;
-              height: 21px;
-              object-fit: cover;
-              flex-shrink: 0;
-              margin-right: 10px;
-              display: inline-block;
-              vertical-align: middle;
-              border-radius: 2px;
-            }
+                <!-- Sign Up Dropdown for Non-authenticated Users -->
+                <div class="dropdown me-2">
+                    <button class="btn btn-primary dropdown-toggle" id="signUpDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user-plus me-1"></i>Sign Up
+            </button>
+                    <ul class="dropdown-menu dropdown-menu-improved" aria-labelledby="signUpDropdown">
+                        <li><a class="dropdown-item dropdown-item-improved" href="{% url 'register' %}">Student Sign Up</a></li>
+                        <li><a class="dropdown-item dropdown-item-improved" href="#">Client Sign Up</a></li>
+                    </ul>
+                </div>
 
-            .dropdown-menu#lang_menu {
-              background-color: #fff !important;
-              border: 1px solid #ccc !important;
-              border-radius: 4px !important;
-              box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
-              padding: 0 !important;
-              margin-top: 0.5rem !important;
-              min-width: auto !important;
-              width: auto !important;
-            }
+                <!-- Theme Toggle Icon for Non-authenticated Users -->
+                <button class="btn btn-link p-1 me-2" id="darkModeButton" title="Toggle Theme">
+            <i class="fas fa-sun" id="darkModeIconGuest"></i>
+          </button> {% endif %}
 
-            .dropdown-menu#lang_menu .dropdown-item {
-              color: #4B5868 !important;
-              font-weight: 500;
-              padding: 0.5rem 0.8rem !important;
-              padding-right: 1.2rem !important;
-              background-color: transparent !important;
-              border-bottom: 1px solid #eee;
-              display: flex !important;
-              align-items: center;
-              justify-content: flex-start;
-            }
-
-            .dropdown-menu#lang_menu .dropdown-item:last-child {
-              border-bottom: none;
-            }
-
-            .dropdown-menu#lang_menu .dropdown-item:hover,
-            .dropdown-menu#lang_menu .dropdown-item:focus {
-              background-color: #1967D2 !important;
-              color: #fff !important;
-            }
-
-            .dropdown-menu#lang_menu .dropdown-item.active {
-              background-color: #ffcd11 !important;
-              color: #fff !important;
-            }
-
-            #langDropdown img.flag-icon {
-              filter: none !important;
-              opacity: 1 !important;
-            }
-          </style>
-          <script>
-            document.addEventListener('DOMContentLoaded', function () {
-              const form  = document.getElementById('set-lang-form');
-              const input = document.getElementById('lang-input');
-              document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
-                a.addEventListener('click', function (e) {
-                  e.preventDefault();
-                  input.value = this.dataset.lang;
-                  form.submit();
-                });
-              });
-            });
-          </script>
-
-
-          <!-- dark mode toggle -->
-          <div style="margin-left: 6px;">
-            <label id="darkModeButton" class="dark-mode-toggle" style="margin: 0px;">
-              <i class="fas fa-sun icon" id="darkModeIcon"></i>
-            </label>
-          </div>
+                <!-- Mobile Menu Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+            </div>
         </div>
-      </div>
     </nav>
-  </header>
-  <script src="{% static 'js/toggles.js' %}"></script>
+</header>
 
-  <script src="{% static 'js/search_suggestions.js' %}"></script>
-
-  <style>
-    .header-profile-name { color: #1a1a1a !important; }
-    body.dark-mode .header-profile-name { color: #fff !important; }
-  </style>
-
-  <style>
-  .dropdown-submenu {
-    position: relative;
-  }
-
-  .submenu {
-    display: none;
-    top: 0;
-    left: 100%;
-    margin-top: -1px;
-    border-radius: 0.25rem;
-    z-index: 1000;
-  }
-
-  .dropdown-submenu.show > .submenu {
-    display: block;
-  }
-
-  </style>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const blogPagePlus = document.getElementById('blogPagePlus');
-      const parentSubmenu = blogPagePlus.closest('.dropdown-submenu');
-      const submenu = blogPagePlus.nextElementSibling;
-
-      // Prevent Bootstrap auto-close on click inside dropdown
-      document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        menu.addEventListener('click', function (e) {
-          e.stopPropagation();
-        });
-      });
-
-      // Bootstrap fix: Stop parent from closing when submenu toggles
-      document.querySelectorAll('.dropdown').forEach(drop => {
-        drop.addEventListener('hide.bs.dropdown', function (e) {
-          if (parentSubmenu.classList.contains('show')) {
-            e.preventDefault(); // prevent closing if submenu is open
-            parentSubmenu.classList.remove('show'); // manually close submenu
-          }
-        });
-      });
-
-      // Toggle submenu on Blog Page + click
-      blogPagePlus.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        // Close all other open submenus
-        document.querySelectorAll('.dropdown-submenu').forEach(sub => {
-          if (sub !== parentSubmenu) sub.classList.remove('show');
-        });
-
-        // Toggle current submenu
-        parentSubmenu.classList.toggle('show');
-      });
-
-      // Close submenu if clicked outside the entire dropdown
-      document.addEventListener('click', function (e) {
-        if (!parentSubmenu.contains(e.target)) {
-          parentSubmenu.classList.remove('show');
+<!-- Enhanced Custom Styles -->
+<style>
+    /* Enhanced Navigation Spacing and Padding */
+    
+    .nav-spacing {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    
+    .nav-item-padding {
+        padding: 0.75rem 1.25rem !important;
+    }
+    /* Improved Dropdown Styles */
+    
+    .dropdown-menu-improved,
+    .dropdown-menu {
+        background-color: #2d3748 !important;
+        border: 1px solid #4a5568 !important;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        padding: 0.5rem 0;
+        min-width: 200px;
+        overflow: visible;
+        margin-top: 0.125rem;
+    }
+    
+    .dropdown-item-improved,
+    .dropdown-item {
+        padding: 0.75rem 1.25rem !important;
+        font-weight: 400;
+        color: #e2e8f0 !important;
+        text-decoration: none;
+        transition: all 0.15s ease;
+        background: none !important;
+        border: none;
+        width: 100%;
+        text-align: left;
+        display: block;
+        margin: 0;
+        border-radius: 0;
+        cursor: pointer;
+    }
+    
+    .dropdown-item-improved:hover,
+    .dropdown-item:hover,
+    .dropdown-item-improved:focus,
+    .dropdown-item:focus {
+        background-color: #4a5568 !important;
+        color: #ffffff !important;
+        text-decoration: none;
+    }
+    /* Active Page Highlighting */
+    
+    .nav-link.active,
+    .nav-link[aria-current="page"] {
+        color: #3b82f6 !important;
+        font-weight: 600;
+        position: relative;
+    }
+    
+    .nav-link.active::after,
+    .nav-link[aria-current="page"]::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 2px;
+        background-color: #3b82f6;
+        border-radius: 1px;
+    }
+    /* Search Toggle Button */
+    
+    .search-toggle-btn {
+        background: none;
+        border: none;
+        color: #6b7280;
+        font-size: 1.1rem;
+        transition: color 0.2s ease;
+    }
+    
+    .search-toggle-btn:hover {
+        color: #3b82f6;
+    }
+    /* Search Container */
+    
+    .search-container-desktop {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        min-width: 300px;
+        z-index: 1000;
+    }
+    /* CRITICAL FIX: User Dropdown Container and Positioning */
+    
+    .user-dropdown-container {
+        position: relative !important;
+        z-index: 9999 !important;
+    }
+    /* User Dropdown */
+    
+    .user-dropdown-toggle {
+        border: none;
+        background: none;
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+        color: inherit;
+    }
+    
+    .user-dropdown-toggle:hover {
+        opacity: 0.8;
+        color: inherit;
+        text-decoration: none;
+    }
+    
+    .profile-avatar {
+        border: 2px solid #e5e7eb;
+        transition: border-color 0.2s ease;
+        object-fit: cover;
+    }
+    
+    .user-dropdown-toggle:hover .profile-avatar {
+        border-color: #3b82f6;
+    }
+    /* CRITICAL FIX: Enhanced User Dropdown Menu with Absolute Positioning */
+    
+    .user-dropdown-menu {
+        position: absolute !important;
+        top: 100% !important;
+        right: 0 !important;
+        left: auto !important;
+        z-index: 10000 !important;
+        min-width: 200px !important;
+        padding: 0.5rem 0 !important;
+        background-color: #2d3748 !important;
+        border: 1px solid #4a5568 !important;
+        border-radius: 0.5rem !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4) !important;
+        margin-top: 0.5rem !important;
+        transform: translateY(0) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: all 0.15s ease !important;
+        pointer-events: none !important;
+    }
+    /* Show dropdown when active */
+    
+    .user-dropdown-container .dropdown.show .user-dropdown-menu,
+    .user-dropdown-menu.show {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translateY(0) !important;
+    }
+    /* CRITICAL FIX: Prevent any external interference */
+    
+    .user-dropdown-menu::before,
+    .user-dropdown-menu::after {
+        content: none !important;
+        display: none !important;
+    }
+    /* Force all dropdown items to be visible and properly styled */
+    
+    .user-dropdown-menu .dropdown-item {
+        display: flex !important;
+        align-items: center !important;
+        padding: 0.75rem 1.25rem !important;
+        color: #e2e8f0 !important;
+        text-decoration: none !important;
+        background: transparent !important;
+        border: none !important;
+        width: 100% !important;
+        text-align: left !important;
+        cursor: pointer !important;
+        position: relative !important;
+        z-index: 10001 !important;
+        transition: all 0.15s ease !important;
+        font-size: 0.875rem !important;
+        line-height: 1.25 !important;
+    }
+    
+    .user-dropdown-menu .dropdown-item:hover,
+    .user-dropdown-menu .dropdown-item:focus {
+        background-color: #4a5568 !important;
+        color: #ffffff !important;
+        outline: none !important;
+    }
+    
+    .user-dropdown-menu .dropdown-divider {
+        border-top: 1px solid #4a5568 !important;
+        margin: 0.5rem 0 !important;
+        opacity: 1 !important;
+    }
+    /* CRITICAL FIX: Remove any potential external content injection */
+    
+    .user-dropdown-menu>*:not(.dropdown-item):not(.dropdown-divider) {
+        display: none !important;
+    }
+    /* Theme toggle button specific styling */
+    
+    #darkModeToggle {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        z-index: 10002 !important;
+    }
+    /* Header Profile Name */
+    
+    .header-profile-name {
+        color: #1a1a1a !important;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+    
+    body.dark-mode .header-profile-name {
+        color: #fff !important;
+    }
+    /* Manual Submenu Styles for Bootstrap 5 */
+    
+    .dropdown-submenu {
+        position: relative;
+    }
+    /* Hide all potential arrows */
+    
+    .dropdown-submenu *::after,
+    .dropdown-submenu *::before {
+        display: none !important;
+        content: none !important;
+    }
+    
+    .dropdown-submenu .dropdown-item-improved {
+        position: relative;
+    }
+    /* Create single custom CSS arrow */
+    
+    .dropdown-submenu .dropdown-item-improved::after {
+        content: "›" !important;
+        position: absolute !important;
+        right: 1rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        font-size: 1rem !important;
+        color: #9ca3af !important;
+        transition: all 0.15s ease !important;
+        display: block !important;
+        z-index: 10 !important;
+    }
+    
+    .dropdown-submenu:hover .dropdown-item-improved::after,
+    .dropdown-submenu.active .dropdown-item-improved::after {
+        color: #ffffff !important;
+    }
+    
+    .dropdown-submenu-menu {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        margin-left: 0.25rem;
+        margin-top: 0;
+        min-width: 180px;
+        display: none;
+        z-index: 1001;
+    }
+    
+    .dropdown-submenu-menu.show {
+        display: block;
+    }
+    /* Show submenu on hover for desktop */
+    
+    @media (min-width: 992px) {
+        .dropdown-submenu:hover .dropdown-submenu-menu {
+            display: block;
         }
-      });
-    });
-  </script>
+    }
+    /* Dark Mode Overrides */
+    
+    body.dark-mode .search-container-desktop {
+        background-color: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    body.dark-mode .search-container-desktop .form-control {
+        background-color: #374151;
+        border-color: #4b5563;
+        color: #e5e7eb;
+    }
+    /* Enhanced Button Styling */
+    
+    .btn-outline-primary {
+        border-color: #3b82f6;
+        color: #3b82f6;
+        padding: 0.5rem 1rem;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        color: white;
+    }
+    
+    .btn-primary {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        padding: 0.5rem 1rem;
+    }
+    
+    .btn-primary:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+    }
+    /* Mobile Responsiveness */
+    
+    @media (max-width: 991.98px) {
+        .nav-spacing {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .nav-item-padding {
+            padding: 0.5rem 0 !important;
+        }
+        .dropdown-menu-improved {
+            position: static !important;
+            float: none !important;
+            box-shadow: none;
+            border: none;
+            padding-left: 1rem;
+        }
+        /* Mobile user dropdown adjustments */
+        .user-dropdown-menu {
+            position: static !important;
+            box-shadow: none !important;
+            border: none !important;
+            margin-top: 0 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+        /* Mobile submenu styling */
+        .dropdown-submenu-menu {
+            position: static !important;
+            margin-left: 1rem !important;
+            margin-top: 0.5rem !important;
+            box-shadow: none !important;
+            border: none !important;
+            border-left: 2px solid #4a5568 !important;
+            border-radius: 0 !important;
+            padding-left: 0.5rem;
+        }
+        .dropdown-submenu-menu.show {
+            display: block !important;
+        }
+    }
+    /* Accessibility improvements */
+    
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none !important;
+        }
+    }
+    /* Enhanced visual spacing */
+    
+    .navbar-nav .nav-item+.nav-item {
+        margin-left: 0.5rem;
+    }
+    /* Consistent padding for all menu elements */
+    
+    .dropdown-item,
+    .dropdown-item-improved,
+    .nav-link {
+        line-height: 1.5;
+    }
+    /* Improved hover states */
+    
+    .nav-link:hover {
+        color: #3b82f6 !important;
+        transition: color 0.2s ease;
+    }
+</style>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const adminReviewDropdown = document.getElementById('adminReviewDropdown');
-      const adminSubmenu = adminReviewDropdown.closest('.dropdown-submenu');
+<!-- Enhanced JavaScript Functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search Toggle Functionality
+        const searchToggle = document.getElementById('searchToggle');
+        const searchContainer = document.getElementById('searchContainer');
 
-      adminReviewDropdown.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (searchToggle && searchContainer) {
+            searchToggle.addEventListener('click', function() {
+                searchContainer.classList.toggle('d-none');
+                if (!searchContainer.classList.contains('d-none')) {
+                    const searchInput = searchContainer.querySelector('#searchInput');
+                    if (searchInput) {
+                        setTimeout(() => searchInput.focus(), 100);
+                    }
+                }
+            });
 
-        // Close other open submenus
-        document.querySelectorAll('.dropdown-submenu').forEach(item => {
-          if (item !== adminSubmenu) item.classList.remove('show');
+            // Close search when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchToggle.contains(e.target) && !searchContainer.contains(e.target)) {
+                    searchContainer.classList.add('d-none');
+                }
+            });
+
+            // Close search on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !searchContainer.classList.contains('d-none')) {
+                    searchContainer.classList.add('d-none');
+                }
+            });
+        }
+
+        // Enhanced Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const darkModeButton = document.getElementById('darkModeButton');
+        const darkModeIconGuest = document.getElementById('darkModeIconGuest');
+        const darkmodeToggleSwitch = document.getElementById('darkmode-toggle');
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+
+            // Update all dark mode icons
+            if (darkModeIcon) {
+                darkModeIcon.className = isDark ? 'fas fa-moon me-2' : 'fas fa-sun me-2';
+            }
+            if (darkModeIconGuest) {
+                darkModeIconGuest.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+            }
+
+            // Update mobile toggle switch
+            if (darkmodeToggleSwitch) {
+                darkmodeToggleSwitch.checked = isDark;
+            }
+
+            // Store preference
+            try {
+                localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            } catch (e) {
+                console.warn('Could not save dark mode preference');
+            }
+        }
+
+        // Event listeners for all dark mode toggles
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent dropdown from closing
+                toggleDarkMode();
+            });
+        }
+
+        if (darkModeButton) {
+            darkModeButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleDarkMode();
+            });
+        }
+
+        if (darkmodeToggleSwitch) {
+            darkmodeToggleSwitch.addEventListener('change', function() {
+                toggleDarkMode();
+            });
+        }
+
+        // Initialize dark mode from localStorage
+        try {
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                if (darkModeIcon) darkModeIcon.className = 'fas fa-moon me-2';
+                if (darkModeIconGuest) darkModeIconGuest.className = 'fas fa-moon';
+                if (darkmodeToggleSwitch) darkmodeToggleSwitch.checked = true;
+            }
+        } catch (e) {
+            console.warn('Could not load dark mode preference');
+        }
+
+        // CRITICAL FIX: Enhanced User Dropdown Management
+        const userDropdown = document.getElementById('userDropdown');
+        const userDropdownMenu = document.getElementById('userDropdownMenu');
+        const userDropdownContainer = document.querySelector('.user-dropdown-container');
+
+        if (userDropdown && userDropdownMenu && userDropdownContainer) {
+            // Clean up any external interference immediately
+            function cleanupDropdown() {
+                try {
+                    // Remove any unwanted injected elements
+                    const allElements = userDropdownMenu.querySelectorAll('*');
+                    allElements.forEach(function(el) {
+                        // Remove elements that contain "Recently Viewed Pages" or similar unwanted content
+                        if (el.textContent &&
+                            (el.textContent.includes('Recently Viewed Pages') ||
+                                el.textContent.includes('recently viewed') ||
+                                el.textContent.includes('Recent Pages')) &&
+                            !el.classList.contains('dropdown-item') &&
+                            !el.classList.contains('dropdown-divider')) {
+                            el.remove();
+                        }
+                    });
+
+                    // Ensure all expected elements are present and properly styled
+                    const themeToggle = document.getElementById('darkModeToggle');
+                    if (themeToggle) {
+                        themeToggle.style.display = 'flex';
+                        themeToggle.style.visibility = 'visible';
+                        themeToggle.style.opacity = '1';
+                        themeToggle.style.position = 'relative';
+                        themeToggle.style.zIndex = '10002';
+                    }
+                } catch (error) {
+                    console.warn('Error cleaning up dropdown:', error);
+                }
+            }
+
+            // Custom dropdown toggle functionality
+            var dropdownVisible = false;
+
+            userDropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Clean up before showing
+                cleanupDropdown();
+
+                dropdownVisible = !dropdownVisible;
+
+                if (dropdownVisible) {
+                    userDropdownMenu.classList.add('show');
+                    userDropdownContainer.classList.add('show');
+                    userDropdown.setAttribute('aria-expanded', 'true');
+                } else {
+                    userDropdownMenu.classList.remove('show');
+                    userDropdownContainer.classList.remove('show');
+                    userDropdown.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!userDropdownContainer.contains(e.target)) {
+                    dropdownVisible = false;
+                    userDropdownMenu.classList.remove('show');
+                    userDropdownContainer.classList.remove('show');
+                    userDropdown.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Prevent dropdown from closing when clicking inside (except on actual links)
+            userDropdownMenu.addEventListener('click', function(e) {
+                if (!e.target.closest('a[href]') && e.target.id !== 'darkModeToggle') {
+                    e.stopPropagation();
+                }
+            });
+
+            // Clean up periodically to prevent external interference
+            setInterval(cleanupDropdown, 1000);
+
+            // Clean up immediately
+            setTimeout(cleanupDropdown, 100);
+
+            // Additional protection against external content injection
+            if (window.MutationObserver) {
+                var observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'childList' && mutation.target === userDropdownMenu) {
+                            // Check for unwanted additions
+                            mutation.addedNodes.forEach(function(node) {
+                                if (node.nodeType === Node.ELEMENT_NODE &&
+                                    node.textContent &&
+                                    (node.textContent.includes('Recently Viewed Pages') ||
+                                        node.textContent.includes('recently viewed') ||
+                                        node.textContent.includes('Recent Pages')) &&
+                                    !node.classList.contains('dropdown-item') &&
+                                    !node.classList.contains('dropdown-divider')) {
+                                    node.remove();
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // Start observing
+                observer.observe(userDropdownMenu, {
+                    childList: true,
+                    subtree: true
+                });
+            }
+        }
+
+        // Manual Submenu Handling (Bootstrap 5 Compatible)
+        var submenuTriggers = document.querySelectorAll('[data-submenu]');
+
+        submenuTriggers.forEach(function(trigger) {
+            var submenuName = trigger.getAttribute('data-submenu');
+            var submenu = document.querySelector('[data-submenu-id="' + submenuName + '"]');
+            var parentSubmenu = trigger.closest('.dropdown-submenu');
+
+            if (!submenu) return;
+
+            // Click handler for submenu toggle
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Close other submenus
+                var allSubmenus = document.querySelectorAll('.dropdown-submenu-menu');
+                allSubmenus.forEach(function(otherSubmenu) {
+                    if (otherSubmenu !== submenu) {
+                        otherSubmenu.classList.remove('show');
+                        otherSubmenu.closest('.dropdown-submenu').classList.remove('active');
+                    }
+                });
+
+                // Toggle current submenu
+                var isOpen = submenu.classList.contains('show');
+                if (isOpen) {
+                    submenu.classList.remove('show');
+                    parentSubmenu.classList.remove('active');
+                } else {
+                    submenu.classList.add('show');
+                    parentSubmenu.classList.add('active');
+                }
+            });
+
+            // Desktop hover behavior
+            if (window.innerWidth > 991) {
+                parentSubmenu.addEventListener('mouseenter', function() {
+                    // Close other submenus first
+                    var allSubmenus = document.querySelectorAll('.dropdown-submenu-menu');
+                    allSubmenus.forEach(function(otherSubmenu) {
+                        if (otherSubmenu !== submenu) {
+                            otherSubmenu.classList.remove('show');
+                            otherSubmenu.closest('.dropdown-submenu').classList.remove('active');
+                        }
+                    });
+
+                    submenu.classList.add('show');
+                    parentSubmenu.classList.add('active');
+                });
+
+                parentSubmenu.addEventListener('mouseleave', function() {
+                    submenu.classList.remove('show');
+                    parentSubmenu.classList.remove('active');
+                });
+            }
         });
 
-        adminSubmenu.classList.toggle('show');
-      });
+        // Close all submenus when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                var allSubmenus = document.querySelectorAll('.dropdown-submenu-menu.show');
+                allSubmenus.forEach(function(submenu) {
+                    submenu.classList.remove('show');
+                    submenu.closest('.dropdown-submenu').classList.remove('active');
+                });
+            }
+        });
 
-      document.addEventListener('click', function (e) {
-        if (!adminSubmenu.contains(e.target)) {
-          adminSubmenu.classList.remove('show');
-        }
-      });
+        // Prevent dropdown from closing when clicking inside (for other dropdowns)
+        document.querySelectorAll('.dropdown-menu:not(.user-dropdown-menu)').forEach(function(menu) {
+            menu.addEventListener('click', function(e) {
+                // Only stop propagation for non-link clicks
+                if (!e.target.closest('a[href]')) {
+                    e.stopPropagation();
+                }
+            });
+        });
+
+        // ENHANCED: Active page highlighting
+        var currentPath = window.location.pathname;
+        var navLinks = document.querySelectorAll('.nav-link:not(.dropdown-toggle)');
+
+        navLinks.forEach(function(link) {
+            var href = link.getAttribute('href');
+            if (href && href === currentPath) {
+                link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
+            }
+        });
+
+        // Handle window resize for responsive behavior
+        var resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                // Close all submenus on resize to prevent positioning issues
+                var allSubmenus = document.querySelectorAll('.dropdown-submenu-menu.show');
+                allSubmenus.forEach(function(submenu) {
+                    submenu.classList.remove('show');
+                    submenu.closest('.dropdown-submenu').classList.remove('active');
+                });
+
+                // Also close user dropdown on resize
+                var userDropdownMenu = document.getElementById('userDropdownMenu');
+                var userDropdownContainer = document.querySelector('.user-dropdown-container');
+                if (userDropdownMenu && userDropdownContainer) {
+                    userDropdownMenu.classList.remove('show');
+                    userDropdownContainer.classList.remove('show');
+                    var userDropdown = document.getElementById('userDropdown');
+                    if (userDropdown) {
+                        userDropdown.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            }, 250);
+        });
     });
-  </script>
-  <script src="{% static 'js/search_suggestions.js' %}"></script>
+</script>
+
+<!-- External Scripts -->
+<script src="{% static 'js/toggles.js' %}"></script>
+<script src="{% static 'js/search_suggestions.js' %}"></script>
