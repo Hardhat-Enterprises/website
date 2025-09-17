@@ -1,139 +1,33 @@
 
-{% load static %}
-{% load i18n %}
-<header class="header-global">
+  {% load static %}
+  {% load i18n %}
+  <header class="header-global">
 
-
-
-  {% comment %}
-  <nav id="navbar-main" aria-label="Primary navigation"
-    class="navbar navbar-main navbar-expand-lg navbar-theme-tertiary navbar-light">
-    <div class="container position-relative">
-      <a class="navbar-brand me-lg-5" href="/">
-        <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light">
-        <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark">
-      </a>
-      <div class="navbar-collapse collapse me-auto" id="navbar_global">
-        <div class="navbar-collapse-header">
-          <div class="row">
-            <div class="col-6 collapse-brand">
-              <a href="/">
-                <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo">
-              </a>
-            </div>
-            <div class="col-6 collapse-close">
-              <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-                aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
-            </div>
-          </div>
-        </div>
-        <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-          <li class="nav-item">
-            <a href="{% url 'index' %}" class="nav-link">
-              Home
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'about_us' %}" class="nav-link">
-              About
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'vault' %}" class="nav-link">
-              Vault
-            </a>
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
-              Projects
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu px-0 py-2 p-lg-4" aria-labelledby="frontPagesDropdown">
-              <div class="row">
-                <div class="col">
-                  <ul class="list-style-none mb-4">
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'appattack' %}">AppAttack</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'malware_viz_main' %}">Malware</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'ptgui_viz_main' %}">PT-GUI</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'smishing_detection_main' %}">Smishing Detection</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'Vr_main' %}">CyberSafe VR</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">Threat mirror</a>
-                    </li>
-                    <li class="mb-2 menu-item">
-                      <a class="menu-link" href="{% url 'policy_deployment' %}">The Policy Deployment Engine</a>
-                    </li>
-                  </ul>
-                </div>
+    <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
+      <div class="navbar-container position-relative">
+        <a class="navbar-brand me-lg-5" href="/">
+          <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light" />
+          <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark" />
+        </a>
+        <div class="navbar-collapse collapse me-auto dark-mode" id="navbar_global">
+          <div class="navbar-collapse-header">
+            <div class="row">
+              <div class="col-4 collapse-brand">
+                <a href="/">
+                  <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo" />
+                </a>
+              </div>
+              <div class="col-6 form-check form-switch dark-mode">
+                <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch"
+                  id="flexSwitchCheckChecked">
+                <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
+              </div>
+              <div class="col-2 collapse-close">
+                <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
+                  aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
               </div>
             </div>
-          </li>
-          <li class="nav-item nav-mobile-link">
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'profile' %}" class="btn btn-outline-gray-100 me-md-3">
-              Profile
-            </a>
-            <a href="{% url 'logout' %}" class="nav-link">Logout</a>
-            {% else %}
-            <a href="{% url 'login' %}" class="nav-link">Sign In</a>
-            {% endif %}
-          </li>
-          <a href="{% url 'profile' %}" class="nav-link d-flex align-items-center me-3">
-
-        </ul>
-      </div>
-      <div class="d-flex align-items-center">
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span
-            class="fas fa-sign-out-alt me-2"></span> Logout</a>
-        {% else %}
-        <a href="{% url 'login' %}" class="btn btn-outline-gray-100 d-none d-lg-inline me-md-3"><span
-            class="fas fa-sign-in-alt me-2"></span> Sign In</a>
-        {% endif %}
-        <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-          aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-  </nav>
-  {% endcomment %}
-
-
-
-  <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
-    <div class="navbar-container position-relative">
-      <a class="navbar-brand me-lg-5" href="/">
-        <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light" />
-        <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark" />
-      </a>
-      <div class="navbar-collapse collapse me-auto dark-mode" id="navbar_global">
-        <div class="navbar-collapse-header">
-          <div class="row">
-            <div class="col-4 collapse-brand">
-              <a href="/">
-                <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo" />
-              </a>
-            </div>
-            <div class="col-6 form-check form-switch dark-mode">
-              <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch"
-                id="flexSwitchCheckChecked">
-              <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
-            </div>
-            <div class="col-2 collapse-close">
-              <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
-                aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
-            </div>
           </div>
-        </div>
 
           <form class="mobile-search-bar" 
                 method="POST" 
@@ -148,326 +42,299 @@
                    autocomplete="off">
             <button class="search-btn-mobile" type="submit">
               <i class="fas fa-search search-icon"></i>
-            </button>
-          </form>
-          <div class="mobile-result-box d-none"></div>
- 
-
-        <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-          <li class="nav-item">
-            <a href="{% url 'index' %}" class="nav-link"> {% trans "Home" %} </a>
-          </li>
-
-          {% if user.is_authenticated %}
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="upskillingDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-              {% trans "Upskilling" %}
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="upskillingDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'dashboard' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "Dashboard" %}
-                  </li>
-                </a>
-                <a class="menu-link" href="{% url 'upskilling' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "Skills" %}
-                  </li>
-                </a>
-              </ul>
-            </div>
-          </li>
-          
-          {% endif %}
-
-          {% if user.is_authenticated %}
-          {% if user.is_staff or user.is_superuser %}
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
-              {% trans "Admin Settings" %}
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'user_management' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'project_teams' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'adminblogpage' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Review Blogs" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'reports' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Reports" %}</li>
-                </a>
-              </ul>
-            </div>
-          </li>
-          {% endif %}
-          {% endif %}
-
-
-          <li class="nav-item">
-            <a href="{% url 'about_us' %}" class="nav-link"> {% trans "About" %} </a>
-          </li>
-          {% if user.is_authenticated %}
-          <li class="nav-item">
-          <a class="nav-link" href="{% url 'vault' %}">Vault</a>
-        </li>
-         {% endif %}
-
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
-              {% trans "Projects" %}
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
-
-
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'appattack' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "AppAttack" %}
-                  </li>
-                </a>
-                <a class="menu-link" href="{% url 'ptgui_viz_main' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "PT-GUI" %}
-                  </li>
-                </a>
-                <a class="menu-link" href="{% url 'smishing_detection_main' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "Smishing Detection" %}
-                  </li>
-                </a>
-                <a class="menu-link" href="{% url 'Vr_main' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "Deakin CyberSafe VR" %}
-                  </li>
-                </a>
-                <a class="menu-link" href="{% url 'policy_deployment' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "The Policy Deployment Engine (New)" %}
-                  </li>
-                </a>
-                <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "Deakin Threat mirror (Finished)" %}
-                  </li>
-                </a>
-
-                <a class="menu-link" href="{% url 'policy_deployment' %}">
-
-                <a class="menu-link" href="{% url 'malware_viz_main' %}">
-
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "Malware (Finished)" %}
-                  </li>
-                </a>
-
-              </ul>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              {% trans "Blog" %}
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
-              <div class="row">
-                <div class="col">
-            <ul class="list-style-none">
-              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">{% trans "Create a Blog" %}</a></li>
-              <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">{% trans "Published Blogs" %}</a></li>
-            </ul>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% trans "Careers" %}
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'career-discover' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'career-list' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'graduate-program' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Graduate Program" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'internships' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'job-alerts' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li>
-                </a>
-                <a href="{% url 'career_path_finder' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Career Path Finder" %}</li>
-                </a>
-              </ul>
-            </div>
-          </li>
-          
-
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
-              {% trans "Cyber Challenges" %}
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'challenge_list' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "All Challenges" %}
-                  </li>
-                </a>
-                <a class="menu-link" href="{% url 'cyber_quiz' %}">
-                  <li class="mb-2 menu ps-3 py-1">
-                    {% trans "Quiz" %}
-                  </li>
-                </a>
-              </ul>
-            </div>
-          </li>
-
-          
-          <div class="search-container position-relative">
-            <form class="desktop-search-bar" 
-                  method="POST" 
-                  action="{% url 'pages/search-results' %}">
-              {% csrf_token %}
-              <input class="form-control me-4 search-box"
-                     type="search"
-                     id="searchInput"
-                     name="q"
-                     placeholder="{% trans 'Search...' %}"
-                     aria-label="Search"
-                     autocomplete="off"
-                     style="background-color: white !important; color: #333 !important; border: 1px solid #ddd !important;">
-              <button class="search-btn" type="submit">
-                <div><i class="fas fa-search search-icon"></i></div>
               </button>
             </form>
-            <div class="result-box d-none"></div>
-          </div>       
-
-        </ul>
-
-      </div>
+            <div class="mobile-result-box d-none"></div>
 
 
-      <div class="d-flex align-items-center justify-content-center">
-        {% if request.user.is_authenticated %}
+          <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+            <li class="nav-item">
+              <a href="{% url 'index' %}" class="nav-link"> {% trans "Home" %} </a>
+            </li>
 
-        <!-- Show Logout Button if User is Authenticated -->
-        <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
-            class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
-
-       <a class="profile-container" href="{% url 'profile' %}">
-        <img
-          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-          <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
-      </a>
-
-
-        {% else %}
-        <div class="sign-up-button-container">
-
-          {% endif %}
-
-          <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
-
-          <!-- Sign In Button for when User is Not Logged In -->
-          {% if not user.is_authenticated %}
-          <div class="position-relative sign-up-button-inner-container">
-            <a href="{% url 'login_with_otp' %}" class="sign-up-button" style="text-decoration: none; display: inline-block;">
-              <span class="fas fa-sign-in-alt me-2">
-              {% trans "Sign In" %}
-              </span>
-            </a>
-          </div>
-          {% endif %}
-
-
-          <!-- Sign Up Button - Unified -->
-          {% if not user.is_authenticated %}
-          <div class="position-relative sign-up-button-inner-container">
-            <button id="signUpButton" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
-              <a href="{% url 'register' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
-                {% trans "Sign Up" %}
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" id="upskillingDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+                {% trans "Upskilling" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </a>
-            </button>
-          </div>
-          {% endif %}
+              <div class="dropdown-menu pt-2" aria-labelledby="upskillingDropdown">
+                <ul class="list-style-none">
+                  <a class="menu-link" href="{% url 'dashboard' %}">
+                    <li class="mb-2 menu ps-3 py-1">
+                      {% trans "Dashboard" %}
+                    </li>
+                  </a>
+                  <a class="menu-link" href="{% url 'upskilling' %}">
+                    <li class="mb-2 menu ps-3 py-1">
+                      {% trans "Skills" %}
+                    </li>
+                  </a>
+                </ul>
+              </div>
+            </li>
 
-          <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </span>
-
-        </div>
-        
-        
-        <!-- language switcher -->
-        <div class="dropdown" style="margin-left:10px;margin-right:5px;">
-          {% get_current_language as CURRENT_LANG %}
-          {% with code=CURRENT_LANG|lower|slice:":2" %}
-          <button class="nav-link dropdown-toggle btn btn-link p-0"
-                  id="langDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  title="{% trans 'Language' %}"
-                  type="button">
-            {% if code == "en" %}
-              🌐
-            {% elif code == "es" %}
-              <img class="flag-icon" src="{% static 'images/flags/es.png' %}" alt="Español">
-            {% elif code == "zh" %}
-              <img class="flag-icon" src="{% static 'images/flags/cn.png' %}" alt="简体中文">
-            {% elif code == "fr" %}
-              <img class="flag-icon" src="{% static 'images/flags/fr.png' %}" alt="Français">
-            {% elif code == "ja" %}
-              <img class="flag-icon" src="{% static 'images/flags/jp.png' %}" alt="日本語">
-            {% elif code == "ko" %}
-              <img class="flag-icon" src="{% static 'images/flags/kr.png' %}" alt="한국어">
-            {% else %}
-              🌐
             {% endif %}
-          </button>
-          {% endwith %}
 
-          <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
-            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
-              <img class="flag-icon me-2" src="{% static 'images/flags/us.png' %}" alt="English"> English
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="es">
-              <img class="flag-icon me-2" src="{% static 'images/flags/es.png' %}" alt="Español"> Español
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="zh-hans">
-              <img class="flag-icon me-2" src="{% static 'images/flags/cn.png' %}" alt="简体中文"> 简体中文
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="fr">
-              <img class="flag-icon me-2" src="{% static 'images/flags/fr.png' %}" alt="Français"> Français
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ja">
-              <img class="flag-icon me-2" src="{% static 'images/flags/jp.png' %}" alt="日本語"> 日本語
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ko">
-              <img class="flag-icon me-2" src="{% static 'images/flags/kr.png' %}" alt="한국어"> 한국어
-            </a></li>
+            {% if user.is_authenticated %}
+            {% if user.is_staff or user.is_superuser %}
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+                {% trans "Admin Settings" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
+                <ul class="list-style-none">
+                  <a class="menu-link" href="#">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
+                  </a>
+                  <a class="menu-link" href="#">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
+                  </a>
+                  <a class="menu-link" href="#">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'adminblogpage' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Review Blogs" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'reports' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Reports" %}</li>
+                  </a>
+                </ul>
+              </div>
+            </li>
+            {% endif %}
+            {% endif %}
+
+
+            <li class="nav-item">
+              <a href="{% url 'about_us' %}" class="nav-link"> {% trans "About" %} </a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                {% trans "Projects" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" style="width: max-content !important;margin-left: 50px;" aria-labelledby="blogDropdown">
+                <div class="row">
+                  <div class="col">
+                    <ul class="list-style-none m-0 p-0">
+
+                      <li class="menu ps-3 py-2">
+                        <a class="nav-link d-block px-2 py-2" href="{% url 'appattack' %}" style="display:table;width:100%;">
+                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/appattack.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                            <div class="fw-semibold">{% trans "AppAttack" %}</div>
+                            <div class="small">{% trans "Offensive security assessment tool" %}</div>
+                          </span>
+                        </a>
+                      </li>
+
+                      <li class="menu ps-3 py-2">
+                        <a class="nav-link d-block px-2 py-2" href="{% url 'malware_viz_main' %}" style="display:table;width:100%;">
+                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/malware.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                            <div class="fw-semibold">{% trans "Malware" %}</div>
+                            <div class="small">{% trans "Malware research and visualization" %}</div>
+                          </span>
+                        </a>
+                      </li>          
+
+                      <li class="menu ps-3 py-2">
+                        <a class="nav-link d-block px-2 py-2" href="{% url 'ptgui_viz_main' %}" style="display:table;width:100%;">
+                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/pentesting.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                            <div class="fw-semibold">{% trans "PT-GUI" %}</div>
+                            <div class="small">{% trans "Visual penetration testing dashboard" %}</div>
+                          </span>
+                        </a>
+                      </li>
+                      
+                      <li class="menu ps-3 py-2">
+                        <a class="nav-link d-block px-2 py-2" href="{% url 'smishing_detection_main' %}" style="display:table;width:100%;">
+                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/phishing.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                            <div class="fw-semibold">{% trans "Smishing Detection" %}</div>
+                            <div class="small">{% trans "SMS phishing detection system" %}</div>
+                          </span>
+                        </a>
+                      </li>
+
+                      <li class="menu ps-3 py-2">
+                        <a class="nav-link d-block px-2 py-2" href="{% url 'Vr_main' %}" style="display:table;width:100%;">
+                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/vr-cyber.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                            <div class="fw-semibold">{% trans "Deakin CyberSafe VR" %}</div>
+                            <div class="small">{% trans "VR Cyber safety project" %}</div>
+                          </span>
+                        </a>
+                      </li>
+
+                      <li class="menu ps-3 py-2">
+                        <a class="nav-link d-block px-2 py-2" href="{% url 'Deakin_Threat_mirror_main' %}" style="display:table;width:100%;">
+                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/threat.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                            <div class="fw-semibold">{% trans "Threat mirror" %}</div>
+                            <div class="small">{% trans "Threat Detection Framework" %}</div>
+                          </span>
+                        </a>
+                      </li>
+
+                      <li class="menu ps-3 py-2">
+                        <a class="nav-link d-block px-2 py-2" href="{% url 'policy_deployment' %}" style="display:table;width:100%;">
+                          <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/policy.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                          <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                            <div class="fw-semibold">{% trans "The Policy Deployment Engine" %}</div>
+                            <div class="small">{% trans "Automated policy enforcement engine" %}</div>
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                {% trans "Blog" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
+                <div class="row">
+                  <div class="col">
+              <ul class="list-style-none">
+                <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">{% trans "Create a Blog" %}</a></li>
+                <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">{% trans "Published Blogs" %}</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {% trans "Careers" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
+                <ul class="list-style-none">
+                  <a class="menu-link" href="{% url 'career-discover' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'career-list' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'internships' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'job-alerts' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li>
+                  </a>
+                  <a href="{% url 'career_path_finder' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Career Path Finder" %}</li>
+                  </a>
+                </ul>
+              </div>
+            </li>
+
+
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+                data-bs-toggle="dropdown">
+                {% trans "Cyber Challenges" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+                <ul class="list-style-none">
+                  <a class="menu-link" href="{% url 'challenge_list' %}">
+                    <li class="mb-2 menu ps-3 py-1">
+                      {% trans "All Challenges" %}
+                    </li>
+                  </a>
+                  <a class="menu-link" href="{% url 'cyber_quiz' %}">
+                    <li class="mb-2 menu ps-3 py-1">
+                      {% trans "Quiz" %}
+                    </li>
+                  </a>
+                </ul>
+              </div>
+            </li>
+
+
+            <div class="search-container position-relative">
+              <form class="desktop-search-bar"
+                    method="POST"
+                    action="{% url 'pages/search-results' %}">
+                {% csrf_token %}
+                <input class="form-control me-4 search-box"
+                      type="search"
+                      id="searchInput"
+                      name="q"
+                      placeholder="{% trans 'Search...' %}"
+                      aria-label="Search"
+                      autocomplete="off">
+                <button class="search-btn" type="submit">
+                  <div><i class="fas fa-search search-icon"></i></div>
+                </button>
+              </form>
+              <div class="result-box d-none"></div>
+            </div>
+
           </ul>
+
         </div>
+
+
+        <div class="d-flex align-items-center justify-content-center">
+          {% if request.user.is_authenticated %}
+
+          <!-- Show Logout Button if User is Authenticated -->
+          <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
+              class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
+
+        <a class="profile-container" href="{% url 'profile' %}">
+          <img
+            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+            <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+        </a>
+
+
+          {% else %}
+          <div class="sign-up-button-container">
+
+            {% endif %}
+
+            <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
+
+            <!-- Sign In Button for when User is Not Logged In -->
+            {% if not user.is_authenticated %}
+            <div class="position-relative sign-up-button-inner-container">
+              <a href="{% url 'login_with_otp' %}" class="sign-up-button" style="text-decoration: none; display: inline-block;">
+                <span class="fas fa-sign-in-alt me-2">
+                {% trans "Sign In" %}
+                </span>
+              </a>
+            </div>
+            {% endif %}
+
+
+            <!-- Sign Up Button - Unified -->
+            {% if not user.is_authenticated %}
+            <div class="position-relative sign-up-button-inner-container">
+              <button id="signUpButton" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
+                <a href="{% url 'register' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
+                  {% trans "Sign Up" %}
+                </a>
+              </button>
+            </div>
+            {% endif %}
+
+            <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </span>
 
         <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
           {% csrf_token %}
@@ -498,161 +365,242 @@
             width: auto !important;
             z-index: 2001 !important;
           }
+          </div>
 
-          .dropdown-menu#lang_menu .dropdown-item {
-            color: #4B5868 !important;          
-            font-weight: 500;
-            padding: 0.5rem 0.8rem !important;
-            padding-right: 1.2rem !important;
-            background-color: transparent !important;
-            border-bottom: 1px solid #eee;
-            display: flex !important;         
-            align-items: center;
-            justify-content: flex-start;
-          }
 
-          .dropdown-menu#lang_menu .dropdown-item:last-child {
-            border-bottom: none;
-          }
+          <!-- language switcher -->
+          <div class="dropdown" style="margin-left:10px;margin-right:5px;">
+            {% get_current_language as CURRENT_LANG %}
+            {% with code=CURRENT_LANG|lower|slice:":2" %}
+            <button class="nav-link dropdown-toggle btn btn-link p-0"
+                    id="langDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    title="{% trans 'Language' %}"
+                    type="button">
+              {% if code == "en" %}
+                🌐
+              {% elif code == "es" %}
+                <img class="flag-icon" src="{% static 'images/flags/es.png' %}" alt="Español">
+              {% elif code == "zh" %}
+                <img class="flag-icon" src="{% static 'images/flags/cn.png' %}" alt="简体中文">
+              {% elif code == "fr" %}
+                <img class="flag-icon" src="{% static 'images/flags/fr.png' %}" alt="Français">
+              {% elif code == "ja" %}
+                <img class="flag-icon" src="{% static 'images/flags/jp.png' %}" alt="日本語">
+              {% elif code == "ko" %}
+                <img class="flag-icon" src="{% static 'images/flags/kr.png' %}" alt="한국어">
+              {% else %}
+                🌐
+              {% endif %}
+            </button>
+            {% endwith %}
 
-          .dropdown-menu#lang_menu .dropdown-item:hover,
-          .dropdown-menu#lang_menu .dropdown-item:focus {
-            background-color: #1967D2 !important;
-            color: #fff !important;
-          }
+            <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
+                <img class="flag-icon me-2" src="{% static 'images/flags/us.png' %}" alt="English"> English
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="es">
+                <img class="flag-icon me-2" src="{% static 'images/flags/es.png' %}" alt="Español"> Español
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="zh-hans">
+                <img class="flag-icon me-2" src="{% static 'images/flags/cn.png' %}" alt="简体中文"> 简体中文
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="fr">
+                <img class="flag-icon me-2" src="{% static 'images/flags/fr.png' %}" alt="Français"> Français
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ja">
+                <img class="flag-icon me-2" src="{% static 'images/flags/jp.png' %}" alt="日本語"> 日本語
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ko">
+                <img class="flag-icon me-2" src="{% static 'images/flags/kr.png' %}" alt="한국어"> 한국어
+              </a></li>
+            </ul>
+          </div>
 
-          .dropdown-menu#lang_menu .dropdown-item.active {
-            background-color: #ffcd11 !important;
-            color: #fff !important;
-          }
+          <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <input type="hidden" name="language" id="lang-input">
+          </form>
 
-          #langDropdown img.flag-icon {
-            filter: none !important;
-            opacity: 1 !important;
-          }
-        </style>
-        <script>
-          document.addEventListener('DOMContentLoaded', function () {
-            const form  = document.getElementById('set-lang-form');
-            const input = document.getElementById('lang-input');
-            document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
-              a.addEventListener('click', function (e) {
-                e.preventDefault();
-                input.value = this.dataset.lang;  
-                form.submit();                    
+          <style>
+            .flag-icon{
+              width: 30px;
+              height: 21px;
+              object-fit: cover;
+              flex-shrink: 0;
+              margin-right: 10px;
+              display: inline-block;
+              vertical-align: middle;
+              border-radius: 2px;
+            }
+
+            .dropdown-menu#lang_menu {
+              background-color: #fff !important;
+              border: 1px solid #ccc !important;
+              border-radius: 4px !important;
+              box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
+              padding: 0 !important;
+              margin-top: 0.5rem !important;
+              min-width: auto !important;
+              width: auto !important;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item {
+              color: #4B5868 !important;
+              font-weight: 500;
+              padding: 0.5rem 0.8rem !important;
+              padding-right: 1.2rem !important;
+              background-color: transparent !important;
+              border-bottom: 1px solid #eee;
+              display: flex !important;
+              align-items: center;
+              justify-content: flex-start;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item:last-child {
+              border-bottom: none;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item:hover,
+            .dropdown-menu#lang_menu .dropdown-item:focus {
+              background-color: #1967D2 !important;
+              color: #fff !important;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item.active {
+              background-color: #ffcd11 !important;
+              color: #fff !important;
+            }
+
+            #langDropdown img.flag-icon {
+              filter: none !important;
+              opacity: 1 !important;
+            }
+          </style>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const form  = document.getElementById('set-lang-form');
+              const input = document.getElementById('lang-input');
+              document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
+                a.addEventListener('click', function (e) {
+                  e.preventDefault();
+                  input.value = this.dataset.lang;
+                  form.submit();
+                });
               });
             });
-          });
-        </script>
-        
+          </script>
 
-        <!-- dark mode toggle -->
-        <div style="margin-left: 6px;">
-          <label id="darkModeButton" class="dark-mode-toggle" style="margin: 0px;">
-            <i class="fas fa-sun icon" id="darkModeIcon"></i>
-          </label>
+
+          <!-- dark mode toggle -->
+          <div style="margin-left: 6px;">
+            <label id="darkModeButton" class="dark-mode-toggle" style="margin: 0px;">
+              <i class="fas fa-sun icon" id="darkModeIcon"></i>
+            </label>
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
-</header>
-<script src="{% static 'js/toggles.js' %}"></script>
-        
-<script src="{% static 'js/search_suggestions.js' %}"></script>
+    </nav>
+  </header>
+  <script src="{% static 'js/toggles.js' %}"></script>
 
-<style>
-  .header-profile-name { color: #1a1a1a !important; }
-  body.dark-mode .header-profile-name { color: #fff !important; }
-</style>
+  <script src="{% static 'js/search_suggestions.js' %}"></script>
 
-<style>
-.dropdown-submenu {
-  position: relative;
-}
+  <style>
+    .header-profile-name { color: #1a1a1a !important; }
+    body.dark-mode .header-profile-name { color: #fff !important; }
+  </style>
 
-.submenu {
-  display: none;
-  top: 0;
-  left: 100%;
-  margin-top: -1px;
-  border-radius: 0.25rem;
-  z-index: 1000;
-}
+  <style>
+  .dropdown-submenu {
+    position: relative;
+  }
 
-.dropdown-submenu.show > .submenu {
-  display: block;
-}
+  .submenu {
+    display: none;
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+    border-radius: 0.25rem;
+    z-index: 1000;
+  }
 
-</style>
+  .dropdown-submenu.show > .submenu {
+    display: block;
+  }
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const blogPagePlus = document.getElementById('blogPagePlus');
-    const parentSubmenu = blogPagePlus.closest('.dropdown-submenu');
-    const submenu = blogPagePlus.nextElementSibling;
+  </style>
 
-    // Prevent Bootstrap auto-close on click inside dropdown
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-      menu.addEventListener('click', function (e) {
-        e.stopPropagation();
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const blogPagePlus = document.getElementById('blogPagePlus');
+      const parentSubmenu = blogPagePlus.closest('.dropdown-submenu');
+      const submenu = blogPagePlus.nextElementSibling;
+
+      // Prevent Bootstrap auto-close on click inside dropdown
+      document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.addEventListener('click', function (e) {
+          e.stopPropagation();
+        });
       });
-    });
 
-    // Bootstrap fix: Stop parent from closing when submenu toggles
-    document.querySelectorAll('.dropdown').forEach(drop => {
-      drop.addEventListener('hide.bs.dropdown', function (e) {
-        if (parentSubmenu.classList.contains('show')) {
-          e.preventDefault(); // prevent closing if submenu is open
-          parentSubmenu.classList.remove('show'); // manually close submenu
+      // Bootstrap fix: Stop parent from closing when submenu toggles
+      document.querySelectorAll('.dropdown').forEach(drop => {
+        drop.addEventListener('hide.bs.dropdown', function (e) {
+          if (parentSubmenu.classList.contains('show')) {
+            e.preventDefault(); // prevent closing if submenu is open
+            parentSubmenu.classList.remove('show'); // manually close submenu
+          }
+        });
+      });
+
+      // Toggle submenu on Blog Page + click
+      blogPagePlus.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Close all other open submenus
+        document.querySelectorAll('.dropdown-submenu').forEach(sub => {
+          if (sub !== parentSubmenu) sub.classList.remove('show');
+        });
+
+        // Toggle current submenu
+        parentSubmenu.classList.toggle('show');
+      });
+
+      // Close submenu if clicked outside the entire dropdown
+      document.addEventListener('click', function (e) {
+        if (!parentSubmenu.contains(e.target)) {
+          parentSubmenu.classList.remove('show');
         }
       });
     });
+  </script>
 
-    // Toggle submenu on Blog Page + click
-    blogPagePlus.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const adminReviewDropdown = document.getElementById('adminReviewDropdown');
+      const adminSubmenu = adminReviewDropdown.closest('.dropdown-submenu');
 
-      // Close all other open submenus
-      document.querySelectorAll('.dropdown-submenu').forEach(sub => {
-        if (sub !== parentSubmenu) sub.classList.remove('show');
+      adminReviewDropdown.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Close other open submenus
+        document.querySelectorAll('.dropdown-submenu').forEach(item => {
+          if (item !== adminSubmenu) item.classList.remove('show');
+        });
+
+        adminSubmenu.classList.toggle('show');
       });
 
-      // Toggle current submenu
-      parentSubmenu.classList.toggle('show');
-    });
-
-    // Close submenu if clicked outside the entire dropdown
-    document.addEventListener('click', function (e) {
-      if (!parentSubmenu.contains(e.target)) {
-        parentSubmenu.classList.remove('show');
-      }
-    });
-  });
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const adminReviewDropdown = document.getElementById('adminReviewDropdown');
-    const adminSubmenu = adminReviewDropdown.closest('.dropdown-submenu');
-
-    adminReviewDropdown.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      // Close other open submenus
-      document.querySelectorAll('.dropdown-submenu').forEach(item => {
-        if (item !== adminSubmenu) item.classList.remove('show');
+      document.addEventListener('click', function (e) {
+        if (!adminSubmenu.contains(e.target)) {
+          adminSubmenu.classList.remove('show');
+        }
       });
-
-      adminSubmenu.classList.toggle('show');
     });
-
-    document.addEventListener('click', function (e) {
-      if (!adminSubmenu.contains(e.target)) {
-        adminSubmenu.classList.remove('show');
-      }
-    });
-  });
-</script>
-<script src="{% static 'js/search_suggestions.js' %}"></script>
+  </script>
+  <script src="{% static 'js/search_suggestions.js' %}"></script>
