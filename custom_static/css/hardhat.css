@@ -1008,6 +1008,89 @@ progress {
   margin-top: var(--bs-gutter-y);
 }
 
+/* Team Section Styles */
+.team-section {
+  padding: 60px 20px;
+  background-color: #ffc900;
+  text-align: center;
+}
+
+.team-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #1a1a1a;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.team-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 300px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+}
+
+.team-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.team-card h3 {
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.team-card p {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.team-card .social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.team-card .social-icons a {
+  color: #333;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+.team-card .social-icons a:hover {
+  color: #0077b5; 
+}
+
+@media (max-width: 768px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* End of Team-Section Style */
+
+
 .col {
   flex: 1 0 0%;
 }
@@ -3692,6 +3775,7 @@ fieldset:disabled .btn {
 }
 .mobile-search-bar {
   display: block;
+  position: relative;
 }
 @media screen and (min-width: 1280px) {
   .mobile-search-bar {
@@ -3715,21 +3799,26 @@ fieldset:disabled .btn {
 
 .search-box-mobile {
   width: 100%;
-  padding: 10px 15px;
+  padding: 10px 50px 10px 15px;
   border-radius: 25px;
 }
 
 .search-btn-mobile {
-  position: absolute;
-  right: 5px;
+  position: absolute; 
   top: 50%;
+  right: 5px;
   transform: translateY(-50%);
   background: #ffcd11;
   color: white;
   border: none;
   border-radius: 50%;
-  padding: 10px;
+  width: 40px; 
+  height: 40px; 
+  padding: 0; 
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-btn-mobile:hover {
@@ -19147,6 +19236,12 @@ fieldset:disabled .btn {
   background-size: cover;
 }
 
+.profile-img-fit {
+    width: 180px;
+    height: 180px;
+    object-fit: cover; 
+    object-position: top;
+}
 /**
  * = Floating animations
  */
@@ -27274,13 +27369,18 @@ blockquote {
   
   .recently-viewed-sidebar {
     position: fixed;
-    top: 150px; /* Adjust based on where you want it */
+    top: 150px; /* Adjusted to sit below language dropdown */
     right: 20px;
-    z-index: 1000;
+    z-index: 10;
     background-color: #1c2540;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.recently-viewed-sidebar .dropdown-menu,
+.recently-viewed-sidebar .dropdown-toggle {
+    z-index: 10;
 }
 
   .recently-viewed-sidebar .dropdown-toggle {
