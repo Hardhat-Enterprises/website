@@ -6241,10 +6241,16 @@ fieldset:disabled .btn {
     transition: none;
   }
 }
+
 .nav-link:hover,
 .nav-link:focus {
   color: #333333;
 }
+
+.nav-link:hover .nav-icon {
+background: #fff !important;
+}
+
 .nav-link.disabled {
   color: #6b7280;
   pointer-events: none;
@@ -27369,13 +27375,18 @@ blockquote {
   
   .recently-viewed-sidebar {
     position: fixed;
-    top: 150px; /* Adjust based on where you want it */
+    top: 150px; /* Adjusted to sit below language dropdown */
     right: 20px;
-    z-index: 1000;
+    z-index: 10;
     background-color: #1c2540;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.recently-viewed-sidebar .dropdown-menu,
+.recently-viewed-sidebar .dropdown-toggle {
+    z-index: 10;
 }
 
   .recently-viewed-sidebar .dropdown-toggle {
@@ -27689,4 +27700,5 @@ body.dark-mode .navbar-collapse.show .nav-link {
     background-color: #222 !important;
     transition: none !important;
   }
+
 }
