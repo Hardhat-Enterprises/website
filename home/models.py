@@ -82,6 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
     upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
 
+
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -888,4 +889,27 @@ class TipRotationState(models.Model):
 
     def __str__(self):
         return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+    
+#Model to track known devices
+class UserDevice(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+    # Device fingerprint (unique identifier)
+    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
+
+    # User-friendly info
+    device_name = models.CharField(max_length=200) 
+
+    # Technical info
+    user_agent = models.TextField()
+    ip_address = models.GenericIPAddressField()
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True) 
+    last_seen = models.DateTimeField(auto_now=True)       
+    def __str__(self):
+        return f"{self.user.email} - {self.device_name} ({self.ip_address})"
 
