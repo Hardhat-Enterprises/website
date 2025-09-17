@@ -85,13 +85,10 @@
               </a>
               <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
                 <ul class="list-style-none">
-                  <a class="menu-link" href="#">
+                  <a class="menu-link" href="{% url 'user_management' %}">
                     <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
                   </a>
-                  <a class="menu-link" href="#">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
-                  </a>
-                  <a class="menu-link" href="#">
+                  <a class="menu-link" href="{% url 'project_teams' %}">
                     <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
                   </a>
                   <a class="menu-link" href="{% url 'adminblogpage' %}">

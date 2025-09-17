@@ -193,6 +193,14 @@
                             </select>
                         </div>
                         
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="performBulkAssignment()">
+                                <i class="fas fa-arrow-right me-1"></i>Assign Projects
+                            </button>
+                        </div>
+                        
+                        <div class="col-md-6"></div>
+                        
                         <!-- Student Info Updates Row -->
                         <div class="col-md-2">
                             <label for="bulkUnitSelect" class="form-label">Update Unit</label>
@@ -225,24 +233,16 @@
                         </div>
                         
                         <div class="col-md-2 d-flex align-items-end">
-                            <div class="text-muted small">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Select users to enable bulk actions
-                            </div>
+                            <button type="button" class="btn btn-info btn-sm" onclick="performBulkStudentUpdate()">
+                                <i class="fas fa-edit me-1"></i>Update Student Info
+                            </button>
                         </div>
+                        
+                        <div class="col-md-4"></div>
                         
                         <!-- Action Buttons Row -->
                         <div class="col-12">
                             <div class="btn-toolbar justify-content-between" role="toolbar">
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="performBulkAssignment()">
-                                        <i class="fas fa-arrow-right me-1"></i>Assign Projects
-                                    </button>
-                                    <button type="button" class="btn btn-info btn-sm ms-1" onclick="performBulkStudentUpdate()">
-                                        <i class="fas fa-edit me-1"></i>Update Student Info
-                                    </button>
-                                </div>
-                                
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-success btn-sm" onclick="performBulkStatusChange('activate')">
                                         <i class="fas fa-user-check me-1"></i>Activate
@@ -619,7 +619,6 @@
     </style>
 
     <!-- Projects data for JavaScript -->
-    {{ projects|safe }}
     <script id="projects-data" type="application/json">
     [{% for project in projects %}{"id": "{{ project.id }}", "name": "{{ project.title }}"}{% if not forloop.last %},{% endif %}{% endfor %}]
     </script>
