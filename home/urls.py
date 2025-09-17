@@ -152,16 +152,16 @@ urlpatterns = [
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
     # Admin challenge management
     #path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
-    path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
+    #path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
     #path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
-    path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
-    path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
-    path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
-    path('challenges/<int:pk>/archive/', views.ChallengeArchiveView.as_view(), name='challenge_archive'),
-    path('challenges/<int:pk>/preview/', views.ChallengePreviewView.as_view(), name='challenge_preview'),
+    #path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
+    #path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
+    #path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
+    #path('challenges/<int:pk>/archive/', views.ChallengeArchiveView.as_view(), name='challenge_archive'),
+    #path('challenges/<int:pk>/preview/', views.ChallengePreviewView.as_view(), name='challenge_preview'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)
