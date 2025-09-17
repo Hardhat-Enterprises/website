@@ -20,8 +20,7 @@ from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 
 
-import os
-from django.contrib.auth.models import Group
+from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from django.utils.timezone import now
@@ -33,7 +32,11 @@ import string
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
+from django.db import models
 import nh3
+from django.conf import settings
+
+
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -78,10 +81,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
     upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
-    description = models.TextField(_("description"), blank=True, null=True)
-    contact_information = models.TextField(_("contact information"), blank=True, null=True)
-    connect_with_me = models.JSONField(_("connect with me"), default=dict, blank=True, null=True)
-
 
     is_staff = models.BooleanField(
         _("staff status"),
@@ -165,19 +164,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.last_activity = now()
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
-        
-    #checking if admin/staff user
-    def is_admin_user(self):
-        return self.is_staff or self.is_superuser
-
-
-
-        
-    #checking if admin/staff user
-    def is_admin_user(self):
-        return self.is_staff or self.is_superuser
-
-
 
 def vault_upload_path(instance, filename):
     """Generate upload path for vault documents"""
@@ -232,31 +218,31 @@ class VaultDocument(models.Model):
     
     def __str__(self):
         return self.original_name or self.file.name
-    
-#Model to track known devices
-class UserDevice(models.Model):
+
+# Keep a short history of password hashes per user
+class PasswordHistory(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="devices"
+        related_name="password_history"
     )
-    # Device fingerprint (unique identifier)
-    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
+    # Store the full encoded hash
+    encoded_password = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    # User-friendly info
-    device_name = models.CharField(max_length=200) 
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "created_at"]),
+        ]
 
-    # Technical info
-    user_agent = models.TextField()
-    ip_address = models.GenericIPAddressField()
-
-    # Timestamps
-    created_at = models.DateTimeField(auto_now_add=True) 
-    last_seen = models.DateTimeField(auto_now=True)       
     def __str__(self):
-        return f"{self.user.email} - {self.device_name} ({self.ip_address})"
-    
+        return f"PasswordHistory(user={self.user_id}, created_at={self.created_at})"
 
+#checking if admin/staff user
+
+    def is_admin_user(self):
+        return self.is_staff or self.is_superuser
     
 #Search Bar Models:
 
@@ -845,7 +831,7 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
-class AdminSesssion(models.Model):
+class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
     ip_address = models.GenericIPAddressField()
@@ -875,6 +861,53 @@ class AdminSesssion(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
-def update_activity(self):
-    self.last_activity = now()
-    self.save(update_fields=['last_activity'])
+
+
+    def update_activity(self):
+        self.last_activity = now()
+        self.save(update_fields=['last_activity'])
+
+class Tip(models.Model):
+    text = models.CharField(max_length=280, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Daily Security Tip"
+        verbose_name_plural = "Daily Security Tips"
+
+    def __str__(self):
+        return self.text[:60]
+
+# keep this only if you implemented 24h rolling rotation
+class TipRotationState(models.Model):
+    lock = models.CharField(max_length=16, default="default", unique=True)
+    last_index = models.IntegerField(default=-1)
+    rotated_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+    
+#Model to track known devices
+class UserDevice(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+    # Device fingerprint (unique identifier)
+    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
+
+    # User-friendly info
+    device_name = models.CharField(max_length=200) 
+
+    # Technical info
+    user_agent = models.TextField()
+    ip_address = models.GenericIPAddressField()
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True) 
+    last_seen = models.DateTimeField(auto_now=True)       
+    def __str__(self):
+        return f"{self.user.email} - {self.device_name} ({self.ip_address})"
+
