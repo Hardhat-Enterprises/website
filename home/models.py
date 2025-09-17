@@ -19,7 +19,6 @@ from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 
 
-from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from django.utils.timezone import now
@@ -31,9 +30,7 @@ import string
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
-from django.db import models
 import nh3
-from django.conf import settings
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -587,7 +584,7 @@ class JobAlert(models.Model):
     def send_confirmation_email(self):
         """Send confirmation email when user subscribes"""
         from django.core.mail import send_mail
-        from django.conf import settings
+        
         
         subject = "Job Alerts Subscription Confirmed - HardHat Enterprises"
         message = f"""
@@ -762,6 +759,7 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
+
 class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
@@ -771,7 +769,7 @@ class AdminSession(models.Model):
     last_activity = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     logout_time = models.DateTimeField(null=True, blank=True)
-    logout_reason = models.CharField(max_length=50, blank=True, null=True) 
+    logout_reason = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ['-login_time']
@@ -792,13 +790,6 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
-<<<<<<< HEAD
-    if not self.is_active:
-        return True
-    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-    return now() > expiry_time
-
-def update_activity(self):
-
-    self.last_activity = now()
-    self.save(update_fields=['last_activity'])
+    def update_activity(self):
+        self.last_activity = now()
+        self.save(update_fields=['last_activity'])
