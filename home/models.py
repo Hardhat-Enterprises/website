@@ -36,9 +36,7 @@ from django.db import models
 import nh3
 from django.conf import settings
 
-def vault_upload_path(instance, filename):
-    """Generate upload path for vault documents"""
-    return os.path.join('vault_documents', filename)
+
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -166,6 +164,33 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.last_activity = now()
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
+
+def vault_upload_path(instance, filename):
+    """Generate upload path for vault documents"""
+    return os.path.join('vault_documents', filename)
+
+class Folder(models.Model):
+    name = models.CharField(max_length=200)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='folders')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('name', 'parent', 'owner')
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def path_list(self):
+        # for breadcrumbs
+        node, parts = self, []
+        while node:
+            parts.append(node)
+            node = node.parent
+        return list(reversed(parts))
+
 
 class VaultDocument(models.Model):
     VIS_PUBLIC = 'public'
@@ -487,6 +512,53 @@ class CyberChallenge(models.Model):
         return self.title
 
 
+class UserScore(models.Model):
+    """Model to track user scores for each category"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20, choices=CyberChallenge.CATEGORY_CHOICES)
+    score = models.IntegerField(default=0)
+    quiz_completed_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ['user', 'category']
+        ordering = ['-score', '-quiz_completed_at']
+    
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} - {self.category}: {self.score}"
+
+class Quiz(models.Model):
+    """Model to track quiz sessions for each category"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20, choices=CyberChallenge.CATEGORY_CHOICES)
+    started_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
+    total_score = models.IntegerField(default=0)
+    questions_answered = models.IntegerField(default=0)
+    current_question_index = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ['-started_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.category} Quiz"
+
+class QuizQuestion(models.Model):
+    """Model to track individual quiz questions and answers"""
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
+    challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
+    question_order = models.IntegerField()
+    user_answer = models.CharField(max_length=200, blank=True, null=True)
+    is_correct = models.BooleanField(default=False)
+    answered_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        unique_together = ['quiz', 'question_order']
+        ordering = ['question_order']
+    
+    def __str__(self):
+        return f"{self.quiz} - Q{self.question_order}"
+
 class UserChallenge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
@@ -495,6 +567,18 @@ class UserChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
+    
+
+class TeamMember(models.Model):
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='team_images/')
+    created_at = models.DateTimeField(auto_now_add=True) 
+    linkedin = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 

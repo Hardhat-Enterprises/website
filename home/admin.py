@@ -1,7 +1,7 @@
 
 
 from django.contrib import admin
-
+from .models import TeamMember
 from .models import AdminNotification
 from .models import VaultDocument
 
@@ -85,6 +85,9 @@ class StudentAdmin(admin.ModelAdmin):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Project._meta.fields]
 
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'role', 'image', 'created_at')
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):

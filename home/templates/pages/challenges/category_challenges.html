@@ -145,6 +145,23 @@
     <a href="{% url 'challenge_list' %}" class="back-button">← Back to Categories</a>
   </div>
 
+  <!-- Quiz Option -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card" style="background-color: #34344a; border: 2px solid #ffa500; border-radius: 16px;">
+        <div class="card-body text-center">
+          <h4 class="text-white mb-3">🎯 Take Category Quiz</h4>
+          <p class="text-white-50 mb-3">
+            Test your knowledge with 15 questions (5 Easy, 5 Medium, 5 Hard) from {{ category|title }} category.
+          </p>
+          <a href="{% url 'start_quiz' category %}" class="btn btn-warning btn-lg px-4">
+            <i class="fas fa-play-circle me-2"></i>Start Quiz
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row mt-4">
     {% for challenge in challenges %}
       <div class="col-md-6 col-lg-4 mb-4 d-flex">

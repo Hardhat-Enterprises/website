@@ -10,9 +10,13 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
 from .views import delete_account
+
+from django.conf.urls.static import static
+
 # Health Endpoint Work
 from .views import health_check
 from django.views.i18n import set_language
+
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
@@ -169,6 +173,15 @@ urlpatterns = [
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
+
+    
+    # Quiz URLs
+    path('quiz/start/<str:category>/', views.start_quiz, name='start_quiz'),
+    path('quiz/take/<int:quiz_id>/', views.take_quiz, name='take_quiz'),
+    path('quiz/submit/<int:quiz_id>/', views.submit_quiz_answer, name='submit_quiz_answer'),
+    path('quiz/results/<int:quiz_id>/', views.quiz_results, name='quiz_results'),
+    
+
     path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
     path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
     path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
@@ -206,6 +219,8 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
     path('vault/', views.vault_view, name='vault'),
+    path('vault/delete/<int:doc_id>/', views.delete_document, name='delete_document'),
+
 
     path("health", health_check, name="health-check"),
     
