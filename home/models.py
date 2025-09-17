@@ -846,7 +846,6 @@ class SecureCodeReviewRequest(models.Model):
         return f"{self.name} - Secure Code Review Request"
 
 class AdminSesssion(models.Model):
-class AdminSesssion(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
     ip_address = models.GenericIPAddressField()
