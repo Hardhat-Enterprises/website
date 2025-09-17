@@ -32,6 +32,10 @@ from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
 import nh3
 
+def vault_upload_path(instance, filename):
+    """Upload path for vault documents"""
+    return f'vault_documents/{filename}'
+
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
         ('feedback', 'Feedback'),
