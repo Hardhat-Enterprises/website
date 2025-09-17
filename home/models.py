@@ -36,9 +36,7 @@ from django.db import models
 import nh3
 from django.conf import settings
 
-def vault_upload_path(instance, filename):
-    """Generate upload path for vault documents"""
-    return os.path.join('vault_documents', filename)
+
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -166,6 +164,33 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.last_activity = now()
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
+
+def vault_upload_path(instance, filename):
+    """Generate upload path for vault documents"""
+    return os.path.join('vault_documents', filename)
+
+class Folder(models.Model):
+    name = models.CharField(max_length=200)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='folders')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('name', 'parent', 'owner')
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def path_list(self):
+        # for breadcrumbs
+        node, parts = self, []
+        while node:
+            parts.append(node)
+            node = node.parent
+        return list(reversed(parts))
+
 
 class VaultDocument(models.Model):
     VIS_PUBLIC = 'public'
@@ -497,6 +522,18 @@ class UserChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
+    
+
+class TeamMember(models.Model):
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='team_images/')
+    created_at = models.DateTimeField(auto_now_add=True) 
+    linkedin = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 

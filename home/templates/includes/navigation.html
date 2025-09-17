@@ -3,7 +3,6 @@
 {% load i18n %}
 <header class="header-global">
 
-<<<<<<< HEAD
 
 
   {% comment %}
@@ -110,8 +109,6 @@
 
 
 
-=======
->>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
   <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
     <div class="navbar-container position-relative">
       <a class="navbar-brand me-lg-5" href="/">
@@ -216,11 +213,11 @@
           <li class="nav-item">
             <a href="{% url 'about_us' %}" class="nav-link"> {% trans "About" %} </a>
           </li>
-          {% if request.user.is_authenticated %}
+          {% if user.is_authenticated %}
           <li class="nav-item">
-            <a href="{% url 'vault' %}" class="nav-link">Vault</a>
-          </li>
-          {% endif %}
+          <a class="nav-link" href="{% url 'vault' %}">Vault</a>
+        </li>
+         {% endif %}
 
           <li class="nav-item dropdown">
             <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
@@ -499,6 +496,7 @@
             margin-top: 0.5rem !important;
             min-width: auto !important;
             width: auto !important;
+            z-index: 2001 !important;
           }
 
           .dropdown-menu#lang_menu .dropdown-item {

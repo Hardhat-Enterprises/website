@@ -1,15 +1,21 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
- 
+
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
+
+
+from home.models import TeamMember
+ 
+
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from .forms import ExperienceForm
 from .models import Experience
@@ -75,6 +81,7 @@ from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from datetime import timedelta
+
  
 # import os
  
@@ -150,6 +157,9 @@ from .models import Passkey
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
+
+from home.models import TeamMember  
+
 def get_login_redirect_url(user):
     """
     Determine where to redirect user after login based on join-us completion status.
@@ -162,6 +172,7 @@ def get_login_redirect_url(user):
     else:
         # User hasn't completed join-us form, redirect to join-us page
         return '/join-us/'
+
 
 
 def index(request):
@@ -194,6 +205,10 @@ def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)
  
 def about_us(request):
+
+    team_members = TeamMember.objects.all()
+    return render(request, 'pages/about.html', {'team_members': team_members})
+
     return render(request, 'pages/about.html')
  
 def security_tools(request):
@@ -292,6 +307,7 @@ def security_tools(request):
         'tools': tools_data
     }
     return render(request, 'pages/our_tools.html', context)
+
 
 
 def what_we_do(request):
@@ -3434,7 +3450,6 @@ def vault_view(request):
             vault_doc.size_bytes = request.FILES['file'].size
             vault_doc.save()
             form.save_m2m()  # Save many-to-many relationships
-            messages.success(request, 'Document uploaded successfully!')
             return redirect('vault')
     else:
         form = VaultUploadForm()
@@ -3447,29 +3462,31 @@ def vault_view(request):
     return render(request, 'pages/vault.html', context)
 
 @login_required
-def vault_delete(request, doc_id):
+def delete_document(request, doc_id):
     """Delete a document from the vault"""
-    if request.method == 'POST':
-        try:
-            document = get_object_or_404(VaultDocument, id=doc_id)
+    try:
+        doc = get_object_or_404(VaultDocument, id=doc_id)
+
+        # Only staff, superuser, or the uploader can delete
+        if not (request.user.is_staff or request.user.is_superuser or doc.uploaded_by == request.user):
+            messages.error(request, 'You do not have permission to delete this document.')
+            return redirect('vault')
+
+        if request.method == "POST":
+            # Store document name for success message
+            document_name = doc.original_name or doc.file.name
             
-            # Check if user has permission to delete
-            # Only the uploader, staff, or superuser can delete
-            if not (request.user.is_staff or request.user.is_superuser or document.uploaded_by == request.user):
-                messages.error(request, 'You do not have permission to delete this document.')
-                return redirect('vault')
-            
-            # Delete the file from storage
-            if document.file:
-                document.file.delete()
+            # Remove the file from storage
+            if doc.file:
+                doc.file.delete(save=False)
             
             # Delete the database record
-            document_name = document.original_name or document.file.name
-            document.delete()
+            doc.delete()
             
             messages.success(request, f'Document "{document_name}" has been deleted successfully.')
-            
-        except Exception as e:
-            messages.error(request, f'Error deleting document: {str(e)}')
-    
+            return redirect('vault')
+
+        # if someone hits the URL with GET, just go back
+    except Exception as e:
+        messages.error(request, f'Error deleting document: {str(e)}')
     return redirect('vault')
