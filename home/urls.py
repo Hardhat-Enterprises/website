@@ -8,7 +8,7 @@ from .views import Index, DetailArticleView, LikeArticle, UpskillingView, Upskil
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
-from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
+from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard
 from .views import delete_account
 # Health Endpoint Work
 from .views import health_check
@@ -151,12 +151,12 @@ urlpatterns = [
     path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
     # Admin challenge management
-    path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
+    #path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
     path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
-    path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
+    #path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
     path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
     path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
     path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
@@ -197,13 +197,7 @@ urlpatterns = [
     # settings page route
     path("settings/", views.settings_view, name="settings"),
 
-
-
-
-
-=======
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
->>>>>>> 313a5b3e2d4caf47372eb960d06cdf11f984256a
+  ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
