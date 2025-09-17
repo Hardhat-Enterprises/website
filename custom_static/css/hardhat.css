@@ -3852,7 +3852,10 @@ body.dark-mode .mobile-result-box div:hover {
 
 /* Override form-control styles for search boxes - highest specificity */
 input.form-control.search-box,
-input[type="search"].form-control.search-box {
+input[type="search"].form-control.search-box,
+.navbar input.form-control.search-box,
+.navbar input[type="search"].form-control.search-box,
+#searchInput.form-control.search-box {
   background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
@@ -3861,7 +3864,10 @@ input[type="search"].form-control.search-box {
 }
 
 input.form-control.search-box:focus,
-input[type="search"].form-control.search-box:focus {
+input[type="search"].form-control.search-box:focus,
+.navbar input.form-control.search-box:focus,
+.navbar input[type="search"].form-control.search-box:focus,
+#searchInput.form-control.search-box:focus {
   background-color: white !important;
   color: #333 !important;
   border-color: #ffcd11 !important;
@@ -3914,6 +3920,31 @@ body.dark-mode .search-box:focus {
   color: #333 !important;
   border-color: #ffcd11 !important;
   box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
+/* EXTREME specificity override for normal mode search box */
+html body nav.navbar div input#searchInput.form-control.search-box,
+html body nav.navbar input#searchInput.form-control.search-box,
+html body input#searchInput.form-control.search-box,
+html body .navbar input.form-control.search-box,
+html body input.search-box.form-control {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+html body nav.navbar div input#searchInput.form-control.search-box:focus,
+html body nav.navbar input#searchInput.form-control.search-box:focus,
+html body input#searchInput.form-control.search-box:focus,
+html body .navbar input.form-control.search-box:focus,
+html body input.search-box.form-control:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
 }
 
 .search-btn {

@@ -348,13 +348,14 @@
                   method="POST" 
                   action="{% url 'pages/search-results' %}">
               {% csrf_token %}
-              <input class="form-control me-4 search-box" 
-                     type="search" 
-                     id="searchInput" 
-                     name="q" 
-                     placeholder="{% trans 'Search...' %}" 
-                     aria-label="Search" 
-                     autocomplete="off">
+              <input class="form-control me-4 search-box"
+                     type="search"
+                     id="searchInput"
+                     name="q"
+                     placeholder="{% trans 'Search...' %}"
+                     aria-label="Search"
+                     autocomplete="off"
+                     style="background-color: white !important; color: #333 !important; border: 1px solid #ddd !important;">
               <button class="search-btn" type="submit">
                 <div><i class="fas fa-search search-icon"></i></div>
               </button>
