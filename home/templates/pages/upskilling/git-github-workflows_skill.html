@@ -2,74 +2,536 @@
 {% load static %}
 
 {% block skill_content %}
+
 <div class="container">
   <div id="sections" class="my-5">
+
+    <!-- 1) What is Git? -->
     <section class="section card mb-3 p-3">
       <h2 class="card-title">What is Git?</h2>
       <p class="card-text">
-        Git is a distributed version control system used to manage source code history and collaboration across teams. GitHub is a platform built around Git for hosting, reviewing, and managing repositories.
-        <br><br>
-        Reference: <a href="https://git-scm.com/doc" target="_blank">Git Official Docs</a>
+        Git is a <strong>distributed version control system</strong> for tracking source code changes. Every clone has the full history, so you can commit, branch, and compare locally. 
+        <br>GitHub is a platform built on top of Git for hosting repositories, code review, CI/CD, and collaboration.
       </p>
+      <ul class="card-text">
+        <li><strong>Snapshots</strong> (commits) capture changes over time</li>
+        <li><strong>Branches</strong> isolate work safely</li>
+        <li><strong>Merges/Rebases</strong> integrate work back</li>
+        <li><strong>Remotes</strong> sync your local repo with GitHub</li>
+      </ul>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <span class="badge bg-secondary">Tip</span>
+        <small class="text-muted">Local &amp; offline friendly — commit anywhere.</small>
+      </div>
     </section>
 
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Key Concepts</h2>
-      <ul>
-        <li><strong>clone</strong> - download a remote repo</li>
-        <li><strong>branch</strong> - isolate your work</li>
-        <li><strong>commit</strong> - snapshot of your changes</li>
-        <li><strong>push/pull</strong> - sync changes with GitHub</li>
-        <li><strong>merge</strong> - combine branches</li>
-        <li><strong>pull request</strong> - propose changes to main repo</li>
+    <!-- 2) Install & First-Time Setup -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Install &amp; First-Time Setup</h2>
+      <ul class="card-text">
+        <li>Install Git (macOS: Homebrew, Windows: Git for Windows, Linux: package manager)</li>
+        <li>Set your identity &amp; sensible defaults</li>
+        <li>Use SSH for secure pushes (recommended)</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Identity & defaults
+git config --global user.name "Your Name"
+git config --global user.email "you@uni.edu.au"
+git config --global init.defaultBranch main
+git config --global pull.rebase true
+git config --global fetch.prune true
+
+# SSH (GitHub)
+ssh-keygen -t ed25519 -C "you@uni.edu.au"
+# Add the public key to GitHub → Settings → SSH and GPG keys
+ssh -T git@github.com  # test</code></pre>
+    </section>
+
+    <!-- 3) Create or Clone a Repository -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Create or Clone a Repository</h2>
+      <ul class="card-text">
+        <li><strong>init</strong> a brand-new repo in an existing folder</li>
+        <li><strong>clone</strong> an existing GitHub repo</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># New repo in current directory
+git init
+echo "# My Project" &gt; README.md
+git add README.md
+git commit -m "chore: initial commit"
+
+# Clone an existing repo
+git clone git@github.com:org/app.git
+cd app</code></pre>
+    </section>
+
+    <!-- 4) The Snapshot Lifecycle: status → add → commit -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Snapshot Lifecycle: Status → Add → Commit</h2>
+      <ul class="card-text">
+        <li>Use <code>git status</code> to see what changed</li>
+        <li>Stage changes with <code>git add</code>, then commit</li>
+        <li>Write meaningful messages; commit early &amp; often</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git status
+git add src/main.py
+git commit -m "feat: add API client for search"</code></pre>
+    </section>
+
+    <!-- 5) .gitignore Essentials -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">.gitignore Essentials</h2>
+      <ul class="card-text">
+        <li>Exclude build artifacts, secrets, OS files</li>
+        <li>Language-specific templates from <code>gitignore.io</code> help</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># .gitignore examples
+node_modules/
+.env
+.DS_Store
+dist/
+__pycache__/</code></pre>
+    </section>
+
+    <!-- 6) Inspecting Changes & History -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Inspecting Changes &amp; History</h2>
+      <ul class="card-text">
+        <li><code>git diff</code> unstaged diffs; <code>git diff --staged</code> staged diffs</li>
+        <li><code>git log --oneline --graph</code> condensed history</li>
+        <li><code>git show &lt;commit&gt;</code> details for a commit</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git diff
+git diff --staged
+git log --oneline --graph --decorate --all
+git show HEAD~1</code></pre>
+    </section>
+
+    <!-- 7) Remotes: add, fetch, pull, push -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Remotes: add, fetch, pull, push</h2>
+      <ul class="card-text">
+        <li><code>origin</code> usually points to your GitHub repo</li>
+        <li>Fetch to update refs locally; pull to integrate</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git remote -v
+git remote add origin git@github.com:your-user/app.git
+git fetch origin
+git pull origin main
+git push -u origin main</code></pre>
+    </section>
+
+    <!-- 8) Branching Basics: create/switch/list -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Branching Basics</h2>
+      <ul class="card-text">
+        <li>Create short-lived feature branches off <code>main</code></li>
+        <li>Use clear, kebab-case names (e.g., <code>feat/login-form</code>)</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git branch
+git switch -c feat/login-form    # create & switch
+git switch main                  # go back</code></pre>
+    </section>
+
+    <!-- 9) Merging Basics: fast-forward vs merge commit -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Merging Basics</h2>
+      <ul class="card-text">
+        <li><strong>Fast-forward</strong> happens when no divergence</li>
+        <li><strong>Merge commit</strong> preserves both histories</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Merge your feature into main
+git switch main
+git merge feat/login-form
+git push origin main</code></pre>
+    </section>
+
+    <!-- 10) Undo & Safety: restore, reset, revert -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Undo &amp; Safety: restore, reset, revert</h2>
+      <ul class="card-text">
+        <li><code>restore</code>: fix files in working tree</li>
+        <li><code>reset</code>: move branch pointer (careful with shared history)</li>
+        <li><code>revert</code>: add a new commit that undoes a prior commit</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># discard local changes to a file
+git restore path/to/file
+
+# soft reset (keep changes staged)
+git reset --soft HEAD~1
+
+# revert a commit safely in shared history
+git revert &lt;commit-sha&gt;</code></pre>
+    </section>
+
+    <!-- 11) GitHub 101: Repo, README, Issues, Wiki -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">GitHub 101: Repo, README, Issues, Wiki</h2>
+      <ul class="card-text">
+        <li>README is your landing page; add badges &amp; quickstart</li>
+        <li>Track tasks with Issues; group with labels &amp; milestones</li>
+        <li>Use Discussions or Wiki for knowledge</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Badges example (README.md)
+![CI](https://github.com/org/app/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-MIT-green)</code></pre>
+    </section>
+
+    <!-- 12) Pull Requests 101: open, review, merge -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Pull Requests 101</h2>
+      <ul class="card-text">
+        <li>Push your branch and open a PR (Draft early)</li>
+        <li>Request review, address comments, squash-merge</li>
+        <li>Link issues with <code>Closes #123</code></li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git push -u origin feat/new-ui
+# Open PR on GitHub → use template, add reviewers, labels
+# Merge when CI green</code></pre>
+    </section>
+
+    <!-- 13) Repo Models & Upstream (Forks vs Org repos) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Repo Models: Org vs Forks &amp; Upstream</h2>
+      <ul class="card-text">
+        <li>Org repo: push branches, PR to <code>main</code></li>
+        <li>Fork workflow: keep <code>upstream</code> remote in sync</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git remote add upstream git@github.com:org/app.git
+git fetch upstream
+git checkout -b main upstream/main</code></pre>
+    </section>
+
+    <!-- 14) Branching Strategies (GitHub Flow vs Git Flow) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Branching Strategies</h2>
+      <ul class="card-text">
+        <li><strong>GitHub Flow</strong>: short-lived branches, PR early</li>
+        <li><strong>Git Flow</strong>: adds develop, release, hotfix branches</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git checkout -b feat/search-index main
+# commit, push, open PR → squash-merge</code></pre>
+    </section>
+
+    <!-- 15) Commit Craft: Atomic, Conventional, Signed -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Commit Craft: Atomic, Conventional, Signed</h2>
+      <ul class="card-text">
+        <li>One logical change per commit (atomic)</li>
+        <li>Conventional Commits for readable history</li>
+        <li>Optional: sign commits (SSH/GPG)</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>feat(search): add BM25 scoring and index warmup
+
+- builds posting lists
+- warms cache on startup
+- adds unit tests
+
+Refs: #123</code></pre>
+    </section>
+
+    <!-- 16) Rebase vs Merge (keep history clean) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Rebase vs Merge</h2>
+      <ul class="card-text">
+        <li>Rebase for linear history on feature branches</li>
+        <li>Merge to preserve branch context</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git fetch origin
+git rebase origin/main
+# resolve conflicts → git add ...; git rebase --continue</code></pre>
+    </section>
+
+    <!-- 17) PR Quality & Templates -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">PR Quality &amp; Templates</h2>
+      <ul class="card-text">
+        <li>Use <code>.github/pull_request_template.md</code></li>
+        <li>Add test plan, screenshots, risk/impact</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code><!-- .github/pull_request_template.md -->
+### Summary
+### How to test
+### Checklist
+- [ ] Unit/CI pass
+- [ ] Docs updated
+Closes #123</code></pre>
+    </section>
+
+    <!-- 18) Code Review Guardrails & Suggestions -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Code Review: Guardrails &amp; Suggestions</h2>
+      <ul class="card-text">
+        <li>Correctness, readability, performance, security</li>
+        <li>Use suggested changes, keep reviews focused</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>npm run lint && npm test
+git diff --staged</code></pre>
+    </section>
+
+    <!-- 19) Conflicts & rerere Superpower -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Conflicts &amp; rerere</h2>
+      <ul class="card-text">
+        <li>Resolve with mergetools/editor; commit resolution</li>
+        <li><code>rerere</code> remembers and reapplies your resolutions</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git rebase origin/main
+# resolve, then:
+git add .
+git rebase --continue
+# if stuck:
+git rebase --abort</code></pre>
+    </section>
+
+    <!-- 20) Stash, Cherry-pick, Backports -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Stash, Cherry-pick &amp; Backports</h2>
+      <ul class="card-text">
+        <li>Stash WIP safely; cherry-pick specific commits</li>
+        <li>Backport fixes to release/hotfix branches</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git stash push -m "WIP: search"
+git switch feat/new-ui
+git stash pop
+
+git switch release/1.4
+git cherry-pick &lt;commit-sha&gt;</code></pre>
+    </section>
+
+    <!-- 21) Tags, Releases & Changelogs -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Tags, Releases &amp; Changelogs</h2>
+      <ul class="card-text">
+        <li>Annotated tags + GitHub Releases</li>
+        <li>Generate changelogs from Conventional Commits</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git tag -a v1.5.0 -m "v1.5.0: new search & fixes"
+git push origin v1.5.0</code></pre>
+    </section>
+
+    <!-- 22) GitHub Actions: CI Quickstart (Node example) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">GitHub Actions: CI Quickstart</h2>
+      <ul class="card-text">
+        <li>Workflows in <code>.github/workflows/</code></li>
+        <li>Cache deps, run lint/tests on PR and main</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># .github/workflows/ci.yml
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'npm' }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test -- --ci</code></pre>
+    </section>
+
+    <!-- 23) Protected Branches & CODEOWNERS -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Protected Branches &amp; CODEOWNERS</h2>
+      <ul class="card-text">
+        <li>Require PR reviews, status checks, linear history</li>
+        <li>Auto-request reviewers by area with CODEOWNERS</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># .github/CODEOWNERS
+docs/**           @docs-team
+src/payments/**  @finops-team @lead-dev
+*.yml            @devops</code></pre>
+    </section>
+
+    <!-- 24) Secrets, Environments & Release Gates -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Secrets, Environments &amp; Gates</h2>
+      <ul class="card-text">
+        <li>Store tokens in Actions Secrets</li>
+        <li>Environments (dev/stage/prod) with approvals</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>deploy:
+  needs: test
+  runs-on: ubuntu-latest
+  environment: production
+  steps:
+    - uses: actions/checkout@v4
+    - run: ./scripts/deploy.sh
+      env:
+        API_TOKEN: ${{ secrets.PROD_API_TOKEN }}</code></pre>
+    </section>
+
+    <!-- 25) Submodules, Monorepos & LFS -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Submodules, Monorepos &amp; LFS</h2>
+      <ul class="card-text">
+        <li>Submodules pin external repos</li>
+        <li>Monorepos use workspaces &amp; CODEOWNERS per dir</li>
+        <li>Git LFS for large binaries/models</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git submodule add git@github.com:org/lib-a.git libs/lib-a
+git submodule update --init --recursive
+
+git lfs install
+git lfs track "*.bin"
+git add .gitattributes</code></pre>
+    </section>
+
+    <!-- 26) Recovery: Reflog, Restore & Bisect -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Recovery: Reflog, Restore &amp; Bisect</h2>
+      <ul class="card-text">
+        <li><code>reflog</code> to find “lost” work</li>
+        <li><code>restore</code> files from another ref</li>
+        <li><code>bisect</code> to locate the bad commit</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>git reflog
+git checkout -b rescue HEAD@{3}
+
+git restore --source=origin/main path/to/file
+
+git bisect start
+git bisect bad
+git bisect good v1.4.0
+# test each step → good/bad
+git bisect reset</code></pre>
+    </section>
+
+    <!-- 27) Learn Git & GitHub (Resources) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Learn Git &amp; GitHub — Curated Resources</h2>
+      <ul class="card-text">
+        <li>📘 Official Git Docs: <a href="https://git-scm.com/doc" target="_blank" rel="noopener">git-scm.com/doc</a></li>
+        <li>📘 Git Tutorial: <a href="https://www.w3schools.com/git/" target="_blank" rel="noopener">W3Schools Git</a></li>
+        <li>🧭 Interactive: <a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">Learn Git Branching</a></li>
+        <li>🎥 GitHub Flow vs Git Flow: <a href="https://www.youtube.com/watch?v=LxJpwYzoO9A" target="_blank" rel="noopener">Edureka</a></li>
+        <li>🎥 GitHub Actions for Beginners: <a href="https://www.youtube.com/watch?v=ylEy4eLdhFs" target="_blank" rel="noopener">Step-by-Step</a></li>
+        <li>📘 GitHub Docs: <a href="https://docs.github.com/" target="_blank" rel="noopener">docs.github.com</a></li>
+        <li>🛠️ .gitignore templates: <a href="https://www.toptal.com/developers/gitignore" target="_blank" rel="noopener">gitignore.io</a></li>
       </ul>
     </section>
 
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Learn Git & GitHub</h2>
-      <ul>
-        <li><a href="https://www.w3schools.com/git/" target="_blank">Git Tutorial by W3Schools</a></li>
-        <li><a href="https://learngitbranching.js.org/" target="_blank">Interactive Git Branching Visualizer</a></li>
-        <li><a href="https://www.youtube.com/watch?v=LxJpwYzoO9A" target="_blank">🎥 GitHub Workflow Tutorial | Git Flow vs GitHub Flow (Edureka)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=ylEy4eLdhFs" target="_blank">🎥 GitHub Actions Step by Step for Beginners</a></li>
-      </ul>
-    </section>
   </div>
 
+  <!-- Progress Header -->
+  <div class="d-flex align-items-center justify-content-between mb-3" id="lesson-progress-header">
+    <div class="fw-semibold" id="step-text" aria-live="polite">Step 1/27</div>
+    <div class="text-muted small" id="percent-text">0%</div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress mb-2" role="progressbar" aria-label="Lesson progress">
+    <div id="progress-bar" class="progress-bar" style="width: 0%;" aria-valuemin="0" aria-valuenow="0" aria-valuemax="100"></div>
+  </div>
+
+  <!-- Block Meter (auto-matches number of sections) -->
+  <div id="block-meter" class="mb-4"></div>
+
+  <style>
+    /* Compact segmented meter that auto-matches your total card count */
+    #block-meter {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: .35rem;
+    }
+    .block-meter-seg {
+      height: 10px;
+      border-radius: 3px;
+      background: #e9ecef; /* light gray */
+    }
+    .block-meter-seg.active {
+      background: #0d6efd; /* Bootstrap primary */
+    }
+    /* Dark-mode friendly tweak if you use .dark somewhere */
+    .dark .block-meter-seg { background: #374151; }
+    .dark .block-meter-seg.active { background: #2563eb; }
+
+    .card-title { color: #EFBF2F; }
+  </style>
+
+  <!-- Navigation Buttons -->
   <div class="d-flex justify-content-between mb-4">
     <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
     <button id="next-button" class="btn btn-primary">Next</button>
     <form id="finishForm" method="post" action="{% url 'complete_skill' slug='git-github-workflows' %}" style="display: none;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-warning">Finish</button>
+      {% csrf_token %}
+      <button type="submit" class="btn btn-warning">Finish</button>
     </form>
-      
   </div>
 
+  <!-- Navigation + Progress Script -->
   <script>
     let currentIndex = 0;
     const sections = document.querySelectorAll("#sections .section");
     const totalCards = sections.length;
 
+    // === Progress elements ===
+    const stepText = document.getElementById("step-text");
+    const percentText = document.getElementById("percent-text");
+    const progressBar = document.getElementById("progress-bar");
+    const blockMeter = document.getElementById("block-meter");
+
+    // Build segmented block meter to match total cards
+    const meterFrags = document.createDocumentFragment();
+    for (let i = 0; i < totalCards; i++) {
+      const seg = document.createElement("div");
+      seg.className = "block-meter-seg";
+      seg.setAttribute("aria-hidden", "true");
+      meterFrags.appendChild(seg);
+    }
+    blockMeter.appendChild(meterFrags);
+
     function toggleButtons(index, total) {
-        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
-        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
-        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
     }
 
+    function updateProgress(index) {
+      const step = index + 1; // display as 1-based
+      const pct = Math.round((step / totalCards) * 100);
+
+      stepText.textContent = `Step ${step}/${totalCards}`;
+      percentText.textContent = `${pct}%`;
+
+      progressBar.style.width = `${pct}%`;
+      progressBar.setAttribute("aria-valuenow", String(pct));
+
+      // Activate filled segments
+      const segs = blockMeter.children;
+      for (let i = 0; i < segs.length; i++) {
+        if (i < step) {
+          segs[i].classList.add("active");
+        } else {
+          segs[i].classList.remove("active");
+        }
+      }
+    }
 
     function showSection(index) {
       sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
       toggleButtons(index, totalCards);
+      updateProgress(index);
     }
 
+    // Init
     showSection(currentIndex);
 
-    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
-    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
-
+    // Nav handlers (guard against under/overflow)
+    document.getElementById("back-button").addEventListener("click", () => {
+      if (currentIndex > 0) showSection(--currentIndex);
+    });
+    document.getElementById("next-button").addEventListener("click", () => {
+      if (currentIndex < totalCards - 1) showSection(++currentIndex);
+    });
   </script>
 
   <script src="{% static 'skill_navigation.js' %}"></script>
 </div>
+
 {% endblock %}

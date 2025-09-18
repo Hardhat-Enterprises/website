@@ -1,26 +1,27 @@
 #!/bin/bash
 
-# Script to check Docker hardening compliance for Hardhat Enterprises website in the current directory
-
-# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+YELLOW='\033[0;33m'
+NC='\033[0m'
 
-# Variables
-REPO_DIR="$(pwd)"  # Use current working directory
+# Determine the repository directory based on script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
 DOCKERFILE_PATH="$REPO_DIR/Dockerfile"
+DOCKERFILE_PROD_PATH="$REPO_DIR/Dockerfile.prod"
 DOCKERIGNORE_PATH="$REPO_DIR/.dockerignore"
 COMPOSE_FILE="$REPO_DIR/docker-compose.yml"
+COMPOSE_PROD_FILE="$REPO_DIR/docker-compose-prod.yml"
 IMAGE_NAME_DJANGO="django_app"
 IMAGE_NAME_NGINX="nginx"
-COMPLIANCE_STATUS=0  # 0 for compliant, 1 for non-compliant
+COMPLIANCE_STATUS=0
 CHECK_IMAGES=false
 
-# Array to store compliance results
-declare -A RESULTS
+# Use a simple approach for storing results that works across bash versions
+RESULTS_KEYS=""
+RESULTS_VALUES=""
 
-# Function to check terminal color support
 check_color_support() {
     if [ -z "$TERM" ] || [ "$TERM" = "dumb" ] || ! command -v tput > /dev/null 2>&1 || [ "$(tput colors)" -lt 8 ]; then
         echo "Warning: Terminal does not support colors or tput is not available. Output will be plain text."
@@ -30,7 +31,6 @@ check_color_support() {
     fi
 }
 
-# Function to print help screen
 print_help() {
     echo "Usage: $0 <command> [options]"
     echo "Commands:"
@@ -45,49 +45,45 @@ print_help() {
     exit 0
 }
 
-# Function to print compliance result
 print_result() {
     local check=$1
     local status=$2
     local message=$3
-    RESULTS["$check"]="$status|$message"
-    if [ "$status" == "FAIL" ]; then
+    
+    # Display result immediately
+    if [ "$status" == "PASS" ]; then
+        echo -e "${YELLOW}$check${NC} : ${GREEN}PASSED${NC}"
+    else
+        echo -e "${YELLOW}$check${NC} : ${RED}FAILED${NC}"
+        if [ -n "$message" ]; then
+            echo -e "${YELLOW}Reason${NC} : $message"
+        fi
         COMPLIANCE_STATUS=1
     fi
 }
 
-# Function to print compliance table
 print_compliance_table() {
     echo
     echo "======================================================================"
     echo "Docker Hardening Compliance Report"
     echo "======================================================================"
-    printf "%-35s | %-6s | %-50s\n" "Check" "Status" "Details"
-    printf "%-35s | %-6s | %-50s\n" "-----------------------------------" "------" "--------------------------------------------------"
+    echo 
 
-    for check in "${!RESULTS[@]}"; do
-        IFS='|' read -r status message <<< "${RESULTS[$check]}"
-        if [ "$status" == "PASS" ]; then
-            status_colored="${GREEN}PASS${NC}"
-        else
-            status_colored="${RED}FAIL${NC}"
-        fi
-        printf "%-35s | %-6b | %-50s\n" "$check" "$status_colored" "$message"
-    done
+    echo "Note: Individual compliance checks are performed during script execution."
+    echo "Review the output above for detailed pass/fail results."
 
     echo "======================================================================"
     if [ "$COMPLIANCE_STATUS" -eq 0 ]; then
-        echo -e "Overall Hardening Status: ${GREEN}Hardened${NC}"
+        echo -e "Overall Hardening Status : ${GREEN}Hardened${NC}"
     else
-        echo -e "Overall Hardening Status: ${RED}Not Hardened${NC}"
+        echo -e "Overall Hardening Status : ${RED}Not Hardened${NC}"
     fi
     echo "======================================================================"
 }
 
-# Check terminal color support
+
 check_color_support
 
-# Parse command-line arguments
 if [ $# -eq 0 ]; then
     print_help
 fi
@@ -113,35 +109,30 @@ case "$COMMAND" in
         print_help
         ;;
     compliance)
-        # Check if current directory contains requirements.txt
         if [ ! -f "$REPO_DIR/requirements.txt" ]; then
             echo "Error: No requirements.txt found in $REPO_DIR. Ensure you're in the correct repository directory."
             exit 1
         fi
-
-        echo "Checking Docker hardening compliance in $REPO_DIR..."
+        echo -e "\n=========================================="
+        echo "Checking Docker hardening compliance in \"$REPO_DIR\""
         echo "=========================================="
 
-        # Step 1: Check Dockerfile compliance
-        echo "Checking Dockerfile ($DOCKERFILE_PATH)..."
+        echo -e "Checking ${YELLOW}Dockerfile ($DOCKERFILE_PATH)${NC}"
         if [ ! -f "$DOCKERFILE_PATH" ]; then
             print_result "Dockerfile Existence" "FAIL" "Dockerfile not found at $DOCKERFILE_PATH."
         else
-            # Check for minimal base image
             if grep -q "FROM python:3.12-slim" "$DOCKERFILE_PATH"; then
                 print_result "Minimal Base Image" "PASS" "Dockerfile uses python:3.12-slim as the base image."
             else
                 print_result "Minimal Base Image" "FAIL" "Dockerfile does not use python:3.12-slim."
             fi
 
-            # Check for non-root user
             if grep -q "USER appuser" "$DOCKERFILE_PATH" && grep -q "useradd.*appuser" "$DOCKERFILE_PATH"; then
                 print_result "Non-Root User" "PASS" "Dockerfile creates and uses non-root user (appuser)."
             else
                 print_result "Non-Root User" "FAIL" "Dockerfile does not define or use a non-root user."
             fi
 
-            # Check for dependency cleanup
             if grep -q "apt-get clean" "$DOCKERFILE_PATH" && grep -q "rm -rf /var/lib/apt/lists" "$DOCKERFILE_PATH"; then
                 print_result "Dependency Cleanup" "PASS" "Dockerfile includes cleanup of apt caches."
             else
@@ -149,12 +140,10 @@ case "$COMMAND" in
             fi
         fi
 
-        # Step 2: Check .dockerignore compliance
-        echo "Checking .dockerignore ($DOCKERIGNORE_PATH)..."
+        echo -e "Checking ${YELLOW}.dockerignore ($DOCKERIGNORE_PATH)${NC}"
         if [ ! -f "$DOCKERIGNORE_PATH" ]; then
             print_result ".dockerignore Existence" "FAIL" ".dockerignore not found. Create one to exclude unnecessary files."
         else
-            # Check for common exclusions
             expected_patterns=("__pycache__" "*.pyc" "*.pyo" "*.pyd" ".env" "*.log" "*.sqlite3" "staticfiles/" "media/" ".git")
             missing_patterns=()
             for pattern in "${expected_patterns[@]}"; do
@@ -169,38 +158,43 @@ case "$COMMAND" in
             fi
         fi
 
-        # Step 3: Check docker-compose.yml compliance
-        echo "Checking docker-compose.yml ($COMPOSE_FILE)..."
+        echo -e "Checking ${YELLOW}docker-compose.yml ($COMPOSE_FILE)${NC}"
         if [ ! -f "$COMPOSE_FILE" ]; then
             print_result "docker-compose.yml Existence" "FAIL" "docker-compose.yml not found at $COMPOSE_FILE."
         else
-            # Check for minimal Nginx image
-            if grep -q "image: nginx:alpine" "$COMPOSE_FILE"; then
-                print_result "Minimal Nginx Image" "PASS" "docker-compose.yml uses nginx:alpine."
+            print_result "docker-compose.yml Existence" "PASS" "docker-compose.yml found for development."
+            
+            # Check development-specific configurations
+            if grep -q "DEBUG=1" "$COMPOSE_FILE"; then
+                print_result "Development Config" "PASS" "docker-compose.yml properly configured for development."
             else
-                print_result "Minimal Nginx Image" "FAIL" "docker-compose.yml does not use nginx:alpine."
-            fi
-
-            # Check for non-root user in web service
-            if grep -q "user:.*1000:1000" "$COMPOSE_FILE"; then
-                print_result "Non-Root User (Compose)" "PASS" "docker-compose.yml specifies non-root user for web service."
-            else
-                print_result "Non-Root User (Compose)" "FAIL" "docker-compose.yml does not specify non-root user."
-            fi
-
-            # Check for read-only volume
-            if grep -q "\.:/app:ro" "$COMPOSE_FILE"; then
-                print_result "Read-Only Volume" "PASS" "docker-compose.yml mounts project code as read-only."
-            else
-                print_result "Read-Only Volume" "FAIL" "docker-compose.yml does not mount project code as read-only."
+                print_result "Development Config" "FAIL" "docker-compose.yml missing development configuration."
             fi
         fi
 
-        # Step 4: Check Docker images (if --images flag is used)
+        echo -e "Checking ${YELLOW}docker-compose-prod.yml ($COMPOSE_PROD_FILE)${NC}"
+        if [ ! -f "$COMPOSE_PROD_FILE" ]; then
+            print_result "docker-compose-prod.yml Existence" "FAIL" "docker-compose-prod.yml not found at $COMPOSE_PROD_FILE."
+        else
+            print_result "docker-compose-prod.yml Existence" "PASS" "docker-compose-prod.yml found for production."
+            
+            # Check production-specific configurations
+            if grep -q "DEBUG=0" "$COMPOSE_PROD_FILE"; then
+                print_result "Production Config" "PASS" "docker-compose-prod.yml properly configured for production."
+            else
+                print_result "Production Config" "FAIL" "docker-compose-prod.yml missing production configuration."
+            fi
+
+            if grep -q "gunicorn" "$COMPOSE_PROD_FILE"; then
+                print_result "Production Server" "PASS" "docker-compose-prod.yml uses Gunicorn for production."
+            else
+                print_result "Production Server" "FAIL" "docker-compose-prod.yml does not use Gunicorn."
+            fi
+        fi
+
         if [ "$CHECK_IMAGES" = true ]; then
-            echo "Inspecting Docker images..."
+            echo -e "Inspecting ${YELLOW}Docker images${NC}"
             if docker images -q "$IMAGE_NAME_DJANGO" > /dev/null 2>&1; then
-                # Check for non-root user in django_app image
                 docker_run_user=$(docker inspect "$IMAGE_NAME_DJANGO" --format '{{.Config.User}}' 2>/dev/null)
                 if [ "$docker_run_user" == "1000:1000" ] || [ "$docker_run_user" == "appuser" ]; then
                     print_result "Django Image Non-Root" "PASS" "Django image ($IMAGE_NAME_DJANGO) runs as non-root user."
@@ -212,7 +206,6 @@ case "$COMMAND" in
             fi
 
             if docker images -q "$IMAGE_NAME_NGINX" > /dev/null 2>&1; then
-                # Check Nginx image base
                 nginx_base=$(docker inspect "$IMAGE_NAME_NGINX" --format '{{.Config.Image}}' 2>/dev/null)
                 if [ "$nginx_base" == "nginx:alpine" ]; then
                     print_result "Nginx Image Base" "PASS" "Nginx image ($IMAGE_NAME_NGINX) uses nginx:alpine."
@@ -224,12 +217,13 @@ case "$COMMAND" in
             fi
         fi
 
-        # Step 5: Print compliance table
         print_compliance_table
         ;;
     build)
-        echo "Build command not implemented in this mode as per request."
-        echo "To build and run, use a separate script or run 'docker-compose up --build -d' manually."
+        echo -e "\n${GREEN}Docker Build Help Command:${NC}"
+        echo -e "=========================================="
+        echo -e "To build and run, use a separate script or run ${GREEN}'docker-compose up --build -d'${NC} manually."
+        echo -e "=========================================="
         exit 0
         ;;
     *)

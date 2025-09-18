@@ -5,80 +5,427 @@
 
 <div class="container">
   <div id="sections" class="my-5">
-    <!-- SECTION 1 -->
+
+    <!-- 1) What is Secure Code Review? -->
     <section class="section card mb-3 p-3">
       <h2 class="card-title">What is Secure Code Review?</h2>
       <p class="card-text">
-        Secure Code Review is a process of manually or automatically inspecting source code to identify security flaws or vulnerabilities before deployment. This ensures that web applications follow secure coding standards and reduce the risk of exploitation.
-        <br><br>
-        Reference: <a href="https://owasp.org/www-project-code-review-guide/" target="_blank">OWASP Code Review Guide</a>
+        Secure Code Review is the practice of systematically inspecting source code to identify security weaknesses before they ship. It combines manual reading, automated tooling, and threat modeling to prevent vulnerabilities early and cheaply.
+      </p>
+      <ul class="card-text">
+        <li><strong>Goals:</strong> catch design &amp; implementation flaws, harden trust boundaries, and build developer security intuition.</li>
+        <li><strong>When:</strong> during PRs, pre-merge gates, and periodically on high-risk areas (auth, payments, uploads, parsers).</li>
+        <li><strong>Sources:</strong> OWASP Code Review Guide, Cheat Sheets, language/framework best practices.</li>
+      </ul>
+      <p class="mb-0">
+        Reference: <a href="https://owasp.org/www-project-code-review-guide/" target="_blank" rel="noopener">OWASP Code Review Guide</a>
       </p>
     </section>
 
-    <!-- SECTION 2 -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Common Security Issues to Look For</h2>
-      <ul>
-        <li>🔐 SQL Injection (e.g., unsafe query construction)</li>
-        <li>🧬 Cross-Site Scripting (XSS)</li>
-        <li>🧱 Insecure Authentication or Session Handling</li>
-        <li>🔓 Sensitive data exposure (e.g., credentials in code)</li>
-        <li>🛑 Lack of Input Validation / Output Encoding</li>
-        <li>⚠️ Insecure dependencies</li>
+    <!-- 2) Review Workflow (Basics) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Review Workflow (Basics)</h2>
+      <ol class="card-text">
+        <li><strong>Understand change intent:</strong> read PR description, tickets, linked designs.</li>
+        <li><strong>Map data flows:</strong> inputs → validation → processing → storage → outputs.</li>
+        <li><strong>Identify trust boundaries:</strong> network, user input, deserialization, external services.</li>
+        <li><strong>Run tooling locally/CI:</strong> linters, SAST (Semgrep/CodeQL), dependency checks.</li>
+        <li><strong>Manual pass:</strong> focus on authZ, input/output handling, error paths, secrets.</li>
+        <li><strong>Recommend fixes:</strong> least invasive secure change; suggest tests.</li>
+      </ol>
+    </section>
+
+    <!-- 3) Threat Modeling Lite (Before the Diff) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Threat Modeling (Quick)</h2>
+      <ul class="card-text">
+        <li><strong>Assets:</strong> accounts, PII, payments, tokens, secrets.</li>
+        <li><strong>Entry points:</strong> controllers, webhooks, file uploads, background jobs, admin UIs.</li>
+        <li><strong>Trust boundaries:</strong> user ↔ app, app ↔ DB, app ↔ third-party API, internal services.</li>
+        <li><strong>STRIDE:</strong> Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege.</li>
       </ul>
     </section>
 
-    <!-- SECTION 3 -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Learn Secure Code Review</h2>
-      <ul>
-        <li><a href="https://owasp.org/www-project-code-review-guide/" target="_blank">📘 OWASP Code Review Guide</a></li>
-        <li><a href="https://cheatsheetseries.owasp.org/" target="_blank">📘 OWASP Cheat Sheet Series</a></li>
-        <li><a href="https://www.youtube.com/watch?v=UimqLp5xc98" target="_blank">🎥 Secure Code Review for Beginners (Security Zone)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=eltB_dBSyFA" target="_blank">🎥 Secure Code Review with Semgrep (Live Walkthrough)</a></li>
-        <li><a href="https://www.veracode.com/security/secure-code-review" target="_blank">📘 Intro to Secure Code Review (Veracode)</a></li>
+    <!-- 4) Input Validation & Output Encoding (Core) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Input Validation &amp; Output Encoding</h2>
+      <ul class="card-text">
+        <li><strong>Validate early:</strong> type, length, range, whitelist formats.</li>
+        <li><strong>Encode on output:</strong> context-aware escaping (HTML, attribute, URL, JavaScript, SQL params).</li>
+        <li><strong>Never trust client-side checks</strong> alone.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>// Node/Express example
+app.post("/user", (req, res) =&gt; {
+  const { email } = req.body;
+  if (typeof email !== "string" || email.length &gt; 254) return res.status(400).end();
+  // Encode on output (templating engine usually handles HTML escaping by default)
+});
+</code></pre>
+    </section>
+
+    <!-- 5) Authentication & Session Management -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Authentication &amp; Sessions</h2>
+      <ul class="card-text">
+        <li>Use vetted frameworks; avoid roll-your-own auth.</li>
+        <li>Enforce secure cookie flags (<code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code>).</li>
+        <li>Multi-factor where possible; protect password reset tokens.</li>
+        <li>Rate limit login/2FA endpoints; audit suspicious logins.</li>
       </ul>
     </section>
+
+    <!-- 6) Authorization (Access Control) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Authorization (Access Control)</h2>
+      <ul class="card-text">
+        <li>Prefer <strong>server-side</strong> checks; never rely on hidden fields or client logic.</li>
+        <li>Check object-level permissions (IDOR risks) and action-level rules.</li>
+        <li>Deny by default; explicit allow lists; centralize policy when possible.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Example (Django)
+def get_document(request, doc_id):
+    doc = get_object_or_404(Document, id=doc_id)
+    if doc.owner_id != request.user.id and not request.user.is_staff:
+        return HttpResponseForbidden()
+    return render(request, "doc.html", {"doc": doc})
+</code></pre>
+    </section>
+
+    <!-- 7) SQL Injection & ORM Pitfalls -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">SQL Injection &amp; ORM Pitfalls</h2>
+      <ul class="card-text">
+        <li>Always parameterize; never concat user input into queries.</li>
+        <li>Beware dynamic ORDER/LIMIT/WHERE built from strings.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>// ❌ Bad
+db.query(`SELECT * FROM users WHERE email = '${email}'`);
+
+// ✅ Good
+db.query("SELECT * FROM users WHERE email = $1", [email]);
+</code></pre>
+    </section>
+
+    <!-- 8) XSS (Reflected, Stored, DOM) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Cross-Site Scripting (XSS)</h2>
+      <ul class="card-text">
+        <li>Default-escape in templates; avoid <code>dangerouslySetInnerHTML</code>/raw HTML.</li>
+        <li>Sanitize rich text (e.g., DOMPurify) and validate allowed tags/attrs.</li>
+        <li>Use CSP (Content Security Policy) to reduce impact.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>// React tip: avoid setting innerHTML; if needed, sanitize first
+const safe = DOMPurify.sanitize(userHtml);
+&lt;div dangerouslySetInnerHTML=&#123;&#123; __html: safe &#125;&#125; /&gt;
+
+</code></pre>
+    </section>
+
+    <!-- 9) CSRF & Cross-Origin Protections -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">CSRF &amp; Cross-Origin</h2>
+      <ul class="card-text">
+        <li>Use framework CSRF tokens for state-changing requests.</li>
+        <li>Set CORS narrowly; avoid <code>*</code> for credentials; prefer same-site cookies.</li>
+        <li>Use SameSite=Lax/Strict where possible.</li>
+      </ul>
+    </section>
+
+    <!-- 10) SSRF, RFI, and URL Handling -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">SSRF &amp; URL Handling</h2>
+      <ul class="card-text">
+        <li>Block internal IP ranges; allowlist destinations; resolve DNS and re-check IP after redirects.</li>
+        <li>Disable URL schemes like <code>file://</code>, <code>gopher://</code>, <code>ftp://</code> unless explicitly needed.</li>
+      </ul>
+    </section>
+
+    <!-- 11) Command Injection & Process Spawning -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Command Injection</h2>
+      <ul class="card-text">
+        <li>Avoid shells; use parameterized APIs (<code>execFile</code>, libraries) and strict allowlists.</li>
+        <li>No user input in commands/args without strict validation.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>// Node.js
+// ❌ Bad: shell=true with concatenated input
+exec(`convert ${filename} out.png`, { shell: true });
+
+// ✅ Good: no shell, validated basename
+execFile("convert", [safeBasename, "out.png"]);
+</code></pre>
+    </section>
+
+    <!-- 12) File Uploads & Path Traversal -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">File Uploads &amp; Path Traversal</h2>
+      <ul class="card-text">
+        <li>Validate content type &amp; size; generate server filenames.</li>
+        <li>Store outside web root or on object storage; scan or sandbox if needed.</li>
+        <li>Normalize paths; prevent <code>../</code> traversal.</li>
+      </ul>
+    </section>
+
+    <!-- 13) Deserialization & Insecure Parser Use -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Deserialization Risks</h2>
+      <ul class="card-text">
+        <li>Use safe formats (JSON, protobuf) and safe parsers.</li>
+        <li>Avoid untrusted pickles/Java serialization, YAML with object constructors.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Python (PyYAML)
+# ❌ yaml.load(untrusted)  --&gt; can instantiate objects
+# ✅ yaml.safe_load(untrusted)
+</code></pre>
+    </section>
+
+    <!-- 14) Secrets, Keys, and Config (12-Factor) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Secrets &amp; Configuration</h2>
+      <ul class="card-text">
+        <li>No secrets in code/commits; use secret managers (AWS SM, GCP SM, Vault).</li>
+        <li>Rotate keys; least-privileged credentials; separate prod/test keys.</li>
+        <li>Block secrets via pre-commit hooks and CI scanners (gitleaks, trufflehog).</li>
+      </ul>
+    </section>
+
+    <!-- 15) Cryptography (Do's & Don'ts) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Cryptography</h2>
+      <ul class="card-text">
+        <li>Use modern libs; avoid home-grown crypto.</li>
+        <li>Prefer AEAD (AES-GCM, ChaCha20-Poly1305); proper randomness; unique nonces.</li>
+        <li>Password storage: Argon2/bcrypt/scrypt with per-user salts.</li>
+      </ul>
+    </section>
+
+    <!-- 16) Logging, Errors & Security Telemetry -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Logging &amp; Telemetry</h2>
+      <ul class="card-text">
+        <li>Log security-relevant events (authz failures, admin actions, rate-limit hits).</li>
+        <li>Never log secrets or full tokens; mask PII; structure logs (JSON).</li>
+        <li>Send to centralized SIEM; alert on anomalies.</li>
+      </ul>
+    </section>
+
+    <!-- 17) Dependency & Supply Chain Security -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Dependencies &amp; Supply Chain</h2>
+      <ul class="card-text">
+        <li>Pin versions; use lockfiles; audit with SCA (OWASP Dependency-Check, npm audit, pip-audit).</li>
+        <li>Watch for typosquatting; prefer signed releases; verify checksums.</li>
+        <li>Enable Renovate/Dependabot with automated PRs &amp; tests.</li>
+      </ul>
+    </section>
+
+    <!-- 18) Advanced: Secure Patterns by Stack -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Advanced: Secure Patterns by Stack</h2>
+      <ul class="card-text">
+        <li><strong>Django/Flask:</strong> use ORM params, <code>@login_required</code>, per-object perms, CSRF middleware on.</li>
+        <li><strong>Express/Nest:</strong> helmet, rate-limits, Joi/Zod validation, CSURF (when using cookies), Prisma/Knex with params.</li>
+        <li><strong>React/Next:</strong> escape by default; sanitize user HTML; use <code>next-safe</code> CSP headers; server actions authZ.</li>
+        <li><strong>Go:</strong> <code>html/template</code> (auto-escape), <code>context</code> timeouts, <code>database/sql</code> prepared statements.</li>
+      </ul>
+    </section>
+
+    <!-- 19) Advanced: CI/CD Security Gates -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Advanced: CI/CD Security Gates</h2>
+      <ul class="card-text">
+        <li>Pre-commit: secrets scan, fmt/lint, lightweight Semgrep rules.</li>
+        <li>PR: SAST (Semgrep/CodeQL), SCA, unit &amp; security tests; block on high severity.</li>
+        <li>Build: SBOM generation (CycloneDX), artifact signing (Sigstore/cosign).</li>
+        <li>Deploy: policy enforcement (OPA), runtime checks, canary with WAF.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Example: GitHub Actions (Semgrep)
+- uses: returntocorp/semgrep-action@v1
+  with:
+    config: "p/owasp-top-ten"
+    generateSarif: "1"
+- uses: github/codeql-action/analyze@v3
+</code></pre>
+    </section>
+
+    <!-- 20) Advanced: CodeQL & Semgrep Rule Hints -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Advanced: CodeQL &amp; Semgrep Tips</h2>
+      <ul class="card-text">
+        <li><strong>Semgrep:</strong> quick custom rules, path filters, autofix hints.</li>
+        <li><strong>CodeQL:</strong> deeper dataflow; great for large mono-repos.</li>
+        <li>Triaging: mark FP with <code>nosemgrep</code> or queries file; keep rules minimal and high-signal.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># Semgrep example: prevent string SQL
+rules:
+- id: no-string-sql
+  pattern: db.query($SQL)
+  message: "Use parameterized queries"
+  languages: [javascript, typescript]
+  severity: ERROR
+  metadata: { cwe: "CWE-89" }
+</code></pre>
+    </section>
+
+    <!-- 21) Advanced: GraphQL, Webhooks, and APIs -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Advanced: GraphQL, Webhooks &amp; APIs</h2>
+      <ul class="card-text">
+        <li>GraphQL: depth/complexity limits, query cost, field-level authZ, persisted queries.</li>
+        <li>Webhooks: verify signatures (HMAC), replay protection (timestamps, nonce).</li>
+        <li>REST: idempotency keys, narrow CORS, pagination limits.</li>
+      </ul>
+    </section>
+
+    <!-- 22) Advanced: Cloud & IaC Checks -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Advanced: Cloud &amp; IaC Checks</h2>
+      <ul class="card-text">
+        <li>Terraform/K8s: scan with tfsec/kics/checkov; least-privilege IAM; secrets as sealed secrets.</li>
+        <li>Containers: minimal base images, non-root, drop capabilities, read-only FS, image signing.</li>
+        <li>Ingress: TLS everywhere; WAF &amp; rate limiting; HSTS; security headers.</li>
+      </ul>
+    </section>
+
+    <!-- 23) Review Checklist (Copy/Paste) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Reviewer Checklist</h2>
+      <ul class="card-text">
+        <li>✅ Clear change intent &amp; tests updated</li>
+        <li>✅ Input validated; output encoded per context</li>
+        <li>✅ AuthN/AuthZ &amp; object-level checks present</li>
+        <li>✅ DB queries parameterized; migrations safe</li>
+        <li>✅ No secrets in code/logs; configs via env/SM</li>
+        <li>✅ Errors handled; safe defaults; no debug leaks</li>
+        <li>✅ Dependencies pinned &amp; scanned</li>
+        <li>✅ High-risk areas feature-flagged and monitored</li>
+      </ul>
+    </section>
+
+    <!-- 24) Learn Secure Code Review (Resources) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Learn Secure Code Review — Resources</h2>
+      <ul class="card-text">
+        <li>📘 <a href="https://owasp.org/www-project-code-review-guide/" target="_blank" rel="noopener">OWASP Code Review Guide</a></li>
+        <li>📘 <a href="https://cheatsheetseries.owasp.org/" target="_blank" rel="noopener">OWASP Cheat Sheet Series</a></li>
+        <li>🔍 <a href="https://semgrep.dev/" target="_blank" rel="noopener">Semgrep</a> &amp; <a href="https://codeql.github.com/" target="_blank" rel="noopener">CodeQL</a></li>
+        <li>📦 <a href="https://owasp.org/www-project-dependency-check/" target="_blank" rel="noopener">OWASP Dependency-Check</a></li>
+        <li>🎥 <a href="https://www.youtube.com/watch?v=UimqLp5xc98" target="_blank" rel="noopener">Secure Code Review for Beginners</a></li>
+        <li>🎥 <a href="https://www.youtube.com/watch?v=eltB_dBSyFA" target="_blank" rel="noopener">Semgrep Live Walkthrough</a></li>
+        <li>📘 <a href="https://www.veracode.com/security/secure-code-review" target="_blank" rel="noopener">Veracode: Intro to Secure Code Review</a></li>
+      </ul>
+    </section>
+
   </div>
+
+  <!-- Progress Header -->
+  <div class="d-flex align-items-center justify-content-between mb-3" id="lesson-progress-header">
+    <div class="fw-semibold" id="step-text" aria-live="polite">Step 1/24</div>
+    <div class="text-muted small" id="percent-text">0%</div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress mb-2" role="progressbar" aria-label="Lesson progress">
+    <div id="progress-bar" class="progress-bar" style="width: 0%;" aria-valuemin="0" aria-valuenow="0" aria-valuemax="100"></div>
+  </div>
+
+  <!-- Segmented Block Meter -->
+  <div id="block-meter" class="mb-4"></div>
+
+  <style>
+    #block-meter {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: .35rem;
+    }
+    .block-meter-seg {
+      height: 10px;
+      border-radius: 3px;
+      background: #e9ecef;
+    }
+    .block-meter-seg.active {
+      background: #0d6efd;
+    }
+    .dark .block-meter-seg { background: #374151; }
+    .dark .block-meter-seg.active { background: #2563eb; }
+
+    .card-title { color: #EFBF2F; }
+  </style>
 
   <!-- Navigation Buttons -->
   <div class="d-flex justify-content-between mb-4">
     <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
     <button id="next-button" class="btn btn-primary">Next</button>
     <form id="finishForm" method="post" action="{% url 'complete_skill' slug='secure-code-review' %}" style="display: none;">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-warning">Finish</button>
+      {% csrf_token %}
+      <button type="submit" class="btn btn-warning">Finish</button>
     </form>
-      
   </div>
 
-  <!-- Section JS -->
+  <!-- Navigation + Progress Script -->
   <script>
     let currentIndex = 0;
     const sections = document.querySelectorAll("#sections .section");
     const totalCards = sections.length;
 
+    // Progress elements
+    const stepText = document.getElementById("step-text");
+    const percentText = document.getElementById("percent-text");
+    const progressBar = document.getElementById("progress-bar");
+    const blockMeter = document.getElementById("block-meter");
+
+    // Build segmented meter
+    const meterFrags = document.createDocumentFragment();
+    for (let i = 0; i < totalCards; i++) {
+      const seg = document.createElement("div");
+      seg.className = "block-meter-seg";
+      seg.setAttribute("aria-hidden", "true");
+      meterFrags.appendChild(seg);
+    }
+    blockMeter.appendChild(meterFrags);
+
     function toggleButtons(index, total) {
-        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
-        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
-        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
     }
 
+    function updateProgress(index) {
+      const step = index + 1;
+      const pct = Math.round((step / totalCards) * 100);
+
+      stepText.textContent = `Step ${step}/${totalCards}`;
+      percentText.textContent = `${pct}%`;
+
+      progressBar.style.width = `${pct}%`;
+      progressBar.setAttribute("aria-valuenow", String(pct));
+
+      const segs = blockMeter.children;
+      for (let i = 0; i < segs.length; i++) {
+        if (i < step) segs[i].classList.add("active");
+        else segs[i].classList.remove("active");
+      }
+    }
 
     function showSection(index) {
+      if (index < 0 || index >= totalCards) return;
       sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
       toggleButtons(index, totalCards);
+      updateProgress(index);
+      currentIndex = index;
     }
 
+    // Init
     showSection(currentIndex);
 
-    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
-    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
-
-    
+    // Handlers
+    document.getElementById("back-button").addEventListener("click", () => showSection(currentIndex - 1));
+    document.getElementById("next-button").addEventListener("click", () => showSection(currentIndex + 1));
   </script>
 
   <script src="{% static 'skill_navigation.js' %}"></script>
+
 </div>
 
 {% endblock %}

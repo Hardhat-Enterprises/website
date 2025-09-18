@@ -10,10 +10,18 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
 from .views import delete_account
+
+from django.conf.urls.static import static
+
 # Health Endpoint Work
 from .views import health_check
 from django.views.i18n import set_language
+
 from .views import ResourceListView
+
+
+
+
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
@@ -25,6 +33,8 @@ from .views import ResourceDetailView
 router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
+
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -190,8 +200,12 @@ urlpatterns = [
     path('appattack/secure-code-review-form/', views.secure_code_review_form_view, name='secure_code_review_form'),
 
     path('account/delete/', delete_account, name='delete-account'),
+    path('vault/', views.vault_view, name='vault'),
+    path('vault/delete/<int:doc_id>/', views.delete_document, name='delete_document'),
+
 
     path("health", health_check, name="health-check"),
+    
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
     path("resources/", ResourceListView.as_view(), name="resources"),

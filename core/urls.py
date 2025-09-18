@@ -19,11 +19,13 @@ from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from home import views
 from rest_framework import permissions
+from home.views_securitytxt import security_txt
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.urls import path, re_path
 from .admin import admin_statistics_view
-
+from django.conf import settings
+from django.conf.urls.static import static
 from .admin import admin_dashboard
 
 handler404 = 'home.views.error_404_view'
@@ -56,6 +58,7 @@ urlpatterns = [
     path('cyber_threat_simulation/', views.cyber_threat_simulation, name='cyber_threat_simulation'),
     path('secure_digital_practices/', views.secure_digital_practices, name='secure_digital_practices'),
     path('cybersecurity_awareness_reports/', views.cybersecurity_awareness_reports, name='cybersecurity_awareness_reports'),
+    path('.well-known/security.txt', security_txt, name='security-txt'),
     
     # blog
     path('blog/', views.blog, name='blog'),
@@ -93,5 +96,8 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('i18n/', include('django.conf.urls.i18n')),
     path('', include('home.urls')),
+    path("api/tip/today/", views.tip_today, name="tip_today"),
 
-   ]
+   ] 
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

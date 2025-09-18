@@ -27,6 +27,13 @@
         <div class="col-lg-6 glass-card" style="position: relative; z-index: 99;">
           <h1 class="fw-bolder display-2 text-center-head">{% trans "Hardhat Enterprises" %}</h1>
           <h2 class="lead fw-normal text-muted mb-4 px-lg-1 text-center-head">{% trans "Security is a necessity. Not a choice" %}</h2>
+                     <!-- Today's Tip (centered) -->
+          <div class="hh-tip-wrap my-3">
+          <div class="hh-tip-grid hh-elevated">
+             <span class="hh-tip-badge">Today’s Tip</span>
+             <span id="hhTipText" class="hh-tip-text">Loading tip…</span>
+          </div>
+          </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a type="button" href="#projects" class="btn btn-primary btn-lg px-5 me-md-2 mb-4">{% trans "Explore Projects" %}</a>
             <a type="button" href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 mb-4">{% trans "Join Us" %}</a>
@@ -38,15 +45,90 @@
         <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
       </svg></figure>
       <style>
-        .blink-animation {
-          animation: blinkEffect 1.9s ease-in-out 2;
-        }
-      
-        @keyframes blinkEffect {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
-        }
-      </style>
+  /* subtle load animation */
+  .blink-animation { animation: blinkEffect 1.9s ease-in-out 2; }
+  @keyframes blinkEffect { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .hh-tip-wrap,
+  .hh-tip-grid,
+  .hh-tip-badge,
+  .hh-tip-text{
+    font-family: var(--font-sans, inherit);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .hh-tip-wrap{
+    display:flex;
+    justify-content:center;
+  }
+
+  .hh-tip-grid{
+    display:grid;
+    grid-template-columns: auto 1fr;   
+    align-items:center;
+    gap:14px;
+    width:100%;
+    max-width:780px;
+  }
+
+  .hh-elevated{
+    background: rgba(33,37,41,.04);
+    border:1px solid rgba(33,37,41,.08);
+    border-radius:16px;
+    padding:12px 16px;
+  }
+
+  .hh-tip-badge{
+    background:#212529;
+    color:#ffcd11;
+    font-weight:700;
+    letter-spacing:.01em;         
+    border-radius:999px;
+    padding:.55rem 1rem;
+    white-space:nowrap;
+    font-size:1rem;
+  }
+
+  
+  .hh-tip-text{
+    font-weight:500;              
+    font-size:clamp(1rem, 1.2vw, 1.25rem);
+    line-height:1.4;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    max-height:calc(1.4em * 2);
+    overflow-wrap:normal;
+    word-break:normal;
+  }
+
+  
+  @media (max-width: 576px){
+    .hh-tip-grid{
+      grid-template-columns: 1fr;  
+      gap:8px;
+      max-width:92vw;
+      align-items:start;
+    }
+    .hh-tip-badge{
+      justify-self:start;
+      padding:.45rem .85rem;
+      font-size:.95rem;
+    }
+    .hh-tip-text{
+      display:block;               
+      -webkit-line-clamp:unset;
+      max-height:none;
+      overflow:visible;
+      white-space:normal;
+      word-break:normal;
+      font-size:clamp(.95rem, 4vw, 1.15rem);
+      line-height:1.45;
+    }
+  }
+</style>
+
   </section>
 
   <!-- Vision and Mission -->
@@ -275,10 +357,11 @@
       .project-track {
         display: flex;
         gap: 20px;
-        transition: transform 0.5s ease;
+        transition: transform 0.5s ease-in-out;
       }
       .project-card {
-        width: calc(100% / 3);
+        flex: 0 0 33.3333%; /* 3 items visible by default */
+        box-sizing: border-box;
       }
       .slider-btn {
         position: absolute;
@@ -302,31 +385,115 @@
           width: calc(100% / 1.1);
         }
       }
-    </style>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const track = document.querySelector('.project-track');
-        const prevBtn = document.querySelector('.prev');
-        const nextBtn = document.querySelector('.next');
-        const cardWidth = document.querySelector('.project-card').offsetWidth + 20;
-        let currentPosition = 0;
+    </style><script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Elements
+  const container = document.querySelector('.project-slider');
+  const track     = document.querySelector('.project-track');
+  const cards     = Array.from(document.querySelectorAll('.project-card'));
+  const nextBtn   = document.querySelector('.slider-btn.next');
+  const prevBtn   = document.querySelector('.slider-btn.prev'); // will also act as "next"
 
-        nextBtn.addEventListener('click', () => {
-          const maxScroll = track.scrollWidth - track.clientWidth;
-          if (currentPosition + cardWidth <= maxScroll) {
-            currentPosition += cardWidth;
-            track.style.transform = `translateX(-${currentPosition}px)`;
-          }
-        });
+  if (!container || !track || cards.length === 0) return;
 
-        prevBtn.addEventListener('click', () => {
-          if (currentPosition - cardWidth >= 0) {
-            currentPosition -= cardWidth;
-            track.style.transform = `translateX(-${currentPosition}px)`;
-          }
-        });
-      });
-    </script>
+  // Helpers
+  function gapPx() {
+    // read the CSS flex gap from .project-track (e.g. "20px")
+    const g = getComputedStyle(track).gap || '0px';
+    return parseFloat(g) || 0;
+  }
+  function cardWidthPx() {
+    // include the visible width of a card (without the gap)
+    return cards[0].getBoundingClientRect().width;
+  }
+  function stepPx() {
+    // how far to move per slide: card width + flex gap
+    return cardWidthPx() + gapPx();
+  }
+  function visibleCount() {
+    // estimate how many cards are visible in the container
+    return Math.max(1, Math.round((container.clientWidth + gapPx()) / stepPx()));
+  }
+
+  // Clone first/last N for seamless loop
+  const N = visibleCount(); // number of clones at each end
+  const headClones = cards.slice(0, N).map(c => c.cloneNode(true));
+  const tailClones = cards.slice(-N).map(c => c.cloneNode(true));
+  tailClones.forEach(cl => track.insertBefore(cl, track.firstChild));
+  headClones.forEach(cl => track.appendChild(cl));
+
+  // State
+  const allSlides = Array.from(track.querySelectorAll('.project-card'));
+  const realCount = cards.length;
+  let index = N;                 // start on first real slide position
+  let animMs = 500;
+  let timer  = null;
+  const intervalMs = 6000;
+
+  function translate(noTransition = false) {
+    if (noTransition) track.style.transition = 'none';
+    const x = index * stepPx();
+    track.style.transform = `translateX(-${x}px)`;
+    if (noTransition) { void track.offsetHeight; } // reflow to lock "none"
+  }
+
+  // Initial position
+  translate(true);
+
+  function goForward() {
+    track.style.transition = `transform ${animMs}ms ease-in-out`;
+    index += 1;
+    translate(false);
+  }
+
+  // Seamless wrap when we hit the head clones
+  track.addEventListener('transitionend', () => {
+    // If we've moved onto the first head clone (past the last real slide)
+    if (index >= realCount + N) {
+      index = N;           // jump back to the first real slide
+      translate(true);     // jump without animation
+    }
+    // (we never move backward, so no need to handle left-side clones)
+  });
+
+  // Buttons: both act as NEXT (forward only)
+  function resetTimer() { stop(); start(); }
+  nextBtn && nextBtn.addEventListener('click', () => { goForward(); resetTimer(); });
+  prevBtn && prevBtn.addEventListener('click', () => { goForward(); resetTimer(); });
+
+  // Auto-slide forward only
+  function tick() {
+    // If next forward step would put us onto the head clone, do a seamless snap then animate
+    if (index + 1 > realCount + N) {
+      index = N;
+      translate(true);
+      requestAnimationFrame(() => requestAnimationFrame(goForward));
+    } else {
+      goForward();
+    }
+  }
+  function start() { timer = setInterval(tick, intervalMs); }
+  function stop()  { if (timer) clearInterval(timer); }
+
+  // Pause on hover (nice UX)
+  container.addEventListener('mouseenter', stop);
+  container.addEventListener('mouseleave', start);
+
+  // Handle resize: recompute positions using new widths/gaps
+  let resizeRAF = null;
+  window.addEventListener('resize', () => {
+    if (resizeRAF) cancelAnimationFrame(resizeRAF);
+    resizeRAF = requestAnimationFrame(() => {
+      translate(true); // snap to correct computed position with new step width
+    });
+  });
+
+  start();
+});
+</script>
+
+
+
   </section>
 
 
@@ -388,29 +555,30 @@
 
 <section id="testimonials" class="testimonial-section section section-lg bg-tertiary">
     <div class="container">
-        <p class="text-center testimonial-sub-header">{% trans "Testimonial" %}</p>
-        <h2 class="fw-bolder testimonials-title  text-center mb-lg-2">{% trans "What Our Clients Say" %}</h2>
-        <!-- <button class="prev-btn">❮</button> -->
+        <p class="text-center testimonial-sub-header">Testimonial</p>
+        <h2 class="fw-bolder testimonials-title  text-center mb-lg-2">What Our Clients Say</h2>
+        
         <div class="testimonial-slider-container">
-          <div class="testimonial-slider">
-            <div class="testimonial-item neomorph-card">
-              <p class="testimonial-contentp">{% blocktrans %}"We have been working with Hardhat for over a year now, and their cybersecurity services have been a game-changer for our business. From preventing ransomware attacks to securing our network infrastructure, they have given us the peace of mind to focus on our growth. Their team is responsive, professional, and always one step ahead. Highly recommend"{% endblocktrans %}</p>
-              <h3 class="testimonial-content">{% trans "James Thompson, CTO, Tech Innovations Ltd." %}</h3>
+            <button class="prev-btn">❮</button>
+            <div class="testimonial-slider">
+                <div class="testimonial-item active">
+                    <p class="testimonial-contentp">"We have been working with Hardhat for over a year now, and their cybersecurity services have been a game-changer for our business. From preventing ransomware attacks to securing our network infrastructure, they have given us the peace of mind to focus on our growth. Their team is responsive, professional, and always one step ahead. Highly recommend"</p>
+                    <h3 class="testimonial-content">James Thompson, CTO, Tech Innovations Ltd.</h3>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-contentp">"As a small business, we were initially hesitant about investing in cybersecurity. However, after partnering with Hardhat, we quickly realized how critical it is to protect our data and systems. Their tailored solutions have kept us safe from cyber threats, and their proactive approach has helped us build a secure foundation for the future. We now feel more confident than ever about our digital security."</p>
+                    <h3 class="testimonial-content">Sarah Mitchell, Founder, EcoProducts Co.</h3>
+                </div>
+                <div class="testimonial-item">
+                    <p class="testimonial-contentp">"In the fast-paced world of finance, cybersecurity is not a luxury—it's a necessity. Hardhat has been instrumental in fortifying our defenses against sophisticated cyber threats. Their expertise in threat detection, incident response, and continuous monitoring has been invaluable. They've helped us navigate through potential vulnerabilities and maintain our clients' trust. A top-tier cybersecurity partner!"</p>
+                    <h3 class="testimonial-content">David Harris, Risk Manager, FinSecure Solutions</h3>
+                </div>
             </div>
-            <div class="testimonial-item neomorph-card">
-              <p class="testimonial-contentp">{% blocktrans %}"As a small business, we were initially hesitant about investing in cybersecurity. However, after partnering with Hardhat, we quickly realized how critical it is to protect our data and systems. Their tailored solutions have kept us safe from cyber threats, and their proactive approach has helped us build a secure foundation for the future. We now feel more confident than ever about our digital security."{% endblocktrans %}</p>
-              <h3 class="testimonial-content">{% trans "Sarah Mitchell, Founder, EcoProducts Co." %}</h3>
-            </div>
-            <div class="testimonial-item neomorph-card">
-              <p class="testimonial-contentp">{% blocktrans %}"In the fast-paced world of finance, cybersecurity is not a luxury—it's a necessity. Hardhat has been instrumental in fortifying our defenses against sophisticated cyber threats. Their expertise in threat detection, incident response, and continuous monitoring has been invaluable. They've helped us navigate through potential vulnerabilities and maintain our clients' trust. A top-tier cybersecurity partner!"{% endblocktrans %}</p>
-              <h3 class="testimonial-content">{% trans "David Harris, Risk Manager, FinSecure Solutions" %}</h3>
-            </div>
-    
-          </div>
+            <button class="next-btn">❯</button>
         </div>
-      </div>
-    </section>
-    
+    </div>
+</section>
+
 <!-- FAQ -->
 
   <section id="faq" class="faq-section section-lg">
@@ -497,8 +665,8 @@
       }
     });
 
-    // Auto slide every 2 seconds
-    setInterval(moveNext, 2000);
+    // Auto slide every 3 seconds
+    setInterval(moveNext, 4000);
   });
 </script>
 
@@ -511,6 +679,42 @@
     display: block;
     animation: fadeIn 0.5s ease-in;
 }
+
+.testimonial-slider-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.testimonial-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.prev-btn, .next-btn {
+    background: #333;
+    color: #fff;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    opacity: 0.7;
+}
+
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+
+.prev-btn:hover, .next-btn:hover {
+    opacity: 1;
+}
+
+
 
 @keyframes fadeIn {
     from {
@@ -763,8 +967,115 @@ body.dark-mode #faq .faq-title {
 .dark-mode .breadcrumb .breadcrumb-item.active { color: #adb5bd; }
 
 </style>
-
 <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+  const slider    = document.querySelector(".testimonial-slider");
+  const container = document.querySelector(".testimonial-slider-container");
+  const baseItems = Array.from(document.querySelectorAll(".testimonial-item"));
+  const nextBtn   = document.querySelector(".next-btn");
+  const prevBtn   = document.querySelector(".prev-btn"); // also "next"
+  if (!slider || baseItems.length === 0) return;
+
+  // --- Build infinite loop with clones
+  const firstClone = baseItems[0].cloneNode(true);
+  const lastClone  = baseItems[baseItems.length - 1].cloneNode(true);
+  slider.appendChild(firstClone);
+  slider.insertBefore(lastClone, slider.firstChild);
+
+  let allItems = Array.from(slider.querySelectorAll(".testimonial-item"));
+  let index = 1;                // start at first real slide
+  let isAnimating = false;
+  let queue = 0;                // queued forward steps
+  const durationMs = 500;
+  const intervalMs = 6000;
+  let timer = null;
+
+  function width() { return container.clientWidth; } // each slide is 100% width
+  function setTranslate(noTransition = false) {
+    if (noTransition) slider.style.transition = "none";
+    slider.style.transform = `translate3d(-${index * width()}px, 0, 0)`;
+    if (noTransition) { void slider.offsetHeight; } // reflow to apply "none"
+  }
+
+  // Initial position
+  setTranslate(true);
+
+  function jumpToFirstReal() {
+    index = 1;
+    setTranslate(true); // snap without animation
+  }
+
+  function animateTo(newIndex) {
+    isAnimating = true;
+    slider.style.transition = `transform ${durationMs}ms ease-in-out`;
+    index = newIndex;
+    setTranslate(false);
+  }
+
+  // Forward step that handles clone edge cleanly
+  function stepForward() {
+    // If the next step would land on the firstClone (past last real), snap then animate
+    if (index + 1 >= allItems.length) {
+      jumpToFirstReal();
+      // Next frame, animate forward one
+      requestAnimationFrame(() => requestAnimationFrame(() => animateTo(index + 1)));
+    } else {
+      animateTo(index + 1);
+    }
+  }
+
+  // Queue-based advance: smooth even with rapid clicks
+  function requestAdvance(steps = 1) {
+    queue += steps;
+    if (!isAnimating) advance();
+  }
+
+  function advance() {
+    if (queue <= 0 || isAnimating) return;
+    queue--;
+    stepForward();
+  }
+
+  // Transition end: finish this step, handle wrap, then run next in queue
+  slider.addEventListener("transitionend", () => {
+    // If we arrived on the firstClone (index === allItems.length - 1), snap back to first real
+    if (index >= allItems.length - 1) {
+      jumpToFirstReal();
+    }
+    isAnimating = false;
+    // Continue queued steps (if any)
+    if (queue > 0) {
+      // microtask to ensure style is settled
+      Promise.resolve().then(advance);
+    }
+  });
+
+  // Buttons — both move forward only
+  const onClick = () => { requestAdvance(1); resetTimer(); };
+  nextBtn && nextBtn.addEventListener("click", onClick);
+  prevBtn && prevBtn.addEventListener("click", onClick);
+
+  // Auto-forward
+  function tick() { requestAdvance(1); }
+  function start() { timer = setInterval(tick, intervalMs); }
+  function stop()  { if (timer) clearInterval(timer); }
+  function resetTimer() { stop(); start(); }
+
+  // Pause on hover (optional)
+  container.addEventListener("mouseenter", stop);
+  container.addEventListener("mouseleave", start);
+
+  // Keep alignment perfect on resize
+  let resizeRAF = null;
+  window.addEventListener("resize", () => {
+    if (resizeRAF) cancelAnimationFrame(resizeRAF);
+    resizeRAF = requestAnimationFrame(() => setTranslate(true));
+  });
+
+  start();
+});
+
   document.addEventListener("DOMContentLoaded", function() {
       const viewMoreBtn = document.getElementById('viewMoreBtn');
       const buttonText = viewMoreBtn.querySelector('span');
@@ -802,7 +1113,13 @@ body.dark-mode #faq .faq-title {
           }
       });
   });
+
 </script>
+
+<script src="{% static 'js/utils/daily-tips.js' %}?v=2"></script>
+
+
+
 
 </main>
 

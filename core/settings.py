@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
+    "django_user_agents",
 
     'rest_framework',  
     'drf_yasg', 
@@ -111,6 +112,7 @@ INSTALLED_APPS = [
     'theme_pixel',
 
     'corsheaders',
+    "django.contrib.humanize"
 
 
 ]
@@ -131,6 +133,7 @@ MIDDLEWARE = [
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
     "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
     'core.middleware.AutoLogoutMiddleware',
+    "django_user_agents.middleware.UserAgentMiddleware",
 
 ]
 
@@ -241,6 +244,27 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+
+    {
+        "NAME": "home.validators.ComplexityPasswordValidator",
+        "OPTIONS": {
+            "require_lower": True,
+            "require_upper": True,
+            "require_digit": True,
+            "require_symbol": True,
+            "symbols": r"[@$!%*?&]",
+        },
+    },
+
+    # Common Patterns (Sequences & Repeats)
+    {
+        "NAME": "home.validators.WeakPatternValidator",
+        "OPTIONS": {
+            "min_sequence_len": 3,  # reject 3+ like 123/abc/qwe
+            "min_repeat_len": 3,    # reject aaa/111/!!!
+            "keyboard_sequences": ["qwe", "asd", "zxc", "rty"],
+        },
     },
     
     # Prevent reusing last N passwords
