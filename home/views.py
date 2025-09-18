@@ -21,6 +21,10 @@ from .forms import ExperienceForm
 from .models import Experience
 from django.db.models import Avg, Count
 from .models import Tip, TipRotationState
+from django.db.models import Q
+from django.views.generic import ListView
+from .models import Resource
+import mimetypes
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 
@@ -81,8 +85,10 @@ from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from datetime import timedelta
-
- 
+from pathlib import Path
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
 # import os
  
 from .models import Smishingdetection_join_us, DDT_contact
@@ -3724,6 +3730,18 @@ class ChallengePreviewView(StaffRequiredMixin, View):
         }
         
         return JsonResponse(data)
+class ResourceListView(ListView):
+    template_name = "resources/list.html"
+    model = Resource
+    context_object_name = "resources"
+    paginate_by = 12
+    def get_queryset(self):
+        qs = Resource.objects.filter(is_published=True)
+        cat = self.request.GET.get("category")
+        q = self.request.GET.get("q")
+        if cat: qs = qs.filter(category=cat)
+        if q:   qs = qs.filter(Q(title__icontains=q) | Q(summary__icontains=q))
+        return qs
 
 # User Management Views
 
@@ -4603,3 +4621,35 @@ def test_login(request):
     
     # Redirect to dashboard
     return HttpResponseRedirect('/dashboard/')
+
+class ResourceDetailView(DetailView):
+    template_name = "resources/detail.html"
+    model = Resource
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+    def get_queryset(self):
+        return Resource.objects.filter(is_published=True)
+
+def resource_download(request, pk: int):
+    obj = get_object_or_404(Resource, pk=pk, is_published=True)
+    if not obj.file:
+        raise Http404("No file attached.")
+
+    ext = Path(obj.file.name).suffix or ""
+    filename = f"{slugify(obj.title)}{ext}"
+
+    ctype, _ = mimetypes.guess_type(obj.file.name)
+    resp = FileResponse(
+        obj.file.open("rb"),
+        as_attachment=True,
+        filename=filename,
+        content_type=ctype or "application/octet-stream",
+    )
+    # size helps some downloaders
+    try:
+        resp["Content-Length"] = obj.file.size
+    except Exception:
+        pass
+
+    resp["X-Content-Type-Options"] = "nosniff"
+    return resp
