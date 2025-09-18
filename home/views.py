@@ -141,15 +141,12 @@ from .models import Passkey
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
-<<<<<<< HEAD
 
 from home.models import TeamMember  
-=======
 #For search form
 import difflib
 from django.utils.dateparse import parse_date
 import re
->>>>>>> 28c82084 (Implemented improved search with filters and did-you-mean suggestions)
 
 def get_login_redirect_url(user):
     """
