@@ -503,4 +503,29 @@ class Migration(migrations.Migration):
                 'indexes': [models.Index(fields=['user', 'created_at'], name='home_passwo_user_id_4c2d2b_idx')],
             },
         ),
+        migrations.CreateModel(
+    name='Resource',
+    fields=[
+        ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        ('title', models.CharField(max_length=180)),
+        ('slug', models.SlugField(blank=True, max_length=200, unique=True)),
+        ('summary', models.TextField(help_text='Short 1–3 line description.', max_length=600)),
+        ('category', models.CharField(choices=[
+            ('whitepaper', 'Whitepaper'),
+            ('checklist', 'Checklist / Guide'),
+            ('infographic', 'Infographic'),
+            ('casestudy', 'Case Study'),
+            ('other', 'Other'),
+        ], default='other', max_length=20)),
+        ('file', models.FileField(upload_to='resources/files/')),
+        ('cover', models.ImageField(blank=True, null=True, upload_to='resources/covers/')),
+        ('is_published', models.BooleanField(default=True)),
+        ('published_at', models.DateTimeField(auto_now_add=True)),
+        ('updated_at', models.DateTimeField(auto_now=True)),
+    ],
+    options={
+        'ordering': ['-published_at'],
+    },
+),
+
     ]

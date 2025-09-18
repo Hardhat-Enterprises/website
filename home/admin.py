@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import AdminNotification
 
 from django.utils.html import format_html
-
+from .models import Resource
 from .models import (
     User,
     Student,
@@ -257,7 +257,11 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     search_fields = ['name', 'email', 'github_repo_link']
     readonly_fields = ['submitted_at']
 
-
-
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ("title", "category", "is_published", "published_at")
+    list_filter = ("category", "is_published")
+    search_fields = ("title", "summary")
+    prepopulated_fields = {"slug": ("title",)}
 
 
