@@ -201,6 +201,7 @@ urlpatterns = [
 
 
     path("health", health_check, name="health-check"),
+    path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
     
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
