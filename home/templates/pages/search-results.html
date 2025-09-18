@@ -31,7 +31,7 @@
       </div>
       
       <div id="filterPanel" class="card p-3 mb-4" style="display:none;">
-        <form method="GET" action="">
+        <form id="filter-form" method="GET" action="">
           <!-- keep the original search query -->
           <input type="hidden" name="q" value="{{ searched }}">
       
@@ -44,22 +44,43 @@
               <option value="oldest">Oldest</option>
             </select>
           </div>
+
+          <br>
       
           <!-- Date range -->
-          <div class="mb-2">
-            <label><strong>Date Range:</strong></label><br>
-            <input type="date" name="start"> to <input type="date" name="end">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="start_date">Start Date:</label>
+              <input type="date" class="form-control" id="start_date" name="start_date">
+            </div>
+            
+            <div class="col-md-6">
+              <label for="end_date">End Date:</label>
+              <input type="date" class="form-control" id="end_date" name="end_date">
+            </div>
           </div>
+
+          <br>
       
           <!-- Type filter -->
           <div class="mb-2">
-            <label><strong>Type:</strong></label><br>
-            <label><input type="checkbox" name="type" value="projects"> Projects</label>
-            <label><input type="checkbox" name="type" value="articles"> Articles</label>
-            <label><input type="checkbox" name="type" value="users"> Users</label>
+            <label><input type="checkbox" name="type" value="projects"> Projects</label><br>
+            <label><input type="checkbox" name="type" value="articles"> Articles</label><br>
+            <label><input type="checkbox" name="type" value="users"> Users</label><br>
+            <label><input type="checkbox" name="type" value="courses"> Courses</label><br>
+            <label><input type="checkbox" name="type" value="skills"> Skills</label><br>
+            <label><input type="checkbox" name="type" value="students"> Students</label><br>
+            <label><input type="checkbox" name="type" value="contacts"> Contacts</label><br>
+            <label><input type="checkbox" name="type" value="webpages"> Webpages</label><br>
           </div>
+
+          <br>
       
-          <button type="submit" class="btn btn-primary">Apply Filters</button>
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary w-50 me-2" id="reset-filters">Reset</button>
+            <button type="submit" class="btn btn-primary w-50">Apply</button>
+          </div>
+
         </form>
       </div>
       
@@ -69,12 +90,41 @@
         let panel = document.getElementById("filterPanel");
         panel.style.display = (panel.style.display === "none") ? "block" : "none";
       };
-      </script>      
+      </script>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const resetBtn = document.getElementById("reset-filters");
+          const filterForm = document.getElementById("filter-form");
+      
+          resetBtn.addEventListener("click", function() {
+            // Reset the form (clears all inputs, checkboxes, selects)
+            filterForm.reset();
+      
+            // Explicitly clear date fields (sometimes browser caches them)
+            document.getElementById("start_date").value = "";
+            document.getElementById("end_date").value = "";
+          });
+        });
+      </script>
+      
       
       <h1 class="fw-bolder">Search Results</h1>
+      
       {% if searched %}
         <h5>You Searched For: "{{ searched }}"</h5>
       {% endif %}
+
+      {% if suggestion %} 
+        <div class="alert alert-light mt-2"> 
+          Did you mean: 
+          {% for word in suggestion %}
+            <a href="?q={{ word }}">{{ word }}</a>{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+          ? 
+        </div> 
+      {% endif %}
+
     </div>
 
     {% if projects %}
