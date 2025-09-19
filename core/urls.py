@@ -26,6 +26,7 @@ from django.urls import path, re_path
 from .admin import admin_statistics_view
 from django.conf import settings
 from django.conf.urls.static import static
+
 from .admin import admin_dashboard
 
 handler404 = 'home.views.error_404_view'
@@ -98,6 +99,7 @@ urlpatterns = [
     path('', include('home.urls')),
     path("api/tip/today/", views.tip_today, name="tip_today"),
 
-   ] 
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static('/static/assets/', document_root=settings.BASE_DIR / 'custom_static/assets')
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
