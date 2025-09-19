@@ -24,8 +24,9 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.urls import path, re_path
 from .admin import admin_statistics_view
-from django.conf import settings
-from django.conf.urls.static import static
+from home.views_securitytxt import security_txt
+from home.views_robotstxt import robots_txt
+
 from .admin import admin_dashboard
 
 handler404 = 'home.views.error_404_view'
@@ -59,7 +60,8 @@ urlpatterns = [
     path('secure_digital_practices/', views.secure_digital_practices, name='secure_digital_practices'),
     path('cybersecurity_awareness_reports/', views.cybersecurity_awareness_reports, name='cybersecurity_awareness_reports'),
     path('.well-known/security.txt', security_txt, name='security-txt'),
-    
+    path("robots.txt", robots_txt, name="robots-txt"),
+
     # blog
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
@@ -98,9 +100,12 @@ urlpatterns = [
     path('', include('home.urls')),
     path("api/tip/today/", views.tip_today, name="tip_today"),
 
+
    ]
 
    
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+ + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static('/static/assets/', document_root=settings.BASE_DIR / 'custom_static/assets')
+
 

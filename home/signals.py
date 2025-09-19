@@ -7,8 +7,15 @@ from django.core.signals import request_finished
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
-from .models import PasswordHistory
+from .models import PasswordHistory, UserDevice
+from utils.device_fingerprint import generate_device_fingerprint
+from utils.email_notifications import send_account_notification
+import logging
 
+logger = logging.getLogger(__name__)
+
+
+# SESSION SIGNALS
 @receiver(user_logged_in)
 def set_session_last_activity_on_login(sender, request, user, **kwargs):
     """
@@ -35,7 +42,8 @@ def set_session_last_activity_on_login(sender, request, user, **kwargs):
     # Save new session key to user model
     user.current_session_key = current_session_key
     user.save()
- 
+
+
 @receiver(user_logged_out)
 def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
     """
@@ -49,6 +57,7 @@ def clear_session_last_activity_on_logout(sender, request, user, **kwargs):
         user.current_session_key = None
         user.save()
 
+
 def clear_user_sessions(user, current_session_key=None):
     """
     Clear all sessions for a user except the current one
@@ -56,7 +65,6 @@ def clear_user_sessions(user, current_session_key=None):
     if not user:
         return
 
-    # Get all sessions for user
     sessions = Session.objects.filter(expire_date__gte=now())
     if current_session_key:
         sessions = sessions.exclude(session_key=current_session_key)
@@ -69,6 +77,7 @@ def clear_user_sessions(user, current_session_key=None):
 
 User = get_user_model()
 
+# PASSWORD HISTORY SIGNALS
 @receiver(post_save, sender=User)
 def add_initial_password_to_history(sender, instance, created, **kwargs):
     if not created:
@@ -91,7 +100,6 @@ def store_old_password_before_change(sender, instance, **kwargs):
     old_encoded = (old.password or "").strip()
     new_encoded = (instance.password or "").strip()
 
-    # Only store if password actually changed
     if old_encoded and new_encoded and old_encoded != new_encoded:
         PasswordHistory.objects.create(user=instance, encoded_password=old_encoded)
 
@@ -102,3 +110,60 @@ def store_old_password_before_change(sender, instance, **kwargs):
             .values_list("id", flat=True)[:KEEP_LAST]
         )
         PasswordHistory.objects.filter(user=instance).exclude(id__in=ids_to_keep).delete()
+
+
+# DEVICE RECOGNITION SIGNAL
+@receiver(user_logged_in)
+def track_login(sender, request, user, **kwargs):
+    ip = request.META.get("REMOTE_ADDR", "")
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
+    device_fp = generate_device_fingerprint(user_agent, ip)
+    device_info = user_agent.split(")")[0] if user_agent else "Unknown device"
+    logger.info(f"Login from {ip}, device: {device_info}")
+
+    device, created = UserDevice.objects.get_or_create(
+        user=user,
+        device_name=device_info,
+        ip_address=ip,
+        defaults={"last_seen": now()},
+    )
+
+    if created:
+        logger.info("New device detected, sending email notification...")
+        message = f"A login to your account was detected from {ip} using {device_info}."
+        send_account_notification(user=user, subject="New Login to Your HardHat Account", message=message)
+    else:
+        device.last_seen = now()
+        device.save(update_fields=["last_seen"])
+
+
+# PROFILE UPDATE SIGNAL
+PROFILE_FIELDS = {"first_name", "last_name", "email"}  
+
+@receiver(pre_save, sender=User)
+def cache_old_user(sender, instance, **kwargs):
+    if instance.pk:
+        try:
+            instance._old_user = User.objects.get(pk=instance.pk)
+        except User.DoesNotExist:
+            instance._old_user = None
+
+
+@receiver(post_save, sender=User)
+def notify_user_profile_update(sender, instance, created, **kwargs):
+    if created or not hasattr(instance, "_old_user") or not instance._old_user:
+        return
+
+    changed = [
+        field for field in PROFILE_FIELDS
+        if getattr(instance, field) != getattr(instance._old_user, field)
+    ]
+
+    if not changed:
+        return
+
+    message = (
+        f"Your profile was updated on {now()}.\n\n"
+        "If this wasn't you, please secure your account immediately."
+    )
+    send_account_notification(instance, "Profile Update Notification", message)
