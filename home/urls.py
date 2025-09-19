@@ -10,9 +10,13 @@ from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
 from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
 from .views import delete_account
+
+from django.conf.urls.static import static
+
 # Health Endpoint Work
 from .views import health_check
 from django.views.i18n import set_language
+
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
@@ -20,6 +24,8 @@ from .views import APIModelListView
 from .views import AnalyticsAPI
 from .views import UserManagementAPI, EmailNotificationViewSet
 from .views import MarkSkillCompletedView
+from .views import ChallengeListAPI, SkillListAPI, LeaderboardAPI, HealthCheckAPI
+
 from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
@@ -179,6 +185,10 @@ urlpatterns = [
     path('api-models/', APIModelListView.as_view(), name='api-models'),
     path('api-analytics/', AnalyticsAPI.as_view(), name='api-analytics'),
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
+    path('api-challenges/', ChallengeListAPI.as_view(), name='api-challenges'),
+    path('api-skills/', SkillListAPI.as_view(), name='api-skills'),
+    path('api-leaderboard/', LeaderboardAPI.as_view(), name='api-leaderboard'),
+    path('api-health/', HealthCheckAPI.as_view(), name='api-health'),
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
@@ -192,6 +202,8 @@ urlpatterns = [
 
     path('account/delete/', delete_account, name='delete-account'),
     path('vault/', views.vault_view, name='vault'),
+    path('vault/delete/<int:doc_id>/', views.delete_document, name='delete_document'),
+
 
     path("health", health_check, name="health-check"),
     

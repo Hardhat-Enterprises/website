@@ -122,3 +122,79 @@ class ComplexityPasswordValidator:
             "Your password must include at least one lowercase letter, one uppercase letter, one number, "
             "and one special character (@, $, !, %, *, ?, &)."
         )
+    
+@deconstructible
+class WeakPatternValidator:
+    
+   # Rejects weak patterns that often bypass complexity rules like: 123, abc, qwe and repeated chars like aaa, 111, !!!
+
+
+    def __init__(self, min_sequence_len=3, min_repeat_len=3, keyboard_sequences=None):
+        self.min_sequence_len = int(min_sequence_len)
+        self.min_repeat_len = int(min_repeat_len)
+        self.keyboard_sequences = (keyboard_sequences or ["qwe", "asd", "zxc", "rty"])
+
+        if self.min_sequence_len < 3:
+            self.min_sequence_len = 3
+        if self.min_repeat_len < 3:
+            self.min_repeat_len = 3
+
+    def _has_repeats(self, s: str) -> bool:
+        pat = rf"(.)\1{{{self.min_repeat_len - 1},}}"
+        return re.search(pat, s) is not None
+
+    def _is_ascending_sequence(self, chunk: str) -> bool:
+        if not chunk:
+            return False
+
+        if chunk.isdigit():
+            return all(ord(chunk[i + 1]) - ord(chunk[i]) == 1 for i in range(len(chunk) - 1))
+
+        if chunk.isalpha():
+            return all(ord(chunk[i + 1]) - ord(chunk[i]) == 1 for i in range(len(chunk) - 1))
+
+        return False
+
+    def _has_ascending_sequences(self, s: str) -> bool:
+        n = len(s)
+        L = self.min_sequence_len
+        if n < L:
+            return False
+
+        sl = s.lower()
+
+        for size in range(L, n + 1):
+            for i in range(0, n - size + 1):
+                chunk = sl[i : i + size]
+                if self._is_ascending_sequence(chunk):
+                    return True
+        return False
+
+    def _has_keyboard_sequences(self, s: str) -> bool:
+        if not self.keyboard_sequences:
+            return False
+        sl = s.lower()
+        for seq in self.keyboard_sequences:
+            if len(seq) >= self.min_sequence_len and seq in sl:
+                return True
+        return False
+
+    def validate(self, password, user=None):
+        errors = []
+
+        if self._has_repeats(password):
+            errors.append(_("Password must not contain repeated characters (e.g., 'aaa', '111')."))
+
+        if self._has_ascending_sequences(password):
+            errors.append(_("Password must not contain ascending sequences (e.g., 'abc', '1234')."))
+
+        if self._has_keyboard_sequences(password):
+            errors.append(_("Password must not contain common keyboard runs (e.g., 'qwe', 'asd')."))
+
+        if errors:
+            raise ValidationError(errors)
+
+    def get_help_text(self):
+        return _(
+            "Avoid weak patterns: repeated characters (e.g., 'aaa') or sequences (e.g., '123', 'abc', 'qwe')."
+        )
