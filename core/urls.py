@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls.i18n import i18n_patterns
 from django.urls import include, path
+from django.conf.urls.static import static
+from django.conf import settings
 from django.contrib.auth import views as auth_views
 from home import views
 from rest_framework import permissions
@@ -105,7 +107,6 @@ urlpatterns = [
 
    
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
- + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static('/static/assets/', document_root=settings.BASE_DIR / 'custom_static/assets')
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static('/static/assets/', document_root=settings.BASE_DIR / 'custom_static/assets')
 
 
