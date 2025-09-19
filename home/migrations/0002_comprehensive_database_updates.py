@@ -17,15 +17,13 @@ class Migration(migrations.Migration):
             name='leaderboardtable',
             options={'ordering': ['-total_points', 'rank']},
         ),
-        migrations.AddField(
-            model_name='leaderboardtable',
-            name='last_updated',
-            field=models.DateTimeField(auto_now=True),
+        migrations.RunSQL(
+            "ALTER TABLE home_leaderboardtable ADD COLUMN IF NOT EXISTS last_updated timestamp with time zone;",
+            reverse_sql="ALTER TABLE home_leaderboardtable DROP COLUMN IF EXISTS last_updated;"
         ),
-        migrations.AddField(
-            model_name='leaderboardtable',
-            name='rank',
-            field=models.IntegerField(default=0),
+        migrations.RunSQL(
+            "ALTER TABLE home_leaderboardtable ADD COLUMN IF NOT EXISTS rank integer DEFAULT 0 NOT NULL;",
+            reverse_sql="ALTER TABLE home_leaderboardtable DROP COLUMN IF EXISTS rank;"
         ),
         migrations.AlterUniqueTogether(
             name='leaderboardtable',
@@ -33,27 +31,24 @@ class Migration(migrations.Migration):
         ),
         
         # ===== PROJECT MODEL UPDATES =====
-        migrations.AddField(
-            model_name='project',
-            name='archived',
-            field=models.BooleanField(default=False, verbose_name='archived'),
+        # Note: archived field addition is handled conditionally to avoid conflicts
+        migrations.RunSQL(
+            "ALTER TABLE home_project ADD COLUMN IF NOT EXISTS archived boolean DEFAULT false NOT NULL;",
+            reverse_sql="ALTER TABLE home_project DROP COLUMN IF EXISTS archived;"
         ),
         
         # ===== CYBERCHALLENGE MODEL UPDATES =====
-        migrations.AddField(
-            model_name='cyberchallenge',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, null=True),
+        migrations.RunSQL(
+            "ALTER TABLE home_cyberchallenge ADD COLUMN IF NOT EXISTS created_at timestamp with time zone;",
+            reverse_sql="ALTER TABLE home_cyberchallenge DROP COLUMN IF EXISTS created_at;"
         ),
-        migrations.AddField(
-            model_name='cyberchallenge',
-            name='is_active',
-            field=models.BooleanField(default=True),
+        migrations.RunSQL(
+            "ALTER TABLE home_cyberchallenge ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true NOT NULL;",
+            reverse_sql="ALTER TABLE home_cyberchallenge DROP COLUMN IF EXISTS is_active;"
         ),
-        migrations.AddField(
-            model_name='cyberchallenge',
-            name='updated_at',
-            field=models.DateTimeField(auto_now=True, null=True),
+        migrations.RunSQL(
+            "ALTER TABLE home_cyberchallenge ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone;",
+            reverse_sql="ALTER TABLE home_cyberchallenge DROP COLUMN IF EXISTS updated_at;"
         ),
         
         # ===== CODE EXECUTION MODELS =====
