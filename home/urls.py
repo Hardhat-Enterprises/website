@@ -154,18 +154,41 @@ urlpatterns = [
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
+
+    path('challenges/execute-code/', views.execute_code, name='execute_code'),
+    path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
+    path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
+    path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
+    
+    # Python Compiler URLs
+    path('compiler/', views.compiler_home, name='compiler_home'),
+    path('compiler/template/<int:template_id>/', views.compiler_template, name='compiler_template'),
+    path('compiler/history/', views.compiler_history, name='compiler_history'),
+    path('compiler/leaderboard/', views.compiler_leaderboard, name='compiler_leaderboard'),
+    
+
     # Admin challenge management
     path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
     path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
+
+    
+    # Quiz URLs
+    path('quiz/start/<str:category>/', views.start_quiz, name='start_quiz'),
+    path('quiz/take/<int:quiz_id>/', views.take_quiz, name='take_quiz'),
+    path('quiz/submit/<int:quiz_id>/', views.submit_quiz_answer, name='submit_quiz_answer'),
+    path('quiz/results/<int:quiz_id>/', views.quiz_results, name='quiz_results'),
+    
+
     path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
     path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
     path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
     path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
     path('challenges/<int:pk>/archive/', views.ChallengeArchiveView.as_view(), name='challenge_archive'),
     path('challenges/<int:pk>/preview/', views.ChallengePreviewView.as_view(), name='challenge_preview'),
+
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)

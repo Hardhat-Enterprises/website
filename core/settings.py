@@ -127,11 +127,15 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     # "home.idle.IdleTimeoutMiddleware",
-    "home.idle.LogoutMiddleware",  
+    "home.idle.LogoutMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
+
+    'core.middleware.AutoLogoutMiddleware',
+
     "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
     'core.middleware.AutoLogoutMiddleware',
+
 
 ]
 
@@ -177,8 +181,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
                 'home.context_processors.recaptcha_site_key',
-
-
+                'home.context_processors.user_scores',
             ],
         },
     },
@@ -475,3 +478,469 @@ SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
+# import os, random, string
+# from pathlib import Path
+# from dotenv import load_dotenv, set_key
+# from django.core.cache.backends.base import InvalidCacheBackendError
+# from pymemcache.client.base import Client
+
+# # Import for CORS headers
+# from corsheaders.defaults import default_headers
+# from django.contrib.messages import constants as messages
+
+# # Quick-start development settings - unsuitable for production
+# # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+
+# # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = Path(__file__).resolve().parent.parent
+# env_path = BASE_DIR / '.env'
+
+# if not env_path.exists():
+#     secret_key = ''.join(random.choice(string.ascii_lowercase) for i in range(50))
+#     with open(env_path, 'w') as f:
+#         f.write(f'SECRET_KEY={secret_key}\n')
+
+# load_dotenv()  # take environment variables from .env.
+
+# # SECURITY WARNING: keep the secret key used in production secret!
+# # This draws the SECRET KEY from the .env file. Previously the secret key rotated as it was not defined therefore sessions would corrupt.
+# SECRET_KEY = os.environ['SECRET_KEY']
+# if not SECRET_KEY:
+#     SECRET_KEY = ''.join(random.choice(string.ascii_lowercase) for i in range(32))
+#     # Save it into the .env file
+#     set_key('.env', 'SECRET_KEY', SECRET_KEY)
+
+# # Render Deployment Code
+# #DEBUG = False
+# #original: 
+# # DEBUG = 'RENDER' not in os.environ
+# PRODUCTION = 'RUN_MAIN' not in os.environ
+# # Set DEBUG based on the environment. TO test 404 locally, set Debug = False.
+# DEBUG = not PRODUCTION
+
+# # Docker HOST
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# # Add here your deployment HOSTS
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://localhost:5085']
+
+# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+# if RENDER_EXTERNAL_HOSTNAME:    
+#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# #Secure Cookies Can be implemented but it affects OTP Functionality.
+# #Ensure cookies are only sent over HTTPS when set True
+# SESSION_COOKIE_SECURE = False
+
+# #Ensure v3 Google ReCAPTCHA keys are set
+# #To set up new keys, navigate to https://www.google.com/recaptcha/admin/site/
+# # Use credentials for Gmail hardhatwebsite@gmail.com
+# RECAPTCHA_SITE_KEY = '6LfAVkYrAAAAADQTOddD3d6Ly-LWGDt-O5zpOkao'
+# RECAPTCHA_SECRET_KEY = '6LfAVkYrAAAAAHmiKUs--9QR_U70BlGPU6yP522i'
+
+# # ---------------- Content Security Policy (CSP) Configuration ----------------
+# # Updated CSP settings for django-csp 4.0+ to allow reCAPTCHA and external resources
+# CONTENT_SECURITY_POLICY = {
+#     'DIRECTIVES': {
+#         'default-src': ("'self'",),
+#         'script-src': (
+#             "'self'",
+#             "'unsafe-inline'",  # Required for reCAPTCHA and inline scripts
+#             "https://www.google.com",
+#             "https://www.gstatic.com",
+#             "https://cdn.jsdelivr.net",  # For Bootstrap and other CDN scripts
+#             "https://cdnjs.cloudflare.com",  # For additional CDN resources
+#         ),
+#         'connect-src': (
+#             "'self'",
+#             "https://www.google.com",
+#             "https://www.gstatic.com",
+#         ),
+#         'frame-src': (
+#             "'self'",
+#             "https://www.google.com",
+#         ),
+#         'style-src': (
+#             "'self'",
+#             "'unsafe-inline'",  # Required for inline styles
+#             "https://www.gstatic.com",
+#             "https://fonts.googleapis.com",  # For Google Fonts
+#             "https://cdn.jsdelivr.net",  # For Bootstrap CSS
+#             "https://cdnjs.cloudflare.com",  # For additional CDN styles
+#         ),
+#         'font-src': (
+#             "'self'",
+#             "https://fonts.gstatic.com",  # For Google Fonts
+#             "https://cdn.jsdelivr.net",
+#             "data:",  # For data URLs in fonts
+#         ),
+#         'img-src': (
+#             "'self'",
+#             "data:",
+#             "https://www.gstatic.com",
+#             "https://cdn.jsdelivr.net",
+#         ),
+#     }
+# }
+
+# # ---------------- Secure Session Cookie Settings ----------------
+# # These settings ensure cookies are securely transmitted over HTTPS and protected from JS and CSRF attacks
+# SESSION_COOKIE_SECURE = not DEBUG           # Only allow HTTPS cookies in production
+# SESSION_COOKIE_HTTPONLY = True              # Prevent access to session cookies via JavaScript
+# SESSION_COOKIE_SAMESITE = 'Strict'          # Restrict cross-origin cookie sharing
+
+# CSRF_COOKIE_SECURE = not DEBUG              # Ensure CSRF cookie is sent over HTTPS
+# CSRF_COOKIE_SAMESITE = 'Strict'             # Restrict CSRF cookie from cross-origin requests
+
+# # ---------------- Idle Session Timeout Configuration ----------------
+# # Automatically logs out users after 5 minutes of inactivity, resets on every user request
+# SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+# SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
+
+# # Application definition
+# INSTALLED_APPS = [
+#     'crispy_forms',
+#     'tinymce',
+#     'crispy_bootstrap5',
+#     'captcha',
+#     "django_light",
+#     'csp',  # Add django-csp for Content Security Policy
+#     #"django.contrib.admin",
+#     "core.apps.CustomAdminConfig",
+#     "django.contrib.auth",
+#     "django.contrib.contenttypes",
+#     "django.contrib.sessions",
+#     "django.contrib.messages",
+#     "django.contrib.staticfiles",
+#     "django_extensions",
+#     'django_cron',
+
+#     'rest_framework',  
+#     'drf_yasg', 
+
+#     'home',
+#     'theme_pixel',
+
+#     'corsheaders',
+# ]
+
+# MIDDLEWARE = [
+#     # CORS middleware must come before commonmiddleware
+#     "corsheaders.middleware.CorsMiddleware",
+#     "django.middleware.security.SecurityMiddleware",
+#     'csp.middleware.CSPMiddleware',  # Add CSP middleware
+#     "django.contrib.sessions.middleware.SessionMiddleware",
+#     "django.middleware.common.CommonMiddleware",
+#     "django.middleware.csrf.CsrfViewMiddleware",
+#     "django.contrib.auth.middleware.AuthenticationMiddleware",
+#     "django.contrib.messages.middleware.MessageMiddleware",
+#     # "home.idle.IdleTimeoutMiddleware",
+#     "home.idle.LogoutMiddleware",  
+#     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+#     "home.ratelimit_middleware.GlobalLockoutMiddleware",
+#     'core.middleware.AutoLogoutMiddleware'
+# ]
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'xss_file': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': 'xss_attempts.log',
+#         },
+
+#     },
+
+#     'loggers': {
+#         'xss_logger': {
+#             'handlers': ['xss_file'],
+#             'level': 'WARNING',
+#             'propagate': False,
+#         },
+#     },
+# }
+
+# ROOT_URLCONF = "core.urls"
+
+# HOME_TEMPLATES = os.path.join(BASE_DIR, 'home', 'templates')
+
+# TEMPLATES = [
+#     {
+#         "BACKEND": "django.template.backends.django.DjangoTemplates",
+
+#         #"DIRS": [BASE_DIR / HOME_TEMPLATES],
+
+#         "DIRS": [os.path.join(BASE_DIR, "templates")],
+      
+#         "APP_DIRS": True,
+#         "OPTIONS": {
+#             "context_processors": [
+#                 "django.template.context_processors.debug",
+#                 "django.template.context_processors.request",
+#                 "django.contrib.auth.context_processors.auth",
+#                 "django.contrib.messages.context_processors.messages",
+#                 'home.context_processors.dynamic_page_title',
+#                 'home.context_processors.recaptcha_site_key',
+#             ],
+#         },
+#     },
+# ]
+
+# WSGI_APPLICATION = "core.wsgi.application"
+
+# # Database
+# # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
+# DB_ENGINE   = os.getenv('DB_ENGINE'   , None)
+# DB_USERNAME = os.getenv('DB_USERNAME' , None)
+# DB_PASS     = os.getenv('DB_PASS'     , None)
+# DB_HOST     = os.getenv('DB_HOST'     , None)
+# DB_PORT     = os.getenv('DB_PORT'     , None)
+# DB_NAME     = os.getenv('DB_NAME'     , None)
+
+# if DB_ENGINE and DB_NAME and DB_USERNAME:
+#     DATABASES = { 
+#       'default': {
+#         'ENGINE'  : 'django.db.backends.' + DB_ENGINE, 
+#         'NAME'    : DB_NAME,
+#         'USER'    : DB_USERNAME,
+#         'PASSWORD': DB_PASS,
+#         'HOST'    : DB_HOST,
+#         'PORT'    : DB_PORT,
+#         }, 
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+
+# AUTH_USER_MODEL = "home.User"
+
+# # Password validation
+# # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+
+# # Password hashing using bcrypt
+# PASSWORD_HASHERS = [
+#     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',  # Built-in bcrypt with SHA256
+#     'django.contrib.auth.hashers.Argon2PasswordHasher',
+#     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+#     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+# ]
+
+# # Password validation
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+#     },
+# ]
+
+# # Internationalization
+# # https://docs.djangoproject.com/en/4.1/topics/i18n/
+
+# LANGUAGE_CODE = "en-us"
+
+# # TIME_ZONE = "UTC"
+# TIME_ZONE = "Australia/Melbourne"
+
+# USE_I18N = True
+
+# USE_TZ = True
+
+# # Static files (CSS, JavaScript, Images)
+# # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+# # STATIC_URL = 'custom_static/'
+# STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'custom_static')
+# ]
+
+# #if not DEBUG:
+#     #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# # Default primary key field type
+# # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
+# DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# LOGIN_REDIRECT_URL = '/'
+
+# # Email Configuration (Fixed - removed duplicate EMAIL_BACKEND)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587 # For TLS, 465 for SSL
+# EMAIL_USE_TLS = True
+
+# #For Gmail Password, speak to your administrator. App Passwords are required for this application.
+# EMAIL_HOST_USER = 'hardhatwebsite@gmail.com'
+# EMAIL_HOST_PASSWORD = 'bcee pser zmli mgrn'
+
+# # Crispy Forms Configuration
+# CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+# CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+# # Message Tags Configuration (Fixed - removed duplicate)
+# MESSAGE_TAGS = {
+#     messages.ERROR: 'error',
+#     messages.SUCCESS: 'success'
+# }
+
+# # Cache Configuration
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+#         'LOCATION': os.getenv('CACHE_LOCATION', '127.0.0.1:11211'),  # Default local if not specified
+#     }
+# }
+
+# try:
+#     from pymemcache.client import Client
+#     client = Client(os.getenv('CACHE_LOCATION', '127.0.0.1:11211'))
+#     client.version()
+# except (ImportError, InvalidCacheBackendError, ConnectionRefusedError):
+    
+#     CACHES = {
+#         'default': {
+#             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         }
+#     }
+
+# # Rate Limiting Configuration
+# RATELIMIT_ENABLE = True
+# RATELIMIT_VIEW = 'django_ratelimit.ratelimit_view'
+# RATELIMIT_USE_CACHE = 'default'
+
+# RATELIMIT_SETTINGS = {
+#     'login': {
+#         'rate': '5/m',  # 5 attempts per minute
+#         'block_expiration': 60,  # block for 1 minute after 5 attempts
+#     },
+# }
+
+# # Security Settings
+# # Prevent MIME type sniffing
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# # Protect against clickjacking
+# X_FRAME_OPTIONS = 'DENY'  # Use 'SAMEORIGIN' if the site needs to be embedded in iframes from the same origin
+
+# # Enable XSS protection
+# SECURE_BROWSER_XSS_FILTER = True
+
+# # Enforce HTTPS (HSTS)
+# SECURE_HSTS_SECONDS = 31536000  # 1 year
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+
+# # Media Files
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# #cron-job-feature
+# # Django-cron configuration class
+# CRON_CLASSES = [
+#     'home.tasks.CleanStaleRecordsCronJob', 
+#     'home.tasks.ClearExpiredSessionsCronJob',
+# ]
+
+# # Logging Configuration (Fixed - removed duplicate LOGGING)
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '{levelname} {asctime} {module} {message}',
+#             'style': '{',
+#         },
+#         'simple': {
+#             'format': '{levelname} {message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'file_django': {  # Handler specifically for Django logs
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'django_activity.log'),  # Separate file for Django logs
+#             'formatter': 'verbose',
+#         },
+#         'file': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'activity.log'),
+#             'formatter': 'verbose',
+#         },
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'simple',
+#         },
+#         'audit_file': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'audit.log'),
+#             'formatter': 'verbose'
+#         },
+#         'xss_file': {
+#             'level': 'WARNING',
+#             'class': 'logging.FileHandler',
+#             'filename': 'xss_attempts.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file_django', 'console'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         },
+#         'page_access_logger': {
+#             'handlers': ['file', 'console'],
+#             'level': 'INFO',
+#             'propagate': False,
+#         },
+#         'audit_logger': {
+#             'handlers': ['audit_file'],
+#             'level': 'INFO',
+#             'propagate': False,
+#         },
+#         'xss_logger': {
+#             'handlers': ['xss_file'],
+#             'level': 'WARNING',
+#             'propagate': False,
+#         },
+#     },
+# }
+
+# # CORS configuration
+# CORS_ALLOWED_ORIGINS = [
+#     'http://127.0.0.1:8000',  # Website localhost server url
+#     'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
+# ]
+
+# CORS_ALLOW_CREDENTIALS = True  # Allow cookies or other credentials
+
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     'content-type',
+#     'authorization',
+# ]
+
+# # Limit request header sizes and body lengths
+# DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
+# DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB

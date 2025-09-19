@@ -512,6 +512,53 @@ class CyberChallenge(models.Model):
         return self.title
 
 
+class UserScore(models.Model):
+    """Model to track user scores for each category"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20, choices=CyberChallenge.CATEGORY_CHOICES)
+    score = models.IntegerField(default=0)
+    quiz_completed_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ['user', 'category']
+        ordering = ['-score', '-quiz_completed_at']
+    
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} - {self.category}: {self.score}"
+
+class Quiz(models.Model):
+    """Model to track quiz sessions for each category"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20, choices=CyberChallenge.CATEGORY_CHOICES)
+    started_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
+    total_score = models.IntegerField(default=0)
+    questions_answered = models.IntegerField(default=0)
+    current_question_index = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ['-started_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.category} Quiz"
+
+class QuizQuestion(models.Model):
+    """Model to track individual quiz questions and answers"""
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
+    challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
+    question_order = models.IntegerField()
+    user_answer = models.CharField(max_length=200, blank=True, null=True)
+    is_correct = models.BooleanField(default=False)
+    answered_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        unique_together = ['quiz', 'question_order']
+        ordering = ['question_order']
+    
+    def __str__(self):
+        return f"{self.quiz} - Q{self.question_order}"
+
 class UserChallenge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey(CyberChallenge, on_delete=models.CASCADE)
@@ -747,12 +794,26 @@ class LeaderBoardTable(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=200)
     total_points = models.IntegerField(default=0)
+    rank = models.IntegerField(default=0)  # Added ranking field
+    last_updated = models.DateTimeField(auto_now=True)  # Track when ranking was last updated
     
     class Meta:
-        ordering = ['-total_points']  
+        ordering = ['-total_points', 'rank']  # Order by points first, then rank
+        unique_together = ['user', 'category']  # One entry per user per category
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS"
+        return f"{self.user.first_name} {self.user.last_name} ({self.category}) - {self.total_points} POINTS - Rank #{self.rank}"
+    
+    def save(self, *args, **kwargs):
+        # Auto-calculate rank before saving
+        if self.total_points > 0:
+            # Get rank based on total points in this category
+            higher_scores = LeaderBoardTable.objects.filter(
+                category=self.category,
+                total_points__gt=self.total_points
+            ).count()
+            self.rank = higher_scores + 1
+        super().save(*args, **kwargs)
         
 class Experience(models.Model):
     name = models.CharField(max_length=100)
@@ -830,6 +891,99 @@ class SecureCodeReviewRequest(models.Model):
 
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
+
+
+
+# Python Compiler Models
+class CodeExecution(models.Model):
+    """Model to track code executions for security and analytics"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    language = models.CharField(max_length=20, default='python')
+    code = models.TextField()
+    input_data = models.TextField(blank=True, null=True)
+    output = models.TextField(blank=True, null=True)
+    error_message = models.TextField(blank=True, null=True)
+    execution_time = models.FloatField(default=0.0)
+    memory_used = models.IntegerField(default=0)  # in bytes
+    is_successful = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Code Execution - {self.user or 'Anonymous'} - {self.created_at}"
+
+
+class CodeTemplate(models.Model):
+    """Model to store code templates for different Python concepts"""
+    DIFFICULTY_CHOICES = [
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('advanced', 'Advanced'),
+    ]
+    
+    CATEGORY_CHOICES = [
+        ('basics', 'Python Basics'),
+        ('data_structures', 'Data Structures'),
+        ('algorithms', 'Algorithms'),
+        ('oop', 'Object-Oriented Programming'),
+        ('file_handling', 'File Handling'),
+        ('web_scraping', 'Web Scraping'),
+        ('data_analysis', 'Data Analysis'),
+        ('machine_learning', 'Machine Learning'),
+        ('security', 'Security'),
+        ('networking', 'Networking'),
+    ]
+    
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    difficulty = models.CharField(max_length=15, choices=DIFFICULTY_CHOICES)
+    template_code = models.TextField()
+    expected_output = models.TextField(blank=True, null=True)
+    hints = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['category', 'difficulty', 'title']
+    
+    def __str__(self):
+        return f"{self.title} - {self.get_category_display()}"
+
+
+class CodeSubmission(models.Model):
+    """Model to store user code submissions for templates"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    template = models.ForeignKey(CodeTemplate, on_delete=models.CASCADE)
+    user_code = models.TextField()
+    is_correct = models.BooleanField(default=False)
+    execution_time = models.FloatField(default=0.0)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-submitted_at']
+        unique_together = ['user', 'template']  # One submission per user per template
+    
+    def __str__(self):
+        return f"{self.user} - {self.template.title}"
+
+
+class CompilerSettings(models.Model):
+    """Model to store compiler settings and limits"""
+    max_execution_time = models.IntegerField(default=5)  # seconds
+    max_memory_limit = models.IntegerField(default=128)  # MB
+    max_code_length = models.IntegerField(default=1000)  # characters
+    allowed_modules = models.JSONField(default=list)  # List of allowed modules
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Compiler Settings - {self.created_at}"
 
 class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")

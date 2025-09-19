@@ -1,0 +1,249 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body.light-mode .navbar {
+    background-color: #000 !important;
+  }
+
+  body.light-mode {
+    background-color: #f1b100de !important;
+  }
+
+  body.dark-mode {
+    background-color: #f1b100de !important;
+  }
+
+  .results-container {
+    background-color: #1e1e1e;
+    border: 2px solid #fff;
+    border-radius: 16px;
+    padding: 30px;
+    margin: 20px 0;
+    color: #fff;
+  }
+
+  .dark-mode .results-container {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .score-display {
+    text-align: center;
+    margin: 30px 0;
+  }
+
+  .score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .score-excellent {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .score-good {
+    background-color: #17a2b8;
+    color: white;
+  }
+
+  .score-average {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  .score-poor {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+  }
+
+  .stat-card {
+    background-color: #34344a;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  .difficulty-breakdown {
+    margin: 30px 0;
+  }
+
+  .difficulty-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #2d2d2d;
+    border-radius: 8px;
+  }
+
+  .difficulty-label {
+    font-weight: bold;
+  }
+
+  .difficulty-label.easy {
+    color: #28a745;
+  }
+
+  .difficulty-label.medium {
+    color: #ffc107;
+  }
+
+  .difficulty-label.hard {
+    color: #dc3545;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px 0;
+  }
+
+  .btn-retake {
+    background-color: #ffa500;
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .btn-back {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .top-offset {
+    margin-top: 130px;
+  }
+
+  footer, .footer, #footer, .site-footer {
+    display: none !important;
+  }
+</style>
+
+<div class="container top-offset">
+  <div class="results-container">
+    <h2 class="text-center text-white mb-4">🎯 Quiz Results</h2>
+    
+    <!-- Score Display -->
+    <div class="score-display">
+      <div class="score-circle {% if percentage >= 80 %}score-excellent{% elif percentage >= 60 %}score-good{% elif percentage >= 40 %}score-average{% else %}score-poor{% endif %}">
+        {{ percentage }}%
+      </div>
+      <h3 class="text-white">{{ correct_answers }}/{{ total_questions }} Correct</h3>
+      <p class="text-white-50">Total Score: {{ total_score }} points</p>
+      {% if time_taken %}
+        <p class="text-white-50">Time Taken: {{ time_taken|floatformat:0 }} seconds</p>
+      {% endif %}
+    </div>
+
+    <!-- Statistics Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number text-success">{{ correct_answers }}</div>
+        <div class="stat-label">Correct Answers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number text-danger">{{ total_questions|add:"-"|add:correct_answers }}</div>
+        <div class="stat-label">Incorrect Answers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number text-warning">{{ total_score }}</div>
+        <div class="stat-label">Total Points</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number text-info">{{ percentage }}%</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+    </div>
+
+    <!-- Difficulty Breakdown -->
+    <div class="difficulty-breakdown">
+      <h4 class="text-white mb-3">Performance by Difficulty</h4>
+      
+      <div class="difficulty-item">
+        <span class="difficulty-label easy">Easy Questions</span>
+        <span class="text-white">{{ easy_correct }}/5 correct</span>
+      </div>
+      
+      <div class="difficulty-item">
+        <span class="difficulty-label medium">Medium Questions</span>
+        <span class="text-white">{{ medium_correct }}/5 correct</span>
+      </div>
+      
+      <div class="difficulty-item">
+        <span class="difficulty-label hard">Hard Questions</span>
+        <span class="text-white">{{ hard_correct }}/5 correct</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <a href="{% url 'start_quiz' quiz.category %}" class="btn-retake">
+        <i class="fas fa-redo me-2"></i>Retake Quiz
+      </a>
+      <a href="{% url 'category_challenges' quiz.category %}" class="btn-back">
+        <i class="fas fa-arrow-left me-2"></i>Back to Challenges
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+// Add some animation to the score circle
+document.addEventListener('DOMContentLoaded', function() {
+    const scoreCircle = document.querySelector('.score-circle');
+    const percentage = {{ percentage }};
+    
+    // Animate the score circle
+    let currentScore = 0;
+    const increment = percentage / 50; // Animate over 50 steps
+    
+    const animation = setInterval(() => {
+        currentScore += increment;
+        if (currentScore >= percentage) {
+            currentScore = percentage;
+            clearInterval(animation);
+        }
+        scoreCircle.textContent = Math.round(currentScore) + '%';
+    }, 30);
+});
+</script>
+{% endblock %}

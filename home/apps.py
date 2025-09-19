@@ -16,3 +16,4 @@ class HomeConfig(AppConfig):
                     insert_default_courses()
                 except Exception as e:
                     print(f"[ERROR] insert_defaults failed: {e}")
+                    # Continue running even if inserts fail

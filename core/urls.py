@@ -98,6 +98,9 @@ urlpatterns = [
     path('', include('home.urls')),
     path("api/tip/today/", views.tip_today, name="tip_today"),
 
-   ] 
+   ]
+
+   
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
