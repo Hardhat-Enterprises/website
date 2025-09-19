@@ -16,34 +16,27 @@
     </a>.  
     Continue your learning there!
     </p>
+
+    <p class="text-center mb-5">
+      Click on a term, and then click on the definition that matches it!
+    </p>
     <!-- Defines quiz and sets out terms and definitions allowing them to be selected-->
     <div id="game-container">
-         <div id="game">
-            <div class="terms">
-            <h3>Terms</h3>
-            <ul>
-                <li class="term" data-term="Access Control">Access Control</li>
-                <li class="term" data-term="Encryption">Encryption</li>
-                <li class="term" data-term="Brute Force">Brute Force</li>
-                <li class="term" data-term="Phishing">Phishing</li>
-                <li class="term" data-term="Denial of Service">Denial of Service</li>
-            </ul>
-            </div>
-
-            <div class="definitions">
-            <h3>Definitions</h3>
-            <ul>
-                <li class="definition" data-definition="The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.">The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.</li>
-                <li class="definition" data-definition="A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one">A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one</li>
-                <li class="definition" data-definition="The prevention of authorized access to a system resource or the delaying of system operations and functions">The prevention of authorized access to a system resource or the delaying of system operations and functions</li>
-                <li class="definition" data-definition="Ensures that resources are only granted to those users who are entitled to them">Ensures that resources are only granted to those users who are entitled to them</li>
-                <li class="definition" data-definition="Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used.">Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used.</li>
-            </ul>
-            </div>
-
-            
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+        <span id="progress-text">0% complete</span>
+      </div>
+      <div id="game">
+        <div class="terms">
+          <h3>Terms</h3>
+          <ul></ul> <!-- Leave empty -->
         </div>
 
+        <div class="definitions">
+          <h3>Definitions</h3>
+          <ul></ul> <!-- Leave empty -->
+        </div>
+      </div>
     </div>
 
 <style>
@@ -75,13 +68,19 @@
     /*Creates the background for the game*/
     #game-container {
         background-color: #222;      
-        color: white;                
+        color: white !important;                
         padding: 20px;
         border-radius: 15px;         
         max-width: 800px;            
         margin: 20px auto;           
         box-shadow: 0 4px 12px rgba(0,0,0,0.4); 
     }
+    /* Forces game text to remain white even when in light mode*/
+    #game-container,
+    #game-container *,
+    #game-container *::before,
+    #game-container *::after {
+      color: #fff !important;}
 
     /*Creates style for the win message*/
     #win-message {
@@ -92,51 +91,147 @@
         text-align: center;
     }
 
+    /* Progress bar container */
+    #progress-container {
+      width: 100%;
+      background-color: #444;
+      border-radius: 10px;
+      margin: 10px 0 20px;
+      height: 25px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: relative;           /* anchor for absolute children */
+    }
+
+    /* Progress bar fill  */
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: limegreen;
+      transition: width 0.4s ease;
+    }
+
+    /* Styles progress bar text */
+    #progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); 
+      color: white;
+      font-weight: bold;
+      font-size: 0.9em;
+      pointer-events: none;              
+      white-space: nowrap;               
+    }
+
 
 </style>
 
 <script>
 // Makes sure page is loaded before running code
 document.addEventListener('DOMContentLoaded', () => {
-  // Defines pairing between terms and definitions
-  const pairs = {
-    "Access Control": "Ensures that resources are only granted to those users who are entitled to them",
-    "Brute Force": "A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one",
-    "Denial of Service": "The prevention of authorized access to a system resource or the delaying of system operations and functions",
-    "Phishing": "The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.",
-    "Encryption": "Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used."
-
-
-  };
-
+  // Define both rounds of matching and the pairs within them
+  const rounds = [
+    {
+      pairs: {
+        "Access Control": "Ensures that resources are only granted to those users who are entitled to them",
+        "Brute Force": "A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one",
+        "Denial of Service": "The prevention of authorized access to a system resource or the delaying of system operations and functions",
+        "Phishing": "The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.",
+        "Encryption": "Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used."
+      }
+    },
+    {
+      pairs: {
+        "Packet": "A piece of a message transmitted over a packet-switching network. One of the key features of a packet is that it contains the destination address in addition to the data. In IP networks, packets are often called datagrams.",
+        "Ransomware": "A type of malware that is a form of extortion. It works by encrypting a victim's hard drive denying them access to key files. The victim must then pay a ransom to decrypt the files and gain access to them again.",
+        "Simple Network Management Protocol (SNMP)": "The protocol governing network management and the monitoring of network devices and their functions. A set of protocols for managing complex networks.",
+        "Smishing": "This is a combination of the terms \"SMS\" and \"phishing.\" It is similar to phishing, but refers to fraudulent messages sent over SMS (text messaging) rather than email.",
+        "Trojan Horse": "A computer program that appears to have a useful function, but also has a hidden and potentially malicious function that evades security mechanisms, sometimes by exploiting legitimate authorizations of a system entity that invokes the program."
+      }
+    }
+  ];
+    //Sets up variables to be used for game functionality
+  const totalRounds = rounds.length; 
+  const totalMatches = rounds.reduce((sum, r) => sum + Object.keys(r.pairs).length, 0); // 10
+  let currentRound = 0;
+  let pairs = rounds[currentRound].pairs;
+  let selectedTerm = null;
+  let matchedCount = 0; 
+  let totalMatched = 0; 
   const game = document.getElementById('game');
-  let selectedTerm = null; // currently selected term name
-  let matchedCount = 0; // Tracks how many pairs have been fine
-  const totalpairs = 5; // Defines how many possible pairs there are
 
-  // Use event delegation so classes can change freely and behavior stays consistent
+  // Shuffles terms and definitions to make game harder
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Function that renders the game, including terms and defitinions
+  function renderRound() {
+    const termsContainer = game.querySelector('.terms ul');
+    const defsContainer = game.querySelector('.definitions ul');
+    termsContainer.innerHTML = '';
+    defsContainer.innerHTML = '';
+
+    // Makes pairs arrays so that they can be shuffled
+    const termEntries = Object.keys(rounds[currentRound].pairs);
+    const defEntries = Object.values(rounds[currentRound].pairs);
+
+    shuffleArray(termEntries);
+    shuffleArray(defEntries);
+
+    termEntries.forEach(term => {
+      const liTerm = document.createElement('li');
+      liTerm.className = 'term';
+      liTerm.dataset.term = term;
+      liTerm.innerText = term;
+      termsContainer.appendChild(liTerm);
+    });
+
+    defEntries.forEach(def => {
+      const liDef = document.createElement('li');
+      liDef.className = 'definition';
+      liDef.dataset.definition = def;
+      liDef.innerText = def;
+      defsContainer.appendChild(liDef);
+    });
+
+    // Resets game state
+    selectedTerm = null;
+    matchedCount = 0;
+    pairs = rounds[currentRound].pairs;
+  }
+
+  // initial render
+  renderRound();
+
+  // Updates progress bar whenever a correct match is made
+  function updateProgressBar() {
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const percent = Math.round((totalMatched / totalMatches) * 100);
+    progressBar.style.width = percent + "%";
+    progressText.textContent = percent + "% complete";
+  }
+
   game.addEventListener('click', (e) => {
     const termEl = e.target.closest('.term');
     const defEl = e.target.closest('.definition');
 
-    // Code determining what term is selected, ensuring already matched terms cant be selected and allows other terms to be selected
     if (termEl) {
       if (termEl.dataset.matched === 'true') return;
-
       game.querySelectorAll('.term').forEach(t => t.classList.remove('selected'));
-      
       selectedTerm = termEl.dataset.term;
       termEl.classList.add('selected');
       return;
     }
-
-    // Code that allows definitions to be selected, but only if a term is selected and ignores already matched definitions
+      //Main game functionality, including making it so that already matched options cannot be selected again
     if (defEl) {
-
-      if (!selectedTerm) {
-        return;
-      }
-
+      if (!selectedTerm) return;
       if (defEl.dataset.matched === 'true') return;
 
       const defValue = defEl.dataset.definition;
@@ -145,41 +240,53 @@ document.addEventListener('DOMContentLoaded', () => {
       if (pairs[selectedTerm] === defValue) {
         defEl.classList.add('correct');
         defEl.dataset.matched = 'true';
-
         termElForSelected.classList.add('correct');
         termElForSelected.dataset.matched = 'true';
         termElForSelected.classList.remove('selected');
-
         selectedTerm = null;
 
-        //Code that determines if all pairs have been completed, if yes then congratulation message is displayed, otherwise game continues
         matchedCount++;
-        if (matchedCount === totalpairs) {     
+        totalMatched++;
+        updateProgressBar();
+
+        if (matchedCount === Object.keys(pairs).length) {
+          if (currentRound === 0) {
+            // Creates message for completing first round
+            const msg = document.createElement("p");
+            msg.innerText = "Good job! Try some more!";
+            msg.style.color = "gold";
+            msg.style.fontWeight = "bold";
+            msg.style.textAlign = "center";
+            document.getElementById("game-container").appendChild(msg);
+
+            currentRound++;
+            setTimeout(() => {
+              msg.remove();
+              renderRound();
+            }, 2000); 
+          } else {
+            // Creates win message once second round is complete
             if (!document.getElementById("win-message")) {
-                const winMsg = document.createElement("p");
-                winMsg.id = "win-message";                    
-                winMsg.innerText = "Congratulations, you got them all!";            
-                document.getElementById("game-container").appendChild(winMsg);
+              const winMsg = document.createElement("p");
+              winMsg.id = "win-message";
+              winMsg.innerText = "Congratulations, you got them all!";
+              document.getElementById("game-container").appendChild(winMsg);
             }
+          }
         }
         return;
       }
 
-      //Allows the incorrect flash to be played multiple times
+      //Flashes definition red if definition is wrong
       defEl.classList.remove('wrong');
-      void defEl.offsetWidth; 
+      void defEl.offsetWidth;
       defEl.classList.add('wrong');
-
-      //Resets flash animation after it has played
-      const onAnimEnd = () => {
+      defEl.addEventListener('animationend', () => {
         defEl.classList.remove('wrong');
-        defEl.removeEventListener('animationend', onAnimEnd);
-      };
-      defEl.addEventListener('animationend', onAnimEnd);
+      }, { once: true });
     }
   });
 
-  // Helps with finding data terms
   function cssEscape(str) {
     if (window.CSS && CSS.escape) return CSS.escape(str);
     return str.replace(/(["\\])/g, '\\$1');
