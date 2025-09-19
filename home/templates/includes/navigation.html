@@ -73,6 +73,7 @@
                         <ul class="dropdown-menu" aria-labelledby="challengesDropdown">
                             <li><a class="dropdown-item" href="{% url 'challenge_list' %}">{% trans "All Challenges" %}</a></li>
                             <li><a class="dropdown-item" href="{% url 'cyber_quiz' %}">{% trans "Quiz" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'achievements' %}">{% trans "Progress" %}</a></li>
                         </ul>
                     </li>
 
@@ -173,7 +174,7 @@
                 {% else %}
                 <!-- Auth buttons (guest) -->
                 <div class="dropdown me-2">
-                    <a href="{% url 'login_with_otp' %}" class="btn btn-outline-primary">
+                    <a href="{% url 'login_with_otp' %}" class="btn btn-primary">
                         <i class="fas fa-sign-in-alt me-1"></i>{% trans "Sign In" %}
                     </a>
                 </div>
@@ -333,7 +334,78 @@
     body.dark-mode .user-dropdown-menu .dropdown-divider {
         border-top-color: #4a5568;
     }
+    /* ============================
+       COMPANY DROPDOWN — MATCH CYBER CHALLENGES
+       ============================ */
+    /* Panel (same as default light dropdown) */
+    
+    #companyDropdown+.dropdown-menu {
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        color: #111827 !important;
+        border-radius: .75rem;
+        /* same rounded feel as screenshot */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05);
+    }
+    /* Items: centered text, no custom borders */
+    
+    #companyDropdown+.dropdown-menu>li>.dropdown-item {
+        background: #ffffff !important;
+        color: #111827 !important;
+        text-align: center !important;
+        /* center like Cyber Challenges */
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding: .75rem 1rem;
+    }
+    /* Subtle divider between rows (like your screenshot) */
+    
+    #companyDropdown+.dropdown-menu>li+li>.dropdown-item {
+        border-top: 1px solid #e5e7eb !important;
+    }
+    /* Hover state = light grey */
+    
+    #companyDropdown+.dropdown-menu>li>.dropdown-item:hover,
+    #companyDropdown+.dropdown-menu>li>.dropdown-item:focus {
+        background: #f3f4f6 !important;
+        color: #111827 !important;
+    }
+    /* Nested submenus: same light look */
+    
+    #companyDropdown+.dropdown-menu .dropdown-submenu-menu {
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        color: #111827 !important;
+        border-radius: .5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05);
+    }
+    
+    #companyDropdown+.dropdown-menu .dropdown-submenu-menu .dropdown-item {
+        background: #ffffff !important;
+        color: #111827 !important;
+        text-align: center !important;
+        border: none !important;
+        padding: .75rem 1rem;
+    }
+    
+    #companyDropdown+.dropdown-menu .dropdown-submenu-menu .dropdown-item+.dropdown-item {
+        border-top: 1px solid #e5e7eb !important;
+    }
+    
+    #companyDropdown+.dropdown-menu .dropdown-submenu-menu .dropdown-item:hover,
+    #companyDropdown+.dropdown-menu .dropdown-submenu-menu .dropdown-item:focus {
+        background: #f3f4f6 !important;
+        color: #111827 !important;
+    }
 </style>
+
+
+
+
+
+
+
 
 <!-- Behavior: search toggle, nested submenus, LANGUAGE, DARK MODE -->
 <script>

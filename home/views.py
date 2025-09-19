@@ -523,6 +523,9 @@ def smishingdetection_join_us(request):
 # Upskill Pages
 def upskill_repository(request):
     return render(request), 'pages/upskilling/repository.html'
+    
+def achievements(request):
+    return render(request, "pages/achievements.html")
  
 def upskill_roadmap(request):
     return render(request), 'pages/upskilling/roadmap.html'
