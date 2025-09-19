@@ -16,17 +16,26 @@ The Hardhat Enterprises Web App's environment setup and verification are automat
 ### Commands and Usage
 
 - **`--dry-run`**
-  - Performs the checks related to enviornment without even starting the application.
-  - Check and Verify the presence of `Git`, `Python 3`, `pip3`, `Docker`, `Docker Compose` (i.e. `.env`,`docker-compose.yaml` etc)
-  - Checks the health endpoint located at `http://localhost:80/health`.
-  - **Example**: `./Auto-setup.sh --dry-run`
+  - Performs environment checks without starting the application.
+  - Checks presence of `Git`, `Python 3`, `pip3`, `Docker`, `Docker Compose`, `.env`, and compose files.
+  - Tests health endpoints based on selected mode.
+  - **Example**: `./Auto-Setup.sh --dry-run` (development mode)
+  - **Example**: `./Auto-Setup.sh --dry-run --prod` (production mode)
+- **`--dev`**
+  - Runs checks and starts development environment (default mode).
+  - Uses `docker-compose.yml` with Django dev server on port 8000 and Nginx on port 8080.
+  - Includes development tools, debugging capabilities, and auto-population of test data.
+  - **Example**: `./Auto-Setup.sh --dev`
+- **`--prod`**
+  - Runs checks and starts production environment.
+  - Uses `docker-compose-prod.yml` with Gunicorn server behind Nginx on port 80.
+  - Optimised for performance with production-grade configuration.
+  - **Example**: `./Auto-Setup.sh --prod`
 - **`--setup`**
-  - Uses `docker-compose up --build -d` to launch the Docker containers and performs all environment checks.
-  - Awaits confirmation from the health endpoint that the application is operating properly.
-  - Feedback on setup success or failure is given, along with recommendations for log checks if necessary.
+  - Legacy command that defaults to development mode for backwards compatibility.
   - **Example**: `./Auto-Setup.sh --setup`
 - **`--help`**
-  -  Displays a help message with the instructions and options available.
+  - Displays help message with all available options and mode descriptions.
   - **Example**: `./Auto-Setup.sh --help`
 
 ## precommit.sh
@@ -83,10 +92,13 @@ The `secrets-scan.sh` script incorporates TruffleHog to detect secrets within fi
   - **Example**: `./secrets-scan.sh`
 
 ## harden_docker_script.sh
-The `harden_docker_script.sh` script evaluates Docker settings for security compliance, verifying adherence to best practices like minimal base images, non-root users, and appropriate cleanup procedures.
+The `harden_docker_script.sh` script evaluates Docker settings for security compliance, verifying adherence to best practices like minimal base images, non-root users, and appropriate cleanup procedures.
 
 - **`compliance`** 
-  - Checks `Dockerfile`, `.dockerignore`, and `docker-compose.yml` for security compliance.                                                           - Validates the use of minimal base images (`python:3.12-slim`, `nginx:alpine`), non-root user configurations, dependency cleanup, and read-only >  - Generates a compliance report with pass/fail results for each check.
+  - Checks `Dockerfile`, `Dockerfile.prod`, `.dockerignore`, `docker-compose.yml`, and `docker-compose-prod.yml` for security compliance.
+  - Validates development and production configurations separately.
+  - Ensures proper environment separation between dev and prod modes.
+  - Generates a compliance report with pass/fail results for each check.
   - **Example**: `./harden_docker_script.sh compliance`
 - **`compliance --images`**
   - Expands the `complianc` directive to encompass the examination of constructed Docker images (`django_app` and `nginx`).

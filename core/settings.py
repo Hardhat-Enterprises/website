@@ -20,6 +20,9 @@ from pymemcache.client.base import Client
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 
+# Import API settings
+from .api_settings import REST_FRAMEWORK, SWAGGER_SETTINGS, REDOC_SETTINGS
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -103,6 +106,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
+    "django_user_agents",
 
     'rest_framework',  
     'drf_yasg', 
@@ -132,6 +136,7 @@ MIDDLEWARE = [
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
     "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
     'core.middleware.AutoLogoutMiddleware',
+    "django_user_agents.middleware.UserAgentMiddleware",
 
 ]
 
@@ -242,6 +247,27 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+
+    {
+        "NAME": "home.validators.ComplexityPasswordValidator",
+        "OPTIONS": {
+            "require_lower": True,
+            "require_upper": True,
+            "require_digit": True,
+            "require_symbol": True,
+            "symbols": r"[@$!%*?&]",
+        },
+    },
+
+    # Common Patterns (Sequences & Repeats)
+    {
+        "NAME": "home.validators.WeakPatternValidator",
+        "OPTIONS": {
+            "min_sequence_len": 3,  # reject 3+ like 123/abc/qwe
+            "min_repeat_len": 3,    # reject aaa/111/!!!
+            "keyboard_sequences": ["qwe", "asd", "zxc", "rty"],
+        },
     },
     
     # Prevent reusing last N passwords
@@ -463,4 +489,4 @@ SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
-
+SECURITY_EMAIL = "hardhatwebsite@gmail.com"

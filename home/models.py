@@ -1,4 +1,5 @@
 ﻿import uuid
+import os
 
 from django.db import models
 from django.core.mail import send_mail
@@ -35,6 +36,8 @@ import nh3
 def vault_upload_path(instance, filename):
     """Upload path for vault documents"""
     return f'vault_documents/{filename}'
+
+
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -79,6 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
     upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
+
 
     is_staff = models.BooleanField(
         _("staff status"),
@@ -162,6 +166,60 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.last_activity = now()
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
+
+def vault_upload_path(instance, filename):
+    """Generate upload path for vault documents"""
+    return os.path.join('vault_documents', filename)
+
+class Folder(models.Model):
+    name = models.CharField(max_length=200)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='folders')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('name', 'parent', 'owner')
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def path_list(self):
+        # for breadcrumbs
+        node, parts = self, []
+        while node:
+            parts.append(node)
+            node = node.parent
+        return list(reversed(parts))
+
+
+class VaultDocument(models.Model):
+    VIS_PUBLIC = 'public'
+    VIS_TEAMS = 'teams'
+    VIS_PRIVATE = 'private'
+    
+    VISIBILITY_CHOICES = [
+        (VIS_PUBLIC, 'Public'),
+        (VIS_TEAMS, 'Selected teams'),
+        (VIS_PRIVATE, 'Private (uploader only)'),
+    ]
+    
+    file = models.FileField(upload_to=vault_upload_path)
+    original_name = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(max_length=120, blank=True)
+    size_bytes = models.PositiveIntegerField(default=0)
+    description = models.CharField(max_length=300, blank=True)
+    visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
+    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.original_name or self.file.name
 
 # Keep a short history of password hashes per user
 class PasswordHistory(models.Model):
@@ -464,6 +522,18 @@ class UserChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
+    
+
+class TeamMember(models.Model):
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='team_images/')
+    created_at = models.DateTimeField(auto_now_add=True) 
+    linkedin = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -794,36 +864,63 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
-    def update_activity(self):
+def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
 
+class Tip(models.Model):
+    text = models.CharField(max_length=280, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Daily Security Tip"
+        verbose_name_plural = "Daily Security Tips"
+    
+    def __str__(self):
+        return self.text[:60]
 
-# --- Vault documents ------------------------------------
+class TipRotationState(models.Model):
+    lock = models.CharField(max_length=16, default="default", unique=True)
+    last_index = models.IntegerField(default=-1)
+    rotated_at = models.DateTimeField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+
+class UserDevice(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
+    device_name = models.CharField(max_length=200) 
+    user_agent = models.TextField()
+    ip_address = models.GenericIPAddressField()
+    created_at = models.DateTimeField(auto_now_add=True) 
+    last_seen = models.DateTimeField(auto_now=True)       
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.device_name} ({self.ip_address})"
 
 class VaultDocument(models.Model):
-    # Visibility choices used by forms/validation
     VIS_PUBLIC = 'public'
     VIS_PRIVATE = 'private'
     VIS_TEAMS = 'teams'
-
     VISIBILITY_CHOICES = [
         (VIS_PUBLIC, 'Public'),
         (VIS_PRIVATE, 'Private'),
         (VIS_TEAMS, 'Selected teams'),
     ]
-
     file = models.FileField(upload_to='vault/')
     description = models.CharField(max_length=255, blank=True)
     visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default=VIS_PRIVATE)
     allowed_teams = models.ManyToManyField(Group, blank=True)
-
-    # Optional but useful metadata
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='vault_documents'
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
         return self.description or f"Vault file #{self.pk}"
-

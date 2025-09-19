@@ -1,4 +1,3 @@
-
 {% load static %}
 {% load i18n %}
 <header class="header-global">
@@ -20,7 +19,7 @@
                 <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo" />
               </a>
             </div>
-            <!-- (Dark mode toggle removed from header on purpose; i'll move it into Settings) -->
+            <!-- (Dark mode toggle removed from header on purpose; moved to Settings) -->
             <div class="col-6 collapse-close text-end">
               <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
                  aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
@@ -28,34 +27,22 @@
           </div>
         </div>
 
-          <form class="mobile-search-bar" 
-                method="POST" 
-                action="{% url 'pages/search-results' %}">
-            {% csrf_token %}
-            <input class="form-control search-box-mobile" 
-                   type="search" 
-                   id="mobileSearchInput" 
-                   name="q" 
-                   placeholder="{% trans 'Search...' %}" 
-                   aria-label="Search" 
-                   autocomplete="off">
-            <button class="search-btn-mobile" type="submit">
-              <i class="fas fa-search search-icon"></i>
-            </button>
-          </form>
-          <div class="mobile-result-box d-none"></div>
- 
-        <!-- Mobile search -->
-        <form class="mobile-search-bar" method="POST" action="{% url 'pages/search-results' %}">
+        <form class="mobile-search-bar" 
+              method="POST" 
+              action="{% url 'pages/search-results' %}">
           {% csrf_token %}
-          <input class="form-control search-box-mobile" type="search" id="mobileSearchInput" name="q"
-                placeholder="{% trans 'Search...' %}" aria-label="Search" autocomplete="off">
+          <input class="form-control search-box-mobile" 
+                 type="search" 
+                 id="mobileSearchInput" 
+                 name="q" 
+                 placeholder="{% trans 'Search...' %}" 
+                 aria-label="Search" 
+                 autocomplete="off">
           <button class="search-btn-mobile" type="submit">
             <i class="fas fa-search search-icon"></i>
           </button>
         </form>
         <div class="mobile-result-box d-none"></div>
-
 
         <!-- Main nav -->
         <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
@@ -85,6 +72,13 @@
           </li>
           {% endif %}
 
+          <!-- Vault (from main branch) -->
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a href="{% url 'vault' %}" class="nav-link">{% trans "Vault" %}</a>
+          </li>
+          {% endif %}
+
           <!-- Admin (staff/superuser only) -->
           {% if user.is_authenticated %}
           {% if user.is_staff or user.is_superuser %}
@@ -111,23 +105,89 @@
             <a href="{% url 'about_us' %}" class="nav-link">{% trans "About" %}</a>
           </li>
 
-          <!-- Projects -->
+          <!-- Projects (enhanced version from main) -->
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="projectsDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+            <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               {% trans "Projects" %}
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="projectsDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'appattack' %}"><li class="mb-2 menu ps-3 py-1">{% trans "AppAttack" %}</li></a>
-                <a class="menu-link" href="{% url 'ptgui_viz_main' %}"><li class="mb-2 menu ps-3 py-1">{% trans "PT-GUI" %}</li></a>
-                <a class="menu-link" href="{% url 'smishing_detection_main' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Smishing Detection" %}</li></a>
-                <a class="menu-link" href="{% url 'Vr_main' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Deakin CyberSafe VR" %}</li></a>
-                <a class="menu-link" href="{% url 'policy_deployment' %}"><li class="mb-2 menu ps-3 py-1">{% trans "The Policy Deployment Engine (New)" %}</li></a>
-                <a class="menu-link" href="{% url 'Deakin_Threat_mirror_main' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Deakin Threat mirror (Finished)" %}</li></a>
-                <a class="menu-link" href="{% url 'malware_viz_main' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Malware (Finished)" %}</li></a>
-              </ul>
-            </div>
+            <div class="dropdown-menu pt-2" style="width: max-content !important;margin-left: 50px;" aria-labelledby="blogDropdown">
+              <div class="row">
+                <div class="col">
+                  <ul class="list-style-none m-0 p-0">
+
+                    <li class="menu ps-3 py-2">
+                      <a class="nav-link d-block px-2 py-2" href="{% url 'appattack' %}" style="display:table;width:100%;">
+                        <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/appattack.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                        <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                          <div class="fw-semibold">{% trans "AppAttack" %}</div>
+                          <div class="small">{% trans "Offensive security assessment tool" %}</div>
+                        </span>
+                      </a>
+                    </li>
+
+                    <li class="menu ps-3 py-2">
+                      <a class="nav-link d-block px-2 py-2" href="{% url 'malware_viz_main' %}" style="display:table;width:100%;">
+                        <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/malware.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                        <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                          <div class="fw-semibold">{% trans "Malware" %}</div>
+                          <div class="small">{% trans "Malware research and visualization" %}</div>
+                        </span>
+                      </a>
+                    </li>          
+
+                    <li class="menu ps-3 py-2">
+                      <a class="nav-link d-block px-2 py-2" href="{% url 'ptgui_viz_main' %}" style="display:table;width:100%;">
+                        <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/pentesting.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                        <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                          <div class="fw-semibold">{% trans "PT-GUI" %}</div>
+                          <div class="small">{% trans "Visual penetration testing dashboard" %}</div>
+                        </span>
+                      </a>
+                    </li>
+                    
+                    <li class="menu ps-3 py-2">
+                      <a class="nav-link d-block px-2 py-2" href="{% url 'smishing_detection_main' %}" style="display:table;width:100%;">
+                        <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/phishing.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                        <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                          <div class="fw-semibold">{% trans "Smishing Detection" %}</div>
+                          <div class="small">{% trans "SMS phishing detection system" %}</div>
+                        </span>
+                      </a>
+                    </li>
+
+                    <li class="menu ps-3 py-2">
+                      <a class="nav-link d-block px-2 py-2" href="{% url 'Vr_main' %}" style="display:table;width:100%;">
+                        <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/vr-cyber.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                        <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                          <div class="fw-semibold">{% trans "Deakin CyberSafe VR" %}</div>
+                          <div class="small">{% trans "VR Cyber safety project" %}</div>
+                        </span>
+                      </a>
+                    </li>
+
+                    <li class="menu ps-3 py-2">
+                      <a class="nav-link d-block px-2 py-2" href="{% url 'Deakin_Threat_mirror_main' %}" style="display:table;width:100%;">
+                        <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/threat.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                        <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                          <div class="fw-semibold">{% trans "Threat mirror" %}</div>
+                          <div class="small">{% trans "Threat Detection Framework" %}</div>
+                        </span>
+                      </a>
+                    </li>
+
+                    <li class="menu ps-3 py-2">
+                      <a class="nav-link d-block px-2 py-2" href="{% url 'policy_deployment' %}" style="display:table;width:100%;">
+                        <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/policy.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
+                        <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
+                          <div class="fw-semibold">{% trans "The Policy Deployment Engine" %}</div>
+                          <div class="small">{% trans "Automated policy enforcement engine" %}</div>
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
           </li>
 
           <!-- Blog -->
@@ -158,24 +218,44 @@
             </a>
             <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
               <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'career-discover' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li></a>
-                <a class="menu-link" href="{% url 'career-list' %}"><li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li></a>
-                <a class="menu-link" href="{% url 'internships' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li></a>
-                <a class="menu-link" href="{% url 'job-alerts' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li></a>
+                <a class="menu-link" href="{% url 'career-discover' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'career-list' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'internships' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'job-alerts' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li>
+                </a>
+                <a href="{% url 'career_path_finder' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Career Path Finder" %}</li>
+                </a>
               </ul>
             </div>
           </li>
 
           <!-- Cyber Challenges -->
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="challengesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+              data-bs-toggle="dropdown">
               {% trans "Cyber Challenges" %}
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="challengesDropdown">
+            <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
               <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'challenge_list' %}"><li class="mb-2 menu ps-3 py-1">{% trans "All Challenges" %}</li></a>
-                <a class="menu-link" href="{% url 'cyber_quiz' %}"><li class="mb-2 menu ps-3 py-1">{% trans "Quiz" %}</li></a>
+                <a class="menu-link" href="{% url 'challenge_list' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    {% trans "All Challenges" %}
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'cyber_quiz' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    {% trans "Quiz" %}
+                  </li>
+                </a>
               </ul>
             </div>
           </li>
@@ -193,9 +273,8 @@
             <div class="result-box d-none"></div>
           </div>
 
-
-          <!-- RIGHT SIDE: Auth / Profile -->
-          {% url 'settings' as settings_url %} {# safe: won't raise if missing #}
+          <!-- RIGHT SIDE: Auth / Profile (your settings feature) -->
+          {% url 'settings' as settings_url %}
           <li class="nav-item dropdown ms-lg-3">
             {% if user.is_authenticated %}
               <a class="nav-link dropdown-toggle d-flex align-items-left" href="#" id="profileDropdown"
@@ -214,7 +293,6 @@
                     <i class="bi bi-person me-2"></i> Profile
                   </a>
                 </li>
-                {% url 'settings' as settings_url %}
                 {% if settings_url %}
                 <li>
                   <a class="dropdown-item fw-semibold py-2" href="{{ settings_url }}">
@@ -244,28 +322,24 @@
         </ul>
       </div>
 
-        <!-- Right side: Auth buttons (guests only) + Hamburger -->
-        <div class="d-flex align-items-center justify-content-center">
+      <!-- Right side: Auth buttons (guests only) + Hamburger -->
+      <div class="d-flex align-items-center justify-content-center">
 
-          {% if not user.is_authenticated %}
-            <!-- Visible when NOT logged in -->
-            <a class="btn btn-outline-gray-100 me-2" href="{% url 'login_with_otp' %}">
-              <span class="fas fa-sign-in-alt me-2"></span> {% trans "Sign In" %}
-            </a>
-            <a class="btn btn-primary" href="{% url 'register' %}">{% trans "Sign Up" %}</a>
-          {% endif %}
+        {% if not user.is_authenticated %}
+          <!-- Visible when NOT logged in -->
+          <a class="btn btn-outline-gray-100 me-2" href="{% url 'login_with_otp' %}">
+            <span class="fas fa-sign-in-alt me-2"></span> {% trans "Sign In" %}
+          </a>
+          <a class="btn btn-primary" href="{% url 'register' %}">{% trans "Sign Up" %}</a>
+        {% endif %}
 
-          <!-- Toggler -->
-          <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </span>
+        <!-- Toggler -->
+        <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+              aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </span>
 
-        </div>
-
-        
-        
         <!-- language switcher -->
         <div class="dropdown" style="margin-left:10px;margin-right:5px;">
           {% get_current_language as CURRENT_LANG %}
@@ -322,151 +396,110 @@
           <input type="hidden" name="language" id="lang-input">
         </form>
 
-        <style>
-          .flag-icon{
-            width: 30px;          
-            height: 21px;          
-            object-fit: cover;    
-            flex-shrink: 0;         
-            margin-right: 10px;       
-            display: inline-block;    
-            vertical-align: middle;
-            border-radius: 2px;
-          }
-
-          .dropdown-menu#lang_menu {
-            background-color: #fff !important;     
-            border: 1px solid #ccc !important;     
-            border-radius: 4px !important;       
-            box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
-            padding: 0 !important;
-            margin-top: 0.5rem !important;
-            min-width: auto !important;
-            width: auto !important;
-          }
-
-          .dropdown-menu#lang_menu .dropdown-item {
-            color: #4B5868 !important;          
-            font-weight: 500;
-            padding: 0.5rem 0.8rem !important;
-            padding-right: 1.2rem !important;
-            background-color: transparent !important;
-            border-bottom: 1px solid #eee;
-            display: flex !important;         
-            align-items: center;
-            justify-content: flex-start;
-          }
-
-          .dropdown-menu#lang_menu .dropdown-item:last-child {
-            border-bottom: none;
-          }
-
-          .dropdown-menu#lang_menu .dropdown-item:hover,
-          .dropdown-menu#lang_menu .dropdown-item:focus {
-            background-color: #1967D2 !important;
-            color: #fff !important;
-          }
-
-          .dropdown-menu#lang_menu .dropdown-item.active {
-            background-color: #ffcd11 !important;
-            color: #fff !important;
-          }
-
-          #langDropdown img.flag-icon {
-            filter: none !important;
-            opacity: 1 !important;
-          }
-        </style>
-        <script>
-          document.addEventListener('DOMContentLoaded', function () {
-            const form  = document.getElementById('set-lang-form');
-            const input = document.getElementById('lang-input');
-            document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
-              a.addEventListener('click', function (e) {
-                e.preventDefault();
-                input.value = this.dataset.lang;  
-                form.submit();                    
-              });
-            });
-          });
-        </script>
-        
-
-
       </div>
     </div>
   </nav>
 </header>
-    </div>
-  </nav>
-</header>
 
 <style>
-  /* =========================
-     NAVBAR DROPDOWN Z-INDEX FIX
-     Why: Dropdown was hidden under "Recently Viewed Pages" panel
-     Approach: Raise navbar + dropdown z-index; ensure no clipping
-     ========================= */
+  .flag-icon{
+    width: 30px;
+    height: 21px;
+    object-fit: cover;
+    flex-shrink: 0;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 2px;
+  }
 
-  /* Make sure the header/nav can paint above page content */
+  .dropdown-menu#lang_menu {
+    background-color: #fff !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
+    padding: 0 !important;
+    margin-top: 0.5rem !important;
+    min-width: auto !important;
+    width: auto !important;
+  }
+
+  .dropdown-menu#lang_menu .dropdown-item {
+    color: #4B5868 !important;
+    font-weight: 500;
+    padding: 0.5rem 0.8rem !important;
+    padding-right: 1.2rem !important;
+    background-color: transparent !important;
+    border-bottom: 1px solid #eee;
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .dropdown-menu#lang_menu .dropdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .dropdown-menu#lang_menu .dropdown-item:hover,
+  .dropdown-menu#lang_menu .dropdown-item:focus {
+    background-color: #1967D2 !important;
+    color: #fff !important;
+  }
+
+  .dropdown-menu#lang_menu .dropdown-item.active {
+    background-color: #ffcd11 !important;
+    color: #fff !important;
+  }
+
+  #langDropdown img.flag-icon {
+    filter: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Your z-index fixes */
   .header-global,
   #navbar-main,
   .navbar-container,
   .navbar {
-    position: relative;            /* create stacking context for nav */
-    z-index: 3000;                 /* higher than other site panels */
-    overflow: visible !important;  /* prevent clipping inside nav */
+    position: relative;
+    z-index: 3000;
+    overflow: visible !important;
   }
 
-  /* Lift the dropdown above everything else on the page */
   #navbar-main .dropdown-menu {
-    z-index: 4000 !important;      /* sits above search/result panels */
+    z-index: 4000 !important;
   }
 
-  /* Your search suggestion panels (lower than dropdown) */
   .result-box,
   .mobile-result-box {
-    z-index: 1500;                 /* underneath dropdown */
+    z-index: 1500;
   }
 
-  /* Defensive: if any ancestor used to clip/stack (common in headers) */
   .navbar-collapse,
   .navbar-nav,
   .search-container {
-    overflow: visible !important;  /* avoid cutting the dropdown */
+    overflow: visible !important;
   }
-</style>
-<style>
+
   /* Force dropdown text to be visible */
   .dropdown-menu {
-    background-color: #fff !important;   /* keep background white */
+    background-color: #fff !important;
   }
   .dropdown-menu .dropdown-item {
-    color: #000 !important;              /* make text black */
+    color: #000 !important;
   }
   .dropdown-menu .dropdown-item:hover {
     background-color: #f2f2f2 !important;
     color: #000 !important;
   }
-  /* Center and bold dropdown items */
   .dropdown-menu .dropdown-item {
     text-align: left;
-    font-weight: 600; /* same as fw-semibold */
+    font-weight: 600;
   }
-  </style>
 
+  .header-profile-name { color: #1a1a1a !important; }
+  body.dark-mode .header-profile-name { color: #fff !important; }
 
-
-  <!-- scripts -->
-  <!--<script src="{% static 'js/toggles.js' %}"></script>-->
-  <script src="{% static 'js/search_suggestions.js' %}"></script>
-
-  <style>
-    .header-profile-name { color: #1a1a1a !important; }
-    body.dark-mode .header-profile-name { color: #fff !important; }
-  </style>
-
-  <style>
   .dropdown-submenu {
     position: relative;
   }
@@ -483,63 +516,94 @@
   .dropdown-submenu.show > .submenu {
     display: block;
   }
-  </style>
+</style>
 
-
-    <!-- (submenu JS) -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const blogPagePlus = document.getElementById('blogPagePlus');
-        if (!blogPagePlus) return;
-
-        const parentSubmenu = blogPagePlus.closest('.dropdown-submenu');
-        const submenu = blogPagePlus.nextElementSibling;
-
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-          menu.addEventListener('click', function (e) { e.stopPropagation(); });
-        });
-
-        document.querySelectorAll('.dropdown').forEach(drop => {
-          drop.addEventListener('hide.bs.dropdown', function (e) {
-            if (parentSubmenu.classList.contains('show')) {
-              e.preventDefault();
-              parentSubmenu.classList.remove('show');
-            }
-          });
-        });
-
-        blogPagePlus.addEventListener('click', function (e) {
-          e.preventDefault(); e.stopPropagation();
-          document.querySelectorAll('.dropdown-submenu').forEach(sub => { if (sub !== parentSubmenu) sub.classList.remove('show'); });
-          parentSubmenu.classList.toggle('show');
-        });
-
-        document.addEventListener('click', function (e) {
-          if (!parentSubmenu.contains(e.target)) parentSubmenu.classList.remove('show');
-        });
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form  = document.getElementById('set-lang-form');
+    const input = document.getElementById('lang-input');
+    document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        input.value = this.dataset.lang;
+        form.submit();
       });
-    </script>
+    });
+  });
+</script>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const adminReviewDropdown = document.getElementById('adminReviewDropdown');
-        if (!adminReviewDropdown) return;
+<script src="{% static 'js/search_suggestions.js' %}"></script>
 
-        const adminSubmenu = adminReviewDropdown.closest('.dropdown-submenu');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const blogPagePlus = document.getElementById('blogPagePlus');
+    if (!blogPagePlus) return;
 
-        adminReviewDropdown.addEventListener('click', function (e) {
-          e.preventDefault(); e.stopPropagation();
-          document.querySelectorAll('.dropdown-submenu').forEach(item => {
-            if (item !== adminSubmenu) item.classList.remove('show');
-          });
-          adminSubmenu.classList.toggle('show');
-        });
+    const parentSubmenu = blogPagePlus.closest('.dropdown-submenu');
 
-        document.addEventListener('click', function (e) {
-          if (!adminSubmenu.contains(e.target)) adminSubmenu.classList.remove('show');
-        });
+    // Prevent Bootstrap auto-close on click inside dropdown
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+      menu.addEventListener('click', function (e) {
+        e.stopPropagation();
       });
-    </script>
+    });
 
-    <script src="{% static 'js/search_suggestions.js' %}"></script>
+    // Bootstrap fix: Stop parent from closing when submenu toggles
+    document.querySelectorAll('.dropdown').forEach(drop => {
+      drop.addEventListener('hide.bs.dropdown', function (e) {
+        if (parentSubmenu.classList.contains('show')) {
+          e.preventDefault(); // prevent closing if submenu is open
+          parentSubmenu.classList.remove('show'); // manually close submenu
+        }
+      });
+    });
 
+    // Toggle submenu on Blog Page + click
+    blogPagePlus.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close all other open submenus
+      document.querySelectorAll('.dropdown-submenu').forEach(sub => {
+        if (sub !== parentSubmenu) sub.classList.remove('show');
+      });
+
+      // Toggle current submenu
+      parentSubmenu.classList.toggle('show');
+    });
+
+    // Close submenu if clicked outside the entire dropdown
+    document.addEventListener('click', function (e) {
+      if (!parentSubmenu.contains(e.target)) {
+        parentSubmenu.classList.remove('show');
+      }
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const adminReviewDropdown = document.getElementById('adminReviewDropdown');
+    if (!adminReviewDropdown) return;
+
+    const adminSubmenu = adminReviewDropdown.closest('.dropdown-submenu');
+
+    adminReviewDropdown.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Close other open submenus
+      document.querySelectorAll('.dropdown-submenu').forEach(item => {
+        if (item !== adminSubmenu) item.classList.remove('show');
+      });
+
+      adminSubmenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!adminSubmenu.contains(e.target)) {
+        adminSubmenu.classList.remove('show');
+      }
+    });
+  });
+</script>
