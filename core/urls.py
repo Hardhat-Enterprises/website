@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.i18n import i18n_patterns
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from home import views
@@ -23,8 +24,8 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.urls import path, re_path
 from .admin import admin_statistics_view
-from home.views_robotstxt import robots_txt  # add this near your other imports
-
+from home.views_securitytxt import security_txt
+from home.views_robotstxt import robots_txt
 
 from .admin import admin_dashboard
 
@@ -49,6 +50,7 @@ urlpatterns = [
     path('accounts/', include('home.urls')), 
     path('', include('home.urls')),
     path('about-us/', views.about_us, name='about_us'),
+    path('our-tools/', views.security_tools, name='our_tools'),
     path('contact', views.contact, name='contact'),
     path('contact-central', views.Contact_central, name='contact-central'),
     path('joinus/', views.join_project, name='join-project'),
@@ -94,6 +96,11 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('', include('home.urls')),
+    path("api/tip/today/", views.tip_today, name="tip_today"),
 
-   ]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static('/static/assets/', document_root=settings.BASE_DIR / 'custom_static/assets')
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

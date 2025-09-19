@@ -49,6 +49,34 @@
               </div>
             </div>
           </div>
+
+          <div class="completed-challenges mt-4">
+            <h4 class="text-center mb-3">Completed Challenges</h4>
+            {% if completed_challenges %}
+                <ul class="list-group list-group-flush">
+                    {% for uc in completed_challenges %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0">
+                            <div>
+                                <strong>{{ uc.challenge.title }}</strong>
+                                <small class="text-muted d-block">{{ uc.challenge.get_category_display }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge 
+                                    {% if uc.challenge.difficulty == 'easy' %}bg-success
+                                    {% elif uc.challenge.difficulty == 'medium' %}bg-warning text-dark
+                                    {% else %}bg-danger{% endif %} me-2">
+                                    {{ uc.challenge.get_difficulty_display }}
+                                </span>
+                                <span class="badge bg-primary rounded-pill">{{ uc.score }} pts</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-center text-muted mt-3">You haven't completed any challenges yet. <a href="{% url 'challenge_list' %}">Get started!</a></p>
+            {% endif %}
+          </div>
+          
         </div>
       </div>
 
@@ -367,6 +395,21 @@ body.dark-mode .form-control:focus {
   width: 30px;
 }
 
+/* Fix dropdown z-index issues on profile page */
+.navbar .dropdown-menu {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+.navbar .dropdown:hover .dropdown-menu {
+  display: block !important;
+}
+
+/* Ensure navbar stays on top */
+.navbar {
+  z-index: 1050 !important;
+}
+
 /* Section Headers */
 h4 {
   color: #1a1a1a;
@@ -485,6 +528,15 @@ h4.text-center {
 .contact-item input {
   width: 100%;
 }
+
+body.dark-mode .completed-challenges .list-group-item {
+  color: #f8f9fa; /* Makes the main text white */
+  border-color: #444 !important; /* Adds a visible border in dark mode */
+}
+
+body.dark-mode .completed-challenges .list-group-item .text-muted {
+  color: #adb5bd !important; /* Makes the light grey text visible */
+}
 </style>
 
 <script>
@@ -542,7 +594,37 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </div>
+<!-- Fix dropdown functionality on profile page -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ensure Bootstrap dropdowns work properly
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        return new bootstrap.Dropdown(dropdownToggleEl);
+    });
+    
+    // Add hover functionality for better UX
+    document.querySelectorAll('.navbar .dropdown').forEach(function(dropdown) {
+        dropdown.addEventListener('mouseenter', function() {
+            var dropdownMenu = this.querySelector('.dropdown-menu');
+            if (dropdownMenu) {
+                dropdownMenu.classList.add('show');
+                this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'true');
+            }
+        });
+        
+        dropdown.addEventListener('mouseleave', function() {
+            var dropdownMenu = this.querySelector('.dropdown-menu');
+            if (dropdownMenu) {
+                dropdownMenu.classList.remove('show');
+                this.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
+});
+</script>
+
 <!-- Bootstrap JS (for modal to work) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 {% endblock %}

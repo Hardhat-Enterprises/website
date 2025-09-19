@@ -20,6 +20,9 @@ from pymemcache.client.base import Client
 from corsheaders.defaults import default_headers
 from django.contrib.messages import constants as messages
 
+# Import API settings
+from .api_settings import REST_FRAMEWORK, SWAGGER_SETTINGS, REDOC_SETTINGS
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -68,8 +71,8 @@ SESSION_COOKIE_SECURE = False
 #Ensure v3 Google ReCAPTCHA keys are set
 #To set up new keys, navigate to https://www.google.com/recaptcha/admin/site/
 # Use credentials for Gmail hardhatwebsite@gmail.com
-RECAPTCHA_SITE_KEY = '6LfAVkYrAAAAADQTOddD3d6Ly-LWGDt-O5zpOkao'
-RECAPTCHA_SECRET_KEY = '6LfAVkYrAAAAAHmiKUs--9QR_U70BlGPU6yP522i'
+RECAPTCHA_SITE_KEY = '6LesBKsrAAAAADwwja7GKS33AEC7ktIuJlcYpBDf'
+RECAPTCHA_SECRET_KEY = '6LesBKsrAAAAANii1CrJeF_C679-5vRMgGNC6htZ'
 
 # ---------------- Secure Session Cookie Settings ----------------
 # These settings ensure cookies are securely transmitted over HTTPS and protected from JS and CSRF attacks
@@ -103,14 +106,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
+    "django_user_agents",
 
     'rest_framework',  
     'drf_yasg', 
 
-    'home',
+    'home.apps.HomeConfig',
     'theme_pixel',
 
     'corsheaders',
+    "django.contrib.humanize"
 
 
 ]
@@ -120,6 +125,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "core.middleware.LocaleMiddlewareDefaultEnglish",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -128,7 +134,10 @@ MIDDLEWARE = [
     "home.idle.LogoutMiddleware",  
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    'core.middleware.AutoLogoutMiddleware'
+    "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
+    'core.middleware.AutoLogoutMiddleware',
+    "django_user_agents.middleware.UserAgentMiddleware",
+
 ]
 
 LOGGING = {
@@ -239,21 +248,62 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+
+    {
+        "NAME": "home.validators.ComplexityPasswordValidator",
+        "OPTIONS": {
+            "require_lower": True,
+            "require_upper": True,
+            "require_digit": True,
+            "require_symbol": True,
+            "symbols": r"[@$!%*?&]",
+        },
+    },
+
+    # Common Patterns (Sequences & Repeats)
+    {
+        "NAME": "home.validators.WeakPatternValidator",
+        "OPTIONS": {
+            "min_sequence_len": 3,  # reject 3+ like 123/abc/qwe
+            "min_repeat_len": 3,    # reject aaa/111/!!!
+            "keyboard_sequences": ["qwe", "asd", "zxc", "rty"],
+        },
+    },
+    
+    # Prevent reusing last N passwords
+    {
+        "NAME": "home.validators.PasswordHistoryValidator",
+        "OPTIONS": {"keep_last": 2, "include_current": True},
+    },
 ]
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
+LANGUAGE_COOKIE_AGE = 60 
 
 # TIME_ZONE = "UTC"
 TIME_ZONE = "Australia/Melbourne"
 
 USE_I18N = True
-
 USE_TZ = True
 
+LANGUAGES = [
+    ('en', 'English'),
+    ('zh-hans', 'Simplified Chinese'),
+    # ("hi", "हिन्दी (Hindi)"),  DeepL api can not translate Hindi.
+    ("fr", "Français"),
+    ("es", "Español"),
+    ("ja", "日本語"),
+    ("ko", "한국어"),
+]
+
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

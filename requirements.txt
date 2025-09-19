@@ -19,6 +19,9 @@ crispy-bootstrap5==2025.6
 django-theme-pixel==1.0.7
 django-tinymce==4.1.0
 
+# Database
+psycopg[binary]>=3.2.2,<3.3
+
 # Deployment
 whitenoise==6.9.0
 gunicorn==23.0.0
@@ -34,6 +37,9 @@ virtualenv==20.34.0
 wheel==0.45.1
 nh3==0.2.18                    
 bleach==6.2.0
+
+# Device Detection
+django-user-agents==0.4.0
 
 # Image Processing
 Pillow==11.3.0

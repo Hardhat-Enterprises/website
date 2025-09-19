@@ -1,86 +1,103 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-
+{% load i18n %}
 {% block content %}
 <main>
 
 {% include 'includes/pre-loader.html' %}
 
+<style>
+  .masonry-grid {
+    column-count: 3;
+    column-gap: 1rem;
+  }
+
+  .masonry-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+</style>
+
 <section class="section section-lg">
   <div class="container">
-    <h4>User Blogs</h4>
-    <br>
-    <p>Please provide your blog details with our company.</p>
+    <h4>{% trans "User Blogs" %}</h4>
+    <br> 
+    <p>{% trans "Please provide your blog details with our company." %}</p>
     <br>
 
     <!-- Blog Submission Form -->
     <form method="post" action="{% url 'blogpage' %}" class="card" enctype="multipart/form-data" style="padding: 20px;">
       {% csrf_token %}
-      <div class="card-header">Share Your Blog</div>
+      <div class="card-header">{% trans "Share Your Blog" %}</div>
       <div class="form-group">
         <br/>
-        <label for="id_name">Name:</label>
+        <label for="id_name">{% trans "Name:" %}</label>
         {{ form.name }}
         <br/>
       </div>
       <br/>
       <div class="form-group">
-        <label for="id_title">Blog Title:</label>
+        <label for="id_title">{% trans "Blog Title:" %}</label>
         {{ form.title }}
       </div>
       <br/>
       <div class="form-group">
-        <label for="id_description">Blog Description:</label>
+        <label for="id_description">{% trans "Blog Description:" %}</label>
         {{ form.description }}
       </div>
       <br/>
       <div class="form-group">
-        <label for="id_file">Image Upload (optional):</label>
+        <label for="id_file">{% trans "Image Upload" %}</label>
         {{ form.file }}
       </div>
       <br/>
-      <button type="reset" class="btn btn-secondary">Reset</button>
+      <button type="reset" class="btn btn-secondary">{% trans "Reset" %}</button>
       <br/>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
     </form>
 
     <br><br>
 
     <!-- Blog Cards -->
     <div class="feedback-list">
-      <h5><u>Recent Blog Pages</u></h5>
+      <h5><u>{% trans "Recent Blog Pages" %}</u></h5>
       <br>
-      <div class="row">
+      <div class="masonry-grid">
         {% if blogpages %}
           {% for blogpage in blogpages %}
-            <div class="col-md-4 mb-4">
+            <div class="masonry-item">
               <div class="card" style="width: 100%; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 15px;">
-                <img src="data:image/jpeg;base64,{{ blogpage.file }}" class="card-img-top" style="border-top-left-radius: 15px; border-top-right-radius: 15px; height: 200px; object-fit: cover;" alt="Blog Image">
+                {% if blogpage.file %}
+                  <img src="data:image/jpeg;base64,{{ blogpage.file }}" class="card-img-top"
+                      style="border-top-left-radius: 15px; border-top-right-radius: 15px; height: 200px; object-fit: cover;" 
+                      alt="Blog Image">
+                {% else %}
+                  <div style="height: 200px; background-color: #e0e0e0; border-top-left-radius: 15px; border-top-right-radius: 15px; display: flex; align-items: center; justify-content: center;">
+                    <span class="text-muted">{% trans "No Image" %}</span>
+                  </div>
+                {% endif %}
                 <div class="card-body">
                   <h5 class="card-title">{{ blogpage.title }}</h5>
                   <h6 class="card-subtitle mb-2 text-muted">By {{ blogpage.name }}</h6>
                   <p class="card-text">{{ blogpage.description|truncatewords:20 }}</p>
 
                   <div style="display: flex; justify-content: space-between;">
-                    <!-- Edit Button -->
                     <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal"
                       onclick="openEditModal('{{ blogpage.id }}', '{{ blogpage.name }}', '{{ blogpage.title }}', `{{ blogpage.description|escapejs }}`)">
-                      Edit
+                      {% trans "Edit" %}
                     </button>
-
-                    <!-- Delete Form -->
                     <form method="post" action="{% url 'delete_blogpage' blogpage.id %}">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                      <button type="submit" class="btn btn-danger btn-sm">{% trans "Delete" %}</button>
                     </form>
                   </div>
-
                 </div>
               </div>
             </div>
           {% endfor %}
         {% else %}
-          <p>No Blogs Yet</p>
+          <p>{% trans "No Blogs Yet" %}</p>
         {% endif %}
       </div>
     </div>
@@ -92,7 +109,7 @@
           {% csrf_token %}
           <div class="modal-content">
             <div class="modal-header">
-              <h5 style="color: black;" id="editModalLabel">Edit Blog</h5>
+              <h5 style="color: black;" id="editModalLabel">{% trans "Edit Blog" %}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetEditForm()">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -100,29 +117,29 @@
             <div class="modal-body">
               <input type="hidden" name="id" id="editBlogId">
               <div class="form-group">
-                <label for="editName" style="color: black;">Name</label>
+                <label for="editName" style="color: black;">{% trans "Name" %}</label>
                 <input type="text" class="form-control" id="editName" name="name" required>
               </div>
               <br/>
               <div class="form-group">
-                <label for="editTitle" style="color: black;">Blog Title</label>
+                <label for="editTitle" style="color: black;">{% trans "Blog Title" %}</label>
                 <input type="text" class="form-control" id="editTitle" name="title" required>
               </div>
               <br/>
               <div class="form-group">
-                <label for="editDescription" style="color: black;">Blog Description</label>
+                <label for="editDescription" style="color: black;">{% trans "Blog Description" %}</label>
                 <textarea class="form-control" id="editDescription" name="description" rows="4" required></textarea>
               </div>
               <br/>
               <div class="form-group">
-                <label for="editFile" style="color: black;">Change Image (optional)</label>
-                <input style="color: black;" type="file" class="form-control-file" id="editFile" name="file">
+                <label for="editFile" style="color: black;">{% trans "Change Image (from your computer, optional)" %}</label>
+                <input style="color: black;" type="file" class="form-control-file" id="editFile" name="file" accept="image/*">
               </div>
             </div>           
             <br/>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetEditForm()">Cancel</button>
-              <button type="submit" class="btn btn-success">Save Changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetEditForm()">{% trans "Cancel" %}</button>
+              <button type="submit" class="btn btn-success">{% trans "Save Changes" %}</button>
             </div>
           </div>
         </form>

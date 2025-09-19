@@ -5,55 +5,402 @@
 
 <div class="container">
   <div id="sections" class="my-5">
+
+      <!-- 1) HTML Essentials & Page Skeleton -->
+      <section class="section card mb-3 p-3">
+        <h2 class="card-title">HTML Essentials &amp; Page Skeleton</h2>
+        <ul class="card-text">
+          <li>Begin with <code>&lt;!DOCTYPE html&gt;</code> to enable standards mode.</li>
+          <li>Core structure: <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>.</li>
+          <li>Always set <code>lang</code>, <code>&lt;meta charset&gt;</code>, and responsive <code>&lt;meta name="viewport"&gt;</code>.</li>
+        </ul>
     
-    <!-- SECTION 1: HTML Basics -->
-    <section class="section card mb-3 p-3">
-      <h2 class="card-title">HTML Basics</h2>
-      <ul class="card-text">
-        <li>🔖 <strong>Tags, Elements, and Attributes</strong></li>
-        <li>🏗️ <strong>Structure:</strong> 
-          <code>&lt;html&gt;</code>, 
-          <code>&lt;head&gt;</code>, 
-          <code>&lt;body&gt;</code>, etc.
-        </li>
-        <li>🔗 <strong>Links, Images, Forms</strong></li>
-        <li>📦 <strong>Semantic HTML:</strong> 
-          <code>&lt;section&gt;</code>, 
-          <code>&lt;article&gt;</code>, 
-          <code>&lt;nav&gt;</code>, 
-          <code>&lt;footer&gt;</code>
-        </li>
-        <li>📐 <strong>Layout techniques:</strong> Flexbox & Grid (used via Tailwind)</li>
-      </ul>
-      <p>Reference: <a href="https://www.w3schools.com/html/" target="_blank">HTML by W3Schools</a></p>
-    </section>
-
-    <!-- SECTION 2: Tailwind CSS -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Tailwind CSS Fundamentals</h2>
-      <ul>
-        <li>🎨 Utility-first CSS framework</li>
-        <li>📏 Responsive design with classes like <code>md:px-4</code>, <code>lg:grid-cols-3</code></li>
-        <li>🔄 Flex/Grid layout using <code>flex</code>, <code>justify-between</code>, <code>grid-cols-2</code>, etc.</li>
-        <li>🌗 Dark Mode Support with <code>dark:bg-gray-900</code></li>
-        <li>💡 Highly customizable via the <code>tailwind.config.js</code></li>
-      </ul>
-      <p>Reference: <a href="https://tailwindcss.com/docs" target="_blank">Tailwind CSS Docs</a></p>
-    </section>
-
-    <!-- SECTION 3: Learning Resources -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Learn HTML & Tailwind</h2>
-      <ul>
-        <li><a href="https://www.w3schools.com/html/" target="_blank">📘 HTML Tutorial – W3Schools</a></li>
-        <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank">📘 MDN Web Docs – HTML</a></li>
-        <li><a href="https://www.youtube.com/watch?v=UBOj6rqRUME" target="_blank">🎥 Tailwind Crash Course – Traversy Media</a></li>
-        <li><a href="https://www.youtube.com/watch?v=lCxcTsOHrjo" target="_blank">🎥 Tailwind CSS Full Course for Beginners – All-in-One Tutorial</a></li>
-        <li><a href="https://tailwindcss.com/docs" target="_blank">📘 Official Tailwind CSS Docs</a></li>
-      </ul>
-    </section>
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Minimal valid document</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;!DOCTYPE html&gt;
+    &lt;html lang="en"&gt;
+      &lt;head&gt;
+        &lt;meta charset="utf-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+        &lt;title&gt;My Page&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;h1&gt;Hello, HTML!&lt;/h1&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;</code></pre>
+      </section>
+    
+      <!-- 2) Text: Headings, Paragraphs, Inline Elements -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Text: Headings, Paragraphs, Inline Elements</h2>
+        <ul class="card-text">
+          <li>Headings <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code> (one <code>&lt;h1&gt;</code> per page is best).</li>
+          <li>Paragraphs with <code>&lt;p&gt;</code>; emphasis via <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, highlight with <code>&lt;mark&gt;</code>, code with <code>&lt;code&gt;</code>.</li>
+          <li>Breaks <code>&lt;br&gt;</code> sparingly; small print with <code>&lt;small&gt;</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Headings &amp; inline formatting</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;h1&gt;Main Title&lt;/h1&gt;
+    &lt;h2&gt;Section Title&lt;/h2&gt;
+    &lt;p&gt;A paragraph with &lt;strong&gt;bold&lt;/strong&gt;, &lt;em&gt;emphasis&lt;/em&gt;,
+    &lt;mark&gt;highlight&lt;/mark&gt;, and &lt;code&gt;inline code&lt;/code&gt;.&lt;/p&gt;
+    &lt;small&gt;Fine print text&lt;/small&gt;</code></pre>
+      </section>
+    
+      <!-- 3) Links, URLs, Navigation -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Links with <code>&lt;a&gt;</code>, URLs &amp; Navigation</h2>
+        <ul class="card-text">
+          <li>External: <code>&lt;a href="https://example.com"&gt;...&lt;/a&gt;</code></li>
+          <li>Internal: <code>&lt;a href="/about/"&gt;...&lt;/a&gt;</code>; in-page: <code>&lt;a href="#contact"&gt;...&lt;/a&gt;</code> with a matching <code>id</code>.</li>
+          <li>New tab: <code>target="_blank"</code> + <code>rel="noopener noreferrer"</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Safe external &amp; internal links</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;a href="https://example.com" target="_blank" rel="noopener noreferrer"&gt;Visit Example&lt;/a&gt;
+    &lt;a href="/about/"&gt;Internal Page&lt;/a&gt;
+    &lt;a href="#contact"&gt;Jump to Contact&lt;/a&gt;</code></pre>
+      </section>
+    
+      <!-- 4) Images, Figure, Responsive -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Images with <code>&lt;img&gt;</code>, <code>&lt;figure&gt;</code>, Responsive Media</h2>
+        <ul class="card-text">
+          <li>Always provide descriptive <code>alt</code> (or empty <code>alt=""</code> if decorative).</li>
+          <li>Use <code>&lt;figure&gt;</code> + <code>&lt;figcaption&gt;</code> for captions.</li>
+          <li>Serve responsive images via <code>srcset</code>/<code>sizes</code> or <code>&lt;picture&gt;</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Captioned &amp; responsive images</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;figure&gt;
+      &lt;img src="/static/img/diagram.png" alt="Architecture diagram"&gt;
+      &lt;figcaption&gt;System architecture overview.&lt;/figcaption&gt;
+    &lt;/figure&gt;
+    
+    &lt;img 
+      src="/static/img/hero-800.jpg"
+      srcset="/static/img/hero-400.jpg 400w, /static/img/hero-800.jpg 800w, /static/img/hero-1600.jpg 1600w"
+      sizes="(max-width: 600px) 100vw, 600px"
+      alt="Responsive hero"&gt;
+    
+    &lt;picture&gt;
+      &lt;source srcset="/static/img/hero.avif" type="image/avif"&gt;
+      &lt;source srcset="/static/img/hero.webp" type="image/webp"&gt;
+      &lt;img src="/static/img/hero.jpg" alt="Modern formats with fallback"&gt;
+    &lt;/picture&gt;</code></pre>
+      </section>
+    
+      <!-- 5) Lists -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Lists: <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;dl&gt;</code></h2>
+        <ul class="card-text">
+          <li>Bulleted: <code>&lt;ul&gt;</code> + <code>&lt;li&gt;</code></li>
+          <li>Numbered: <code>&lt;ol&gt;</code> + <code>&lt;li&gt;</code> (supports <code>start</code>, <code>reversed</code>).</li>
+          <li>Definitions: <code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, <code>&lt;dd&gt;</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Common list patterns</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;ul&gt;&lt;li&gt;Milk&lt;/li&gt;&lt;li&gt;Bread&lt;/li&gt;&lt;/ul&gt;
+    &lt;ol start="3"&gt;&lt;li&gt;Preheat&lt;/li&gt;&lt;li&gt;Mix&lt;/li&gt;&lt;/ol&gt;
+    &lt;dl&gt;&lt;dt&gt;HTML&lt;/dt&gt;&lt;dd&gt;Markup language&lt;/dd&gt;&lt;/dl&gt;</code></pre>
+      </section>
+    
+      <!-- 6) Tables -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Tables: <code>&lt;table&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;th&gt;</code></h2>
+        <ul class="card-text">
+          <li>Add a <code>&lt;caption&gt;</code> for accessibility.</li>
+          <li>Use <code>&lt;th scope="col|row"&gt;</code> to associate headers and cells.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Accessible table</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;table&gt;
+      &lt;caption&gt;Quarterly Sales&lt;/caption&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;&lt;th scope="col"&gt;Quarter&lt;/th&gt;&lt;th scope="col"&gt;Sales&lt;/th&gt;&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;th scope="row"&gt;Q1&lt;/th&gt;&lt;td&gt;$10k&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;th scope="row"&gt;Q2&lt;/th&gt;&lt;td&gt;$12k&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;</code></pre>
+      </section>
+    
+      <!-- 7) Forms -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Forms: <code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code></h2>
+        <ul class="card-text">
+          <li>Pair <code>&lt;label for&gt;</code> with matching control <code>id</code>.</li>
+          <li>Native validation: <code>required</code>, <code>minlength</code>, <code>pattern</code>.</li>
+          <li>Group with <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Accessible form</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;form action="/signup/" method="post"&gt;
+      &lt;label for="email"&gt;Email&lt;/label&gt;
+      &lt;input id="email" name="email" type="email" required placeholder="you@example.com"&gt;
+    
+      &lt;label for="pwd"&gt;Password&lt;/label&gt;
+      &lt;input id="pwd" name="password" type="password" minlength="8" required&gt;
+    
+      &lt;fieldset&gt;
+        &lt;legend&gt;Preferences&lt;/legend&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="news" checked&gt; Newsletter&lt;/label&gt;
+        &lt;label&gt;&lt;input type="radio" name="plan" value="basic" checked&gt; Basic&lt;/label&gt;
+        &lt;label&gt;&lt;input type="radio" name="plan" value="pro"&gt; Pro&lt;/label&gt;
+      &lt;/fieldset&gt;
+    
+      &lt;label for="country"&gt;Country&lt;/label&gt;
+      &lt;select id="country" name="country" required&gt;
+        &lt;option value="" disabled selected&gt;Choose...&lt;/option&gt;
+        &lt;option value="au"&gt;Australia&lt;/option&gt;
+      &lt;/select&gt;
+    
+      &lt;label for="bio"&gt;Bio&lt;/label&gt;
+      &lt;textarea id="bio" name="bio" rows="4" maxlength="200"&gt;&lt;/textarea&gt;
+    
+      &lt;button type="submit"&gt;Submit&lt;/button&gt;
+    &lt;/form&gt;</code></pre>
+      </section>
+    
+      <!-- 8) Media & Embeds -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Media: <code>&lt;img&gt;</code>, <code>&lt;audio&gt;</code>, <code>&lt;video&gt;</code>, <code>&lt;iframe&gt;</code></h2>
+        <ul class="card-text">
+          <li>Provide captions/subtitles for accessibility.</li>
+          <li>For embeds use <code>&lt;iframe&gt;</code> with <code>title</code> and <code>loading="lazy"</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Audio, video &amp; embed</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;audio controls&gt;
+      &lt;source src="/static/media/podcast.mp3" type="audio/mpeg"&gt;
+      Your browser does not support the audio element.
+    &lt;/audio&gt;
+    
+    &lt;video controls width="640" poster="/static/img/poster.jpg"&gt;
+      &lt;source src="/static/media/demo.mp4" type="video/mp4"&gt;
+    &lt;/video&gt;
+    
+    &lt;iframe 
+      src="https://www.youtube.com/embed/VIDEO_ID"
+      title="Tutorial video"
+      width="560" height="315"
+      allowfullscreen
+      loading="lazy"&gt;&lt;/iframe&gt;</code></pre>
+      </section>
+    
+      <!-- 9) Semantic Landmarks -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Semantic Landmarks: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code></h2>
+        <ul class="card-text">
+          <li>Create meaningful regions for screen readers &amp; SEO.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Page layout with landmarks</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;header&gt;...branding / nav...&lt;/header&gt;
+    &lt;nav&gt;&lt;ul&gt;&lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/nav&gt;
+    &lt;main id="main"&gt;
+      &lt;article&gt;
+        &lt;h1&gt;Blog Post&lt;/h1&gt;
+        &lt;section&gt;Intro&lt;/section&gt;
+        &lt;section&gt;Details&lt;/section&gt;
+      &lt;/article&gt;
+      &lt;aside&gt;Related links&lt;/aside&gt;
+    &lt;/main&gt;
+    &lt;footer&gt;© 2025 Your Name&lt;/footer&gt;</code></pre>
+      </section>
+    
+      <!-- 10) Head: Metadata, SEO, Social -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">The <code>&lt;head&gt;</code>: Metadata, SEO, Social Cards</h2>
+        <ul class="card-text">
+          <li>Descriptions: <code>&lt;meta name="description"&gt;</code>, Canonical: <code>&lt;link rel="canonical"&gt;</code>.</li>
+          <li>Open Graph &amp; Twitter cards for rich shares.</li>
+          <li>Favicons &amp; app icons via <code>&lt;link rel="icon"&gt;</code>, <code>&lt;link rel="apple-touch-icon"&gt;</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Common head tags</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;meta name="description" content="Concise page summary"&gt;
+    &lt;link rel="canonical" href="https://example.com/page/"&gt;
+    
+    &lt;meta property="og:title" content="My Page"&gt;
+    &lt;meta property="og:description" content="Description here"&gt;
+    &lt;meta property="og:image" content="https://example.com/og.jpg"&gt;
+    &lt;meta property="og:type" content="website"&gt;
+    &lt;meta name="twitter:card" content="summary_large_image"&gt;
+    
+    &lt;link rel="icon" href="/static/icons/favicon.ico"&gt;</code></pre>
+      </section>
+    
+      <!-- 11) Styles & Scripts -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Styles &amp; Scripts: <code>&lt;link&gt;</code>, <code>&lt;style&gt;</code>, <code>&lt;script&gt;</code></h2>
+        <ul class="card-text">
+          <li>Prefer external CSS via <code>&lt;link rel="stylesheet"&gt;</code>.</li>
+          <li>Use <code>defer</code> for ordered JS after parse; <code>async</code> for independent loading.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Load strategies</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;link rel="stylesheet" href="/static/css/styles.css"&gt;
+    &lt;style&gt;body { font-family: system-ui; }&lt;/style&gt;
+    &lt;script src="/static/js/app.js" defer&gt;&lt;/script&gt;
+    &lt;script async src="https://analytics.example.com/track.js"&gt;&lt;/script&gt;</code></pre>
+      </section>
+    
+      <!-- 12) Tailwind CSS Fundamentals -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Tailwind CSS Fundamentals</h2>
+        <ul class="card-text">
+          <li>🎨 Utility-first: compose designs using classes like <code>p-4</code>, <code>text-center</code>, <code>rounded-lg</code>.</li>
+          <li>📏 Responsive: prefixes <code>sm:</code>, <code>md:</code>, <code>lg:</code>, <code>xl:</code>, <code>2xl:</code> (e.g., <code>md:px-4</code>, <code>lg:grid-cols-3</code>).</li>
+          <li>🔄 Layout: <code>flex</code>, <code>grid</code>, <code>justify-between</code>, <code>items-center</code>, <code>grid-cols-2</code>.</li>
+          <li>🌗 Dark mode: <code>dark:</code> variant (e.g., <code>dark:bg-gray-900</code>, <code>dark:text-white</code>).</li>
+          <li>⚙️ Config: customize theme via <code>tailwind.config.js</code> (<code>theme.extend</code>, <code>plugins</code>).</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Card layout in Tailwind</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"&gt;
+      &lt;article class="p-4 rounded-lg border shadow-sm dark:bg-gray-900"&gt;
+        &lt;h3 class="text-lg font-semibold mb-2"&gt;Card Title&lt;/h3&gt;
+        &lt;p class="text-sm text-gray-600 dark:text-gray-300"&gt;Card body content.&lt;/p&gt;
+        &lt;button class="mt-3 px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"&gt;Action&lt;/button&gt;
+      &lt;/article&gt;
+    &lt;/div&gt;</code></pre>
+      </section>
+    
+      <!-- 13) Tailwind Layout, Responsiveness & Theming -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Tailwind: Layout, Responsive Patterns &amp; Theming</h2>
+        <ul class="card-text">
+          <li><strong>Spacing &amp; sizing:</strong> <code>m-*</code>, <code>p-*</code>, <code>w-*</code>, <code>h-*</code>, <code>max-w-*</code>.</li>
+          <li><strong>Responsive stacks:</strong> <code>flex flex-col md:flex-row</code>, <code>gap-*</code>.</li>
+          <li><strong>State variants:</strong> <code>hover:</code>, <code>focus:</code>, <code>disabled:</code>, <code>aria-*</code>.</li>
+          <li><strong>Typography:</strong> <code>text-*</code>, <code>font-*</code>, <code>leading-*</code>, <code>tracking-*</code>.</li>
+          <li><strong>Colors:</strong> <code>text-gray-700</code>, <code>bg-indigo-600</code>, extend via <code>theme.extend.colors</code>.</li>
+        </ul>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Responsive header bar</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;header class="flex flex-col md:flex-row items-center justify-between gap-3 p-4 bg-white border-b dark:bg-gray-900"&gt;
+      &lt;h1 class="text-xl font-bold"&gt;Site&lt;/h1&gt;
+      &lt;nav class="flex gap-4"&gt;
+        &lt;a class="text-gray-700 hover:text-blue-600" href="#"&gt;Home&lt;/a&gt;
+        &lt;a class="text-gray-700 hover:text-blue-600" href="#"&gt;Docs&lt;/a&gt;
+        &lt;a class="text-gray-700 hover:text-blue-600" href="#"&gt;Contact&lt;/a&gt;
+      &lt;/nav&gt;
+    &lt;/header&gt;</code></pre>
+    
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-secondary">Example</span>
+          <small class="text-muted">Dark mode section</small>
+        </div>
+        <pre class="bg-light p-3 rounded border"><code>&lt;section class="p-6 bg-gray-50 dark:bg-gray-900 dark:text-white rounded-lg"&gt;
+      &lt;h2 class="text-lg font-semibold mb-2"&gt;Dark Mode Ready&lt;/h2&gt;
+      &lt;p class="text-sm text-gray-700 dark:text-gray-300"&gt;This section adapts to theme.&lt;/p&gt;
+    &lt;/section&gt;</code></pre>
+      </section>
+    
+      <!-- 14) Accessibility & Best Practices -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Accessibility &amp; Best Practices</h2>
+        <ul class="card-text">
+          <li>Meaningful <code>alt</code> on <code>&lt;img&gt;</code>; empty <code>alt</code> if decorative.</li>
+          <li>Keyboard-accessible controls; visible focus; logical heading order.</li>
+          <li>Skip links like <code>&lt;a href="#main"&gt;Skip to content&lt;/a&gt;</code>.</li>
+          <li>Validate with <a href="https://validator.w3.org/" target="_blank" rel="noopener">W3C Validator</a>; test with keyboard/screen reader.</li>
+        </ul>
+      </section>
+    
+      <!-- 15) Learning Resources -->
+      <section class="section card mb-3 p-3" style="display:none">
+        <h2 class="card-title">Learn HTML &amp; Tailwind — Curated Resources</h2>
+        <ul class="card-text">
+          <li>📘 HTML: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener">MDN Web Docs</a></li>
+          <li>📘 HTML Tutorial: <a href="https://www.w3schools.com/html/" target="_blank" rel="noopener">W3Schools</a></li>
+          <li>🎥 Tailwind Crash Course: <a href="https://www.youtube.com/watch?v=UBOj6rqRUME" target="_blank" rel="noopener">Traversy Media</a></li>
+          <li>🎥 Tailwind Full Course: <a href="https://www.youtube.com/watch?v=lCxcTsOHrjo" target="_blank" rel="noopener">All-in-One Tutorial</a></li>
+          <li>📘 Tailwind Docs: <a href="https://tailwindcss.com/docs" target="_blank" rel="noopener">Official Documentation</a></li>
+          <li>🧩 Components: <a href="https://tailwindui.com/" target="_blank" rel="noopener">Tailwind UI</a> (paid), <a href="https://flowbite.com/" target="_blank" rel="noopener">Flowbite</a> (free/paid)</li>
+          <li>🛠️ Playground: <a href="https://play.tailwindcss.com/" target="_blank" rel="noopener">Tailwind Play</a></li>
+        </ul>
+      </section>
 
   </div>
+
+  <!-- Progress Header -->
+<div class="d-flex align-items-center justify-content-between mb-3" id="lesson-progress-header">
+  <div class="fw-semibold" id="step-text" aria-live="polite">Step 1/15</div>
+  <div class="text-muted small" id="percent-text">0%</div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress mb-2" role="progressbar" aria-label="Lesson progress">
+  <div id="progress-bar" class="progress-bar" style="width: 0%;" aria-valuemin="0" aria-valuenow="0" aria-valuemax="100"></div>
+</div>
+
+<!-- Block Meter (15 segments / matches number of sections) -->
+<div id="block-meter" class="mb-4"></div>
+
+<style>
+  /* Compact segmented meter that auto-matches your total card count */
+  #block-meter {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: .35rem;
+  }
+  .block-meter-seg {
+    height: 10px;
+    border-radius: 3px;
+    background: #e9ecef; /* light gray */
+  }
+  .block-meter-seg.active {
+    background: #0d6efd; /* Bootstrap primary */
+  }
+  /* Dark-mode friendly tweak if you use .dark somewhere */
+  .dark .block-meter-seg { background: #374151; }
+  .dark .block-meter-seg.active { background: #2563eb; }
+  
+  .card-title { color: #EFBF2F; }
+</style>
+
 
   <!-- Navigation Buttons -->
   <div class="d-flex justify-content-between mb-4">
@@ -71,25 +418,68 @@
     let currentIndex = 0;
     const sections = document.querySelectorAll("#sections .section");
     const totalCards = sections.length;
-
-    function toggleButtons(index, total) {
-        document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
-        document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
-        document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+  
+    // === Progress elements ===
+    const stepText = document.getElementById("step-text");
+    const percentText = document.getElementById("percent-text");
+    const progressBar = document.getElementById("progress-bar");
+    const blockMeter = document.getElementById("block-meter");
+  
+    // Build segmented block meter to match total cards
+    const meterFrags = document.createDocumentFragment();
+    for (let i = 0; i < totalCards; i++) {
+      const seg = document.createElement("div");
+      seg.className = "block-meter-seg";
+      seg.setAttribute("aria-hidden", "true");
+      meterFrags.appendChild(seg);
     }
-
-
+    blockMeter.appendChild(meterFrags);
+  
+    function toggleButtons(index, total) {
+      document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
+      document.getElementById("next-button").style.display = index === total - 1 ? "none" : "block";
+      document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
+    }
+  
+    function updateProgress(index) {
+      const step = index + 1; // display as 1-based
+      const pct = Math.round((step / totalCards) * 100);
+  
+      stepText.textContent = `Step ${step}/${totalCards}`;
+      percentText.textContent = `${pct}%`;
+  
+      progressBar.style.width = `${pct}%`;
+      progressBar.setAttribute("aria-valuenow", String(pct));
+  
+      // Activate filled segments
+      const segs = blockMeter.children;
+      for (let i = 0; i < segs.length; i++) {
+        if (i < step) {
+          segs[i].classList.add("active");
+        } else {
+          segs[i].classList.remove("active");
+        }
+      }
+    }
+  
     function showSection(index) {
       sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
       toggleButtons(index, totalCards);
+      updateProgress(index);
     }
-
+  
+    // Init
     showSection(currentIndex);
-
-    document.getElementById("back-button").addEventListener("click", () => showSection(--currentIndex));
-    document.getElementById("next-button").addEventListener("click", () => showSection(++currentIndex));
-
+  
+    // Nav handlers (guard against under/overflow)
+    document.getElementById("back-button").addEventListener("click", () => {
+      if (currentIndex > 0) showSection(--currentIndex);
+    });
+    document.getElementById("next-button").addEventListener("click", () => {
+      if (currentIndex < totalCards - 1) showSection(++currentIndex);
+    });
   </script>
+  
 
   <script src="{% static 'skill_navigation.js' %}"></script>
 </div>

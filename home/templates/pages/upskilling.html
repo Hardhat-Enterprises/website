@@ -2,32 +2,162 @@
 {% load static %}
 
 {% block content %}
-<main class="pt-6 px-3 mt-3">
-  <h1 class="text-light">Upskilling Skills</h1>
+<main class="pt-6 px-3 mt-5">
+  <h1 class="text-light mb-4">Upskilling Skills</h1>
+
+  <style>
+    
+    .card-glass-dark {
+      position: relative;
+      background: rgba(33, 37, 41, 0.88); 
+      border: 1px solid rgba(255, 193, 7, 0.45); 
+      border-radius: 1rem;
+      color: #f8f9fa; 
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .card-glass-dark:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 193, 7, 0.7);
+      box-shadow:
+        0 16px 44px rgba(0,0,0,0.45),
+        0 0 0 1px rgba(255, 193, 7, 0.15) inset;
+    }
+
+    .card-title-warning {
+      color: #f1c40f;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    
+    .status-pill {
+      position: absolute;
+      top: .75rem; right: .75rem;
+      padding: .35rem .6rem;
+      font-size: .72rem; font-weight: 600;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 6px 14px rgba(0,0,0,.35);
+    }
+    .status-completed { background: linear-gradient(135deg, rgba(40,167,69,.95), rgba(111,207,151,.85)); color:#0b2e14; }
+    .status-progress  { background: linear-gradient(135deg, rgba(255,193,7,.95), rgba(255,214,102,.85)); color:#1b1b1b; }
+    .status-pending   { background: linear-gradient(135deg, rgba(108,117,125,.95), rgba(189,195,199,.8)); color:#0f1a20; }
+
+    
+    .diff-badge {
+      font-size: .72rem;
+      border-radius: 999px;
+      padding: .2rem .5rem;
+      border: 1px solid rgba(255,255,255,.12);
+      display: inline-flex; align-items: center; gap: .35rem;
+    }
+    .diff-beginner    { background: rgba(25,135,84,.18);  color: #9be7c4; }
+    .diff-intermediate{ background: rgba(255,193,7,.18);  color: #ffd76a; }
+    .diff-advanced    { background: rgba(220,53,69,.18);  color: #ff9ca7; }
+
+    
+    .tag-chip {
+      display:inline-flex; align-items:center; gap:.35rem;
+      margin:.25rem .3rem 0 0; padding:.28rem .55rem;
+      font-size:.72rem; border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:#e8edf3;
+    }
+
+    .muted { color: #cfd6dc; opacity: .9; }
+    .muted-soft { color:#b6c0c8; opacity:.85; }
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: #e9ecef;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.12); }
+  </style>
 
   <div class="row mt-4 pb-5" id="skill-cards">
     {% for skill in skills %}
     <div class="col-md-4 mb-4">
-      <div class="card bg-dark text-white h-100 shadow-sm border-warning border-1 rounded-4">
-        <div class="card-body">
-          <h5 class="card-title text-warning">{{ skill.title }}</h5>
-          <p class="card-text">
-            <strong>Difficulty:</strong> {{ skill.difficulty }}<br>
-            <strong>Tags:</strong>
-            {% for tag in skill.tags %}
-              <span class="badge bg-secondary">{{ tag }}</span>
-            {% endfor %}
-            <br>
-            <strong>Status:</strong> {{ skill.status }}
-          </p>
+      <div class="card-glass-dark h-100 position-relative">
+        <!-- status pill -->
+        
 
-          {% if skill.status == "Completed" %}
-            <button class="btn btn-secondary btn-sm mt-2" disabled>Completed</button>
-          {% elif skill.status == "In Progress" %}
-            <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-warning btn-sm mt-2">Continue</a>
+        <div class="card-body">
+          <h5 class="card-title card-title-warning d-flex align-items-center gap-2">
+            {{ skill.title }}
+          </h5>
+
+          
+          {% if skill.description %}
+            <p class="muted mb-2">{{ skill.description }}</p>
           {% else %}
-            <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-success btn-sm mt-2">Start</a>
+            <p class="muted mb-2">
+              {% if skill.tags %}
+                Topics:
+                {% for tag in skill.tags %}
+                  {{ tag }}{% if not forloop.last %} • {% endif %}
+                {% endfor %}
+              {% else %}
+                Sharpen this skill with a focused, hands-on micro-course.
+              {% endif %}
+            </p>
           {% endif %}
+
+          
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="muted-soft">Difficulty</span>
+            <span class="diff-badge
+              {% if skill.title == 'Docker Basics' or skill.title == 'HTML & Tailwind Styling' %}
+                diff-beginner
+              {% elif skill.title == 'Git & GitHub Workflows' or skill.title == 'Django' %}
+                diff-intermediate
+              {% elif skill.title == 'Secure Code Review' %}
+                diff-advanced
+              {% else %}
+                {% if skill.difficulty == 'Easy' %}diff-beginner{% elif skill.difficulty == 'Medium' %}diff-intermediate{% else %}diff-advanced{% endif %}
+              {% endif %}">
+              {% if skill.title == 'Docker Basics' or skill.title == 'HTML & Tailwind Styling' %}
+                Beginner
+              {% elif skill.title == 'Git & GitHub Workflows' or skill.title == 'Django' %}
+                Intermediate
+              {% elif skill.title == 'Secure Code Review' %}
+                Advanced
+              {% else %}
+                {% if skill.difficulty == 'Easy' %}Beginner{% elif skill.difficulty == 'Medium' %}Intermediate{% else %}Advanced{% endif %}
+              {% endif %}
+            </span>
+          </div>
+
+          <!-- tags -->
+          <div class="mb-3">
+            {% for tag in skill.tags %}
+              <span class="tag-chip">{{ tag }}</span>
+            {% empty %}
+              <span class="tag-chip">General</span>
+            {% endfor %}
+          </div>
+
+          <!-- actions -->
+          <div class="d-flex gap-2">
+            {% if skill.status == "Completed" %}
+              <button class="btn btn-ghost btn-sm" disabled>Completed</button>
+              <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-warning btn-sm">Start Again</a>
+            {% elif skill.status == "In Progress" %}
+              <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-warning btn-sm">Continue</a>
+              <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-ghost btn-sm">View Outline</a>
+            {% else %}
+              <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-success btn-sm">Start</a>
+              <a href="{% url 'upskilling_skill' slug=skill.slug %}" class="btn btn-ghost btn-sm">Details</a>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
