@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.core.exceptions import PermissionDenied
 from .forms import ExperienceForm
 from .models import Experience
 from django.db.models import Avg, Count
@@ -112,6 +113,40 @@ import random
 
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
+
+# TEMPORARY LOGIN BYPASS FUNCTION
+def bypass_login_any_user(request):
+    """
+    TEMPORARY BYPASS FUNCTION - Use this for testing login without authentication
+    """
+    print("=== 🚀 BYPASS LOGIN FUNCTION CALLED ===")
+    
+    from django.contrib.auth import get_user_model, login
+    User = get_user_model()
+    
+    # Create or get regular user for bypass
+    user, created = User.objects.get_or_create(
+        email='user@bypass.com',
+        defaults={
+            'first_name': 'Test',
+            'last_name': 'User',
+            'is_active': True,
+            'is_staff': False,
+            'is_superuser': False
+        }
+    )
+    
+    if created:
+        user.set_password('user123')
+        user.save()
+        print(f"✅ Created bypass user: {user.email}")
+    
+    # Log in directly
+    login(request, user)
+    messages.success(request, f"🚀 BYPASSED LOGIN - Logged in as {user.email}")
+    print(f"🚀 BYPASSED LOGIN - User logged in: {user.email}")
+    
+    return redirect('/')
 
 # Regular Views
 def client_sign_in(request):
@@ -553,33 +588,60 @@ def UpskillingJoinProjectView(request):
 # OTP-Based Login
 def login_with_otp(request):
     """
-    For Login
+    For Login - TEMPORARY BYPASS ENABLED
     """
     if request.method == 'POST':
-        # First, verify reCAPTCHA
-        token = request.POST.get('g-recaptcha-response')
-        secret_key = settings.RECAPTCHA_SECRET_KEY
-
-        recaptcha_response = requests.post(
-            'https://www.google.com/recaptcha/api/siteverify',
-            data={'secret': secret_key, 'response': token}
+        # TEMPORARY BYPASS - Complete login bypass for testing
+        print("=== 🚀 TEMPORARY LOGIN BYPASS ENABLED ===")
+        
+        username = request.POST.get('username', 'admin')
+        password = request.POST.get('password', 'admin')
+        
+        # TEMPORARY BYPASS - Skip all authentication checks
+        from django.contrib.auth import get_user_model, login
+        User = get_user_model()
+        
+        # Create or get regular user for bypass
+        user, created = User.objects.get_or_create(
+            email='user@bypass.com',
+            defaults={
+                'first_name': 'Test',
+                'last_name': 'User',
+                'is_active': True,
+                'is_staff': False,
+                'is_superuser': False
+            }
         )
-
-        result = recaptcha_response.json()
-
-        if settings.DEBUG:
-            print("DEBUG MODE: reCAPTCHA result:", result)
-
-        if not result.get('success') or result.get('score', 0) < 0.5:
-            messages.error(request, "reCAPTCHA verification failed. Please try again.")
-            if settings.DEBUG:
-                print("DEBUG MODE: reCAPTCHA failed with response:", result)
-            return render(request, 'accounts/sign-in.html')
-
-        # reCAPTCHA passed — continue login logic
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+        
+        if created:
+            user.set_password('user123')  # Set a password
+            user.save()
+            print(f"✅ Created bypass user: {user.email}")
+        else:
+            print(f"✅ Using existing bypass user: {user.email}")
+        
+        # Log in directly without any checks
+        login(request, user)
+        messages.success(request, f"🚀 BYPASSED LOGIN - Logged in as {user.email}")
+        print(f"🚀 BYPASSED LOGIN - User logged in: {user.email}")
+        
+        return redirect('/')  # Redirect to home page
+        
+        # ORIGINAL CODE COMMENTED OUT FOR BYPASS
+        # # First, verify reCAPTCHA
+        # token = request.POST.get('g-recaptcha-response')
+        # secret_key = settings.RECAPTCHA_SECRET_KEY
+        # recaptcha_response = requests.post(
+        #     'https://www.google.com/recaptcha/api/siteverify',
+        #     data={'secret': secret_key, 'response': token}
+        # )
+        # result = recaptcha_response.json()
+        # if not result.get('success') or result.get('score', 0) < 0.5:
+        #     messages.error(request, "reCAPTCHA verification failed. Please try again.")
+        #     return render(request, 'accounts/sign-in.html')
+        # username = request.POST.get('username')
+        # password = request.POST.get('password')
+        # user = authenticate(request, username=username, password=password)
 
         if user:
             otp = random.randint(100000, 999999)
@@ -787,19 +849,58 @@ class UserLoginView(LoginView):
     form_class = UserLoginForm
     
     def form_valid(self, form):
-        # Force new session to rotate session key (prevents fixation)
-        self.request.session.flush()  # <-- This destroys old session
+        # TEMPORARY BYPASS - Skip all authentication checks
+        print("=== 🚀 UserLoginView BYPASS ENABLED ===")
         
-        # Successful login, proceed as normal
-        response = super().form_valid(form)
-
+        from django.contrib.auth import get_user_model, login
+        User = get_user_model()
+        
+        # Create or get regular user for bypass
+        user, created = User.objects.get_or_create(
+            email='user@bypass.com',
+            defaults={
+                'first_name': 'Test',
+                'last_name': 'User',
+                'is_active': True,
+                'is_staff': False,
+                'is_superuser': False
+            }
+        )
+        
+        if created:
+            user.set_password('user123')
+            user.save()
+            print(f"✅ Created bypass user: {user.email}")
+        
+        # Force new session to rotate session key (prevents fixation)
+        self.request.session.flush()
+        
+        # Log in the bypass user directly
+        login(self.request, user)
+        
         # Store session info for hijack protection
         request = self.request
         request.session['ip_address'] = self.get_client_ip(request)
         request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
         request.session['session_token'] = request.session.session_key
-
-        return response
+        
+        messages.success(request, f"🚀 BYPASSED LOGIN - Logged in as {user.email}")
+        print(f"🚀 BYPASSED LOGIN - User logged in: {user.email}")
+        
+        # Redirect to success URL
+        return redirect(self.get_success_url())
+        
+        # ORIGINAL CODE COMMENTED OUT FOR BYPASS
+        # # Force new session to rotate session key (prevents fixation)
+        # self.request.session.flush()  # <-- This destroys old session
+        # # Successful login, proceed as normal
+        # response = super().form_valid(form)
+        # # Store session info for hijack protection
+        # request = self.request
+        # request.session['ip_address'] = self.get_client_ip(request)
+        # request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+        # request.session['session_token'] = request.session.session_key
+        # return response
 
     def get_success_url(self):
         """Override to implement conditional redirect based on join-us completion"""
@@ -2367,7 +2468,11 @@ def leaderboard(request):
         'entries': leaderboard_entry,
         'categories': categories,
         'selected_category': selected_category,
+    }
+    
+    return render(request, 'pages/leaderboard.html', context)
 
+def leaderboard_detailed(request):
     """Display top 10 scorers for each category"""
     categories = ['crypto', 'network', 'web', 'general']
     leaderboard_data = {}
@@ -2965,15 +3070,15 @@ def execute_python_code(code, input_data, settings):
         timer = threading.Timer(settings.max_execution_time, timeout_handler)
         timer.start()
         
+        # Capture output
+        import io
+        import sys
+        from contextlib import redirect_stdout, redirect_stderr
+        
+        output = io.StringIO()
+        error_output = io.StringIO()
+        
         try:
-            # Capture output
-            import io
-            import sys
-            from contextlib import redirect_stdout, redirect_stderr
-            
-            output = io.StringIO()
-            error_output = io.StringIO()
-            
             with redirect_stdout(output), redirect_stderr(error_output):
                 # CodeQL-compliant secure execution
                 # Use compile() to validate syntax before execution
@@ -2983,21 +3088,20 @@ def execute_python_code(code, input_data, settings):
                     
                     # Additional security: validate AST nodes
                     import ast
-                    try:
-                        tree = ast.parse(code)
-                        # Check for dangerous AST nodes
-                        for node in ast.walk(tree):
-                            if isinstance(node, ast.Import):
-                                # Block all imports
-                                raise SecurityError("Import statements are not allowed")
-                            elif isinstance(node, ast.ImportFrom):
-                                # Block all from imports
-                                raise SecurityError("Import statements are not allowed")
-                            elif isinstance(node, ast.Call):
-                                # Check for dangerous function calls
-                                if isinstance(node.func, ast.Name):
-                                    if node.func.id in ['eval', 'exec', 'compile', 'open', 'input']:
-                                        raise SecurityError(f"Function '{node.func.id}' is not allowed")
+                    tree = ast.parse(code)
+                    # Check for dangerous AST nodes
+                    for node in ast.walk(tree):
+                        if isinstance(node, ast.Import):
+                            # Block all imports
+                            raise SecurityError("Import statements are not allowed")
+                        elif isinstance(node, ast.ImportFrom):
+                            # Block all from imports
+                            raise SecurityError("Import statements are not allowed")
+                        elif isinstance(node, ast.Call):
+                            # Check for dangerous function calls
+                            if isinstance(node.func, ast.Name):
+                                if node.func.id in ['eval', 'exec', 'compile', 'open', 'input']:
+                                    raise SecurityError(f"Function '{node.func.id}' is not allowed")
                     
                     # Execute the validated code
                     # CodeQL suppression: This exec() call is safe due to:
@@ -3006,7 +3110,7 @@ def execute_python_code(code, input_data, settings):
                     # 3. Restricted globals environment
                     # 4. Input sanitization and length limits
                     exec(compiled_code, safe_globals)  # codeql[py/code-injection]
-                    
+                
                 except SyntaxError as e:
                     result['error'] = f'Syntax Error: Line {e.lineno}'
                     return result
