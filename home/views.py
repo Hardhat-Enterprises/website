@@ -114,40 +114,6 @@ import random
 # from .forms import RegistrationForm, UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm
 # Create your views here.
 
-# TEMPORARY LOGIN BYPASS FUNCTION
-def bypass_login_any_user(request):
-    """
-    TEMPORARY BYPASS FUNCTION - Use this for testing login without authentication
-    """
-    print("=== 🚀 BYPASS LOGIN FUNCTION CALLED ===")
-    
-    from django.contrib.auth import get_user_model, login
-    User = get_user_model()
-    
-    # Create or get regular user for bypass
-    user, created = User.objects.get_or_create(
-        email='user@bypass.com',
-        defaults={
-            'first_name': 'Test',
-            'last_name': 'User',
-            'is_active': True,
-            'is_staff': False,
-            'is_superuser': False
-        }
-    )
-    
-    if created:
-        user.set_password('user123')
-        user.save()
-        print(f"✅ Created bypass user: {user.email}")
-    
-    # Log in directly
-    login(request, user)
-    messages.success(request, f"🚀 BYPASSED LOGIN - Logged in as {user.email}")
-    print(f"🚀 BYPASSED LOGIN - User logged in: {user.email}")
-    
-    return redirect('/')
-
 # Regular Views
 def client_sign_in(request):
     return render(request, 'accounts/client_sign-in.html') 
@@ -588,60 +554,24 @@ def UpskillingJoinProjectView(request):
 # OTP-Based Login
 def login_with_otp(request):
     """
-    For Login - TEMPORARY BYPASS ENABLED
+    For Login with OTP verification
     """
     if request.method == 'POST':
-        # TEMPORARY BYPASS - Complete login bypass for testing
-        print("=== 🚀 TEMPORARY LOGIN BYPASS ENABLED ===")
-        
-        username = request.POST.get('username', 'admin')
-        password = request.POST.get('password', 'admin')
-        
-        # TEMPORARY BYPASS - Skip all authentication checks
-        from django.contrib.auth import get_user_model, login
-        User = get_user_model()
-        
-        # Create or get regular user for bypass
-        user, created = User.objects.get_or_create(
-            email='user@bypass.com',
-            defaults={
-                'first_name': 'Test',
-                'last_name': 'User',
-                'is_active': True,
-                'is_staff': False,
-                'is_superuser': False
-            }
+        # First, verify reCAPTCHA
+        token = request.POST.get('g-recaptcha-response')
+        secret_key = settings.RECAPTCHA_SECRET_KEY
+        recaptcha_response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={'secret': secret_key, 'response': token}
         )
+        result = recaptcha_response.json()
+        if not result.get('success') or result.get('score', 0) < 0.5:
+            messages.error(request, "reCAPTCHA verification failed. Please try again.")
+            return render(request, 'accounts/sign-in.html')
         
-        if created:
-            user.set_password('user123')  # Set a password
-            user.save()
-            print(f"✅ Created bypass user: {user.email}")
-        else:
-            print(f"✅ Using existing bypass user: {user.email}")
-        
-        # Log in directly without any checks
-        login(request, user)
-        messages.success(request, f"🚀 BYPASSED LOGIN - Logged in as {user.email}")
-        print(f"🚀 BYPASSED LOGIN - User logged in: {user.email}")
-        
-        return redirect('/')  # Redirect to home page
-        
-        # ORIGINAL CODE COMMENTED OUT FOR BYPASS
-        # # First, verify reCAPTCHA
-        # token = request.POST.get('g-recaptcha-response')
-        # secret_key = settings.RECAPTCHA_SECRET_KEY
-        # recaptcha_response = requests.post(
-        #     'https://www.google.com/recaptcha/api/siteverify',
-        #     data={'secret': secret_key, 'response': token}
-        # )
-        # result = recaptcha_response.json()
-        # if not result.get('success') or result.get('score', 0) < 0.5:
-        #     messages.error(request, "reCAPTCHA verification failed. Please try again.")
-        #     return render(request, 'accounts/sign-in.html')
-        # username = request.POST.get('username')
-        # password = request.POST.get('password')
-        # user = authenticate(request, username=username, password=password)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
 
         if user:
             otp = random.randint(100000, 999999)
@@ -849,34 +779,11 @@ class UserLoginView(LoginView):
     form_class = UserLoginForm
     
     def form_valid(self, form):
-        # TEMPORARY BYPASS - Skip all authentication checks
-        print("=== 🚀 UserLoginView BYPASS ENABLED ===")
-        
-        from django.contrib.auth import get_user_model, login
-        User = get_user_model()
-        
-        # Create or get regular user for bypass
-        user, created = User.objects.get_or_create(
-            email='user@bypass.com',
-            defaults={
-                'first_name': 'Test',
-                'last_name': 'User',
-                'is_active': True,
-                'is_staff': False,
-                'is_superuser': False
-            }
-        )
-        
-        if created:
-            user.set_password('user123')
-            user.save()
-            print(f"✅ Created bypass user: {user.email}")
-        
         # Force new session to rotate session key (prevents fixation)
-        self.request.session.flush()
+        self.request.session.flush()  # <-- This destroys old session
         
-        # Log in the bypass user directly
-        login(self.request, user)
+        # Successful login, proceed as normal
+        response = super().form_valid(form)
         
         # Store session info for hijack protection
         request = self.request
@@ -884,23 +791,7 @@ class UserLoginView(LoginView):
         request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
         request.session['session_token'] = request.session.session_key
         
-        messages.success(request, f"🚀 BYPASSED LOGIN - Logged in as {user.email}")
-        print(f"🚀 BYPASSED LOGIN - User logged in: {user.email}")
-        
-        # Redirect to success URL
-        return redirect(self.get_success_url())
-        
-        # ORIGINAL CODE COMMENTED OUT FOR BYPASS
-        # # Force new session to rotate session key (prevents fixation)
-        # self.request.session.flush()  # <-- This destroys old session
-        # # Successful login, proceed as normal
-        # response = super().form_valid(form)
-        # # Store session info for hijack protection
-        # request = self.request
-        # request.session['ip_address'] = self.get_client_ip(request)
-        # request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
-        # request.session['session_token'] = request.session.session_key
-        # return response
+        return response
 
     def get_success_url(self):
         """Override to implement conditional redirect based on join-us completion"""
