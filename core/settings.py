@@ -120,6 +120,7 @@ MIDDLEWARE = [
     # CORS middleware must come before commonmiddleware
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "core.middleware.SecurityHeadersMiddleware",  # Add security headers early
     "django.contrib.sessions.middleware.SessionMiddleware",
     "core.middleware.LocaleMiddlewareDefaultEnglish",
     "django.middleware.common.CommonMiddleware",
@@ -134,7 +135,6 @@ MIDDLEWARE = [
     'core.middleware.AutoLogoutMiddleware',
 
     "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
-    'core.middleware.AutoLogoutMiddleware',
 
 
 ]

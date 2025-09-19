@@ -122,3 +122,54 @@ class LocaleMiddlewareDefaultEnglish(LocaleMiddleware):
 
         translation.activate(lang)
         request.LANGUAGE_CODE = translation.get_language()
+
+
+class SecurityHeadersMiddleware:
+    """
+    Middleware to add security headers that help mitigate vulnerabilities
+    in third-party JavaScript libraries and prevent common attacks.
+    """
+    
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        
+        # Content Security Policy to prevent XSS and code injection
+        response['Content-Security-Policy'] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "  # unsafe-eval needed for some dev tools
+            "style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data: https:; "
+            "font-src 'self' https:; "
+            "connect-src 'self'; "
+            "frame-ancestors 'none'; "
+            "base-uri 'self';"
+        )
+        
+        # Prevent clickjacking
+        response['X-Frame-Options'] = 'DENY'
+        
+        # Prevent MIME type sniffing
+        response['X-Content-Type-Options'] = 'nosniff'
+        
+        # Enable XSS protection
+        response['X-XSS-Protection'] = '1; mode=block'
+        
+        # Prevent referrer leakage
+        response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        
+        # Permissions policy
+        response['Permissions-Policy'] = (
+            'geolocation=(), '
+            'microphone=(), '
+            'camera=(), '
+            'payment=(), '
+            'usb=(), '
+            'magnetometer=(), '
+            'accelerometer=(), '
+            'gyroscope=()'
+        )
+        
+        return response

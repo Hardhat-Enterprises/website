@@ -2880,7 +2880,7 @@ def execute_code(request):
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON data'}, status=400)
     except Exception as e:
-        return JsonResponse({'error': f'Server error: {str(e)}'}, status=500)
+        return JsonResponse({'error': 'Internal server error occurred'}, status=500)
 
 
 def execute_python_code(code, input_data, settings):
@@ -2980,27 +2980,35 @@ def execute_python_code(code, input_data, settings):
                     # Additional security: validate AST nodes
                     import ast
                     tree = ast.parse(code)
-                    # Check for dangerous AST nodes
+                    
+                    # Enhanced AST validation - check for dangerous nodes
+                    dangerous_nodes = []
                     for node in ast.walk(tree):
-                        if isinstance(node, ast.Import):
-                            # Block all imports
-                            raise SecurityError("Import statements are not allowed")
-                        elif isinstance(node, ast.ImportFrom):
-                            # Block all from imports
-                            raise SecurityError("Import statements are not allowed")
+                        if isinstance(node, (ast.Import, ast.ImportFrom)):
+                            dangerous_nodes.append("Import statements are not allowed")
                         elif isinstance(node, ast.Call):
                             # Check for dangerous function calls
                             if isinstance(node.func, ast.Name):
-                                if node.func.id in ['eval', 'exec', 'compile', 'open', 'input']:
-                                    raise SecurityError(f"Function '{node.func.id}' is not allowed")
+                                if node.func.id in ['eval', 'exec', 'compile', 'open', 'input', '__import__', 'getattr', 'setattr', 'delattr', 'hasattr']:
+                                    dangerous_nodes.append(f"Function '{node.func.id}' is not allowed")
+                            elif isinstance(node.func, ast.Attribute):
+                                # Check for dangerous attribute access like os.system
+                                if hasattr(node.func, 'attr') and node.func.attr in ['system', 'popen', 'spawn', 'fork', 'kill']:
+                                    dangerous_nodes.append(f"Method '{node.func.attr}' is not allowed")
+                        elif isinstance(node, ast.Attribute):
+                            # Block access to dangerous attributes
+                            if node.attr in ['__globals__', '__locals__', '__builtins__', '__import__', '__file__', '__name__']:
+                                dangerous_nodes.append(f"Attribute '{node.attr}' is not allowed")
                     
-                    # Execute the validated code
-                    # CodeQL suppression: This exec() call is safe due to:
-                    # 1. Code is compiled and syntax-validated
-                    # 2. AST analysis blocks dangerous constructs
-                    # 3. Restricted globals environment
-                    # 4. Input sanitization and length limits
-                    exec(compiled_code, safe_globals)  # codeql[py/code-injection]
+                    if dangerous_nodes:
+                        raise SecurityError("; ".join(dangerous_nodes))
+                    
+                    # Create isolated namespace with no access to outer scope
+                    isolated_globals = safe_globals.copy()
+                    isolated_locals = {}
+                    
+                    # Execute in completely isolated environment
+                    exec(compiled_code, isolated_globals, isolated_locals)
                 
                 except SyntaxError as e:
                     result['error'] = f'Syntax Error: Line {e.lineno}'
@@ -3010,8 +3018,21 @@ def execute_python_code(code, input_data, settings):
                     return result
                 except Exception as e:
                     # Sanitize error messages to prevent information leakage
+                    # Only show generic error types, never actual exception content
+                    safe_error_types = {
+                        'ValueError': 'Invalid value provided',
+                        'TypeError': 'Type error in code',
+                        'NameError': 'Undefined variable or function',
+                        'IndexError': 'List index out of range',
+                        'KeyError': 'Dictionary key not found',
+                        'AttributeError': 'Object attribute not found',
+                        'ZeroDivisionError': 'Division by zero',
+                        'OverflowError': 'Numerical overflow',
+                        'MemoryError': 'Insufficient memory',
+                        'RecursionError': 'Maximum recursion depth exceeded'
+                    }
                     error_type = type(e).__name__
-                    result['error'] = f'{error_type} occurred'
+                    result['error'] = safe_error_types.get(error_type, 'Runtime error occurred')
                     return result
             
             execution_time = time.time() - start_time
@@ -3032,11 +3053,11 @@ def execute_python_code(code, input_data, settings):
         except Exception as e:
             timer.cancel()
             # Sanitize exception messages to prevent information leakage
-            result['error'] = f'Execution error: {type(e).__name__}'
+            result['error'] = 'Code execution failed'
             
     except Exception as e:
-        # Sanitize outer exception messages
-        result['error'] = f'System error: {type(e).__name__}'
+        # Sanitize outer exception messages - never expose system details
+        result['error'] = 'System error occurred'
     
     return result
 

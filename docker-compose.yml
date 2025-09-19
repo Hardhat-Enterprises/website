@@ -63,9 +63,7 @@ services:
              done &&
              echo 'Database is ready!' &&
              python manage.py migrate &&
-             echo 'Populating database with test data...' &&
-             python manage.py populate_database &&
-             echo 'Database population completed!' &&
+             echo 'Skipping database population for development...' &&
              python manage.py collectstatic --noinput --clear &&
              echo 'Starting Django development server...' &&
              python manage.py runserver 0.0.0.0:8000 --insecure"

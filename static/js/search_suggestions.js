@@ -35,11 +35,28 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     if (filtered.length === 0) {
-      resultBox.innerHTML = `<div class="suggestion-item">No results found</div>`;
+      // Create safe "No results found" element
+      resultBox.innerHTML = '';
+      const noResultsDiv = document.createElement('div');
+      noResultsDiv.className = 'suggestion-item';
+      noResultsDiv.textContent = 'No results found';
+      resultBox.appendChild(noResultsDiv);
     } else {
-      resultBox.innerHTML = filtered.map(item =>
-        `<div class="suggestion-item" data-label="${item.label}" ${item.url ? `data-url="${item.url}"` : ''}>${item.label}</div>`
-      ).join('');
+      // Clear previous content
+      resultBox.innerHTML = '';
+      
+      // Create elements safely to prevent XSS
+      filtered.forEach(item => {
+        const suggestionDiv = document.createElement('div');
+        suggestionDiv.className = 'suggestion-item';
+        suggestionDiv.setAttribute('data-label', item.label);
+        if (item.url) {
+          suggestionDiv.setAttribute('data-url', item.url);
+        }
+        // Use textContent to prevent HTML injection
+        suggestionDiv.textContent = item.label;
+        resultBox.appendChild(suggestionDiv);
+      });
     }
 
     resultBox.classList.remove("d-none");
