@@ -3939,7 +3939,7 @@ input[type="search"].form-control.search-box,
 .navbar input.form-control.search-box,
 .navbar input[type="search"].form-control.search-box,
 #searchInput.form-control.search-box {
-  background-color: #f8f9fa !important;
+  background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
   box-shadow: none !important;
@@ -3961,7 +3961,7 @@ input[type="search"].form-control.search-box:focus,
 .search-box {
   border-radius: 25px;
   padding: 10px 15px;
-  background-color: #f8f9fa !important;
+  background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
 }
@@ -4011,7 +4011,7 @@ html body nav.navbar input#searchInput.form-control.search-box,
 html body input#searchInput.form-control.search-box,
 html body .navbar input.form-control.search-box,
 html body input.search-box.form-control {
-  background-color: #f8f9fa !important;
+  background-color: white !important;
   color: #333 !important;
   border: 1px solid #ddd !important;
   box-shadow: none !important;
@@ -4023,6 +4023,71 @@ html body nav.navbar input#searchInput.form-control.search-box:focus,
 html body input#searchInput.form-control.search-box:focus,
 html body .navbar input.form-control.search-box:focus,
 html body input.search-box.form-control:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+/* Ensure light mode search box is white (when not in dark mode) */
+body:not(.dark-mode) input.form-control.search-box,
+body:not(.dark-mode) input[type="search"].form-control.search-box,
+body:not(.dark-mode) .navbar input.form-control.search-box,
+body:not(.dark-mode) .navbar input[type="search"].form-control.search-box,
+body:not(.dark-mode) #searchInput.form-control.search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+body:not(.dark-mode) input.form-control.search-box:focus,
+body:not(.dark-mode) input[type="search"].form-control.search-box:focus,
+body:not(.dark-mode) .navbar input.form-control.search-box:focus,
+body:not(.dark-mode) .navbar input[type="search"].form-control.search-box:focus,
+body:not(.dark-mode) #searchInput.form-control.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+/* Additional override for light mode mobile search box */
+body:not(.dark-mode) input.form-control.search-box-mobile,
+body:not(.dark-mode) input[type="search"].form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+body:not(.dark-mode) input.form-control.search-box-mobile:focus,
+body:not(.dark-mode) input[type="search"].form-control.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+/* Ultra-specific override to ensure search boxes are white in light mode */
+html body:not(.dark-mode) .navbar .search-container input.form-control.search-box,
+html body:not(.dark-mode) .navbar .desktop-search-bar input.form-control.search-box,
+html body:not(.dark-mode) .navbar .mobile-search-bar input.form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+html body:not(.dark-mode) .navbar .search-container input.form-control.search-box:focus,
+html body:not(.dark-mode) .navbar .desktop-search-bar input.form-control.search-box:focus,
+html body:not(.dark-mode) .navbar .mobile-search-bar input.form-control.search-box-mobile:focus {
   background-color: white !important;
   color: #333 !important;
   border-color: #ffcd11 !important;
