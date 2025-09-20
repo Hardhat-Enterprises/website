@@ -91,13 +91,10 @@
               </a>
               <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
                 <ul class="list-style-none">
-                  <a class="menu-link" href="#">
+                  <a class="menu-link" href="{% url 'user_management' %}">
                     <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
                   </a>
-                  <a class="menu-link" href="#">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
-                  </a>
-                  <a class="menu-link" href="#">
+                  <a class="menu-link" href="{% url 'project_teams' %}">
                     <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
                   </a>
                   <a class="menu-link" href="{% url 'adminblogpage' %}">
@@ -304,12 +301,6 @@
           <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
               class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
 
-        <a class="profile-container" href="{% url 'profile' %}">
-          <img
-            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
-            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-            <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
-        </a>
 
 
           {% else %}
@@ -523,6 +514,33 @@
   <style>
     .header-profile-name { color: #1a1a1a !important; }
     body.dark-mode .header-profile-name { color: #fff !important; }
+
+    /* Search box styling - black text in light mode, white text in dark mode */
+    #searchInput,
+    .search-box,
+    input.search-box {
+      color: black !important;
+      background-color: transparent !important;
+      border: none !important;
+      outline: none !important;
+    }
+    #searchInput::placeholder,
+    .search-box::placeholder,
+    input.search-box::placeholder {
+      color: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Dark mode - white text */
+    body.dark-mode #searchInput,
+    body.dark-mode .search-box,
+    body.dark-mode input.search-box {
+      color: white !important;
+    }
+    body.dark-mode #searchInput::placeholder,
+    body.dark-mode .search-box::placeholder,
+    body.dark-mode input.search-box::placeholder {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
   </style>
 
   <style>
