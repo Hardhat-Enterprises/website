@@ -5,6 +5,9 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
+from django.conf import settings
+from django.middleware.locale import LocaleMiddleware
+from django.utils import translation
 logger = logging.getLogger('admin_logout_logger')
 
 class AutoLogoutMiddleware(MiddlewareMixin):
@@ -47,23 +50,48 @@ class LogRequestMiddleware:
             current_ip = self.get_client_ip(request)
             current_ua = request.META.get('HTTP_USER_AGENT')
 
-            # Check for IP address mismatch
-            if session_ip and session_ip != current_ip:
-                logger.warning(f"Session IP mismatch! Session IP: {session_ip}, Current IP: {current_ip}")
-                request.session.flush()
-                return redirect('login')  # Redirect to login
+            # Skip hijacking checks for OAuth authentication paths to prevent redirect loops
+            is_oauth_path = (
+                request.path.startswith('/complete/') or 
+                request.path.startswith('/oauth/') or
+                request.path == '/dashboard/' or
+                'oauth' in request.path or
+                'complete' in request.path or
+                'azuread' in request.path
+            )
+            
+            # Check if user was authenticated via OAuth
+            is_oauth_user = request.session.get('oauth_authenticated', False)
+            
+            # Check if this is a social auth completion
+            is_social_auth = 'social' in request.path or 'complete' in request.path
+            
+            # If this is an OAuth path, dashboard, OAuth user, or social auth, set session data instead of checking
+            if is_oauth_path or is_oauth_user or is_social_auth:
+                # Set session data for OAuth users to prevent future hijacking checks
+                request.session['ip_address'] = current_ip
+                request.session['user_agent'] = current_ua
+                request.session['session_token'] = request.session.session_key
+                logger.info(f"OAuth/social auth path/user detected - setting session data for user {request.user.email}")
+            else:
+                # Only perform hijacking checks for non-OAuth paths
+                # Check for IP address mismatch
+                if session_ip and session_ip != current_ip:
+                    logger.warning(f"Session IP mismatch! Session IP: {session_ip}, Current IP: {current_ip}")
+                    request.session.flush()
+                    return redirect('login')  # Redirect to login
 
-            # Check for User-Agent mismatch
-            if session_ua and session_ua != current_ua:
-                logger.warning(f"Session UA mismatch! Session UA: {session_ua}, Current UA: {current_ua}")
-                request.session.flush()
-                return redirect('login')
+                # Check for User-Agent mismatch
+                if session_ua and session_ua != current_ua:
+                    logger.warning(f"Session UA mismatch! Session UA: {session_ua}, Current UA: {current_ua}")
+                    request.session.flush()
+                    return redirect('login')
 
-            # Check for session token mismatch
-            if session_token and session_token != request.session.session_key:
-                logger.warning(f"Session token mismatch! Session token: {session_token}, Current session ID: {request.session.session_key}")
-                request.session.flush()
-                return redirect('login')
+                # Check for session token mismatch
+                if session_token and session_token != request.session.session_key:
+                    logger.warning(f"Session token mismatch! Session token: {session_token}, Current session ID: {request.session.session_key}")
+                    request.session.flush()
+                    return redirect('login')
 
         # Log the IP and accessed URL if no hijacking is detected
         self.log_request(request)
@@ -91,3 +119,31 @@ class LogRequestMiddleware:
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip   
+
+
+
+        
+try:
+    from django.utils.translation import LANGUAGE_SESSION_KEY  # Django 4+
+except Exception:
+    LANGUAGE_SESSION_KEY = 'django_language'
+
+class LocaleMiddlewareDefaultEnglish(LocaleMiddleware):
+    """
+    1) If a language cookie or session exists => Respect the user's selected language
+    2) If neither exists => Ignore the browser's Accept-Language setting and force settings.LANGUAGE_CODE (English)
+    """
+    def process_request(self, request):
+        # check cookie/session
+        cookie_name = getattr(settings, "LANGUAGE_COOKIE_NAME", "django_language")
+        lang = request.COOKIES.get(cookie_name)
+
+        if not lang and hasattr(request, "session"):
+            lang = request.session.get(LANGUAGE_SESSION_KEY)
+
+        if not lang:
+            # No user selection => Force default to English, ignore Accept-Language
+            lang = settings.LANGUAGE_CODE
+
+        translation.activate(lang)
+        request.LANGUAGE_CODE = translation.get_language()

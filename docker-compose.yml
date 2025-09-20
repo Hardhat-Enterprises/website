@@ -15,7 +15,7 @@ services:
     networks:
       - web_network
     ports:
-      - "5432:5432"
+      - "5433:5432" # Different port to avoid conflicts with production
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U hardhat_user -d hardhat_db"]
       interval: 10s
@@ -25,47 +25,61 @@ services:
 
   web:
     container_name: django_app
-    build: .
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: "no" # Don't auto-restart in development to maintain sessions
     volumes:
       - .:/app
       - staticfiles:/app/static #collectstatic will only collect static folder so needs to be created from custom_static folder
       - mediafiles:/app/media
       # Keep custom_static mount if you have static files there
       - ./custom_static:/app/custom_static
+      # Mount .env file to persist SECRET_KEY across container rebuilds
+      - ./.env:/app/.env
     networks:
       - web_network
     environment:
-      - DEBUG=0
+      - DEBUG=1 # Development mode
       - DB_ENGINE=postgresql
       - DB_NAME=hardhat_db
       - DB_USERNAME=hardhat_user
       - DB_PASS=hardhat_password
       - DB_HOST=db
       - DB_PORT=5432
-    expose:
-      - "8000:80"
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=core.settings
+      # Microsoft Azure AD Authentication
+      - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID:-550b92bc-e30d-415c-8f08-ec4dddff455d}
+      - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET:-J088Q~8XQjHMrJd-ABl8V2vCrUAfmoE9KTAEmc~1}
+      - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID:-d02378ec-1688-46d5-8540-1c28b5f470f6}
+    ports:
+      - "8000:8000" # Direct port mapping for development
     depends_on:
       db:
         condition: service_healthy
-    # Wait for database to install then run migrations and start server
+    # Development command - uses Django's development server with better stability
     command: >
       sh -c "echo 'Waiting for database...' &&
-             until python -c 'import psycopg2; psycopg2.connect(host=\"db\", port=5432, user=\"hardhat_user\", password=\"hardhat_password\", database=\"hardhat_db\")' 2>/dev/null; do
+             until pg_isready -h db -p 5432 -U hardhat_user -d hardhat_db; do
                echo 'Database is unavailable - sleeping';
                sleep 2;
              done &&
              echo 'Database is ready!' &&
              python manage.py migrate &&
+             echo 'Populating database with test data...' &&
+             python manage.py populate_database &&
+             echo 'Database population completed!' &&
              python manage.py collectstatic --noinput --clear &&
-             gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 core.wsgi"
+             echo 'Starting Django development server...' &&
+             python manage.py runserver 0.0.0.0:8000 --insecure"
 
   nginx:
     container_name: nginx
     image: nginx:latest
     restart: always
     ports:
-      - "80:80"
+      - "8080:80" # Different port for development
     volumes:
       # Use named volumes (read-only)
       - staticfiles:/app/static:ro
@@ -87,7 +101,7 @@ networks:
   web_network:
     driver: bridge
 
-# Define named volumes
+# Define named volumes for development
 volumes:
   staticfiles: {}
   mediafiles: {}

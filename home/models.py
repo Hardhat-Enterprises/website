@@ -1,4 +1,5 @@
 ﻿import uuid
+import os
 
 from django.db import models
 from django.core.mail import send_mail
@@ -11,10 +12,18 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.sessions.models import Session
 
+from django.utils.text import slugify
+
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill, Adjust, Transpose 
 
 from django.db import models
 from django.utils import timezone
@@ -31,6 +40,8 @@ from .validators import StudentIdValidator
 from django.db import models
 import nh3
 from django.conf import settings
+
+
 
 class AdminNotification(models.Model):
     NOTIFICATION_TYPES = [
@@ -75,6 +86,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
     email = models.EmailField(_("deakin email address"), blank=False, unique=True)
     upskilling_progress = models.JSONField(default=dict, blank=True, null=True)
+
 
     is_staff = models.BooleanField(
         _("staff status"),
@@ -159,6 +171,80 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
 
+def vault_upload_path(instance, filename):
+    """Generate upload path for vault documents"""
+    return os.path.join('vault_documents', filename)
+
+class Folder(models.Model):
+    name = models.CharField(max_length=200)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='folders')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('name', 'parent', 'owner')
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def path_list(self):
+        # for breadcrumbs
+        node, parts = self, []
+        while node:
+            parts.append(node)
+            node = node.parent
+        return list(reversed(parts))
+
+
+class VaultDocument(models.Model):
+    VIS_PUBLIC = 'public'
+    VIS_TEAMS = 'teams'
+    VIS_PRIVATE = 'private'
+    
+    VISIBILITY_CHOICES = [
+        (VIS_PUBLIC, 'Public'),
+        (VIS_TEAMS, 'Selected teams'),
+        (VIS_PRIVATE, 'Private (uploader only)'),
+    ]
+    
+    file = models.FileField(upload_to=vault_upload_path)
+    original_name = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(max_length=120, blank=True)
+    size_bytes = models.PositiveIntegerField(default=0)
+    description = models.CharField(max_length=300, blank=True)
+    visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
+    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return self.original_name or self.file.name
+
+# Keep a short history of password hashes per user
+class PasswordHistory(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="password_history"
+    )
+    # Store the full encoded hash
+    encoded_password = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "created_at"]),
+        ]
+
+    def __str__(self):
+        return f"PasswordHistory(user={self.user_id}, created_at={self.created_at})"
+
 #checking if admin/staff user
 
     def is_admin_user(self):
@@ -189,6 +275,8 @@ class Project(AbstractBaseSet):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     title = models.CharField(_("project title"), max_length=150, choices=PROJECT_CHOICES, blank=False)
+    archived = models.BooleanField(_("archived"), default=False)
+    description = models.TextField(_("project description"), blank=True, null=True)
 
     def __str__(self) -> str:
         return self.get_title_display()
@@ -375,9 +463,27 @@ class Profile(models.Model):
     github = models.URLField(max_length=200, blank=True, null=True)
     # phone = models.CharField(max_length=20, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
+    avatar_webp_80 = ImageSpecField(
+        source='avatar',
+        processors=[
+            Transpose(),  # Auto-rotate based on EXIF
+            Adjust(contrast=1.0, sharpness=1.0),  # Basic enhancement
+        ],
+        format='WEBP',
+        options={'quality': 80},
+    )
+    avatar_webp_70 = ImageSpecField(
+        source='avatar',
+        processors=[
+            Transpose(),
+            Adjust(contrast=1.0, sharpness=1.0),
+        ],
+        format='WEBP',
+        options={'quality': 70},
+    )
 
     def __str__(self):
-        return self.user.username
+        return self.user.get_full_name() or self.user.email
 
     
 class CyberChallenge(models.Model):
@@ -422,6 +528,9 @@ class CyberChallenge(models.Model):
     points = models.IntegerField(default=10)
     challenge_type = models.CharField(max_length=20, choices=[('mcq', 'Multiple Choice'), ('fix_code', 'Fix the Code')])
     time_limit = models.IntegerField(default=60)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -435,6 +544,18 @@ class UserChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
+    
+
+class TeamMember(models.Model):
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='team_images/')
+    created_at = models.DateTimeField(auto_now_add=True) 
+    linkedin = models.URLField(blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -524,14 +645,116 @@ class ContactSubmission(models.Model):
 class Job(models.Model):
     title = models.CharField(max_length=200)
     description = HTMLField()
-    location = models.CharField(max_length=100,choices=[("Remote","Remote"),("OnSite","OnSite")])
-    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract')])
+    location = models.CharField(max_length=100,choices=[("Remote","Remote"),("OnSite","OnSite"),("Hybrid","Hybrid")])
+    job_type = models.CharField(max_length=50, choices=[('FT', 'Full-time'), ('PT', 'Part-time'), ('CT', 'Contract'), ('internship', 'Internship')])
     posted_date = models.DateField(auto_now_add=True)
     closing_date = models.DateField()
+    
+    # New detailed fields
+    responsibilities = HTMLField(blank=True, null=True)
+    qualifications = HTMLField(blank=True, null=True)
+    benefits = HTMLField(blank=True, null=True)
+    salary_range = models.CharField(max_length=100, blank=True, null=True)
+    experience_level = models.CharField(max_length=50, choices=[
+        ('entry', 'Entry Level'),
+        ('mid', 'Mid Level'),
+        ('senior', 'Senior Level'),
+        ('lead', 'Lead'),
+        ('intern', 'Internship')
+    ], default='entry')
+    department = models.CharField(max_length=100, blank=True, null=True)
+    skills_required = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title
+
+class JobAlert(models.Model):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_notification = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Job Alert for {self.email}"
+
+    def send_confirmation_email(self):
+        """Send confirmation email when user subscribes"""
+        from django.core.mail import send_mail
+        from django.conf import settings
+        
+        subject = "Job Alerts Subscription Confirmed - HardHat Enterprises"
+        message = f"""
+        Thank you for subscribing to job alerts from HardHat Enterprises!
+        
+        You will now receive notifications about new job openings that match your interests.
+        
+        To unsubscribe, please contact our support team.
+        
+        Best regards,
+        The HardHat Enterprises Team
+        """
+        
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[self.email],
+                fail_silently=False,
+            )
+            return True
+        except Exception as e:
+            print(f"Failed to send confirmation email: {e}")
+            return False
+
+class GraduateProgram(models.Model):
+    title = models.CharField(max_length=200)
+    description = HTMLField()
+    duration_months = models.IntegerField(default=12)
+    program_type = models.CharField(max_length=50, choices=[
+        ('cybersecurity', 'Cybersecurity'),
+        ('software_engineering', 'Software Engineering'),
+        ('data_science', 'Data Science'),
+        ('ai_ml', 'AI & Machine Learning'),
+        ('general', 'General Technology')
+    ])
+    start_date = models.DateField()
+    application_deadline = models.DateField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
+    # Program details
+    overview = HTMLField()
+    curriculum = HTMLField()
+    benefits = HTMLField()
+    requirements = HTMLField()
+    application_process = HTMLField()
+    
+    def __str__(self):
+        return self.title
+
+class CareerFAQ(models.Model):
+    CATEGORY_CHOICES = [
+        ('application', 'Application'),
+        ('benefits', 'Benefits'),
+        ('growth', 'Growth'),
+        ('popular', 'Popular'),
+        ('general', 'General')
+    ]
+    
+    question = models.CharField(max_length=500)
+    answer = HTMLField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
+    is_popular = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['order', 'created_at']
+    
+    def __str__(self):
+        return f"{self.category}: {self.question[:50]}..."
+
 class JobApplication(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
     name = models.CharField(max_length=100)
@@ -539,7 +762,6 @@ class JobApplication(models.Model):
     resume = models.FileField(upload_to="resumes/")
     cover_letter = models.FileField(upload_to="cover_letter/")
     applied_date = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self):
         return f"{self.name} - {self.job.title}"
@@ -633,7 +855,7 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
-class AdninSesssion(models.Model):
+class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
     ip_address = models.GenericIPAddressField()
@@ -644,28 +866,102 @@ class AdninSesssion(models.Model):
     logout_time = models.DateTimeField(null=True, blank=True)
     logout_reason = models.CharField(max_length=50, blank=True, null=True) 
 
-class Meta:
+    class Meta:
         ordering = ['-login_time']
 
-def __str__(self):
-    admin_type = "Superuser" if self.user.is_superuser else "Staff"
-    return f"{admin_type} session for {self.user.email} - {self.login_time}"
+    def __str__(self):
+        admin_type = "Superuser" if self.user.is_superuser else "Staff"
+        return f"{admin_type} session for {self.user.email} - {self.login_time}"
 
-def mark_logout(self, reason="manual"):
-
+    def mark_logout(self, reason="manual"):
         self.is_active = False
         self.logout_time = now()
         self.logout_reason = reason
         self.save()
 
-def is_expired(self, timeout_minutes=30):
+    def is_expired(self, timeout_minutes=30):
+        if not self.is_active:
+            return True
+        expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
+        return now() > expiry_time
 
-    if not self.is_active:
-        return True
-    expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-    return now() > expiry_time
 
-def update_activity(self):
 
-    self.last_activity = now()
-    self.save(update_fields=['last_activity'])
+    def update_activity(self):
+        self.last_activity = now()
+        self.save(update_fields=['last_activity'])
+
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        WHITEPAPER = "whitepaper", "Whitepaper"
+        CHECKLIST  = "checklist", "Checklist / Guide"
+        INFOGRAPH  = "infographic", "Infographic"
+        CASESTUDY  = "casestudy", "Case Study"
+        OTHER      = "other", "Other"
+
+    title = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    summary = models.TextField(max_length=600, help_text="Short 1–3 line description.")
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.OTHER)
+    file = models.FileField(upload_to="resources/files/")
+    cover = models.ImageField(upload_to="resources/covers/", blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:190]
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class Tip(models.Model):
+    text = models.CharField(max_length=280, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Daily Security Tip"
+        verbose_name_plural = "Daily Security Tips"
+
+    def __str__(self):
+        return self.text[:60]
+
+# keep this only if you implemented 24h rolling rotation
+class TipRotationState(models.Model):
+    lock = models.CharField(max_length=16, default="default", unique=True)
+    last_index = models.IntegerField(default=-1)
+    rotated_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+    
+#Model to track known devices
+class UserDevice(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+    # Device fingerprint (unique identifier)
+    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
+
+    # User-friendly info
+    device_name = models.CharField(max_length=200) 
+
+    # Technical info
+    user_agent = models.TextField()
+    ip_address = models.GenericIPAddressField()
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True) 
+    last_seen = models.DateTimeField(auto_now=True)       
+    def __str__(self):
+        return f"{self.user.email} - {self.device_name} ({self.ip_address})"
+

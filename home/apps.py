@@ -16,3 +16,10 @@ class HomeConfig(AppConfig):
                     insert_default_courses()
                 except Exception as e:
                     print(f"[ERROR] insert_defaults failed: {e}")
+                
+                # Auto-optimize images if needed
+                try:
+                    from home.simple_optimize import optimize_images_simple
+                    optimize_images_simple()
+                except Exception as e:
+                    print(f"[ERROR] Auto-optimization failed: {e}")

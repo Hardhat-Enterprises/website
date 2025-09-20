@@ -1,0 +1,98 @@
+services:
+  db:
+    container_name: postgres_db
+    image: postgres:17.5
+    restart: always
+    environment:
+      POSTGRES_DB: hardhat_db
+      POSTGRES_USER: hardhat_user
+      POSTGRES_PASSWORD: hardhat_password
+      # PostgreSQL 17.5
+      POSTGRES_INITDB_ARGS: "--auth-host=md5 --auth-local=trust"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      #note postgresql can be optimised by adding a custom config file
+    networks:
+      - web_network
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hardhat_user -d hardhat_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  web:
+    container_name: django_app
+    build: .
+    restart: always
+    volumes:
+      - .:/app
+      - staticfiles:/app/static #collectstatic will only collect static folder so needs to be created from custom_static folder
+      - mediafiles:/app/media
+      # Keep custom_static mount if you have static files there
+      - ./custom_static:/app/custom_static
+    networks:
+      - web_network
+    environment:
+      - DEBUG=0
+      - DB_ENGINE=postgresql
+      - DB_NAME=hardhat_db
+      - DB_USERNAME=hardhat_user
+      - DB_PASS=hardhat_password
+      - DB_HOST=db
+      - DB_PORT=5432
+      # Microsoft Azure AD Authentication
+      - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID:-550b92bc-e30d-415c-8f08-ec4dddff455d}
+      - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET:-J088Q~8XQjHMrJd-ABl8V2vCrUAfmoE9KTAEmc~1}
+      - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID:-d02378ec-1688-46d5-8540-1c28b5f470f6}
+    expose:
+      - "8000:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Wait for database to install then run migrations and start server
+    command: >
+      sh -c "echo 'Waiting for database...' &&
+             until python -c \"import psycopg; psycopg.connect(host='db', port=5432, dbname='hardhat_db', user='hardhat_user', password='hardhat_password').close()\" 2>/dev/null; do
+               echo 'Database is unavailable - sleeping';
+               sleep 2;
+             done &&
+             echo 'Database is ready!' &&
+             python manage.py migrate &&
+             python manage.py collectstatic --noinput --clear &&
+             gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 core.wsgi"
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      # Use named volumes (read-only)
+      - staticfiles:/app/static:ro
+      - mediafiles:/app/media:ro
+      # Nginx config
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - web_network
+    depends_on:
+      - web
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  web_network:
+    driver: bridge
+
+# Define named volumes
+volumes:
+  staticfiles: {}
+  mediafiles: {}
+  postgres_data: {}

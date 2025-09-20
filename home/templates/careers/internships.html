@@ -2,84 +2,732 @@
 {% block content %}
 
 <style>
-  /* Apply yellow background in dark mode only */
-  @media (prefers-color-scheme: dark) {
-    .internship-section {
-      background-color: #ffc107 !important;
+  body {
+    background-color: #ffd700;
+  }
+
+  .internship-section {
+    background-color: #ffd700;
+    padding: 8rem 1rem 2rem; /* increased top padding to avoid header obstruction */
+    min-height: 100vh;
+  }
+
+  .internship-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .internship-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
+
+  .filter-section {
+    margin-bottom: 3rem;
+  }
+
+  .filter-group {
+    margin-bottom: 2rem;
+  }
+
+  .filter-label {
+    display: block;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 10px 20px;
+    border: 1px solid #212529;
+    border-radius: 8px;
+    background-color: white;
+    color: #212529;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+  }
+
+  .filter-btn.active {
+    background-color: #212529;
+    color: white;
+  }
+
+  .filter-btn:hover {
+    background-color: #212529;
+    color: white;
+  }
+
+  .recently-viewed-btn {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background-color: #212529;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .recently-viewed-btn::after {
+    content: "▼";
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .internship-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .internship-card {
+    background-color: #212529;
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+  }
+
+  .internship-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  }
+
+  .category-tag {
+    background-color: #ffd700;
+    color: #212529;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  .internship-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .internship-description {
+    color: #f6f5f1;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .internship-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ccc;
+    font-size: 0.9rem;
+  }
+
+  .detail-item i {
+    width: 16px;
+    color: #ccc;
+  }
+
+  .view-details-btn {
+    color: #ffd700;
+    background: none;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0;
+  }
+
+  .view-details-btn:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
+  }
+
+  .view-details-btn::after {
+    content: "▼";
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+  }
+
+  .view-details-btn.expanded::after {
+    transform: rotate(180deg);
+  }
+
+  /* Role Details Panel */
+  .role-details-panel {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    /* Removed fixed max-height and scroll to make content expand naturally */
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    border: 2px solid #ffd700;
+    display: none;
+    animation: slideDown 0.3s ease;
+  }
+
+  .role-details-panel.show {
+    display: block;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
-  /* Force card text to white in light mode for visibility */
-  @media (prefers-color-scheme: light) {
-    .internship-card {
-      color: white !important;
+  .role-details-header {
+    border-bottom: 2px solid #f8f9fa;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .role-details-title {
+    color: #212529;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .role-details-subtitle {
+    color: #6c757d;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .role-details-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .detail-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 3px solid #ffd700;
+  }
+
+  .detail-section h4 {
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .detail-section ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .detail-section li {
+    color: #495057;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .detail-section li:last-child {
+    margin-bottom: 0;
+  }
+
+  .apply-section {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #f8f9fa;
+  }
+
+  .apply-btn {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #212529;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  }
+
+  .apply-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .filter-buttons {
+      flex-direction: column;
+      align-items: center;
     }
-    .internship-card .text-muted {
-      color: #ccc !important;
+    
+    .filter-btn {
+      min-width: 200px;
+    }
+    
+    .internship-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .internship-section {
+      padding-top: 9rem;
+    }
+
+    .role-details-content {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .role-details-panel {
+      background: #2d3748;
+      border-color: #ffd700;
+    }
+
+    .role-details-title {
+      color: #e2e8f0;
+    }
+
+    .role-details-subtitle {
+      color: #a0aec0;
+    }
+
+    .detail-section {
+      background: #4a5568;
+    }
+
+    .detail-section h4 {
+      color: #e2e8f0;
+    }
+
+    .detail-section li {
+      color: #a0aec0;
+    }
+
+    .role-details-header,
+    .apply-section {
+      border-color: #4a5568;
     }
   }
 </style>
 
-<div class="container mt-5">
-  <h2 class="text-center mb-5">Internship Opportunities</h2>
+<div class="internship-section position-relative">
+  <div class="container">
+    <!-- Recently Viewed Pages Button -->
+    <button class="recently-viewed-btn">Recently Viewed Pages</button>
+    
+    <div class="internship-header">
+      <h2>Upcoming Internship Opportunities</h2>
+    </div>
 
-  {% if internships %}
-    {% for job in internships %}
-      <div class="card mb-3 p-3 shadow-sm">
-        <h4>{{ job.title }}</h4>
-        <p><strong>Location:</strong> {{ job.location }}</p>
-        <p><strong>Salary:</strong> {{ job.salary }}</p>
-        <a href="{% url 'career-detail' job.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <!-- Type Filter -->
+      <div class="filter-group">
+        <label class="filter-label">Type:</label>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-type="all">All</button>
+          <button class="filter-btn" data-type="marketing">Marketing</button>
+          <button class="filter-btn" data-type="development">Development</button>
+          <button class="filter-btn" data-type="analytics">Analytics</button>
+        </div>
       </div>
-    {% endfor %}
-  {% else %}
-    <!-- Static Upcoming Internship Section if no internships exist -->
-    <section class="py-5 text-center internship-section">
-      <div class="container">
-        <h2 class="mb-5" style="font-weight: 700;">Upcoming Internship Opportunities</h2>
-        <div class="row justify-content-center">
-          <!-- Marketing Intern -->
-          <div class="col-md-4 mb-4">
-            <div class="card bg-dark internship-card h-100">
-              <div class="card-body text-center">
-                <h5 class="card-title" style="color: #ffc107;">Marketing Intern</h5>
-                <p class="card-text" style="color: #f6f5f1;">
-                  Join our creative team to assist in digital campaigns, analytics, and content creation.
-                </p>
-                <p class="text-muted small">Remote | Starts Jul 2025</p>
-              </div>
+
+      <!-- Location Filter -->
+      <div class="filter-group">
+        <label class="filter-label">Location:</label>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-location="all">All</button>
+          <button class="filter-btn" data-location="remote">Remote</button>
+          <button class="filter-btn" data-location="onsite">Onsite</button>
+          <button class="filter-btn" data-location="hybrid">Hybrid</button>
+        </div>
+      </div>
+
+      <!-- Duration Filter -->
+      <div class="filter-group">
+        <label class="filter-label">Duration:</label>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-duration="all">All</button>
+          <button class="filter-btn" data-duration="3">3 months</button>
+          <button class="filter-btn" data-duration="4">4 months</button>
+          <button class="filter-btn" data-duration="6">6 months</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Internship Cards -->
+    <div class="internship-cards">
+      <!-- Marketing Intern -->
+      <div class="internship-card" data-type="marketing" data-location="remote" data-duration="3">
+        <span class="category-tag">Marketing</span>
+        <h3 class="internship-title">Marketing Intern</h3>
+        <p class="internship-description">
+          Join our creative team to assist in digital campaigns, analytics, and content creation.
+        </p>
+        <div class="internship-details">
+          <div class="detail-item">
+            <i>📍</i>
+            <span>Remote</span>
+          </div>
+          <div class="detail-item">
+            <i>🕒</i>
+            <span>3 months</span>
+          </div>
+          <div class="detail-item">
+            <i>📅</i>
+            <span>Starts Aug 2025</span>
+          </div>
+        </div>
+        <button class="view-details-btn" onclick="toggleRoleDetails(this, 'marketing')">View Details</button>
+        
+        <!-- Marketing Intern Details Panel -->
+        <div class="role-details-panel" id="marketing-details">
+          <div class="role-details-header">
+            <h3 class="role-details-title">Marketing Intern - Digital Campaigns & Analytics</h3>
+            <p class="role-details-subtitle">Remote • 3 months • Starts August 2025</p>
+          </div>
+          
+          <div class="role-details-content">
+            <div class="detail-section">
+              <h4><i class="fas fa-tasks text-primary"></i> Key Responsibilities</h4>
+              <ul>
+                <li>Assist in digital marketing campaign development</li>
+                <li>Create engaging social media content</li>
+                <li>Analyze campaign performance metrics</li>
+                <li>Support email marketing initiatives</li>
+                <li>Conduct market research and competitor analysis</li>
+                <li>Help with content creation and copywriting</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-graduation-cap text-success"></i> Requirements</h4>
+              <ul>
+                <li>Currently pursuing Marketing, Communications, or related degree</li>
+                <li>Strong written and verbal communication skills</li>
+                <li>Familiarity with social media platforms</li>
+                <li>Basic understanding of marketing principles</li>
+                <li>Creative mindset and attention to detail</li>
+                <li>Proficiency in Microsoft Office Suite</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-star text-warning"></i> What You'll Learn</h4>
+              <ul>
+                <li>Digital marketing strategy and execution</li>
+                <li>Social media management and analytics</li>
+                <li>Email marketing best practices</li>
+                <li>Campaign performance measurement</li>
+                <li>Marketing automation tools</li>
+                <li>Industry-standard marketing software</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-users text-info"></i> Team & Culture</h4>
+              <ul>
+                <li>Work with experienced marketing professionals</li>
+                <li>Collaborative team environment</li>
+                <li>Regular mentorship and feedback sessions</li>
+                <li>Opportunity to present ideas to the team</li>
+                <li>Flexible working hours</li>
+                <li>Potential for full-time conversion</li>
+              </ul>
             </div>
           </div>
-
-          <!-- Frontend Developer Intern -->
-          <div class="col-md-4 mb-4">
-            <div class="card bg-dark internship-card h-100">
-              <div class="card-body text-center">
-                <h5 class="card-title" style="color: #ffc107;">Frontend Developer Intern</h5>
-                <p class="card-text" style="color: #f6f5f1;">
-                  Work with React and Django to build user interfaces and refine website features.
-                </p>
-                <p class="text-muted small">Onsite | Starts Aug 2025</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Data Analyst Intern -->
-          <div class="col-md-4 mb-4">
-            <div class="card bg-dark internship-card h-100">
-              <div class="card-body text-center">
-                <h5 class="card-title" style="color: #ffc107;">Data Analyst Intern</h5>
-                <p class="card-text" style="color: #f6f5f1;">
-                  Support the BI team with dashboards, Excel, and data wrangling using Python and SQL.
-                </p>
-                <p class="text-muted small">Hybrid | Starts Sep 2025</p>
-              </div>
-            </div>
+          
+          <div class="apply-section">
+            <button class="apply-btn">Apply for Marketing Intern</button>
           </div>
         </div>
       </div>
-    </section>
-  {% endif %}
+
+      <!-- Frontend Developer Intern -->
+      <div class="internship-card" data-type="development" data-location="onsite" data-duration="4">
+        <span class="category-tag">Development</span>
+        <h3 class="internship-title">Frontend Developer Intern</h3>
+        <p class="internship-description">
+          Work with React and Django to build user interfaces and refine website features.
+        </p>
+        <div class="internship-details">
+          <div class="detail-item">
+            <i>📍</i>
+            <span>Onsite</span>
+          </div>
+          <div class="detail-item">
+            <i>🕒</i>
+            <span>4 months</span>
+          </div>
+          <div class="detail-item">
+            <i>📅</i>
+            <span>Starts Aug 2025</span>
+          </div>
+        </div>
+        <button class="view-details-btn" onclick="toggleRoleDetails(this, 'development')">View Details</button>
+        
+        <!-- Frontend Developer Intern Details Panel -->
+        <div class="role-details-panel" id="development-details">
+          <div class="role-details-header">
+            <h3 class="role-details-title">Frontend Developer Intern - React & Django</h3>
+            <p class="role-details-subtitle">Onsite • 4 months • Starts August 2025</p>
+          </div>
+          
+          <div class="role-details-content">
+            <div class="detail-section">
+              <h4><i class="fas fa-code text-primary"></i> Key Responsibilities</h4>
+              <ul>
+                <li>Develop responsive user interfaces using React</li>
+                <li>Work with Django backend integration</li>
+                <li>Implement modern UI/UX designs</li>
+                <li>Write clean, maintainable code</li>
+                <li>Participate in code reviews</li>
+                <li>Collaborate with design and backend teams</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-laptop-code text-success"></i> Technical Requirements</h4>
+              <ul>
+                <li>Strong knowledge of HTML, CSS, and JavaScript</li>
+                <li>Experience with React.js framework</li>
+                <li>Understanding of responsive design principles</li>
+                <li>Basic knowledge of Python/Django</li>
+                <li>Familiarity with Git version control</li>
+                <li>Understanding of RESTful APIs</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-rocket text-warning"></i> What You'll Learn</h4>
+              <ul>
+                <li>Advanced React patterns and best practices</li>
+                <li>Django backend development</li>
+                <li>Modern frontend build tools</li>
+                <li>Performance optimization techniques</li>
+                <li>Testing and debugging strategies</li>
+                <li>Agile development methodologies</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-lightbulb text-info"></i> Project Experience</h4>
+              <ul>
+                <li>Work on real client projects</li>
+                <li>Contribute to open-source initiatives</li>
+                <li>Build portfolio-worthy applications</li>
+                <li>Present your work to the team</li>
+                <li>Receive mentorship from senior developers</li>
+                <li>Potential for GitHub contributions</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="apply-section">
+            <button class="apply-btn">Apply for Frontend Developer Intern</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Analyst Intern -->
+      <div class="internship-card" data-type="analytics" data-location="hybrid" data-duration="6">
+        <span class="category-tag">Analytics</span>
+        <h3 class="internship-title">Data Analyst Intern</h3>
+        <p class="internship-description">
+          Support the BI team with dashboards, Excel, and data wrangling using Python and SQL.
+        </p>
+        <div class="internship-details">
+          <div class="detail-item">
+            <i>📍</i>
+            <span>Hybrid</span>
+          </div>
+          <div class="detail-item">
+            <i>🕒</i>
+            <span>6 months</span>
+          </div>
+          <div class="detail-item">
+            <i>📅</i>
+            <span>Starts Sep 2025</span>
+          </div>
+        </div>
+        <button class="view-details-btn" onclick="toggleRoleDetails(this, 'development')">View Details</button>
+        
+        <!-- Data Analyst Intern Details Panel -->
+        <div class="role-details-panel" id="analytics-details">
+          <div class="role-details-header">
+            <h3 class="role-details-title">Data Analyst Intern - Business Intelligence</h3>
+            <p class="role-details-subtitle">Hybrid • 6 months • Starts September 2025</p>
+          </div>
+          
+          <div class="role-details-content">
+            <div class="detail-section">
+              <h4><i class="fas fa-chart-line text-primary"></i> Key Responsibilities</h4>
+              <ul>
+                <li>Create interactive dashboards and reports</li>
+                <li>Perform data cleaning and preprocessing</li>
+                <li>Conduct statistical analysis and modeling</li>
+                <li>Support business decision-making processes</li>
+                <li>Automate data workflows using Python</li>
+                <li>Present findings to stakeholders</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-database text-success"></i> Technical Skills</h4>
+              <ul>
+                <li>Proficiency in Python for data analysis</li>
+                <li>Strong SQL querying abilities</li>
+                <li>Experience with Excel and Power BI</li>
+                <li>Knowledge of statistical analysis methods</li>
+                <li>Familiarity with data visualization tools</li>
+                <li>Understanding of ETL processes</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-brain text-warning"></i> Learning Outcomes</h4>
+              <ul>
+                <li>Advanced data analysis techniques</li>
+                <li>Business intelligence tool mastery</li>
+                <li>Machine learning fundamentals</li>
+                <li>Data storytelling and presentation</li>
+                <li>Industry-specific analytics</li>
+                <li>Big data processing technologies</li>
+              </ul>
+            </div>
+            
+            <div class="detail-section">
+              <h4><i class="fas fa-handshake text-info"></i> Career Development</h4>
+              <ul>
+                <li>Work with real business data</li>
+                <li>Network with analytics professionals</li>
+                <li>Build a strong analytical portfolio</li>
+                <li>Receive industry certifications</li>
+                <li>Mentorship from senior analysts</li>
+                <li>Pathway to full-time analyst roles</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="apply-section">
+            <button class="apply-btn">Apply for Data Analyst Intern</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+  // Filter functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const internshipCards = document.querySelectorAll('.internship-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const filterType = this.getAttribute('data-type') || this.getAttribute('data-location') || this.getAttribute('data-duration');
+        const filterCategory = this.parentElement.previousElementSibling.textContent.replace(':', '').toLowerCase();
+        
+        // Update active state
+        this.parentElement.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Apply filters
+        applyFilters();
+      });
+    });
+
+    function applyFilters() {
+      const activeType = document.querySelector('.filter-group:nth-child(1) .filter-btn.active').getAttribute('data-type');
+      const activeLocation = document.querySelector('.filter-group:nth-child(2) .filter-btn.active').getAttribute('data-location');
+      const activeDuration = document.querySelector('.filter-group:nth-child(3) .filter-btn.active').getAttribute('data-duration');
+
+      internshipCards.forEach(card => {
+        const cardType = card.getAttribute('data-type');
+        const cardLocation = card.getAttribute('data-location');
+        const cardDuration = card.getAttribute('data-duration');
+
+        const typeMatch = activeType === 'all' || cardType === activeType;
+        const locationMatch = activeLocation === 'all' || cardLocation === activeLocation;
+        const durationMatch = activeDuration === 'all' || cardDuration === activeDuration;
+
+        if (typeMatch && locationMatch && durationMatch) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  });
+
+  // Role Details Toggle Function
+  function toggleRoleDetails(button, roleType) {
+    const card = button.closest('.internship-card');
+    const detailsPanel = card.querySelector('.role-details-panel');
+    const isExpanded = detailsPanel.classList.contains('show');
+    
+    // Toggle current panel
+    if (!isExpanded) {
+      detailsPanel.classList.add('show');
+      button.classList.add('expanded');
+      
+      // Smooth scroll to show the expanded content
+      setTimeout(() => {
+        detailsPanel.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'nearest' 
+        });
+      }, 100);
+    } else {
+      detailsPanel.classList.remove('show');
+      button.classList.remove('expanded');
+    }
+  }
+
+  // Keep details open unless toggled via the View Details button
+</script>
 
 {% endblock %}

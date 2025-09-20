@@ -1,0 +1,336 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<style>
+  .d-none {
+    display: none !important;
+  }
+
+  .col.d-flex {
+    display: flex !important;
+  }
+  /* dark mode styling for h2 color */
+  body.dark-mode h2 {
+    color: #ffc107 !important;
+  }
+
+  /* dark mode styling for challenge details */
+  body.dark-mode .fw-bold,
+  body.dark-mode .text-muted {
+    color: #ffffff !important;
+  }
+
+  /* spacing to navbar */
+  .admin-content-wrapper {
+    position: relative;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 992px) {
+    .admin-content-wrapper {
+      padding-top: 10rem;
+      padding-bottom: 3rem;
+    }
+  }
+</style>
+<!-- Created by Bryce Bacon, 14/8/2025
+Started using prettier to format the code.
+Page is for admin to manage challenges within main app
+-->
+<div class="container-fluid admin-content-wrapper">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-1">Challenge Management</h2>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="d-flex gap-3 align-items-center">
+              <a href="{% url 'add_challenge' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add Challenge
+              </a>
+
+              <div class="btn-group" role="group" aria-label="Challenge filter">
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="challengeFilter"
+                  id="filterAll"
+                  value="all"
+                  checked
+                />
+                <label class="btn btn-outline-warning" for="filterAll"
+                  >All</label
+                >
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="challengeFilter"
+                  id="filterActive"
+                  value="active"
+                />
+                <label class="btn btn-outline-success" for="filterActive"
+                  >Active</label
+                >
+
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="challengeFilter"
+                  id="filterArchived"
+                  value="archived"
+                />
+                <label class="btn btn-outline-danger" for="filterArchived"
+                  >Archived</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommend furture development 
+   2. Add more filter Options
+  3. Add search bar for challenges here also
+  4. Add pagination for challenges here also
+  Add sorting for challenges here also
+  Add bulk actions for challenges here also
+  5. Add add , archive, delete , edit into modals instead of seperate page
+  6. Have confirmation messages for archive, delete, edit
+  -->
+
+  <!-- Challenges grid -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    {% for challenge in challenges %}
+    <div class="col d-flex">
+      <!-- Restyle and add challenge type badge multii choice or code-->
+      <div
+        class="card h-100 w-100{% if not challenge.is_active %} border-danger{% else %} border-success{% endif %}"
+      >
+        <!-- Title and Action buttons -->
+        <div class="card-header bg-white border-0 pb-0">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              {{ challenge.title|truncatechars:50}}
+            </h5>
+            <div class="btn-group btn-group-sm" role="group">
+              <a
+                href="{% url 'challenge_detail' challenge.id %}"
+                class="btn btn-outline-primary"
+                style="border-color: #87ceeb; color: #4682b4"
+                title="Preview"
+                target="_blank"
+              >
+                <i class="fas fa-eye"></i>
+              </a>
+              <a
+                href="{% url 'challenge_edit' challenge.id %}"
+                class="btn btn-outline-success"
+                title="Edit"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <a
+                href="{% url 'challenge_archive' challenge.id %}"
+                class="btn btn-outline-secondary"
+                style="border-color: #d4b896; color: #8b7355"
+                title="Archive"
+              >
+                <i class="fas fa-archive"></i>
+              </a>
+              <a
+                href="{% url 'challenge_delete' challenge.id %}"
+                class="btn btn-outline-danger"
+                title="Delete"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body d-flex flex-column">
+          {% if not challenge.is_active %}
+          <div class="mb-2">
+            <span class="badge" style="background-color: #8b4513; color: white"
+              >Archived</span
+            >
+          </div>
+          {% endif %}
+          <p class="card-text text-muted mb-3">
+            {{ challenge.description|truncatechars:150}}
+          </p>
+
+          <div class="mt-auto">
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <small class="text-muted">Category: </small><br />
+                <span class="badge bg-secondary"
+                  >{{ challenge.get_category_display }}</span
+                >
+              </div>
+              <div class="col-6">
+                <small class="text-muted">Difficulty:</small><br />
+                <span
+                  class="badge bg-{% if challenge.difficulty == 'easy' %}success{% elif challenge.difficulty == 'medium' %}warning{% else %}danger{% endif %}"
+                >
+                  {{ challenge.get_difficulty_display }}
+                </span>
+              </div>
+            </div>
+
+            <div class="row g-2">
+              <div class="col-6">
+                <small class="text-muted">Points: </small><br />
+                <span class="fw-bold">{{ challenge.points }}</span>
+              </div>
+              <div class="col-6">
+                <small class="text-muted">Time Limit: </small><br />
+                <span class="fw-bold">{{ challenge.time_limit }} min</span>
+              </div>
+            </div>
+
+            <div class="mt-2">
+              <small class="text-muted"
+                >Created: {{ challenge.created_at|date:"d M, Y" }} |
+                <span class="badge bg-info"
+                  >{{ challenge.get_challenge_type_display }}</span
+                >
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col">
+      <div class="card">
+        <div class="card-body text-center py-5">
+          <!-- Filter/Search empty state here-->
+          <h5>No challenges found</h5>
+          <p class="text-muted">Create your first challenge to get started.</p>
+          <a href="{% url 'add_challenge' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Create Your First Challenge
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const filterButtons = document.querySelectorAll(
+      'input[name="challengeFilter"]'
+    );
+
+    function filterChallenges(filterValue) {
+      const challengesGrid = document.querySelector(
+        ".row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-3"
+      );
+      if (!challengesGrid) {
+        console.error("Challenges grid not found");
+        return;
+      }
+
+      const allChallengeCards =
+        challengesGrid.querySelectorAll(":scope > .col");
+
+      console.log(`Filtering by: ${filterValue}`);
+      console.log(`Found ${allChallengeCards.length} total challenge cards`);
+
+      // First, reset all cards to visible state
+      allChallengeCards.forEach(function (card) {
+        card.style.removeProperty("display");
+        card.classList.remove("d-none");
+        card.classList.add("d-flex");
+      });
+
+      console.log("Reset all cards to visible");
+
+      let shownCount = 0;
+      let hiddenCount = 0;
+      let activeCount = 0;
+      let archivedCount = 0;
+
+      allChallengeCards.forEach(function (card, index) {
+        const challengeCard = card.querySelector(".card");
+        if (!challengeCard) {
+          console.log(`Card ${index}: No .card element found, skipping`);
+          return;
+        }
+
+        const hasBorderDanger =
+          challengeCard.classList.contains("border-danger");
+        const hasArchivedBadge = card.innerHTML.includes("Archived</span>");
+        const isArchived = hasBorderDanger || hasArchivedBadge;
+
+        if (isArchived) {
+          archivedCount++;
+        } else {
+          activeCount++;
+        }
+
+        console.log(
+          `Card ${index}: border-danger=${hasBorderDanger}, has badge=${hasArchivedBadge}, archived=${isArchived}`
+        );
+
+        let shouldShow = false;
+
+        switch (filterValue) {
+          case "all":
+            shouldShow = true;
+            break;
+          case "active":
+            shouldShow = !isArchived;
+            break;
+          case "archived":
+            shouldShow = isArchived;
+            break;
+        }
+
+        if (shouldShow) {
+          card.style.removeProperty("display");
+          card.classList.remove("d-none");
+          card.classList.add("d-flex");
+          shownCount++;
+          console.log(`Card ${index}: SHOWING`);
+        } else {
+          card.classList.add("d-none");
+          card.classList.remove("d-flex");
+          hiddenCount++;
+          console.log(`Card ${index}: HIDING`);
+        }
+      });
+
+      console.log(
+        `Total: ${allChallengeCards.length} cards, Active: ${activeCount}, Archived: ${archivedCount}`
+      );
+      console.log(`Filter result: ${shownCount} shown, ${hiddenCount} hidden`);
+    }
+
+    filterButtons.forEach(function (button) {
+      button.addEventListener("change", function () {
+        if (this.checked) {
+          console.log(`Filter changed to: ${this.value}`);
+          filterChallenges(this.value);
+        }
+      });
+    });
+
+    setTimeout(function () {
+      const checkedFilter = document.querySelector(
+        'input[name="challengeFilter"]:checked'
+      );
+      if (checkedFilter) {
+        filterChallenges(checkedFilter.value);
+      }
+    }, 100);
+  });
+</script>
+
+{% endblock %}

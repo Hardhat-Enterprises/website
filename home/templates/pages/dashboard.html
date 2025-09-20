@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<main class="pt-6">
+<main class="pt-5">
   {% include 'includes/pre-loader.html' %}
 
   <!-- Header -->
@@ -42,9 +42,9 @@
 
     <!-- Overall Progress Bar -->
     <div class="mb-5">
-      <label class="text-light">Total Progress: {{ percent }}%</label>
+      <p class="text-dark">Total Progress: {{ percent }}%</p>
       <div class="progress" style="height: 16px;">
-        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percent }}%;" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar bg-success" role="progressbar" data-progress="{{ percent }}" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
     <div class="row">
       {% for skill in skills %}
       <div class="col-md-6 mb-4">
-        <div class="card bg-dark text-white shadow-sm rounded-4 transition transform hover:scale-105 hover:shadow-lg">
+        <div class="card bg-dark text-white shadow-sm rounded-4">
           <div class="card-body">
             <h5 class="card-title text-warning">{{ skill.title }}</h5>
             <p>
@@ -122,5 +122,15 @@
     }
   });
 </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.progress-bar[data-progress]').forEach(function(bar){
+      var value = parseFloat(bar.getAttribute('data-progress')) || 0;
+      value = Math.max(0, Math.min(100, value));
+      bar.style.width = value + '%';
+    });
+  });
+  </script>
 
 {% endblock %}

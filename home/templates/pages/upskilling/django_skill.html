@@ -5,47 +5,558 @@
 
 <div class="container">
   <div id="sections" class="my-5">
-    <!-- SECTION 1 -->
+
+    <!-- 1) What is Django? -->
     <section class="section card mb-3 p-3">
-      <h2 class="card-title">Structure</h2>
+      <h2 class="card-title">What is Django?</h2>
       <p class="card-text">
-        Django follows the MVT architecture. MVT stands for Model-View-Template. In an MVT architecture, there are three parts:
-        <br><br>
-        <strong>Model:</strong> Provides a logical data structure and maintains data using a database.<br>
-        <strong>View:</strong> Controls the logic that accesses models and renders templates.<br>
-        <strong>Template:</strong> Handles the UI — the HTML structure sent to users.
-        <br><br>
-        Reference: <a href="https://www.naukri.com/code360/library/project-structure-in-django" target="_blank">Code360 – Django Structure</a>
+        Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design. It follows the <strong>MVT</strong> pattern: <em>Model</em> (data), <em>View</em> (request handling), and <em>Template</em> (presentation).
       </p>
-    </section>
-
-    <!-- SECTION 2 -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Syntax & Templates</h2>
-      <p class="card-text">
-        Django’s template language is designed to strike a balance between power and ease. It’s built for HTML-friendly developers and supports filters, tags, inheritance, and autoescaping.
-        <br><br>
-        Reference: <a href="https://docs.djangoproject.com/en/5.0/ref/templates/language/" target="_blank">Django Template Language Docs</a>
-      </p>
-    </section>
-
-    <!-- SECTION 3 -->
-    <section class="section card mb-3 p-3" style="display: none">
-      <h2 class="card-title">Helpful Django Resources</h2>
-      <ul>
-        <li><a href="https://docs.djangoproject.com/en/5.0/" target="_blank">📘 Official Django 5.0 Docs</a></li>
-        <li><a href="https://www.djangoproject.com/start/" target="_blank">🌐 Getting Started (Django)</a></li>
-        <li><a href="https://www.w3schools.com/django/" target="_blank">🌐 W3Schools Django Guide</a></li>
-        <li><a href="https://learndjango.com/tutorials/getting-started-django-tutorial" target="_blank">🌐 LearnDjango Beginner Tutorial</a></li>
-        <li><a href="https://www.youtube.com/watch?v=rHux0gMZ3Eg" target="_blank">🎥 Mosh Django Tutorial</a></li>
-        <li><a href="https://www.youtube.com/watch?v=nGIg40xs9e4" target="_blank">🎥 Tech With Tim – Django in 20 Minutes</a></li>
-        <li><a href="https://www.youtube.com/watch?v=ZxMB6Njs3ck" target="_blank">🎥 Django Marketplace (freeCodeCamp)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=0sMtoedWaf0" target="_blank">🎥 Django in 8 Minutes (Denis Ivy)</a></li>
+      <ul class="card-text">
+        <li><strong>Batteries-included:</strong> ORM, admin, auth, sessions, CSRF, templating, forms, caching, i18n.</li>
+        <li><strong>Security-first:</strong> CSRF protection, XSS/SQLi defenses, clickjacking protection.</li>
+        <li><strong>Scales well:</strong> caching, async views, channels (websockets), horizontal scaling.</li>
       </ul>
     </section>
+
+    <!-- 2) Project vs App (MVT Structure) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Structure: Project vs App (MVT)</h2>
+      <ul class="card-text">
+        <li><strong>Project:</strong> global config (settings/urls/asgi/wsgi), houses one or more apps.</li>
+        <li><strong>App:</strong> focused feature (models, views, urls, templates, static).</li>
+        <li><strong>MVT:</strong> Model (ORM) ↔ View (logic) ↔ Template (rendered HTML).</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>myproject/
+  manage.py
+  myproject/           # project package
+    settings.py
+    urls.py
+    asgi.py
+    wsgi.py
+  blog/                # app
+    models.py
+    views.py
+    urls.py
+    templates/blog/
+    static/blog/</code></pre>
+    </section>
+
+    <!-- 3) Installing & Starting a Project -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Install &amp; Start a Project</h2>
+      <ul class="card-text">
+        <li>Create a virtual environment; install Django.</li>
+        <li>Start a project and an app; wire app into <code>INSTALLED_APPS</code>.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install "Django&gt;=5.0,&lt;6.0"
+
+django-admin startproject myproject .
+python manage.py startapp blog
+
+# myproject/settings.py
+INSTALLED_APPS = [
+  # ...
+  "blog",
+]</code></pre>
+    </section>
+
+    <!-- 4) URLs & Views (Function-Based Views Basics) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">URLs &amp; Views (FBVs)</h2>
+      <ul class="card-text">
+        <li>Map paths to views; views return HttpResponse or render templates.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/views.py
+from django.http import HttpResponse
+from django.shortcuts import render
+
+def home(request):
+    return render(request, "blog/home.html", {"title": "Home"})
+
+# blog/urls.py
+from django.urls import path
+from . import views
+urlpatterns = [ path("", views.home, name="home"), ]
+
+# myproject/urls.py
+from django.urls import path, include
+urlpatterns = [ path("", include("blog.urls")), ]</code></pre>
+    </section>
+
+    <!-- 5) Templates & Inheritance (Blocks, Extends, Includes) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Templates &amp; Inheritance</h2>
+      <ul class="card-text">
+        <li>Use <code>&#123;% extends %&#125;</code>, <code>&#123;% block %&#125;</code>, <code>&#123;% include %&#125;</code>.</li>
+        <li>Enable <code>TEMPLATES.DIRS</code> or app templates folders.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>&lt;!-- templates/base.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;&#123;% block head %&#125;&lt;title&gt;&#123;% block title %&#125;Site&#123;% endblock %&#125;&lt;/title&gt;&#123;% endblock %&#125;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;header&gt;...nav...&lt;/header&gt;
+    &lt;main&gt;&#123;% block content %&#125;&#123;% endblock %&#125;&lt;/main&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+&lt;!-- blog/templates/blog/home.html --&gt;
+&#123;% extends "base.html" %&#125;
+&#123;% block title %&#125;Home&#123;% endblock %&#125;
+&#123;% block content %&#125;&lt;h1&gt;Welcome&lt;/h1&gt;&#123;% endblock %&#125;</code></pre>
+    </section>
+
+    <!-- 6) Static Files & Media (Dev) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Static &amp; Media (Dev)</h2>
+      <ul class="card-text">
+        <li>App static under <code>app/static/app/...</code>; load with <code>&#123;% load static %&#125;</code>.</li>
+        <li>Media for user uploads; use <code>urlpatterns += static(...)</code> in dev.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># settings.py (dev)
+STATIC_URL = "static/"
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# templates
+&#123;% load static %&#125;
+&lt;img src="&#123;% static 'blog/logo.png' %&#125;" alt="logo"&gt;</code></pre>
+    </section>
+
+    <!-- 7) Models & ORM (Basics & Migrations) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Models &amp; ORM (Basics)</h2>
+      <ul class="card-text">
+        <li>Define models; run migrations; interact via ORM.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/models.py
+from django.db import models
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    body = models.TextField()
+    published_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self): return self.title
+
+# Migrate & use shell
+python manage.py makemigrations
+python manage.py migrate
+python manage.py shell</code></pre>
+    </section>
+
+    <!-- 8) ORM Queries (Filter, Q, F, Annotate, Select_related/prefetch) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">ORM Queries &amp; Performance</h2>
+      <ul class="card-text">
+        <li>Filter with <code>filter()</code>, compose with <code>Q</code>, use <code>F</code> expressions.</li>
+        <li>Optimize with <code>select_related</code>/<code>prefetch_related</code>.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>from django.db.models import Q, F, Count
+recent = Post.objects.filter(title__icontains="django").order_by("-published_at")
+popular = Post.objects.annotate(num=Count("id")).filter(num__gte=1)
+# Related optimization:
+qs = Comment.objects.select_related("post").all()</code></pre>
+    </section>
+
+    <!-- 9) Admin Site (ModelAdmin & Customization) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Admin Site</h2>
+      <ul class="card-text">
+        <li>Register models; customize list display, search, filters.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/admin.py
+from django.contrib import admin
+from .models import Post
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ("title", "published_at")
+    search_fields = ("title",)
+    list_filter = ("published_at",)
+
+python manage.py createsuperuser</code></pre>
+    </section>
+
+    <!-- 10) Forms & ModelForms (Validation, CSRF, Messages) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Forms &amp; ModelForms</h2>
+      <ul class="card-text">
+        <li>Use <code>forms.Form</code> or <code>forms.ModelForm</code> for validation.</li>
+        <li>Remember CSRF token; show success via <code>messages</code>.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/forms.py
+from django import forms
+from .models import Post
+class PostForm(forms.ModelForm):
+    class Meta: model = Post; fields = ["title", "body"]
+
+# blog/views.py
+from django.contrib import messages
+from django.shortcuts import redirect, render
+def create_post(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Post created!")
+            return redirect("home")
+    else:
+        form = PostForm()
+    return render(request, "blog/post_form.html", {"form": form})
+
+&lt;!-- blog/templates/blog/post_form.html --&gt;
+&lt;form method="post"&gt;&#123;% csrf_token %&#125;
+  &#123;&#123; form.as_p &#125;&#125;
+  &lt;button type="submit"&gt;Save&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    </section>
+
+    <!-- 11) Authentication (Login, Logout, Signup, Permissions) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Authentication &amp; Authorization</h2>
+      <ul class="card-text">
+        <li>Use built-in views for login/logout; extend User or use a custom user model.</li>
+        <li>Decorators: <code>@login_required</code>, permissions, groups.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># settings.py
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
+# views.py
+from django.contrib.auth.decorators import login_required
+@login_required
+def dashboard(request): ...</code></pre>
+    </section>
+
+    <!-- 12) Class-Based Views & Generic Views -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Class-Based &amp; Generic Views</h2>
+      <ul class="card-text">
+        <li>Use generic views to reduce boilerplate: <code>ListView</code>, <code>DetailView</code>, <code>CreateView</code>, etc.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/views.py
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+from .models import Post
+
+class PostListView(ListView):
+    model = Post
+    paginate_by = 10
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ["title", "body"]
+    success_url = reverse_lazy("home")</code></pre>
+    </section>
+
+    <!-- 13) Settings & Environments (.env, DEBUG, ALLOWED_HOSTS) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Settings &amp; Environments</h2>
+      <ul class="card-text">
+        <li>Split settings by env (dev/stage/prod); use <code>python-dotenv</code> or <code>environ</code>.</li>
+        <li><strong>Never</strong> commit secrets; set <code>DEBUG=False</code> in prod.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># .env (do not commit)
+SECRET_KEY=...
+DEBUG=False
+ALLOWED_HOSTS=example.com
+
+# settings.py
+from os import getenv
+DEBUG = getenv("DEBUG","True") == "True"</code></pre>
+    </section>
+
+    <!-- 14) Security (CSRF, XSS, Clickjacking, SECRET_KEY, HTTPS) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Security Essentials</h2>
+      <ul class="card-text">
+        <li>CSRF token in POST forms, secure cookies, HTTPS, HSTS.</li>
+        <li>Set <code>SECURE_*</code> settings; rotate compromised secrets.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>&lt;!-- templates snippet --&gt;
+&lt;form method="post"&gt;&#123;% csrf_token %&#125;... &lt;/form&gt;
+
+# settings.py (prod)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_SSL_REDIRECT = True</code></pre>
+    </section>
+
+    <!-- 15) REST APIs with Django REST Framework -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">APIs with Django REST Framework (DRF)</h2>
+      <ul class="card-text">
+        <li>Serializers, ViewSets, Routers for rapid API development.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>pip install djangorestframework
+
+# settings.py
+INSTALLED_APPS += ["rest_framework"]
+
+# blog/api.py
+from rest_framework import viewsets, serializers, routers
+from .models import Post
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta: model = Post; fields = "__all__"
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+# myproject/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from blog.api import PostViewSet
+router = DefaultRouter()
+router.register("posts", PostViewSet)
+urlpatterns = [ path("api/", include(router.urls)), ]</code></pre>
+    </section>
+
+    <!-- 16) Testing (Unit, Integration, Client, Coverage) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Testing &amp; Coverage</h2>
+      <ul class="card-text">
+        <li>Use Django test runner or pytest-django; Client for request tests.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/tests/test_views.py
+from django.test import TestCase
+from django.urls import reverse
+class HomeTests(TestCase):
+    def test_home_ok(self):
+        resp = self.client.get(reverse("home"))
+        self.assertContains(resp, "Welcome")</code></pre>
+    </section>
+
+    <!-- 17) Management Commands & Fixtures -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Management Commands &amp; Fixtures</h2>
+      <ul class="card-text">
+        <li>Write custom <code>manage.py</code> commands; seed data with fixtures.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/management/commands/say_hello.py
+from django.core.management.base import BaseCommand
+class Command(BaseCommand):
+    def handle(self, *args, **opts):
+        self.stdout.write("Hello from Django!")</code></pre>
+    </section>
+
+    <!-- 18) Deployment (ASGI/WGSI, Gunicorn, WhiteNoise, Nginx) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Deployment Basics</h2>
+      <ul class="card-text">
+        <li>Use Gunicorn/Uvicorn behind Nginx; collectstatic + WhiteNoise for static files.</li>
+        <li>Set <code>ALLOWED_HOSTS</code>, <code>DEBUG=False</code>, secure settings.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>pip install gunicorn whitenoise
+# settings.py
+MIDDLEWARE = ["whitenoise.middleware.WhiteNoiseMiddleware", *MIDDLEWARE]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+python manage.py collectstatic
+gunicorn myproject.wsgi:application</code></pre>
+    </section>
+
+    <!-- 19) Caching (Per-view, Template, Low-level, Redis/Memcached) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Caching Strategies</h2>
+      <ul class="card-text">
+        <li>Per-view/Template/Low-level caches; use Redis/Memcached in prod.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># views.py
+from django.views.decorators.cache import cache_page
+@cache_page(60 * 5)
+def home(request): ...</code></pre>
+    </section>
+
+    <!-- 20) Async Views, Tasks, and Channels (WebSockets) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Async Views &amp; Channels</h2>
+      <ul class="card-text">
+        <li>Async views for IO-bound work; Django Channels for websockets.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># async view (Django 3.1+)
+from django.http import JsonResponse
+import httpx
+async def ping_api(request):
+    async with httpx.AsyncClient() as client:
+        r = await client.get("https://httpbin.org/get")
+    return JsonResponse(r.json())</code></pre>
+    </section>
+
+    <!-- 21) Background Jobs (Celery + Redis) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Background Jobs with Celery</h2>
+      <ul class="card-text">
+        <li>Use Celery for long-running/periodic tasks; Redis/RabbitMQ as broker.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/tasks.py
+from celery import shared_task
+@shared_task
+def send_newsletter(ids): ...</code></pre>
+    </section>
+
+    <!-- 22) Signals (post_save), Clean Methods, Validators -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Signals &amp; Validation</h2>
+      <ul class="card-text">
+        <li>Use signals for decoupled reactions; prefer explicit calls when possible.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># blog/signals.py
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import Post
+@receiver(post_save, sender=Post)
+def notify_on_new_post(sender, instance, created, **kwargs):
+    if created:
+        print("New post:", instance.title)</code></pre>
+    </section>
+
+    <!-- 23) Pagination, Filtering, and Search -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Pagination, Filtering &amp; Search</h2>
+      <ul class="card-text">
+        <li><code>Paginator</code> for lists; basic search with <code>Q(title__icontains=...)</code>.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>from django.core.paginator import Paginator
+def post_list(request):
+    qs = Post.objects.all()
+    q = request.GET.get("q")
+    if q: qs = qs.filter(title__icontains=q)
+    page = Paginator(qs, 10).get_page(request.GET.get("page"))
+    return render(request, "blog/list.html", {"page": page})</code></pre>
+    </section>
+
+    <!-- 24) Internationalization (i18n) & Localization (l10n) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">i18n &amp; l10n</h2>
+      <ul class="card-text">
+        <li>Mark strings for translation; compile messages; set languages/timezones.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># template
+&#123;% load i18n %&#125;
+&lt;p&gt;&#123;% trans "Hello, world!" %&#125;&lt;/p&gt;
+
+# commands
+django-admin makemessages -l en
+django-admin compilemessages</code></pre>
+    </section>
+
+    <!-- 25) Logging & Observability (LOGGING, Sentry) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Logging &amp; Observability</h2>
+      <ul class="card-text">
+        <li>Configure <code>LOGGING</code> dict; add Sentry/APM for errors &amp; performance.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># settings.py (snippet)
+LOGGING = {
+  "version": 1,
+  "handlers": {"console": {"class": "logging.StreamHandler"}},
+  "root": {"handlers": ["console"], "level": "INFO"},
+}</code></pre>
+    </section>
+
+    <!-- 26) Performance: N+1, Selectivity, Indexes, Query Debugging -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Performance Tuning</h2>
+      <ul class="card-text">
+        <li>Avoid N+1 queries; add DB indexes; measure before optimizing.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># models.py
+class Post(models.Model):
+    title = models.CharField(max_length=200, db_index=True)</code></pre>
+    </section>
+
+    <!-- 27) Django Admin Customization (Actions, Inlines, Forms) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Admin Customization</h2>
+      <ul class="card-text">
+        <li>Custom actions, inlines, form overrides, readonly fields.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code>@admin.action(description="Publish selected posts")
+def make_published(modeladmin, request, queryset):
+    queryset.update(published_at=timezone.now())</code></pre>
+    </section>
+
+    <!-- 28) File Uploads, Forms, and Storage (S3/GCS) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Uploads &amp; Cloud Storage</h2>
+      <ul class="card-text">
+        <li>Use <code>ImageField/FileField</code>; for cloud use django-storages (S3/GCS/Azure).</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># models.py
+image = models.ImageField(upload_to="posts/")
+# settings.py + django-storages config (bucket creds via env)</code></pre>
+    </section>
+
+    <!-- 29) Django Signals vs. Domain Services (When to Use Which) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Architecture: Signals vs Services</h2>
+      <ul class="card-text">
+        <li>Prefer explicit domain services for core flows; signals for cross-cutting concerns.</li>
+      </ul>
+      <pre class="bg-light p-3 rounded border"><code># services/posting.py
+def publish_post(post): ...</code></pre>
+    </section>
+
+    <!-- 30) Learn Django — Curated Resources (Final Slide) -->
+    <section class="section card mb-3 p-3" style="display:none">
+      <h2 class="card-title">Learn Django — Curated Resources</h2>
+      <ul class="card-text">
+        <li>📘 Official Docs (Django 5): <a href="https://docs.djangoproject.com/en/5.0/" target="_blank" rel="noopener">docs.djangoproject.com/en/5.0</a></li>
+        <li>🚀 Getting Started: <a href="https://www.djangoproject.com/start/" target="_blank" rel="noopener">djangoproject.com/start</a></li>
+        <li>🧭 Tutorial: <a href="https://learndjango.com/tutorials/getting-started-django-tutorial" target="_blank" rel="noopener">LearnDjango</a></li>
+        <li>🌐 W3Schools Guide: <a href="https://www.w3schools.com/django/" target="_blank" rel="noopener">W3Schools Django</a></li>
+        <li>🎥 Video — Mosh: <a href="https://www.youtube.com/watch?v=rHux0gMZ3Eg" target="_blank" rel="noopener">Django Course</a></li>
+        <li>🎥 Video — Tech With Tim: <a href="https://www.youtube.com/watch?v=nGIg40xs9e4" target="_blank" rel="noopener">Django in 20 Minutes</a></li>
+        <li>🎥 Video — freeCodeCamp: <a href="https://www.youtube.com/watch?v=ZxMB6Njs3ck" target="_blank" rel="noopener">Django Marketplace</a></li>
+        <li>🧪 DRF: <a href="https://www.django-rest-framework.org/" target="_blank" rel="noopener">Django REST Framework</a></li>
+      </ul>
+    </section>
+
   </div>
 
-  <!-- NAVIGATION BUTTONS -->
+  <!-- Progress Header -->
+  <div class="d-flex align-items-center justify-content-between mb-3" id="lesson-progress-header">
+    <div class="fw-semibold" id="step-text" aria-live="polite">Step 1/30</div>
+    <div class="text-muted small" id="percent-text">0%</div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress mb-2" role="progressbar" aria-label="Lesson progress">
+    <div id="progress-bar" class="progress-bar" style="width: 0%;" aria-valuemin="0" aria-valuenow="0" aria-valuemax="100"></div>
+  </div>
+
+  <!-- Block Meter (auto-matches number of sections) -->
+  <div id="block-meter" class="mb-4"></div>
+
+  <style>
+    /* Compact segmented meter that auto-matches your total card count */
+    #block-meter {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: .35rem;
+    }
+    .block-meter-seg {
+      height: 10px;
+      border-radius: 3px;
+      background: #e9ecef; /* light gray */
+    }
+    .block-meter-seg.active {
+      background: #0d6efd; /* Bootstrap primary */
+    }
+    /* Dark-mode friendly tweak if you use .dark somewhere */
+    .dark .block-meter-seg { background: #374151; }
+    .dark .block-meter-seg.active { background: #2563eb; }
+
+    .card-title { color: #EFBF2F; }
+  </style>
+
+  <!-- Navigation Buttons -->
   <div class="d-flex justify-content-between mb-4">
     <button id="back-button" class="btn btn-secondary" style="display: none">Back</button>
     <button id="next-button" class="btn btn-primary">Next</button>
@@ -53,13 +564,29 @@
       {% csrf_token %}
       <button type="submit" class="btn btn-warning">Finish</button>
     </form>
-    
   </div>
 
-  <!-- Progress Data -->
+  <!-- Navigation + Progress Script -->
   <script>
-    window.progressId = "{{ progress_id }}";
-    window.csrfToken = "{{ csrf_token }}";
+    let currentIndex = 0;
+    const sections = document.querySelectorAll("#sections .section");
+    const totalCards = sections.length;
+
+    // === Progress elements ===
+    const stepText = document.getElementById("step-text");
+    const percentText = document.getElementById("percent-text");
+    const progressBar = document.getElementById("progress-bar");
+    const blockMeter = document.getElementById("block-meter");
+
+    // Build segmented block meter to match total cards
+    const meterFrags = document.createDocumentFragment();
+    for (let i = 0; i < totalCards; i++) {
+      const seg = document.createElement("div");
+      seg.className = "block-meter-seg";
+      seg.setAttribute("aria-hidden", "true");
+      meterFrags.appendChild(seg);
+    }
+    blockMeter.appendChild(meterFrags);
 
     function toggleButtons(index, total) {
       document.getElementById("back-button").style.display = index === 0 ? "none" : "block";
@@ -67,34 +594,43 @@
       document.getElementById("finishForm").style.display = index === total - 1 ? "block" : "none";
     }
 
+    function updateProgress(index) {
+      const step = index + 1; // display as 1-based
+      const pct = Math.round((step / totalCards) * 100);
 
-    let currentIndex = 0;
-    const sections = document.querySelectorAll("#sections .section");
-    const totalCards = sections.length;
+      stepText.textContent = `Step ${step}/${totalCards}`;
+      percentText.textContent = `${pct}%`;
 
-    function showSection(index) {
-      sections.forEach((section, i) => {
-        section.style.display = i === index ? "block" : "none";
-      });
-      toggleButtons(index, totalCards);
+      progressBar.style.width = `${pct}%`;
+      progressBar.setAttribute("aria-valuenow", String(pct));
+
+      // Activate filled segments
+      const segs = blockMeter.children;
+      for (let i = 0; i < segs.length; i++) {
+        if (i < step) {
+          segs[i].classList.add("active");
+        } else {
+          segs[i].classList.remove("active");
+        }
+      }
     }
 
+    function showSection(index) {
+      sections.forEach((s, i) => s.style.display = i === index ? "block" : "none");
+      toggleButtons(index, totalCards);
+      updateProgress(index);
+    }
+
+    // Init
     showSection(currentIndex);
 
+    // Nav handlers (guard against under/overflow)
     document.getElementById("back-button").addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        showSection(currentIndex);
-      }
+      if (currentIndex > 0) showSection(--currentIndex);
     });
-
     document.getElementById("next-button").addEventListener("click", () => {
-      if (currentIndex < totalCards - 1) {
-        currentIndex++;
-        showSection(currentIndex);
-      }
+      if (currentIndex < totalCards - 1) showSection(++currentIndex);
     });
-
   </script>
 
   <script src="{% static 'skill_navigation.js' %}"></script>

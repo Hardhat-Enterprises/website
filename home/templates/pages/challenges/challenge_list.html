@@ -12,10 +12,10 @@
   <!-- Admin buttons for staff/superuser -->
   {% if show_admin_controls %}
   <div class="text-center mb-4">
-    <a href="#" class="btn btn-success btn-lg admin-add-challenge-btn me-2">
+    <a href="{% url 'add_challenge' %}" class="btn btn-success btn-lg admin-add-challenge-btn me-2">
       <i class="fas fa-plus"></i> Add New Challenge
     </a>
-    <a href="#" class="btn btn-outline-primary btn-lg">
+    <a href="{% url 'challenge_management' %}" class="btn btn-outline-primary btn-lg">
       <i class="fas fa-cogs"></i> Manage Challenges
     </a>
   </div>
