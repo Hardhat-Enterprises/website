@@ -39,6 +39,8 @@
 from django.utils.text import capfirst
 from django.utils.translation import gettext as _
 from django.conf import settings
+
+from .models import UserScore
 import re
 
 def _prettify_from_path(path: str) -> str:
@@ -46,6 +48,7 @@ def _prettify_from_path(path: str) -> str:
     slug = path.strip("/").replace("-", " ").replace("_", " ")
     slug = re.sub(r"\s+", " ", slug).strip()
     return capfirst(slug) if slug else "Home"
+
 
 def dynamic_page_title(request):
 
@@ -85,7 +88,24 @@ def dynamic_page_title(request):
     return {"dynamic_title": full_title}
 
 def recaptcha_site_key(request):
+
+    return {
+        'RECAPTCHA_SITE_KEY': settings.RECAPTCHA_SITE_KEY
+    }
+
+def user_scores(request):
+    """Add user scores to context for navigation display"""
+    if request.user.is_authenticated:
+        user_scores = UserScore.objects.filter(user=request.user).order_by('-score')
+        total_score = sum(score.score for score in user_scores)
+        return {
+            'user_scores': user_scores,
+            'user_total_score': total_score
+        }
+    return {}
+
     return {'RECAPTCHA_SITE_KEY': settings.RECAPTCHA_SITE_KEY}
+
 
 def microsoft_client_id(request):
     return {
@@ -93,3 +113,4 @@ def microsoft_client_id(request):
         'MICROSOFT_TENANT_ID': getattr(settings, 'MICROSOFT_TENANT_ID', 'deakin.edu.au'),
         'DEAKIN_DOMAIN': 'deakin.edu.au'
     }
+

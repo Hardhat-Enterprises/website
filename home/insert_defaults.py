@@ -13,7 +13,7 @@ def insert_default_projects():
     ]
 
     for title in default_titles:
-        Project.objects.get_or_create(title=title)
+        Project.objects.get_or_create(title=title, defaults={'title': title})
 
 def insert_default_courses():
     course_data = [

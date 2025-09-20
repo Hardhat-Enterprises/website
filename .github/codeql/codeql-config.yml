@@ -1,0 +1,10 @@
+name: "CodeQL config"
+
+paths-ignore:
+  - static/django_extensions
+  - static/drf-yasg
+  - static/rest_framework
+  - static/vendor
+  - static/tinymce
+  - venv
+  - node_modules

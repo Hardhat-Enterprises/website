@@ -1,0 +1,84 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body.light-mode .navbar {
+    background-color: #000 !important;
+  }
+
+  body.light-mode {
+    background-color: #f1b100de !important;
+  }
+
+  body.dark-mode {
+    background-color: #f1b100de !important;
+  }
+
+  .error-container {
+    background-color: #1e1e1e;
+    border: 2px solid #dc3545;
+    border-radius: 16px;
+    padding: 40px;
+    margin: 50px auto;
+    color: #fff;
+    text-align: center;
+    max-width: 600px;
+  }
+
+  .error-icon {
+    font-size: 64px;
+    color: #dc3545;
+    margin-bottom: 20px;
+  }
+
+  .error-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .error-message {
+    font-size: 16px;
+    color: #ccc;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .btn-back {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-back:hover {
+    background-color: #5a6268;
+    color: white;
+    text-decoration: none;
+  }
+
+  .top-offset {
+    margin-top: 130px;
+  }
+
+  footer, .footer, #footer, .site-footer {
+    display: none !important;
+  }
+</style>
+
+<div class="container top-offset">
+  <div class="error-container">
+    <div class="error-icon">⚠️</div>
+    <h2 class="error-title">Quiz Not Available</h2>
+    <p class="error-message">{{ error }}</p>
+    <a href="{% url 'challenge_list' %}" class="btn-back">
+      <i class="fas fa-arrow-left me-2"></i>Back to Categories
+    </a>
+  </div>
+</div>
+{% endblock %}

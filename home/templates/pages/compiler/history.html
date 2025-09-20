@@ -1,0 +1,210 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}Code Execution History - Python Compiler{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4><i class="fas fa-history"></i> My Code Execution History</h4>
+                    <div>
+                        <a href="{% url 'compiler_home' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Compiler
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if executions %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Language</th>
+                                    <th>Code Preview</th>
+                                    <th>Output</th>
+                                    <th>Status</th>
+                                    <th>Execution Time</th>
+                                    <th>Memory Used</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for execution in executions %}
+                                <tr>
+                                    <td>
+                                        <small>{{ execution.created_at|date:"M d, Y" }}</small><br>
+                                        <small class="text-muted">{{ execution.created_at|time:"H:i:s" }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">{{ execution.language|upper }}</span>
+                                    </td>
+                                    <td>
+                                        <code class="text-truncate" style="max-width: 200px;" title="{{ execution.code }}">
+                                            {{ execution.code|truncatechars:50 }}
+                                        </code>
+                                    </td>
+                                    <td>
+                                        {% if execution.output %}
+                                            <code class="text-success" style="max-width: 200px;" title="{{ execution.output }}">
+                                                {{ execution.output|truncatechars:50 }}
+                                            </code>
+                                        {% elif execution.error_message %}
+                                            <code class="text-danger" style="max-width: 200px;" title="{{ execution.error_message }}">
+                                                {{ execution.error_message|truncatechars:50 }}
+                                            </code>
+                                        {% else %}
+                                            <span class="text-muted">No output</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if execution.is_successful %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> Success
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times"></i> Error
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">{{ execution.execution_time }}s</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">{{ execution.memory_used }} bytes</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination would go here if needed -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-muted">Showing {{ executions|length }} recent executions</small>
+                        <div>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="exportHistory()">
+                                <i class="fas fa-download"></i> Export History
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-code fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Code Executions Yet</h5>
+                        <p class="text-muted">Start coding to see your execution history here!</p>
+                        <a href="{% url 'compiler_home' %}" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Start Coding
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Execution Details Modal -->
+<div class="modal fade" id="executionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-code"></i> Execution Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Code:</h6>
+                        <pre id="modalCode" class="bg-light p-3 rounded"></pre>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Output:</h6>
+                        <pre id="modalOutput" class="bg-light p-3 rounded"></pre>
+                    </div>
+                </div>
+                {% if execution.input_data %}
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Input Data:</h6>
+                        <pre id="modalInput" class="bg-light p-3 rounded"></pre>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showExecutionDetails(code, output, input, error) {
+    document.getElementById('modalCode').textContent = code;
+    document.getElementById('modalOutput').textContent = output || error || 'No output';
+    if (input) {
+        document.getElementById('modalInput').textContent = input;
+    }
+    
+    const modal = new bootstrap.Modal(document.getElementById('executionModal'));
+    modal.show();
+}
+
+function exportHistory() {
+    // Simple CSV export functionality
+    const executions = {{ executions|safe }};
+    let csv = 'Date,Language,Code,Output,Status,Execution Time,Memory Used\n';
+    
+    executions.forEach(execution => {
+        const date = new Date(execution.created_at).toLocaleString();
+        const code = execution.code.replace(/"/g, '""');
+        const output = (execution.output || execution.error_message || '').replace(/"/g, '""');
+        const status = execution.is_successful ? 'Success' : 'Error';
+        
+        csv += `"${date}","${execution.language}","${code}","${output}","${status}","${execution.execution_time}","${execution.memory_used}"\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'code_execution_history.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+// Add click handlers to table rows
+document.addEventListener('DOMContentLoaded', function() {
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', function() {
+            const cells = this.cells;
+            const code = cells[2].textContent.trim();
+            const output = cells[3].textContent.trim();
+            const status = cells[4].textContent.includes('Success');
+            
+            showExecutionDetails(code, output, '', '');
+        });
+    });
+});
+</script>
+
+<style>
+tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table-responsive {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+code {
+    font-size: 0.9em;
+}
+</style>
+{% endblock %}
+

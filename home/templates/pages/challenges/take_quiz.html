@@ -1,0 +1,329 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body.light-mode .navbar {
+    background-color: #000 !important;
+  }
+
+  body.light-mode {
+    background-color: #f1b100de !important;
+  }
+
+  body.dark-mode {
+    background-color: #f1b100de !important;
+  }
+
+  .quiz-container {
+    background-color: #1e1e1e;
+    border: 2px solid #fff;
+    border-radius: 16px;
+    padding: 30px;
+    margin: 20px 0;
+    color: #fff;
+  }
+
+  .dark-mode .quiz-container {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .question-header {
+    background-color: #34344a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+  }
+
+  .difficulty-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .difficulty-badge.easy {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .difficulty-badge.medium {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  .difficulty-badge.hard {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .points-badge {
+    background-color: #17a2b8;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 20px;
+  }
+
+  .timer {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .question-text {
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 20px 0;
+  }
+
+  .answer-options {
+    margin: 20px 0;
+  }
+
+  .answer-option {
+    background-color: #2d2d2d;
+    border: 2px solid #555;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .answer-option:hover {
+    background-color: #3d3d3d;
+    border-color: #ffa500;
+  }
+
+  .answer-option.selected {
+    background-color: #ffa500;
+    border-color: #ffa500;
+    color: #000;
+  }
+
+  .quiz-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+
+  .btn-exit {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+  .btn-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+
+  .progress-bar {
+    background-color: #34344a;
+    height: 8px;
+    border-radius: 4px;
+    margin: 20px 0;
+  }
+
+  .progress-fill {
+    background-color: #ffa500;
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .top-offset {
+    margin-top: 130px;
+  }
+
+  footer, .footer, #footer, .site-footer {
+    display: none !important;
+  }
+</style>
+
+<div class="container top-offset">
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="progress-fill" style="width: {% widthratio question_number total_questions 100 %}%"></div>
+  </div>
+  
+  <div class="text-center mb-3">
+    <span class="text-white">Question {{ question_number }} of {{ total_questions }}</span>
+  </div>
+
+  <div class="quiz-container">
+    <!-- Question Header -->
+    <div class="question-header">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <span class="difficulty-badge {% if challenge.difficulty == 'easy' %}easy{% elif challenge.difficulty == 'medium' %}medium{% else %}hard{% endif %}">
+            {{ challenge.get_difficulty_display }}
+          </span>
+          <span class="points-badge">{{ challenge.points }} points</span>
+        </div>
+        <div class="timer" id="timer">
+          Time Remaining: <span id="time-remaining">{{ time_limit }}s</span>
+        </div>
+      </div>
+      
+      <h3 class="text-white mb-0">{{ challenge.title }}</h3>
+      <p class="text-white-50 mb-0">{{ challenge.description }}</p>
+    </div>
+
+    <!-- Question -->
+    <div class="question-text">
+      <h5 class="text-info">Question:</h5>
+      <p class="text-white">{{ challenge.question }}</p>
+    </div>
+
+    <!-- Answer Options -->
+    <div class="answer-options">
+      {% for choice in challenge.choices %}
+        <div class="answer-option" data-value="{{ choice }}">
+          {{ choice }}
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Buttons -->
+    <div class="quiz-buttons">
+      <a href="{% url 'category_challenges' quiz.category %}" class="btn-exit">Exit</a>
+      <button class="btn-submit" id="submit-btn" disabled>Submit Answer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let timeRemaining = {{ time_limit }};
+let selectedAnswer = null;
+let timerInterval;
+
+// Timer functionality
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        document.getElementById('time-remaining').textContent = timeRemaining + 's';
+        
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            submitAnswer();
+        }
+    }, 1000);
+}
+
+// Answer selection
+document.querySelectorAll('.answer-option').forEach(option => {
+    option.addEventListener('click', function() {
+        // Remove previous selection
+        document.querySelectorAll('.answer-option').forEach(opt => opt.classList.remove('selected'));
+        
+        // Add selection to clicked option
+        this.classList.add('selected');
+        selectedAnswer = this.dataset.value;
+        
+        // Enable submit button
+        document.getElementById('submit-btn').disabled = false;
+    });
+});
+
+// Submit answer
+function submitAnswer() {
+    if (!selectedAnswer) {
+        alert('Please select an answer before submitting.');
+        return;
+    }
+    
+    clearInterval(timerInterval);
+    
+    // Disable submit button
+    document.getElementById('submit-btn').disabled = true;
+    
+    // Submit via AJAX
+    fetch('{% url "submit_quiz_answer" quiz.id %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'answer=' + encodeURIComponent(selectedAnswer)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Error: ' + data.error);
+            return;
+        }
+        
+        // Show result
+        showResult(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting your answer.');
+    });
+}
+
+function showResult(data) {
+    // Highlight correct answer
+    document.querySelectorAll('.answer-option').forEach(option => {
+        if (option.dataset.value === data.correct_answer) {
+            option.style.backgroundColor = '#28a745';
+            option.style.borderColor = '#28a745';
+        } else if (option.classList.contains('selected') && !data.correct) {
+            option.style.backgroundColor = '#dc3545';
+            option.style.borderColor = '#dc3545';
+        }
+    });
+    
+    // Show explanation if available
+    if (data.explanation) {
+        const explanationDiv = document.createElement('div');
+        explanationDiv.className = 'alert alert-info mt-3';
+        explanationDiv.innerHTML = '<strong>Explanation:</strong> ' + data.explanation;
+        document.querySelector('.answer-options').appendChild(explanationDiv);
+    }
+    
+    // Update submit button
+    const submitBtn = document.getElementById('submit-btn');
+    if (data.next_question) {
+        submitBtn.textContent = 'Next Question';
+        submitBtn.onclick = () => window.location.reload();
+    } else {
+        submitBtn.textContent = 'View Results';
+        submitBtn.onclick = () => window.location.href = '{% url "quiz_results" quiz.id %}';
+    }
+    submitBtn.disabled = false;
+    
+    // If quiz is completed, redirect to results after a short delay
+    if (data.quiz_completed) {
+        setTimeout(() => {
+            window.location.href = '{% url "quiz_results" quiz.id %}';
+        }, 2000);
+    }
+}
+
+// Start timer when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    startTimer();
+});
+
+// Submit button click handler
+document.getElementById('submit-btn').addEventListener('click', submitAnswer);
+</script>
+
+{% csrf_token %}
+{% endblock %}

@@ -1,0 +1,45 @@
+# CodeQL ignore file - exclude third-party libraries from security scanning
+
+# Django Extensions (third-party)
+static/django_extensions/
+
+# DRF-YASG Swagger UI (third-party)
+static/drf-yasg/
+
+# Django REST Framework (third-party)
+static/rest_framework/
+
+# TinyMCE Editor (third-party)
+static/tinymce/
+
+# General vendor directories
+static/vendor/
+vendor/
+
+# Node modules
+node_modules/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Minified files (usually third-party)
+**/*.min.js
+**/*.min.css
+**/*.bundle.js
+
+# Build directories
+build/
+dist/
+.next/
+
+# Database files
+*.sqlite3
+*.db
+
+# Cache directories
+__pycache__/
+.cache/
+*.pyc
+*.pyo
