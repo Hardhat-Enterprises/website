@@ -1,4 +1,5 @@
-{% load static %}
+
+  {% load static %}
   {% load i18n %}
   <header class="header-global">
 
@@ -28,20 +29,19 @@
             </div>
           </div>
 
-          <form class="mobile-search-bar" 
-                method="POST" 
-                action="{% url 'pages/search-results' %}">
-            {% csrf_token %}
-            <input class="form-control search-box-mobile"
-                   type="search"
-                   id="mobileSearchInput"
-                   name="q"
-                   placeholder="{% trans 'Search...' %}"
-                   aria-label="Search"
-                   autocomplete="off"
-                   style="background-color: white !important; color: #333 !important; border: 1px solid #ddd !important;">
-            <button class="search-btn-mobile" type="submit">
-              <i class="fas fa-search search-icon"></i>
+            <form class="mobile-search-bar"
+                  method="POST"
+                  action="{% url 'pages/search-results' %}">
+              {% csrf_token %}
+              <input class="form-control search-box-mobile"
+                    type="search"
+                    id="mobileSearchInput"
+                    name="q"
+                    placeholder="{% trans 'Search...' %}"
+                    aria-label="Search"
+                    autocomplete="off">
+              <button class="search-btn-mobile" type="submit">
+                <i class="fas fa-search search-icon"></i>
               </button>
             </form>
             <div class="mobile-result-box d-none"></div>
@@ -74,10 +74,12 @@
               </div>
             </li>
 
+            {% endif %}
+
+            {% if user.is_authenticated %}
             <li class="nav-item">
               <a href="{% url 'vault' %}" class="nav-link"> {% trans "Vault" %} </a>
             </li>
-
             {% endif %}
 
             {% if user.is_authenticated %}
@@ -89,10 +91,13 @@
               </a>
               <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
                 <ul class="list-style-none">
-                  <a class="menu-link" href="{% url 'user_management' %}">
+                  <a class="menu-link" href="#">
                     <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
                   </a>
-                  <a class="menu-link" href="{% url 'project_teams' %}">
+                  <a class="menu-link" href="#">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
+                  </a>
+                  <a class="menu-link" href="#">
                     <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
                   </a>
                   <a class="menu-link" href="{% url 'adminblogpage' %}">
@@ -273,8 +278,7 @@
                       name="q"
                       placeholder="{% trans 'Search...' %}"
                       aria-label="Search"
-                      autocomplete="off"
-                      style="background-color: white !important; color: #333 !important; border: 1px solid #ddd !important;">
+                      autocomplete="off">
                 <button class="search-btn" type="submit">
                   <div><i class="fas fa-search search-icon"></i></div>
                 </button>
@@ -287,6 +291,12 @@
         </div>
 
 
+       <a class="profile-container" href="{% url 'profile' %}">
+        <img
+          src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar_webp_70.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
+          class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture" loading="lazy">
+          <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+      </a>
         <div class="d-flex align-items-center justify-content-center">
           {% if request.user.is_authenticated %}
 
@@ -296,7 +306,7 @@
 
         <a class="profile-container" href="{% url 'profile' %}">
           <img
-            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
             class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
             <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
         </a>

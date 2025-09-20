@@ -106,8 +106,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
-    "django_user_agents",
 
+    'imagekit',
+    "django_user_agents",
     'rest_framework',  
     'drf_yasg', 
 
@@ -182,7 +183,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
                 'home.context_processors.recaptcha_site_key',
-
 
             ],
         },
@@ -489,4 +489,4 @@ SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
-
+SECURITY_EMAIL = "hardhatwebsite@gmail.com"
