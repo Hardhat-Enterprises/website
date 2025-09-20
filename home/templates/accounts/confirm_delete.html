@@ -1,8 +1,73 @@
-<h2>Are you sure you want to delete your account?</h2>
-<p>This action cannot be undone.</p>
+{% load static %}
 
-<form method="post">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-danger">Yes, delete my account</button>
-  <a href="{% url 'profile' %}" class="btn btn-secondary">Cancel</a>
-</form>
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100" style="background: #f0f2f5;">
+    <div class="card shadow-lg p-5" style="max-width: 600px; border-radius: 1.5rem; background: linear-gradient(145deg, #ffffffcc, #f1f5f9cc);">
+        <h2 class="mb-4 text-center text-primary fw-bold">Confirm Account Action</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'delete-account' %}">
+            {% csrf_token %}
+
+            <div class="mb-4">
+                <label for="password" class="form-label fw-semibold">Password:</label>
+                <input type="password" id="password" name="password" required class="form-control shadow-sm" placeholder="Your password" style="border-radius: 0.75rem; border: 1px solid #ced4da;">
+            </div>
+
+            <p class="fw-bold mb-3">Select an action:</p>
+
+            <div class="form-check mb-3 p-3 rounded hover-shadow" style="background-color: #f8f9fa; transition: all 0.3s;">
+                <input class="form-check-input" type="radio" id="deactivate" name="choice" value="deactivate" required>
+                <label class="form-check-label fw-medium" for="deactivate">
+                     Deactivate account temporarily
+                </label>
+            </div>
+
+            <div class="form-check mb-3 p-3 rounded hover-shadow" style="background-color: #fff3f3; border: 1px solid #ffcccc; transition: all 0.3s;">
+                <input class="form-check-input" type="radio" id="delete_now" name="choice" value="delete_now">
+                <label class="form-check-label fw-medium text-danger" for="delete_now">
+                     Delete account immediately
+                </label>
+            </div>
+
+            <div class="form-check mb-4 p-3 rounded hover-shadow" style="background-color: #fff8e6; border: 1px solid #ffe5b4; transition: all 0.3s;">
+                <input class="form-check-input" type="radio" id="delete_30days" name="choice" value="delete_30days">
+                <label class="form-check-label fw-medium text-warning" for="delete_30days">
+                     Schedule account deletion in 30 days
+                </label>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'profile' %}" class="btn btn-secondary px-5 shadow-sm" style="border-radius: 1rem;">Cancel</a>
+                <button type="submit" class="btn btn-danger px-5 shadow-sm" style="border-radius: 1rem;">Confirm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+/* Hover effect for radio option cards */
+.hover-shadow:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    background-color: #e2e6ea !important;
+    cursor: pointer;
+    transform: translateY(-2px);
+    transition: all 0.3s;
+}
+
+/* Smooth focus effect on inputs */
+input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+    outline: none;
+}
+</style>
+{% endblock %}
