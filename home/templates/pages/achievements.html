@@ -9,9 +9,10 @@
                     <!-- Card -->
                     <div class="card shadow-sm p-4 rounded-4" style="background:#fff;">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="fw-bold m-0">Cyber Progress</h3>
+                            <h3 class="fw-bold m-0">Cyber Achievements</h3>
                             <div class="small text-secondary">
                                 <span class="me-3"><span class="legend-dot dot-earned"></span> Earned</span>
+                                <span class="me-3"><span class="legend-dot dot-started"></span> Started</span>
                                 <span><span class="legend-dot dot-locked"></span> Locked</span>
                             </div>
                         </div>
@@ -19,21 +20,45 @@
                         <!-- Progress -->
                         <div class="mb-3 d-flex justify-content-between">
                             <span class="fw-semibold">Overall Progress</span>
-                            <span id="pctText" class="fw-semibold">0%</span>
+                            <span class="fw-semibold">
+                {{ percent }}%
+                {% if total_challenges %}
+                  <span class="text-secondary fw-normal ms-2">
+                    ({{ total_completed }}/{{ total_challenges }})
+                  </span> {% endif %}
+                            </span>
                         </div>
                         <div class="progress mb-4" style="height:12px; border-radius:50px;">
-                            <div id="pctBar" class="progress-bar bg-dark" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%; border-radius:50px;">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ percent }}" style="width: {{ percent }}%; border-radius:50px;">
                             </div>
                         </div>
 
                         <!-- Pills -->
-                        <div id="pillGrid" class="d-flex flex-wrap gap-3"></div>
+                        <div class="d-flex flex-wrap gap-3">
+                            {% for c in categories %} {% if c.status == "locked" %}
+                            <div class="pill locked">
+                                <span class="pill-text">{{ c.name }}</span>
+                                <span class="pill-state">Locked</span>
+                            </div>
+                            {% else %}
+                            <a href="{% url 'category_challenges' c.raw %}" class="text-decoration-none">
+                                <div class="pill {{ c.status }}">
+                                    <span class="pill-text">{{ c.name }}</span>
+                                    <span class="pill-state">
+                        {% if c.status == "earned" %}Earned{% else %}Started{% endif %}
+                      </span>
+                                </div>
+                            </a>
+                            {% endif %} {% empty %}
+                            <div class="text-muted">No challenges found yet.</div>
+                            {% endfor %}
+                        </div>
                     </div>
 
                     <!-- Back button -->
                     <div class="text-center mt-5">
-                        <a href="{% url 'challenge_list' %}" class="btn btn-dark">
-              ⬅️ Back to Challenges
+                        <a href="{% url 'malware_viz_main' %}" class="btn btn-dark">
+              ⬅️ Back to Cyber Challenges
             </a>
                     </div>
 
@@ -53,11 +78,15 @@
     }
     
     .dot-earned {
-        background: #2d3748;
+        background: #38a169;
+    }
+    
+    .dot-started {
+        background: #cbd5e0;
     }
     
     .dot-locked {
-        background: #cfd6de;
+        background: #2d3748;
     }
     
     .pill {
@@ -69,25 +98,61 @@
         min-width: 160px;
         font-weight: 600;
         font-size: 0.9rem;
+        transition: transform 0.15s ease;
     }
     
-    .pill .pill-text {
+    .pill-text {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     
-    .pill .pill-state {
+    .pill-state {
         margin-left: auto;
         font-size: 12px;
         font-weight: 700;
         padding: 4px 8px;
         border-radius: 20px;
     }
+    /* Locked = dark background, white text (not clickable) */
     
-    .pill.earned {
+    .pill.locked {
         background: #2d3748;
         color: #fff;
+        cursor: default;
+    }
+    
+    .pill.locked .pill-text {
+        color: #fff;
+    }
+    
+    .pill.locked .pill-state {
+        background: rgba(255, 255, 255, .2);
+        color: #fff;
+    }
+    /* Started = white background, grey text (clickable) */
+    
+    .pill.started {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        cursor: pointer;
+    }
+    
+    .pill.started .pill-text {
+        color: #64748b;
+    }
+    
+    .pill.started .pill-state {
+        background: #eef2f6;
+        color: #64748b;
+    }
+    /* Earned = green background, white text (clickable) */
+    
+    .pill.earned {
+        background: #38a169;
+        color: #fff;
+        cursor: pointer;
     }
     
     .pill.earned .pill-text {
@@ -98,73 +163,12 @@
         background: rgba(255, 255, 255, .2);
         color: #fff;
     }
+    /* Hover effect only for clickable ones */
     
-    .pill.locked {
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        color: #64748b;
-    }
-    
-    .pill.locked .pill-text {
-        color: #64748b;
-    }
-    
-    .pill.locked .pill-state {
-        background: #eef2f6;
-        color: #64748b;
+    a.text-decoration-none:hover .pill.started,
+    a.text-decoration-none:hover .pill.earned {
+        transform: translateY(-2px);
     }
 </style>
-
-<script>
-    const categories = [{
-        name: "Binary_Exploitation",
-        completed: false
-    }, {
-        name: "Crypto",
-        completed: false
-    }, {
-        name: "Databases",
-        completed: false
-    }, {
-        name: "Javascript",
-        completed: false
-    }, {
-        name: "Linux",
-        completed: false
-    }, {
-        name: "Network",
-        completed: false
-    }, {
-        name: "Python",
-        completed: false
-    }, {
-        name: "Reverse_Engineering",
-        completed: false
-    }, {
-        name: "Web",
-        completed: false
-    }, {
-        name: "Web_Security",
-        completed: false
-    }, ];
-
-    // Render pills
-    const grid = document.getElementById('pillGrid');
-    categories.forEach(c => {
-        const pill = document.createElement('div');
-        pill.className = `pill ${c.completed ? 'earned' : 'locked'}`;
-        pill.innerHTML = `
-      <span class="pill-text">${c.name}</span>
-      <span class="pill-state">${c.completed ? 'Earned' : 'Locked'}</span>
-    `;
-        grid.appendChild(pill);
-    });
-
-    // Progress
-    const completedCount = categories.filter(c => c.completed).length;
-    const pct = Math.round((completedCount / categories.length) * 100);
-    document.getElementById('pctText').innerText = pct + '%';
-    document.getElementById('pctBar').style.width = pct + '%';
-</script>
 
 {% endblock content %}

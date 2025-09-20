@@ -129,6 +129,10 @@ from .models import APIModel
 from .serializers import APIModelSerializer
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.viewsets import ViewSet
+from django.db.models import Count
+from django.urls import reverse
+from .models import CyberChallenge, UserChallenge
+
 
 
 #For LeaderBoard
@@ -505,6 +509,184 @@ def smishing_detection(request):
 def smishing_skills(request):
     return render(request, 'pages/smishing_detection/smishing_skills.html')
 
+def achievements(request):
+    """
+    Visible to everyone.
+    - Anonymous: all pills 'locked', progress 0%.
+    - Authenticated: pill state & progress reflect that user's challenge activity.
+      State rules per category:
+        earned  = user has any completed challenge in that category
+        started = user has any started challenge in that category (but none completed)
+        locked  = otherwise
+    Progress bar = (# earned pills) / (total categories) * 100
+    """
+
+    # 1) List every category that has at least one challenge
+    base = (
+        CyberChallenge.objects
+        .values("category")
+        .annotate(total=Count("id"))
+        .order_by("category")
+    )
+
+    # 2) Build maps of started/completed counts for the current user (or empty if anon)
+    started_map = {}
+    completed_map = {}
+
+    if request.user.is_authenticated:
+        started_qs = (
+            UserChallenge.objects
+            .filter(user=request.user, started=True)
+            .values("challenge__category")
+            .annotate(n=Count("id"))
+        )
+        completed_qs = (
+            UserChallenge.objects
+            .filter(user=request.user, completed=True)
+            .values("challenge__category")
+            .annotate(n=Count("id"))
+        )
+        started_map   = {r["challenge__category"]: r["n"] for r in started_qs}
+        completed_map = {r["challenge__category"]: r["n"] for r in completed_qs}
+
+    # 3) Compose the pill list
+    categories = []
+    for row in base:
+        raw   = row["category"]               # e.g., "Web_Security"
+        total = row["total"]
+        name  = raw.replace("_", " ")
+
+        # Default: locked for anonymous
+        if not request.user.is_authenticated:
+            state = "locked"
+        else:
+            done   = completed_map.get(raw, 0)
+            start  = started_map.get(raw, 0)
+            state  = "earned" if done > 0 else ("started" if start > 0 else "locked")
+
+        # Enable link only if started/earned
+        url = reverse("category_challenges", args=[raw]) if state in ("started", "earned") else None
+
+        categories.append({
+            "raw": raw,
+            "name": name,
+            "total": total,
+            "state": state,
+            "url": url,
+        })
+
+    total_categories = len(categories)
+    earned_categories = sum(1 for c in categories if c["state"] == "earned")
+    percent = int((earned_categories / total_categories) * 100) if total_categories else 0
+
+    return render(
+        request,
+        "pages/achievements.html",
+        {
+            "categories": categories,
+            "percent": percent,
+            "total_categories": total_categories,
+            "earned_categories": earned_categories,
+        },
+    )
+
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q  # keep using Count, etc.
+from .models import CyberChallenge, UserChallenge
+
+def category_challenges(request, category):
+    challenges = CyberChallenge.objects.filter(category=category).order_by("id")
+
+    if request.user.is_authenticated:
+        for ch in challenges:
+            uc, _ = UserChallenge.objects.get_or_create(user=request.user, challenge=ch)
+            if not uc.started:
+                uc.started = True
+                uc.save()
+
+    return render(request, "pages/challenges/category_challenges.html", {
+        "category": category,
+        "challenges": challenges
+    })
+
+# views.py
+from django.shortcuts import render
+from django.db.models import Count, Q
+# import your models
+from .models import CyberChallenge, UserChallenge
+
+def achievements(request):
+    """
+    Build per-category pill status without needing a 'started' field.
+    - Locked: user has no attempts in the category
+    - Started: user has at least 1 attempt in the category (not necessarily completed)
+    - Earned: user has at least 1 completed challenge in the category
+    """
+    # All categories + how many total challenges in each
+    categories_qs = (
+        CyberChallenge.objects
+        .values("category")
+        .annotate(total=Count("id"))
+        .order_by("category")
+    )
+
+    total_challenges = sum(row["total"] for row in categories_qs)
+
+    # Defaults for anonymous users
+    started_cats = set()
+    earned_cats = set()
+    total_completed = 0
+
+    if request.user.is_authenticated:
+        # Aggregate attempts for this user by category
+        user_rows = (
+            UserChallenge.objects
+            .filter(user=request.user)
+            .values("challenge__category")
+            .annotate(
+                num_attempts=Count("id"),
+                num_completed=Count("id", filter=Q(completed=True)),
+            )
+        )
+
+        # Derive sets for quick membership checks
+        started_cats = {r["challenge__category"] for r in user_rows if r["num_attempts"] > 0}
+        earned_cats  = {r["challenge__category"] for r in user_rows if r["num_completed"] > 0}
+
+        # Overall completed count across all categories
+        total_completed = sum(r["num_completed"] for r in user_rows)
+
+    # Build pill objects for template
+    categories = []
+    for row in categories_qs:
+        raw = row["category"]                 # e.g., "Web_Security"
+        pretty = raw.replace("_", " ")
+        if raw in earned_cats:
+            status = "earned"
+        elif raw in started_cats:
+            status = "started"
+        else:
+            status = "locked"
+
+        categories.append({
+            "raw": raw,        # slug used for links
+            "name": pretty,    # label
+            "total": row["total"],
+            "status": status,  # locked | started | earned
+        })
+
+    percent = round((total_completed / total_challenges) * 100) if total_challenges else 0
+
+    return render(request, "pages/achievements.html", {
+        "percent": percent,
+        "categories": categories,
+        "total_completed": total_completed,
+        "total_challenges": total_challenges,
+    })
+
+
+
+
  
 def smishingdetection_join_us(request):
  
@@ -523,9 +705,6 @@ def smishingdetection_join_us(request):
 # Upskill Pages
 def upskill_repository(request):
     return render(request), 'pages/upskilling/repository.html'
-    
-def achievements(request):
-    return render(request, "pages/achievements.html")
  
 def upskill_roadmap(request):
     return render(request), 'pages/upskilling/roadmap.html'

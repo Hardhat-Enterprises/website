@@ -58,7 +58,8 @@ urlpatterns = [
     path('ptgui_viz/tools/arpaname/', views.arpaname_view, name='tool_arpaname'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
     path('smishing_detection/skills/', views.smishing_skills, name='smishing_skills'),
-    path('achievements/', views.achievements, name='achievements'),
+    path('achievements', views.achievements, name='achievements'),
+    
 
 
      #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
