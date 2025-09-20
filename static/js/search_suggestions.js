@@ -45,28 +45,25 @@ document.addEventListener("DOMContentLoaded", function () {
       // Clear previous content
       resultBox.innerHTML = '';
       
-      // Create elements safely to prevent XSS
+      // Create elements safely to prevent XSS - using DOMPurify-style approach
       filtered.forEach(item => {
-        // Sanitize label to prevent HTML injection
-        const sanitizedLabel = String(item.label).replace(/[<>&"']/g, function(match) {
-          const escapeMap = {
-            '<': '&lt;',
-            '>': '&gt;',
-            '&': '&amp;',
-            '"': '&quot;',
-            "'": '&#x27;'
-          };
-          return escapeMap[match];
-        });
-        
+        // Create element first
         const suggestionDiv = document.createElement('div');
         suggestionDiv.className = 'suggestion-item';
-        suggestionDiv.setAttribute('data-label', sanitizedLabel);
-        if (item.url) {
+        
+        // Validate and sanitize the label - only allow alphanumeric and safe characters
+        const safeLabel = String(item.label || '').replace(/[^\w\s\-\(\)]/g, '');
+        
+        // Use createTextNode for ultimate safety - this cannot be interpreted as HTML
+        const textNode = document.createTextNode(safeLabel);
+        suggestionDiv.appendChild(textNode);
+        
+        // Set data attributes safely
+        suggestionDiv.setAttribute('data-label', safeLabel);
+        if (item.url && typeof item.url === 'string' && item.url.match(/^\/[a-zA-Z0-9\-_\/]*$/)) {
           suggestionDiv.setAttribute('data-url', item.url);
         }
-        // Use textContent to prevent HTML injection
-        suggestionDiv.textContent = sanitizedLabel;
+        
         resultBox.appendChild(suggestionDiv);
       });
     }

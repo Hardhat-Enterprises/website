@@ -1,0 +1,69 @@
+name: "CodeQL Configuration"
+
+# Disable default queries and enable only security-focused ones
+disable-default-queries: false
+
+# Query filters to reduce false positives from third-party libraries
+query-filters:
+  # Exclude third-party library files from certain checks
+  - exclude:
+      id: js/unsafe-html-construction
+    from: 
+      - "static/django_extensions/**"
+      - "static/drf-yasg/**"
+      - "static/rest_framework/**"
+      - "static/vendor/**"
+      - "static/tinymce/**"
+
+  - exclude:
+      id: js/incomplete-sanitization
+    from: 
+      - "static/django_extensions/**"
+      - "static/drf-yasg/**"
+      - "static/rest_framework/**"
+      - "static/vendor/**"
+
+  - exclude:
+      id: js/overly-large-range
+    from: 
+      - "static/django_extensions/**"
+      - "static/drf-yasg/**"
+      - "static/rest_framework/**"
+      - "static/vendor/**"
+
+  - exclude:
+      id: js/incomplete-string-escaping-or-encoding
+    from: 
+      - "static/django_extensions/**"
+      - "static/drf-yasg/**"
+      - "static/rest_framework/**"
+      - "static/vendor/**"
+
+# Paths to exclude entirely from analysis
+paths-ignore:
+  - "static/django_extensions/**"
+  - "static/drf-yasg/**" 
+  - "static/rest_framework/**"
+  - "static/vendor/**"
+  - "static/tinymce/**"
+  - "venv/**"
+  - "node_modules/**"
+  - "**/*.min.js"
+  - "**/*.bundle.js"
+
+# Paths to include (our own code)
+paths:
+  - "home/**"
+  - "core/**"
+  - "utils/**"
+  - "static/js/**"
+  - "static/css/**"
+  - "custom_static/**"
+
+# Additional queries for enhanced security
+queries:
+  - name: security-extended
+    uses: security-extended
+    
+  - name: security-and-quality  
+    uses: security-and-quality
