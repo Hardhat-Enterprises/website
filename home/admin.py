@@ -4,8 +4,10 @@ from .models import AdminNotification
 from .models import VaultDocument
 
 from django.utils.html import format_html
-from .models import Tip , TipRotationState
+
 from .models import Resource
+
+from .models import Tip , TipRotationState
 from .models import (
     User,
     Student,
@@ -283,5 +285,6 @@ class ResourceAdmin(admin.ModelAdmin):
     list_filter = ("category", "is_published")
     search_fields = ("title", "summary")
     prepopulated_fields = {"slug": ("title",)}
+
 
 

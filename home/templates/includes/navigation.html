@@ -1,4 +1,3 @@
-
   {% load static %}
   {% load i18n %}
   <header class="header-global">
@@ -240,6 +239,9 @@
               </div>
             </li>
 
+            <li class="nav-item">
+              <a href="{% url 'resources' %}" class="nav-link"> {% trans "Resources" %} </a>
+            </li>
 
             <li class="nav-item dropdown">
               <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
@@ -290,11 +292,23 @@
         <div class="d-flex align-items-center justify-content-center">
           {% if request.user.is_authenticated %}
 
-          <!-- Show Logout Button if User is Authenticated -->
-          <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
-              class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
-
-
+          <!-- User Profile Dropdown -->
+          <div class="dropdown">
+            <a href="#" class="btn btn-outline-gray-100 me-md-3 d-flex align-items-center dropdown-toggle"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="fas fa-user-circle me-2"></span>
+              <span class="header-profile-name">{{ request.user.username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'profile' %}">
+                <span class="fas fa-user me-2"></span>{% trans 'Profile' %}
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">
+                <span class="fas fa-sign-out-alt me-2"></span>{% trans 'Logout' %}
+              </a></li>
+            </ul>
+          </div>
 
           {% else %}
           <div class="sign-up-button-container">
@@ -507,6 +521,15 @@
   <style>
     .header-profile-name { color: #1a1a1a !important; }
     body.dark-mode .header-profile-name { color: #fff !important; }
+
+    /* Profile dropdown styling in dark mode */
+    body.dark-mode .dropdown-menu .dropdown-item {
+      color: #FFCD11 !important;
+    }
+    body.dark-mode .dropdown-menu .dropdown-item:hover {
+      color: #FFCD11 !important;
+      background-color: rgba(255, 205, 17, 0.1) !important;
+    }
 
     /* Search box styling - black text in light mode, white text in dark mode */
     #searchInput,
