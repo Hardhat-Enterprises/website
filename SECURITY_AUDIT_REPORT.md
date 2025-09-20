@@ -49,7 +49,8 @@
 - **Files**: `.github/codeql/codeql-config.yml`, `.codeqlignore`, `.github/workflows/codeql.yml`
 - **Issues Fixed**:
   - ✅ Fixed "Cannot deserialize value of type java.lang.String from Array value" error
-  - ✅ Corrected queries syntax from array format to string format
+  - ✅ Fixed "(config.originalUserInput.queries || []).map is not a function" error
+  - ✅ Corrected queries syntax to proper YAML list format with 'uses:' syntax
   - ✅ Removed unsupported query-filters that caused deserialization errors
   - ✅ Simplified configuration to use only supported CodeQL options
 - **Purpose**: Exclude third-party library files from security scanning
