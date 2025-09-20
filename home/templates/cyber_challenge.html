@@ -1,8 +1,4 @@
-{% extends 'layouts/base.html' %}
-{% load static %}
-
-{% block content %}
-{% include 'includes/pre-loader.html' %}
+{% extends 'layouts/base.html' %} {% load static %} {% block content %} {% include 'includes/pre-loader.html' %}
 
 <div class="cyber-challenge-container" style="background-color: #ffc107;">
     <!-- Hero Section -->
@@ -12,7 +8,7 @@
                 <div class="col-md-8 mx-auto text-center">
                     <h1 class="challenge-title">Cyber Security Challenge</h1>
                     <p class="challenge-subtitle">Test your knowledge and earn your security badge!</p>
-                    
+
                     <!-- Button to add or manage challenges, only visible to admin/staff users -->
                     {% if show_admin_controls %}
                     <div class="text-center mb-4">
@@ -100,14 +96,14 @@
         padding: 4rem 0;
         min-height: 100vh;
     }
-
+    
     .challenge-hero {
         background: linear-gradient(135deg, #ffcd11 0%, #ff8c00 100%);
         padding: 4rem 0;
         margin-bottom: 3rem;
         color: white;
     }
-
+    
     .challenge-title {
         font-size: 2.5rem;
         font-weight: 700;
@@ -115,46 +111,46 @@
         text-transform: uppercase;
         letter-spacing: 2px;
     }
-
+    
     .challenge-subtitle {
         font-size: 1.2rem;
         opacity: 0.9;
     }
-
+    
     .quiz-container {
         background: white;
         border-radius: 10px;
         padding: 2rem;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-
+    
     .quiz-progress {
         margin-bottom: 2rem;
     }
-
+    
     .progress {
         height: 10px;
         background: rgba(0, 0, 0, 0.1);
         border-radius: 5px;
         overflow: hidden;
     }
-
+    
     .progress-bar {
         background: linear-gradient(45deg, #ffcd11, #ff8c00);
         transition: width 0.3s ease;
     }
-
+    
     .progress-text {
         text-align: center;
         margin-top: 0.5rem;
         color: #666;
     }
-
+    
     .score-container {
         text-align: center;
         margin-bottom: 2rem;
     }
-
+    
     .score-badge {
         display: inline-flex;
         align-items: center;
@@ -165,26 +161,26 @@
         font-size: 1.2rem;
         box-shadow: 0 0 10px rgba(255, 205, 17, 0.3);
     }
-
+    
     .score-badge i {
         margin-right: 0.5rem;
     }
-
+    
     .question-container {
         margin-bottom: 2rem;
     }
-
+    
     .question-text {
         font-size: 1.5rem;
         color: #333;
         margin-bottom: 1.5rem;
     }
-
+    
     .options-container {
         display: grid;
         gap: 1rem;
     }
-
+    
     .option-btn {
         display: block;
         width: 100%;
@@ -196,22 +192,22 @@
         border-radius: 5px;
         transition: all 0.3s ease;
     }
-
+    
     .option-btn:hover {
         background: rgba(255, 205, 17, 0.1);
         border-color: #ffcd11;
     }
-
+    
     .option-btn.correct {
         background: rgba(255, 205, 17, 0.2);
         border-color: #ffcd11;
     }
-
+    
     .option-btn.incorrect {
         background: rgba(255, 0, 0, 0.1);
         border-color: #ff0000;
     }
-
+    
     .feedback-message {
         text-align: center;
         margin: 1rem 0;
@@ -219,19 +215,19 @@
         border-radius: 5px;
         display: none;
     }
-
+    
     .feedback-message.correct {
         background: rgba(255, 205, 17, 0.2);
         color: #28a745;
         display: block;
     }
-
+    
     .feedback-message.incorrect {
         background: rgba(255, 0, 0, 0.1);
         color: #dc3545;
         display: block;
     }
-
+    
     .next-btn {
         display: block;
         width: 100%;
@@ -244,39 +240,39 @@
         cursor: pointer;
         transition: all 0.3s ease;
     }
-
+    
     .next-btn:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(255, 205, 17, 0.4);
     }
-
+    
     .next-btn:disabled {
         opacity: 0.7;
         cursor: not-allowed;
     }
-
+    
     .leaderboard-container {
         background: white;
         border-radius: 10px;
         padding: 2rem;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-
+    
     .leaderboard-title {
         text-align: center;
         margin-bottom: 2rem;
         color: #333;
     }
-
+    
     .table th {
         background-color: rgba(255, 205, 17, 0.1);
         border-bottom: 2px solid #ffcd11;
     }
-
+    
     .table td {
         border-bottom: 1px solid rgba(255, 205, 17, 0.2);
     }
-
+    
     .table tr:hover {
         background-color: rgba(255, 205, 17, 0.05);
     }
@@ -284,58 +280,52 @@
 
 <script>
     // Quiz questions
-    const questions = [
-        {
-            question: "What is the primary purpose of a firewall?",
-            options: [
-                "To prevent unauthorized access to a network",
-                "To speed up internet connection",
-                "To store backup data",
-                "To manage email servers"
-            ],
-            correct: 0
-        },
-        {
-            question: "Which of the following is NOT a type of malware?",
-            options: [
-                "Virus",
-                "Firewall",
-                "Trojan",
-                "Ransomware"
-            ],
-            correct: 1
-        },
-        {
-            question: "What does HTTPS stand for?",
-            options: [
-                "Hyper Text Transfer Protocol Secure",
-                "High Tech Transfer Protocol System",
-                "Hyper Transfer Protocol Security",
-                "High Tech Transfer Protocol Secure"
-            ],
-            correct: 0
-        },
-        {
-            question: "What is two-factor authentication?",
-            options: [
-                "Using two different passwords",
-                "A security process requiring two different forms of identification",
-                "Having two email accounts",
-                "Using two different browsers"
-            ],
-            correct: 1
-        },
-        {
-            question: "What is phishing?",
-            options: [
-                "A type of fishing website",
-                "A method of catching fish",
-                "A cyber attack that uses disguised email as a weapon",
-                "A type of computer hardware"
-            ],
-            correct: 2
-        }
-    ];
+    const questions = [{
+        question: "What is the primary purpose of a firewall?",
+        options: [
+            "To prevent unauthorized access to a network",
+            "To speed up internet connection",
+            "To store backup data",
+            "To manage email servers"
+        ],
+        correct: 0
+    }, {
+        question: "Which of the following is NOT a type of malware?",
+        options: [
+            "Virus",
+            "Firewall",
+            "Trojan",
+            "Ransomware"
+        ],
+        correct: 1
+    }, {
+        question: "What does HTTPS stand for?",
+        options: [
+            "Hyper Text Transfer Protocol Secure",
+            "High Tech Transfer Protocol System",
+            "Hyper Transfer Protocol Security",
+            "High Tech Transfer Protocol Secure"
+        ],
+        correct: 0
+    }, {
+        question: "What is two-factor authentication?",
+        options: [
+            "Using two different passwords",
+            "A security process requiring two different forms of identification",
+            "Having two email accounts",
+            "Using two different browsers"
+        ],
+        correct: 1
+    }, {
+        question: "What is phishing?",
+        options: [
+            "A type of fishing website",
+            "A method of catching fish",
+            "A cyber attack that uses disguised email as a weapon",
+            "A type of computer hardware"
+        ],
+        correct: 2
+    }];
 
     let currentQuestion = 0;
     let score = 0;
@@ -348,10 +338,10 @@
         const question = questions[currentQuestion];
         const questionText = document.getElementById('question-text');
         const optionsContainer = document.getElementById('options-container');
-        
+
         questionText.textContent = question.question;
         optionsContainer.innerHTML = '';
-        
+
         question.options.forEach((option, index) => {
             const button = document.createElement('button');
             button.className = 'option-btn';
@@ -368,9 +358,9 @@
         const question = questions[currentQuestion];
         const options = document.querySelectorAll('.option-btn');
         const feedbackMessage = document.getElementById('feedback-message');
-        
+
         options.forEach(option => option.disabled = true);
-        
+
         if (selectedIndex === question.correct) {
             options[selectedIndex].classList.add('correct');
             score += 20;
@@ -416,19 +406,19 @@
     function updateLeaderboard() {
         const leaderboardBody = document.getElementById('leaderboard-body');
         const leaderboard = JSON.parse(localStorage.getItem('cyberQuizLeaderboard')) || [];
-        
+
         const newScore = {
             name: 'Player ' + Math.floor(Math.random() * 1000),
             score: score,
             date: new Date().toLocaleDateString()
         };
-        
+
         leaderboard.push(newScore);
         leaderboard.sort((a, b) => b.score - a.score);
-        
+
         const topScores = leaderboard.slice(0, 10);
         localStorage.setItem('cyberQuizLeaderboard', JSON.stringify(topScores));
-        
+
         leaderboardBody.innerHTML = '';
         topScores.forEach((entry, index) => {
             const row = document.createElement('tr');
@@ -449,4 +439,4 @@
         updateLeaderboard();
     });
 </script>
-{% endblock %} 
+{% endblock %}
