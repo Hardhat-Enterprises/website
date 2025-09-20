@@ -143,7 +143,13 @@ from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
 
-from home.models import TeamMember  
+from home.models import TeamMember 
+
+#For search form
+import difflib
+from django.utils.dateparse import parse_date
+import re
+
 
 def get_login_redirect_url(user):
     """
@@ -682,13 +688,57 @@ def SearchSuggestions(request):
     return JsonResponse([], safe=False)
 
 #Search-Results page
+
+# --- normalize function ---
+def normalize(word):
+    return re.sub(r'[^a-z0-9]', '', word.lower()) if word else ''  
+
+# --- get_suggestions function ---
+def get_suggestions(query):
+    if not query:
+        return []
+
+    normalized_query = normalize(query)
+
+    User = get_user_model()
+
+    # Build dictionary from database
+    raw_dictionary = list(Project.objects.values_list("title", flat=True)) + \
+        list(Course.objects.values_list("title", flat=True)) + \
+        list(Article.objects.values_list("title", flat=True)) + \
+        list(Skill.objects.values_list("name", flat=True)) + \
+        list(User.objects.values_list("first_name", flat=True)) + \
+        list(User.objects.values_list("last_name", flat=True)) + \
+        list(BlogPost.objects.values_list("title", flat=True))
+
+    # Create mapping {normalized → original}
+    dictionary_map = {normalize(w): w for w in raw_dictionary if w}
+    dictionary = list(dictionary_map.keys())
+
+    # Find close matches
+    matches = difflib.get_close_matches(normalized_query, dictionary, n=5, cutoff=0.5)
+
+    # Map back to original words
+    return [dictionary_map[m] for m in matches if m != normalized_query]
+
+# --- Main SearchResults function ---
 def SearchResults(request):
     User = get_user_model()
-    query = request.POST.get('q', '').strip()  # Get search query from request
+    query = request.GET.get('q') or request.POST.get('q', '')  # GET support and strip
+    query = query.strip()  
+
+    sort = request.GET.get('sort', '')          # newest / oldest  
+    start_date = request.GET.get('start_date')  # from filter form  
+    end_date = request.GET.get('end_date')      
+    content_type = request.GET.getlist('type')  # multiple checkboxes possible  
+
+    # function is defined before we call it
+    suggestion = get_suggestions(query)  
     
     if not query:
         return render(request, 'pages/search-results.html', {
             'searched': '',
+            'suggestion': '',
             'webpages': [],
             'projects': [],
             'courses': [],
@@ -699,38 +749,72 @@ def SearchResults(request):
             'contacts': []
     })
 
-    # Projects logic
-    if query.lower() == "projects":
-        project_results = Project.objects.all()
-    else:
-        project_results = Project.objects.filter(title__icontains=query)
+    # --- Projects ---
+    project_results = Project.objects.filter(title__icontains=query)
 
-    # Courses logic
-    if query.lower() == "courses":
-        course_results = Course.objects.all()
-    else:
-        course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
+    # --- Courses ---
+    course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
 
-    # Users logic
-    if query.lower() == "user":
-        users = User.objects.filter(id=request.user.id)
-    else:
-        users = User.objects.filter(
-            first_name__icontains=query
-        ) | User.objects.filter(
-            last_name__icontains=query
-        ) | User.objects.filter(
-            email__icontains=query
-        )
+    # --- Articles ---
+    article_results = Article.objects.filter(title__icontains=query)
+    if start_date:  
+        article_results = article_results.filter(date__gte=parse_date(start_date))  
+    if end_date:  
+        article_results = article_results.filter(date__lte=parse_date(end_date))  
 
+    # --- Users ---
+    users = User.objects.filter(
+        first_name__icontains=query
+    ) | User.objects.filter(
+        last_name__icontains=query
+    ) | User.objects.filter(
+        email__icontains=query
+    )
+
+    # --- Apply sorting ---
+    if sort == "newest":  
+        article_results = article_results.order_by('-date')  
+    elif sort == "oldest":  
+        article_results = article_results.order_by('date')  
+
+    # --- Type filter ---
+    if content_type:  
+        if "projects" not in content_type:
+            project_results = Project.objects.none()  
+        if "articles" not in content_type:
+            article_results = Article.objects.none()  
+        if "users" not in content_type:
+            users = User.objects.none()  
+        if "courses" not in content_type:
+            course_results = Course.objects.none()  
+        if "skills" not in content_type:
+            skills = Skill.objects.none()  
+        if "students" not in content_type:
+            students = Student.objects.none()  
+        if "contacts" not in content_type:
+            contacts = Contact.objects.none()  
+        if "webpages" not in content_type:
+            webpages = Webpage.objects.none()  
+    else:
+        # show everything
+        students = Student.objects.filter(user__first_name__icontains=query) | \
+           Student.objects.filter(user__last_name__icontains=query) | \
+           Student.objects.filter(user__email__icontains=query)  
+        contacts = Contact.objects.filter(name__icontains=query)  
+        webpages = Webpage.objects.filter(title__icontains=query)
+
+    # --- Compile results ---
     results = {
         'searched': query,
+        'suggestion': suggestion,
         'webpages': Webpage.objects.filter(title__icontains=query),
         'projects': project_results,
         'users': users,
         'courses': course_results,
         'skills': Skill.objects.filter(name__icontains=query),
         'articles': Article.objects.filter(title__icontains=query),
+        'students': students,  
+        'contacts': contacts,
     }
     return render(request, 'pages/search-results.html', results)
    
