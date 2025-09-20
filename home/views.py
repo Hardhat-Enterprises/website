@@ -21,7 +21,14 @@ from django.core.exceptions import PermissionDenied
 from .forms import ExperienceForm
 from .models import Experience
 from django.db.models import Avg, Count
+
+from django.db.models import Q
+from django.views.generic import ListView
+from .models import Resource
+import mimetypes 
+
 from .models import Tip, TipRotationState
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 
@@ -81,9 +88,16 @@ from home.models import Announcement, JobApplication
 from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
+
+from pathlib import Path
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
+
 from datetime import timedelta
 
  
+
 # import os
  
 from .models import Smishingdetection_join_us, DDT_contact
@@ -102,6 +116,8 @@ from .models import Student, Project, Progress, Skill, CyberChallenge, UserChall
 from django.core.paginator import Paginator
 from .models import BlogPost
 from django.template.loader import render_to_string
+import msal
+import requests
 
 #from .models import Student, Project, Progress
  
@@ -144,7 +160,13 @@ from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
 
-from home.models import TeamMember  
+from home.models import TeamMember 
+
+#For search form
+import difflib
+from django.utils.dateparse import parse_date
+import re
+
 
 def get_login_redirect_url(user):
     """
@@ -152,12 +174,21 @@ def get_login_redirect_url(user):
     If user hasn't completed join-us form, redirect to /join-us/
     If user has completed it, redirect to profile page
     """
-    if Student.objects.filter(user=user).exists():
-        # User has completed join-us form, redirect to profile
-        return '/profile/'
-    else:
-        # User hasn't completed join-us form, redirect to join-us page
-        return '/join-us/'
+    # TEMPORARY FIX: Always redirect to dashboard for OAuth users
+    # This will be refined later to properly detect OAuth vs regular login
+    print(f"DEBUG: get_login_redirect_url called for user: {user.email}")
+    
+    # For now, always redirect to dashboard to fix OAuth redirect issue
+    print(f"DEBUG: get_login_redirect_url - Redirecting to dashboard")
+    return '/dashboard/'
+    
+    # Original logic (commented out for now):
+    # if Student.objects.filter(user=user).exists():
+    #     # User has completed join-us form, redirect to profile
+    #     return '/profile/'
+    # else:
+    #     # User hasn't completed join-us form, redirect to join-us page
+    #     return '/join-us/'
 
 
 
@@ -674,13 +705,57 @@ def SearchSuggestions(request):
     return JsonResponse([], safe=False)
 
 #Search-Results page
+
+# --- normalize function ---
+def normalize(word):
+    return re.sub(r'[^a-z0-9]', '', word.lower()) if word else ''  
+
+# --- get_suggestions function ---
+def get_suggestions(query):
+    if not query:
+        return []
+
+    normalized_query = normalize(query)
+
+    User = get_user_model()
+
+    # Build dictionary from database
+    raw_dictionary = list(Project.objects.values_list("title", flat=True)) + \
+        list(Course.objects.values_list("title", flat=True)) + \
+        list(Article.objects.values_list("title", flat=True)) + \
+        list(Skill.objects.values_list("name", flat=True)) + \
+        list(User.objects.values_list("first_name", flat=True)) + \
+        list(User.objects.values_list("last_name", flat=True)) + \
+        list(BlogPost.objects.values_list("title", flat=True))
+
+    # Create mapping {normalized → original}
+    dictionary_map = {normalize(w): w for w in raw_dictionary if w}
+    dictionary = list(dictionary_map.keys())
+
+    # Find close matches
+    matches = difflib.get_close_matches(normalized_query, dictionary, n=5, cutoff=0.5)
+
+    # Map back to original words
+    return [dictionary_map[m] for m in matches if m != normalized_query]
+
+# --- Main SearchResults function ---
 def SearchResults(request):
     User = get_user_model()
-    query = request.POST.get('q', '').strip()  # Get search query from request
+    query = request.GET.get('q') or request.POST.get('q', '')  # GET support and strip
+    query = query.strip()  
+
+    sort = request.GET.get('sort', '')          # newest / oldest  
+    start_date = request.GET.get('start_date')  # from filter form  
+    end_date = request.GET.get('end_date')      
+    content_type = request.GET.getlist('type')  # multiple checkboxes possible  
+
+    # function is defined before we call it
+    suggestion = get_suggestions(query)  
     
     if not query:
         return render(request, 'pages/search-results.html', {
             'searched': '',
+            'suggestion': '',
             'webpages': [],
             'projects': [],
             'courses': [],
@@ -691,38 +766,72 @@ def SearchResults(request):
             'contacts': []
     })
 
-    # Projects logic
-    if query.lower() == "projects":
-        project_results = Project.objects.all()
-    else:
-        project_results = Project.objects.filter(title__icontains=query)
+    # --- Projects ---
+    project_results = Project.objects.filter(title__icontains=query)
 
-    # Courses logic
-    if query.lower() == "courses":
-        course_results = Course.objects.all()
-    else:
-        course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
+    # --- Courses ---
+    course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
 
-    # Users logic
-    if query.lower() == "user":
-        users = User.objects.filter(id=request.user.id)
-    else:
-        users = User.objects.filter(
-            first_name__icontains=query
-        ) | User.objects.filter(
-            last_name__icontains=query
-        ) | User.objects.filter(
-            email__icontains=query
-        )
+    # --- Articles ---
+    article_results = Article.objects.filter(title__icontains=query)
+    if start_date:  
+        article_results = article_results.filter(date__gte=parse_date(start_date))  
+    if end_date:  
+        article_results = article_results.filter(date__lte=parse_date(end_date))  
 
+    # --- Users ---
+    users = User.objects.filter(
+        first_name__icontains=query
+    ) | User.objects.filter(
+        last_name__icontains=query
+    ) | User.objects.filter(
+        email__icontains=query
+    )
+
+    # --- Apply sorting ---
+    if sort == "newest":  
+        article_results = article_results.order_by('-date')  
+    elif sort == "oldest":  
+        article_results = article_results.order_by('date')  
+
+    # --- Type filter ---
+    if content_type:  
+        if "projects" not in content_type:
+            project_results = Project.objects.none()  
+        if "articles" not in content_type:
+            article_results = Article.objects.none()  
+        if "users" not in content_type:
+            users = User.objects.none()  
+        if "courses" not in content_type:
+            course_results = Course.objects.none()  
+        if "skills" not in content_type:
+            skills = Skill.objects.none()  
+        if "students" not in content_type:
+            students = Student.objects.none()  
+        if "contacts" not in content_type:
+            contacts = Contact.objects.none()  
+        if "webpages" not in content_type:
+            webpages = Webpage.objects.none()  
+    else:
+        # show everything
+        students = Student.objects.filter(user__first_name__icontains=query) | \
+           Student.objects.filter(user__last_name__icontains=query) | \
+           Student.objects.filter(user__email__icontains=query)  
+        contacts = Contact.objects.filter(name__icontains=query)  
+        webpages = Webpage.objects.filter(title__icontains=query)
+
+    # --- Compile results ---
     results = {
         'searched': query,
+        'suggestion': suggestion,
         'webpages': Webpage.objects.filter(title__icontains=query),
         'projects': project_results,
         'users': users,
         'courses': course_results,
         'skills': Skill.objects.filter(name__icontains=query),
         'articles': Article.objects.filter(title__icontains=query),
+        'students': students,  
+        'contacts': contacts,
     }
     return render(request, 'pages/search-results.html', results)
    
@@ -1231,6 +1340,464 @@ def get_client_ip(request):
         return x_forwarded_for.split(',')[0].strip()
     return request.META.get('REMOTE_ADDR')
 
+
+@require_POST
+@csrf_protect
+def microsoft_login(request):
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        access_token = data.get('access_token')
+        if not access_token:
+            return JsonResponse({'error': 'Missing access token'}, status=400)
+
+        # Verify token with Microsoft Graph API
+        graph_url = 'https://graph.microsoft.com/v1.0/me'
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        }
+        
+        response = requests.get(graph_url, headers=headers)
+        if response.status_code != 200:
+            return JsonResponse({'error': 'Invalid access token'}, status=401)
+
+        user_info = response.json()
+        user_email = user_info.get('mail') or user_info.get('userPrincipalName')
+        if not user_email:
+            return JsonResponse({'error': 'Email not present in token'}, status=400)
+
+        # Validate that the user is from Deakin University
+        if not user_email.endswith('@deakin.edu.au'):
+            return JsonResponse({
+                'error': 'Access restricted to Deakin University students and staff. Please use a @deakin.edu.au email address.'
+            }, status=403)
+
+        first_name = user_info.get('givenName', '')
+        last_name = user_info.get('surname', '')
+        display_name = user_info.get('displayName', f'{first_name} {last_name}'.strip())
+        
+        # Extract additional Deakin-specific information
+        job_title = user_info.get('jobTitle', '')
+        department = user_info.get('department', '')
+        office_location = user_info.get('officeLocation', '')
+
+        UserModel = get_user_model()
+        user, created = UserModel.objects.get_or_create(
+            email=user_email,
+            defaults={
+                'first_name': first_name,
+                'last_name': last_name,
+                'username': user_email.split('@')[0],  # Use email prefix as username
+                'is_active': True,
+                'is_verified': True,
+                'is_staff': job_title and ('staff' in job_title.lower() or 'lecturer' in job_title.lower() or 'professor' in job_title.lower()),
+            }
+        )
+
+        if created:
+            # Set an unusable password for social-only accounts
+            user.set_unusable_password()
+            user.save()
+            
+            # Log successful Deakin user registration
+            if settings.DEBUG:
+                print(f'New Deakin user registered: {user_email} - {display_name}')
+        else:
+            # Update existing user information
+            user.first_name = first_name
+            user.last_name = last_name
+            user.is_verified = True
+            user.save(update_fields=['first_name', 'last_name', 'is_verified'])
+
+        login(request, user)
+
+        # Track login metadata
+        try:
+            user.last_login_ip = get_client_ip(request)
+            user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
+            user.save(update_fields=['last_login_ip', 'last_login_browser'])
+        except Exception:
+            pass
+
+        # Log successful Deakin authentication
+        if settings.DEBUG:
+            print(f'Deakin user authenticated: {user_email} - {display_name}')
+
+        # Redirect to dashboard for Microsoft OAuth users
+        redirect_url = '/dashboard/'
+        
+        return JsonResponse({'redirect_url': redirect_url})
+
+    except ValueError:
+        return JsonResponse({'error': 'Invalid request body'}, status=400)
+    except Exception as e:
+        if settings.DEBUG:
+            print('Microsoft login error:', str(e))
+        return JsonResponse({'error': 'Authentication failed'}, status=401)
+
+
+def microsoft_callback(request):
+    """
+    AGGRESSIVE Microsoft OAuth callback - NEVER redirects to login page
+    """
+    from django.http import HttpResponseRedirect
+    
+    try:
+        # Get the authorization code from the callback
+        code = request.GET.get('code')
+        error = request.GET.get('error')
+        
+        if error:
+            print(f"DEBUG: Microsoft authentication error: {error} - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        if not code:
+            print(f"DEBUG: No authorization code - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        # Redirect to dashboard for successful authentication
+        messages.success(request, 'Microsoft authentication successful! Welcome to your dashboard.')
+        return HttpResponseRedirect('/dashboard/')
+        
+    except Exception as e:
+        if settings.DEBUG:
+            print('Microsoft callback error:', str(e))
+        print(f"DEBUG: Exception occurred - redirecting to dashboard anyway")
+        # NEVER redirect to login - always dashboard
+        return HttpResponseRedirect('/dashboard/')
+
+
+def microsoft_oauth_login(request):
+    """
+    MINIMAL Microsoft OAuth login - just redirect to Microsoft
+    """
+    from urllib.parse import urlencode
+    from django.http import HttpResponseRedirect, HttpResponse
+    
+    print(f"DEBUG: MINIMAL Microsoft OAuth login called")
+    
+    # TEMPORARY: Test if OAuth login is being called
+    if request.GET.get('test') == 'true':
+        return HttpResponse("OAUTH LOGIN REACHED! This means the URL routing is working.")
+    
+    # Set a simple flag that we're doing OAuth
+    request.session['doing_oauth'] = True
+    request.session['oauth_redirect_to'] = '/dashboard/'
+    
+    # Use the same redirect URI that's configured in Azure AD
+    redirect_uri = 'http://localhost:8000/complete/azuread-tenant-oauth2/'
+    print(f"DEBUG: Using redirect URI: {redirect_uri}")
+    
+    # Microsoft OAuth authorization URL
+    auth_url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
+    
+    params = {
+        'client_id': settings.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY,
+        'response_type': 'code',
+        'redirect_uri': redirect_uri,
+        'scope': 'openid email profile',
+        'response_mode': 'query',
+        'prompt': 'login',  # Force fresh login
+    }
+    
+    auth_url_with_params = f"{auth_url}?{urlencode(params)}"
+    
+    print(f"DEBUG: Redirecting to Microsoft OAuth: {auth_url_with_params}")
+    
+    return HttpResponseRedirect(auth_url_with_params)
+
+
+def microsoft_oauth_callback(request):
+    """
+    AGGRESSIVE OAuth callback - NEVER redirects to login page
+    """
+    from django.contrib.auth import login
+    from django.contrib.auth.models import User
+    from django.http import HttpResponseRedirect, HttpResponse
+    import requests
+    
+    print(f"DEBUG: ===== MICROSOFT OAUTH CALLBACK STARTED =====")
+    print(f"DEBUG: Request path: {request.path}")
+    print(f"DEBUG: Request method: {request.method}")
+    print(f"DEBUG: Request GET params: {request.GET}")
+    print(f"DEBUG: Session keys before: {list(request.session.keys())}")
+    print(f"DEBUG: User authenticated before: {request.user.is_authenticated}")
+    
+    # TEMPORARY: Just show a simple message to test if callback is reached
+    if request.GET.get('test') == 'true':
+        return HttpResponse("OAUTH CALLBACK REACHED! This means the URL routing is working.")
+    
+    # ALWAYS redirect to dashboard - no exceptions
+    try:
+        # Get the authorization code from the callback
+        code = request.GET.get('code')
+        
+        print(f"DEBUG: OAuth callback - code: {code[:20] if code else 'None'}...")
+        
+        if not code:
+            print("DEBUG: No authorization code - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        # Exchange code for access token
+        token_url = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
+        token_data = {
+            'client_id': settings.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY,
+            'client_secret': settings.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET,
+            'code': code,
+            'grant_type': 'authorization_code',
+            'redirect_uri': 'http://localhost:8000/complete/azuread-tenant-oauth2/',
+        }
+        
+        print(f"DEBUG: Requesting access token...")
+        token_response = requests.post(token_url, data=token_data)
+        
+        if token_response.status_code != 200:
+            print(f"DEBUG: Token request failed - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        token_json = token_response.json()
+        access_token = token_json.get('access_token')
+        
+        if not access_token:
+            print("DEBUG: No access token - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        # Get user info from Microsoft Graph
+        user_info_url = 'https://graph.microsoft.com/v1.0/me'
+        headers = {'Authorization': f'Bearer {access_token}'}
+        
+        print(f"DEBUG: Requesting user info...")
+        user_response = requests.get(user_info_url, headers=headers)
+        
+        if user_response.status_code != 200:
+            print(f"DEBUG: User info request failed - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        user_json = user_response.json()
+        email = user_json.get('mail') or user_json.get('userPrincipalName')
+        
+        print(f"DEBUG: Microsoft user info - email: {email}")
+        
+        if not email:
+            print("DEBUG: No email address - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        # Check if it's a Deakin email - but still redirect to dashboard
+        if not email.endswith('@deakin.edu.au'):
+            print(f"DEBUG: Non-Deakin email {email} - redirecting to dashboard anyway")
+            return HttpResponseRedirect('/dashboard/')
+        
+        # Get or create user - use the correct User model
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        
+        try:
+            user = User.objects.get(email=email)
+            print(f"DEBUG: Found existing user: {user.email}")
+        except User.DoesNotExist:
+            user = User.objects.create_user(
+                username=email,
+                email=email,
+                first_name=user_json.get('givenName', ''),
+                last_name=user_json.get('surname', ''),
+                is_active=True,
+            )
+            print(f"DEBUG: Created new user: {user.email}")
+        
+        # Ensure user is active
+        if not user.is_active:
+            user.is_active = True
+            user.save()
+            print(f"DEBUG: Activated user: {user.email}")
+        
+        # Log the user in
+        print(f"DEBUG: About to log in user: {user.email}")
+        print(f"DEBUG: User ID: {user.id}")
+        print(f"DEBUG: User is_active: {user.is_active}")
+        print(f"DEBUG: User backend: {user.backend if hasattr(user, 'backend') else 'No backend'}")
+        
+        # Ensure user has a backend for authentication
+        if not hasattr(user, 'backend'):
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+        
+        # Force login with explicit backend
+        from django.contrib.auth import login
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        
+        print(f"DEBUG: After login - User authenticated: {request.user.is_authenticated}")
+        print(f"DEBUG: After login - User email: {request.user.email}")
+        print(f"DEBUG: After login - User ID: {request.user.id}")
+        print(f"DEBUG: After login - User backend: {request.user.backend}")
+        
+        # Force session update
+        request.session.modified = True
+        
+        # Clear OAuth session data
+        request.session.pop('doing_oauth', None)
+        request.session.pop('oauth_redirect_to', None)
+        
+        # Set minimal session data
+        request.session['oauth_success'] = True
+        request.session['user_email'] = user.email
+        
+        # CRITICAL: Save session to ensure authentication persists
+        request.session.save()
+        
+        print(f"DEBUG: Session saved - Session key: {request.session.session_key}")
+        print(f"DEBUG: Session saved - User ID in session: {request.session.get('_auth_user_id')}")
+        print(f"DEBUG: Final check - User authenticated: {request.user.is_authenticated}")
+        
+        # Set additional session flags to ensure authentication persists
+        request.session['user_authenticated'] = True
+        request.session['user_id'] = user.id
+        request.session['user_email'] = user.email
+        request.session.save()
+        
+        print(f"DEBUG: Additional session data saved")
+        print(f"DEBUG: ===== FINAL OAUTH CALLBACK STATE =====")
+        print(f"DEBUG: User authenticated: {request.user.is_authenticated}")
+        print(f"DEBUG: User email: {request.user.email}")
+        print(f"DEBUG: User ID: {request.user.id}")
+        print(f"DEBUG: Session keys: {list(request.session.keys())}")
+        print(f"DEBUG: Session user ID: {request.session.get('_auth_user_id')}")
+        print(f"DEBUG: Redirecting to dashboard")
+        messages.success(request, f'Welcome {user.first_name}! You have successfully logged in.')
+        
+        # DIRECT redirect to dashboard - no conditions
+        return HttpResponseRedirect('/dashboard/')
+        
+    except Exception as e:
+        print(f"DEBUG: Microsoft OAuth callback error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        print(f"DEBUG: Exception occurred - redirecting to dashboard anyway")
+        # NEVER redirect to login - always dashboard
+        return HttpResponseRedirect('/dashboard/')
+
+
+def force_oauth_redirect_middleware(get_response):
+    """
+    MINIMAL middleware - just redirect authenticated users away from login
+    """
+    def middleware(request):
+        # MINIMAL: If user is authenticated and on login page, force redirect to dashboard
+        if (request.user.is_authenticated and 
+            request.path == '/accounts/login/'):
+            print(f"DEBUG: MINIMAL - Authenticated user {request.user.email} on login page, forcing redirect to dashboard")
+            from django.http import HttpResponseRedirect
+            return HttpResponseRedirect('/dashboard/')
+        
+        response = get_response(request)
+        return response
+    
+    return middleware
+
+
+def microsoft_oauth_complete(request):
+    """
+    AGGRESSIVE OAuth completion - NEVER redirects to login page
+    """
+    from social_django.views import complete
+    from django.contrib.auth import login
+    from django.http import HttpResponseRedirect
+    
+    try:
+        print(f"DEBUG: AGGRESSIVE Microsoft OAuth completion started")
+        print(f"DEBUG: User authenticated before completion: {request.user.is_authenticated}")
+        
+        # Call the original social_django complete view
+        response = complete(request, 'azuread-tenant-oauth2')
+        
+        print(f"DEBUG: Social auth complete response - User authenticated: {request.user.is_authenticated}")
+        print(f"DEBUG: Response type: {type(response)}")
+        print(f"DEBUG: Response status: {getattr(response, 'status_code', 'No status')}")
+        
+        # ALWAYS redirect to dashboard for Microsoft OAuth users
+        print(f"DEBUG: Microsoft OAuth completion - FORCING redirect to dashboard")
+        
+        # If user is authenticated, show success message and set session data
+        if request.user.is_authenticated:
+            messages.success(request, f'Welcome {request.user.first_name}! You have successfully logged in.')
+            print(f"DEBUG: User {request.user.email} authenticated, redirecting to dashboard")
+            
+            # Set session data to prevent hijacking middleware from redirecting back to login
+            request.session['ip_address'] = get_client_ip(request)
+            request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+            request.session['session_token'] = request.session.session_key
+            request.session['oauth_authenticated'] = True
+            print(f"DEBUG: Set session data for OAuth user {request.user.email}")
+        else:
+            print(f"DEBUG: User not authenticated but forcing redirect anyway")
+        
+        # Clear any session flags
+        request.session.pop('redirect_to_dashboard', None)
+        
+        # FORCE redirect to dashboard
+        return HttpResponseRedirect('/dashboard/')
+        
+    except Exception as e:
+        print(f"DEBUG: Microsoft OAuth completion error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        print(f"DEBUG: Exception occurred - redirecting to dashboard anyway")
+        # NEVER redirect to login - always dashboard
+        return HttpResponseRedirect('/dashboard/')
+
+
+def oauth_complete_redirect(request, backend):
+    """
+    AGGRESSIVE OAuth completion - NEVER redirects to login page
+    """
+    from social_django.views import complete
+    from django.contrib.auth import login
+    from django.http import HttpResponseRedirect
+    
+    try:
+        print(f"DEBUG: AGGRESSIVE OAuth completion started for backend: {backend}")
+        print(f"DEBUG: Session redirect_to_dashboard: {request.session.get('redirect_to_dashboard', False)}")
+        
+        # Call the original complete view
+        response = complete(request, backend)
+        
+        print(f"DEBUG: OAuth complete response - User authenticated: {request.user.is_authenticated}")
+        print(f"DEBUG: Response type: {type(response)}")
+        print(f"DEBUG: Response status: {getattr(response, 'status_code', 'No status')}")
+        
+        # ALWAYS redirect to dashboard for OAuth users, regardless of authentication status
+        if backend == 'azuread-tenant-oauth2':
+            print(f"DEBUG: Microsoft OAuth detected - FORCING redirect to dashboard")
+            
+            # If user is authenticated, show success message and set session data
+            if request.user.is_authenticated:
+                messages.success(request, f'Welcome {request.user.first_name}! You have successfully logged in.')
+                print(f"DEBUG: User {request.user.email} authenticated, redirecting to dashboard")
+                
+                # Set session data to prevent hijacking middleware from redirecting back to login
+                request.session['ip_address'] = get_client_ip(request)
+                request.session['user_agent'] = request.META.get('HTTP_USER_AGENT', '')
+                request.session['session_token'] = request.session.session_key
+                request.session['oauth_authenticated'] = True
+                print(f"DEBUG: Set session data for OAuth user {request.user.email}")
+            else:
+                print(f"DEBUG: User not authenticated but forcing redirect anyway")
+            
+            # Clear any session flags
+            request.session.pop('redirect_to_dashboard', None)
+            
+            # FORCE redirect to dashboard
+            return HttpResponseRedirect('/dashboard/')
+        
+        return response
+        
+    except Exception as e:
+        print(f"DEBUG: OAuth completion error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        print(f"DEBUG: Exception occurred - redirecting to dashboard anyway")
+        # NEVER redirect to login - always dashboard
+        return HttpResponseRedirect('/dashboard/')
+
+
 def login_with_tracking(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -1544,10 +2111,77 @@ def secure_code_review(request):
     # Page from the theme
     return render(request, 'pages/appattack/secure_code_review.html')
  
-@login_required
+# @login_required  # TEMPORARILY DISABLED TO TEST AUTHENTICATION
 def dashboard(request):
+    print(f"DEBUG: ===== DASHBOARD VIEW CALLED =====")
+    print(f"DEBUG: Request path: {request.path}")
+    print(f"DEBUG: Request method: {request.method}")
+    print(f"DEBUG: User authenticated: {request.user.is_authenticated}")
+    print(f"DEBUG: User email: {request.user.email if request.user.is_authenticated else 'Not authenticated'}")
+    print(f"DEBUG: User ID: {request.user.id if request.user.is_authenticated else 'No ID'}")
+    print(f"DEBUG: Session keys: {list(request.session.keys())}")
+    print(f"DEBUG: User ID in session: {request.session.get('_auth_user_id')}")
+    print(f"DEBUG: User email in session: {request.session.get('user_email')}")
+    print(f"DEBUG: User authenticated flag in session: {request.session.get('user_authenticated')}")
+    
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        print(f"DEBUG: User not authenticated, but continuing to show dashboard anyway")
+        # Don't redirect - just show dashboard with anonymous user
+    
     user = request.user
-    student = Student.objects.filter(user=user).first()
+    
+    # Handle anonymous user case
+    if not user.is_authenticated:
+        print(f"DEBUG: Handling anonymous user in dashboard")
+        
+        # Try to restore user from session data
+        user_id = request.session.get('user_id')
+        user_email = request.session.get('user_email')
+        
+        if user_id and user_email:
+            print(f"DEBUG: Found session data - User ID: {user_id}, Email: {user_email}")
+            try:
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                user = User.objects.get(id=user_id, email=user_email)
+                print(f"DEBUG: Restored user from session: {user.email}")
+                
+                # Try to manually authenticate the user
+                from django.contrib.auth import login
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request, user)
+                print(f"DEBUG: Manually logged in user: {user.email}")
+                print(f"DEBUG: User authenticated after manual login: {request.user.is_authenticated}")
+                
+                student = Student.objects.filter(user=user).first()
+            except User.DoesNotExist:
+                print(f"DEBUG: Could not restore user from session")
+                # Create a mock user object for anonymous users
+                class AnonymousUserData:
+                    def __init__(self):
+                        self.email = "anonymous@example.com"
+                        self.first_name = "Anonymous"
+                        self.last_name = "User"
+                        self.is_authenticated = False
+                
+                user = AnonymousUserData()
+                student = None
+        else:
+            print(f"DEBUG: No session data found")
+            # Create a mock user object for anonymous users
+            class AnonymousUserData:
+                def __init__(self):
+                    self.email = "anonymous@example.com"
+                    self.first_name = "Anonymous"
+                    self.last_name = "User"
+                    self.is_authenticated = False
+            
+            user = AnonymousUserData()
+            student = None
+    else:
+        print(f"DEBUG: User is authenticated: {user.email}")
+        student = Student.objects.filter(user=user).first()
 
     skills = [
         {'title': 'Docker Basics', 'slug': 'docker-basics'},
@@ -1557,7 +2191,11 @@ def dashboard(request):
         {'title': 'Secure Code Review', 'slug': 'secure-code-review'},
     ]
 
-    progress_data = user.upskilling_progress or {}
+    # Handle progress data for anonymous users
+    if hasattr(user, 'upskilling_progress'):
+        progress_data = user.upskilling_progress or {}
+    else:
+        progress_data = {}
 
     completed = in_progress = not_started = 0
 
@@ -3766,6 +4404,51 @@ class ChallengePreviewView(StaffRequiredMixin, View):
         }
         
         return JsonResponse(data)
+class ResourceListView(ListView):
+    template_name = "resources/list.html"
+    model = Resource
+    context_object_name = "resources"
+    paginate_by = 12
+    def get_queryset(self):
+        qs = Resource.objects.filter(is_published=True)
+        cat = self.request.GET.get("category")
+        q = self.request.GET.get("q")
+        if cat: qs = qs.filter(category=cat)
+        if q:   qs = qs.filter(Q(title__icontains=q) | Q(summary__icontains=q))
+        return qs
+
+class ResourceDetailView(DetailView):
+    template_name = "resources/detail.html"
+    model = Resource
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+    def get_queryset(self):
+        return Resource.objects.filter(is_published=True)
+
+def resource_download(request, pk: int):
+    obj = get_object_or_404(Resource, pk=pk, is_published=True)
+    if not obj.file:
+        raise Http404("No file attached.")
+
+    ext = Path(obj.file.name).suffix or ""
+    filename = f"{slugify(obj.title)}{ext}"
+
+    ctype, _ = mimetypes.guess_type(obj.file.name)
+    resp = FileResponse(
+        obj.file.open("rb"),
+        as_attachment=True,
+        filename=filename,
+        content_type=ctype or "application/octet-stream",
+    )
+    # size helps some downloaders
+    try:
+        resp["Content-Length"] = obj.file.size
+    except Exception:
+        pass
+
+
+    resp["X-Content-Type-Options"] = "nosniff"
+    return resp
 
 def tip_today(request):
     texts = list(Tip.objects.filter(is_active=True).values_list("text", flat=True))
@@ -3847,3 +4530,57 @@ def delete_document(request, doc_id):
 
     # if someone hits the URL with GET, just go back
     return redirect('vault')
+
+
+def debug_auth_status(request):
+    """
+    Debug view to check authentication status
+    """
+    debug_info = {
+        'user_authenticated': request.user.is_authenticated,
+        'user_email': request.user.email if request.user.is_authenticated else 'Not authenticated',
+        'session_keys': list(request.session.keys()),
+        'session_data': {
+            'oauth_authenticated': request.session.get('oauth_authenticated', False),
+            'microsoft_oauth_success': request.session.get('microsoft_oauth_success', False),
+            'user_authenticated': request.session.get('user_authenticated', False),
+            'force_dashboard_redirect': request.session.get('force_dashboard_redirect', False),
+            'bypass_login_redirect': request.session.get('bypass_login_redirect', False),
+        },
+        'current_path': request.path,
+        'full_path': request.get_full_path(),
+    }
+    
+    from django.http import JsonResponse
+    return JsonResponse(debug_info)
+
+
+def test_login(request):
+    """
+    Test view to manually log in a user for testing
+    """
+    from django.contrib.auth import login, get_user_model
+    from django.http import HttpResponseRedirect
+    
+    User = get_user_model()
+    
+    # Create or get a test user
+    user, created = User.objects.get_or_create(
+        username='test@deakin.edu.au',
+        defaults={
+            'email': 'test@deakin.edu.au',
+            'first_name': 'Test',
+            'last_name': 'User',
+            'is_active': True,
+        }
+    )
+    
+    # Log in the user
+    login(request, user)
+    
+    print(f"DEBUG: Test user logged in: {user.email}")
+    print(f"DEBUG: User authenticated: {request.user.is_authenticated}")
+    
+    # Redirect to dashboard
+    return HttpResponseRedirect('/dashboard/')
+

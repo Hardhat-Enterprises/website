@@ -6,7 +6,11 @@ from .models import AdminNotification
 from .models import VaultDocument
 
 from django.utils.html import format_html
+
+from .models import Resource
+
 from .models import Tip , TipRotationState
+
 from .models import (
     User,
     Student,
@@ -274,6 +278,7 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
 
 
 
+
 # Python Compiler Admin Classes
 @admin.register(CodeExecution)
 class CodeExecutionAdmin(admin.ModelAdmin):
@@ -339,6 +344,15 @@ class CompilerSettingsAdmin(admin.ModelAdmin):
         # Prevent deletion of settings
         return False
 
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ("title", "category", "is_published", "published_at")
+    list_filter = ("category", "is_published")
+    search_fields = ("title", "summary")
+    prepopulated_fields = {"slug": ("title",)}
+
+
+
 @admin.register(Tip)
 class TipAdmin(admin.ModelAdmin):
     list_display = ("text", "is_active", "created_at")
@@ -352,6 +366,7 @@ class TipRotationStateAdmin(admin.ModelAdmin):
 class VaultDocumentAdmin(admin.ModelAdmin):
     list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
     search_fields = ('original_name', 'description')
+
 
 
 
