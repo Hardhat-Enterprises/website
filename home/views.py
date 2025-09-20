@@ -69,7 +69,7 @@ import os
 import json
 import bleach
 import requests
-import time
+# import time  # Imported locally where needed to avoid unused import warnings
 # from utils.charts import generate_color_palette
 # from .models import Student, Project, Contact
 from .forms import ClientRegistrationForm, RegistrationForm, UserLoginForm, ClientLoginForm, UserPasswordResetForm, UserPasswordChangeForm, UserSetPasswordForm, StudentForm, sd_JoinUsForm, projects_JoinUsForm, NewWebURL, Upskilling_JoinProjectForm
@@ -1416,8 +1416,11 @@ def microsoft_login(request):
             user.last_login_ip = get_client_ip(request)
             user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
             user.save(update_fields=['last_login_ip', 'last_login_browser'])
-        except Exception:
-            pass
+        except Exception as e:
+            # Log error but don't prevent login - user metadata update is not critical
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Failed to update user login metadata: {e}")
 
         # Log successful Deakin authentication
         if settings.DEBUG:
@@ -3077,8 +3080,12 @@ class UserManagementAPI(APIView):
                 "bio": profile.bio,
                 "avatar": profile.avatar.url if profile.avatar else None
             }
-        except:
+        except Exception as e:
+            # Profile doesn't exist or error accessing it - set to None
             user_data["profile"] = None
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.debug(f"Profile not found or error accessing profile for user {user.id}: {e}")
         
         return Response(user_data)    
     
@@ -3394,8 +3401,11 @@ class HealthCheckAPI(APIView):
             # Check database connection
             User.objects.count()
             db_status = "connected"
-        except Exception:
+        except Exception as e:
             db_status = "disconnected"
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Database connectivity check failed: {e}")
         
         health_data = {
             "status": "healthy" if db_status == "connected" else "unhealthy",
@@ -3816,8 +3826,8 @@ def health_check(request):
 
 # Enhanced Python Compiler Views
 from .models import CodeExecution, CodeTemplate, CodeSubmission, CompilerSettings
-import threading
-import time
+# import threading  # Imported locally where needed
+# import time       # Imported locally where needed
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -3965,6 +3975,9 @@ def execute_python_code(code, input_data, settings):
     - Error message sanitization
     - Input validation and length limits
     """
+    import time
+    import threading
+    
     result = {'output': '', 'error': None, 'execution_time': 0, 'memory_used': 0}
     
     try:
@@ -4079,8 +4092,7 @@ def execute_python_code(code, input_data, settings):
                     isolated_locals = {}
                     
                     # Execute in completely isolated environment with cross-platform timeout
-                    import threading
-                    import time
+                    # threading and time already imported at function level
                     
                     class TimeoutException(Exception):
                         pass
@@ -4443,8 +4455,11 @@ def resource_download(request, pk: int):
     # size helps some downloaders
     try:
         resp["Content-Length"] = obj.file.size
-    except Exception:
-        pass
+    except Exception as e:
+        # File size unavailable - not critical for download
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.debug(f"Could not determine file size for download: {e}")
 
 
     resp["X-Content-Type-Options"] = "nosniff"

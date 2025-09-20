@@ -23,7 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   inputBox.addEventListener("input", function () {
     const input = this.value.trim().toLowerCase();
-    resultBox.innerHTML = "";
+    // Clear content safely
+    while (resultBox.firstChild) {
+      resultBox.removeChild(resultBox.firstChild);
+    }
 
     if (input.length === 0) {
       resultBox.classList.add("d-none");
@@ -35,15 +38,19 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     if (filtered.length === 0) {
-      // Create safe "No results found" element
-      resultBox.innerHTML = '';
+      // Create safe "No results found" element - clear content safely
+      while (resultBox.firstChild) {
+        resultBox.removeChild(resultBox.firstChild);
+      }
       const noResultsDiv = document.createElement('div');
       noResultsDiv.className = 'suggestion-item';
       noResultsDiv.textContent = 'No results found';
       resultBox.appendChild(noResultsDiv);
     } else {
-      // Clear previous content
-      resultBox.innerHTML = '';
+      // Clear previous content safely
+      while (resultBox.firstChild) {
+        resultBox.removeChild(resultBox.firstChild);
+      }
       
       // Create elements safely to prevent XSS - using DOMPurify-style approach
       filtered.forEach(item => {
