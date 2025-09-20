@@ -1,5 +1,3 @@
-
-
   {% load static %}
   {% load i18n %}
   <header class="header-global">
@@ -92,13 +90,10 @@
               </a>
               <div class="dropdown-menu pt-2" aria-labelledby="adminDropdown">
                 <ul class="list-style-none">
-                  <a class="menu-link" href="#">
+                  <a class="menu-link" href="{% url 'user_management' %}">
                     <li class="mb-2 menu ps-3 py-1">{% trans "User Management" %}</li>
                   </a>
-                  <a class="menu-link" href="#">
-                    <li class="mb-2 menu ps-3 py-1">{% trans "Project Assignment" %}</li>
-                  </a>
-                  <a class="menu-link" href="#">
+                  <a class="menu-link" href="{% url 'project_teams' %}">
                     <li class="mb-2 menu ps-3 py-1">{% trans "Project Teams" %}</li>
                   </a>
                   <a class="menu-link" href="{% url 'adminblogpage' %}">
@@ -119,14 +114,15 @@
             </li>
 
             <li class="nav-item dropdown">
-              <a class="nav-link" href="#" id="projectsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 {% trans "Projects" %}
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </a>
-              <div class="dropdown-menu pt-2" style="width: max-content !important;" aria-labelledby="projectsDropdown">
+              <div class="dropdown-menu pt-2" style="width: max-content !important;margin-left: 50px;" aria-labelledby="blogDropdown">
                 <div class="row">
                   <div class="col">
                     <ul class="list-style-none m-0 p-0">
+
                       <li class="menu ps-3 py-2">
                         <a class="nav-link d-block px-2 py-2" href="{% url 'appattack' %}" style="display:table;width:100%;">
                           <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/appattack.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
@@ -136,6 +132,7 @@
                           </span>
                         </a>
                       </li>
+
                       <li class="menu ps-3 py-2">
                         <a class="nav-link d-block px-2 py-2" href="{% url 'malware_viz_main' %}" style="display:table;width:100%;">
                           <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/malware.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
@@ -144,7 +141,8 @@
                             <div class="small">{% trans "Malware research and visualization" %}</div>
                           </span>
                         </a>
-                      </li>
+                      </li>          
+
                       <li class="menu ps-3 py-2">
                         <a class="nav-link d-block px-2 py-2" href="{% url 'ptgui_viz_main' %}" style="display:table;width:100%;">
                           <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/pentesting.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
@@ -154,6 +152,7 @@
                           </span>
                         </a>
                       </li>
+                      
                       <li class="menu ps-3 py-2">
                         <a class="nav-link d-block px-2 py-2" href="{% url 'smishing_detection_main' %}" style="display:table;width:100%;">
                           <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/phishing.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
@@ -163,6 +162,7 @@
                           </span>
                         </a>
                       </li>
+
                       <li class="menu ps-3 py-2">
                         <a class="nav-link d-block px-2 py-2" href="{% url 'Vr_main' %}" style="display:table;width:100%;">
                           <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/vr-cyber.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
@@ -172,6 +172,7 @@
                           </span>
                         </a>
                       </li>
+
                       <li class="menu ps-3 py-2">
                         <a class="nav-link d-block px-2 py-2" href="{% url 'Deakin_Threat_mirror_main' %}" style="display:table;width:100%;">
                           <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/threat.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
@@ -181,6 +182,7 @@
                           </span>
                         </a>
                       </li>
+
                       <li class="menu ps-3 py-2">
                         <a class="nav-link d-block px-2 py-2" href="{% url 'policy_deployment' %}" style="display:table;width:100%;">
                           <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/policy.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
@@ -196,9 +198,6 @@
               </div>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'resources' %}">Resources</a>
-            </li>
 
             <li class="nav-item dropdown">
               <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -208,47 +207,41 @@
               <div class="dropdown-menu pt-2" aria-labelledby="blogDropdown">
                 <div class="row">
                   <div class="col">
-                    <ul class="list-style-none">
-                      <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">{% trans "Create a Blog" %}</a></li>
-                      <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">{% trans "Published Blogs" %}</a></li>
-                    </ul>
-                  </div>
-                </div>
+              <ul class="list-style-none">
+                <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'blogpage' %}">{% trans "Create a Blog" %}</a></li>
+                <li class="mb-2 menu ps-3 py-1"><a class="menu-link" href="{% url 'publishedblog' %}">{% trans "Published Blogs" %}</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {% trans "Careers" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
+                <ul class="list-style-none">
+                  <a class="menu-link" href="{% url 'career-discover' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'career-list' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'internships' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
+                  </a>
+                  <a class="menu-link" href="{% url 'job-alerts' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li>
+                  </a>
+                  <a href="{% url 'career_path_finder' %}">
+                    <li class="mb-2 menu ps-3 py-1">{% trans "Career Path Finder" %}</li>
+                  </a>
+                </ul>
               </div>
             </li>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% trans "Careers" %}
-              <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
-            </a>
-            <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
-              <ul class="list-style-none">
-                <a class="menu-link" href="{% url 'career-discover' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'career-list' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'graduate-program' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Graduate Program" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'internships' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
-                </a>
-                <a class="menu-link" href="{% url 'job-alerts' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li>
-                </a>
-                <a href="{% url 'career_path_finder' %}">
-                  <li class="mb-2 menu ps-3 py-1">{% trans "Career Path Finder" %}</li>
-                </a>
-              </ul>
-            </div>
-          </li>
-          
-
-        
-
+            <li class="nav-item">
+              <a href="{% url 'resources' %}" class="nav-link"> {% trans "Resources" %} </a>
+            </li>
 
             <li class="nav-item dropdown">
               <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
@@ -296,20 +289,26 @@
 
         </div>
 
-
         <div class="d-flex align-items-center justify-content-center">
           {% if request.user.is_authenticated %}
 
-          <!-- Show Logout Button if User is Authenticated -->
-          <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
-              class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
-
-        <a class="profile-container" href="{% url 'profile' %}">
-          <img
-            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-            class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-        </a>
-
+          <!-- User Profile Dropdown -->
+          <div class="dropdown">
+            <a href="#" class="btn btn-outline-gray-100 me-md-3 d-flex align-items-center dropdown-toggle"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="fas fa-user-circle me-2"></span>
+              <span class="header-profile-name">{{ request.user.username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'profile' %}">
+                <span class="fas fa-user me-2"></span>{% trans 'Profile' %}
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">
+                <span class="fas fa-sign-out-alt me-2"></span>{% trans 'Logout' %}
+              </a></li>
+            </ul>
+          </div>
 
           {% else %}
           <div class="sign-up-button-container">
@@ -366,9 +365,9 @@
           }
 
           .dropdown-menu#lang_menu {
-            background-color: #fff !important;
-            border: 1px solid #ccc !important;
-            border-radius: 4px !important;
+            background-color: #fff !important;     
+            border: 1px solid #ccc !important;     
+            border-radius: 4px !important;       
             box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
             padding: 0 !important;
             margin-top: 0.5rem !important;
@@ -376,8 +375,7 @@
             width: auto !important;
             z-index: 2001 !important;
           }
-        </style>
-        </div>
+          </div>
 
 
           <!-- language switcher -->
@@ -430,6 +428,80 @@
             </ul>
           </div>
 
+          <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <input type="hidden" name="language" id="lang-input">
+          </form>
+
+          <style>
+            .flag-icon{
+              width: 30px;
+              height: 21px;
+              object-fit: cover;
+              flex-shrink: 0;
+              margin-right: 10px;
+              display: inline-block;
+              vertical-align: middle;
+              border-radius: 2px;
+            }
+
+            .dropdown-menu#lang_menu {
+              background-color: #fff !important;
+              border: 1px solid #ccc !important;
+              border-radius: 4px !important;
+              box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
+              padding: 0 !important;
+              margin-top: 0.5rem !important;
+              min-width: auto !important;
+              width: auto !important;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item {
+              color: #4B5868 !important;
+              font-weight: 500;
+              padding: 0.5rem 0.8rem !important;
+              padding-right: 1.2rem !important;
+              background-color: transparent !important;
+              border-bottom: 1px solid #eee;
+              display: flex !important;
+              align-items: center;
+              justify-content: flex-start;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item:last-child {
+              border-bottom: none;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item:hover,
+            .dropdown-menu#lang_menu .dropdown-item:focus {
+              background-color: #1967D2 !important;
+              color: #fff !important;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item.active {
+              background-color: #ffcd11 !important;
+              color: #fff !important;
+            }
+
+            #langDropdown img.flag-icon {
+              filter: none !important;
+              opacity: 1 !important;
+            }
+          </style>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const form  = document.getElementById('set-lang-form');
+              const input = document.getElementById('lang-input');
+              document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
+                a.addEventListener('click', function (e) {
+                  e.preventDefault();
+                  input.value = this.dataset.lang;
+                  form.submit();
+                });
+              });
+            });
+          </script>
 
 
           <!-- dark mode toggle -->
@@ -449,6 +521,42 @@
   <style>
     .header-profile-name { color: #1a1a1a !important; }
     body.dark-mode .header-profile-name { color: #fff !important; }
+
+    /* Profile dropdown styling in dark mode */
+    body.dark-mode .dropdown-menu .dropdown-item {
+      color: #FFCD11 !important;
+    }
+    body.dark-mode .dropdown-menu .dropdown-item:hover {
+      color: #FFCD11 !important;
+      background-color: rgba(255, 205, 17, 0.1) !important;
+    }
+
+    /* Search box styling - black text in light mode, white text in dark mode */
+    #searchInput,
+    .search-box,
+    input.search-box {
+      color: black !important;
+      background-color: transparent !important;
+      border: none !important;
+      outline: none !important;
+    }
+    #searchInput::placeholder,
+    .search-box::placeholder,
+    input.search-box::placeholder {
+      color: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Dark mode - white text */
+    body.dark-mode #searchInput,
+    body.dark-mode .search-box,
+    body.dark-mode input.search-box {
+      color: white !important;
+    }
+    body.dark-mode #searchInput::placeholder,
+    body.dark-mode .search-box::placeholder,
+    body.dark-mode input.search-box::placeholder {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
   </style>
 
   <style>
@@ -542,4 +650,3 @@
     });
   </script>
   <script src="{% static 'js/search_suggestions.js' %}"></script>
-

@@ -1,0 +1,1348 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<style> 
+   .admin-content-wrapper {
+    position: relative;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 992px) {
+    .admin-content-wrapper {
+      padding-top: 10rem;
+      padding-bottom: 3rem;
+    }
+  }</style>
+
+<div class="admin-content-wrapper">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">User Management</h4>
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-gradient-primary me-3">{{ total_users }} user{{ total_users|pluralize }} found</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Row -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="GET" class="row g-3">
+                        <!-- Search Bar -->
+                        <div class="col-md-3">
+                            <label for="search" class="form-label">Search Users</label>
+                            <div class="input-group">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="search" 
+                                       name="search" 
+                                       value="{{ search_query }}"
+                                       placeholder="Search by name, email, or student ID...">
+                                <button class="btn btn-outline-secondary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Dropdown -->
+                        <div class="col-md-3">
+                            <label for="filter" class="form-label">Filter Users</label>
+                            <select class="form-select" id="filter" name="filter" onchange="this.form.submit()">
+                                <option value="">All Users</option>
+                                <option value="preferences_no_assignment" 
+                                        {% if current_filter == 'preferences_no_assignment' %}selected{% endif %}>
+                                    Has Preferences & No Assignment
+                                </option>
+                                <option value="no_preferences" 
+                                        {% if current_filter == 'no_preferences' %}selected{% endif %}>
+                                    No Preferences
+                                </option>
+                                <option value="assigned" 
+                                        {% if current_filter == 'assigned' %}selected{% endif %}>
+                                    Assigned to Project
+                                </option>
+                                <option value="unassigned" 
+                                        {% if current_filter == 'unassigned' %}selected{% endif %}>
+                                    Not Assigned
+                                </option>
+                                <option value="verified" 
+                                        {% if current_filter == 'verified' %}selected{% endif %}>
+                                    Verified Users
+                                </option>
+                                <option value="unverified" 
+                                        {% if current_filter == 'unverified' %}selected{% endif %}>
+                                    Unverified Users
+                                </option>
+                                <option value="staff" 
+                                        {% if current_filter == 'staff' %}selected{% endif %}>
+                                    Staff Users
+                                </option>
+                                <option value="admin" 
+                                        {% if current_filter == 'admin' %}selected{% endif %}>
+                                    Admin Users
+                                </option>
+                                <option value="regular_users" 
+                                        {% if current_filter == 'regular_users' %}selected{% endif %}>
+                                    Students
+                                </option>
+                                <option value="active" 
+                                        {% if current_filter == 'active' %}selected{% endif %}>
+                                    Active Users
+                                </option>
+                                <option value="inactive" 
+                                        {% if current_filter == 'inactive' %}selected{% endif %}>
+                                    Inactive Users
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Preference Project Filter -->
+                        <div class="col-md-3">
+                            <label for="pref_project" class="form-label">Preference Project</label>
+                            <select class="form-select" id="pref_project" name="pref_project" onchange="this.form.submit()">
+                                <option value="">All Projects</option>
+                                {% for project in projects %}
+                                    <option value="{{ project.id }}" {% if pref_project == project.id|stringformat:'s' %}selected{% endif %}>
+                                        {{ project.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <small class="text-muted">P1 first, then P2, then P3</small>
+                        </div>
+
+                        <!-- Student Filters Row -->
+                        <div class="col-md-2">
+                            <label for="unit" class="form-label">Unit</label>
+                            <select class="form-select" id="unit" name="unit" onchange="this.form.submit()">
+                                <option value="">All Units</option>
+                                {% for value, label in units %}
+                                    <option value="{{ value }}" {% if unit_filter == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="trimester" class="form-label">Trimester</label>
+                            <select class="form-select" id="trimester" name="trimester" onchange="this.form.submit()">
+                                <option value="">All Trimesters</option>
+                                {% for value, label in trimesters %}
+                                    <option value="{{ value }}" {% if trimester_filter == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="year" class="form-label">Year</label>
+                            <select class="form-select" id="year" name="year" onchange="this.form.submit()">
+                                <option value="">All Years</option>
+                                {% for year in year_options %}
+                                    <option value="{{ year }}" {% if year_filter == year|stringformat:"s" %}selected{% endif %}>
+                                        {{ year }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Clear Filters -->
+                        <div class="col-12 mt-3">
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter"></i> Apply Filters
+                                </button>
+                                <a href="{% url 'user_management' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times"></i> Clear All Filters
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Section -->
+    <div class="row mb-4" id="bulkActionsSection" style="display: none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h6 class="text-primary mb-0">
+                        <i class="fas fa-tasks me-2"></i>Bulk Actions 
+                        <span id="selectedCount" class="badge bg-gradient-primary ms-2">0 selected</span>
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <!-- Project Assignment Row -->
+                        <div class="col-md-4">
+                            <label for="bulkProjectSelect" class="form-label">Assign Selected Users to Project</label>
+                            <select class="form-select" id="bulkProjectSelect">
+                                <option value="">-- Select Project --</option>
+                                <option value="unassigned">Unassign from Projects</option>
+                                {% for project in projects %}
+                                    <option value="{{ project.id }}">{{ project.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="performBulkAssignment()">
+                                <i class="fas fa-arrow-right me-1"></i>Assign Projects
+                            </button>
+                        </div>
+                        
+                        <div class="col-md-6"></div>
+                        
+                        <!-- Student Info Updates Row -->
+                        <div class="col-md-2">
+                            <label for="bulkUnitSelect" class="form-label">Update Unit</label>
+                            <select class="form-select" id="bulkUnitSelect">
+                                <option value="">-- Select Unit --</option>
+                                {% for value, label in units %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label for="bulkTrimesterSelect" class="form-label">Update Trimester</label>
+                            <select class="form-select" id="bulkTrimesterSelect">
+                                <option value="">-- Select Trimester --</option>
+                                {% for value, label in trimesters %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label for="bulkYearSelect" class="form-label">Update Year</label>
+                            <select class="form-select" id="bulkYearSelect">
+                                <option value="">-- Select Year --</option>
+                                {% for year in year_options %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="button" class="btn btn-info btn-sm" onclick="performBulkStudentUpdate()">
+                                <i class="fas fa-edit me-1"></i>Update Student Info
+                            </button>
+                        </div>
+                        
+                        <div class="col-md-4"></div>
+                        
+                        <!-- Action Buttons Row -->
+                        <div class="col-12">
+                            <div class="btn-toolbar justify-content-between" role="toolbar">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-success btn-sm" onclick="performBulkStatusChange('activate')">
+                                        <i class="fas fa-user-check me-1"></i>Activate
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-sm" onclick="performBulkStatusChange('deactivate')">
+                                        <i class="fas fa-user-times me-1"></i>Deactivate
+                                    </button>
+                                </div>
+                                
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearSelection()">
+                                    <i class="fas fa-times me-1"></i>Clear Selection
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6>Users ({{ users.paginator.count }} total)</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    {% if users %}
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="width: 50px;">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="selectAll">
+                                        </div>
+                                    </th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Staff</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="min-width: 180px;">Student Info</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Joined</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="min-width: 200px;">Assigned Project</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Preferences</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input user-checkbox" type="checkbox" value="{{ user.id }}" data-user-name="{{ user.get_full_name|default:user.email }}">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">{{ user.get_full_name|default:"No name" }}</h6>
+                                                {% if user.is_verified %}
+                                                    <small class="text-success">
+                                                        <i class="fas fa-check-circle"></i> Verified
+                                                    </small>
+                                                {% else %}
+                                                    <small class="text-warning">
+                                                        <i class="fas fa-exclamation-circle"></i> Unverified
+                                                    </small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="text-xs font-weight-bold mb-0">{{ user.email }}</p>
+                                        <p class="text-xs text-secondary mb-0">ID: {{ user.id }}</p>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        {% if user.is_active %}
+                                            <span class="badge badge-sm bg-gradient-success">Active</span>
+                                        {% else %}
+                                            <span class="badge badge-sm bg-gradient-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        {% if user.is_superuser %}
+                                            <span class="badge badge-sm bg-gradient-danger">Admin</span>
+                                        {% elif user.is_staff %}
+                                            <span class="badge badge-sm bg-gradient-info">Staff</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="align-middle text-center text-sm" style="min-width: 180px;">
+                                        {% if user.users %}
+                                            <div class="text-xs">
+                                                <div><strong>ID:</strong> {{ user.users.id }}</div>
+                                                {% if user.users.year %}<div><strong>Year:</strong> {{ user.users.year }}</div>{% endif %}
+                                                {% if user.users.trimester %}<div><strong>Tri:</strong> {{ user.users.get_trimester_display }}</div>{% endif %}
+                                                {% if user.users.unit %}<div><strong>Unit:</strong> {{ user.users.get_unit_display }}</div>{% endif %}
+                                                {% if user.users.course %}<div><strong>Course:</strong> {{ user.users.get_course_display|truncatechars:15 }}</div>{% endif %}
+                                            </div>
+                                        {% else %}
+                                            <span class="text-muted">No student info</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-sm btn-outline-info edit-user-btn" 
+                                                    data-user-id="{{ user.id }}"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#userEditModal"
+                                                    title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger ms-1 delete-user-btn"
+                                                    data-user-id="{{ user.id }}"
+                                                    data-user-name="{{ user.get_full_name|default:user.email }}"
+                                                    {% if user.is_superuser or user.id == request.user.id %}disabled title="Cannot delete this user"{% else %}title="Delete"{% endif %}>
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-xs">{{ user.created_at|date:"M d, Y" }}</span>
+                                    </td>
+                                    <td class="align-middle text-center" style="width: 200px;">
+                                        <select class="form-select form-select-sm project-assignment-dropdown" 
+                                                data-user-id="{{ user.id }}" 
+                                                style="width: 200px;">
+                                            <option value="">-- Select Project --</option>
+                                            <option value="unassigned" 
+                                                    {% if user.users and not user.users.allocated %}selected{% endif %}>
+                                                Unassigned
+                                            </option>
+                                            {% for project in projects %}
+                                                <option value="{{ project.id }}" 
+                                                        {% if user.users and user.users.allocated and user.users.allocated.id == project.id %}selected{% endif %}>
+                                                    {{ project.title }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        {% if user.users %}
+                                            <div class="text-xs">
+                                                {% if user.users.p1 %}
+                                                    <div><strong>P1:</strong> {{ user.users.p1.title }}</div>
+                                                {% endif %}
+                                                {% if user.users.p2 %}
+                                                    <div><strong>P2:</strong> {{ user.users.p2.title }}</div>
+                                                {% endif %}
+                                                {% if user.users.p3 %}
+                                                    <div><strong>P3:</strong> {{ user.users.p3.title }}</div>
+                                                {% endif %}
+                                                {% if not user.users.p1 and not user.users.p2 and not user.users.p3 %}
+                                                    <span class="text-muted">No preferences</span>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <span class="text-muted">No student info</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-muted">No users found.</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Pagination -->
+                    {% if users.has_other_pages %}
+                    <div class="d-flex justify-content-center mt-4">
+                        <nav aria-label="User pagination">
+                            <ul class="pagination">
+                                {% if users.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ users.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_filter %}&filter={{ current_filter }}{% endif %}{% if unit_filter %}&unit={{ unit_filter }}{% endif %}{% if trimester_filter %}&trimester={{ trimester_filter }}{% endif %}{% if year_filter %}&year={{ year_filter }}{% endif %}{% if pref_project %}&pref_project={{ pref_project }}{% endif %}">Previous</a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% for num in users.paginator.page_range %}
+                                    {% if users.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > users.number|add:'-3' and num < users.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_filter %}&filter={{ current_filter }}{% endif %}{% if unit_filter %}&unit={{ unit_filter }}{% endif %}{% if trimester_filter %}&trimester={{ trimester_filter }}{% endif %}{% if year_filter %}&year={{ year_filter }}{% endif %}{% if pref_project %}&pref_project={{ pref_project }}{% endif %}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if users.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ users.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if current_filter %}&filter={{ current_filter }}{% endif %}{% if unit_filter %}&unit={{ unit_filter }}{% endif %}{% if trimester_filter %}&trimester={{ trimester_filter }}{% endif %}{% if year_filter %}&year={{ year_filter }}{% endif %}{% if pref_project %}&pref_project={{ pref_project }}{% endif %}">Next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Edit Modal -->
+<div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userEditModalLabel">Edit User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userEditForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">User Information</h6>
+                            <div class="mb-3">
+                                <label for="edit-first-name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="edit-first-name" name="first_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-last-name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="edit-last-name" name="last_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="edit-email" name="email">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit-unit" class="form-label">Unit</label>
+                                        <select class="form-control" id="edit-unit" name="unit">
+                                            <option value="">Select Unit</option>
+                                            {% for value, label in units %}
+                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="edit-is-active" name="is_active">
+                                        <label class="form-check-label" for="edit-is-active">Active</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="edit-is-staff" name="is_staff">
+                                        <label class="form-check-label" for="edit-is-staff">Staff</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="edit-is-verified" name="is_verified">
+                                        <label class="form-check-label" for="edit-is-verified">Verified</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6 class="text-primary mb-3">Project Preferences</h6>
+                            <div class="mb-3">
+                                <label for="edit-p1" class="form-label">1st Preference</label>
+                                <select class="form-select" id="edit-p1" name="p1">
+                                    <option value="">No preference</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-p2" class="form-label">2nd Preference</label>
+                                <select class="form-select" id="edit-p2" name="p2">
+                                    <option value="">No preference</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-p3" class="form-label">3rd Preference</label>
+                                <select class="form-select" id="edit-p3" name="p3">
+                                    <option value="">No preference</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Student Information</h6>
+                            <div class="mb-3">
+                                <label for="edit-student-id" class="form-label">Student ID</label>
+                                <input type="number" class="form-control" id="edit-student-id" name="student_id">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-year" class="form-label">Year</label>
+                                <input type="number" class="form-control" id="edit-year" name="year" min="2020" max="2030">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-trimester" class="form-label">Trimester</label>
+                                <select class="form-control" id="edit-trimester" name="trimester">
+                                    <option value="">Select Trimester</option>
+                                    {% for value, label in trimesters %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-course" class="form-label">Course</label>
+                                <select class="form-control" id="edit-course" name="course">
+                                    <option value="">Select Course</option>
+                                    {% for value, label in courses %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+
+                            <h6 class="text-primary mb-3">Assigned Project</h6>
+                            <div class="mb-3">
+                                <label for="edit-assigned-project" class="form-label">Assigned Project</label>
+                                <select class="form-select" id="edit-assigned-project" name="assigned_project">
+                                    <option value="">Not assigned</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveUser()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Dark mode styling for text-xs elements -->
+    <style>
+        /* Default light mode - keep existing colors */
+        .text-xs {
+            color: inherit;
+        }
+        
+        /* Dark mode - use white color for better readability */
+        body.dark-mode .text-xs,
+        .dark-mode .text-xs {
+            color: #ffffff !important;
+        }
+        
+        /* Also apply to small text elements in dark mode */
+        body.dark-mode small.text-xs,
+        .dark-mode small.text-xs {
+            color: #ffffff !important;
+        }
+        
+        /* Dark mode badge styling */
+        body.dark-mode .text-muted,
+        .dark-mode .text-muted {
+            color: #6c757d !important;
+        }
+        
+        /* Dark mode table header styling - use website yellow color scheme */
+        body.dark-mode thead th,
+        .dark-mode thead th {
+            color: #ffcd11 !important;
+        }
+        
+        /* Specifically target the column headers */
+        body.dark-mode .text-uppercase.text-secondary,
+        .dark-mode .text-uppercase.text-secondary {
+            color: #ffcd11 !important;
+        }
+    </style>
+
+    <!-- Projects data for JavaScript -->
+    <script id="projects-data" type="application/json">
+    [{% for project in projects %}{"id": "{{ project.id }}", "name": "{{ project.title }}"}{% if not forloop.last %},{% endif %}{% endfor %}]
+    </script>
+
+    <!-- JavaScript for handling project assignment and user editing -->
+    <script>
+    const projectsData = JSON.parse(document.getElementById('projects-data').textContent);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdowns = document.querySelectorAll('.project-assignment-dropdown');
+        const editButtons = document.querySelectorAll('.edit-user-btn');
+        const deleteButtons = document.querySelectorAll('.delete-user-btn');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const userCheckboxes = document.querySelectorAll('.user-checkbox');
+        const bulkActionsSection = document.getElementById('bulkActionsSection');
+        const selectedCountSpan = document.getElementById('selectedCount');
+        
+        // Handle select all checkbox
+        selectAllCheckbox.addEventListener('change', function() {
+            userCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateBulkActionsVisibility();
+        });
+        
+        // Handle individual user checkboxes
+        userCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateBulkActionsVisibility();
+                updateSelectAllState();
+            });
+        });
+        
+        function updateSelectAllState() {
+            const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+            const totalBoxes = userCheckboxes.length;
+            
+            if (checkedBoxes.length === 0) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = false;
+            } else if (checkedBoxes.length === totalBoxes) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = true;
+            } else {
+                selectAllCheckbox.indeterminate = true;
+                selectAllCheckbox.checked = false;
+            }
+        }
+        
+        function updateBulkActionsVisibility() {
+            const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+            const count = checkedBoxes.length;
+            
+            if (count > 0) {
+                bulkActionsSection.style.display = 'block';
+                selectedCountSpan.textContent = `${count} selected`;
+            } else {
+                bulkActionsSection.style.display = 'none';
+                selectedCountSpan.textContent = '0 selected';
+            }
+        }
+        
+        dropdowns.forEach(dropdown => {
+            dropdown.addEventListener('change', function() {
+                const userId = this.getAttribute('data-user-id');
+                const projectId = this.value;
+                
+                // Show loading state
+                this.disabled = true;
+                const originalHTML = this.innerHTML;
+                
+                // Make AJAX request to assign project
+                fetch('{% url "assign_user_project" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'user_id': userId,
+                        'project_id': projectId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        const toast = document.createElement('div');
+                        toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                        toast.style.top = '20px';
+                        toast.style.right = '20px';
+                        toast.style.zIndex = '9999';
+                        toast.innerHTML = `
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        document.body.appendChild(toast);
+                        
+                        // Auto dismiss after 3 seconds
+                        setTimeout(() => {
+                            toast.remove();
+                        }, 3000);
+                    } else {
+                        // Show error message
+                        alert('Error: ' + data.error);
+                        // Reset dropdown to previous value
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the assignment.');
+                    location.reload();
+                })
+                .finally(() => {
+                    // Re-enable dropdown
+                    this.disabled = false;
+                });
+            });
+        });
+
+        // Handle edit button clicks
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-user-id');
+                loadUserData(userId);
+            });
+        });
+
+        // Handle delete button clicks
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-user-id');
+                const userName = this.getAttribute('data-user-name');
+                const modalEl = document.getElementById('deleteUserModal');
+                modalEl.dataset.userId = userId;
+                modalEl.querySelector('.modal-body .delete-user-name').textContent = userName || userId;
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+            });
+        });
+
+        // Populate project options in modal
+        populateProjectOptions();
+    });
+
+    function loadUserData(userId) {
+        // Ensure project options are populated before loading user data
+        populateProjectOptions();
+        
+        const userRow = document.querySelector(`button[data-user-id="${userId}"]`).closest('tr');
+        const cells = userRow.querySelectorAll('td');
+        
+        
+        // Extract user data from table cells (adjusted for checkbox column)
+        const userName = userRow.querySelector('h6').textContent;
+        const userEmail = cells[2].querySelector('.text-xs.font-weight-bold').textContent;
+        const isActive = cells[3].querySelector('.badge').textContent.includes('Active');
+        const staffBadge = cells[4].querySelector('.badge');
+        const isStaff = staffBadge && staffBadge.textContent === 'Staff';
+        const isSuperuser = staffBadge && staffBadge.textContent === 'Admin';
+        
+        // Extract student info
+        const studentInfoCell = cells[5];
+        const studentInfoDiv = studentInfoCell.querySelector('.text-xs');
+        let studentId = '', year = '', trimester = '', unit = '', course = '';
+        
+        if (studentInfoDiv) {
+            const studentInfoText = studentInfoDiv.textContent;
+            const idMatch = studentInfoText.match(/ID:\s*(\d+)/);
+            const yearMatch = studentInfoText.match(/Year:\s*(\d+)/);
+            const triMatch = studentInfoText.match(/Tri:\s*([^]+?)(?=Unit:|Course:|$)/);
+            const unitMatch = studentInfoText.match(/Unit:\s*([^]+?)(?=Course:|$)/);
+            const courseMatch = studentInfoText.match(/Course:\s*(.+?)(?=$|\n)/);
+            
+            if (idMatch) studentId = idMatch[1];
+            if (yearMatch) year = yearMatch[1];
+            if (triMatch) trimester = triMatch[1].trim();
+            if (unitMatch) unit = unitMatch[1].trim();
+            if (courseMatch) course = courseMatch[1].trim();
+        }
+        
+        // Extract assigned project (column 8 - Assigned Project)
+        const assignedSelect = cells[8] ? cells[8].querySelector('select') : null;
+        const assignedProject = assignedSelect ? assignedSelect.value : '';
+        
+        // Extract project preferences (column 9 - Project Preferences)
+        const prefCell = cells[9]; // Project Preferences column
+        const prefDiv = prefCell ? prefCell.querySelector('.text-xs') : null;
+        let p1 = '', p2 = '', p3 = '';
+        
+        if (prefDiv && !prefDiv.textContent.includes('No preferences')) {
+            // Try to find individual preference divs
+            const prefDivs = prefDiv.querySelectorAll('div');
+            
+            prefDivs.forEach((div, index) => {
+                const text = div.textContent.trim();
+                
+                if (text.includes('P1:')) {
+                    p1 = text.replace(/P1:\s*/, '').trim();
+                } else if (text.includes('P2:')) {
+                    p2 = text.replace(/P2:\s*/, '').trim();
+                } else if (text.includes('P3:')) {
+                    p3 = text.replace(/P3:\s*/, '').trim();
+                }
+            });
+            
+            // Fallback to regex if div parsing doesn't work
+            if (!p1 && !p2 && !p3) {
+                const prefText = prefDiv.textContent;
+                
+                const p1Match = prefText.match(/P1:\s*([^\n]+?)(?=P2:|P3:|$)/);
+                const p2Match = prefText.match(/P2:\s*([^\n]+?)(?=P3:|$)/);
+                const p3Match = prefText.match(/P3:\s*([^\n]+?)(?=$)/);
+                
+                if (p1Match) p1 = p1Match[1].trim();
+                if (p2Match) p2 = p2Match[1].trim();
+                if (p3Match) p3 = p3Match[1].trim();
+            }
+        }
+        
+        // Store user ID in modal for saving
+        document.getElementById('userEditModal').dataset.userId = userId;
+        
+        // Populate modal fields
+        document.getElementById('userEditModalLabel').textContent = `Edit ${userName}`;
+        
+        // Split name into first and last
+        const nameParts = userName.split(' ');
+        document.getElementById('edit-first-name').value = nameParts[0] || '';
+        document.getElementById('edit-last-name').value = nameParts.slice(1).join(' ') || '';
+        
+        document.getElementById('edit-email').value = userEmail;
+        document.getElementById('edit-is-active').checked = isActive;
+        document.getElementById('edit-is-staff').checked = isStaff;
+        document.getElementById('edit-is-verified').checked = userRow.querySelector('.text-success') !== null;
+        
+        // Student info
+        document.getElementById('edit-student-id').value = studentId;
+        document.getElementById('edit-year').value = year;
+        
+        // Set dropdowns
+        setSelectValueByText('edit-trimester', trimester);
+        setSelectValueByText('edit-unit', unit);
+        setSelectValueByText('edit-course', course);
+        setSelectValue('edit-assigned-project', assignedProject);
+        
+        // Set project preferences
+        setProjectPreference('edit-p1', p1);
+        setProjectPreference('edit-p2', p2);
+        setProjectPreference('edit-p3', p3);
+    }
+    
+    function setSelectValue(selectId, value) {
+        const select = document.getElementById(selectId);
+        if (select) {
+            if (value) {
+                select.value = value;
+            } else {
+                select.value = ''; // Set to empty/default option
+            }
+        }
+    }
+    
+    function setSelectValueByText(selectId, text) {
+        const select = document.getElementById(selectId);
+        if (select && text) {
+            for (let option of select.options) {
+                if (option.text.includes(text) || option.text === text) {
+                    select.value = option.value;
+                    break;
+                }
+            }
+        }
+    }
+    
+    function setProjectPreference(selectId, projectName) {
+        const select = document.getElementById(selectId);
+        if (select) {
+            if (projectName) {
+                const project = projectsData.find(p => p.name === projectName);
+                if (project) {
+                    select.value = project.id;
+                } else {
+                    select.value = ''; // Reset to default if project not found
+                }
+            } else {
+                select.value = ''; // Set to empty/default option
+            }
+        }
+    }
+
+    function populateProjectOptions() {
+        const projectSelects = ['edit-p1', 'edit-p2', 'edit-p3', 'edit-assigned-project'];
+        
+        projectSelects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            if (select) {
+                // Clear existing options except the first one (placeholder)
+                const firstOption = select.firstElementChild;
+                select.innerHTML = '';
+                if (firstOption) {
+                    select.appendChild(firstOption);
+                }
+                
+                // Add project options
+                projectsData.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.name;
+                    select.appendChild(option);
+                });
+            }
+        });
+    }
+
+    function saveUser() {
+        const form = document.getElementById('userEditForm');
+        const formData = new FormData(form);
+        
+        // Get the user ID from the modal (we'll store it when opening)
+        const userId = document.getElementById('userEditModal').dataset.userId;
+        
+        const data = {
+            user_id: userId,
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
+            email: formData.get('email'),
+            is_active: formData.get('is_active') === 'on',
+            is_staff: formData.get('is_staff') === 'on',
+            is_verified: formData.get('is_verified') === 'on',
+            student_id: formData.get('student_id'),
+            year: formData.get('year'),
+            trimester: formData.get('trimester'),
+            unit: formData.get('unit'),
+            course: formData.get('course'),
+            p1: formData.get('p1'),
+            p2: formData.get('p2'),
+            p3: formData.get('p3'),
+            assigned_project: formData.get('assigned_project')
+        };
+        
+        fetch('{% url "update_user" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    ${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(toast);
+                
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+                
+                // Close modal and reload page to reflect changes
+                bootstrap.Modal.getInstance(document.getElementById('userEditModal')).hide();
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while saving user data.');
+        });
+    }
+
+    // Bulk action functions
+    function clearSelection() {
+        document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        document.getElementById('selectAll').checked = false;
+        document.getElementById('selectAll').indeterminate = false;
+        document.getElementById('bulkActionsSection').style.display = 'none';
+        document.getElementById('bulkProjectSelect').value = '';
+        document.getElementById('bulkUnitSelect').value = '';
+        document.getElementById('bulkTrimesterSelect').value = '';
+        document.getElementById('bulkYearSelect').value = '';
+    }
+
+    function performBulkAssignment() {
+        const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+        const projectSelect = document.getElementById('bulkProjectSelect');
+        const projectId = projectSelect.value;
+        
+        if (checkedBoxes.length === 0) {
+            alert('Please select at least one user.');
+            return;
+        }
+        
+        if (!projectId) {
+            alert('Please select a project.');
+            return;
+        }
+        
+        const userIds = Array.from(checkedBoxes).map(checkbox => checkbox.value);
+        const userNames = Array.from(checkedBoxes).map(checkbox => checkbox.dataset.userName);
+        
+        const projectName = projectId === 'unassigned' ? 'Unassigned' : projectSelect.options[projectSelect.selectedIndex].text;
+        
+        if (!confirm(`Are you sure you want to assign ${userIds.length} user(s) to "${projectName}"?\\n\\nUsers: ${userNames.slice(0, 5).join(', ')}${userNames.length > 5 ? ` and ${userNames.length - 5} more` : ''}`)) {
+            return;
+        }
+        
+        // Disable bulk actions while processing
+        const bulkButton = document.querySelector('[onclick="performBulkAssignment()"]');
+        const originalText = bulkButton.innerHTML;
+        bulkButton.disabled = true;
+        bulkButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+        
+        // Make AJAX request for bulk assignment
+        fetch('{% url "bulk_assign_users_project" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                'user_ids': userIds,
+                'project_id': projectId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    ${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(toast);
+                
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+                
+                // Clear selection and reload page
+                clearSelection();
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while performing bulk assignment.');
+        })
+        .finally(() => {
+            // Re-enable bulk actions
+            bulkButton.disabled = false;
+            bulkButton.innerHTML = originalText;
+        });
+    }
+
+    function performBulkStatusChange(action) {
+        const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+        
+        if (checkedBoxes.length === 0) {
+            alert('Please select at least one user.');
+            return;
+        }
+        
+        const userIds = Array.from(checkedBoxes).map(checkbox => checkbox.value);
+        const userNames = Array.from(checkedBoxes).map(checkbox => checkbox.dataset.userName);
+        
+        const actionText = action === 'activate' ? 'activate' : 'deactivate';
+        const actionPastTense = action === 'activate' ? 'activated' : 'deactivated';
+        
+        if (!confirm(`Are you sure you want to ${actionText} ${userIds.length} user(s)?\\n\\nUsers: ${userNames.slice(0, 5).join(', ')}${userNames.length > 5 ? ` and ${userNames.length - 5} more` : ''}`)) {
+            return;
+        }
+        
+        // Disable buttons while processing
+        const activateBtn = document.querySelector('[onclick="performBulkStatusChange(\'activate\')"]');
+        const deactivateBtn = document.querySelector('[onclick="performBulkStatusChange(\'deactivate\')"]');
+        const targetBtn = action === 'activate' ? activateBtn : deactivateBtn;
+        
+        const originalText = targetBtn.innerHTML;
+        targetBtn.disabled = true;
+        targetBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Processing...';
+        
+        // Make AJAX request for bulk status change
+        fetch('{% url "bulk_update_user_status" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                'user_ids': userIds,
+                'action': action
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    ${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(toast);
+                
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+                
+                // Clear selection and reload page
+                clearSelection();
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating user status.');
+        })
+        .finally(() => {
+            // Re-enable buttons
+            targetBtn.disabled = false;
+            targetBtn.innerHTML = originalText;
+        });
+    }
+
+    function performBulkStudentUpdate() {
+        const checkedBoxes = document.querySelectorAll('.user-checkbox:checked');
+        
+        if (checkedBoxes.length === 0) {
+            alert('Please select at least one user.');
+            return;
+        }
+        
+        const unit = document.getElementById('bulkUnitSelect').value;
+        const trimester = document.getElementById('bulkTrimesterSelect').value;
+        const year = document.getElementById('bulkYearSelect').value;
+        
+        if (!unit && !trimester && !year) {
+            alert('Please select at least one field to update (Unit, Trimester, or Year).');
+            return;
+        }
+        
+        const userIds = Array.from(checkedBoxes).map(checkbox => checkbox.value);
+        const userNames = Array.from(checkedBoxes).map(checkbox => checkbox.dataset.userName);
+        
+        let updateFields = [];
+        if (unit) updateFields.push(`Unit: ${unit}`);
+        if (trimester) updateFields.push(`Trimester: ${trimester}`);
+        if (year) updateFields.push(`Year: ${year}`);
+        
+        if (!confirm(`Are you sure you want to update ${userIds.length} user(s) with the following:\\n${updateFields.join(', ')}\\n\\nUsers: ${userNames.slice(0, 5).join(', ')}${userNames.length > 5 ? ` and ${userNames.length - 5} more` : ''}`)) {
+            return;
+        }
+        
+        // Disable button while processing
+        const updateBtn = document.querySelector('[onclick="performBulkStudentUpdate()"]');
+        const originalText = updateBtn.innerHTML;
+        updateBtn.disabled = true;
+        updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Processing...';
+        
+        // Make AJAX request for bulk student update
+        fetch('{% url "bulk_update_student_info" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                'user_ids': userIds,
+                'unit': unit || null,
+                'trimester': trimester || null,
+                'year': year || null
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    ${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(toast);
+                
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+                
+                // Clear selection and reload page
+                clearSelection();
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating student information.');
+        })
+        .finally(() => {
+            // Re-enable button
+            updateBtn.disabled = false;
+            updateBtn.innerHTML = originalText;
+        });
+    }
+    </script>
+
+<!-- Delete User Confirmation Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Delete User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this? This can't be undone.</p>
+                <p class="mb-0"><strong>User:</strong> <span class="delete-user-name"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteUser()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDeleteUser() {
+    const modalEl = document.getElementById('deleteUserModal');
+    const userId = modalEl.dataset.userId;
+    if (!userId) return;
+
+    // Disable button to prevent double submission
+    const deleteBtn = modalEl.querySelector('.btn.btn-danger');
+    const originalHtml = deleteBtn.innerHTML;
+    deleteBtn.disabled = true;
+    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Deleting...';
+
+    fetch('{% url "delete_user" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ user_id: userId })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            // Hide modal
+            bootstrap.Modal.getInstance(modalEl).hide();
+            // Remove row from table
+            const btn = document.querySelector(`.delete-user-btn[data-user-id="${userId}"]`);
+            if (btn) {
+                const row = btn.closest('tr');
+                if (row) row.remove();
+            }
+            // Show toast
+            const toast = document.createElement('div');
+            toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            toast.style.top = '20px';
+            toast.style.right = '20px';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = `
+                ${data.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        } else {
+            alert('Error: ' + (data.error || 'Failed to delete user'));
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('An error occurred while deleting the user.');
+    })
+    .finally(() => {
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = originalHtml;
+    });
+}
+</script>
+
+{% endblock %}

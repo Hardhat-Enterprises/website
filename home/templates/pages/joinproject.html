@@ -28,6 +28,7 @@
                                 {% else %}
                                     <div class="text-center text-md-center mb-4 mt-md-0">
                                         <h1 class="mb-0 h3">Join a project</h1>
+                                        <p class="text-muted mt-2">Submit preferences for what project you would like to be assigned to</p>
                                     </div>
                                     <form method="post" action="{% url 'join_us' %}">
                                         {% csrf_token %}

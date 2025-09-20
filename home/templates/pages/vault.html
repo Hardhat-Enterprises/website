@@ -3,15 +3,38 @@
 {% load humanize %}
 
 {% block content %}
+<style> 
+  .content-wrapper-vault {
+   position: relative;
+   padding-top: 5rem;
+   padding-bottom: 3rem;
+ }
+
+ @media (min-width: 992px) {
+   .content-wrapper-vault {
+     padding-top: 5rem;
+     padding-bottom: 3rem;
+   }
+ }</style>
 <section class="section-header bg-gray-100 pt-4 pb-2">
-  <div class="container">
-    <h2 class="h2 mb-1">Document Vault</h2>
-    <p class="text-muted mb-0">Securely store, organize, and manage your documents with search, filters, and team-based access.</p>
+  <div class="content-wrapper-vault">
+    <h1 class="h1 mb-1" style="color: #000 !important;">Document Vault</h1>
+    <p class="text-muted mb-0">Securely store, organize, and manage your documents with search, filters, and project-based access.</p>
   </div>
 </section>
 
 <section class="py-4">
   <div class="container">
+
+    <!-- Messages -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
 
     <!-- Upload box -->
     {% if user.is_authenticated %}
@@ -19,6 +42,15 @@
       <div class="card-body">
         <form method="post" enctype="multipart/form-data" class="row g-2 align-items-center">
           {% csrf_token %}
+          
+          <!-- Display form errors -->
+          {% if form.non_field_errors %}
+            <div class="col-12">
+              <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+              </div>
+            </div>
+          {% endif %}
           <div class="col-12 col-lg-4">
             <input type="file" name="file"
                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
@@ -30,8 +62,8 @@
           <div class="col-6 col-lg-2">
             {{ form.visibility }}
           </div>
-          <div class="col-6 col-lg-2" id="teams-wrapper">
-            {{ form.allowed_teams }}
+          <div class="col-6 col-lg-2" id="projects-wrapper">
+            {{ form.allowed_projects }}
           </div>
           <div class="col-12 col-lg-1 d-grid">
             <button type="submit" class="btn btn-warning">Upload</button>
@@ -93,10 +125,10 @@
               {% if d.description %}
                 <div class="text-muted small">{{ d.description }}</div>
               {% endif %}
-              {% if d.visibility == 'teams' and d.allowed_teams.all %}
+              {% if d.visibility == 'projects' and d.allowed_projects.all %}
                 <div class="text-muted small">
-                  Teams:
-                  {% for g in d.allowed_teams.all %}{{ g.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                  Projects:
+                  {% for p in d.allowed_projects.all %}{{ p.title }}{% if not forloop.last %}, {% endif %}{% endfor %}
                 </div>
               {% endif %}
             </td>
@@ -105,8 +137,8 @@
             <td>
               {% if d.visibility == 'public' %}
                 <span class="badge bg-success">Public</span>
-              {% elif d.visibility == 'teams' %}
-                <span class="badge bg-warning text-dark">Teams</span>
+              {% elif d.visibility == 'projects' %}
+                <span class="badge bg-warning text-dark">Projects</span>
               {% else %}
                 <span class="badge bg-secondary">Private</span>
               {% endif %}
@@ -183,21 +215,21 @@
 <!-- Security / Validation JS -->
 <script>
 (function(){
-  // Show/Hide team picker
+  // Show/Hide project picker
   const vis = document.querySelector('select[name="visibility"]');
-  const teams = document.querySelector('select[name="allowed_teams"]');
-  const teamsWrapper = document.getElementById('teams-wrapper');
-  if (vis && teams && teamsWrapper) {
-    function toggleTeams() {
-      if (vis.value === 'teams') {
-        teamsWrapper.style.display = '';
+  const projects = document.querySelector('select[name="allowed_projects"]');
+  const projectsWrapper = document.getElementById('projects-wrapper');
+  if (vis && projects && projectsWrapper) {
+    function toggleProjects() {
+      if (vis.value === 'projects') {
+        projectsWrapper.style.display = '';
       } else {
-        teamsWrapper.style.display = 'none';
-        for (const opt of teams.options) opt.selected = false;
+        projectsWrapper.style.display = 'none';
+        for (const opt of projects.options) opt.selected = false;
       }
     }
-    toggleTeams();
-    vis.addEventListener('change', toggleTeams);
+    toggleProjects();
+    vis.addEventListener('change', toggleProjects);
   }
 
   // File validation

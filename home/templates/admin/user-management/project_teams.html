@@ -1,0 +1,627 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .admin-content-wrapper {
+        position: relative;
+        padding-top: 7rem;
+        padding-bottom: 3rem;
+    }
+
+    @media (min-width: 992px) {
+        .admin-content-wrapper {
+            padding-top: 10rem;
+            padding-bottom: 3rem;
+        }
+    }
+
+    /* Dark mode styling for text elements */
+    body.dark-mode .text-xs,
+    .dark-mode .text-xs {
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .text-muted,
+    .dark-mode .text-muted {
+        color: #6c757d !important;
+    }
+
+    /* Dark mode table header styling */
+    body.dark-mode thead th,
+    .dark-mode thead th {
+        color: #ffcd11 !important;
+    }
+
+    body.dark-mode .text-uppercase.text-secondary,
+    .dark-mode .text-uppercase.text-secondary {
+        color: #ffcd11 !important;
+    }
+
+    /* Yellow theme button hover effects */
+    .btn-yellow {
+        background: linear-gradient(135deg, #ffcd11, #ffd633);
+        color: #000;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-yellow:hover {
+        background: linear-gradient(135deg, #ffd633, #ffe066);
+        color: #000;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(255, 205, 17, 0.3);
+    }
+
+    /* Yellow theme card header */
+    .card-header-yellow {
+        background: linear-gradient(135deg, #ffcd11, #ffd633);
+        color: #000;
+        border-bottom: 1px solid #e6c10f;
+    }
+
+    /* Project card styling */
+    .project-card {
+        transition: transform 0.2s ease-in-out;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .project-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Staff member badge styling */
+    .staff-badge {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+        margin-left: 0.5rem;
+    }
+
+    /* User list styling */
+    .user-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .user-item {
+        border-bottom: 1px solid #e9ecef;
+        padding: 0.75rem 0;
+    }
+
+    .user-item:last-child {
+        border-bottom: none;
+    }
+
+    /* Dark mode card styling */
+    body.dark-mode .card {
+        background-color: #343a40;
+        border-color: #495057;
+    }
+
+    body.dark-mode .project-card {
+        background-color: #495057;
+        border-color: #6c757d;
+    }
+
+    body.dark-mode .user-item {
+        border-bottom-color: #6c757d;
+    }
+</style>
+
+<div class="container-fluid admin-content-wrapper">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-3">
+                <i class="fas fa-users me-2" style="color: #ffcd11;"></i>Project Teams Management
+            </h2>
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <span class="badge bg-secondary">
+                    {{ projects|length }} Active Project{{ projects|length|pluralize }}
+                </span>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                    <i class="fas fa-plus me-2"></i>Add New Project
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="row">
+        {% for project in projects %}
+        <div class="col-lg-6 col-xl-4 mb-4">
+            <div class="card project-card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #ffcd11, #ffd633); color: #000;">
+                    <h5 class="mb-0">{{ project.title }}</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="#" 
+                                   data-project-id="{{ project.id }}" 
+                                   data-project-title="{{ project.title }}" 
+                                   data-project-description="{{ project.description|default:"" }}"
+                                   onclick="editProject(this.dataset.projectId, this.dataset.projectTitle, this.dataset.projectDescription)">
+                                    <i class="fas fa-edit me-2"></i>Edit Project
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" onclick="deleteProject('{{ project.id }}', '{{ project.title }}')">
+                                    <i class="fas fa-trash me-2"></i>Delete Project
+                                </a>
+                            </li>
+                        </ul>
+                     </div>
+                </div>
+                <div class="card-body">
+                    {% if project.description %}
+                    <p class="card-text text-muted mb-3">{{ project.description|truncatewords:20 }}</p>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Team Members</h6>
+                        <span class="badge bg-secondary">{{ project.team_members|length }} member{{ project.team_members|length|pluralize }}</span>
+                    </div>
+
+                    <div class="user-list">
+                        {% if project.team_members %}
+                            {% for member in project.team_members %}
+                            <div class="user-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-sm bg-gradient-secondary rounded-circle me-2">
+                                        <span class="text-white text-xs">
+                                            {{ member.user.first_name|first|default:member.user.email|first }}{{ member.user.last_name|first|default:'' }}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-sm">
+                                            {{ member.user.get_full_name|default:member.user.email }}
+                                            {% if member.user.is_staff %}
+                                                <span class="staff-badge">STAFF</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="text-xs text-muted">{{ member.user.email }}</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger" onclick="removeUserFromProject('{{ member.user.id }}', '{{ project.id }}', '{{ member.user.get_full_name|default:member.user.email }}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center text-muted py-3">
+                                <i class="fas fa-users fa-2x mb-2"></i>
+                                <p class="mb-0">No team members assigned</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <button class="btn btn-sm w-100" style="background: linear-gradient(135deg, #ffcd11, #ffd633); color: #000; border: 1px solid #ffcd11;" onclick="showAssignUserModal('{{ project.id }}', '{{ project.title }}')">
+                        <i class="fas fa-user-plus me-2"></i>Assign Users
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-project-diagram fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Projects Found</h5>
+                    <p class="text-muted">Get started by creating your first project.</p>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                        <i class="fas fa-plus me-2"></i>Create First Project
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Add Project Modal -->
+<div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProjectModalLabel">
+                    <i class="fas fa-plus me-2"></i>Add New Project
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addProjectForm">
+                    <div class="mb-3">
+                        <label for="projectTitle" class="form-label">Project Title</label>
+                        <input type="text" class="form-control" id="projectTitle" required placeholder="Enter project title...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="projectDescription" rows="3" placeholder="Enter project description..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="addProject()">
+                    <i class="fas fa-save me-2"></i>Create Project
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Project Modal -->
+<div class="modal fade" id="editProjectModal" tabindex="-1" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProjectModalLabel">
+                    <i class="fas fa-edit me-2"></i>Edit Project
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProjectForm">
+                    <input type="hidden" id="editProjectId">
+                    <div class="mb-3">
+                        <label for="editProjectTitle" class="form-label">Project Title</label>
+                        <input type="text" class="form-control" id="editProjectTitle" required placeholder="Enter project title...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editProjectDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editProjectDescription" rows="3" placeholder="Enter project description..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn" style="background: linear-gradient(135deg, #ffcd11, #ffd633); color: #000; border: none;" onclick="updateProject()">
+                    <i class="fas fa-save me-2"></i>Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Project Modal -->
+<div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProjectModalLabel">
+                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>Delete Project
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Warning:</strong> This action cannot be undone.
+                </div>
+                <p>Are you sure you want to delete the project "<span id="deleteProjectName"></span>"?</p>
+                <p class="text-muted">All user assignments will be removed from this project.</p>
+                <input type="hidden" id="deleteProjectId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteProject()">
+                    <i class="fas fa-trash me-2"></i>Delete Project
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Users Modal -->
+<div class="modal fade" id="assignUsersModal" tabindex="-1" aria-labelledby="assignUsersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignUsersModalLabel">
+                    <i class="fas fa-user-plus me-2"></i>Assign Users to <span id="assignProjectName"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="assignProjectId">
+                
+                <!-- Search Bar -->
+                <div class="mb-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="userSearchInput" placeholder="Search users by name or email...">
+                        <button class="btn btn-outline-secondary" type="button" onclick="searchUsers()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Users List -->
+                <div id="usersList" style="max-height: 400px; overflow-y: auto;">
+                    <!-- Users will be loaded here via AJAX -->
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading users...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+
+function addProject() {
+    const title = document.getElementById('projectTitle').value;
+    const description = document.getElementById('projectDescription').value;
+
+    if (!title) {
+        alert('Please select a project title');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    fetch('{% url "add_project" %}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Project created successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while creating the project');
+    });
+}
+
+function editProject(projectId, title, description) {
+    document.getElementById('editProjectId').value = projectId;
+    document.getElementById('editProjectTitle').value = title;
+    document.getElementById('editProjectDescription').value = description;
+    
+    var editModal = new bootstrap.Modal(document.getElementById('editProjectModal'));
+    editModal.show();
+}
+
+function updateProject() {
+    const projectId = document.getElementById('editProjectId').value;
+    const title = document.getElementById('editProjectTitle').value;
+    const description = document.getElementById('editProjectDescription').value;
+
+    if (!title) {
+        alert('Please select a project title');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    fetch(`{% url "edit_project" pk=0 %}`.replace('0', projectId), {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Project updated successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating the project');
+    });
+}
+
+function deleteProject(projectId, projectName) {
+    document.getElementById('deleteProjectId').value = projectId;
+    document.getElementById('deleteProjectName').textContent = projectName;
+    
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteProjectModal'));
+    deleteModal.show();
+}
+
+function confirmDeleteProject() {
+    const projectId = document.getElementById('deleteProjectId').value;
+
+    fetch(`{% url "delete_project" pk=0 %}`.replace('0', projectId), {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Project deleted successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the project');
+    });
+}
+
+function showAssignUserModal(projectId, projectName) {
+    document.getElementById('assignProjectId').value = projectId;
+    document.getElementById('assignProjectName').textContent = projectName;
+    
+    // Load users
+    loadAvailableUsers(projectId);
+    
+    var assignModal = new bootstrap.Modal(document.getElementById('assignUsersModal'));
+    assignModal.show();
+}
+
+function loadAvailableUsers(projectId) {
+    const usersList = document.getElementById('usersList');
+    
+    fetch(`{% url "get_available_users" %}?project_id=${projectId}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayUsers(data.users);
+        } else {
+            usersList.innerHTML = '<div class="alert alert-danger">Error loading users: ' + data.error + '</div>';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        usersList.innerHTML = '<div class="alert alert-danger">An error occurred while loading users</div>';
+    });
+}
+
+function displayUsers(users) {
+    const usersList = document.getElementById('usersList');
+    
+    if (users.length === 0) {
+        usersList.innerHTML = '<div class="text-center py-3 text-muted">No available users found</div>';
+        return;
+    }
+    
+    let html = '';
+    users.forEach(user => {
+        const isStaff = user.is_staff ? '<span class="badge bg-success ms-2">STAFF</span>' : '';
+        html += `
+            <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                <div>
+                    <div class="fw-bold">${user.full_name || user.email}${isStaff}</div>
+                    <div class="text-muted small">${user.email}</div>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="assignUserToProject('${user.id}')">
+                    <i class="fas fa-plus"></i> Assign
+                </button>
+            </div>
+        `;
+    });
+    
+    usersList.innerHTML = html;
+}
+
+function assignUserToProject(userId) {
+    const projectId = document.getElementById('assignProjectId').value;
+    
+    fetch('{% url "assign_user_project" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            project_id: projectId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User assigned successfully!');
+            // Reload the available users list
+            loadAvailableUsers(projectId);
+            // Optionally reload the page to update the main view
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while assigning the user');
+    });
+}
+
+function removeUserFromProject(userId, projectId, userName) {
+    if (confirm(`Are you sure you want to remove ${userName} from this project?`)) {
+        fetch('{% url "assign_user_project" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                project_id: 'unassigned'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('User removed successfully!');
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while removing the user');
+        });
+    }
+}
+
+function searchUsers() {
+    const searchTerm = document.getElementById('userSearchInput').value;
+    const projectId = document.getElementById('assignProjectId').value;
+    
+    fetch(`{% url "get_available_users" %}?project_id=${projectId}&search=${encodeURIComponent(searchTerm)}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayUsers(data.users);
+        } else {
+            document.getElementById('usersList').innerHTML = '<div class="alert alert-danger">Error searching users: ' + data.error + '</div>';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('usersList').innerHTML = '<div class="alert alert-danger">An error occurred while searching users</div>';
+    });
+}
+
+// Search users on enter key press
+document.getElementById('userSearchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        searchUsers();
+    }
+});
+</script>
+
+{% endblock %}
