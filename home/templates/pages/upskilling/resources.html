@@ -1,0 +1,45 @@
+{% extends "pages/upskilling/skill_base.html" %}
+{% load static %}
+
+{% block skill_content %}
+<div class="container my-5">
+  <h1 class="mb-4">Resources</h1>
+
+  <section class="card p-3 mb-3">
+    <h2 class="card-title text-warning">Useful Websites</h2>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <a href="https://www.w3schools.com/" target="_blank">W3Schools</a>
+      </li>
+      <li class="list-group-item">
+        <a href="https://developer.mozilla.org/" target="_blank">MDN Web Docs</a>
+      </li>
+      <li class="list-group-item">
+        <a href="https://owasp.org/" target="_blank">OWASP Foundation</a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="card p-3 mb-3">
+    <h2 class="card-title text-warning">Useful Tools</h2>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <a href="https://code.visualstudio.com/download" target="_blank">
+          Visual Studio Code (Download)
+        </a>
+      </li>
+      <li class="list-group-item">
+        <a href="https://jupyter.org/" target="_blank">
+          Jupyter Notebook
+        </a>
+      </li>
+    </ul>
+  </section>
+</div>
+
+<style>
+  .card-title.text-warning {
+    color: #ffc107 !important;
+  }
+</style>
+{% endblock %}
