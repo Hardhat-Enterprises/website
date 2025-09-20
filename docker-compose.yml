@@ -49,6 +49,10 @@ services:
       - DB_PORT=5432
       - PYTHONUNBUFFERED=1
       - DJANGO_SETTINGS_MODULE=core.settings
+      # Microsoft Azure AD Authentication
+      - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID:-550b92bc-e30d-415c-8f08-ec4dddff455d}
+      - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET:-J088Q~8XQjHMrJd-ABl8V2vCrUAfmoE9KTAEmc~1}
+      - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID:-d02378ec-1688-46d5-8540-1c28b5f470f6}
     ports:
       - "8000:8000" # Direct port mapping for development
     depends_on:

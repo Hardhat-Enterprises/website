@@ -481,7 +481,7 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return self.user.username
+        return self.user.get_full_name() or self.user.email
 
     
 class CyberChallenge(models.Model):

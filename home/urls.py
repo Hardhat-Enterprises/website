@@ -133,6 +133,7 @@ urlpatterns = [
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
     path('accounts/login/', views.login_with_otp, name='login_with_otp'),
     path('accounts/verify-otp/', views.verify_otp, name='verify_otp'),
+    path('accounts/microsoft-login/', views.microsoft_login, name='microsoft_login'),
     # Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
@@ -203,8 +204,10 @@ urlpatterns = [
     path('vault/delete/<int:doc_id>/', views.delete_document, name='delete_document'),
 
 path("health", health_check, name="health-check"),
-    # settings page route
-    path("settings/", views.settings_view, name="settings"),
+path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
+# settings page route  
+path("settings/", views.settings_view, name="settings"),
+  
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
   ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
