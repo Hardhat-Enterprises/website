@@ -115,8 +115,8 @@ INSTALLED_APPS = [
 
     'rest_framework',  
     'drf_yasg', 
-    # Social Auth - DISABLED TO PREVENT LOGIN REDIRECTS
-    # 'social_django',
+    # Social Auth - Microsoft OAuth
+    'social_django',
 
     'home.apps.HomeConfig',
     'theme_pixel',
@@ -192,8 +192,8 @@ TEMPLATES = [
                 'home.context_processors.dynamic_page_title',
                 'home.context_processors.recaptcha_site_key',
                 'home.context_processors.microsoft_client_id',
-                # 'social_django.context_processors.backends',  # DISABLED TO PREVENT LOGIN REDIRECTS
-                # 'social_django.context_processors.login_redirect',  # DISABLED TO PREVENT LOGIN REDIRECTS
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
 
             ],
