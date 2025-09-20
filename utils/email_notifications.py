@@ -9,7 +9,7 @@ def send_account_notification(user, subject, message):
         return False  # No email on user account
 
     full_message = f"""
-Hi {user.first_name or user.username},
+Hi {user.first_name or user.email},
 
 {message}
 
