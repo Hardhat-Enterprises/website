@@ -28,6 +28,8 @@ from .views import APIModelListView
 from .views import AnalyticsAPI
 from .views import UserManagementAPI, EmailNotificationViewSet
 from .views import MarkSkillCompletedView
+from .views import ChallengeListAPI, SkillListAPI, LeaderboardAPI, HealthCheckAPI
+
 from rest_framework.routers import DefaultRouter
 from .views import ResourceDetailView
 router = DefaultRouter()
@@ -138,6 +140,7 @@ urlpatterns = [
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
     path('accounts/login/', views.login_with_otp, name='login_with_otp'),
     path('accounts/verify-otp/', views.verify_otp, name='verify_otp'),
+    path('accounts/microsoft-login/', views.microsoft_login, name='microsoft_login'),
     # Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
@@ -188,6 +191,10 @@ urlpatterns = [
     path('api-models/', APIModelListView.as_view(), name='api-models'),
     path('api-analytics/', AnalyticsAPI.as_view(), name='api-analytics'),
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
+    path('api-challenges/', ChallengeListAPI.as_view(), name='api-challenges'),
+    path('api-skills/', SkillListAPI.as_view(), name='api-skills'),
+    path('api-leaderboard/', LeaderboardAPI.as_view(), name='api-leaderboard'),
+    path('api-health/', HealthCheckAPI.as_view(), name='api-health'),
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
@@ -205,6 +212,7 @@ urlpatterns = [
 
 
     path("health", health_check, name="health-check"),
+    path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
     
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),

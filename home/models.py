@@ -22,6 +22,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill, Adjust, Transpose 
 
 from django.db import models
 from django.utils import timezone
@@ -461,6 +463,24 @@ class Profile(models.Model):
     github = models.URLField(max_length=200, blank=True, null=True)
     # phone = models.CharField(max_length=20, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
+    avatar_webp_80 = ImageSpecField(
+        source='avatar',
+        processors=[
+            Transpose(),  # Auto-rotate based on EXIF
+            Adjust(contrast=1.0, sharpness=1.0),  # Basic enhancement
+        ],
+        format='WEBP',
+        options={'quality': 80},
+    )
+    avatar_webp_70 = ImageSpecField(
+        source='avatar',
+        processors=[
+            Transpose(),
+            Adjust(contrast=1.0, sharpness=1.0),
+        ],
+        format='WEBP',
+        options={'quality': 70},
+    )
 
     def __str__(self):
         return self.user.username

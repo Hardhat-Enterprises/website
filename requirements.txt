@@ -43,6 +43,9 @@ django-user-agents==0.4.0
 
 # Image Processing
 Pillow==11.3.0
+svglib>=1.5.0
+reportlab>=4.0.0
+django-imagekit==5.0.0
 
 # Password Hashing
 bcrypt==4.3.0
@@ -53,6 +56,9 @@ django-simple-captcha==0.6.2
 # REST / API
 djangorestframework==3.16.1
 drf-yasg==1.21.10
+
+# Microsoft Authentication
+msal==1.28.0
 
 # Sentiment Analysis
 textblob==0.19.0
