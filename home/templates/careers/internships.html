@@ -188,6 +188,7 @@
     background: #ffffff;
     border-radius: 12px;
     padding: 1.5rem;
+    /* Removed fixed max-height and scroll to make content expand naturally */
     margin-top: 1.5rem;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     border: 2px solid #ffd700;
@@ -708,15 +709,6 @@
     const detailsPanel = card.querySelector('.role-details-panel');
     const isExpanded = detailsPanel.classList.contains('show');
     
-    // Close all other panels first
-    document.querySelectorAll('.role-details-panel').forEach(panel => {
-      panel.classList.remove('show');
-    });
-    
-    document.querySelectorAll('.view-details-btn').forEach(btn => {
-      btn.classList.remove('expanded');
-    });
-    
     // Toggle current panel
     if (!isExpanded) {
       detailsPanel.classList.add('show');
@@ -735,18 +727,7 @@
     }
   }
 
-  // Close details when clicking outside
-  document.addEventListener('click', function(event) {
-    if (!event.target.closest('.internship-card')) {
-      document.querySelectorAll('.role-details-panel').forEach(panel => {
-        panel.classList.remove('show');
-      });
-      
-      document.querySelectorAll('.view-details-btn').forEach(btn => {
-        btn.classList.remove('expanded');
-      });
-    }
-  });
+  // Keep details open unless toggled via the View Details button
 </script>
 
 {% endblock %}

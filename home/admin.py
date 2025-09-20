@@ -1,10 +1,10 @@
 from django.contrib import admin
+from .models import TeamMember
+from .models import AdminNotification
 from .models import VaultDocument
 
-from .models import AdminNotification
-
 from django.utils.html import format_html
-
+from .models import Tip , TipRotationState
 from .models import (
     User,
     Student,
@@ -74,6 +74,9 @@ class StudentAdmin(admin.ModelAdmin):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Project._meta.fields]
 
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'role', 'image', 'created_at')
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -258,10 +261,21 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     search_fields = ['name', 'email', 'github_repo_link']
     readonly_fields = ['submitted_at']
 
-# @admin.register(VaultDocument)
-# class VaultDocumentAdmin(admin.ModelAdmin):
-#     list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
-#     search_fields = ('original_name', 'description')
+@admin.register(Tip)
+class TipAdmin(admin.ModelAdmin):
+    list_display = ("text", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("text",)
+
+@admin.register(TipRotationState)
+class TipRotationStateAdmin(admin.ModelAdmin):
+    list_display = ("lock", "last_index", "rotated_at")
+
+@admin.register(VaultDocument)
+class VaultDocumentAdmin(admin.ModelAdmin):
+    list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
+    search_fields = ('original_name', 'description')
+
 
 
 

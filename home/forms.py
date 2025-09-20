@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from django.forms import ModelForm
 import re
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UsernameField
 from django.contrib.auth import get_user_model
 from captcha.fields import CaptchaField
@@ -12,8 +13,10 @@ from django.utils import timezone
 from django.utils.timezone import now
 from datetime import timedelta
 from .models import VaultDocument
+from django.contrib.auth.models import Group
 import logging
 import nh3
+from django.contrib.auth import password_validation
 
 from .models import Student, Smishingdetection_join_us, Projects_join_us, Webpage, Project, Profile, Experience, UserBlogPage, SecurityEvent, JobApplication, CyberChallenge
 from .models import PenTestingRequest, SecureCodeReviewRequest
@@ -50,28 +53,6 @@ class RegistrationForm(UserCreationForm):
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
     )
-    # Newly added................................................
-    def clean_password1(self):
-        password = self.cleaned_data.get('password1')
-
-        # Check individual requirements - this matches the frontend validation
-        if len(password) < 8:
-            raise ValidationError(_("Password must be at least 8 characters long."))
-
-        if not re.search(r'[a-z]', password):
-            raise ValidationError(_("Password must include at least one lowercase letter."))
-
-        if not re.search(r'[A-Z]', password):
-            raise ValidationError(_("Password must include at least one uppercase letter."))
-
-        if not re.search(r'\d', password):
-            raise ValidationError(_("Password must include at least one number."))
-
-        if not re.search(r'[@$!%*?&]', password):
-            raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
-
-        return password
-    # .........................................................
 
     # Keep strict Deakin email validation with debug logs
     def clean_email(self):
@@ -133,28 +114,6 @@ class ClientRegistrationForm(UserCreationForm):
         label=_("Confirm Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
     )
-    # Newly added................................................
-    def clean_password1(self):
-        password = self.cleaned_data.get('password1')
-
-        # Check individual requirements - this matches the frontend validation
-        if len(password) < 8:
-            raise ValidationError(_("Password must be at least 8 characters long."))
-
-        if not re.search(r'[a-z]', password):
-            raise ValidationError(_("Password must include at least one lowercase letter."))
-
-        if not re.search(r'[A-Z]', password):
-            raise ValidationError(_("Password must include at least one uppercase letter."))
-
-        if not re.search(r'\d', password):
-            raise ValidationError(_("Password must include at least one number."))
-
-        if not re.search(r'[@$!%*?&]', password):
-            raise ValidationError(_("Password must include at least one special character (@, $, !, %, *, ?, &)."))
-
-        return password
-    # .........................................................
 
     # Sanitized general email (business)
     def clean_email(self):
@@ -502,6 +461,10 @@ class CaptchaForm(forms.Form):
 
 
 class UserBlogPageForm(ModelForm):
+    image_url = forms.URLField(required=False, widget=forms.URLInput(attrs={
+        'class': 'form-control',
+        'placeholder': _('Image URL (Dropbox/shared link, optional)')
+    }))
     def clean_name(self):
         return clean_text(self.cleaned_data.get('name', ''))
 
@@ -518,6 +481,7 @@ class UserBlogPageForm(ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Your name')}),
             'title': forms.Textarea(attrs={'class': 'form-control', 'placeholder': _('Your title'), 'rows': 2}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': _('Your description')}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
         }
 
 
