@@ -27630,60 +27630,218 @@ body.dark-mode .testimonial-content{
   right: 10px;
 }
 
-.prev-btn:hover, .next-btn:hover {
-  background-color: rgba(0, 0, 0, 0.7);
-}
-.testimonial-section{
-  background-color: #ffc107 !important;
-}
-.testimonials-title{
-  font-size: 32px;
-  color: #333;
-}
-.sub-header{
-  color: #ffc107;
-  margin: 0px !important;
-  font-size: 20px;
-  font-weight: 400;
-}
-.testimonial-content{
-  font-style: italic;
-}
-.testimonial-contentp{
-  font-style: italic;
-  font-size: 16px !important;
-}
+/* Theme-related styles with improved consistency */
 
+  .prev-btn:hover, .next-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
 
-h2 {
+  .testimonial-section {
+    background-color: #ffc107 !important;
+  }
+
+  .testimonials-title {
+    font-size: 32px;
+    color: #333;
+  }
+
+  .sub-header {
+    color: #ffc107;
+    margin: 0px !important;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .testimonial-content {
+    font-style: italic;
+  }
+
+  .testimonial-contentp {
+    font-style: italic;
+    font-size: 16px !important;
+  }
+
+  h2 {
     margin-bottom: 20px;
     color: #333;
+  }
+
+  /* Custom progress color for In Progress status */
+  .progress-in-progress {
+    background-color: #f1c40f !important; /* vivid yellow */
+    color: black;
+  }
+
+  /* Light/dark mode safe styling for Not Started card */
+  .not-started-card {
+    background-color: #f8f9fa; /* Light gray */
+    color: #111;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .not-started-text {
+    font-weight: bold;
+  }
+
+  /* ======================
+   UNIFIED THEME SYSTEM
+   - Only applies classes to body element
+   - Ensures proper text visibility
+   ====================== */
+
+/* Base/Default styling - light mode defaults */
+body {
+  background-color: #ffffff;
+  color: #111111;
+  transition: background-color 0.22s ease, color 0.22s ease;
 }
-/* Custom progress color for In Progress status */
-.progress-in-progress {
-  background-color: #f1c40f !important; /* vivid yellow */
-  color: black;
+
+/* Ensure all text elements inherit body color by default */
+h1, h2, h3, h4, h5, h6, p, div, span, a, li, td, th {
+  color: inherit;
 }
 
-/* Light/dark mode safe styling for Not Started card */
-.not-started-card {
-  background-color: #f8f9fa; /* Light gray */
-  color: #111;
-  transition: all 0.3s ease-in-out;
+/* Light Mode Explicit Styling */
+body.light-mode {
+  background-color: #ffffff !important;
+  color: #111111 !important;
 }
 
-html[data-theme="dark"] .not-started-card {
-  background-color: #000; /* Black in dark mode */
-  color: #fff;
+body.light-mode .navbar,
+body.light-mode .header-global {
+  background-color: #f8f9fa !important;
+  color: #111111 !important;
 }
 
-.not-started-text {
-  font-weight: bold;
+body.light-mode .navbar .nav-link {
+  color: #111111 !important;
 }
 
+body.light-mode .dropdown-menu {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
 
+body.light-mode .dropdown-item {
+  color: #111111 !important;
+}
 
-/* Force dark mode background on mobile navbar when collapsed */
+body.light-mode .dropdown-item:hover {
+  background-color: #ffcd11 !important;
+  color: #000000 !important;
+}
+
+body.light-mode .card {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border-color: rgba(0, 0, 0, 0.125) !important;
+}
+
+body.light-mode footer {
+  background-color: #f8f9fa !important;
+  color: #111111 !important;
+}
+
+body.light-mode .not-started-card {
+  background-color: #f8f9fa !important;
+  color: #111111 !important;
+}
+
+/* Ensure headings are visible in light mode */
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4,
+body.light-mode h5,
+body.light-mode h6 {
+  color: #333333 !important;
+}
+
+body.light-mode .testimonials-title {
+  color: #333333 !important;
+}
+
+/* Dark Mode Styling */
+body.dark-mode {
+  background-color: #111111 !important;
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .header-global {
+  background-color: #2a2a2a !important;
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .navbar .nav-link {
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .dropdown-menu {
+  background-color: #2a2a2a !important;
+  color: #f8f9fa !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode .dropdown-item {
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: #ffcd11 !important;
+  color: #000000 !important;
+}
+
+body.dark-mode .card {
+  background-color: #2a2a2a !important;
+  color: #f8f9fa !important;
+  border-color: rgba(255, 255, 255, 0.125) !important;
+}
+
+body.dark-mode footer {
+  background-color: #2a2a2a !important;
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .not-started-card {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Ensure headings are visible in dark mode */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .testimonials-title {
+  color: #f8f9fa !important;
+}
+
+/* Special handling for yellow header text */
+body.dark-mode .sub-header {
+  color: #ffc107 !important;
+}
+
+body.light-mode .sub-header {
+  color: #ffc107 !important;
+}
+
+/* Links styling */
+body.dark-mode a {
+  color: #ffc107 !important;
+}
+
+body.light-mode a {
+  color: #007bff !important;
+}
+
+/* Mobile navbar improvements for dark mode */
 body.dark-mode .navbar-collapse.show {
   background-color: #333333 !important;
 }
@@ -27694,11 +27852,227 @@ body.dark-mode .navbar-collapse.show .nav-link {
   color: #ffffff !important;
 }
 
-/* Immediate dark background for collapsed navbar in dark mode */
+/* Immediate dark background for collapsed navbar in dark mode on mobile */
 @media (max-width: 991.98px) {
   body.dark-mode .navbar-collapse {
-    background-color: #222 !important;
+    background-color: #222222 !important;
     transition: none !important;
   }
-
 }
+
+/* Form elements styling */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #333333 !important;
+  color: #f8f9fa !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #adb5bd !important;
+}
+
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+  color: #6c757d !important;
+}
+
+/* Button styling */
+body.dark-mode .btn-secondary {
+  background-color: #444444 !important;
+  border-color: #555555 !important;
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background-color: #555555 !important;
+  border-color: #666666 !important;
+}
+
+body.light-mode .btn-secondary {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: #ffffff !important;
+}
+
+body.light-mode .btn-secondary:hover {
+  background-color: #5a6268 !important;
+  border-color: #545b62 !important;
+}
+
+/* Modal styling */
+body.dark-mode .modal-content {
+  background-color: #2a2a2a !important;
+  color: #f8f9fa !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.light-mode .modal-content {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-mode .modal-header,
+body.light-mode .modal-footer {
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* List group items */
+body.dark-mode .list-group-item {
+  background-color: #2a2a2a !important;
+  color: #f8f9fa !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode .list-group-item.active {
+  background-color: #ffc107 !important;
+  border-color: #ffc107 !important;
+  color: #000000 !important;
+}
+
+body.dark-mode .list-group-item:hover {
+  background-color: #333333 !important;
+}
+
+body.light-mode .list-group-item {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border-color: rgba(0, 0, 0, 0.125) !important;
+}
+
+body.light-mode .list-group-item.active {
+  background-color: #007bff !important;
+  border-color: #007bff !important;
+  color: #ffffff !important;
+}
+
+body.light-mode .list-group-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+/* Text color fixes for specific elements */
+body.dark-mode .text-dark {
+  color: #f8f9fa !important;
+}
+
+body.light-mode .text-light {
+  color: #111111 !important;
+}
+
+/* Ensure table text is visible */
+body.dark-mode table,
+body.dark-mode th,
+body.dark-mode td {
+  color: #f8f9fa !important;
+}
+
+body.light-mode table,
+body.light-mode th,
+body.light-mode td {
+  color: #111111 !important;
+}
+
+/* Number display styling */
+body .number-display {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffc107 !important; /* Always yellow regardless of theme */
+}
+
+/* Last Updated text */
+body.dark-mode .last-updated {
+  color: #f8f9fa !important;
+}
+
+body.light-mode .last-updated {
+  color: #111111 !important;
+}
+
+/* Ensure smooth transitions for theme changes */
+.theme-transition,
+.theme-transition *,
+.theme-transition .navbar,
+.theme-transition .card,
+.theme-transition footer,
+.theme-transition .dropdown-menu,
+.theme-transition .list-group-item,
+.theme-transition .modal-content {
+  transition:
+    background-color 0.22s ease,
+    color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease !important;
+}
+
+/* Respect users' motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition,
+  .theme-transition * {
+    transition: none !important;
+  }
+}
+
+/* System theme support - fallback for when no explicit classes are applied */
+@media (prefers-color-scheme: dark) {
+  /* Only apply if no explicit light/dark mode classes are present */
+  body:not(.light-mode):not(.dark-mode) {
+    background-color: #111111;
+    color: #f8f9fa;
+  }
+  
+  body:not(.light-mode):not(.dark-mode) .navbar,
+  body:not(.light-mode):not(.dark-mode) .card,
+  body:not(.light-mode):not(.dark-mode) footer {
+    background-color: #2a2a2a;
+    color: #f8f9fa;
+  }
+
+  body:not(.light-mode):not(.dark-mode) h1,
+  body:not(.light-mode):not(.dark-mode) h2,
+  body:not(.light-mode):not(.dark-mode) h3,
+  body:not(.light-mode):not(.dark-mode) h4,
+  body:not(.light-mode):not(.dark-mode) h5,
+  body:not(.light-mode):not(.dark-mode) h6 {
+    color: #f8f9fa;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body:not(.light-mode):not(.dark-mode) {
+    background-color: #ffffff;
+    color: #111111;
+  }
+  
+  body:not(.light-mode):not(.dark-mode) .navbar,
+  body:not(.light-mode):not(.dark-mode) .card,
+  body:not(.light-mode):not(.dark-mode) footer {
+    background-color: #f8f9fa;
+    color: #111111;
+  }
+
+  body:not(.light-mode):not(.dark-mode) h1,
+  body:not(.light-mode):not(.dark-mode) h2,
+  body:not(.light-mode):not(.dark-mode) h3,
+  body:not(.light-mode):not(.dark-mode) h4,
+  body:not(.light-mode):not(.dark-mode) h5,
+  body:not(.light-mode):not(.dark-mode) h6 {
+    color: #333333;
+  }
+}
+

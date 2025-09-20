@@ -25,7 +25,6 @@ from tinymce.models import HTMLField
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust, Transpose 
 
-from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from django.utils.timezone import now
@@ -37,9 +36,11 @@ import string
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
-from django.db import models
 import nh3
-from django.conf import settings
+
+def vault_upload_path(instance, filename):
+    """Upload path for vault documents"""
+    return f'vault_documents/{filename}'
 
 
 
@@ -680,7 +681,7 @@ class JobAlert(models.Model):
     def send_confirmation_email(self):
         """Send confirmation email when user subscribes"""
         from django.core.mail import send_mail
-        from django.conf import settings
+        
         
         subject = "Job Alerts Subscription Confirmed - HardHat Enterprises"
         message = f"""
@@ -855,6 +856,7 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
+
 class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
@@ -864,7 +866,7 @@ class AdminSession(models.Model):
     last_activity = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     logout_time = models.DateTimeField(null=True, blank=True)
-    logout_reason = models.CharField(max_length=50, blank=True, null=True) 
+    logout_reason = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ['-login_time']
@@ -885,9 +887,7 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
-
-
-    def update_activity(self):
+def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
 
@@ -925,43 +925,35 @@ class Tip(models.Model):
     text = models.CharField(max_length=280, unique=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         verbose_name = "Daily Security Tip"
         verbose_name_plural = "Daily Security Tips"
-
+    
     def __str__(self):
         return self.text[:60]
 
-# keep this only if you implemented 24h rolling rotation
 class TipRotationState(models.Model):
     lock = models.CharField(max_length=16, default="default", unique=True)
     last_index = models.IntegerField(default=-1)
     rotated_at = models.DateTimeField(null=True, blank=True)
-
+    
     def __str__(self):
         return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
-    
-#Model to track known devices
+
 class UserDevice(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="devices"
     )
-    # Device fingerprint (unique identifier)
     device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
-
-    # User-friendly info
     device_name = models.CharField(max_length=200) 
-
-    # Technical info
     user_agent = models.TextField()
     ip_address = models.GenericIPAddressField()
-
-    # Timestamps
     created_at = models.DateTimeField(auto_now_add=True) 
     last_seen = models.DateTimeField(auto_now=True)       
+    
     def __str__(self):
         return f"{self.user.email} - {self.device_name} ({self.ip_address})"
 
