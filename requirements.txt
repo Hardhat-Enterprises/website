@@ -59,6 +59,7 @@ drf-yasg==1.21.10
 
 # Microsoft Authentication
 msal==1.28.0
+social-auth-app-django==5.4.0
 
 # Sentiment Analysis
 textblob==0.19.0
