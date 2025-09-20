@@ -67,8 +67,18 @@ urlpatterns = [
     # blog
     path('blog/', views.blog, name='blog'),
     path('tinymce/', include('tinymce.urls')),
+# Custom Microsoft OAuth login and callback
+path('oauth/login/', views.microsoft_oauth_login, name='microsoft_oauth_login'),
+path('oauth/callback/', views.microsoft_oauth_callback, name='microsoft_oauth_callback'),
+# Override the social_django complete URL to use our custom handler (MUST be before social_django URLs)
+path('complete/azuread-tenant-oauth2/', views.microsoft_oauth_callback, name='microsoft_oauth_callback_override'),
+# Custom OAuth completion view for other backends
+path('complete/<str:backend>/', views.oauth_complete_redirect, name='oauth_complete_redirect'),
+# Python Social Auth URLs (Microsoft OAuth implementation)
+path('', include(('social_django.urls', 'social_django'), namespace='social')),
     
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
+    path("test-login/", views.test_login, name="test_login"),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
