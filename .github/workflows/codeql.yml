@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main", "master" ]
   schedule:
-    - cron: '30 2 * * 1'  # Weekly on Mondays
+    - cron: '30 2 * * 1'
 
 jobs:
   analyze:
@@ -17,9 +17,6 @@ jobs:
       contents: read
       security-events: write
       pull-requests: write
-      issues: write
-      repository-projects: read
-      statuses: write
 
     strategy:
       fail-fast: false
@@ -29,32 +26,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        # Fetch more history for better diff analysis
-        fetch-depth: 0
-
-    - name: Check changed files count
-      id: check-diff
-      if: github.event_name == 'pull_request'
-      run: |
-        # Check number of changed files to provide informative message
-        CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | wc -l)
-        echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
-        if [ $CHANGED_FILES -gt 300 ]; then
-          echo "WARNING: Large changeset detected ($CHANGED_FILES files). CodeQL will perform full analysis instead of diff-based analysis."
-          echo "This is normal and does not indicate a failure - just reduced efficiency."
-        else
-          echo "INFO: Changeset size ($CHANGED_FILES files) is within diff analysis limits."
-        fi
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        config-file: ./.github/codeql/codeql-config.yml
-        # Add debug mode for troubleshooting
-        debug: false
-        
+
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
 
@@ -62,7 +39,3 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
-        # Upload results even if there are warnings
-        upload: true
-        # Continue on error to ensure results are uploaded
-      continue-on-error: false

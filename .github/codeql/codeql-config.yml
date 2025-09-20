@@ -1,26 +1,10 @@
-name: "CodeQL Configuration"
+name: "CodeQL config"
 
-# Paths to exclude entirely from analysis (third-party libraries)
 paths-ignore:
-  - "static/django_extensions/**"
-  - "static/drf-yasg/**" 
-  - "static/rest_framework/**"
-  - "static/vendor/**"
-  - "static/tinymce/**"
-  - "venv/**"
-  - "node_modules/**"
-  - "**/*.min.js"
-  - "**/*.bundle.js"
-
-# Paths to include (focus on our own code)
-paths:
-  - "home/**"
-  - "core/**"
-  - "utils/**"
-  - "static/js/**"
-  - "static/css/**"
-  - "custom_static/**"
-
-# Use security-focused queries
-queries:
-  - uses: security-and-quality
+  - static/django_extensions
+  - static/drf-yasg
+  - static/rest_framework
+  - static/vendor
+  - static/tinymce
+  - venv
+  - node_modules
