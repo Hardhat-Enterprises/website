@@ -22,4 +22,5 @@ paths:
   - "custom_static/**"
 
 # Use security-focused queries
-queries: security-and-quality
+queries:
+  - uses: security-and-quality
