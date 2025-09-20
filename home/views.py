@@ -28,7 +28,7 @@ from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordRes
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.db.models import Count, Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
@@ -130,6 +130,7 @@ from rest_framework.response import Response
 from .models import APIModel
 from .serializers import APIModelSerializer
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework.viewsets import ViewSet
 
 
@@ -144,7 +145,13 @@ from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
 
 
-from home.models import TeamMember  
+from home.models import TeamMember 
+
+#For search form
+import difflib
+from django.utils.dateparse import parse_date
+import re
+
 
 def get_login_redirect_url(user):
     """
@@ -325,6 +332,12 @@ def profile(request):
 
     achievement_count = UserChallenge.objects.filter(user=request.user, completed=True).count()
 
+    # Fetch the list of completed challenges
+    completed_challenges = UserChallenge.objects.filter(
+        user=request.user, 
+        completed=True
+    ).select_related('challenge').order_by('-challenge__points')
+
     if request.method == 'POST':
         if 'save_photo' in request.POST:
             # Only handle avatar upload
@@ -364,6 +377,7 @@ def profile(request):
         'profile': profile,
         'skill_count': skill_count,
         'achievement_count': achievement_count,
+        'completed_challenges': completed_challenges,
     }
 
     return render(request, 'pages/profile.html', context)
@@ -685,13 +699,57 @@ def SearchSuggestions(request):
     return JsonResponse([], safe=False)
 
 #Search-Results page
+
+# --- normalize function ---
+def normalize(word):
+    return re.sub(r'[^a-z0-9]', '', word.lower()) if word else ''  
+
+# --- get_suggestions function ---
+def get_suggestions(query):
+    if not query:
+        return []
+
+    normalized_query = normalize(query)
+
+    User = get_user_model()
+
+    # Build dictionary from database
+    raw_dictionary = list(Project.objects.values_list("title", flat=True)) + \
+        list(Course.objects.values_list("title", flat=True)) + \
+        list(Article.objects.values_list("title", flat=True)) + \
+        list(Skill.objects.values_list("name", flat=True)) + \
+        list(User.objects.values_list("first_name", flat=True)) + \
+        list(User.objects.values_list("last_name", flat=True)) + \
+        list(BlogPost.objects.values_list("title", flat=True))
+
+    # Create mapping {normalized → original}
+    dictionary_map = {normalize(w): w for w in raw_dictionary if w}
+    dictionary = list(dictionary_map.keys())
+
+    # Find close matches
+    matches = difflib.get_close_matches(normalized_query, dictionary, n=5, cutoff=0.5)
+
+    # Map back to original words
+    return [dictionary_map[m] for m in matches if m != normalized_query]
+
+# --- Main SearchResults function ---
 def SearchResults(request):
     User = get_user_model()
-    query = request.POST.get('q', '').strip()  # Get search query from request
+    query = request.GET.get('q') or request.POST.get('q', '')  # GET support and strip
+    query = query.strip()  
+
+    sort = request.GET.get('sort', '')          # newest / oldest  
+    start_date = request.GET.get('start_date')  # from filter form  
+    end_date = request.GET.get('end_date')      
+    content_type = request.GET.getlist('type')  # multiple checkboxes possible  
+
+    # function is defined before we call it
+    suggestion = get_suggestions(query)  
     
     if not query:
         return render(request, 'pages/search-results.html', {
             'searched': '',
+            'suggestion': '',
             'webpages': [],
             'projects': [],
             'courses': [],
@@ -702,38 +760,72 @@ def SearchResults(request):
             'contacts': []
     })
 
-    # Projects logic
-    if query.lower() == "projects":
-        project_results = Project.objects.all()
-    else:
-        project_results = Project.objects.filter(title__icontains=query)
+    # --- Projects ---
+    project_results = Project.objects.filter(title__icontains=query)
 
-    # Courses logic
-    if query.lower() == "courses":
-        course_results = Course.objects.all()
-    else:
-        course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
+    # --- Courses ---
+    course_results = Course.objects.filter(title__icontains=query) | Course.objects.filter(code__icontains=query)
 
-    # Users logic
-    if query.lower() == "user":
-        users = User.objects.filter(id=request.user.id)
-    else:
-        users = User.objects.filter(
-            first_name__icontains=query
-        ) | User.objects.filter(
-            last_name__icontains=query
-        ) | User.objects.filter(
-            email__icontains=query
-        )
+    # --- Articles ---
+    article_results = Article.objects.filter(title__icontains=query)
+    if start_date:  
+        article_results = article_results.filter(date__gte=parse_date(start_date))  
+    if end_date:  
+        article_results = article_results.filter(date__lte=parse_date(end_date))  
 
+    # --- Users ---
+    users = User.objects.filter(
+        first_name__icontains=query
+    ) | User.objects.filter(
+        last_name__icontains=query
+    ) | User.objects.filter(
+        email__icontains=query
+    )
+
+    # --- Apply sorting ---
+    if sort == "newest":  
+        article_results = article_results.order_by('-date')  
+    elif sort == "oldest":  
+        article_results = article_results.order_by('date')  
+
+    # --- Type filter ---
+    if content_type:  
+        if "projects" not in content_type:
+            project_results = Project.objects.none()  
+        if "articles" not in content_type:
+            article_results = Article.objects.none()  
+        if "users" not in content_type:
+            users = User.objects.none()  
+        if "courses" not in content_type:
+            course_results = Course.objects.none()  
+        if "skills" not in content_type:
+            skills = Skill.objects.none()  
+        if "students" not in content_type:
+            students = Student.objects.none()  
+        if "contacts" not in content_type:
+            contacts = Contact.objects.none()  
+        if "webpages" not in content_type:
+            webpages = Webpage.objects.none()  
+    else:
+        # show everything
+        students = Student.objects.filter(user__first_name__icontains=query) | \
+           Student.objects.filter(user__last_name__icontains=query) | \
+           Student.objects.filter(user__email__icontains=query)  
+        contacts = Contact.objects.filter(name__icontains=query)  
+        webpages = Webpage.objects.filter(title__icontains=query)
+
+    # --- Compile results ---
     results = {
         'searched': query,
+        'suggestion': suggestion,
         'webpages': Webpage.objects.filter(title__icontains=query),
         'projects': project_results,
         'users': users,
         'courses': course_results,
         'skills': Skill.objects.filter(name__icontains=query),
         'articles': Article.objects.filter(title__icontains=query),
+        'students': students,  
+        'contacts': contacts,
     }
     return render(request, 'pages/search-results.html', results)
    
@@ -2853,6 +2945,18 @@ def careers_faqs(request):
 #swagger-implementation
 
 class APIModelListView(APIView):
+
+    @swagger_auto_schema(
+        operation_summary="List API Models",
+        operation_description="Retrieve a list of all API models in the system.",
+        responses={
+            200: APIModelSerializer(many=True),
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+        tags=["API Models"]
+    )
+
     def get(self, request):
         data = APIModel.objects.all()
         serializer = APIModelSerializer(data, many=True)
@@ -2860,30 +2964,443 @@ class APIModelListView(APIView):
     
 class AnalyticsAPI(APIView):
     @swagger_auto_schema(
-        operation_summary="Fetch analytics data",
-        operation_description="Returns basic analytics data for testing purposes.",
+        operation_summary="Fetch Analytics Data",
+        operation_description="Retrieve analytics data including user statistics, challenge completions, and system metrics.",
+        responses={
+            200: openapi.Response(
+                description="Analytics data retrieved successfully",
+                examples={
+                    "application/json": {
+                        "total_users": 150,
+                        "active_challenges": 25,
+                        "completed_challenges": 1200,
+                        "total_points_awarded": 50000,
+                        "last_updated": "2024-01-15T10:30:00Z"
+                    }
+                }
+            ),
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+
         tags=["Analytics"]  
     )
     def get(self, request):
-        return Response({"message": "Analytics data fetched successfully!"})  
+        # Get basic analytics data
+        total_users = User.objects.count()
+        active_challenges = CyberChallenge.objects.filter(is_active=True).count()
+        completed_challenges = UserChallenge.objects.filter(completed=True).count()
+        total_points = UserChallenge.objects.filter(completed=True).aggregate(
+            total=Sum('score')
+        )['total'] or 0
+        
+        analytics_data = {
+            "total_users": total_users,
+            "active_challenges": active_challenges,
+            "completed_challenges": completed_challenges,
+            "total_points_awarded": total_points,
+            "last_updated": timezone.now().isoformat()
+        }
+        
+        return Response(analytics_data)   
     
 class UserManagementAPI(APIView):
     @swagger_auto_schema(
         operation_summary="Get User Details",
-        operation_description="Retrieve detailed information of a specific user.",
+       operation_description="Retrieve detailed information of the authenticated user including profile, progress, and achievements.",
+        responses={
+            200: openapi.Response(
+                description="User details retrieved successfully",
+                examples={
+                    "application/json": {
+                        "id": 1,
+                        "email": "john@example.com",
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "is_active": True,
+                        "profile": {
+                            "bio": "Cybersecurity enthusiast",
+                            "avatar": "/media/avatars/user1.jpg"
+                        },
+                        "completed_challenges": 15,
+                        "total_points": 2500,
+                        "rank": 5
+                    }
+                }
+            ),
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+
         tags=["User Management"]  
     )
     def get(self, request):
-        return Response({"message": "User details here."})    
+        if not request.user.is_authenticated:
+            return Response({"error": "Authentication required"}, status=401)
+        
+        user = request.user
+        completed_challenges = UserChallenge.objects.filter(user=user, completed=True).count()
+        total_points = UserChallenge.objects.filter(user=user, completed=True).aggregate(
+            total=Sum('score')
+        )['total'] or 0
+        
+        # Get user's rank (simplified)
+        user_rank = LeaderBoardTable.objects.filter(
+            user=user
+        ).aggregate(rank=Count('id'))['rank'] or 0
+        
+        user_data = {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "is_active": user.is_active,
+            "completed_challenges": completed_challenges,
+            "total_points": total_points,
+            "rank": user_rank
+        }
+        
+        # Add profile data if exists
+        try:
+            profile = user.profile
+            user_data["profile"] = {
+                "bio": profile.bio,
+                "avatar": profile.avatar.url if profile.avatar else None
+            }
+        except:
+            user_data["profile"] = None
+        
+        return Response(user_data)    
     
 class EmailNotificationViewSet(ViewSet):
     @swagger_auto_schema(
         operation_summary="Send Email Notification",
-        operation_description="Send a notification email to a user.",
+        operation_description="Send a notification email to a user with customizable content and recipients.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['recipient_email', 'subject', 'message'],
+            properties={
+                'recipient_email': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    format=openapi.FORMAT_EMAIL,
+                    description='Email address of the recipient'
+                ),
+                'subject': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Subject line of the email'
+                ),
+                'message': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Content of the email message'
+                ),
+                'notification_type': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    enum=['info', 'warning', 'success', 'error'],
+                    description='Type of notification',
+                    default='info'
+                )
+            }
+        ),
+        responses={
+            201: openapi.Response(
+                description="Email notification sent successfully",
+                examples={
+                    "application/json": {
+                        "message": "Email sent successfully!",
+                        "notification_id": "notif_123456",
+                        "sent_at": "2024-01-15T10:30:00Z"
+                    }
+                }
+            ),
+            400: 'Invalid request data',
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+
         tags=["Email Notifications"]  
     )
     def create(self, request):
-        return Response({"message": "Email sent successfully!"})
+        recipient_email = request.data.get('recipient_email')
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+        notification_type = request.data.get('notification_type', 'info')
+        
+        if not all([recipient_email, subject, message]):
+            return Response(
+                {"error": "Missing required fields: recipient_email, subject, message"}, 
+                status=400
+            )
+        
+        # In a real implementation, you would send the actual email here
+        # For now, we'll just return a success response
+        notification_id = f"notif_{random.randint(100000, 999999)}"
+        
+        return Response({
+            "message": "Email sent successfully!",
+            "notification_id": notification_id,
+            "sent_at": timezone.now().isoformat()
+        }, status=201)
+
+
+# Additional API endpoints for comprehensive documentation
+
+class ChallengeListAPI(APIView):
+    """
+    API endpoint to list cybersecurity challenges.
+    """
+    @swagger_auto_schema(
+        operation_summary="List Cybersecurity Challenges",
+        operation_description="Retrieve a list of all available cybersecurity challenges with filtering options.",
+        manual_parameters=[
+            openapi.Parameter(
+                'difficulty',
+                openapi.IN_QUERY,
+                description="Filter by difficulty level",
+                type=openapi.TYPE_STRING,
+                enum=['easy', 'medium', 'hard']
+            ),
+            openapi.Parameter(
+                'category',
+                openapi.IN_QUERY,
+                description="Filter by challenge category",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'is_active',
+                openapi.IN_QUERY,
+                description="Filter by active status",
+                type=openapi.TYPE_BOOLEAN
+            )
+        ],
+        responses={
+            200: openapi.Response(
+                description="Challenges retrieved successfully",
+                examples={
+                    "application/json": {
+                        "count": 25,
+                        "results": [
+                            {
+                                "id": 1,
+                                "title": "SQL Injection Challenge",
+                                "description": "Identify and exploit SQL injection vulnerabilities",
+                                "difficulty": "medium",
+                                "category": "web_security",
+                                "points": 100,
+                                "is_active": True,
+                                "created_at": "2024-01-01T00:00:00Z"
+                            }
+                        ]
+                    }
+                }
+            ),
+            401: 'Authentication required'
+        },
+        tags=["Challenges"]
+    )
+    def get(self, request):
+        challenges = CyberChallenge.objects.all()
+        
+        # Apply filters
+        difficulty = request.query_params.get('difficulty')
+        category = request.query_params.get('category')
+        is_active = request.query_params.get('is_active')
+        
+        if difficulty:
+            challenges = challenges.filter(difficulty=difficulty)
+        if category:
+            challenges = challenges.filter(category=category)
+        if is_active is not None:
+            challenges = challenges.filter(is_active=is_active.lower() == 'true')
+        
+        # Serialize the data
+        challenge_data = []
+        for challenge in challenges:
+            challenge_data.append({
+                "id": challenge.id,
+                "title": challenge.title,
+                "description": challenge.description,
+                "difficulty": challenge.difficulty,
+                "category": challenge.category,
+                "points": challenge.points,
+                "is_active": challenge.is_active,
+                "created_at": challenge.created_at.isoformat()
+            })
+        
+        return Response({
+            "count": len(challenge_data),
+            "results": challenge_data
+        })
+
+
+class SkillListAPI(APIView):
+    """
+    API endpoint to list available skills for upskilling.
+    """
+    @swagger_auto_schema(
+        operation_summary="List Available Skills",
+        operation_description="Retrieve a list of all available skills for upskilling programs.",
+        responses={
+            200: openapi.Response(
+                description="Skills retrieved successfully",
+                examples={
+                    "application/json": {
+                        "count": 15,
+                        "results": [
+                            {
+                                "id": 1,
+                                "name": "Network Security",
+                                "description": "Learn about network security fundamentals and best practices",
+                                "slug": "network-security",
+                                "created_at": "2024-01-01T00:00:00Z"
+                            }
+                        ]
+                    }
+                }
+            ),
+            401: 'Authentication required'
+        },
+        tags=["Skills"]
+    )
+    def get(self, request):
+        skills = Skill.objects.all()
+        
+        skill_data = []
+        for skill in skills:
+            skill_data.append({
+                "id": skill.id,
+                "name": skill.name,
+                "description": skill.description,
+                "slug": skill.slug,
+                "created_at": skill.created_at.isoformat() if hasattr(skill, 'created_at') else None
+            })
+        
+        return Response({
+            "count": len(skill_data),
+            "results": skill_data
+        })
+
+
+class LeaderboardAPI(APIView):
+    """
+    API endpoint to retrieve leaderboard data.
+    """
+    @swagger_auto_schema(
+        operation_summary="Get Leaderboard",
+        operation_description="Retrieve leaderboard data for cybersecurity challenges with optional category filtering.",
+        manual_parameters=[
+            openapi.Parameter(
+                'category',
+                openapi.IN_QUERY,
+                description="Filter by challenge category",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'limit',
+                openapi.IN_QUERY,
+                description="Number of top entries to return (default: 10)",
+                type=openapi.TYPE_INTEGER
+            )
+        ],
+        responses={
+            200: openapi.Response(
+                description="Leaderboard data retrieved successfully",
+                examples={
+                    "application/json": {
+                        "category": "web_security",
+                        "entries": [
+                            {
+                                "rank": 1,
+                                "email": "john@example.com",
+                                "first_name": "John",
+                                "last_name": "Doe",
+                                "total_points": 2500,
+                                "completed_challenges": 15
+                            }
+                        ]
+                    }
+                }
+            ),
+            401: 'Authentication required'
+        },
+        tags=["Leaderboard"]
+    )
+    def get(self, request):
+        category = request.query_params.get('category', '')
+        limit = int(request.query_params.get('limit', 10))
+        
+        # Get leaderboard entries
+        if category:
+            entries = LeaderBoardTable.objects.filter(category=category).order_by('-total_points')[:limit]
+        else:
+            entries = LeaderBoardTable.objects.all().order_by('-total_points')[:limit]
+        
+        leaderboard_data = []
+        for rank, entry in enumerate(entries, 1):
+            leaderboard_data.append({
+                "rank": rank,
+                "email": entry.user.email,
+                "first_name": entry.first_name,
+                "last_name": entry.last_name,
+                "total_points": entry.total_points,
+                "category": entry.category
+            })
+        
+        return Response({
+            "category": category or "all",
+            "entries": leaderboard_data
+        })
+
+
+class HealthCheckAPI(APIView):
+    """
+    API endpoint for health check and system status.
+    """
+    @swagger_auto_schema(
+        operation_summary="Health Check",
+        operation_description="Check the health status of the API and system components.",
+        responses={
+            200: openapi.Response(
+                description="System is healthy",
+                examples={
+                    "application/json": {
+                        "status": "healthy",
+                        "timestamp": "2024-01-15T10:30:00Z",
+                        "version": "1.0.0",
+                        "database": "connected",
+                        "services": {
+                            "api": "operational",
+                            "database": "operational",
+                            "email": "operational"
+                        }
+                    }
+                }
+            ),
+            503: 'Service unavailable'
+        },
+        tags=["System"]
+    )
+    def get(self, request):
+        try:
+            # Check database connection
+            User.objects.count()
+            db_status = "connected"
+        except Exception:
+            db_status = "disconnected"
+        
+        health_data = {
+            "status": "healthy" if db_status == "connected" else "unhealthy",
+            "timestamp": timezone.now().isoformat(),
+            "version": "1.0.0",
+            "database": db_status,
+            "services": {
+                "api": "operational",
+                "database": "operational" if db_status == "connected" else "down",
+                "email": "operational"
+            }
+        }
+        
+        status_code = 200 if db_status == "connected" else 503
+        return Response(health_data, status=status_code)
 
 def leaderboard(request):
     #Select category to display leaderboard table

@@ -77,6 +77,12 @@
             {% endif %}
 
             {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a href="{% url 'vault' %}" class="nav-link"> {% trans "Vault" %} </a>
+            </li>
+            {% endif %}
+
+            {% if user.is_authenticated %}
             {% if user.is_staff or user.is_superuser %}
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" aria-expanded="false" data-bs-toggle="dropdown">
