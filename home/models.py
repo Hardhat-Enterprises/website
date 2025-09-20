@@ -893,6 +893,80 @@ class AdminSession(models.Model):
         self.last_activity = now()        
         self.save(update_fields=['last_activity'])
 
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        WHITEPAPER = "whitepaper", "Whitepaper"
+        CHECKLIST  = "checklist", "Checklist / Guide"
+        INFOGRAPH  = "infographic", "Infographic"
+        CASESTUDY  = "casestudy", "Case Study"
+        OTHER      = "other", "Other"
+
+    title = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    summary = models.TextField(max_length=600, help_text="Short 1–3 line description.")
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.OTHER)
+    file = models.FileField(upload_to="resources/files/")
+    cover = models.ImageField(upload_to="resources/covers/", blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:190]
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class Tip(models.Model):
+    text = models.CharField(max_length=280, unique=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Daily Security Tip"
+        verbose_name_plural = "Daily Security Tips"
+
+    def __str__(self):
+        return self.text[:60]
+
+# keep this only if you implemented 24h rolling rotation
+class TipRotationState(models.Model):
+    lock = models.CharField(max_length=16, default="default", unique=True)
+    last_index = models.IntegerField(default=-1)
+    rotated_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
+    
+#Model to track known devices
+class UserDevice(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+    # Device fingerprint (unique identifier)
+    device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
+
+    # User-friendly info
+    device_name = models.CharField(max_length=200) 
+
+    # Technical info
+    user_agent = models.TextField()
+    ip_address = models.GenericIPAddressField()
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True) 
+    last_seen = models.DateTimeField(auto_now=True)       
+    def __str__(self):
+        return f"{self.user.email} - {self.device_name} ({self.ip_address})"
+
 
 class Resource(models.Model):
     class Category(models.TextChoices):
