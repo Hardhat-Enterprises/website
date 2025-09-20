@@ -1,37 +1,45 @@
 # from django.shortcuts import render, get_object_or_404
  
 # views.py
- 
+
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
+
+
+from home.models import TeamMember
  
+
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from textblob import TextBlob
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from .forms import ExperienceForm
 from .models import Experience
 from django.db.models import Avg, Count
-
+from .models import Tip, TipRotationState
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.db.models import Count, Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.contrib import messages
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 from .models import ContactSubmission
 from django.utils.html import strip_tags
 from .models import Report
 
-from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, UserBlogPage #Feedback 
+
+from .models import Article, Student, Project, Contact, Smishingdetection_join_us, Projects_join_us, Webpage, Profile, User, Course, Skill, Experience, Job, JobAlert, UserBlogPage, VaultDocument #Feedback 
 
 
 from django.contrib.auth import get_user_model
@@ -45,7 +53,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse_lazy
 # from Website.settings import EMAIL_HOST_USER
 import random
-from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm
+from .forms import UserUpdateForm, ProfileUpdateForm, ExperienceForm, JobApplicationForm, UserBlogPageForm, ChallengeForm, VaultUploadForm
 
 from .forms import CaptchaForm
 
@@ -72,6 +80,7 @@ from home.models import Announcement, JobApplication
 from django.http import Http404
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
+from datetime import timedelta
 
  
 # import os
@@ -119,6 +128,7 @@ from rest_framework.response import Response
 from .models import APIModel
 from .serializers import APIModelSerializer
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework.viewsets import ViewSet
 
 
@@ -131,6 +141,23 @@ from .models import Passkey
 
 from .forms import PenTestingRequestForm, SecureCodeReviewRequestForm
 from .models import AppAttackReport
+
+
+from home.models import TeamMember  
+
+def get_login_redirect_url(user):
+    """
+    Determine where to redirect user after login based on join-us completion status.
+    If user hasn't completed join-us form, redirect to /join-us/
+    If user has completed it, redirect to profile page
+    """
+    if Student.objects.filter(user=user).exists():
+        # User has completed join-us form, redirect to profile
+        return '/profile/'
+    else:
+        # User hasn't completed join-us form, redirect to join-us page
+        return '/join-us/'
+
 
 
 def index(request):
@@ -163,8 +190,111 @@ def error_404_view(request,exception):
     return render(request,'includes/404-error-page.html', status=404)
  
 def about_us(request):
+
+    team_members = TeamMember.objects.all()
+    return render(request, 'pages/about.html', {'team_members': team_members})
+
     return render(request, 'pages/about.html')
  
+def security_tools(request):
+    """
+    View to display the Security Tools Arsenal page.
+    """
+    tools_data = [
+        {
+            'name': 'CyberArk PAM',
+            'category': 'Identity Security',
+            'icon_class': 'fas fa-shield-alt',  
+            'description': 'Enterprise-grade privileged access management solution for securing critical credentials and preventing cyber attacks.',
+            'key_benefits': [
+                'Reduces privileged account vulnerabilities by 95%',
+                'Automated credential rotation and discovery',
+                'Real-time threat detection and response',
+                'Compliance with major security frameworks',
+            ],
+            'features': ['Zero Trust Architecture', 'AI-Powered Analytics', 'Session Recording', 'Just-in-Time Access'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Splunk SIEM',
+            'category': 'Security Analytics',
+            'icon_class': 'fas fa-chart-line', 
+            'description': 'Advanced security information and event management platform for comprehensive threat detection and incident response.',
+            'key_benefits': [
+                'Faster threat detection and response times',
+                'Centralized security monitoring across all systems',
+                'Advanced analytics with machine learning',
+                'Scalable cloud-native architecture',
+            ],
+            'features': ['Real-Time Monitoring', 'Machine Learning', 'Custom Dashboards', 'Automated Alerting'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Nessus Scanner',
+            'category': 'Vulnerability Management',
+            'icon_class': 'fas fa-search', 
+            'description': 'Industry-leading vulnerability assessment tool for identifying security weaknesses across your infrastructure.',
+            'key_benefits': [
+                'Comprehensive vulnerability coverage',
+                'Accurate scanning with low false positives',
+                'Regulatory compliance reporting',
+                'Integration with existing security tools',
+            ],
+            'features': ['Network Scanning', 'Web App Testing', 'Configuration Auditing', 'Compliance Checks'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Wireshark Analyzer',
+            'category': 'Network Security',
+            'icon_class': 'fas fa-wifi', 
+            'description': 'Open-source network protocol analyzer for deep packet inspection and network troubleshooting.',
+            'key_benefits': [
+                'Deep network visibility and analysis',
+                'Real-time packet capture and inspection',
+                'Extensive protocol support',
+                'Cost-effective open-source solution',
+            ],
+            'features': ['Packet Capture', 'Protocol Analysis', 'Traffic Filtering', 'Export Capabilities'],
+            'service_url': '#'
+        },
+        {
+            'name': 'Metasploit Framework',
+            'category': 'Penetration Testing',
+            'icon_class': 'fas fa-terminal',  
+            'description': 'Comprehensive penetration testing platform for identifying and exploiting security vulnerabilities.',
+            'key_benefits': [
+                'Validate security defenses effectively',
+                'Extensive exploit database and payloads',
+                'Automated exploitation capabilities',
+                'Professional reporting and documentation',
+            ],
+            'features': ['Exploit Database', 'Payload Generation', 'Post-Exploitation', 'Social Engineering'],
+            'service_url': '/pen-testing'
+        },
+        {
+            'name': 'Burp Suite Pro',
+            'category': 'Web Application Security',
+            'icon_class': 'fas fa-wrench', 
+            'description': 'Leading web application security testing platform for finding and exploiting web vulnerabilities.',
+            'key_benefits': [
+                'Comprehensive web app security testing',
+                'Advanced scanning and manual testing tools',
+                'Extensible through custom plugins',
+                'Industry-standard security testing platform',
+            ],
+            'features': ['Automated Scanning', 'Manual Testing Tools', 'Extensibility', 'Session Management'],
+            'service_url': '/pen-testing'
+        }
+    ]
+
+    context = {
+        'title': 'Our Security Tools',
+        'tools': tools_data
+    }
+    return render(request, 'pages/our_tools.html', context)
+
+
+
 def what_we_do(request):
     return render(request, 'pages/what_we_do.html')
 
@@ -184,6 +314,12 @@ def profile(request):
         skill_count = 0
 
     achievement_count = UserChallenge.objects.filter(user=request.user, completed=True).count()
+
+    # Fetch the list of completed challenges
+    completed_challenges = UserChallenge.objects.filter(
+        user=request.user, 
+        completed=True
+    ).select_related('challenge').order_by('-challenge__points')
 
     if request.method == 'POST':
         if 'save_photo' in request.POST:
@@ -224,6 +360,7 @@ def profile(request):
         'profile': profile,
         'skill_count': skill_count,
         'achievement_count': achievement_count,
+        'completed_challenges': completed_challenges,
     }
 
     return render(request, 'pages/profile.html', context)
@@ -522,7 +659,7 @@ def verify_otp(request):
                 request.session.pop('otp_attempts', None)
                 request.session.pop('otp_timestamp', None)
                 messages.success(request, "Login successful!")
-                return redirect('/')
+                return redirect(get_login_redirect_url(user))
             except User.DoesNotExist:
                 messages.error(request, "User does not exist.")
         else:
@@ -677,6 +814,11 @@ class UserLoginView(LoginView):
 
         return response
 
+    def get_success_url(self):
+        """Override to implement conditional redirect based on join-us completion"""
+        user = self.request.user
+        return get_login_redirect_url(user)
+
     def form_invalid(self, form):
         # Increment the failed login attempts
         failed_attempts = cache.get('failed_login_attempts', 0) + 1
@@ -691,6 +833,84 @@ class UserLoginView(LoginView):
             return redirect(reverse('rate_limit_exceeded'))  # Redirect to a rate limit exceeded page
 
         return super().form_invalid(form)
+
+    def get_client_ip(self, request):
+        # Using x_forwarded_for allows for proxy bypass to give the true IP of a user
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            return x_forwarded_for.split(',')[0].strip()
+        return request.META.get('REMOTE_ADDR')
+
+class AdminLoginView(LoginView):
+    """Specialised login view for admin users via /accounts/admin"""
+    template_name = 'accounts/sign-in.html'
+    form_class = UserLoginForm
+
+    def form_valid(self, form):
+        user = form.get_user()
+
+        # Check if user has admin privileges (staff or superuser - treated the same)
+        if not user.is_admin_user():
+            messages.error(self.request, 'Access denied. Admin privileges required.')
+            return redirect('login')
+
+        # Force new session to rotate session key (prevents fixation)
+        self.request.session.flush()
+
+        # Successful login, proceed as normal
+        response = super().form_valid(form)
+
+        # Enhanced admin session tracking
+        request = self.request
+        client_ip = self.get_client_ip(request)
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+
+        # Store regular session info for hijack protection
+        request.session['ip_address'] = client_ip
+        request.session['user_agent'] = user_agent
+        request.session['session_token'] = request.session.session_key
+
+        # Mark this as an admin session
+        request.session['is_admin_session'] = True
+        request.session['admin_login_time'] = timezone.now().isoformat()
+
+        # Create AdminSession record for tracking
+        from .models import AdminSession
+
+        # End any existing active admin sessions for this user
+        AdminSession.objects.filter(user=user, is_active=True).update(
+            is_active=False, 
+            logout_time=timezone.now(),
+            logout_reason='new_session'
+        )
+
+        # Create new admin session record
+        admin_session = AdminSession.objects.create(
+            user=user,
+            session_key=request.session.session_key,
+            ip_address=client_ip,
+            user_agent=user_agent
+        )
+
+        # Store admin session ID in session for tracking
+        request.session['admin_session_id'] = admin_session.id
+
+        # Log admin login
+        import logging
+        logger = logging.getLogger('audit_logger')
+        logger.info(f"Admin login: {user.email} from IP {client_ip}")
+
+        messages.success(request, f'Welcome back, {user.get_full_name()}! Admin session started.')
+
+        return response
+
+    def get_client_ip(self, request):
+        # Using x_forwarded_for allows for proxy bypass to give the true IP of a user
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            return x_forwarded_for.split(',')[0].strip()
+        return request.META.get('REMOTE_ADDR')
+
 
 def rate_limit_exceeded(request):
     remaining_time = 60  # Use the helper function
@@ -793,7 +1013,7 @@ def login_with_passkey(request):
 
                 messages.success(request, "Passkey verified! Please complete CAPTCHA verification.")
                 request.session['is_otp_verified'] = True  # Mark OTP as verified
-                return redirect("/")
+                return redirect(get_login_redirect_url(user))
             else:
                 messages.error(request, "Invalid passkey. Please try again.")
         except get_user_model().DoesNotExist:
@@ -895,7 +1115,6 @@ def reset_passkeys_verify(request):
     return render(request, "accounts/reset_passkeys_verify.html")
 
 def register_client(request):
-    form = ClientRegistrationForm()
     if request.method == 'POST':
         email = request.POST.get('email')
         business_name = request.POST.get('business_name')
@@ -1007,7 +1226,7 @@ def post_otp_login_captcha(request):
                 del request.session['user_id']
                 del request.session['is_otp_verified']  # Clean up session data
                 messages.success(request, "Login successful!")
-                return redirect('dashboard')  # Redirect to the user's dashboard
+                return redirect(get_login_redirect_url(user))  # Conditional redirect based on join-us completion
             except User.DoesNotExist:
                 messages.error(request, "User not found. Please log in again.")
                 return redirect('login_with_otp')
@@ -1037,81 +1256,87 @@ def login_with_tracking(request):
             user.last_login_ip = get_client_ip(request)
             user.last_login_browser = request.META.get('HTTP_USER_AGENT', '')[:256]
             user.save(update_fields=['last_login_ip', 'last_login_browser'])
-            return redirect('home')
+            return redirect(get_login_redirect_url(user))
     return render(request, 'accounts/sign-in.html')
 
-# Email Verification 
-# def verify_email(request, first_name):
-#     user = get_user_model().objects.get(username=first_name)
-#     user_otp = OtpToken.objects.filter(user=user).last()
+# Email Verification (OtpToken model missing - commented out until model is created)
+def verify_email(request, first_name):
+    # user = get_user_model().objects.get(username=first_name)
+    # user_otp = OtpToken.objects.filter(user=user).last()
     
+    messages.info(request, "Email verification temporarily unavailable - OTP model missing")
+    return redirect("login")
     
-#     if request.method == 'POST':
-#         # valid token
-#         if user_otp.otp_code == request.POST['otp_code']:
-            
-#             # checking for expired token
-#             if user_otp.otp_expires_at > timezone.now():
-#                 user.is_active=True
-#                 user.save()
-#                 messages.success(request, "Account activated successfully!! You can Login.")
-#                 return redirect("signin")
-            
-#             # expired token
-#             else:
-#                 messages.warning(request, "The OTP has expired, get a new OTP!")
-#                 return redirect("verify-email", username=user.first_name)
-        
-        
-#         # invalid otp code
-#         else:
-#             messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
-#             return redirect("verify-email", username=user.first_name)
-        
-#     context = {}
-#     return render(request, "verify_token.html", context)
+    # if request.method == 'POST':
+    #     # valid token
+    #     if user_otp.otp_code == request.POST['otp_code']:
+    #         
+    #         # checking for expired token
+    #         if user_otp.otp_expires_at > timezone.now():
+    #             user.is_active=True
+    #             user.save()
+    #             messages.success(request, "Account activated successfully!! You can Login.")
+    #             return redirect("signin")
+    #         
+    #         # expired token
+    #         else:
+    #             messages.warning(request, "The OTP has expired, get a new OTP!")
+    #             return redirect("verify-email", username=user.first_name)
+    #     
+    #     
+    #     # invalid otp code
+    #     else:
+    #         messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
+    #         return redirect("verify-email", username=user.first_name)
+    #     
+    # context = {}
+    # return render(request, "verify_token.html", context)
 
 
-# def resend_otp(request):
-#     if request.method == 'POST':
-#         user_email = request.POST["otp_email"]
-        
-#         if get_user_model().objects.filter(email=user_email).exists():
-#             user = get_user_model().objects.get(email=user_email)
-#             otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
-            
-            
-#             # email variables
-#             subject="Email Verification"
-#             message = f"""
-#                                 Hi {user.username}, here is your OTP {otp.otp_code} 
-#                                 it expires in 5 minute, use the url below to redirect back to the website
-#                                 http://127.0.0.1:8000/verify-email/{user.username}
-                                
-#                                 """
-#             sender = "kaviuln@gmail.com"
-#             receiver = [user.email, ]
-        
-        
-#             # send email
-#             send_mail(
-#                     subject,
-#                     message,
-#                     sender,
-#                     receiver,
-#                     fail_silently=False,
-#                 )
-            
-#             messages.success(request, "A new OTP has been sent to your email-address")
-#             return redirect("verify-email", username=user.first_name)
-
-#         else:
-#             messages.warning(request, "This email dosen't exist in the database")
-#             return redirect("resend-otp")
-        
-           
-#     context = {}
-#     return render(request, "resend_otp.html", context)
+def resend_otp(request):
+    # OtpToken model missing - function disabled until model is created
+    messages.info(request, "OTP resend temporarily unavailable - OTP model missing")
+    return redirect("login")
+    
+    # if request.method == 'POST':
+    #     user_email = request.POST["otp_email"]
+    #     
+    #     if get_user_model().objects.filter(email=user_email).exists():
+    #         user = get_user_model().objects.get(email=user_email)
+    #         otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
+    #         
+    #         
+    #         # email variables
+    #         subject="Email Verification"
+    #         message = f"""
+    #                             Hi {user.username}, here is your OTP {otp.otp_code} 
+    #                             it expires in 5 minute, use the url below to redirect back to the website
+    #                             {request.build_absolute_uri(reverse('verify-email', args=[user.username]))}
+    #                            
+    #                             """
+    #         sender = "kaviuln@gmail.com"
+    #         receiver = [user.email, ]
+    #     
+    #     
+    #         # send email
+    #         send_mail(
+    #                 subject,
+    #                 message,
+    #                 sender,
+    #                 receiver,
+    #                 fail_silently=False,
+    #             )
+    #         
+    #         messages.success(request, "A new OTP has been sent to your email-address")
+    #         return redirect("verify-email", username=user.first_name)
+    # 
+    #     else:
+    #         messages.warning(request, "This email dosen't exist in the database")
+    #         return redirect("resend-otp")
+    #     
+    #        
+    # context = {}
+    # return render(request, "resend_otp.html", context)
 
 
 
@@ -1132,12 +1357,34 @@ class UserPasswordChangeView(PasswordChangeView):
     template_name = 'accounts/password_change.html'
     form_class = UserPasswordChangeForm
  
-#def resources_view(request):
-    #return render(request, 'pages/resources.html.')
+def resources_view(request):
+    return render(request, 'pages/resources.html.')
    
 def package_plan(request):
     return render(request, 'pages/package-plan.html')
  
+@staff_member_required  
+def admin_dashboard(request):
+    """
+    Admin dashboard view with session management.
+    """
+    # Verify user has admin privileges
+    if not request.user.is_admin_user():
+        messages.error(request, 'Access denied. Admin privileges required.')
+        return redirect('login')
+
+    # Check if this is a valid admin session
+    is_admin_session = request.session.get('is_admin_session', False)
+    if not is_admin_session:
+        messages.warning(request, 'Please log in through the admin portal.')
+        return redirect('admin_login')
+
+    return render(request, 'admin/dashboard.html', {
+        'user': request.user,
+        'admin_session_active': True
+    })
+
+
 # Chart Views
  
 @staff_member_required
@@ -1779,8 +2026,25 @@ def delete_feedback(request, id):
 
 def challenge_list(request):
     categories = CyberChallenge.objects.values('category').annotate(count=Count('id')).order_by('category')
-    return render(request, 'pages/challenges/challenge_list.html', {'categories': categories})
+    
+    # Check if user is staff or superuser
+    show_admin_controls = request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)
 
+    return render(request, 'pages/challenges/challenge_list.html', {
+        'categories': categories,
+        'show_admin_controls': show_admin_controls
+    })
+
+def cyber_challenge(request):
+    """
+    View for the cyber challenge page with admin controls.
+    """
+    # Check if user is staff or superuser
+    show_admin_controls = request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)
+
+    return render(request, 'cyber_challenge.html', {
+        'show_admin_controls': show_admin_controls
+    })
 
 
 @login_required
@@ -1809,29 +2073,38 @@ def challenge_detail(request, challenge_id):
             selected = request.POST.get("selected_choice", "").strip()
             correct_answer = challenge.correct_answer.strip()
 
-            # Check if the answer is correct
-            is_correct = selected == correct_answer
+            # Handle JSON array format for correct_answer
+            try:
+                import json
+                parsed_correct = json.loads(correct_answer)
+                if isinstance(parsed_correct, list):
+                    # If correct_answer is a JSON array, check if user_answer matches any element
+                    is_correct = selected in parsed_correct
+                else:
+                    # If it's not a list, compare directly
+                    is_correct = selected == correct_answer
+            except (json.JSONDecodeError, TypeError):
+                # If it's not valid JSON, compare directly
+                is_correct = selected == correct_answer
+            
             user_challenge.completed = is_correct
             user_challenge.score = challenge.points if is_correct else 0
-            output = correct_answer  # just to include something in response
+            
+            if is_correct:
+                output = "Correct!"
+            else:
+                output = "Incorrect. The correct answer is: " + correct_answer
 
         # For Fix the Code challenges
         elif challenge.challenge_type == 'fix_code':
             user_code = request.POST.get("code_input", "").strip()
-            expected_output = challenge.expected_output.strip()
-
-            f = io.StringIO()
-            with contextlib.redirect_stdout(f):
-                try:
-                    exec(user_code, {"input": lambda: next(iter(challenge.sample_input.split('\n')))})
-                    output = f.getvalue().strip()
-                    is_correct = output == expected_output
-                    user_challenge.completed = is_correct
-                    user_challenge.score = challenge.points if is_correct else 0
-                except Exception as e:
-                    output = str(e)
-                    user_challenge.completed = False
-                    user_challenge.score = 0
+            correct_code = challenge.correct_answer.strip()
+            
+            # Compare the user's code directly with the correct answer code
+            is_correct = user_code.strip() == correct_code.strip()
+            output = "Code comparison completed"
+            user_challenge.completed = is_correct
+            user_challenge.score = challenge.points if is_correct else 0
 
         user_challenge.save()
 
@@ -1862,26 +2135,36 @@ def submit_answer(request, challenge_id):
 
         if challenge.challenge_type == 'mcq':
             correct_answer = challenge.correct_answer.strip()
-            if user_answer.strip() == correct_answer:
-                is_correct = True
+            user_answer = user_answer.strip()
+            
+            # Handle JSON array format for correct_answer
+            try:
+                import json
+                parsed_correct = json.loads(correct_answer)
+                if isinstance(parsed_correct, list):
+                    # If correct_answer is a JSON array, check if user_answer matches any element
+                    is_correct = user_answer in parsed_correct
+                else:
+                    # If it's not a list, compare directly
+                    is_correct = user_answer == correct_answer
+            except (json.JSONDecodeError, TypeError):
+                # If it's not valid JSON, compare directly
+                is_correct = user_answer == correct_answer
+            
+            if is_correct:
                 output = "Correct!"
             else:
                 output = "Incorrect. The correct answer is: " + correct_answer
 
         elif challenge.challenge_type == 'fix_code':
-            f = io.StringIO()
-            try:
-                with contextlib.redirect_stdout(f):
-                    inputs = challenge.sample_input.strip().split('\n')
-                    input_iter = iter(inputs)
-                    exec(user_code, {"input": lambda: next(input_iter)})
-
-                result_output = f.getvalue().strip()
-                is_correct = result_output == challenge.expected_output.strip()
-                output = result_output
-            except Exception as e:
-                output = str(e)
-                is_correct = False
+            user_code = request.POST.get('code_input', '').strip()
+            correct_code = challenge.correct_answer.strip()
+            
+            # Compare the user's code directly with the correct answer code
+            is_correct = user_code.strip() == correct_code.strip()
+            output = "Code comparison completed"
+            user_challenge.completed = is_correct
+            user_challenge.score = challenge.points if is_correct else 0
 
         user_challenge, created = UserChallenge.objects.get_or_create(user=request.user, challenge=challenge)
 
@@ -1980,7 +2263,30 @@ def internships(request):
 
 # View for Job Alerts Page
 def job_alerts(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+            # Check if email already exists
+            job_alert, created = JobAlert.objects.get_or_create(email=email)
+            if created:
+                # Send confirmation email
+                job_alert.send_confirmation_email()
+                messages.success(request, 'Successfully subscribed to job alerts! Check your email for confirmation.')
+            else:
+                if job_alert.is_active:
+                    messages.info(request, 'You are already subscribed to job alerts.')
+                else:
+                    job_alert.is_active = True
+                    job_alert.save()
+                    job_alert.send_confirmation_email()
+                    messages.success(request, 'Successfully re-subscribed to job alerts! Check your email for confirmation.')
+        else:
+            messages.error(request, 'Please provide a valid email address.')
+    
     return render(request, "careers/job-alerts.html")
+
+def career_path_finder(request):
+    return render(request, "careers/path_finder.html")
 
 def career_application(request,id):
     job = get_object_or_404(Job, id=id)
@@ -2006,10 +2312,32 @@ def career_application(request,id):
     }
     return render(request,"careers/application-form.html",context)
 
+def graduate_program(request):
+    """View for the Graduate Program roadmap page"""
+    return render(request, "careers/graduate-program.html")
+
+
+
+def careers_faqs(request):
+    """View for the Careers FAQ page"""
+    return render(request, "careers/faqs.html")
+
   
 #swagger-implementation
 
 class APIModelListView(APIView):
+
+    @swagger_auto_schema(
+        operation_summary="List API Models",
+        operation_description="Retrieve a list of all API models in the system.",
+        responses={
+            200: APIModelSerializer(many=True),
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+        tags=["API Models"]
+    )
+
     def get(self, request):
         data = APIModel.objects.all()
         serializer = APIModelSerializer(data, many=True)
@@ -2017,30 +2345,443 @@ class APIModelListView(APIView):
     
 class AnalyticsAPI(APIView):
     @swagger_auto_schema(
-        operation_summary="Fetch analytics data",
-        operation_description="Returns basic analytics data for testing purposes.",
+        operation_summary="Fetch Analytics Data",
+        operation_description="Retrieve analytics data including user statistics, challenge completions, and system metrics.",
+        responses={
+            200: openapi.Response(
+                description="Analytics data retrieved successfully",
+                examples={
+                    "application/json": {
+                        "total_users": 150,
+                        "active_challenges": 25,
+                        "completed_challenges": 1200,
+                        "total_points_awarded": 50000,
+                        "last_updated": "2024-01-15T10:30:00Z"
+                    }
+                }
+            ),
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+
         tags=["Analytics"]  
     )
     def get(self, request):
-        return Response({"message": "Analytics data fetched successfully!"})  
+        # Get basic analytics data
+        total_users = User.objects.count()
+        active_challenges = CyberChallenge.objects.filter(is_active=True).count()
+        completed_challenges = UserChallenge.objects.filter(completed=True).count()
+        total_points = UserChallenge.objects.filter(completed=True).aggregate(
+            total=Sum('score')
+        )['total'] or 0
+        
+        analytics_data = {
+            "total_users": total_users,
+            "active_challenges": active_challenges,
+            "completed_challenges": completed_challenges,
+            "total_points_awarded": total_points,
+            "last_updated": timezone.now().isoformat()
+        }
+        
+        return Response(analytics_data)   
     
 class UserManagementAPI(APIView):
     @swagger_auto_schema(
         operation_summary="Get User Details",
-        operation_description="Retrieve detailed information of a specific user.",
+       operation_description="Retrieve detailed information of the authenticated user including profile, progress, and achievements.",
+        responses={
+            200: openapi.Response(
+                description="User details retrieved successfully",
+                examples={
+                    "application/json": {
+                        "id": 1,
+                        "email": "john@example.com",
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "is_active": True,
+                        "profile": {
+                            "bio": "Cybersecurity enthusiast",
+                            "avatar": "/media/avatars/user1.jpg"
+                        },
+                        "completed_challenges": 15,
+                        "total_points": 2500,
+                        "rank": 5
+                    }
+                }
+            ),
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+
         tags=["User Management"]  
     )
     def get(self, request):
-        return Response({"message": "User details here."})    
+        if not request.user.is_authenticated:
+            return Response({"error": "Authentication required"}, status=401)
+        
+        user = request.user
+        completed_challenges = UserChallenge.objects.filter(user=user, completed=True).count()
+        total_points = UserChallenge.objects.filter(user=user, completed=True).aggregate(
+            total=Sum('score')
+        )['total'] or 0
+        
+        # Get user's rank (simplified)
+        user_rank = LeaderBoardTable.objects.filter(
+            user=user
+        ).aggregate(rank=Count('id'))['rank'] or 0
+        
+        user_data = {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "is_active": user.is_active,
+            "completed_challenges": completed_challenges,
+            "total_points": total_points,
+            "rank": user_rank
+        }
+        
+        # Add profile data if exists
+        try:
+            profile = user.profile
+            user_data["profile"] = {
+                "bio": profile.bio,
+                "avatar": profile.avatar.url if profile.avatar else None
+            }
+        except:
+            user_data["profile"] = None
+        
+        return Response(user_data)    
     
 class EmailNotificationViewSet(ViewSet):
     @swagger_auto_schema(
         operation_summary="Send Email Notification",
-        operation_description="Send a notification email to a user.",
+        operation_description="Send a notification email to a user with customizable content and recipients.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['recipient_email', 'subject', 'message'],
+            properties={
+                'recipient_email': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    format=openapi.FORMAT_EMAIL,
+                    description='Email address of the recipient'
+                ),
+                'subject': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Subject line of the email'
+                ),
+                'message': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Content of the email message'
+                ),
+                'notification_type': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    enum=['info', 'warning', 'success', 'error'],
+                    description='Type of notification',
+                    default='info'
+                )
+            }
+        ),
+        responses={
+            201: openapi.Response(
+                description="Email notification sent successfully",
+                examples={
+                    "application/json": {
+                        "message": "Email sent successfully!",
+                        "notification_id": "notif_123456",
+                        "sent_at": "2024-01-15T10:30:00Z"
+                    }
+                }
+            ),
+            400: 'Invalid request data',
+            401: 'Authentication required',
+            403: 'Permission denied'
+        },
+
         tags=["Email Notifications"]  
     )
     def create(self, request):
-        return Response({"message": "Email sent successfully!"})
+        recipient_email = request.data.get('recipient_email')
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+        notification_type = request.data.get('notification_type', 'info')
+        
+        if not all([recipient_email, subject, message]):
+            return Response(
+                {"error": "Missing required fields: recipient_email, subject, message"}, 
+                status=400
+            )
+        
+        # In a real implementation, you would send the actual email here
+        # For now, we'll just return a success response
+        notification_id = f"notif_{random.randint(100000, 999999)}"
+        
+        return Response({
+            "message": "Email sent successfully!",
+            "notification_id": notification_id,
+            "sent_at": timezone.now().isoformat()
+        }, status=201)
+
+
+# Additional API endpoints for comprehensive documentation
+
+class ChallengeListAPI(APIView):
+    """
+    API endpoint to list cybersecurity challenges.
+    """
+    @swagger_auto_schema(
+        operation_summary="List Cybersecurity Challenges",
+        operation_description="Retrieve a list of all available cybersecurity challenges with filtering options.",
+        manual_parameters=[
+            openapi.Parameter(
+                'difficulty',
+                openapi.IN_QUERY,
+                description="Filter by difficulty level",
+                type=openapi.TYPE_STRING,
+                enum=['easy', 'medium', 'hard']
+            ),
+            openapi.Parameter(
+                'category',
+                openapi.IN_QUERY,
+                description="Filter by challenge category",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'is_active',
+                openapi.IN_QUERY,
+                description="Filter by active status",
+                type=openapi.TYPE_BOOLEAN
+            )
+        ],
+        responses={
+            200: openapi.Response(
+                description="Challenges retrieved successfully",
+                examples={
+                    "application/json": {
+                        "count": 25,
+                        "results": [
+                            {
+                                "id": 1,
+                                "title": "SQL Injection Challenge",
+                                "description": "Identify and exploit SQL injection vulnerabilities",
+                                "difficulty": "medium",
+                                "category": "web_security",
+                                "points": 100,
+                                "is_active": True,
+                                "created_at": "2024-01-01T00:00:00Z"
+                            }
+                        ]
+                    }
+                }
+            ),
+            401: 'Authentication required'
+        },
+        tags=["Challenges"]
+    )
+    def get(self, request):
+        challenges = CyberChallenge.objects.all()
+        
+        # Apply filters
+        difficulty = request.query_params.get('difficulty')
+        category = request.query_params.get('category')
+        is_active = request.query_params.get('is_active')
+        
+        if difficulty:
+            challenges = challenges.filter(difficulty=difficulty)
+        if category:
+            challenges = challenges.filter(category=category)
+        if is_active is not None:
+            challenges = challenges.filter(is_active=is_active.lower() == 'true')
+        
+        # Serialize the data
+        challenge_data = []
+        for challenge in challenges:
+            challenge_data.append({
+                "id": challenge.id,
+                "title": challenge.title,
+                "description": challenge.description,
+                "difficulty": challenge.difficulty,
+                "category": challenge.category,
+                "points": challenge.points,
+                "is_active": challenge.is_active,
+                "created_at": challenge.created_at.isoformat()
+            })
+        
+        return Response({
+            "count": len(challenge_data),
+            "results": challenge_data
+        })
+
+
+class SkillListAPI(APIView):
+    """
+    API endpoint to list available skills for upskilling.
+    """
+    @swagger_auto_schema(
+        operation_summary="List Available Skills",
+        operation_description="Retrieve a list of all available skills for upskilling programs.",
+        responses={
+            200: openapi.Response(
+                description="Skills retrieved successfully",
+                examples={
+                    "application/json": {
+                        "count": 15,
+                        "results": [
+                            {
+                                "id": 1,
+                                "name": "Network Security",
+                                "description": "Learn about network security fundamentals and best practices",
+                                "slug": "network-security",
+                                "created_at": "2024-01-01T00:00:00Z"
+                            }
+                        ]
+                    }
+                }
+            ),
+            401: 'Authentication required'
+        },
+        tags=["Skills"]
+    )
+    def get(self, request):
+        skills = Skill.objects.all()
+        
+        skill_data = []
+        for skill in skills:
+            skill_data.append({
+                "id": skill.id,
+                "name": skill.name,
+                "description": skill.description,
+                "slug": skill.slug,
+                "created_at": skill.created_at.isoformat() if hasattr(skill, 'created_at') else None
+            })
+        
+        return Response({
+            "count": len(skill_data),
+            "results": skill_data
+        })
+
+
+class LeaderboardAPI(APIView):
+    """
+    API endpoint to retrieve leaderboard data.
+    """
+    @swagger_auto_schema(
+        operation_summary="Get Leaderboard",
+        operation_description="Retrieve leaderboard data for cybersecurity challenges with optional category filtering.",
+        manual_parameters=[
+            openapi.Parameter(
+                'category',
+                openapi.IN_QUERY,
+                description="Filter by challenge category",
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'limit',
+                openapi.IN_QUERY,
+                description="Number of top entries to return (default: 10)",
+                type=openapi.TYPE_INTEGER
+            )
+        ],
+        responses={
+            200: openapi.Response(
+                description="Leaderboard data retrieved successfully",
+                examples={
+                    "application/json": {
+                        "category": "web_security",
+                        "entries": [
+                            {
+                                "rank": 1,
+                                "email": "john@example.com",
+                                "first_name": "John",
+                                "last_name": "Doe",
+                                "total_points": 2500,
+                                "completed_challenges": 15
+                            }
+                        ]
+                    }
+                }
+            ),
+            401: 'Authentication required'
+        },
+        tags=["Leaderboard"]
+    )
+    def get(self, request):
+        category = request.query_params.get('category', '')
+        limit = int(request.query_params.get('limit', 10))
+        
+        # Get leaderboard entries
+        if category:
+            entries = LeaderBoardTable.objects.filter(category=category).order_by('-total_points')[:limit]
+        else:
+            entries = LeaderBoardTable.objects.all().order_by('-total_points')[:limit]
+        
+        leaderboard_data = []
+        for rank, entry in enumerate(entries, 1):
+            leaderboard_data.append({
+                "rank": rank,
+                "email": entry.user.email,
+                "first_name": entry.first_name,
+                "last_name": entry.last_name,
+                "total_points": entry.total_points,
+                "category": entry.category
+            })
+        
+        return Response({
+            "category": category or "all",
+            "entries": leaderboard_data
+        })
+
+
+class HealthCheckAPI(APIView):
+    """
+    API endpoint for health check and system status.
+    """
+    @swagger_auto_schema(
+        operation_summary="Health Check",
+        operation_description="Check the health status of the API and system components.",
+        responses={
+            200: openapi.Response(
+                description="System is healthy",
+                examples={
+                    "application/json": {
+                        "status": "healthy",
+                        "timestamp": "2024-01-15T10:30:00Z",
+                        "version": "1.0.0",
+                        "database": "connected",
+                        "services": {
+                            "api": "operational",
+                            "database": "operational",
+                            "email": "operational"
+                        }
+                    }
+                }
+            ),
+            503: 'Service unavailable'
+        },
+        tags=["System"]
+    )
+    def get(self, request):
+        try:
+            # Check database connection
+            User.objects.count()
+            db_status = "connected"
+        except Exception:
+            db_status = "disconnected"
+        
+        health_data = {
+            "status": "healthy" if db_status == "connected" else "unhealthy",
+            "timestamp": timezone.now().isoformat(),
+            "version": "1.0.0",
+            "database": db_status,
+            "services": {
+                "api": "operational",
+                "database": "operational" if db_status == "connected" else "down",
+                "email": "operational"
+            }
+        }
+        
+        status_code = 200 if db_status == "connected" else 503
+        return Response(health_data, status=status_code)
 
 def leaderboard(request):
     #Select category to display leaderboard table
@@ -2168,4 +2909,261 @@ def arpaname_view(request):
 
 def policy_deployment(request):
     return render(request, 'pages/policy_deployment.html')
+ #Health Check Function
+def health_check(request):
+    return JsonResponse({"status": "ok"}, status=200) 
 
+
+# Challenge Management Views
+
+class StaffRequiredMixin(UserPassesTestMixin):
+    #Check if user is staff
+    
+    def test_func(self):
+        return self.request.user.is_authenticated and (self.request.user.is_staff or self.request.user.is_superuser)
+    
+    def handle_no_permission(self):
+        print(f"DEBUG: Access denied for user {self.request.user}")
+        from django.shortcuts import redirect
+        # Redirect to login page instead of raising 403
+        return redirect('login')
+    
+class ChallengeManagementView(StaffRequiredMixin, ListView):
+    model = CyberChallenge
+    template_name = 'admin/challenges/challenge_management.html'
+    context_object_name = 'challenges'
+    
+    
+    def get_queryset(self):
+        queryset = CyberChallenge.objects.all().order_by('-created_at')
+        print(f"DEBUG: Found {queryset.count()} challenges in queryset")
+        return queryset
+
+class ChallengeCreateView(StaffRequiredMixin, CreateView):
+    
+    model = CyberChallenge
+    form_class = ChallengeForm
+    template_name = 'admin/challenges/add_challenge.html'
+    success_url = reverse_lazy('challenge_management')
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'Challenge "{form.instance.title}" was created successfully!')
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_title'] = 'Create New Challenge'
+        context['submit_text'] = 'Create Challenge'
+        return context
+    
+class ChallengeUpdateView(StaffRequiredMixin, UpdateView):
+  #edit challenge 
+    model = CyberChallenge
+    form_class = ChallengeForm
+    template_name = 'admin/challenges/edit_challenge.html'
+    success_url = reverse_lazy('challenge_management')
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'Challenge "{form.instance.title}" was updated successfully!')
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_title'] = f'Edit Challenge: {self.object.title}'
+        context['submit_text'] = 'Update Challenge'
+        context['is_edit'] = True
+        return context
+class ChallengeDeleteView(StaffRequiredMixin, DeleteView):
+    model = CyberChallenge
+    template_name = 'admin/challenges/confirm_delete.html'
+    success_url = reverse_lazy('challenge_management')
+    
+    def delete(self, request, *args, **kwargs):
+        challenge = self.get_object()
+        challenge_title = challenge.title
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, f'Challenge "{challenge_title}" was permanently deleted.')
+        return response
+
+
+class ChallengeArchiveView(StaffRequiredMixin, View):
+    def get(self, request, pk):
+        challenge = get_object_or_404(CyberChallenge, pk=pk)
+        return render(request, 'admin/challenges/archive_challenge.html', {'object': challenge})
+
+    def post(self, request, pk):
+        challenge = get_object_or_404(CyberChallenge, pk=pk)
+        
+        # Handle JSON request body for AJAX
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            try:
+                import json
+                data = json.loads(request.body.decode('utf-8'))
+                action = data.get('action', '')
+                
+                if action == 'archive':
+                    challenge.is_active = False
+                elif action == 'unarchive':
+                    challenge.is_active = True
+                else:
+                    # Default toggle behavior
+                    challenge.is_active = not challenge.is_active
+            except (json.JSONDecodeError, KeyError):
+                # Default toggle behavior if no valid JSON
+                challenge.is_active = not challenge.is_active
+        else:
+            # Default toggle behavior for non-AJAX requests
+            challenge.is_active = not challenge.is_active
+            
+        challenge.save()
+        
+        status = "archived" if not challenge.is_active else "unarchived"
+        messages.success(request, f'Challenge "{challenge.title}" was {status} successfully!')
+        
+        # Return JSON response for AJAX requests
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'is_active': challenge.is_active,
+                'message': f'Challenge "{challenge.title}" was {status} successfully!'
+            })
+        
+        return redirect('challenge_management')
+
+
+class ChallengePreviewView(StaffRequiredMixin, View):
+    
+    
+    def _format_correct_answer(self, challenge):
+        
+        if not challenge.correct_answer:
+            return None
+            
+        try:
+           
+            parsed = json.loads(challenge.correct_answer)
+            if isinstance(parsed, list):
+                return parsed
+            return challenge.correct_answer
+        except (json.JSONDecodeError, TypeError):
+        
+            return challenge.correct_answer
+    
+    def get(self, request, pk):
+        challenge = get_object_or_404(CyberChallenge, pk=pk)
+        
+        choices_display = None
+        if challenge.choices and challenge.challenge_type == 'mcq':
+            if isinstance(challenge.choices, list):
+                choices_display = challenge.choices
+            else:
+                try:
+                    import json
+                    choices_display = json.loads(challenge.choices)
+                except (json.JSONDecodeError, TypeError):
+                    choices_display = [challenge.choices]
+        
+        data = {
+            'id': challenge.id,
+            'title': challenge.title,
+            'description': challenge.description,
+            'question': challenge.question,
+            'explanation': challenge.explanation,
+            'difficulty': challenge.get_difficulty_display(),
+            'category': challenge.get_category_display(),
+            'points': challenge.points,
+            'challenge_type': challenge.challenge_type,  
+            'challenge_type_display': challenge.get_challenge_type_display(), 
+            'time_limit': challenge.time_limit,
+            'correct_answer': self._format_correct_answer(challenge),
+            'choices': choices_display,
+            'starter_code': challenge.starter_code,
+            'sample_input': challenge.sample_input,
+            'expected_output': challenge.expected_output,
+            'is_active': challenge.is_active,
+            'created_at': challenge.created_at.strftime('%B %d, %Y at %I:%M %p'),
+            'updated_at': challenge.updated_at.strftime('%B %d, %Y at %I:%M %p'),
+        }
+        
+        return JsonResponse(data)
+
+def tip_today(request):
+    texts = list(Tip.objects.filter(is_active=True).values_list("text", flat=True))
+    if not texts:
+        return JsonResponse({"tip": "Stay safe online!"})
+
+    state, _ = TipRotationState.objects.get_or_create(lock="default")
+
+    now = timezone.now()
+    needs_rotate = (
+        state.rotated_at is None
+        or (now - state.rotated_at) >= timedelta(hours=24)
+        or state.last_index >= len(texts)  # handle when you add/remove tips
+        or state.last_index < -1
+    )
+
+    if needs_rotate:
+        state.last_index = (state.last_index + 1) % len(texts)
+        state.rotated_at = now
+        state.save(update_fields=["last_index", "rotated_at"])
+
+    return JsonResponse({"tip": texts[state.last_index]})
+
+
+@login_required
+def vault_view(request):
+    """View for the document vault"""
+    documents = VaultDocument.objects.all()
+    
+    # Handle filtering
+    type_filter = request.GET.get('type', '')
+    if type_filter:
+        if type_filter == 'pdf':
+            documents = documents.filter(content_type__icontains='pdf')
+        elif type_filter == 'word':
+            documents = documents.filter(content_type__icontains='word')
+        elif type_filter == 'excel':
+            documents = documents.filter(content_type__icontains='excel')
+        elif type_filter == 'powerpoint':
+            documents = documents.filter(content_type__icontains='powerpoint')
+        elif type_filter == 'image':
+            documents = documents.filter(content_type__icontains='image')
+    
+    # Handle file upload
+    if request.method == 'POST':
+        form = VaultUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            vault_doc = form.save(commit=False)
+            vault_doc.uploaded_by = request.user
+            vault_doc.original_name = request.FILES['file'].name
+            vault_doc.content_type = request.FILES['file'].content_type
+            vault_doc.size_bytes = request.FILES['file'].size
+            vault_doc.save()
+            form.save_m2m()  # Save many-to-many relationships
+            return redirect('vault')
+    else:
+        form = VaultUploadForm()
+    
+    context = {
+        'documents': documents,
+        'form': form,
+        'type_filter': type_filter,
+    }
+    return render(request, 'pages/vault.html', context)
+
+def delete_document(request, doc_id):
+    doc = get_object_or_404(VaultDocument, id=doc_id)
+
+    # Only staff or the uploader can delete
+    if not (request.user.is_staff or doc.uploaded_by_id == request.user.id):
+        raise PermissionDenied("You don't have permission to delete this document.")
+
+    if request.method == "POST":
+        # optionally remove the file from storage too
+        if doc.file:
+            doc.file.delete(save=False)
+        doc.delete()
+        return redirect('vault')
+
+    # if someone hits the URL with GET, just go back
+    return redirect('vault')

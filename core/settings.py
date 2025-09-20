@@ -74,20 +74,25 @@ SESSION_COOKIE_SECURE = False
 RECAPTCHA_SITE_KEY = '6LesBKsrAAAAADwwja7GKS33AEC7ktIuJlcYpBDf'
 RECAPTCHA_SECRET_KEY = '6LesBKsrAAAAANii1CrJeF_C679-5vRMgGNC6htZ'
 
+# Microsoft OAuth Client (set via environment in production)
+MICROSOFT_CLIENT_ID = os.getenv('MICROSOFT_CLIENT_ID', '')
+MICROSOFT_CLIENT_SECRET = os.getenv('MICROSOFT_CLIENT_SECRET', '')
+MICROSOFT_TENANT_ID = os.getenv('MICROSOFT_TENANT_ID', 'common')
+
 # ---------------- Secure Session Cookie Settings ----------------
 # These settings ensure cookies are securely transmitted over HTTPS and protected from JS and CSRF attacks
 SESSION_COOKIE_SECURE = not DEBUG           # Only allow HTTPS cookies in production
 SESSION_COOKIE_HTTPONLY = True              # Prevent access to session cookies via JavaScript
-SESSION_COOKIE_SAMESITE = 'Strict'          # Restrict cross-origin cookie sharing
+SESSION_COOKIE_SAMESITE = 'Lax'             # Allow cross-origin cookie sharing for OAuth
 
 CSRF_COOKIE_SECURE = not DEBUG              # Ensure CSRF cookie is sent over HTTPS
 CSRF_COOKIE_SAMESITE = 'Strict'             # Restrict CSRF cookie from cross-origin requests
 
 # ---------------- Idle Session Timeout Configuration ----------------
 # Automatically logs out users after 5 minutes of inactivity, resets on every user request
-SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
 
 # Application definition
@@ -106,10 +111,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
-    "django_user_agents",
 
+    'imagekit',
+    "django_user_agents",
     'rest_framework',  
     'drf_yasg', 
+    # Social Auth - Microsoft OAuth
+    'social_django',
 
     'home.apps.HomeConfig',
     'theme_pixel',
@@ -131,12 +139,14 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     # "home.idle.IdleTimeoutMiddleware",
-    "home.idle.LogoutMiddleware",  
+    # "home.idle.LogoutMiddleware",  # TEMPORARILY DISABLED - causing OAuth redirect issues
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "home.ratelimit_middleware.GlobalLockoutMiddleware",
-    "home.admin_session_middleware.AdminSessionMiddleware", #admin session middleware
-    'core.middleware.AutoLogoutMiddleware',
+    # "home.ratelimit_middleware.GlobalLockoutMiddleware",  # TEMPORARILY DISABLED - causing OAuth redirect issues
+    # "home.admin_session_middleware.AdminSessionMiddleware",  # TEMPORARILY DISABLED - causing OAuth redirect issues
+    # 'core.middleware.AutoLogoutMiddleware',  # TEMPORARILY DISABLED - causing OAuth redirect issues
     "django_user_agents.middleware.UserAgentMiddleware",
+    # "core.middleware.LogRequestMiddleware",  # TEMPORARILY DISABLED - causing OAuth redirect issues
+    # "home.views.force_oauth_redirect_middleware", # DISABLED - causing redirect loops
 
 ]
 
@@ -182,7 +192,9 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
                 'home.context_processors.recaptcha_site_key',
-
+                'home.context_processors.microsoft_client_id',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
             ],
         },
@@ -324,7 +336,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -348,6 +360,50 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success'
 }
 
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'home.custom_azure_backend.CustomAzureADTenantOAuth2',
+)
+
+# Social Auth (Azure AD)
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = MICROSOFT_CLIENT_ID
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = MICROSOFT_CLIENT_SECRET
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = MICROSOFT_TENANT_ID
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_REDIRECT_URI = 'http://localhost:8000/complete/azuread-tenant-oauth2/'
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/dashboard/'
+# SOCIAL_AUTH_LOGIN_ERROR_URL = '/accounts/login/'  # DISABLED TO PREVENT LOGIN REDIRECTS
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/dashboard/'
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/dashboard/'
+# SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/accounts/login/'  # DISABLED TO PREVENT LOGIN REDIRECTS
+SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+SOCIAL_AUTH_SANITIZE_REDIRECTS = False
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+SOCIAL_AUTH_USER_MODEL = 'home.User'
+SOCIAL_AUTH_CREATE_USERS = True
+SOCIAL_AUTH_ASSOCIATE_BY_EMAIL = True
+SOCIAL_AUTH_ALWAYS_ASSOCIATE = False
+
+# Ensure user is created and details saved, enforce Deakin rule
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'home.pipeline.check_deakin_email',
+    'home.pipeline.set_oauth_redirect_url',
+    'home.pipeline.ensure_user_authenticated',
+)
 
 CACHES = {
     'default': {
@@ -464,7 +520,7 @@ LOGGING = {
  
 # CORS configuration
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8000',  # Website localhost server url
+    'http://localhost:8000',  # Website localhost server url
     'https://hardhatwebdev2024.pythonanywhere.com',    # Frontend url
 ]
 
@@ -485,8 +541,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
 
 # ---------------- Idle Session Timeout Configuration ----------------
 # Automatically logs out users after 5 minutes of inactivity, resets on every user request
-SESSION_COOKIE_AGE = 300  # 5 minutes in seconds
+SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expire session when browser closes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
+
+DEBUG = True
+
+
 SECURITY_EMAIL = "hardhatwebsite@gmail.com"
+

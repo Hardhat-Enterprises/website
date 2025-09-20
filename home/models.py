@@ -11,6 +11,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser  
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.sessions.models import Session
+
+from django.utils.text import slugify
+
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -19,6 +22,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from tinymce.models import HTMLField
 
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill, Adjust, Transpose 
 
 from django.db import models
 from django.utils import timezone
@@ -458,9 +463,27 @@ class Profile(models.Model):
     github = models.URLField(max_length=200, blank=True, null=True)
     # phone = models.CharField(max_length=20, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
+    avatar_webp_80 = ImageSpecField(
+        source='avatar',
+        processors=[
+            Transpose(),  # Auto-rotate based on EXIF
+            Adjust(contrast=1.0, sharpness=1.0),  # Basic enhancement
+        ],
+        format='WEBP',
+        options={'quality': 80},
+    )
+    avatar_webp_70 = ImageSpecField(
+        source='avatar',
+        processors=[
+            Transpose(),
+            Adjust(contrast=1.0, sharpness=1.0),
+        ],
+        format='WEBP',
+        options={'quality': 70},
+    )
 
     def __str__(self):
-        return self.user.username
+        return self.user.get_full_name() or self.user.email
 
     
 class CyberChallenge(models.Model):
@@ -867,6 +890,36 @@ class AdminSession(models.Model):
     def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
+
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        WHITEPAPER = "whitepaper", "Whitepaper"
+        CHECKLIST  = "checklist", "Checklist / Guide"
+        INFOGRAPH  = "infographic", "Infographic"
+        CASESTUDY  = "casestudy", "Case Study"
+        OTHER      = "other", "Other"
+
+    title = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    summary = models.TextField(max_length=600, help_text="Short 1–3 line description.")
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.OTHER)
+    file = models.FileField(upload_to="resources/files/")
+    cover = models.ImageField(upload_to="resources/covers/", blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:190]
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
 
 class Tip(models.Model):
     text = models.CharField(max_length=280, unique=True)
