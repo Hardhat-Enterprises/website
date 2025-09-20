@@ -488,10 +488,13 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('category', models.CharField(max_length=200)),
                 ('total_points', models.IntegerField(default=0)),
+                ('rank', models.IntegerField(default=0)),
+                ('last_updated', models.DateTimeField(auto_now=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'ordering': ['-total_points'],
+                'ordering': ['-total_points', 'rank'],
+                'unique_together': {('user', 'category')},
             },
         ),
         migrations.CreateModel(
@@ -580,6 +583,123 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ['name'],
                 'unique_together': {('name', 'parent', 'owner')},
+            },
+        ),
+        # ===== CODE EXECUTION MODELS =====
+        migrations.CreateModel(
+            name='CodeTemplate',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=200)),
+                ('description', models.TextField()),
+                ('category', models.CharField(choices=[('basics', 'Python Basics'), ('data_structures', 'Data Structures'), ('algorithms', 'Algorithms'), ('oop', 'Object-Oriented Programming'), ('file_handling', 'File Handling'), ('web_scraping', 'Web Scraping'), ('data_analysis', 'Data Analysis'), ('machine_learning', 'Machine Learning'), ('security', 'Security'), ('networking', 'Networking')], max_length=20)),
+                ('difficulty', models.CharField(choices=[('beginner', 'Beginner'), ('intermediate', 'Intermediate'), ('advanced', 'Advanced')], max_length=15)),
+                ('template_code', models.TextField()),
+                ('expected_output', models.TextField(blank=True, null=True)),
+                ('hints', models.TextField(blank=True, null=True)),
+                ('is_active', models.BooleanField(default=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+                'ordering': ['category', 'difficulty', 'title'],
+            },
+        ),
+        migrations.CreateModel(
+            name='CompilerSettings',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('max_execution_time', models.IntegerField(default=5)),
+                ('max_memory_limit', models.IntegerField(default=128)),
+                ('max_code_length', models.IntegerField(default=1000)),
+                ('allowed_modules', models.JSONField(default=list)),
+                ('is_active', models.BooleanField(default=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='CodeExecution',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('language', models.CharField(default='python', max_length=20)),
+                ('code', models.TextField()),
+                ('input_data', models.TextField(blank=True, null=True)),
+                ('output', models.TextField(blank=True, null=True)),
+                ('error_message', models.TextField(blank=True, null=True)),
+                ('execution_time', models.FloatField(default=0.0)),
+                ('memory_used', models.IntegerField(default=0)),
+                ('is_successful', models.BooleanField(default=False)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('ip_address', models.GenericIPAddressField(blank=True, null=True)),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='CodeSubmission',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('user_code', models.TextField()),
+                ('is_correct', models.BooleanField(default=False)),
+                ('execution_time', models.FloatField(default=0.0)),
+                ('submitted_at', models.DateTimeField(auto_now_add=True)),
+                ('template', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.codetemplate')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-submitted_at'],
+                'unique_together': {('user', 'template')},
+            },
+        ),
+        # ===== QUIZ MODELS =====
+        migrations.CreateModel(
+            name='UserScore',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('category', models.CharField(choices=[('network', 'Network Security'), ('web', 'Web Application Security'), ('crypto', 'Cryptography'), ('general', 'General Knowledge'), ('python', 'Python'), ('javascript', 'JavaScript'), ('html_css', 'HTML & CSS'), ('web_security', 'Web Security'), ('reverse_engineering', 'Reverse Engineering'), ('forensics', 'Forensics'), ('binary_exploitation', 'Binary Exploitation'), ('linux', 'Linux'), ('algorithms', 'Algorithms'), ('data_structures', 'Data Structures'), ('databases', 'Databases'), ('regex', 'Regex'), ('secure_coding', 'Secure Coding'), ('logic_reasoning', 'Logic & Reasoning'), ('misc', 'Miscellaneous')], max_length=20)),
+                ('score', models.IntegerField(default=0)),
+                ('quiz_completed_at', models.DateTimeField(auto_now_add=True)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-score', '-quiz_completed_at'],
+                'unique_together': {('user', 'category')},
+            },
+        ),
+        migrations.CreateModel(
+            name='Quiz',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('category', models.CharField(choices=[('network', 'Network Security'), ('web', 'Web Application Security'), ('crypto', 'Cryptography'), ('general', 'General Knowledge'), ('python', 'Python'), ('javascript', 'JavaScript'), ('html_css', 'HTML & CSS'), ('web_security', 'Web Security'), ('reverse_engineering', 'Reverse Engineering'), ('forensics', 'Forensics'), ('binary_exploitation', 'Binary Exploitation'), ('linux', 'Linux'), ('algorithms', 'Algorithms'), ('data_structures', 'Data Structures'), ('databases', 'Databases'), ('regex', 'Regex'), ('secure_coding', 'Secure Coding'), ('logic_reasoning', 'Logic & Reasoning'), ('misc', 'Miscellaneous')], max_length=20)),
+                ('started_at', models.DateTimeField(auto_now_add=True)),
+                ('completed_at', models.DateTimeField(blank=True, null=True)),
+                ('is_completed', models.BooleanField(default=False)),
+                ('total_score', models.IntegerField(default=0)),
+                ('questions_answered', models.IntegerField(default=0)),
+                ('current_question_index', models.IntegerField(default=0)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-started_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='QuizQuestion',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('question_order', models.IntegerField()),
+                ('user_answer', models.CharField(blank=True, max_length=200, null=True)),
+                ('is_correct', models.BooleanField(default=False)),
+                ('answered_at', models.DateTimeField(blank=True, null=True)),
+                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.cyberchallenge')),
+                ('quiz', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='home.quiz')),
+            ],
+            options={
+                'ordering': ['question_order'],
+                'unique_together': {('quiz', 'question_order')},
             },
         ),
     ]
