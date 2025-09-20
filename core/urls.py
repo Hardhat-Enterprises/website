@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.conf.urls.i18n import i18n_patterns
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 from home import views
 from rest_framework import permissions
 from home.views_securitytxt import security_txt

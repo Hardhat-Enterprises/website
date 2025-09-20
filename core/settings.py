@@ -106,8 +106,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     'django_cron',
-    "django_user_agents",
 
+    'imagekit',
+    "django_user_agents",
     'rest_framework',  
     'drf_yasg', 
 
@@ -182,7 +183,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'home.context_processors.dynamic_page_title',
                 'home.context_processors.recaptcha_site_key',
-
 
             ],
         },

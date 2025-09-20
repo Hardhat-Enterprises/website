@@ -8,8 +8,8 @@
     <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}/">
     <meta property="og:title" content="Hardhat Enterprises">
     <meta property="og:image" content="{% static 'assets/img/pages/home/hero-image.svg' %}">
-    <link rel="apple-touch-icon" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" href="{% static 'assets/img/favicon/favicon-32x32.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'assets/img/favicon/apple-touch-icon.webp' %}">
+    <link rel="icon" type="image/png" href="{% static 'assets/img/favicon/favicon-32x32.webp' %}">
     <link rel="stylesheet" href="{% static 'vendor/@fortawesome/fontawesome-free/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/hardhat.css' %}?v=2">
 </head>
@@ -23,10 +23,108 @@
 <div class="container">
   <div class="row">
     <div class="col-md-6 col-12 mx-md-auto mx-3 mt-7 mb-5">
+
+      <!-- Filter button -->
+      <div class="mb-3 text-start">
+        <button id="filterBtn" class="btn btn-outline-secondary">
+          <i class="fas fa-filter"></i> Filters
+        </button>
+      </div>
+      
+      <!-- Filter panel -->
+      <div id="filterPanel" class="card p-3 mb-4" style="display:none;">
+        <form id="filter-form" method="GET" action="">
+          
+          <input type="hidden" name="q" value="{{ searched }}">
+      
+          <!-- Sort options -->
+          <div class="mb-2">
+            <label><strong>Sort By:</strong></label>
+            <select name="sort" class="form-select">
+              <option value="">Relevance</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+            </select>
+          </div>
+
+          <br>
+      
+          <!-- Date range -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="start_date">Start Date:</label>
+              <input type="date" class="form-control" id="start_date" name="start_date">
+            </div>
+            
+            <div class="col-md-6">
+              <label for="end_date">End Date:</label>
+              <input type="date" class="form-control" id="end_date" name="end_date">
+            </div>
+          </div>
+
+          <br>
+      
+          <!-- Type filter -->
+          <div class="mb-2">
+            <label><input type="checkbox" name="type" value="projects"> Projects</label><br>
+            <label><input type="checkbox" name="type" value="articles"> Articles</label><br>
+            <label><input type="checkbox" name="type" value="users"> Users</label><br>
+            <label><input type="checkbox" name="type" value="courses"> Courses</label><br>
+            <label><input type="checkbox" name="type" value="skills"> Skills</label><br>
+            <label><input type="checkbox" name="type" value="students"> Students</label><br>
+            <label><input type="checkbox" name="type" value="contacts"> Contacts</label><br>
+            <label><input type="checkbox" name="type" value="webpages"> Webpages</label><br>
+          </div>
+
+          <br>
+      
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary w-50 me-2" id="reset-filters">Reset</button>
+            <button type="submit" class="btn btn-primary w-50">Apply</button>
+          </div>
+
+        </form>
+      </div>
+      
+      <!--  Script to toggle filter panel -->
+      <script>
+      document.getElementById("filterBtn").onclick = function(){
+        let panel = document.getElementById("filterPanel");
+        panel.style.display = (panel.style.display === "none") ? "block" : "none";
+      };
+      </script>
+      
+      <!-- Script to reset filters -->
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const resetBtn = document.getElementById("reset-filters");
+          const filterForm = document.getElementById("filter-form");
+      
+          resetBtn.addEventListener("click", function() {
+            filterForm.reset();
+            document.getElementById("start_date").value = "";
+            document.getElementById("end_date").value = "";
+          });
+        });
+      </script>
+
       <h1 class="fw-bolder">Search Results</h1>
+
       {% if searched %}
         <h5>You Searched For: "{{ searched }}"</h5>
       {% endif %}
+
+      <!-- Suggestion feature -->
+      {% if suggestion %} 
+        <div class="alert alert-light mt-2"> 
+          Did you mean: 
+          {% for word in suggestion %}
+            <a href="?q={{ word }}">{{ word }}</a>{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+          ? 
+        </div> 
+      {% endif %}
+
     </div>
 
     {% if projects %}
