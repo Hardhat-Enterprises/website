@@ -326,14 +326,6 @@
       <!-- Right side: Auth buttons (guests only) + Hamburger -->
       <div class="d-flex align-items-center justify-content-center">
 
-        {% if not user.is_authenticated %}
-          <!-- Visible when NOT logged in -->
-          <a class="btn btn-outline-gray-100 me-2" href="{% url 'login_with_otp' %}">
-            <span class="fas fa-sign-in-alt me-2"></span> {% trans "Sign In" %}
-          </a>
-          <a class="btn btn-primary" href="{% url 'register' %}">{% trans "Sign Up" %}</a>
-        {% endif %}
-
         <!-- Toggler -->
         <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
               data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
