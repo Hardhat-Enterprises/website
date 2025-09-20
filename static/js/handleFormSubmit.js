@@ -36,10 +36,21 @@ function handleFormSubmit(event) {
   })
     .then(response => {
       if (response.ok) {
-        // Show thank-you message on success
-        document.getElementById("form-header").innerHTML = `
-          <h2 style="color: #ffc107; text-align: center;">Thank you for reaching out!</h2>
-          <p style="text-align: center;">We appreciate your message and will get back to you as soon as possible.</p>`;
+        // Show thank-you message on success - using safe DOM methods
+        const formHeader = document.getElementById("form-header");
+        formHeader.textContent = ''; // Clear existing content safely
+        
+        const thankYouHeading = document.createElement('h2');
+        thankYouHeading.style.color = '#ffc107';
+        thankYouHeading.style.textAlign = 'center';
+        thankYouHeading.textContent = 'Thank you for reaching out!';
+        
+        const thankYouMessage = document.createElement('p');
+        thankYouMessage.style.textAlign = 'center';
+        thankYouMessage.textContent = 'We appreciate your message and will get back to you as soon as possible.';
+        
+        formHeader.appendChild(thankYouHeading);
+        formHeader.appendChild(thankYouMessage);
         // Hide the form body
         document.getElementById("form-body").style.display = "none";
       } else {

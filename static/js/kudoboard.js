@@ -125,7 +125,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Clear all reviews
     clearReviews.addEventListener('click', function() {
         if (confirm('Are you sure you want to clear all reviews?')) {
-            whiteboard.innerHTML = '';
+            // Clear all child elements safely
+            while (whiteboard.firstChild) {
+                whiteboard.removeChild(whiteboard.firstChild);
+            }
             usedColors = [];
             localStorage.removeItem('reviews');
             toggleClearButton();

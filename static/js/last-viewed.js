@@ -24,11 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update the dropdown menu
     const dropdownMenu = document.getElementById("recently-viewed-list");
     if (dropdownMenu) {
-        dropdownMenu.innerHTML = "";
+        // Clear content safely
+        while (dropdownMenu.firstChild) {
+            dropdownMenu.removeChild(dropdownMenu.firstChild);
+        }
 
         recentlyViewed.forEach((page) => {
             const listItem = document.createElement("li");
-            listItem.innerHTML = `<a class="dropdown-item" href="${page.url}">${page.title}</a>`;
+            const link = document.createElement("a");
+            link.className = "dropdown-item";
+            // Sanitize URL and title to prevent XSS
+            link.href = String(page.url || '').replace(/[<>&"']/g, '');
+            link.textContent = String(page.title || '');
+            listItem.appendChild(link);
             dropdownMenu.appendChild(listItem);
         });
     }

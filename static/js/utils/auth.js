@@ -10,7 +10,10 @@ function initializePasswordToggle() {
         const toggleButton = document.createElement('button');
         toggleButton.type = 'button';
         toggleButton.className = 'password-toggle-btn';
-        toggleButton.innerHTML = '<i class="fas fa-eye"></i>';
+        // Create eye icon safely using DOM methods
+        const eyeIcon = document.createElement('i');
+        eyeIcon.className = 'fas fa-eye';
+        toggleButton.appendChild(eyeIcon);
         toggleButton.setAttribute('aria-label', 'Toggle password visibility');
         container.appendChild(toggleButton);
 
@@ -98,11 +101,23 @@ function checkPasswordRequirements(passwordValue) {
             if (requirements[req]) {
                 checkElement.classList.remove("text-danger");
                 checkElement.classList.add("text-success");
-                checkElement.innerHTML = `<i class="fas fa-check"></i> ${getRequirementText(req)}`;
+                // Create elements safely
+                checkElement.textContent = '';
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check';
+                const reqText = document.createTextNode(' ' + getRequirementText(req));
+                checkElement.appendChild(checkIcon);
+                checkElement.appendChild(reqText);
             } else {
                 checkElement.classList.remove("text-success");
                 checkElement.classList.add("text-danger");
-                checkElement.innerHTML = `<i class="fas fa-times"></i> ${getRequirementText(req)}`;
+                // Create elements safely
+                checkElement.textContent = '';
+                const timesIcon = document.createElement('i');
+                timesIcon.className = 'fas fa-times';
+                const reqText = document.createTextNode(' ' + getRequirementText(req));
+                checkElement.appendChild(timesIcon);
+                checkElement.appendChild(reqText);
             }
         }
     });
