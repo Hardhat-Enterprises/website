@@ -3440,14 +3440,43 @@ def execute_python_code(code, input_data, settings):
                     isolated_globals = safe_globals.copy()
                     isolated_locals = {}
                     
-                    # Execute in completely isolated environment
-                    exec(compiled_code, isolated_globals, isolated_locals)
+                    # Execute in completely isolated environment with cross-platform timeout
+                    import threading
+                    import time
+                    
+                    class TimeoutException(Exception):
+                        pass
+                    
+                    execution_result = {'completed': False, 'exception': None}
+                    
+                    def execute_with_timeout():
+                        try:
+                            # Execute with restricted builtins and no access to dangerous modules
+                            exec(compiled_code, isolated_globals, isolated_locals)
+                            execution_result['completed'] = True
+                        except Exception as e:
+                            execution_result['exception'] = e
+                    
+                    # Run execution in separate thread with timeout
+                    execution_thread = threading.Thread(target=execute_with_timeout, daemon=True)
+                    execution_thread.start()
+                    execution_thread.join(timeout=settings.max_execution_time)
+                    
+                    if execution_thread.is_alive():
+                        # Thread is still running, execution timed out
+                        raise TimeoutException("Code execution timed out")
+                    
+                    if execution_result['exception']:
+                        raise execution_result['exception']
                 
                 except SyntaxError as e:
                     result['error'] = f'Syntax Error: Line {e.lineno}'
                     return result
                 except SecurityError as e:
                     result['error'] = f'Security Error: {str(e)}'
+                    return result
+                except TimeoutException as e:
+                    result['error'] = 'Code execution timed out'
                     return result
                 except Exception as e:
                     # Sanitize error messages to prevent information leakage

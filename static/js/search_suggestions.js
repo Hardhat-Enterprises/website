@@ -47,14 +47,26 @@ document.addEventListener("DOMContentLoaded", function () {
       
       // Create elements safely to prevent XSS
       filtered.forEach(item => {
+        // Sanitize label to prevent HTML injection
+        const sanitizedLabel = String(item.label).replace(/[<>&"']/g, function(match) {
+          const escapeMap = {
+            '<': '&lt;',
+            '>': '&gt;',
+            '&': '&amp;',
+            '"': '&quot;',
+            "'": '&#x27;'
+          };
+          return escapeMap[match];
+        });
+        
         const suggestionDiv = document.createElement('div');
         suggestionDiv.className = 'suggestion-item';
-        suggestionDiv.setAttribute('data-label', item.label);
+        suggestionDiv.setAttribute('data-label', sanitizedLabel);
         if (item.url) {
           suggestionDiv.setAttribute('data-url', item.url);
         }
         // Use textContent to prevent HTML injection
-        suggestionDiv.textContent = item.label;
+        suggestionDiv.textContent = sanitizedLabel;
         resultBox.appendChild(suggestionDiv);
       });
     }
