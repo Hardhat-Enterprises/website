@@ -64,3 +64,5 @@ Write-Host "🔄 Switching back to main branch..." -ForegroundColor Blue
 git checkout main
 
 Write-Host "✅ i18n automation completed successfully!" -ForegroundColor Green
+
+
