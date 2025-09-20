@@ -904,23 +904,3 @@ class UserDevice(models.Model):
     def __str__(self):
         return f"{self.user.email} - {self.device_name} ({self.ip_address})"
 
-class VaultDocument(models.Model):
-    VIS_PUBLIC = 'public'
-    VIS_PRIVATE = 'private'
-    VIS_TEAMS = 'teams'
-    VISIBILITY_CHOICES = [
-        (VIS_PUBLIC, 'Public'),
-        (VIS_PRIVATE, 'Private'),
-        (VIS_TEAMS, 'Selected teams'),
-    ]
-    file = models.FileField(upload_to='vault/')
-    description = models.CharField(max_length=255, blank=True)
-    visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default=VIS_PRIVATE)
-    allowed_teams = models.ManyToManyField(Group, blank=True)
-    uploaded_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='vault_documents'
-    )
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.description or f"Vault file #{self.pk}"
