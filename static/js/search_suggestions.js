@@ -87,7 +87,18 @@ document.addEventListener("DOMContentLoaded", function () {
         resultBox.classList.add("d-none");
 
         if (url) {
-          window.location.href = url;
+          // Whitelist of allowed URLs for maximum security
+          const allowedUrls = ['/feedback', '/careers', '/challenges'];
+          
+          // Strict validation: only allow predefined safe URLs
+          if (typeof url === 'string' && allowedUrls.includes(url)) {
+            // Safe to navigate - URL is from our predefined whitelist
+            window.location.href = url;
+          } else {
+            // URL not in whitelist - log and fallback to form submission
+            console.warn('URL not in allowed whitelist, using form submission instead:', url);
+            inputBox.closest("form").submit();
+          }
         } else {
           inputBox.closest("form").submit();
         }
