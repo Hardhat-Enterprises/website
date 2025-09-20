@@ -7,8 +7,12 @@ from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
 from django.conf import settings
 from django.middleware.locale import LocaleMiddleware
+from django.http import HttpResponseNotFound
 from django.utils import translation
+from django.shortcuts import render
+
 logger = logging.getLogger('admin_logout_logger')
+Honeypot_logger = logging.getLogger("honeypot_logger")
 
 class AutoLogoutMiddleware(MiddlewareMixin):
     """
@@ -147,3 +151,60 @@ class LocaleMiddlewareDefaultEnglish(LocaleMiddleware):
 
         translation.activate(lang)
         request.LANGUAGE_CODE = translation.get_language()
+
+# Honeypot Middleware
+
+class HoneypotMiddleware:
+    """
+    Middleware to detect and log requests to honeypot (fake) paths.
+    Normal users will never visit these paths.
+    If triggered, log the attempt and return a 404 page.
+    """
+
+    # Fake paths attackers often try
+    HONEYPOT_PATHS = [
+        "/admin-secret",
+        "/Main-admin",
+        "/superuser",
+        "/dashboard-old",
+        "/backup.sql",
+        "/db.dump",
+        "/config.php",
+        "/env.bak",
+        "/administration-login",
+        "/auth-test",
+        "/secure-login",
+        "/test-page",
+        "/debug/",
+        "/old-site/"
+    ]
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        path = request.path
+
+        # Check if the request path is in honeypot traps
+        if path in self.HONEYPOT_PATHS:
+            ip = self.get_client_ip(request)
+            ua = request.META.get("HTTP_USER_AGENT", "unknown")
+
+            Honeypot_logger.warning(
+                f"HONEYPOT TRIGGERED: Path={path}, IP={ip}, User-Agent={ua}"
+            )
+
+            # Return fake 404 so attacker doesn't know it’s a trap
+            return render(request, "404.html", status=404)
+
+        # Otherwise continue normally
+        return self.get_response(request)
+
+    def get_client_ip(self, request):
+        """Extract client IP address from headers"""
+        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(",")[0]
+        else:
+            ip = request.META.get("REMOTE_ADDR", "")
+        return ip
