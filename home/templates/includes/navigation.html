@@ -306,7 +306,7 @@
 
         <a class="profile-container" href="{% url 'profile' %}">
           <img
-            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
+            src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
             class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
             <span class="header-profile-name">{{ request.user.first_name }} {{ request.user.last_name }}</span>
         </a>

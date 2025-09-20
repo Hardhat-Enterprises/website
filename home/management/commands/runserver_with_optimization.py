@@ -53,7 +53,9 @@ class Command(BaseCommand):
 
     def images_need_optimization(self):
         """Check if there are any JPG/PNG images that need conversion"""
-        static_dir = Path(__file__).parent.parent.parent.parent.parent / "custom_static" / "assets" / "img"
+        # Determine website directory reliably: .../website/home/management/commands -> parents[3] = .../website
+        website_dir = Path(__file__).resolve().parents[3]
+        static_dir = website_dir / "custom_static" / "assets" / "img"
         
         if not static_dir.exists():
             return False

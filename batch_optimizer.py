@@ -16,8 +16,12 @@ from pathlib import Path
 
 class BatchOptimizer:
     def __init__(self, project_root):
-        self.project_root = Path(project_root)
-        self.website_dir = self.project_root / "website"
+        self.project_root = Path(project_root).resolve()
+        # If invoked from inside website dir, avoid duplicating path
+        if (self.project_root / "website").exists():
+            self.website_dir = (self.project_root / "website").resolve()
+        else:
+            self.website_dir = self.project_root
         self.static_dir = self.website_dir / "custom_static" / "assets" / "img"
         self.templates_dir = self.website_dir / "home" / "templates"
     

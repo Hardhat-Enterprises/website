@@ -40,9 +40,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("Starting image optimization...")
 
-        # Get the project root directory
-        project_root = Path(__file__).parent.parent.parent.parent.parent
-        website_dir = project_root / "website"
+        # Get the project root directory - we're already in the website directory
+        website_dir = Path("/app")  # Docker container path
         static_dir = website_dir / "custom_static" / "assets" / "img"
         templates_dir = website_dir / "home" / "templates"
 
