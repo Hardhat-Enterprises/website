@@ -4,7 +4,7 @@ from django.conf.urls.i18n import set_language
 from django.contrib import admin
 
 from .views import Index, DetailArticleView, LikeArticle, UpskillingView, UpskillingSkillView, SearchResults, UpskillSuccessView, UpskillingJoinProjectView, join_project, list_careers, internships, job_alerts, career_detail, career_application, feedback_view, delete_feedback, career_discover, policy_deployment
-
+from .views import resources_view  
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
@@ -17,6 +17,10 @@ from django.conf.urls.static import static
 from .views import health_check
 from django.views.i18n import set_language
 
+from .views import ResourceListView
+
+
+
 
 #from home.views import register
 from rest_framework.routers import DefaultRouter
@@ -24,7 +28,10 @@ from .views import APIModelListView
 from .views import AnalyticsAPI
 from .views import UserManagementAPI, EmailNotificationViewSet
 from .views import MarkSkillCompletedView
+from .views import ChallengeListAPI, SkillListAPI, LeaderboardAPI, HealthCheckAPI
+
 from rest_framework.routers import DefaultRouter
+from .views import ResourceDetailView
 router = DefaultRouter()
 router.register(r'email-notifications', EmailNotificationViewSet, basename='email-notifications')
 from . import views
@@ -135,6 +142,7 @@ urlpatterns = [
     path("verifyEmail/", views.VerifyOTP, name="verifyEmail"),
     path('accounts/login/', views.login_with_otp, name='login_with_otp'),
     path('accounts/verify-otp/', views.verify_otp, name='verify_otp'),
+    path('accounts/microsoft-login/', views.microsoft_login, name='microsoft_login'),
     # Statistics
     path('chart/filter-options', views.get_filter_options, name='chart-filter-options'),
     path('chart/project-priority/<str:priority>', views.get_priority_breakdown, name='chart-filter-options'),
@@ -185,6 +193,10 @@ urlpatterns = [
     path('api-models/', APIModelListView.as_view(), name='api-models'),
     path('api-analytics/', AnalyticsAPI.as_view(), name='api-analytics'),
     path('user-management/', UserManagementAPI.as_view(), name='user-management'),
+    path('api-challenges/', ChallengeListAPI.as_view(), name='api-challenges'),
+    path('api-skills/', SkillListAPI.as_view(), name='api-skills'),
+    path('api-leaderboard/', LeaderboardAPI.as_view(), name='api-leaderboard'),
+    path('api-health/', HealthCheckAPI.as_view(), name='api-health'),
     path('', include(router.urls)), 
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/delete/<int:id>', delete_feedback, name='delete_feedback'),
@@ -202,8 +214,15 @@ urlpatterns = [
 
 
     path("health", health_check, name="health-check"),
+    path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
     
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
+    path("resources/", ResourceListView.as_view(), name="resources"),
+    path("resources/<slug:slug>/", ResourceDetailView.as_view(), name="resource_detail"),
+      path("resources/<int:pk>/download/", views.resource_download, name="resource_download"),
+    path("resources/<slug:slug>/", views.ResourceDetailView.as_view(), name="resource_detail"),
+    path("resources/", views.ResourceListView.as_view(), name="resources"),
+  
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

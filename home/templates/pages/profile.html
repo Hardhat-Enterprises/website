@@ -19,8 +19,8 @@
         <div class="card profile-card shadow p-4 h-100">
           <div class="text-center mb-4">
             <img id="avatar-preview"
-                src="{% if profile.avatar %}{{ profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-                alt="Profile Picture" class="rounded-circle profile-image">
+              src="{% if profile.avatar %}{{ profile.avatar_webp_80.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.webp' %}{% endif %}"
+              alt="Profile Picture" class="rounded-circle profile-image" loading="lazy">
           </div>
           
           <form method="POST" enctype="multipart/form-data" id="avatar-form">
@@ -49,6 +49,34 @@
               </div>
             </div>
           </div>
+
+          <div class="completed-challenges mt-4">
+            <h4 class="text-center mb-3">Completed Challenges</h4>
+            {% if completed_challenges %}
+                <ul class="list-group list-group-flush">
+                    {% for uc in completed_challenges %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0">
+                            <div>
+                                <strong>{{ uc.challenge.title }}</strong>
+                                <small class="text-muted d-block">{{ uc.challenge.get_category_display }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge 
+                                    {% if uc.challenge.difficulty == 'easy' %}bg-success
+                                    {% elif uc.challenge.difficulty == 'medium' %}bg-warning text-dark
+                                    {% else %}bg-danger{% endif %} me-2">
+                                    {{ uc.challenge.get_difficulty_display }}
+                                </span>
+                                <span class="badge bg-primary rounded-pill">{{ uc.score }} pts</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-center text-muted mt-3">You haven't completed any challenges yet. <a href="{% url 'challenge_list' %}">Get started!</a></p>
+            {% endif %}
+          </div>
+          
         </div>
       </div>
 
@@ -500,6 +528,15 @@ h4.text-center {
 .contact-item input {
   width: 100%;
 }
+
+body.dark-mode .completed-challenges .list-group-item {
+  color: #f8f9fa; /* Makes the main text white */
+  border-color: #444 !important; /* Adds a visible border in dark mode */
+}
+
+body.dark-mode .completed-challenges .list-group-item .text-muted {
+  color: #adb5bd !important; /* Makes the light grey text visible */
+}
 </style>
 
 <script>
@@ -529,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('clear-avatar').addEventListener('click', function() {
     var avatarInput = document.getElementById('avatar-input');
     var avatarPreview = document.getElementById('avatar-preview');
-    var defaultAvatar = "{% static 'assets/img/pages/home/profile_icon.jpeg' %}";
+    var defaultAvatar = "{% static 'assets/img/pages/home/profile_icon.webp' %}";
     avatarInput.value = '';
     avatarPreview.src = defaultAvatar;
   });
