@@ -123,8 +123,6 @@ path('', include(('social_django.urls', 'social_django'), namespace='social')),
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static('/static/assets/', document_root=settings.BASE_DIR / 'custom_static/assets')
 
-] 
-
 # Static & media files (served by Django in dev)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static('/static/assets/', document_root=settings.BASE_DIR / 'custom_static/assets')

@@ -367,6 +367,4 @@ class VaultDocumentAdmin(admin.ModelAdmin):
     list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
     search_fields = ('original_name', 'description')
 
-# Resource registration completely removed - not part of cyber challenge/quiz/compiler features
-
 
