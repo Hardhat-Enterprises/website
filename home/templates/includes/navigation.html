@@ -249,17 +249,8 @@
                                         {% trans "Match" %}
                                     </li>
                                 </a>
-
-
-                                <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
-                                    <ul class="list-style-none">
-                                        <a class="menu-link" href="{% url 'achievements' %}">
-                                            <li class="mb-2 menu ps-3 py-1">
-                                                {% trans "All Challenges" %}
-                                            </li>
-                                        </a>
-                                    </ul>
-                                </div>
+                            </ul>
+                        </div>
                     </li>
 
 
@@ -274,94 +265,94 @@
                         <div class="result-box d-none"></div>
                     </div>
 
-                    </ul>
+                </ul>
 
-                    </div>
+            </div>
 
 
-                    <div class="d-flex align-items-center justify-content-center">
-                        {% if request.user.is_authenticated %}
+            <div class="d-flex align-items-center justify-content-center">
+                {% if request.user.is_authenticated %}
 
-                        <!-- Show Logout Button if User is Authenticated -->
-                        <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
+                <!-- Show Logout Button if User is Authenticated -->
+                <a href="{% url 'logout' %}" class="btn btn-outline-gray-100 me-md-3"><span
             class="fas fa-sign-out-alt me-2"></span> {% trans "Logout" %}</a>
 
-                        <a class="profile-container" href="{% url 'profile' %}">
-                            <img src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}" class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
-                        </a>
+                <a class="profile-container" href="{% url 'profile' %}">
+                    <img src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}" class="rounded-circle profile-avatar" width="40" height="40" alt="User Profile Picture">
+                </a>
 
 
-                        {% else %}
-                        <div class="sign-up-button-container">
+                {% else %}
+                <div class="sign-up-button-container">
 
-                            {% endif %}
+                    {% endif %}
 
-                            <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
+                    <!-- The Sign In and Sign Up menu options were appearing in the toolbar while an authenticated user was logged in. The following two blocks now have conditions to remove them when signed in. -->
 
-                            <!-- Sign In Button for when User is Not Logged In -->
-                            {% if not user.is_authenticated %}
-                            <div class="position-relative sign-up-button-inner-container">
-                                <a href="{% url 'login_with_otp' %}" class="sign-up-button" style="text-decoration: none; display: inline-block;">
-                                    <span class="fas fa-sign-in-alt me-2">
+                    <!-- Sign In Button for when User is Not Logged In -->
+                    {% if not user.is_authenticated %}
+                    <div class="position-relative sign-up-button-inner-container">
+                        <a href="{% url 'login_with_otp' %}" class="sign-up-button" style="text-decoration: none; display: inline-block;">
+                            <span class="fas fa-sign-in-alt me-2">
               {% trans "Sign In" %}
               </span>
-                                </a>
-                            </div>
-                            {% endif %}
+                        </a>
+                    </div>
+                    {% endif %}
 
 
-                            <!-- Sign Up Button - Unified -->
-                            {% if not user.is_authenticated %}
-                            <div class="position-relative sign-up-button-inner-container">
-                                <button id="signUpButton" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
+                    <!-- Sign Up Button - Unified -->
+                    {% if not user.is_authenticated %}
+                    <div class="position-relative sign-up-button-inner-container">
+                        <button id="signUpButton" aria-expanded="false" class="sign-up-button" type="button" style="padding: 0;">
               <a href="{% url 'register' %}" class="fas fa-sign-in-alt me-2" style="padding: 14px 12px; margin-right: 0 !important;">
                 {% trans "Sign Up" %}
               </a>
             </button>
-                            </div>
-                            {% endif %}
+                    </div>
+                    {% endif %}
 
-                            <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-                            </span>
+                    </span>
 
-                            <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
-                                {% csrf_token %}
-                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                                <input type="hidden" name="language" id="lang-input">
-                            </form>
+                    <form id="set-lang-form" action="{% url 'set_language' %}" method="post" class="d-none">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <input type="hidden" name="language" id="lang-input">
+                    </form>
 
-                            <style>
-                                .flag-icon {
-                                    width: 30px;
-                                    height: 21px;
-                                    object-fit: cover;
-                                    flex-shrink: 0;
-                                    margin-right: 10px;
-                                    display: inline-block;
-                                    vertical-align: middle;
-                                    border-radius: 2px;
-                                }
-                                
-                                .dropdown-menu#lang_menu {
-                                    background-color: #fff !important;
-                                    border: 1px solid #ccc !important;
-                                    border-radius: 4px !important;
-                                    box-shadow: 0 2px 6px rgba(0, 0, 0, .15) !important;
-                                    padding: 0 !important;
-                                    margin-top: 0.5rem !important;
-                                    min-width: auto !important;
-                                    width: auto !important;
-                                    z-index: 2001 !important;
-                                }
-                            </style>
-                        </div>
+                    <style>
+                        .flag-icon {
+                            width: 30px;
+                            height: 21px;
+                            object-fit: cover;
+                            flex-shrink: 0;
+                            margin-right: 10px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            border-radius: 2px;
+                        }
+                        
+                        .dropdown-menu#lang_menu {
+                            background-color: #fff !important;
+                            border: 1px solid #ccc !important;
+                            border-radius: 4px !important;
+                            box-shadow: 0 2px 6px rgba(0, 0, 0, .15) !important;
+                            padding: 0 !important;
+                            margin-top: 0.5rem !important;
+                            min-width: auto !important;
+                            width: auto !important;
+                            z-index: 2001 !important;
+                        }
+                    </style>
+                </div>
 
 
-                        <!-- language switcher -->
-                        <div class="dropdown" style="margin-left:10px;margin-right:5px;">
-                            {% get_current_language as CURRENT_LANG %} {% with code=CURRENT_LANG|lower|slice:":2" %}
-                            <button class="nav-link dropdown-toggle btn btn-link p-0" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="{% trans 'Language' %}" type="button">
+                <!-- language switcher -->
+                <div class="dropdown" style="margin-left:10px;margin-right:5px;">
+                    {% get_current_language as CURRENT_LANG %} {% with code=CURRENT_LANG|lower|slice:":2" %}
+                    <button class="nav-link dropdown-toggle btn btn-link p-0" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="{% trans 'Language' %}" type="button">
             {% if code == "en" %}
               🌐
             {% elif code == "es" %}
@@ -379,50 +370,50 @@
             {% endif %}
           </button> {% endwith %}
 
-                            <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
-                                        <img class="flag-icon me-2" src="{% static 'images/flags/us.png' %}" alt="English"> English
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="es">
-                                        <img class="flag-icon me-2" src="{% static 'images/flags/es.png' %}" alt="Español"> Español
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="zh-hans">
-                                        <img class="flag-icon me-2" src="{% static 'images/flags/cn.png' %}" alt="简体中文"> 简体中文
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="fr">
-                                        <img class="flag-icon me-2" src="{% static 'images/flags/fr.png' %}" alt="Français"> Français
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ja">
-                                        <img class="flag-icon me-2" src="{% static 'images/flags/jp.png' %}" alt="日本語"> 日本語
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ko">
-                                        <img class="flag-icon me-2" src="{% static 'images/flags/kr.png' %}" alt="한국어"> 한국어
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                    <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
+                                <img class="flag-icon me-2" src="{% static 'images/flags/us.png' %}" alt="English"> English
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="es">
+                                <img class="flag-icon me-2" src="{% static 'images/flags/es.png' %}" alt="Español"> Español
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="zh-hans">
+                                <img class="flag-icon me-2" src="{% static 'images/flags/cn.png' %}" alt="简体中文"> 简体中文
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="fr">
+                                <img class="flag-icon me-2" src="{% static 'images/flags/fr.png' %}" alt="Français"> Français
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ja">
+                                <img class="flag-icon me-2" src="{% static 'images/flags/jp.png' %}" alt="日本語"> 日本語
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ko">
+                                <img class="flag-icon me-2" src="{% static 'images/flags/kr.png' %}" alt="한국어"> 한국어
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
 
 
-                        <!-- dark mode toggle -->
-                        <div style="margin-left: 6px;">
-                            <label id="darkModeButton" class="dark-mode-toggle" style="margin: 0px;">
+                <!-- dark mode toggle -->
+                <div style="margin-left: 6px;">
+                    <label id="darkModeButton" class="dark-mode-toggle" style="margin: 0px;">
             <i class="fas fa-sun icon" id="darkModeIcon"></i>
           </label>
-                        </div>
-                    </div>
+                </div>
             </div>
+        </div>
     </nav>
 </header>
 <script src="{% static 'js/toggles.js' %}"></script>
