@@ -20,3 +20,5 @@ venv/
 env/
 media/
 *.log
+
+/static/
