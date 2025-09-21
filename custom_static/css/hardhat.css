@@ -28076,3 +28076,68 @@ body.light-mode .last-updated {
   }
 }
 
+/* Custom button styles - no hover effects, always filled */
+.btn.no-hover-filled {
+  transition: none !important;
+}
+
+.btn.no-hover-filled:hover,
+.btn.no-hover-filled:focus,
+.btn.no-hover-filled:active {
+  background-color: inherit !important;
+  border-color: inherit !important;
+  color: inherit !important;
+  box-shadow: inherit !important;
+  transform: none !important;
+}
+
+/* Ensure primary button is always filled - yellow */
+.btn.btn-primary.no-hover-filled {
+  background-color: #ffc107 !important;
+  border-color: #ffc107 !important;
+  color: #000000 !important;
+}
+
+/* Ensure secondary button is always filled - custom dark blue */
+.btn.btn-secondary.no-hover-filled {
+  background-color: #1c2540 !important;
+  border-color: #1c2540 !important;
+  color: #ffffff !important;
+}
+
+/* Microsoft login button - white text */
+#ms-login-link {
+  color: #ffffff !important;
+}
+
+/* Project navigation links hover effect */
+.project-nav-link:hover {
+  background-color: #FFCD11 !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.project-nav-link:hover .nav-icon {
+  background-color: #ffffff !important;
+  filter: invert(1) !important;
+}
+
+.project-nav-link:hover .fw-semibold,
+.project-nav-link:hover .small {
+  color: #ffffff !important;
+}
+
+/* Recently Viewed Pages button styling */
+#recentlyViewedDropdown {
+  background-color: #1c2540 !important;
+  border-color: #1c2540 !important;
+  color: #ffffff !important;
+}
+
+#recentlyViewedDropdown:hover,
+#recentlyViewedDropdown:focus,
+#recentlyViewedDropdown:active {
+  background-color: #1c2540 !important;
+  border-color: #1c2540 !important;
+  color: #ffffff !important;
+}
+

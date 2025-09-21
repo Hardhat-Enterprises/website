@@ -119,7 +119,7 @@
                   <ul class="list-style-none m-0 p-0">
 
                     <li class="menu ps-3 py-2">
-                      <a class="nav-link d-block px-2 py-2" href="{% url 'appattack' %}" style="display:table;width:100%;">
+                      <a class="nav-link d-block px-2 py-2 project-nav-link" href="{% url 'appattack' %}" style="display:table;width:100%;">
                         <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/appattack.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
                         <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
                           <div class="fw-semibold">{% trans "AppAttack" %}</div>
@@ -129,7 +129,7 @@
                     </li>
 
                     <li class="menu ps-3 py-2">
-                      <a class="nav-link d-block px-2 py-2" href="{% url 'malware_viz_main' %}" style="display:table;width:100%;">
+                      <a class="nav-link d-block px-2 py-2 project-nav-link" href="{% url 'malware_viz_main' %}" style="display:table;width:100%;">
                         <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/malware.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
                         <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
                           <div class="fw-semibold">{% trans "Malware" %}</div>
@@ -139,7 +139,7 @@
                     </li>          
 
                     <li class="menu ps-3 py-2">
-                      <a class="nav-link d-block px-2 py-2" href="{% url 'ptgui_viz_main' %}" style="display:table;width:100%;">
+                      <a class="nav-link d-block px-2 py-2 project-nav-link" href="{% url 'ptgui_viz_main' %}" style="display:table;width:100%;">
                         <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/pentesting.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
                         <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
                           <div class="fw-semibold">{% trans "PT-GUI" %}</div>
@@ -149,7 +149,7 @@
                     </li>
                     
                     <li class="menu ps-3 py-2">
-                      <a class="nav-link d-block px-2 py-2" href="{% url 'smishing_detection_main' %}" style="display:table;width:100%;">
+                      <a class="nav-link d-block px-2 py-2 project-nav-link" href="{% url 'smishing_detection_main' %}" style="display:table;width:100%;">
                         <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/phishing.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
                         <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
                           <div class="fw-semibold">{% trans "Smishing Detection" %}</div>
@@ -159,7 +159,7 @@
                     </li>
 
                     <li class="menu ps-3 py-2">
-                      <a class="nav-link d-block px-2 py-2" href="{% url 'Vr_main' %}" style="display:table;width:100%;">
+                      <a class="nav-link d-block px-2 py-2 project-nav-link" href="{% url 'Vr_main' %}" style="display:table;width:100%;">
                         <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/vr-cyber.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
                         <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
                           <div class="fw-semibold">{% trans "Deakin CyberSafe VR" %}</div>
@@ -169,7 +169,7 @@
                     </li>
 
                     <li class="menu ps-3 py-2">
-                      <a class="nav-link d-block px-2 py-2" href="{% url 'Deakin_Threat_mirror_main' %}" style="display:table;width:100%;">
+                      <a class="nav-link d-block px-2 py-2 project-nav-link" href="{% url 'Deakin_Threat_mirror_main' %}" style="display:table;width:100%;">
                         <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/threat.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
                         <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
                           <div class="fw-semibold">{% trans "Threat mirror" %}</div>
@@ -179,7 +179,7 @@
                     </li>
 
                     <li class="menu ps-3 py-2">
-                      <a class="nav-link d-block px-2 py-2" href="{% url 'policy_deployment' %}" style="display:table;width:100%;">
+                      <a class="nav-link d-block px-2 py-2 project-nav-link" href="{% url 'policy_deployment' %}" style="display:table;width:100%;">
                         <span class="nav-icon" style="display:table-cell; width:32px; height:32px; background:#FFCD11;mask:url('{% static 'icons/policy.svg' %}') no-repeat center / contain;vertical-align:middle;text-align:center;"></span>
                         <span style="display:table-cell;vertical-align:middle;padding-left:8px;">
                           <div class="fw-semibold">{% trans "The Policy Deployment Engine" %}</div>
@@ -297,9 +297,16 @@
               <a class="nav-link dropdown-toggle d-flex align-items-left" href="#" id="profileDropdown"
                 role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
 
-                <img
-                  src="{% if request.user.profile.avatar %}{{ request.user.profile.avatar.url }}{% else %}{% static 'assets/img/pages/home/profile_icon.jpeg' %}{% endif %}"
-                  class="rounded-circle me-2" width="32" height="32" alt="User Profile Picture">
+                {% if request.user.profile.avatar %}
+                  <img
+                    src="{{ request.user.profile.avatar.url }}"
+                    class="rounded-circle me-2" width="32" height="32" alt="User Profile Picture">
+                {% else %}
+                  <div class="rounded-circle me-2 d-flex align-items-center justify-content-center bg-secondary text-white" 
+                       style="width: 32px; height: 32px;">
+                    <i class="fas fa-user"></i>
+                  </div>
+                {% endif %}
                 <span class="d-none d-lg-inline header-profile-name">
                   {{ request.user.first_name }} {{ request.user.last_name }}
                 </span>
@@ -333,7 +340,9 @@
               <a class="btn btn-outline-gray-100 me-2" href="{% url 'login_with_otp' %}">
                 <span class="fas fa-sign-in-alt me-2"></span> Sign In
               </a>
-              <a class="btn btn-primary" href="{% url 'register' %}">Sign Up</a>
+              <a class="btn btn-outline-gray-100" href="{% url 'register' %}">
+                <span class="fas fa-user-plus me-2"></span> Sign Up
+              </a>
             {% endif %}
           </li>
 
