@@ -1,0 +1,171 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+
+<main>
+    <section style="background-color:#ffc107; padding:6rem 0 4rem;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+
+                    <!-- Card -->
+                    <div class="card shadow-sm p-4 rounded-4" style="background:#fff;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="fw-bold m-0">Cyber Achievements</h3>
+                            <div class="small text-secondary">
+                                <span class="me-3"><span class="legend-dot dot-earned"></span> Earned</span>
+                                <span class="me-3"><span class="legend-dot dot-started"></span> Started</span>
+                                <span><span class="legend-dot dot-locked"></span> Locked</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress -->
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <div class="fw-semibold">Overall Progress</div>
+                            <div class="fw-semibold">
+                                {{ percent }}% {% if total_challenges %}
+                                <span class="text-secondary fw-normal ms-2">({{ total_completed }}/{{ total_challenges }})</span> {% endif %}
+                            </div>
+                        </div>
+                        <div class="progress mb-4" style="height:12px; border-radius:50px; background:#e9ecef;">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ percent }}" style="width: {{ percent }}%; border-radius:50px;">
+                            </div>
+                        </div>
+
+                        <!-- Pills -->
+                        <div class="d-grid gap-3" style="grid-template-columns:repeat( auto-fit, minmax(220px, 1fr) );">
+                            {% for c in categories %} {% if is_anon %} {# Not logged in -> send to login (change to your login url name if different) #}
+                            <a href="{% url 'login' %}" class="text-decoration-none">
+                {% else %}
+                  {# Logged-in -> go to that category's list/landing #}
+                  <a href="{% url 'category_challenges' c.raw %}" class="text-decoration-none">
+                {% endif %}
+                    <div class="pill pill-{{ c.state }}">
+                      <span class="pill-text">{{ c.name }}</span>
+                      <span class="pill-state">
+                        {% if c.state == 'earned' %}Earned{% elif c.state == 'started' %}Started{% else %}Locked{% endif %}
+                      </span>
+                    </div>
+                  </a> {% empty %}
+                            <div class="text-muted">No challenges available yet.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Back button -->
+                    <div class="text-center mt-5">
+                        <a href="{% url 'malware_viz_main' %}" class="btn btn-dark">
+              ⬅️ Back to Cyber Challenges
+            </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+    .legend-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+    
+    .dot-earned {
+        background: #198754;
+    }
+    
+    .dot-started {
+        background: #2d3748;
+    }
+    
+    .dot-locked {
+        background: #cfd6de;
+    }
+    
+    .pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        min-height: 42px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, .02) inset;
+        font-weight: 600;
+        font-size: 0.92rem;
+        transition: transform .1s ease, box-shadow .15s ease;
+    }
+    
+    .pill .pill-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .pill .pill-state {
+        margin-left: auto;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+    /* Locked = dark bg, white text */
+    
+    .pill-locked {
+        background: #2d3748;
+        border-color: #2d3748;
+        color: #fff;
+    }
+    
+    .pill-locked .pill-text {
+        color: #fff;
+    }
+    
+    .pill-locked .pill-state {
+        background: rgba(255, 255, 255, .18);
+        color: #fff;
+    }
+    /* Started = white bg, grey text */
+    
+    .pill-started {
+        background: #fff;
+        border-color: #e2e8f0;
+        color: #64748b;
+    }
+    
+    .pill-started .pill-text {
+        color: #64748b;
+    }
+    
+    .pill-started .pill-state {
+        background: #eef2f6;
+        color: #64748b;
+        border: 1px solid #d9e0e7;
+    }
+    /* Earned = green bg, white text */
+    
+    .pill-earned {
+        background: #198754;
+        border-color: #198754;
+        color: #fff;
+    }
+    
+    .pill-earned .pill-text {
+        color: #fff;
+    }
+    
+    .pill-earned .pill-state {
+        background: rgba(255, 255, 255, .18);
+        color: #fff;
+    }
+    
+    a.text-decoration-none:hover .pill {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, .05);
+    }
+</style>
+
+{% endblock content %}
