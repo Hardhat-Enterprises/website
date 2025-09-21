@@ -13,6 +13,23 @@
       </div>
     {% endif %}
 
+    <!-- Banner for users without project preferences -->
+    {% if not has_preferences %}
+      <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
+          <div class="flex-grow-1">
+            <h5 class="alert-heading mb-1">Complete Your Project Preferences</h5>
+            <p class="mb-2">You haven't filled out your project preferences yet. Complete your preferences to get the most out of your experience!</p>
+            <a href="/join-us/" class="btn btn-warning btn-sm">
+              <i class="fas fa-plus me-1"></i>Complete Preferences
+            </a>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endif %}
+
     <div class="row justify-content-center">
       <!-- Left column for profile picture -->
       <div class="col-md-5 mb-4">
