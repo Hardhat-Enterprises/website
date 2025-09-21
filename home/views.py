@@ -2657,6 +2657,8 @@ def policy_deployment(request):
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
 
+def resources_view(request):
+    return render(request, 'pages/resources.html.')
 
 # Challenge Management Views
 
