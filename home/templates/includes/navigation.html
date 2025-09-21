@@ -232,6 +232,7 @@
               {% trans "Cyber Challenges" %}
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
+main
                         <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
                             <ul class="list-style-none">
                                 <a class="menu-link" href="{% url 'challenge_list' %}">
@@ -275,6 +276,78 @@
                     </div>
 
                     </ul>
+
+            <div class="dropdown-menu pt-2" aria-labelledby="careersDropdown">
+              <ul class="list-style-none">
+                <a class="menu-link" href="{% url 'career-discover' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Discover Hardhat" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'career-list' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'graduate-program' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Graduate Program" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'internships' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
+                </a>
+                <a class="menu-link" href="{% url 'job-alerts' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Job Alerts" %}</li>
+                </a>
+                <a href="{% url 'career_path_finder' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Career Path Finder" %}</li>
+                </a>
+              </ul>
+            </div>
+          </li>
+            
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
+                data-bs-toggle="dropdown">
+                {% trans "Cyber Challenges" %}
+                <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
+              </a>
+              <div class="dropdown-menu pt-2" aria-labelledby="frontPagesDropdown">
+                <ul class="list-style-none">
+                  <a class="menu-link" href="{% url 'challenge_list' %}">
+                    <li class="mb-2 menu ps-3 py-1">
+                      {% trans "All Challenges" %}
+                    </li>
+                  </a>
+                  <a class="menu-link" href="{% url 'cyber_quiz' %}">
+                    <li class="mb-2 menu ps-3 py-1">
+                      {% trans "Quiz" %}
+                    </li>
+                  </a>
+                  <a class="menu-link" href="{% url 'cyber_match' %}"> 
+                    <li class="mb-2 menu ps-3 py-1"> 
+                      {% trans "Match" %} 
+                    </li> 
+                  </a>
+                </ul>
+              </div>
+            </li>
+
+
+            <div class="search-container position-relative">
+              <form class="desktop-search-bar"
+                    method="POST"
+                    action="{% url 'pages/search-results' %}">
+                {% csrf_token %}
+                <input class="form-control me-4 search-box"
+                      type="search"
+                      id="searchInput"
+                      name="q"
+                      placeholder="{% trans 'Search...' %}"
+                      aria-label="Search"
+                      autocomplete="off">
+                <button class="search-btn" type="submit">
+                  <div><i class="fas fa-search search-icon"></i></div>
+                </button>
+              </form>
+              <div class="result-box d-none"></div>
+            </div>
+ main
 
                     </div>
 
