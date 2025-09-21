@@ -220,14 +220,14 @@ urlpatterns = [
 
     path("health", health_check, name="health-check"),
     path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
+    # settings page route
+    path("settings/", views.settings_view, name="settings"),
     
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
-    path("resources/", ResourceListView.as_view(), name="resources"),
-    path("resources/<slug:slug>/", ResourceDetailView.as_view(), name="resource_detail"),
-      path("resources/<int:pk>/download/", views.resource_download, name="resource_download"),
-    path("resources/<slug:slug>/", views.ResourceDetailView.as_view(), name="resource_detail"),
     path("resources/", views.ResourceListView.as_view(), name="resources"),
+    path("resources/<slug:slug>/", views.ResourceDetailView.as_view(), name="resource_detail"),
+    path("resources/<int:pk>/download/", views.resource_download, name="resource_download"),
   
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

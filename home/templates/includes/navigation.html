@@ -16,11 +16,7 @@
                   <img src="{% static 'assets/img/brand/dark.svg' %}" alt="Themesberg logo" />
                 </a>
               </div>
-              <div class="col-6 form-check form-switch dark-mode">
-                <input id="darkmode-toggle" class="form-check-input" type="checkbox" role="switch"
-                  id="flexSwitchCheckChecked">
-                <label class="form-check-label" for="flexSwitchCheckChecked">Dark Mode</label>
-              </div>
+              
               <div class="col-2 collapse-close">
                 <a href="#navbar_global" class="fas fa-times" data-bs-toggle="collapse" data-bs-target="#navbar_global"
                   aria-controls="navbar_global" aria-expanded="false" title="close" aria-label="Toggle navigation"></a>
@@ -294,14 +290,17 @@
 
           <!-- User Profile Dropdown -->
           <div class="dropdown">
-            <a href="#" class="btn btn-outline-gray-100 me-md-3 d-flex align-items-center dropdown-toggle"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="#" id="profileDropdown" role="button" class="btn btn-outline-gray-100 me-md-3 d-flex align-items-center dropdown-toggle"
+              data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
               <span class="fas fa-user-circle me-2"></span>
               <span class="header-profile-name">{{ request.user.username }}</span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
               <li><a class="dropdown-item" href="{% url 'profile' %}">
                 <span class="fas fa-user me-2"></span>{% trans 'Profile' %}
+              </a></li>
+              <li><a class="dropdown-item" href="{% url 'settings' %}">
+                <span class="fas fa-cog me-2"></span>{% trans 'Settings' %}
               </a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">
@@ -353,6 +352,7 @@
         </form>
 
         <style>
+          .navbar .dropdown-menu { z-index: 2001 !important; }
           .flag-icon{
             width: 30px;          
             height: 21px;          
@@ -504,12 +504,7 @@
           </script>
 
 
-          <!-- dark mode toggle -->
-          <div style="margin-left: 6px;">
-            <label id="darkModeButton" class="dark-mode-toggle" style="margin: 0px;">
-              <i class="fas fa-sun icon" id="darkModeIcon"></i>
-            </label>
-          </div>
+          
         </div>
       </div>
     </nav>
