@@ -157,6 +157,7 @@ urlpatterns = [
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
+    path('challenges/match/', views.cyber_match, name='cyber_match'),
     # Admin challenge management
     path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
     path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
