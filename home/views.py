@@ -5,6 +5,8 @@
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Count
+from .models import CyberChallenge, UserChallenge
 
 
 from home.models import TeamMember
@@ -2139,6 +2141,98 @@ def pen_testing(request):
 def secure_code_review(request):
     # Page from the theme
     return render(request, 'pages/appattack/secure_code_review.html')
+
+
+def progress(request):
+    """
+    Visible to everyone.
+    - Logged out: all pills show 'locked', progress 0%.
+    - Logged in: per-category state:
+        locked  = no UserChallenge rows in that category
+        started = has a UserChallenge row in that category
+        earned  = has a completed=True row in that category
+    - Overall % = earned challenges / total challenges (green bar).
+    """
+    # All categories with their total number of challenges
+    cats_qs = (
+        CyberChallenge.objects
+        .values("category")
+        .annotate(total=Count("id"))
+        .order_by("category")
+    )
+
+    # If anonymous: everything locked
+    if not request.user.is_authenticated:
+        categories = [{
+            "raw": row["category"],
+            "name": row["category"].replace("_", " "),
+            "total": row["total"],
+            "state": "locked",
+        } for row in cats_qs]
+
+        return render(request, "pages/progress.html", {   # <- changed
+            "percent": 0,
+            "total_completed": 0,
+            "total_challenges": sum(r["total"] for r in categories),
+            "categories": categories,
+            "is_anon": True,
+        })
+
+    # Logged-in user: compute started / earned per category
+    started_map = dict(
+        UserChallenge.objects
+        .filter(user=request.user)
+        .values("challenge__category")
+        .annotate(cnt=Count("id"))
+        .values_list("challenge__category", "cnt")
+    )
+
+    earned_map = dict(
+        UserChallenge.objects
+        .filter(user=request.user, completed=True)
+        .values("challenge__category")
+        .annotate(done=Count("id"))
+        .values_list("challenge__category", "done")
+    )
+
+    categories = []
+    total_challenges = 0
+    total_earned = 0
+
+    for row in cats_qs:
+        cat = row["category"]
+        total = row["total"]
+        total_challenges += total
+
+        started_cnt = started_map.get(cat, 0)
+        earned_cnt  = earned_map.get(cat, 0)
+        total_earned += earned_cnt
+
+        if earned_cnt > 0:
+            state = "earned"
+        elif started_cnt > 0:
+            state = "started"
+        else:
+            state = "locked"
+
+        categories.append({
+            "raw": cat,                     # slug used in URL
+            "name": cat.replace("_", " "),  # display name
+            "total": total,
+            "state": state,
+        })
+
+    percent = round((total_earned / total_challenges) * 100) if total_challenges else 0
+
+    return render(request, "pages/progress.html", {   # <- changed
+        "percent": percent,
+        "total_completed": total_earned,
+        "total_challenges": total_challenges,
+        "categories": categories,
+        "is_anon": False,
+    })
+
+
  
 # @login_required  # TEMPORARILY DISABLED TO TEST AUTHENTICATION
 def dashboard(request):
