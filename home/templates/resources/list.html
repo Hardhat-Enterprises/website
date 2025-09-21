@@ -1,0 +1,200 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}Resource Library{% endblock %}
+
+{% block content %}
+<section class="res-page py-4">
+  <div class="container">
+    <div class="res-shell">
+
+      <!-- Toolbar -->
+      <form method="get" class="res-toolbar" role="search" aria-label="Filter resources">
+        <div class="res-search-wrap">
+          <span class="res-ico" aria-hidden="true">🔎</span>
+          <input class="form-control res-input res-search"
+                 type="search" name="q" value="{{ request.GET.q }}"
+                 placeholder="Search resources…" autocomplete="off">
+        </div>
+
+        <div class="res-select-wrap">
+          <select class="form-select res-input res-select" name="category" aria-label="Filter by category">
+            <option value="">All categories</option>
+            {% for value,label in resources.model.Category.choices %}
+              <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+          <span class="res-caret" aria-hidden="true"></span>
+        </div>
+
+        <div class="res-actions-inline">
+          <button class="btn btn-dark res-btn" type="submit">Filter</button>
+          {% if request.GET.q or request.GET.category %}
+            <a class="btn btn-outline-dark res-btn" href="{% url 'resources' %}">Clear</a>
+          {% endif %}
+        </div>
+      </form>
+
+      <!-- Quick chips -->
+      <nav class="res-filterbar" aria-label="Quick filters">
+        {% with current=request.GET.category %}
+          <a class="res-chip {% if not current %}is-active{% endif %}"
+             href="?{% if request.GET.q %}q={{request.GET.q|urlencode}}&{% endif %}">All</a>
+          {% for value,label in resources.model.Category.choices %}
+            <a class="res-chip {% if current == value %}is-active{% endif %}"
+               href="?{% if request.GET.q %}q={{request.GET.q|urlencode}}&{% endif %}category={{ value }}">{{ label }}</a>
+          {% endfor %}
+        {% endwith %}
+      </nav>
+
+      <div class="res-count">
+        {% if page_obj.paginator.count %}
+          Showing <strong>{{ page_obj.paginator.count }}</strong> result{{ page_obj.paginator.count|pluralize }}
+        {% endif %}
+      </div>
+
+      {% if resources %}
+      <div class="row g-4">
+        {% for r in resources %}
+        <div class="col-12 col-sm-6 col-xl-4">
+          <article class="res-card h-100">
+
+            <!-- Decorative gold header (only badges) -->
+            <header class="res-hdr" aria-hidden="true">
+              <div class="res-filetag">
+                {% with url=r.file.url|lower %}
+                  {% if ".pdf" in url %}PDF
+                  {% elif ".docx" in url or ".doc" in url %}DOCX
+                  {% elif ".xlsx" in url or ".xls" in url %}XLSX
+                  {% elif ".csv" in url %}CSV
+                  {% else %}FILE{% endif %}
+                {% endwith %}
+              </div>
+              <span class="res-eyebrow">{{ r.get_category_display }}</span>
+              <span class="res-divider"></span>
+            </header>
+
+            <!-- Body (dark area with ALL readable text) -->
+            <div class="res-body">
+              <h3 class="res-title">
+                <a class="res-link" href="{% url 'resource_detail' slug=r.slug %}">{{ r.title }}</a>
+              </h3>
+
+              <div class="res-meta">
+                <span>{{ r.file.size|filesizeformat }}</span>
+                <span>•</span>
+                <time datetime="{{ r.published_at|date:'c' }}">{{ r.published_at|date:"d M Y" }}</time>
+              </div>
+
+              <p class="res-summary">{{ r.summary }}</p>
+
+              <div class="res-actions">
+
+                <a href="{% url 'resource_download' r.pk %}"
+                   class="btn res-cta res-cta--ghost" aria-label="Download {{ r.title }}">⬇ Download</a>
+              </div>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+      <nav class="mt-4 d-flex justify-content-center" aria-label="Pagination">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}{% if request.GET.category %}category={{request.GET.category}}&{% endif %}page={{ page_obj.previous_page_number }}">Prev</a>
+            </li>
+          {% endif %}
+          <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?{% if request.GET.q %}q={{request.GET.q}}&{% endif %}{% if request.GET.category %}category={{request.GET.category}}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+
+      {% else %}
+        <div class="res-empty">
+          <div class="res-empty-card">
+            <h3>No resources yet</h3>
+            <p>Try clearing filters or check back soon.</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+:root{
+  --res-radius: 24px;
+  --gold-1: color-mix(in oklab, var(--accent) 88%, #fff 12%);
+  --gold-2: color-mix(in oklab, var(--accent) 62%, #000 8%);
+  --gold-3: color-mix(in oklab, var(--accent) 40%, #000 16%);
+  --charcoal: #0f172a;       /* dark body */
+  --charcoal-line: #1f2937;  /* outline */
+}
+
+/* Shell */
+.res-shell{ background:var(--card); border:1px solid var(--border); border-radius:28px; padding:18px 18px 24px; box-shadow:0 10px 30px rgba(3,7,18,.08); }
+
+/* Toolbar */
+.res-toolbar{ display:grid; grid-template-columns:1fr minmax(220px,260px) auto; gap:12px; align-items:center; background:color-mix(in oklab, var(--accent) 16%, var(--card)); border:1px solid color-mix(in oklab, var(--accent) 22%, var(--border)); border-radius:999px; padding:10px 12px; }
+@media (max-width:992px){ .res-toolbar{ grid-template-columns:1fr 1fr; border-radius:18px; } }
+@media (max-width:576px){ .res-toolbar{ grid-template-columns:1fr; } }
+.res-input{ height:48px; border-radius:999px; }
+.res-btn{ height:48px; border-radius:999px; padding-inline:18px; font-weight:800; }
+.res-actions-inline{ display:flex; gap:10px; justify-content:flex-end; }
+.res-search-wrap{ position:relative; }
+.res-ico{ position:absolute; inset-block:0; inset-inline-start:12px; display:grid; place-items:center; font-size:16px; opacity:.65; }
+.res-search{ padding-inline-start:40px; }
+.res-select-wrap{ position:relative; }
+.res-select{ appearance:none; padding-inline-end:40px; }
+.res-caret{ position:absolute; right:14px; top:50%; translate:0 -50%; width:10px; height:10px; pointer-events:none;
+  background:conic-gradient(from 135deg at 50% 50%, currentColor 0 25%, #0000 0 100%);
+  color: color-mix(in oklab, var(--ink) 60%, #0000);
+  mask: radial-gradient(6px at 50% 35%, #0000 99%, #000) top/100% 50% no-repeat, radial-gradient(6px at 50% 65%, #0000 99%, #000) bottom/100% 50% no-repeat;
+}
+
+/* Chips */
+.res-filterbar{ display:flex; gap:10px; flex-wrap:wrap; margin:12px 2px 8px; }
+.res-chip{ display:inline-flex; align-items:center; gap:.5rem; font-weight:800; font-size:.82rem; padding:.38rem .78rem; border-radius:999px; background:color-mix(in oklab, var(--accent) 12%, transparent); border:1px solid var(--accent); color:var(--ink); text-decoration:none; transition:background .15s, transform .15s; }
+.res-chip:hover{ background:color-mix(in oklab, var(--accent) 22%, transparent); transform:translateY(-1px); }
+.res-chip.is-active{ background:color-mix(in oklab, var(--accent) 28%, var(--card)); }
+.res-count{ color:var(--muted); margin:8px 6px 16px; }
+
+/* Card */
+.res-card{ position:relative; overflow:hidden; border-radius:var(--res-radius); background:var(--charcoal); border:1px solid var(--charcoal-line); box-shadow:0 18px 36px rgba(0,0,0,.28); transition:transform .2s, box-shadow .2s; }
+.res-card:hover{ box-shadow:0 24px 56px rgba(0,0,0,.34); transform:translateY(-2px); }
+
+/* Header — decorative only (no text over glare) */
+.res-hdr{ position:relative; height:118px; background:linear-gradient(180deg, var(--gold-1) 0%, var(--gold-2) 56%, var(--gold-3) 100%); }
+.res-filetag{ position:absolute; left:18px; top:16px; padding:.22rem .6rem; border-radius:999px; font-size:.78rem; font-weight:900; letter-spacing:.4px; color:#111; background:#ffe58f; border:2px dashed #111; box-shadow:0 1px 0 #00000014 inset; }
+.res-eyebrow{ position:absolute; left:18px; bottom:44px; display:inline-block; font-weight:800; font-size:.82rem; color:#111; background:#ffffffcc; border:1px solid #00000022; padding:.18rem .55rem; border-radius:999px; }
+.res-divider{ position:absolute; left:0; right:0; bottom:0; height:1px; background:linear-gradient(90deg, #0000 0, #00000029 35%, #00000029 65%, #0000 100%); }
+
+/* Body — all readable content here */
+.res-body{ padding:18px 20px 20px; color:#e9edf2; }
+.res-title{ margin:0 0 4px; font-size:clamp(1.05rem, 1.2vw, 1.25rem); font-weight:900; }
+.res-link{ color:#ffffff; text-decoration:none; }
+.res-link:hover{ text-decoration:underline; }
+.res-meta{ color:#cbd5e1; font-weight:700; margin-bottom:10px; }
+.res-summary{ color:#e9edf2; opacity:.95; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; min-height:3.6em; margin:8px 0 16px; }
+
+/* CTAs */
+.res-actions{ display:flex; gap:12px; }
+.res-cta{ border-radius:999px; padding:10px 18px; font-weight:800; }
+.res-cta--primary{ background:#0b1220; color:#fff; border:1px solid #0000; box-shadow:0 6px 16px rgba(3,7,18,.28); }
+.res-cta--primary:hover{ box-shadow:0 12px 28px rgba(3,7,18,.36); transform:translateY(-1px); }
+.res-cta--ghost{ background:transparent; border:2px solid #facc15; color:#facc15; }
+.res-cta--ghost:hover{ background:#facc15; color:#111; box-shadow:0 6px 16px rgba(3,7,18,.18); }
+
+/* Empty */
+.res-empty{ display:grid; place-items:center; }
+.res-empty-card{ background:var(--card); border:1px solid var(--border); border-radius:18px; padding:28px; text-align:center; width:min(560px, 96%); }
+</style>
+{% endblock %}

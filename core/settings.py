@@ -545,4 +545,9 @@ SESSION_COOKIE_AGE = 1800  # 30 minutes in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session timeout on each request
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session when browser closes
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in DB
+
+DEBUG = True
+
+
 SECURITY_EMAIL = "hardhatwebsite@gmail.com"
+

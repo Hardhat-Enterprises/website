@@ -1,4 +1,5 @@
 
+
 {% load static %}
 {% load i18n %}
 <header class="header-global">
@@ -190,6 +191,11 @@
                 </div>
               </div>
           </li>
+            
+            <!-- Resources -->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'resources' %}">Resources</a>
+            </li>
 
           <!-- Blog -->
           <li class="nav-item dropdown">
@@ -212,6 +218,7 @@
           </li>
 
           <!-- Careers -->
+
           <li class="nav-item dropdown">
             <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {% trans "Careers" %}
@@ -225,6 +232,11 @@
                 <a class="menu-link" href="{% url 'career-list' %}">
                   <li class="mb-2 menu ps-3 py-1">{% trans "All Jobs" %}</li>
                 </a>
+
+                <a class="menu-link" href="{% url 'graduate-program' %}">
+                  <li class="mb-2 menu ps-3 py-1">{% trans "Graduate Program" %}</li>
+                </a>
+
                 <a class="menu-link" href="{% url 'internships' %}">
                   <li class="mb-2 menu ps-3 py-1">{% trans "Internships" %}</li>
                 </a>
