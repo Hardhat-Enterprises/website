@@ -349,6 +349,10 @@
       body.dark-mode .card,
       body.dark-mode footer { background-color: #2a2a2a; color: #f8f9fa; }
 
+      /* Make sure the fixed site navbar uses the correct theme explicitly */
+      body.light-mode .navbar-main { background-color: var(--navbar-light) !important; }
+      body.dark-mode  .navbar-main { background-color: var(--navbar-dark) !important; }
+
       /* Dropdowns adapt to theme */
       body.light-mode .dropdown-menu { background-color: #ffffff; color: #111; }
       body.dark-mode  .dropdown-menu { background-color: #333333; color: #f8f9fa; }
