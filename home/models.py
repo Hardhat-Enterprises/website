@@ -17,6 +17,7 @@ from django.utils.text import slugify
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.utils.text import slugify
 
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -25,7 +26,6 @@ from tinymce.models import HTMLField
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust, Transpose 
 
-from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from django.utils.timezone import now
@@ -37,9 +37,11 @@ import string
 
 from .mixins import AbstractBaseSet, CustomUserManager
 from .validators import StudentIdValidator
-from django.db import models
 import nh3
-from django.conf import settings
+
+def vault_upload_path(instance, filename):
+    """Upload path for vault documents"""
+    return f'vault_documents/{filename}'
 
 
 
@@ -171,6 +173,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.current_session_key = request.session.session_key
         self.save(update_fields=['last_activity', 'current_session_key'])
 
+    def is_admin_user(self):
+        """Check if user has admin privileges (staff or superuser)"""
+        return self.is_staff or self.is_superuser
+
 def vault_upload_path(instance, filename):
     """Generate upload path for vault documents"""
     return os.path.join('vault_documents', filename)
@@ -200,12 +206,12 @@ class Folder(models.Model):
 
 class VaultDocument(models.Model):
     VIS_PUBLIC = 'public'
-    VIS_TEAMS = 'teams'
+    VIS_PROJECTS = 'projects'
     VIS_PRIVATE = 'private'
     
     VISIBILITY_CHOICES = [
         (VIS_PUBLIC, 'Public'),
-        (VIS_TEAMS, 'Selected teams'),
+        (VIS_PROJECTS, 'Selected projects'),
         (VIS_PRIVATE, 'Private (uploader only)'),
     ]
     
@@ -215,7 +221,7 @@ class VaultDocument(models.Model):
     size_bytes = models.PositiveIntegerField(default=0)
     description = models.CharField(max_length=300, blank=True)
     visibility = models.CharField(max_length=16, choices=VISIBILITY_CHOICES, default=VIS_PUBLIC)
-    allowed_teams = models.ManyToManyField(Group, blank=True, related_name='vault_documents')
+    allowed_projects = models.ManyToManyField('Project', blank=True, related_name='vault_documents')
     uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -245,11 +251,6 @@ class PasswordHistory(models.Model):
     def __str__(self):
         return f"PasswordHistory(user={self.user_id}, created_at={self.created_at})"
 
-#checking if admin/staff user
-
-    def is_admin_user(self):
-        return self.is_staff or self.is_superuser
-    
 #Search Bar Models:
 
 class Webpage(models.Model):
@@ -263,23 +264,20 @@ class Webpage(models.Model):
 
 class Project(AbstractBaseSet):
 
-    PROJECT_CHOICES = [
-        ('AppAttack', 'AppAttack'),
-        ('Malware', 'Malware'),
-        ('PT-GUI', 'PT-GUI'),
-        ('Smishing_Detection', 'Smishing Detection'),
-        ('Deakin_CyberSafe_VR', 'Deakin CyberSafe VR'),
-        ('Deakin_Threat_Mirror', 'Deakin Threat Mirror'),
-        ('Company_Website_Development', 'Company Website Development'),
-    ]
-
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
-    title = models.CharField(_("project title"), max_length=150, choices=PROJECT_CHOICES, blank=False)
+    title = models.CharField(_("project title"), max_length=150, blank=False, unique=True)
     archived = models.BooleanField(_("archived"), default=False)
     description = models.TextField(_("project description"), blank=True, null=True)
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("updated at"), auto_now=True)
 
     def __str__(self) -> str:
-        return self.get_title_display()
+        return self.title
+
+    class Meta:
+        ordering = ['title']
+        verbose_name = _("project")
+        verbose_name_plural = _("projects")
 
 
 class Course(AbstractBaseSet):
@@ -351,7 +349,7 @@ class Student(AbstractBaseSet):
         },
     )
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="users", blank=False, null=False)
-    year = models.PositiveIntegerField(blank=True)
+    year = models.PositiveIntegerField(blank=True, null=True)
     trimester = models.CharField(_("trimester"), choices=TRIMESTERS, max_length=10, blank=True)
     unit = models.CharField(_("unit"), choices=UNITS, max_length=50, blank=True)
     course = models.CharField(max_length=10, choices=COURSES, blank=True, null=True)
@@ -360,7 +358,12 @@ class Student(AbstractBaseSet):
     p3 = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="p3_preferences", null=True, blank=True)
 
     def clean(self):
-        if self.p1 == self.p2 or self.p1 == self.p3 or self.p2 == self.p3:
+        # Only validate uniqueness if preferences are not None
+        preferences = [self.p1, self.p2, self.p3]
+        non_null_preferences = [p for p in preferences if p is not None]
+        
+        # Check if there are duplicates among non-null preferences
+        if len(non_null_preferences) != len(set(non_null_preferences)):
             raise ValidationError("Project preferences p1, p2, and p3 must be unique.")
     allocated = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="allocated", blank=True, null=True)
     skills = models.ManyToManyField(Skill, through='Progress')
@@ -727,7 +730,7 @@ class JobAlert(models.Model):
     def send_confirmation_email(self):
         """Send confirmation email when user subscribes"""
         from django.core.mail import send_mail
-        from django.conf import settings
+        
         
         subject = "Job Alerts Subscription Confirmed - HardHat Enterprises"
         message = f"""
@@ -1009,6 +1012,7 @@ class CompilerSettings(models.Model):
     def __str__(self):
         return f"Compiler Settings - {self.created_at}"
 
+
 class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
     session_key = models.CharField(max_length=40, unique=True)
@@ -1018,7 +1022,7 @@ class AdminSession(models.Model):
     last_activity = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     logout_time = models.DateTimeField(null=True, blank=True)
-    logout_reason = models.CharField(max_length=50, blank=True, null=True) 
+    logout_reason = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ['-login_time']
@@ -1039,9 +1043,7 @@ class AdminSession(models.Model):
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
         return now() > expiry_time
 
-
-
-    def update_activity(self):
+def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
 
@@ -1079,43 +1081,63 @@ class Tip(models.Model):
     text = models.CharField(max_length=280, unique=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         verbose_name = "Daily Security Tip"
         verbose_name_plural = "Daily Security Tips"
-
+    
     def __str__(self):
         return self.text[:60]
 
-# keep this only if you implemented 24h rolling rotation
 class TipRotationState(models.Model):
     lock = models.CharField(max_length=16, default="default", unique=True)
     last_index = models.IntegerField(default=-1)
     rotated_at = models.DateTimeField(null=True, blank=True)
-
+    
     def __str__(self):
         return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
-    
-#Model to track known devices
+
 class UserDevice(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="devices"
     )
-    # Device fingerprint (unique identifier)
     device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
-
-    # User-friendly info
     device_name = models.CharField(max_length=200) 
-
-    # Technical info
     user_agent = models.TextField()
     ip_address = models.GenericIPAddressField()
-
-    # Timestamps
     created_at = models.DateTimeField(auto_now_add=True) 
     last_seen = models.DateTimeField(auto_now=True)       
+    
     def __str__(self):
         return f"{self.user.email} - {self.device_name} ({self.ip_address})"
 
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        WHITEPAPER = "whitepaper", "Whitepaper"
+        CHECKLIST  = "checklist", "Checklist / Guide"
+        INFOGRAPH  = "infographic", "Infographic"
+        CASESTUDY  = "casestudy", "Case Study"
+        OTHER      = "other", "Other"
+
+    title = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    summary = models.TextField(max_length=600, help_text="Short 1–3 line description.")
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.OTHER)
+    file = models.FileField(upload_to="resources/files/")
+    cover = models.ImageField(upload_to="resources/covers/", blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:190]
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

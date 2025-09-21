@@ -1,0 +1,105 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Hardhat Enterprise Admin</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+/* Dark mode: align admin with Upskilling page theme */
+body.dark-mode {
+  --dm-bg: #0f1216;
+  --dm-panel: rgba(33, 37, 41, 0.88);
+  --dm-panel-solid: #15171a;
+  --dm-surface: #1b1e22;
+  --dm-border: rgba(255, 193, 7, 0.45);
+  --dm-border-soft: #2a2f36;
+  --dm-text: #f8f9fa;
+  --dm-muted: #cfd6dc;
+  --dm-muted-soft: #b6c0c8;
+  --dm-accent: #f1c40f; /* Upskilling card-title-warning */
+}
+
+/* Base background/text */
+body.dark-mode { background-color: var(--dm-bg); color: var(--dm-text); }
+body.dark-mode a { color: var(--dm-accent); }
+
+/* Panels and header */
+body.dark-mode #header,
+body.dark-mode .breadcrumbs,
+body.dark-mode .module,
+body.dark-mode .app-*,
+body.dark-mode .content,
+body.dark-mode #content-main,
+body.dark-mode .colMS,
+body.dark-mode .colSM,
+body.dark-mode .inline-group,
+body.dark-mode .inline-related,
+body.dark-mode .selector-available,
+body.dark-mode .selector-chosen {
+  background: var(--dm-panel);
+  color: var(--dm-text);
+  border: 1px solid var(--dm-border);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Tables */
+body.dark-mode table,
+body.dark-mode .results,
+body.dark-mode .module table { background: var(--dm-panel); }
+body.dark-mode table th,
+body.dark-mode .results th { background: var(--dm-surface); color: var(--dm-text); border-color: var(--dm-border-soft); }
+body.dark-mode table td { border-color: var(--dm-border-soft); color: var(--dm-text); }
+
+/* Forms */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="password"],
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode .vTextField,
+body.dark-mode .vIntegerField,
+body.dark-mode .vLargeTextField {
+  background-color: var(--dm-surface);
+  color: var(--dm-text);
+  border-color: #3a4048;
+}
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder { color: var(--dm-muted-soft); }
+
+/* Buttons */
+body.dark-mode .button,
+body.dark-mode input[type="submit"],
+body.dark-mode .deletelink,
+body.dark-mode .default { 
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: var(--dm-text);
+}
+body.dark-mode .button:hover,
+body.dark-mode input[type="submit"]:hover,
+body.dark-mode .default:hover { background: rgba(255,255,255,.12); }
+body.dark-mode .deletelink { border-color: rgba(220,53,69,.45); }
+
+/* Modal alignment (reuse upskilling tone) */
+body.dark-mode .modal-content,
+.dark-mode .modal-content { background-color: var(--dm-panel-solid); color: var(--dm-text); }
+body.dark-mode .modal-header,
+.dark-mode .modal-header,
+body.dark-mode .modal-footer,
+.dark-mode .modal-footer { border-color: var(--dm-border-soft); background-color: var(--dm-panel-solid); color: var(--dm-text); }
+body.dark-mode .modal-title,
+.dark-mode .modal-title { color: var(--dm-accent); }
+body.dark-mode .btn-close,
+.dark-mode .btn-close { filter: invert(1) grayscale(100%) brightness(180%); }
+</style>
+{% endblock %}

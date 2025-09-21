@@ -156,6 +156,7 @@ MIDDLEWARE = [
     # 'core.middleware.AutoLogoutMiddleware',  # TEMPORARILY DISABLED - causing OAuth redirect issues
 
     "django_user_agents.middleware.UserAgentMiddleware",
+    "core.middleware.HoneypotMiddleware",
     # "core.middleware.LogRequestMiddleware",  # TEMPORARILY DISABLED - causing OAuth redirect issues
     # "home.views.force_oauth_redirect_middleware", # DISABLED - causing redirect loops
 
@@ -528,6 +529,11 @@ LOGGING = {
             'handlers': ['audit_file'],
             'level': 'INFO',
             'propagate': False,
+        },
+        "honeypot_logger": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
         },
     },
 }

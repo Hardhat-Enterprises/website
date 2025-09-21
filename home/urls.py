@@ -16,12 +16,7 @@ from django.conf.urls.static import static
 # Health Endpoint Work
 from .views import health_check
 from django.views.i18n import set_language
-
 from .views import ResourceListView
-
-
-
-
 #from home.views import register
 from rest_framework.routers import DefaultRouter
 from .views import APIModelListView
@@ -163,6 +158,7 @@ urlpatterns = [
     path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
 
+
     path('challenges/execute-code/', views.execute_code, name='execute_code'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
@@ -174,6 +170,9 @@ urlpatterns = [
     path('compiler/history/', views.compiler_history, name='compiler_history'),
     path('compiler/leaderboard/', views.compiler_leaderboard, name='compiler_leaderboard'),
     
+
+
+    path('challenges/match/', views.cyber_match, name='cyber_match'),
 
     # Admin challenge management
     path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
@@ -208,6 +207,19 @@ urlpatterns = [
     path('rate_limit_exceeded/', rate_limit_exceeded, name='rate_limit_exceeded'),
   path('accounts/admin/', AdminLoginView.as_view(), name='admin_login'),
     path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('staff/user-management/', views.user_management, name='user_management'),
+    path('staff/assign-user-project/', views.assign_user_project, name='assign_user_project'),
+    path('staff/update-user/', views.update_user, name='update_user'),
+    path('staff/delete-user/', views.delete_user, name='delete_user'),
+    path('staff/bulk-assign-users-project/', views.bulk_assign_users_project, name='bulk_assign_users_project'),
+    path('staff/bulk-update-user-status/', views.bulk_update_user_status, name='bulk_update_user_status'),
+    path('staff/bulk-update-student-info/', views.bulk_update_student_info, name='bulk_update_student_info'),
+    # Project Teams Management URLs
+    path('staff/project-teams/', views.project_teams, name='project_teams'),
+    path('staff/projects/add/', views.add_project, name='add_project'),
+    path('staff/projects/<str:pk>/edit/', views.edit_project, name='edit_project'),
+    path('staff/projects/<str:pk>/delete/', views.delete_project, name='delete_project'),
+    path('staff/get-available-users/', views.get_available_users, name='get_available_users'),
     
 
     #swagger-new-implementation
@@ -233,17 +245,16 @@ urlpatterns = [
     path('vault/', views.vault_view, name='vault'),
     path('vault/delete/<int:doc_id>/', views.delete_document, name='delete_document'),
 
-
     path("health", health_check, name="health-check"),
     path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
+    # settings page route
+    path("settings/", views.settings_view, name="settings"),
     
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
-    path("resources/", ResourceListView.as_view(), name="resources"),
-    path("resources/<slug:slug>/", ResourceDetailView.as_view(), name="resource_detail"),
-      path("resources/<int:pk>/download/", views.resource_download, name="resource_download"),
-    path("resources/<slug:slug>/", views.ResourceDetailView.as_view(), name="resource_detail"),
     path("resources/", views.ResourceListView.as_view(), name="resources"),
+    path("resources/<slug:slug>/", views.ResourceDetailView.as_view(), name="resource_detail"),
+    path("resources/<int:pk>/download/", views.resource_download, name="resource_download"),
   
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

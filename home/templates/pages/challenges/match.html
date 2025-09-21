@@ -1,0 +1,297 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/pre-loader.html' %}
+<!-- Displays header and subtitles -->
+<div class="content-container container mt-10">
+    <h1 class="mb-4 text-center">Matching Challenge</h1>
+    <p class="text-center mb-5">
+        Test your knowledge with our matching quiz! Match the terms and their definitions!
+    </p>
+    <p class="text-center mb-5">
+        Terms and definitions from 
+        <a href="https://www.sans.org/security-resources/glossary-of-terms" target="_blank" rel="noopener noreferrer">
+        SANS institute 
+    </a>.  
+    Continue your learning there!
+    </p>
+
+    <p class="text-center mb-5">
+      Click on a term, and then click on the definition that matches it!
+    </p>
+    <!-- Defines quiz and sets out terms and definitions allowing them to be selected-->
+    <div id="game-container">
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+        <span id="progress-text">0% complete</span>
+      </div>
+      <div id="game">
+        <div class="terms">
+          <h3>Terms</h3>
+          <ul></ul> <!-- Leave empty -->
+        </div>
+
+        <div class="definitions">
+          <h3>Definitions</h3>
+          <ul></ul> <!-- Leave empty -->
+        </div>
+      </div>
+    </div>
+
+<style>
+/* Defines all the styles for the quiz, ensuring it does not overwrite website template*/
+ #game { display: flex; gap: 50px; }
+    #game ul { list-style: none; padding: 0; }
+    #game li { 
+      padding: 8px; 
+      border: 1px solid #ccc; 
+      margin: 5px 0; 
+      cursor: pointer; 
+      border-radius: 5px; 
+    }
+    /*Defines the colours for a matched pair*/
+    #game .term.correct, #game .definition.correct { background-color: lightgreen; }
+
+    /*Defines the colours for term selected*/
+    #game .term.selected { background-color: lightblue; }
+    
+    /*Defines the colours for incorrect flash*/
+    @keyframes flashRed {
+        0%   { background-color: salmon; }
+        50%  { background-color: rgb(247, 21, 21); }
+        100% { background-color: salmon; }
+    }
+    /*Flashes the definition red if it is incorrect*/
+    #game .definition.wrong { animation: flashRed 0.5s ease; }
+
+    /*Creates the background for the game*/
+    #game-container {
+        background-color: #222;      
+        color: white !important;                
+        padding: 20px;
+        border-radius: 15px;         
+        max-width: 800px;            
+        margin: 20px auto;           
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4); 
+    }
+    /* Forces game text to remain white even when in light mode*/
+    #game-container,
+    #game-container *,
+    #game-container *::before,
+    #game-container *::after {
+      color: #fff !important;}
+
+    /*Creates style for the win message*/
+    #win-message {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: gold;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    /* Progress bar container */
+    #progress-container {
+      width: 100%;
+      background-color: #444;
+      border-radius: 10px;
+      margin: 10px 0 20px;
+      height: 25px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: relative;           /* anchor for absolute children */
+    }
+
+    /* Progress bar fill  */
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: limegreen;
+      transition: width 0.4s ease;
+    }
+
+    /* Styles progress bar text */
+    #progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); 
+      color: white;
+      font-weight: bold;
+      font-size: 0.9em;
+      pointer-events: none;              
+      white-space: nowrap;               
+    }
+
+
+</style>
+
+<script>
+// Makes sure page is loaded before running code
+document.addEventListener('DOMContentLoaded', () => {
+  // Define both rounds of matching and the pairs within them
+  const rounds = [
+    {
+      pairs: {
+        "Access Control": "Ensures that resources are only granted to those users who are entitled to them",
+        "Brute Force": "A cryptanalysis technique or other kind of attack method involving an exhaustive procedure that tries all possibilities, one-by-one",
+        "Denial of Service": "The prevention of authorized access to a system resource or the delaying of system operations and functions",
+        "Phishing": "The use of e-mails that appear to originate from a trusted source to trick a user into entering valid credentials at a fake website. Typically the e-mail and the web site looks like they are part of a bank the user is doing business with.",
+        "Encryption": "Cryptographic transformation of data into a form that conceals the data's original meaning to prevent it from being known or used."
+      }
+    },
+    {
+      pairs: {
+        "Packet": "A piece of a message transmitted over a packet-switching network. One of the key features of a packet is that it contains the destination address in addition to the data. In IP networks, packets are often called datagrams.",
+        "Ransomware": "A type of malware that is a form of extortion. It works by encrypting a victim's hard drive denying them access to key files. The victim must then pay a ransom to decrypt the files and gain access to them again.",
+        "Simple Network Management Protocol (SNMP)": "The protocol governing network management and the monitoring of network devices and their functions. A set of protocols for managing complex networks.",
+        "Smishing": "This is a combination of the terms \"SMS\" and \"phishing.\" It is similar to phishing, but refers to fraudulent messages sent over SMS (text messaging) rather than email.",
+        "Trojan Horse": "A computer program that appears to have a useful function, but also has a hidden and potentially malicious function that evades security mechanisms, sometimes by exploiting legitimate authorizations of a system entity that invokes the program."
+      }
+    }
+  ];
+    //Sets up variables to be used for game functionality
+  const totalRounds = rounds.length; 
+  const totalMatches = rounds.reduce((sum, r) => sum + Object.keys(r.pairs).length, 0); // 10
+  let currentRound = 0;
+  let pairs = rounds[currentRound].pairs;
+  let selectedTerm = null;
+  let matchedCount = 0; 
+  let totalMatched = 0; 
+  const game = document.getElementById('game');
+
+  // Shuffles terms and definitions to make game harder
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Function that renders the game, including terms and defitinions
+  function renderRound() {
+    const termsContainer = game.querySelector('.terms ul');
+    const defsContainer = game.querySelector('.definitions ul');
+    termsContainer.innerHTML = '';
+    defsContainer.innerHTML = '';
+
+    // Makes pairs arrays so that they can be shuffled
+    const termEntries = Object.keys(rounds[currentRound].pairs);
+    const defEntries = Object.values(rounds[currentRound].pairs);
+
+    shuffleArray(termEntries);
+    shuffleArray(defEntries);
+
+    termEntries.forEach(term => {
+      const liTerm = document.createElement('li');
+      liTerm.className = 'term';
+      liTerm.dataset.term = term;
+      liTerm.innerText = term;
+      termsContainer.appendChild(liTerm);
+    });
+
+    defEntries.forEach(def => {
+      const liDef = document.createElement('li');
+      liDef.className = 'definition';
+      liDef.dataset.definition = def;
+      liDef.innerText = def;
+      defsContainer.appendChild(liDef);
+    });
+
+    // Resets game state
+    selectedTerm = null;
+    matchedCount = 0;
+    pairs = rounds[currentRound].pairs;
+  }
+
+  // initial render
+  renderRound();
+
+  // Updates progress bar whenever a correct match is made
+  function updateProgressBar() {
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const percent = Math.round((totalMatched / totalMatches) * 100);
+    progressBar.style.width = percent + "%";
+    progressText.textContent = percent + "% complete";
+  }
+
+  game.addEventListener('click', (e) => {
+    const termEl = e.target.closest('.term');
+    const defEl = e.target.closest('.definition');
+
+    if (termEl) {
+      if (termEl.dataset.matched === 'true') return;
+      game.querySelectorAll('.term').forEach(t => t.classList.remove('selected'));
+      selectedTerm = termEl.dataset.term;
+      termEl.classList.add('selected');
+      return;
+    }
+      //Main game functionality, including making it so that already matched options cannot be selected again
+    if (defEl) {
+      if (!selectedTerm) return;
+      if (defEl.dataset.matched === 'true') return;
+
+      const defValue = defEl.dataset.definition;
+      const termElForSelected = game.querySelector(`[data-term="${cssEscape(selectedTerm)}"]`);
+
+      if (pairs[selectedTerm] === defValue) {
+        defEl.classList.add('correct');
+        defEl.dataset.matched = 'true';
+        termElForSelected.classList.add('correct');
+        termElForSelected.dataset.matched = 'true';
+        termElForSelected.classList.remove('selected');
+        selectedTerm = null;
+
+        matchedCount++;
+        totalMatched++;
+        updateProgressBar();
+
+        if (matchedCount === Object.keys(pairs).length) {
+          if (currentRound === 0) {
+            // Creates message for completing first round
+            const msg = document.createElement("p");
+            msg.innerText = "Good job! Try some more!";
+            msg.style.color = "gold";
+            msg.style.fontWeight = "bold";
+            msg.style.textAlign = "center";
+            document.getElementById("game-container").appendChild(msg);
+
+            currentRound++;
+            setTimeout(() => {
+              msg.remove();
+              renderRound();
+            }, 2000); 
+          } else {
+            // Creates win message once second round is complete
+            if (!document.getElementById("win-message")) {
+              const winMsg = document.createElement("p");
+              winMsg.id = "win-message";
+              winMsg.innerText = "Congratulations, you got them all!";
+              document.getElementById("game-container").appendChild(winMsg);
+            }
+          }
+        }
+        return;
+      }
+
+      //Flashes definition red if definition is wrong
+      defEl.classList.remove('wrong');
+      void defEl.offsetWidth;
+      defEl.classList.add('wrong');
+      defEl.addEventListener('animationend', () => {
+        defEl.classList.remove('wrong');
+      }, { once: true });
+    }
+  });
+
+  function cssEscape(str) {
+    if (window.CSS && CSS.escape) return CSS.escape(str);
+    return str.replace(/(["\\])/g, '\\$1');
+  }
+});
+</script>
+
+{% endblock content %} 

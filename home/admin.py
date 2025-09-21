@@ -10,7 +10,6 @@ from django.utils.html import format_html
 from .models import Resource
 
 from .models import Tip , TipRotationState
-
 from .models import (
     User,
     Student,
@@ -279,6 +278,7 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
 
 
 
+
 # Python Compiler Admin Classes
 @admin.register(CodeExecution)
 class CodeExecutionAdmin(admin.ModelAdmin):
@@ -358,6 +358,7 @@ class TipAdmin(admin.ModelAdmin):
     list_display = ("text", "is_active", "created_at")
     list_filter = ("is_active",)
     search_fields = ("text",)
+
 @admin.register(TipRotationState)
 class TipRotationStateAdmin(admin.ModelAdmin):
     list_display = ("lock", "last_index", "rotated_at")
@@ -367,9 +368,12 @@ class VaultDocumentAdmin(admin.ModelAdmin):
     list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
     search_fields = ('original_name', 'description')
 
-
-
-
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ("title", "category", "is_published", "published_at")
+    list_filter = ("category", "is_published")
+    search_fields = ("title", "summary")
+    prepopulated_fields = {"slug": ("title",)}
 
 
 
