@@ -189,21 +189,21 @@ def get_login_redirect_url(user):
     If user hasn't completed join-us form, redirect to /join-us/
     If user has completed it, redirect to profile page
     """
-    # TEMPORARY FIX: Always redirect to dashboard for OAuth users
-    # This will be refined later to properly detect OAuth vs regular login
     print(f"DEBUG: get_login_redirect_url called for user: {user.email}")
     
-    # For now, always redirect to dashboard to fix OAuth redirect issue
-    print(f"DEBUG: get_login_redirect_url - Redirecting to dashboard")
-    return '/dashboard/'
-    
-    # Original logic (commented out for now):
-    # if Student.objects.filter(user=user).exists():
-    #     # User has completed join-us form, redirect to profile
-    #     return '/profile/'
-    # else:
-    #     # User hasn't completed join-us form, redirect to join-us page
-    #     return '/join-us/'
+    try:
+        student = Student.objects.get(user=user)
+        # Check if user has filled out project preferences
+        if student.p1 or student.p2 or student.p3:
+            print(f"DEBUG: User {user.email} has preferences, redirecting to profile")
+            return '/profile/'
+        else:
+            print(f"DEBUG: User {user.email} has no preferences, redirecting to join-us")
+            return '/join-us/'
+    except Student.DoesNotExist:
+        # User hasn't completed join-us form at all
+        print(f"DEBUG: User {user.email} has no Student record, redirecting to join-us")
+        return '/join-us/'
 
 
 
@@ -353,10 +353,13 @@ def profile(request):
     except Profile.DoesNotExist:
         profile = Profile.objects.create(user=request.user)
 
-    # Get student object if exists
+    # Get student object if exists and check preferences
+    has_preferences = False
     try:
         student = Student.objects.get(user=request.user)
         skill_count = Progress.objects.filter(student=student, completed=True).count()
+        # Check if user has filled out project preferences
+        has_preferences = bool(student.p1 or student.p2 or student.p3)
     except Student.DoesNotExist:
         skill_count = 0
 
@@ -408,6 +411,7 @@ def profile(request):
         'skill_count': skill_count,
         'achievement_count': achievement_count,
         'completed_challenges': completed_challenges,
+        'has_preferences': has_preferences,
     }
 
     return render(request, 'pages/profile.html', context)
@@ -697,7 +701,7 @@ def verify_otp(request):
             User = get_user_model()
             try:
                 user = User.objects.get(id=user_id)
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 # Clear session data on success
                 request.session.pop('otp', None)
                 request.session.pop('user_id', None)
@@ -1125,7 +1129,7 @@ def login_with_passkey(request):
 
             if Passkey.objects.filter(user=user, key=passkey).exists():
                 request.session['pending_user_id'] = user.id  # Store user ID temporarily
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
                 # Save IP and browser info when logging in with passkey
                 user.last_login_ip = get_client_ip(request)

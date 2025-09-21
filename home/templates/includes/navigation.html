@@ -245,11 +245,13 @@
                                         {% trans "Match" %}
                                     </li>
                                 </a>
+                                {% if user.is_authenticated %}
                                 <a class="menu-link" href="{% url 'progress' %}">
                                     <li class="mb-2 menu ps-3 py-1">
                                         {% trans "Progress" %}
                                     </li>
                                 </a>
+                                {% endif %}
                             </ul>
                         </div>
                     </li>
@@ -331,7 +333,60 @@
                         </div>
                         {% endif %}
 
-                        <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+            
+            <!-- language switcher (moved into right-side toolbar) -->
+            <div class="dropdown ms-2" style="margin-left:10px;margin-right:5px;">
+              {% get_current_language as CURRENT_LANG %}
+              {% with code=CURRENT_LANG|lower|slice:":2" %}
+              <button class="nav-link dropdown-toggle btn btn-link p-0"
+                      id="langDropdown"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      title="{% trans 'Language' %}"
+                      type="button">
+                {% if code == "en" %}
+                  🌐
+                {% elif code == "es" %}
+                  <img class="flag-icon" src="{% static 'images/flags/es.png' %}" alt="Español">
+                {% elif code == "zh" %}
+                  <img class="flag-icon" src="{% static 'images/flags/cn.png' %}" alt="简体中文">
+                {% elif code == "fr" %}
+                  <img class="flag-icon" src="{% static 'images/flags/fr.png' %}" alt="Français">
+                {% elif code == "ja" %}
+                  <img class="flag-icon" src="{% static 'images/flags/jp.png' %}" alt="日本語">
+                {% elif code == "ko" %}
+                  <img class="flag-icon" src="{% static 'images/flags/kr.png' %}" alt="한국어">
+                {% else %}
+                  🌐
+                {% endif %}
+              </button>
+              {% endwith %}
+
+              <ul id="lang_menu" class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="en">
+                  <img class="flag-icon me-2" src="{% static 'images/flags/us.png' %}" alt="English"> English
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="es">
+                  <img class="flag-icon me-2" src="{% static 'images/flags/es.png' %}" alt="Español"> Español
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="zh-hans">
+                  <img class="flag-icon me-2" src="{% static 'images/flags/cn.png' %}" alt="简体中文"> 简体中文
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="fr">
+                  <img class="flag-icon me-2" src="{% static 'images/flags/fr.png' %}" alt="Français"> Français
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ja">
+                  <img class="flag-icon me-2" src="{% static 'images/flags/jp.png' %}" alt="日本語"> 日本語
+                </a></li>
+                <li><a class="dropdown-item d-flex align-items-center lang-choice" href="#" data-lang="ko">
+                  <img class="flag-icon me-2" src="{% static 'images/flags/kr.png' %}" alt="한국어"> 한국어
+                </a></li>
+              </ul>
+            </div>
+
+            <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+              aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
                         </span>
 
@@ -485,10 +540,81 @@
                             });
                         </script>
 
-
-
                     </div>
                 </div>
+          <style>
+            .flag-icon{
+              width: 30px;
+              height: 21px;
+              object-fit: cover;
+              flex-shrink: 0;
+              margin-right: 10px;
+              display: inline-block;
+              vertical-align: middle;
+              border-radius: 2px;
+            }
+
+            .dropdown-menu#lang_menu {
+              background-color: #fff !important;
+              border: 1px solid #ccc !important;
+              border-radius: 4px !important;
+              box-shadow: 0 2px 6px rgba(0,0,0,.15) !important;
+              padding: 0 !important;
+              margin-top: 0.5rem !important;
+              min-width: auto !important;
+              width: auto !important;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item {
+              color: #4B5868 !important;
+              font-weight: 500;
+              padding: 0.5rem 0.8rem !important;
+              padding-right: 1.2rem !important;
+              background-color: transparent !important;
+              border-bottom: 1px solid #eee;
+              display: flex !important;
+              align-items: center;
+              justify-content: flex-start;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item:last-child {
+              border-bottom: none;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item:hover,
+            .dropdown-menu#lang_menu .dropdown-item:focus {
+              background-color: #1967D2 !important;
+              color: #fff !important;
+            }
+
+            .dropdown-menu#lang_menu .dropdown-item.active {
+              background-color: #ffcd11 !important;
+              color: #fff !important;
+            }
+
+            #langDropdown img.flag-icon {
+              filter: none !important;
+              opacity: 1 !important;
+            }
+          </style>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const form  = document.getElementById('set-lang-form');
+              const input = document.getElementById('lang-input');
+              document.querySelectorAll('.dropdown-item.lang-choice[data-lang]').forEach(a => {
+                a.addEventListener('click', function (e) {
+                  e.preventDefault();
+                  input.value = this.dataset.lang;
+                  form.submit();
+                });
+              });
+            });
+          </script>
+
+
+          
+        </div>
+      </div>
     </nav>
 </header>
 <script src="{% static 'js/toggles.js' %}"></script>
@@ -632,5 +758,28 @@
             }
         });
     });
+
 </script>
 <script src="{% static 'js/search_suggestions.js' %}"></script>
+
+  </script>
+  <script src="{% static 'js/search_suggestions.js' %}"></script>
+  <style>
+    /* Keep navbar link text yellow, including when dropdown is expanded */
+    .navbar .nav-link,
+    .navbar .nav-link:hover,
+    .navbar .nav-link:focus,
+    .navbar .nav-link:active,
+    .navbar .nav-link:visited,
+    .navbar .nav-link.active,
+    .navbar .dropdown-toggle[aria-expanded="true"],
+    .navbar .dropdown-toggle.show {
+      color: #FFCD11 !important;
+    }
+
+    /* Ensure icons/arrows inherit the same yellow */
+    .navbar .nav-link .fas,
+    .navbar .nav-link .nav-link-arrow {
+      color: inherit !important;
+    }
+  </style>
