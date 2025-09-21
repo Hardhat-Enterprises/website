@@ -8,10 +8,8 @@ from .views import resources_view
 from django.conf import settings
 from django.conf.urls.static import static
 from django_ratelimit.decorators import ratelimit
-from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard, ChallengeManagementView
+from .views import UserLoginView, AdminLoginView, rate_limit_exceeded, admin_dashboard
 from .views import delete_account
-
-from django.conf.urls.static import static
 
 # Health Endpoint Work
 from .views import health_check
@@ -162,20 +160,22 @@ urlpatterns = [
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
-    path('challenges/match/', views.cyber_match, name='cyber_match'),
 
-    path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
-    path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
+    # Admin challenge management
+    #path('challenges/manage/', ChallengeManagementView.as_view(), name='challenge_management'),
+    #path('challenges/add/', views.ChallengeCreateView.as_view(), name='add_challenge'),
+
+    path('challenges/match/', views.cyber_match, name='cyber_match'),
 
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
     path('challenges/<int:challenge_id>/submit/', views.submit_answer, name='submit_answer'),
-    path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
-    path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
-    path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
-    path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
-    path('challenges/<int:pk>/archive/', views.ChallengeArchiveView.as_view(), name='challenge_archive'),
-    path('challenges/<int:pk>/preview/', views.ChallengePreviewView.as_view(), name='challenge_preview'),
+    #path('challenges/manage/', views.ChallengeManagementView.as_view(), name='challenge_management'),
+    #path('challenges/add/', views.ChallengeCreateView.as_view(), name='challenge_create'),
+    #path('challenges/<int:pk>/edit/', views.ChallengeUpdateView.as_view(), name='challenge_edit'),
+    #path('challenges/<int:pk>/delete/', views.ChallengeDeleteView.as_view(), name='challenge_delete'),
+    #path('challenges/<int:pk>/archive/', views.ChallengeArchiveView.as_view(), name='challenge_archive'),
+    #path('challenges/<int:pk>/preview/', views.ChallengePreviewView.as_view(), name='challenge_preview'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     
     # Feedback (duplicate removed)
@@ -212,17 +212,15 @@ urlpatterns = [
     path('vault/', views.vault_view, name='vault'),
     path('vault/delete/<int:doc_id>/', views.delete_document, name='delete_document'),
 
-
-    path("health", health_check, name="health-check"),
-    path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
-    
+path("health", health_check, name="health-check"),
+path("debug-auth/", views.debug_auth_status, name="debug_auth_status"),
+# settings page route  
+path("settings/", views.settings_view, name="settings"),
+  
     # internationalization
     path('i18n/setlang/', set_language, name='set_language'),
-    path("resources/", ResourceListView.as_view(), name="resources"),
-    path("resources/<slug:slug>/", ResourceDetailView.as_view(), name="resource_detail"),
-      path("resources/<int:pk>/download/", views.resource_download, name="resource_download"),
+path("resources/", views.ResourceListView.as_view(), name="resources"),
     path("resources/<slug:slug>/", views.ResourceDetailView.as_view(), name="resource_detail"),
-    path("resources/", views.ResourceListView.as_view(), name="resources"),
-  
-
+    path("resources/<int:pk>/download/", views.resource_download, name="resource_download"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
