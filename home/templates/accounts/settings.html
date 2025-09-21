@@ -1,0 +1,128 @@
+<!--
+  templates/accounts/settings.html
+  Purpose: Simple settings page with a small sidebar and a theme picker.
+  Notes:
+  - Theme changes apply immediately on click and are saved to the session + localStorage.
+  - Other sidebar items are placeholders for future work.
+-->
+
+{% extends "layouts/base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+
+    {# Single form wraps both columns for future expansion #}
+    <form method="post" class="settings-form">
+        {% csrf_token %}
+
+        <div class="row g-4">
+
+        {# Left column: simple nav list (placeholders for now) #}
+        <div class="col-12 col-md-3 border-end pe-md-4">
+            <div class="list-group">
+            <button type="button" class="list-group-item list-group-item-action active" id="nav-theme">
+                Theme
+            </button>
+            <button type="button" class="list-group-item list-group-item-action" disabled>
+                Language (extend later)
+            </button>
+            <button type="button" class="list-group-item list-group-item-action" disabled>
+                Item 3 (extend later)
+            </button>
+            <button type="button" class="list-group-item list-group-item-action" disabled>
+                Item 4 (extend later)
+            </button>
+            </div>
+        </div>
+
+        {# Right column: theme options #}
+        <div class="col-12 col-md-9">
+            <div class="card shadow-sm">
+            <div class="card-body">
+
+                <h1 class="h5 mb-3">Settings</h1>
+
+                {# Theme section: three radio options #}
+                <fieldset class="mb-4">
+                <legend class="small fw-semibold mb-2">Theme</legend>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="theme" id="themeSystem" value="system"
+                        {% if theme_value == "system" %}checked{% endif %}>
+                    <label class="form-check-label" for="themeSystem">System default</label>
+                </div>
+
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="theme" id="themeLight" value="light"
+                        {% if theme_value == "light" %}checked{% endif %}>
+                    <label class="form-check-label" for="themeLight">Light</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="theme" id="themeDark" value="dark"
+                        {% if theme_value == "dark" %}checked{% endif %}>
+                    <label class="form-check-label" for="themeDark">Dark</label>
+                </div>
+                </fieldset>
+
+            </div>
+            </div>
+        </div>
+        </div>
+    </form>
+
+    {# Small visual tweak so the sidebar separator is visible on dark backgrounds #}
+    <style>
+        .border-end { border-color: rgba(255, 255, 255, 0.15) !important; }
+    </style>
+
+    <script>
+  (function () {
+    var form = document.querySelector('.settings-form');
+    if (!form) return;
+    var radios = form.querySelectorAll('input[name="theme"]');
+    if (!radios.length) return;
+
+    function applyTheme(theme) {
+      var html = document.documentElement;
+      var b = document.body;
+      html.classList.remove('dark-mode','light-mode');
+      b.classList.remove('dark-mode','light-mode');
+      if (theme === 'dark')  { html.classList.add('dark-mode');  b.classList.add('dark-mode'); }
+      if (theme === 'light') { html.classList.add('light-mode'); b.classList.add('light-mode'); }
+      // system => no explicit class
+    }
+
+    function saveTheme(theme) {
+      // localStorage (best effort)
+      try { localStorage.setItem('theme_preference', theme); } catch(e) {}
+
+      // cookie fallback (1 year)
+      document.cookie = "theme_preference=" + encodeURIComponent(theme) +
+                        "; Path=/; Max-Age=31536000; SameSite=Lax";
+
+      // session (server)
+      var token = form.querySelector('input[name=\"csrfmiddlewaretoken\"]');
+      var fd = new FormData(); fd.append('theme', theme);
+      fetch("{% url 'settings' %}", {
+        method: 'POST',
+        headers: { 'X-CSRFToken': token ? token.value : '', 'X-Requested-With': 'fetch' },
+        body: fd,
+        credentials: 'same-origin'
+      }).catch(function(){});
+    }
+
+    radios.forEach(function (r) {
+      r.addEventListener('change', function (e) {
+        var theme = e.target.value;
+        applyTheme(theme);   // instant preview
+        saveTheme(theme);    // persist (localStorage + cookie + session)
+      });
+    });
+  })();
+</script>
+
+    </div>
+    {% endblock %}
