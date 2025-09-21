@@ -5,6 +5,8 @@
 from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Count
+from .models import CyberChallenge, UserChallenge
 
 
 from home.models import TeamMember
@@ -188,21 +190,21 @@ def get_login_redirect_url(user):
     If user hasn't completed join-us form, redirect to /join-us/
     If user has completed it, redirect to profile page
     """
-    # TEMPORARY FIX: Always redirect to dashboard for OAuth users
-    # This will be refined later to properly detect OAuth vs regular login
     print(f"DEBUG: get_login_redirect_url called for user: {user.email}")
     
-    # For now, always redirect to dashboard to fix OAuth redirect issue
-    print(f"DEBUG: get_login_redirect_url - Redirecting to dashboard")
-    return '/dashboard/'
-    
-    # Original logic (commented out for now):
-    # if Student.objects.filter(user=user).exists():
-    #     # User has completed join-us form, redirect to profile
-    #     return '/profile/'
-    # else:
-    #     # User hasn't completed join-us form, redirect to join-us page
-    #     return '/join-us/'
+    try:
+        student = Student.objects.get(user=user)
+        # Check if user has filled out project preferences
+        if student.p1 or student.p2 or student.p3:
+            print(f"DEBUG: User {user.email} has preferences, redirecting to profile")
+            return '/profile/'
+        else:
+            print(f"DEBUG: User {user.email} has no preferences, redirecting to join-us")
+            return '/join-us/'
+    except Student.DoesNotExist:
+        # User hasn't completed join-us form at all
+        print(f"DEBUG: User {user.email} has no Student record, redirecting to join-us")
+        return '/join-us/'
 
 
 
@@ -352,10 +354,13 @@ def profile(request):
     except Profile.DoesNotExist:
         profile = Profile.objects.create(user=request.user)
 
-    # Get student object if exists
+    # Get student object if exists and check preferences
+    has_preferences = False
     try:
         student = Student.objects.get(user=request.user)
         skill_count = Progress.objects.filter(student=student, completed=True).count()
+        # Check if user has filled out project preferences
+        has_preferences = bool(student.p1 or student.p2 or student.p3)
     except Student.DoesNotExist:
         skill_count = 0
 
@@ -407,6 +412,7 @@ def profile(request):
         'skill_count': skill_count,
         'achievement_count': achievement_count,
         'completed_challenges': completed_challenges,
+        'has_preferences': has_preferences,
     }
 
     return render(request, 'pages/profile.html', context)
@@ -619,7 +625,6 @@ def login_with_otp(request):
         )
         result = recaptcha_response.json()
         if not result.get('success') or result.get('score', 0) < 0.5:
-
             messages.error(request, "reCAPTCHA verification failed. Please try again.")
             return render(request, 'accounts/sign-in.html')
         
@@ -696,7 +701,7 @@ def verify_otp(request):
             User = get_user_model()
             try:
                 user = User.objects.get(id=user_id)
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 # Clear session data on success
                 request.session.pop('otp', None)
                 request.session.pop('user_id', None)
@@ -1124,7 +1129,7 @@ def login_with_passkey(request):
 
             if Passkey.objects.filter(user=user, key=passkey).exists():
                 request.session['pending_user_id'] = user.id  # Store user ID temporarily
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
                 # Save IP and browser info when logging in with passkey
                 user.last_login_ip = get_client_ip(request)
@@ -2139,6 +2144,98 @@ def pen_testing(request):
 def secure_code_review(request):
     # Page from the theme
     return render(request, 'pages/appattack/secure_code_review.html')
+
+
+def progress(request):
+    """
+    Visible to everyone.
+    - Logged out: all pills show 'locked', progress 0%.
+    - Logged in: per-category state:
+        locked  = no UserChallenge rows in that category
+        started = has a UserChallenge row in that category
+        earned  = has a completed=True row in that category
+    - Overall % = earned challenges / total challenges (green bar).
+    """
+    # All categories with their total number of challenges
+    cats_qs = (
+        CyberChallenge.objects
+        .values("category")
+        .annotate(total=Count("id"))
+        .order_by("category")
+    )
+
+    # If anonymous: everything locked
+    if not request.user.is_authenticated:
+        categories = [{
+            "raw": row["category"],
+            "name": row["category"].replace("_", " "),
+            "total": row["total"],
+            "state": "locked",
+        } for row in cats_qs]
+
+        return render(request, "pages/progress.html", {   # <- changed
+            "percent": 0,
+            "total_completed": 0,
+            "total_challenges": sum(r["total"] for r in categories),
+            "categories": categories,
+            "is_anon": True,
+        })
+
+    # Logged-in user: compute started / earned per category
+    started_map = dict(
+        UserChallenge.objects
+        .filter(user=request.user)
+        .values("challenge__category")
+        .annotate(cnt=Count("id"))
+        .values_list("challenge__category", "cnt")
+    )
+
+    earned_map = dict(
+        UserChallenge.objects
+        .filter(user=request.user, completed=True)
+        .values("challenge__category")
+        .annotate(done=Count("id"))
+        .values_list("challenge__category", "done")
+    )
+
+    categories = []
+    total_challenges = 0
+    total_earned = 0
+
+    for row in cats_qs:
+        cat = row["category"]
+        total = row["total"]
+        total_challenges += total
+
+        started_cnt = started_map.get(cat, 0)
+        earned_cnt  = earned_map.get(cat, 0)
+        total_earned += earned_cnt
+
+        if earned_cnt > 0:
+            state = "earned"
+        elif started_cnt > 0:
+            state = "started"
+        else:
+            state = "locked"
+
+        categories.append({
+            "raw": cat,                     # slug used in URL
+            "name": cat.replace("_", " "),  # display name
+            "total": total,
+            "state": state,
+        })
+
+    percent = round((total_earned / total_challenges) * 100) if total_challenges else 0
+
+    return render(request, "pages/progress.html", {   # <- changed
+        "percent": percent,
+        "total_completed": total_earned,
+        "total_challenges": total_challenges,
+        "categories": categories,
+        "is_anon": False,
+    })
+
+
  
 # @login_required  # TEMPORARILY DISABLED TO TEST AUTHENTICATION
 def dashboard(request):
@@ -3569,6 +3666,12 @@ def cyber_quiz(request):
     View for the cybersecurity quiz page.
     """
     return render(request, 'pages/challenges/quiz.html')
+
+def cyber_match(request):
+    """
+    View for the cybersecurity match page.
+    """
+    return render(request, 'pages/challenges/match.html')
 
 
 @login_required
@@ -5214,11 +5317,15 @@ def resource_download(request, pk: int):
     # size helps some downloaders
     try:
         resp["Content-Length"] = obj.file.size
+
     except Exception as e:
         # File size unavailable - not critical for download
         import logging
         logger = logging.getLogger(__name__)
         logger.debug(f"Could not determine file size for download: {e}")
+
+    except Exception:
+        pass
 
     resp["X-Content-Type-Options"] = "nosniff"
     return resp

@@ -60,6 +60,9 @@ urlpatterns = [
     path('ptgui_viz/tools/arpaname/', views.arpaname_view, name='tool_arpaname'),
     path('smishing_detection', views.smishing_detection, name='smishing_detection_main'),
     path('smishing_detection/skills/', views.smishing_skills, name='smishing_skills'),
+    path('progress', views.progress, name='progress'),
+
+
 
 
      #path('smishing_detection/join_us', views.smishing_detection_join_us, name='smishingdetection_join_us'),
@@ -158,7 +161,6 @@ urlpatterns = [
     path('challenges/cyber-challenge/', views.cyber_challenge, name='cyber_challenge'),
     path('challenges/quiz/', views.cyber_quiz, name='cyber_quiz'),
 
-
     path('challenges/execute-code/', views.execute_code, name='execute_code'),
     path('challenges/<str:category>/', views.category_challenges, name='category_challenges'),
     path('challenges/detail/<int:challenge_id>/', views.challenge_detail, name='challenge_detail'),
@@ -171,6 +173,8 @@ urlpatterns = [
     path('compiler/leaderboard/', views.compiler_leaderboard, name='compiler_leaderboard'),
     
 
+
+    path('challenges/match/', views.cyber_match, name='cyber_match'),
 
     path('challenges/match/', views.cyber_match, name='cyber_match'),
 

@@ -919,8 +919,6 @@ class SecureCodeReviewRequest(models.Model):
     def __str__(self):
         return f"{self.name} - Secure Code Review Request"
 
-
-
 # Python Compiler Models
 class CodeExecution(models.Model):
     """Model to track code executions for security and analytics"""
@@ -1011,7 +1009,6 @@ class CompilerSettings(models.Model):
     
     def __str__(self):
         return f"Compiler Settings - {self.created_at}"
-
 
 class AdminSession(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_sessions")
@@ -1113,3 +1110,31 @@ class UserDevice(models.Model):
     def __str__(self):
         return f"{self.user.email} - {self.device_name} ({self.ip_address})"
 
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        WHITEPAPER = "whitepaper", "Whitepaper"
+        CHECKLIST  = "checklist", "Checklist / Guide"
+        INFOGRAPH  = "infographic", "Infographic"
+        CASESTUDY  = "casestudy", "Case Study"
+        OTHER      = "other", "Other"
+
+    title = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    summary = models.TextField(max_length=600, help_text="Short 1–3 line description.")
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.OTHER)
+    file = models.FileField(upload_to="resources/files/")
+    cover = models.ImageField(upload_to="resources/covers/", blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:190]
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

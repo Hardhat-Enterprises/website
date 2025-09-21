@@ -304,6 +304,72 @@
           visibility: visible;
           display: block;
       }
+
+      /* Dark mode: modal readability */
+      body.dark-mode .modal-content,
+      .dark-mode .modal-content {
+          background-color: #15171a; /* deep gray */
+          color: #f1f3f5;
+      }
+      body.dark-mode .modal-header,
+      .dark-mode .modal-header,
+      body.dark-mode .modal-footer,
+      .dark-mode .modal-footer {
+          border-color: #2a2f36;
+          background-color: #15171a;
+          color: #f1f3f5;
+      }
+      body.dark-mode .modal-title,
+      .dark-mode .modal-title { color: #ffcd11; }
+      body.dark-mode .modal-body,
+      .dark-mode .modal-body { color: #f1f3f5; }
+      body.dark-mode .btn-close,
+      .dark-mode .btn-close { filter: invert(1) grayscale(100%) brightness(180%); }
+      body.dark-mode .form-control,
+      .dark-mode .form-control,
+      body.dark-mode .form-select,
+      .dark-mode .form-select {
+          background-color: #1b1e22;
+          color: #f1f3f5;
+          border-color: #3a4048;
+      }
+      body.dark-mode .form-control::placeholder,
+      .dark-mode .form-control::placeholder { color: #c2c7cf; }
+      /* ===== Basic theme styles (applied site-wide) ===== */
+      body { background-color: #ffffff; color: #111111; }
+      body.light-mode { background-color: #ffffff; color: #111111; }
+      body.dark-mode  { background-color: #1a1a1a; color: #f8f9fa; }
+
+      /* Nav, cards, footer surfaces */
+      body.light-mode .navbar,
+      body.light-mode .card,
+      body.light-mode footer { background-color: #f8f9fa; color: #111; }
+
+      body.dark-mode .navbar,
+      body.dark-mode .card,
+      body.dark-mode footer { background-color: #2a2a2a; color: #f8f9fa; }
+
+      /* Make sure the fixed site navbar uses the correct theme explicitly */
+      body.light-mode .navbar-main { background-color: var(--navbar-light) !important; }
+      body.dark-mode  .navbar-main { background-color: var(--navbar-dark) !important; }
+
+      /* Dropdowns adapt to theme */
+      body.light-mode .dropdown-menu { background-color: #ffffff; color: #111; }
+      body.dark-mode  .dropdown-menu { background-color: #333333; color: #f8f9fa; }
+      body.dark-mode  .dropdown-menu .dropdown-item { color: #f8f9fa; }
+      body.dark-mode  .dropdown-menu .dropdown-item:hover { background-color: #2a2a2a; color: #ffffff; }
+
+      /* Smoothen theme transitions a bit */
+      .theme-transition,
+      .theme-transition .navbar,
+      .theme-transition .card,
+      .theme-transition footer,
+      .theme-transition .dropdown-menu {
+        transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+      }
+
+      /* Compensate for fixed navbar so content isn't hidden */
+      body { padding-top: 80px; }
   </style>
   
   <!-- Google Identity Services - Load only when needed -->
@@ -318,7 +384,8 @@
   
 </head>
 
-<body>
+<body class="theme-transition {% if request.session.theme_preference == 'dark' %}dark-mode{% elif request.session.theme_preference == 'light' %}light-mode{% endif %}"
+      data-session-theme="{{ request.session.theme_preference|default:'system' }}">
   <div class="recently-viewed-sidebar">
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="recentlyViewedDropdown" data-bs-toggle="dropdown" aria-expanded="false">

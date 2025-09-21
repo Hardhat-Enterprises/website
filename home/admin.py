@@ -276,9 +276,6 @@ class SecureCodeReviewRequestAdmin(admin.ModelAdmin):
     readonly_fields = ['submitted_at']
 
 
-
-
-
 # Python Compiler Admin Classes
 @admin.register(CodeExecution)
 class CodeExecutionAdmin(admin.ModelAdmin):
@@ -354,6 +351,7 @@ class CompilerSettingsAdmin(admin.ModelAdmin):
 
 
 
+
 @admin.register(Tip)
 class TipAdmin(admin.ModelAdmin):
     list_display = ("text", "is_active", "created_at")
@@ -369,5 +367,11 @@ class VaultDocumentAdmin(admin.ModelAdmin):
     list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
     search_fields = ('original_name', 'description')
 
+@admin.register(Resource)
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ("title", "category", "is_published", "published_at")
+    list_filter = ("category", "is_published")
+    search_fields = ("title", "summary")
+    prepopulated_fields = {"slug": ("title",)}
 
 

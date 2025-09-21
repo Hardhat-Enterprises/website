@@ -574,7 +574,6 @@ class Migration(migrations.Migration):
                 'indexes': [models.Index(fields=['user', 'created_at'], name='home_passwo_user_id_4c2d2b_idx')],
             },
         ),
-
         migrations.CreateModel(
             name='Folder',
             fields=[
@@ -732,8 +731,6 @@ class Migration(migrations.Migration):
         'ordering': ['-published_at'],
     },
 ),
-
-
 
         migrations.CreateModel(
             name='Resource',
