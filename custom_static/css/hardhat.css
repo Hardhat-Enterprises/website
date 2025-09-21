@@ -3797,10 +3797,71 @@ fieldset:disabled .btn {
   margin: 15px auto;
 }
 
+/* Override form-control styles for mobile search boxes - highest specificity */
+input.form-control.search-box-mobile,
+input[type="search"].form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+input.form-control.search-box-mobile:focus,
+input[type="search"].form-control.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
 .search-box-mobile {
   width: 100%;
   padding: 10px 50px 10px 15px;
   border-radius: 25px;
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
+/* Dark mode - keep mobile search box white - highest specificity */
+body.dark-mode input.form-control.search-box-mobile,
+body.dark-mode input[type="search"].form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+body.dark-mode input.form-control.search-box-mobile:focus,
+body.dark-mode input[type="search"].form-control.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+body.dark-mode .search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+body.dark-mode .search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
 }
 
 .search-btn-mobile {
@@ -3855,15 +3916,183 @@ fieldset:disabled .btn {
   background-color: #f0f0f0;
 }
 
+/* Dark mode - keep mobile result box styling consistent */
+body.dark-mode .mobile-result-box {
+  background: white !important;
+  border: 1px solid #ccc !important;
+  color: black !important;
+}
+
+body.dark-mode .mobile-result-box div:hover {
+  background-color: #f0f0f0 !important;
+}
+
 .search-container {
   position: relative;
   width: 300px; 
   margin: 20px;
 }
 
+/* Override form-control styles for search boxes - Light Mode */
+input.form-control.search-box,
+input[type="search"].form-control.search-box,
+.navbar input.form-control.search-box,
+.navbar input[type="search"].form-control.search-box,
+#searchInput.form-control.search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+input.form-control.search-box:focus,
+input[type="search"].form-control.search-box:focus,
+.navbar input.form-control.search-box:focus,
+.navbar input[type="search"].form-control.search-box:focus,
+#searchInput.form-control.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
 .search-box {
   border-radius: 25px;
   padding: 10px 15px;
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
+/* Dark mode - keep search box white - highest specificity */
+body.dark-mode input.form-control.search-box,
+body.dark-mode input[type="search"].form-control.search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+body.dark-mode input.form-control.search-box:focus,
+body.dark-mode input[type="search"].form-control.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+body.dark-mode .search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+}
+
+body.dark-mode .search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+}
+
+/* EXTREME specificity override for light mode search box */
+html body nav.navbar div input#searchInput.form-control.search-box,
+html body nav.navbar input#searchInput.form-control.search-box,
+html body input#searchInput.form-control.search-box,
+html body .navbar input.form-control.search-box,
+html body input.search-box.form-control {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+html body nav.navbar div input#searchInput.form-control.search-box:focus,
+html body nav.navbar input#searchInput.form-control.search-box:focus,
+html body input#searchInput.form-control.search-box:focus,
+html body .navbar input.form-control.search-box:focus,
+html body input.search-box.form-control:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+/* Ensure light mode search box is white (when not in dark mode) */
+body:not(.dark-mode) input.form-control.search-box,
+body:not(.dark-mode) input[type="search"].form-control.search-box,
+body:not(.dark-mode) .navbar input.form-control.search-box,
+body:not(.dark-mode) .navbar input[type="search"].form-control.search-box,
+body:not(.dark-mode) #searchInput.form-control.search-box {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+body:not(.dark-mode) input.form-control.search-box:focus,
+body:not(.dark-mode) input[type="search"].form-control.search-box:focus,
+body:not(.dark-mode) .navbar input.form-control.search-box:focus,
+body:not(.dark-mode) .navbar input[type="search"].form-control.search-box:focus,
+body:not(.dark-mode) #searchInput.form-control.search-box:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+/* Additional override for light mode mobile search box */
+body:not(.dark-mode) input.form-control.search-box-mobile,
+body:not(.dark-mode) input[type="search"].form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+body:not(.dark-mode) input.form-control.search-box-mobile:focus,
+body:not(.dark-mode) input[type="search"].form-control.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
+}
+
+/* Ultra-specific override to ensure search boxes are white in light mode */
+html body:not(.dark-mode) .navbar .search-container input.form-control.search-box,
+html body:not(.dark-mode) .navbar .desktop-search-bar input.form-control.search-box,
+html body:not(.dark-mode) .navbar .mobile-search-bar input.form-control.search-box-mobile {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+html body:not(.dark-mode) .navbar .search-container input.form-control.search-box:focus,
+html body:not(.dark-mode) .navbar .desktop-search-bar input.form-control.search-box:focus,
+html body:not(.dark-mode) .navbar .mobile-search-bar input.form-control.search-box-mobile:focus {
+  background-color: white !important;
+  color: #333 !important;
+  border-color: #ffcd11 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 205, 17, 0.25) !important;
+  background-image: none !important;
 }
 
 .search-btn {
@@ -3898,6 +4127,17 @@ fieldset:disabled .btn {
 
 .result-box div:hover {
   background-color: #f0f0f0;
+}
+
+/* Dark mode - keep result box styling consistent */
+body.dark-mode .result-box {
+  background: white !important;
+  border: 1px solid #ccc !important;
+  color: black !important;
+}
+
+body.dark-mode .result-box div:hover {
+  background-color: #f0f0f0 !important;
 }
 
 .btn-primary {
@@ -22060,8 +22300,8 @@ background: #fff !important;
   align-items: center;
   position: fixed;
   top: 0;
+  z-index: 1030;
   width: 100%;
-  z-index: 100;
   padding: 12px 16px;
 }
 
@@ -22074,6 +22314,23 @@ background: #fff !important;
 @media (min-width: 1024px) {
   .navbar-main {
     padding: 12px 50px;
+  }
+}
+
+/* Fix for fixed navbar overlap on form pages like join-us */
+.min-vh-100.section-image {
+  padding-top: 100px; /* Add padding to account for fixed navbar */
+}
+
+/* Ensure form containers have proper spacing from top */
+.signin-inner {
+  margin-top: 20px;
+}
+
+/* Media query adjustments for different screen sizes */
+@media (max-width: 768px) {
+  .min-vh-100.section-image {
+    padding-top: 120px; /* More padding on mobile due to potentially taller navbar */
   }
 }
 
@@ -27630,218 +27887,60 @@ body.dark-mode .testimonial-content{
   right: 10px;
 }
 
-/* Theme-related styles with improved consistency */
+.prev-btn:hover, .next-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.testimonial-section{
+  background-color: #ffc107 !important;
+}
+.testimonials-title{
+  font-size: 32px;
+  color: #333;
+}
+.sub-header{
+  color: #ffc107;
+  margin: 0px !important;
+  font-size: 20px;
+  font-weight: 400;
+}
+.testimonial-content{
+  font-style: italic;
+}
+.testimonial-contentp{
+  font-style: italic;
+  font-size: 16px !important;
+}
 
-  .prev-btn:hover, .next-btn:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-  }
 
-  .testimonial-section {
-    background-color: #ffc107 !important;
-  }
-
-  .testimonials-title {
-    font-size: 32px;
-    color: #333;
-  }
-
-  .sub-header {
-    color: #ffc107;
-    margin: 0px !important;
-    font-size: 20px;
-    font-weight: 400;
-  }
-
-  .testimonial-content {
-    font-style: italic;
-  }
-
-  .testimonial-contentp {
-    font-style: italic;
-    font-size: 16px !important;
-  }
-
-  h2 {
+h2 {
     margin-bottom: 20px;
     color: #333;
-  }
-
-  /* Custom progress color for In Progress status */
-  .progress-in-progress {
-    background-color: #f1c40f !important; /* vivid yellow */
-    color: black;
-  }
-
-  /* Light/dark mode safe styling for Not Started card */
-  .not-started-card {
-    background-color: #f8f9fa; /* Light gray */
-    color: #111;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .not-started-text {
-    font-weight: bold;
-  }
-
-  /* ======================
-   UNIFIED THEME SYSTEM
-   - Only applies classes to body element
-   - Ensures proper text visibility
-   ====================== */
-
-/* Base/Default styling - light mode defaults */
-body {
-  background-color: #ffffff;
-  color: #111111;
-  transition: background-color 0.22s ease, color 0.22s ease;
+}
+/* Custom progress color for In Progress status */
+.progress-in-progress {
+  background-color: #f1c40f !important; /* vivid yellow */
+  color: black;
 }
 
-/* Ensure all text elements inherit body color by default */
-h1, h2, h3, h4, h5, h6, p, div, span, a, li, td, th {
-  color: inherit;
+/* Light/dark mode safe styling for Not Started card */
+.not-started-card {
+  background-color: #f8f9fa; /* Light gray */
+  color: #111;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Light Mode Explicit Styling */
-body.light-mode {
-  background-color: #ffffff !important;
-  color: #111111 !important;
+html[data-theme="dark"] .not-started-card {
+  background-color: #000; /* Black in dark mode */
+  color: #fff;
 }
 
-body.light-mode .navbar,
-body.light-mode .header-global {
-  background-color: #f8f9fa !important;
-  color: #111111 !important;
+.not-started-text {
+  font-weight: bold;
 }
 
-body.light-mode .navbar .nav-link {
-  color: #111111 !important;
-}
 
-body.light-mode .dropdown-menu {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
 
-body.light-mode .dropdown-item {
-  color: #111111 !important;
-}
-
-body.light-mode .dropdown-item:hover {
-  background-color: #ffcd11 !important;
-  color: #000000 !important;
-}
-
-body.light-mode .card {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-  border-color: rgba(0, 0, 0, 0.125) !important;
-}
-
-body.light-mode footer {
-  background-color: #f8f9fa !important;
-  color: #111111 !important;
-}
-
-body.light-mode .not-started-card {
-  background-color: #f8f9fa !important;
-  color: #111111 !important;
-}
-
-/* Ensure headings are visible in light mode */
-body.light-mode h1,
-body.light-mode h2,
-body.light-mode h3,
-body.light-mode h4,
-body.light-mode h5,
-body.light-mode h6 {
-  color: #333333 !important;
-}
-
-body.light-mode .testimonials-title {
-  color: #333333 !important;
-}
-
-/* Dark Mode Styling */
-body.dark-mode {
-  background-color: #111111 !important;
-  color: #f8f9fa !important;
-}
-
-body.dark-mode .navbar,
-body.dark-mode .header-global {
-  background-color: #2a2a2a !important;
-  color: #f8f9fa !important;
-}
-
-body.dark-mode .navbar .nav-link {
-  color: #f8f9fa !important;
-}
-
-body.dark-mode .dropdown-menu {
-  background-color: #2a2a2a !important;
-  color: #f8f9fa !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-body.dark-mode .dropdown-item {
-  color: #f8f9fa !important;
-}
-
-body.dark-mode .dropdown-item:hover {
-  background-color: #ffcd11 !important;
-  color: #000000 !important;
-}
-
-body.dark-mode .card {
-  background-color: #2a2a2a !important;
-  color: #f8f9fa !important;
-  border-color: rgba(255, 255, 255, 0.125) !important;
-}
-
-body.dark-mode footer {
-  background-color: #2a2a2a !important;
-  color: #f8f9fa !important;
-}
-
-body.dark-mode .not-started-card {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-}
-
-/* Ensure headings are visible in dark mode */
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3,
-body.dark-mode h4,
-body.dark-mode h5,
-body.dark-mode h6 {
-  color: #f8f9fa !important;
-}
-
-body.dark-mode .testimonials-title {
-  color: #f8f9fa !important;
-}
-
-/* Special handling for yellow header text */
-body.dark-mode .sub-header {
-  color: #ffc107 !important;
-}
-
-body.light-mode .sub-header {
-  color: #ffc107 !important;
-}
-
-/* Links styling */
-body.dark-mode a {
-  color: #ffc107 !important;
-}
-
-body.light-mode a {
-  color: #007bff !important;
-}
-
-/* Mobile navbar improvements for dark mode */
+/* Force dark mode background on mobile navbar when collapsed */
 body.dark-mode .navbar-collapse.show {
   background-color: #333333 !important;
 }
@@ -27852,292 +27951,11 @@ body.dark-mode .navbar-collapse.show .nav-link {
   color: #ffffff !important;
 }
 
-/* Immediate dark background for collapsed navbar in dark mode on mobile */
+/* Immediate dark background for collapsed navbar in dark mode */
 @media (max-width: 991.98px) {
   body.dark-mode .navbar-collapse {
-    background-color: #222222 !important;
+    background-color: #222 !important;
     transition: none !important;
   }
+
 }
-
-/* Form elements styling */
-body.dark-mode input,
-body.dark-mode select,
-body.dark-mode textarea {
-  background-color: #333333 !important;
-  color: #f8f9fa !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-body.dark-mode input::placeholder,
-body.dark-mode textarea::placeholder {
-  color: #adb5bd !important;
-}
-
-body.light-mode input,
-body.light-mode select,
-body.light-mode textarea {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
-}
-
-body.light-mode input::placeholder,
-body.light-mode textarea::placeholder {
-  color: #6c757d !important;
-}
-
-/* Button styling */
-body.dark-mode .btn-secondary {
-  background-color: #444444 !important;
-  border-color: #555555 !important;
-  color: #f8f9fa !important;
-}
-
-body.dark-mode .btn-secondary:hover {
-  background-color: #555555 !important;
-  border-color: #666666 !important;
-}
-
-body.light-mode .btn-secondary {
-  background-color: #6c757d !important;
-  border-color: #6c757d !important;
-  color: #ffffff !important;
-}
-
-body.light-mode .btn-secondary:hover {
-  background-color: #5a6268 !important;
-  border-color: #545b62 !important;
-}
-
-/* Modal styling */
-body.dark-mode .modal-content {
-  background-color: #2a2a2a !important;
-  color: #f8f9fa !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-body.dark-mode .modal-header,
-body.dark-mode .modal-footer {
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-body.light-mode .modal-content {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
-}
-
-body.light-mode .modal-header,
-body.light-mode .modal-footer {
-  border-color: rgba(0, 0, 0, 0.15) !important;
-}
-
-/* List group items */
-body.dark-mode .list-group-item {
-  background-color: #2a2a2a !important;
-  color: #f8f9fa !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-body.dark-mode .list-group-item.active {
-  background-color: #ffc107 !important;
-  border-color: #ffc107 !important;
-  color: #000000 !important;
-}
-
-body.dark-mode .list-group-item:hover {
-  background-color: #333333 !important;
-}
-
-body.light-mode .list-group-item {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-  border-color: rgba(0, 0, 0, 0.125) !important;
-}
-
-body.light-mode .list-group-item.active {
-  background-color: #007bff !important;
-  border-color: #007bff !important;
-  color: #ffffff !important;
-}
-
-body.light-mode .list-group-item:hover {
-  background-color: #f8f9fa !important;
-}
-
-/* Text color fixes for specific elements */
-body.dark-mode .text-dark {
-  color: #f8f9fa !important;
-}
-
-body.light-mode .text-light {
-  color: #111111 !important;
-}
-
-/* Ensure table text is visible */
-body.dark-mode table,
-body.dark-mode th,
-body.dark-mode td {
-  color: #f8f9fa !important;
-}
-
-body.light-mode table,
-body.light-mode th,
-body.light-mode td {
-  color: #111111 !important;
-}
-
-/* Number display styling */
-body .number-display {
-  font-size: 48px;
-  font-weight: bold;
-  color: #ffc107 !important; /* Always yellow regardless of theme */
-}
-
-/* Last Updated text */
-body.dark-mode .last-updated {
-  color: #f8f9fa !important;
-}
-
-body.light-mode .last-updated {
-  color: #111111 !important;
-}
-
-/* Ensure smooth transitions for theme changes */
-.theme-transition,
-.theme-transition *,
-.theme-transition .navbar,
-.theme-transition .card,
-.theme-transition footer,
-.theme-transition .dropdown-menu,
-.theme-transition .list-group-item,
-.theme-transition .modal-content {
-  transition:
-    background-color 0.22s ease,
-    color 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease !important;
-}
-
-/* Respect users' motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .theme-transition,
-  .theme-transition * {
-    transition: none !important;
-  }
-}
-
-/* System theme support - fallback for when no explicit classes are applied */
-@media (prefers-color-scheme: dark) {
-  /* Only apply if no explicit light/dark mode classes are present */
-  body:not(.light-mode):not(.dark-mode) {
-    background-color: #111111;
-    color: #f8f9fa;
-  }
-  
-  body:not(.light-mode):not(.dark-mode) .navbar,
-  body:not(.light-mode):not(.dark-mode) .card,
-  body:not(.light-mode):not(.dark-mode) footer {
-    background-color: #2a2a2a;
-    color: #f8f9fa;
-  }
-
-  body:not(.light-mode):not(.dark-mode) h1,
-  body:not(.light-mode):not(.dark-mode) h2,
-  body:not(.light-mode):not(.dark-mode) h3,
-  body:not(.light-mode):not(.dark-mode) h4,
-  body:not(.light-mode):not(.dark-mode) h5,
-  body:not(.light-mode):not(.dark-mode) h6 {
-    color: #f8f9fa;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  body:not(.light-mode):not(.dark-mode) {
-    background-color: #ffffff;
-    color: #111111;
-  }
-  
-  body:not(.light-mode):not(.dark-mode) .navbar,
-  body:not(.light-mode):not(.dark-mode) .card,
-  body:not(.light-mode):not(.dark-mode) footer {
-    background-color: #f8f9fa;
-    color: #111111;
-  }
-
-  body:not(.light-mode):not(.dark-mode) h1,
-  body:not(.light-mode):not(.dark-mode) h2,
-  body:not(.light-mode):not(.dark-mode) h3,
-  body:not(.light-mode):not(.dark-mode) h4,
-  body:not(.light-mode):not(.dark-mode) h5,
-  body:not(.light-mode):not(.dark-mode) h6 {
-    color: #333333;
-  }
-}
-
-/* Custom button styles - no hover effects, always filled */
-.btn.no-hover-filled {
-  transition: none !important;
-}
-
-.btn.no-hover-filled:hover,
-.btn.no-hover-filled:focus,
-.btn.no-hover-filled:active {
-  background-color: inherit !important;
-  border-color: inherit !important;
-  color: inherit !important;
-  box-shadow: inherit !important;
-  transform: none !important;
-}
-
-/* Ensure primary button is always filled - yellow */
-.btn.btn-primary.no-hover-filled {
-  background-color: #ffc107 !important;
-  border-color: #ffc107 !important;
-  color: #000000 !important;
-}
-
-/* Ensure secondary button is always filled - custom dark blue */
-.btn.btn-secondary.no-hover-filled {
-  background-color: #1c2540 !important;
-  border-color: #1c2540 !important;
-  color: #ffffff !important;
-}
-
-/* Microsoft login button - white text */
-#ms-login-link {
-  color: #ffffff !important;
-}
-
-/* Project navigation links hover effect */
-.project-nav-link:hover {
-  background-color: #FFCD11 !important;
-  transition: background-color 0.3s ease !important;
-}
-
-.project-nav-link:hover .nav-icon {
-  background-color: #ffffff !important;
-  filter: invert(1) !important;
-}
-
-.project-nav-link:hover .fw-semibold,
-.project-nav-link:hover .small {
-  color: #ffffff !important;
-}
-
-/* Recently Viewed Pages button styling */
-#recentlyViewedDropdown {
-  background-color: #1c2540 !important;
-  border-color: #1c2540 !important;
-  color: #ffffff !important;
-}
-
-#recentlyViewedDropdown:hover,
-#recentlyViewedDropdown:focus,
-#recentlyViewedDropdown:active {
-  background-color: #1c2540 !important;
-  border-color: #1c2540 !important;
-  color: #ffffff !important;
-}
-

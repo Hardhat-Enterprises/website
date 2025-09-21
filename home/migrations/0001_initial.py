@@ -262,16 +262,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Project',
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created_at')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated_at')),
                 ('is_active', models.BooleanField(default=True)),
                 ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False, unique=True)),
-                ('title', models.CharField(choices=[('AppAttack', 'AppAttack'), ('Malware', 'Malware'), ('PT-GUI', 'PT-GUI'), ('Smishing_Detection', 'Smishing Detection'), ('Deakin_CyberSafe_VR', 'Deakin CyberSafe VR'), ('Deakin_Threat_Mirror', 'Deakin Threat Mirror'), ('Company_Website_Development', 'Company Website Development')], max_length=150, verbose_name='project title')),
+                ('title', models.CharField(max_length=150, unique=True, verbose_name='project title')),
                 ('archived', models.BooleanField(default=False, verbose_name='archived')),
                 ('description', models.TextField(blank=True, null=True, verbose_name='project description')),
+                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
+                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
             ],
             options={
-                'abstract': False,
+                'verbose_name': 'project',
+                'verbose_name_plural': 'projects',
+                'ordering': ['title'],
             },
         ),
         migrations.CreateModel(
@@ -387,9 +389,9 @@ class Migration(migrations.Migration):
                 ('content_type', models.CharField(blank=True, max_length=120)),
                 ('size_bytes', models.PositiveIntegerField(default=0)),
                 ('description', models.CharField(blank=True, max_length=300)),
-                ('visibility', models.CharField(choices=[('public', 'Public'), ('teams', 'Selected teams'), ('private', 'Private (uploader only)')], default='public', max_length=16)),
+                ('visibility', models.CharField(choices=[('public', 'Public'), ('projects', 'Selected projects'), ('private', 'Private (uploader only)')], default='public', max_length=16)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('allowed_teams', models.ManyToManyField(blank=True, related_name='vault_documents', to='auth.group')),
+                ('allowed_projects', models.ManyToManyField(blank=True, related_name='vault_documents', to='home.project')),
                 ('uploaded_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -426,7 +428,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated_at')),
                 ('is_active', models.BooleanField(default=True)),
                 ('id', models.BigIntegerField(error_messages={'unique': 'A user with that Student ID already exists.'}, help_text='Required. Enter Deakin Student ID. Digits only.', primary_key=True, serialize=False, unique=True, validators=[home.validators.StudentIdValidator], verbose_name='student_id')),
-                ('year', models.PositiveIntegerField(blank=True)),
+                ('year', models.PositiveIntegerField(blank=True, null=True)),
                 ('trimester', models.CharField(blank=True, choices=[('T1', 'Trimester 1'), ('T2', 'Trimester 2'), ('T3', 'Trimester 3')], max_length=10, verbose_name='trimester')),
                 ('unit', models.CharField(blank=True, choices=[('SIT782', 'SIT782'), ('SIT764', 'SIT764'), ('SIT378', 'SIT378'), ('SIT374', 'SIT374')], max_length=50, verbose_name='unit')),
                 ('course', models.CharField(blank=True, choices=[('BDS', 'Bachelor of Data Science'), ('BCS', 'Bachelor of Computer Science'), ('BCYB', 'Bachelor of Cyber Security'), ('BIT', 'Bachelor of Information Technology'), ('BSE', 'Bachelor of Software Enginerring'), ('BAI', 'Bachelor of AI'), ('MAAI', 'Master of Applied AI'), ('MDS', 'Master of Data Science'), ('MIT', 'Master of Information Technology'), ('MITM', 'Master of IT Management'), ('MCS', 'Master of Cyber Security')], max_length=10, null=True)),
@@ -569,29 +571,42 @@ class Migration(migrations.Migration):
                 'indexes': [models.Index(fields=['user', 'created_at'], name='home_passwo_user_id_4c2d2b_idx')],
             },
         ),
-         migrations.CreateModel(
-    name='Resource',
-    fields=[
-        ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-        ('title', models.CharField(max_length=180)),
-        ('slug', models.SlugField(blank=True, max_length=200, unique=True)),
-        ('summary', models.TextField(help_text='Short 1–3 line description.', max_length=600)),
-        ('category', models.CharField(choices=[
-            ('whitepaper', 'Whitepaper'),
-            ('checklist', 'Checklist / Guide'),
-            ('infographic', 'Infographic'),
-            ('casestudy', 'Case Study'),
-            ('other', 'Other'),
-        ], default='other', max_length=20)),
-        ('file', models.FileField(upload_to='resources/files/')),
-        ('cover', models.ImageField(blank=True, null=True, upload_to='resources/covers/')),
-        ('is_published', models.BooleanField(default=True)),
-        ('published_at', models.DateTimeField(auto_now_add=True)),
-        ('updated_at', models.DateTimeField(auto_now=True)),
-    ],
-    options={
-        'ordering': ['-published_at'],
-    },
-),
-
+        migrations.CreateModel(
+            name='Folder',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=200)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='folders', to=settings.AUTH_USER_MODEL)),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='children', to='home.folder')),
+            ],
+            options={
+                'ordering': ['name'],
+                'unique_together': {('name', 'parent', 'owner')},
+            },
+        ),
+        migrations.CreateModel(
+            name='Resource',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=180)),
+                ('slug', models.SlugField(blank=True, max_length=200, unique=True)),
+                ('summary', models.TextField(help_text='Short 1–3 line description.', max_length=600)),
+                ('category', models.CharField(choices=[
+                    ('whitepaper', 'Whitepaper'),
+                    ('checklist', 'Checklist / Guide'),
+                    ('infographic', 'Infographic'),
+                    ('casestudy', 'Case Study'),
+                    ('other', 'Other'),
+                ], default='other', max_length=20)),
+                ('file', models.FileField(upload_to='resources/files/')),
+                ('cover', models.ImageField(blank=True, null=True, upload_to='resources/covers/')),
+                ('is_published', models.BooleanField(default=True)),
+                ('published_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+                'ordering': ['-published_at'],
+            },
+        ),
     ]
