@@ -367,11 +367,6 @@ class VaultDocumentAdmin(admin.ModelAdmin):
     list_display = ('original_name', 'uploaded_by', 'content_type', 'size_bytes', 'created_at')
     search_fields = ('original_name', 'description')
 
-@admin.register(Resource)
-class ResourceAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "is_published", "published_at")
-    list_filter = ("category", "is_published")
-    search_fields = ("title", "summary")
-    prepopulated_fields = {"slug": ("title",)}
+# Resource registration completely removed - not part of cyber challenge/quiz/compiler features
 
 
