@@ -252,8 +252,7 @@
 
           <!-- Cyber Challenges -->
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false"
-              data-bs-toggle="dropdown">
+            <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
               {% trans "Cyber Challenges" %}
               <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
             </a>
@@ -267,6 +266,11 @@
                 <a class="menu-link" href="{% url 'cyber_quiz' %}">
                   <li class="mb-2 menu ps-3 py-1">
                     {% trans "Quiz" %}
+                  </li>
+                </a>
+                <a class="menu-link" href="{% url 'cyber_match' %}">
+                  <li class="mb-2 menu ps-3 py-1">
+                    {% trans "Match" %}
                   </li>
                 </a>
               </ul>
@@ -323,6 +327,7 @@
                   </form>
                 </li>
               </ul>
+
 
             {% else %}
               <a class="btn btn-outline-gray-100 me-2" href="{% url 'login_with_otp' %}">

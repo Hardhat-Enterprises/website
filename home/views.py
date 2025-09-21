@@ -3454,6 +3454,12 @@ def cyber_quiz(request):
     """
     return render(request, 'pages/challenges/quiz.html')
 
+def cyber_match(request):
+    """
+    View for the cybersecurity match page.
+    """
+    return render(request, 'pages/challenges/match.html')
+
 
 def comphrehensive_reports(request):
     reports = AppAttackReport.objects.all().order_by('-year')
