@@ -7,7 +7,7 @@ from .models import VaultDocument
 
 from django.utils.html import format_html
 
-from .models import Resource
+# from .models import Resource  # Not needed for cyber challenge/quiz/compiler features
 
 from .models import Tip , TipRotationState
 from .models import (
@@ -344,12 +344,13 @@ class CompilerSettingsAdmin(admin.ModelAdmin):
         # Prevent deletion of settings
         return False
 
-@admin.register(Resource)
-class ResourceAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "is_published", "published_at")
-    list_filter = ("category", "is_published")
-    search_fields = ("title", "summary")
-    prepopulated_fields = {"slug": ("title",)}
+# Resource admin registration removed - not part of cyber challenge/quiz/compiler features
+# @admin.register(Resource)
+# class ResourceAdmin(admin.ModelAdmin):
+#     list_display = ("title", "category", "is_published", "published_at")
+#     list_filter = ("category", "is_published")
+#     search_fields = ("title", "summary")
+#     prepopulated_fields = {"slug": ("title",)}
 
 
 
