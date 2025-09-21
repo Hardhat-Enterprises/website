@@ -43,6 +43,10 @@ services:
       - DB_PASS=hardhat_password
       - DB_HOST=db
       - DB_PORT=5432
+      # Microsoft Azure AD Authentication
+      - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID:-550b92bc-e30d-415c-8f08-ec4dddff455d}
+      - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET:-J088Q~8XQjHMrJd-ABl8V2vCrUAfmoE9KTAEmc~1}
+      - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID:-d02378ec-1688-46d5-8540-1c28b5f470f6}
     expose:
       - "8000:80"
     depends_on:
