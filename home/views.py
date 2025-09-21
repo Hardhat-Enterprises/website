@@ -3894,6 +3894,87 @@ def debug_auth_status(request):
     from django.http import JsonResponse
     return JsonResponse(debug_info)
 
+def achievements(request):
+    """
+    Visible to everyone.
+    - Anonymous: all pills 'locked', progress 0%.
+    - Authenticated: pill state & progress reflect that user's challenge activity.
+      State rules per category:
+        earned  = user has any completed challenge in that category
+        started = user has any started challenge in that category (but none completed)
+        locked  = otherwise
+    Progress bar = (# earned pills) / (total categories) * 100
+    """
+
+    # 1) List every category that has at least one challenge
+    base = (
+        CyberChallenge.objects
+        .values("category")
+        .annotate(total=Count("id"))
+        .order_by("category")
+    )
+
+    # 2) Build maps of started/completed counts for the current user (or empty if anon)
+    started_map = {}
+    completed_map = {}
+
+    if request.user.is_authenticated:
+        started_qs = (
+            UserChallenge.objects
+            .filter(user=request.user, started=True)
+            .values("challenge__category")
+            .annotate(n=Count("id"))
+        )
+        completed_qs = (
+            UserChallenge.objects
+            .filter(user=request.user, completed=True)
+            .values("challenge__category")
+            .annotate(n=Count("id"))
+        )
+        started_map   = {r["challenge__category"]: r["n"] for r in started_qs}
+        completed_map = {r["challenge__category"]: r["n"] for r in completed_qs}
+
+    # 3) Compose the pill list
+    categories = []
+    for row in base:
+        raw   = row["category"]               # e.g., "Web_Security"
+        total = row["total"]
+        name  = raw.replace("_", " ")
+
+        # Default: locked for anonymous
+        if not request.user.is_authenticated:
+            state = "locked"
+        else:
+            done   = completed_map.get(raw, 0)
+            start  = started_map.get(raw, 0)
+            state  = "earned" if done > 0 else ("started" if start > 0 else "locked")
+
+        # Enable link only if started/earned
+        url = reverse("category_challenges", args=[raw]) if state in ("started", "earned") else None
+
+        categories.append({
+            "raw": raw,
+            "name": name,
+            "total": total,
+            "state": state,
+            "url": url,
+        })
+
+    total_categories = len(categories)
+    earned_categories = sum(1 for c in categories if c["state"] == "earned")
+    percent = int((earned_categories / total_categories) * 100) if total_categories else 0
+
+    return render(
+        request,
+        "pages/achievements.html",
+        {
+            "categories": categories,
+            "percent": percent,
+            "total_categories": total_categories,
+            "earned_categories": earned_categories,
+        },
+    )
+
 
 def test_login(request):
     """
@@ -3923,4 +4004,3 @@ def test_login(request):
     
     # Redirect to dashboard
     return HttpResponseRedirect('/dashboard/')
-
