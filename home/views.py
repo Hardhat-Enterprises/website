@@ -3471,6 +3471,12 @@ def cyber_quiz(request):
     """
     return render(request, 'pages/challenges/quiz.html')
 
+def cyber_match(request):
+    """
+    View for the cybersecurity match page.
+    """
+    return render(request, 'pages/challenges/match.html')
+
 
 def comphrehensive_reports(request):
     reports = AppAttackReport.objects.all().order_by('-year')
@@ -3562,6 +3568,25 @@ def policy_deployment(request):
  #Health Check Function
 def health_check(request):
     return JsonResponse({"status": "ok"}, status=200) 
+
+# --- Settings page ---
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+
+def settings_view(request):
+    # get current preference (prefer session, else system)
+    theme_value = request.session.get("theme_preference", "system")
+
+    if request.method == "POST":
+        new_theme = (request.POST.get("theme") or "system").strip().lower()
+        if new_theme in ("system", "light", "dark"):
+            request.session["theme_preference"] = new_theme
+            # if this was AJAX/fetch, just return 204 (no reload)
+            if request.headers.get("X-Requested-With") == "fetch":
+                return HttpResponse(status=204)
+        return redirect("settings")
+
+    return render(request, "accounts/settings.html", {"theme_value": theme_value})
 
 
 # Challenge Management Views
