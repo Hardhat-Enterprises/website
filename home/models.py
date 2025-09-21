@@ -873,31 +873,26 @@ class AdminSession(models.Model):
     class Meta:
         ordering = ['-login_time']
 
-        def __str__(self):
-            admin_type = "Superuser" if self.user.is_superuser else "Staff"
-            return f"{admin_type} session for {self.user.email} - {self.login_time}"
+    def __str__(self):
+        admin_type = "Superuser" if self.user.is_superuser else "Staff"
+        return f"{admin_type} session for {self.user.email} - {self.login_time}"
 
-        def mark_logout(self, reason="manual"):
-            self.is_active = False
-            self.logout_time = now()
-            self.logout_reason = reason
-            self.save()
+    def mark_logout(self, reason="manual"):
+        self.is_active = False
+        self.logout_time = now()
+        self.logout_reason = reason
+        self.save()
 
-        def is_expired(self, timeout_minutes=30):
-            if not self.is_active:
-                return True
-            expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-            return now() > expiry_time        
+    def is_expired(self, timeout_minutes=30):
+        if not self.is_active:
+            return True
+        expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
+        return now() > expiry_time        
 
-        def is_expired(self, timeout_minutes=30):
-            if not self.is_active:
-                return True
-            expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-            return now() > expiry_time
-
-        def update_activity(self):
-            self.last_activity = now()
-            self.save(update_fields=['last_activity'])
+    
+def update_activity(self):
+        self.last_activity = now()
+        self.save(update_fields=['last_activity'])
 
 class Resource(models.Model):
     class Category(models.TextChoices):
