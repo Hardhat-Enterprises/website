@@ -877,11 +877,17 @@ class AdminSession(models.Model):
             admin_type = "Superuser" if self.user.is_superuser else "Staff"
             return f"{admin_type} session for {self.user.email} - {self.login_time}"
 
-    def mark_logout(self, reason="manual"):
-        self.is_active = False
-        self.logout_time = now()
-        self.logout_reason = reason
-        self.save()
+        def mark_logout(self, reason="manual"):
+            self.is_active = False
+            self.logout_time = now()
+            self.logout_reason = reason
+            self.save()
+
+        def is_expired(self, timeout_minutes=30):
+            if not self.is_active:
+                return True
+            expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
+            return now() > expiry_time        
 
         def is_expired(self, timeout_minutes=30):
             if not self.is_active:
@@ -889,9 +895,9 @@ class AdminSession(models.Model):
             expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
             return now() > expiry_time
 
-    def update_activity(self):
-        self.last_activity = now()        
-        self.save(update_fields=['last_activity'])
+        def update_activity(self):
+            self.last_activity = now()
+            self.save(update_fields=['last_activity'])
 
 class Resource(models.Model):
     class Category(models.TextChoices):
@@ -927,46 +933,37 @@ class Tip(models.Model):
     text = models.CharField(max_length=280, unique=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         verbose_name = "Daily Security Tip"
         verbose_name_plural = "Daily Security Tips"
-
+    
     def __str__(self):
         return self.text[:60]
 
-# keep this only if you implemented 24h rolling rotation
 class TipRotationState(models.Model):
     lock = models.CharField(max_length=16, default="default", unique=True)
     last_index = models.IntegerField(default=-1)
     rotated_at = models.DateTimeField(null=True, blank=True)
-
+    
     def __str__(self):
         return f"{self.lock} @ {self.rotated_at or 'never'} (idx={self.last_index})"
-    
-#Model to track known devices
+
 class UserDevice(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="devices"
     )
-    # Device fingerprint (unique identifier)
     device_fingerprint = models.CharField(max_length=255, null=True, blank=True)
-
-    # User-friendly info
     device_name = models.CharField(max_length=200) 
-
-    # Technical info
     user_agent = models.TextField()
     ip_address = models.GenericIPAddressField()
-
-    # Timestamps
     created_at = models.DateTimeField(auto_now_add=True) 
     last_seen = models.DateTimeField(auto_now=True)       
+    
     def __str__(self):
         return f"{self.user.email} - {self.device_name} ({self.ip_address})"
-
 
 class Resource(models.Model):
     class Category(models.TextChoices):
@@ -976,6 +973,17 @@ class Resource(models.Model):
         CASESTUDY  = "casestudy", "Case Study"
         OTHER      = "other", "Other"
 
+<<<<<<< HEAD
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        WHITEPAPER = "whitepaper", "Whitepaper"
+        CHECKLIST  = "checklist", "Checklist / Guide"
+        INFOGRAPH  = "infographic", "Infographic"
+        CASESTUDY  = "casestudy", "Case Study"
+        OTHER      = "other", "Other"
+
+=======
+>>>>>>> c1bbe61a (match upstream main models.py)
     title = models.CharField(max_length=180)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     summary = models.TextField(max_length=600, help_text="Short 1–3 line description.")
@@ -988,6 +996,7 @@ class Resource(models.Model):
 
     class Meta:
         ordering = ["-published_at"]
+<<<<<<< HEAD
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -1074,12 +1083,13 @@ class UserDeletionRequest(models.Model):
     scheduled_for = models.DateTimeField()
     is_executed = models.BooleanField(default=False)
     executed_at = models.DateTimeField(null=True, blank=True)
+=======
+>>>>>>> c1bbe61a (match upstream main models.py)
 
     def save(self, *args, **kwargs):
-        if not self.scheduled_for:
-            self.scheduled_for = self.requested_at + timedelta(days=30)
-        super().save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(self.title)[:190]
+        return super().save(*args, **kwargs)
 
     def __str__(self):
-        status = "Executed" if self.is_executed else "Pending"
-        return f"Deletion request for {self.user.username} ({status}), scheduled {self.scheduled_for}"
+        return self.title
