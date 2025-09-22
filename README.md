@@ -1,43 +1,233 @@
-# [Hardhat Enterprises](https://cwt12025.pythonanywhere.com/)
+# Hardhat Enterprises - Cybersecurity Platform
 
-Hardhat Enterprises is an organization that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company are open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met. 
+Hardhat Enterprises is an organisation that aims to create cyber weapons and tools that can be used to empower white-hat operations. All deliverables produced by the company are open source so that anyone may use and benefit from them. These deliverables should either improve on existing tools or fill a market need that is not yet met.
 
-# [Hardhat Enterprises](https://cwt12025.pythonanywhere.com/) T1 2025
-[Note: The Hardhat website has been deployed already. Below is the rundown of how it can be deployed from PythonAnywhere.]
+The Hardhat Enterprises Website is a comprehensive Django-based cybersecurity platform that provides educational tools, security assessments, and hands-on learning experiences for cybersecurity professionals and students. The platform combines theoretical knowledge with practical application through interactive challenges, security tools, and real-world simulations.
 
-Deploying HardHat Website from Python Anywhere Platform
-For launching the Hardhat website, we have chosen the Python Anywhere platform since it offers free tiers and the website can be hosted for three months without any charge or cost.
-In this document, I will describe the process of deploying the website from the platform with the steps necessary.
+##  Key Features
 
-**Step 1:** First, a user account needs to be opened using the free tier (Beginners). In this case, the login credentials are:  
-- **Username:** `cwt12025`  
-- **Email:** `s222340498@deakin.edu.au`  
-- **Password:** `"consult lead"`  
-- **Web App Domain:** [https://cwt12025.pythonanywhere.com](https://cwt12025.pythonanywhere.com)
+### Educational Platform
+- **Interactive Cyber Challenges**: Multiple choice questions and code-fixing challenges across various cybersecurity domains
+- **Skills Tracking**: Progress monitoring for cybersecurity skills development
+- **Upskilling Modules**: Comprehensive learning paths for different cybersecurity specialisations
+- **Leaderboard System**: Gamified learning with points and rankings
 
-> **Note:** To make the deployment permanent for future trimesters, use the following account instead:  
-> **Email:** `hardhatwebsite@gmail.com`
+### Security Tools Arsenal
+- **Penetration Testing Tools**: Integration with Metasploit, Burp Suite, and custom testing frameworks
+- **Vulnerability Assessment**: Nessus scanner integration and custom vulnerability detection
+- **Network Analysis**: Nmap, Wireshark, and network monitoring tools
+- **SIEM Integration**: Splunk and custom security analytics
+- **Identity Management**: CyberArk PAM and privileged access controls
 
-**Step 2:** Now you must launch the bash console. Run the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
+### Hardhat Enterprises Cybersecurity Projects
+- **AppAttack**: Application security testing and vulnerability assessment
+- **Malware Visualisation**: Malware analysis and threat intelligence tools
+- **PT-GUI (Deakin Detonator Toolkit)**: Comprehensive penetration testing GUI with 15+ integrated tools
+- **Smishing Detection**: SMS phishing detection and prevention
+- **VR Cybersecurity**: Virtual reality cybersecurity training modules
+- **Threat Mirror**: Real-time threat intelligence and monitoring
 
-**Step 3:** Create a virtual environment using the command – ‘mkvirtualenv <virtual environment name>’. The name of the virtual environment can be anything. Keeping it simple and short is recommended. In this case, I have used ‘venv’ as the environment name.
+### Career Development
+- **Job Portal**: Cybersecurity job listings and application management
+- **Career Path Finder**: Guided career planning for cybersecurity roles
+- **Graduate Programmes**: Structured learning programmes for career advancement
+- **Internship Opportunities**: Hands-on experience programmes
 
-**Step 4:** Once the virtual environment is created, the necessary tools and dependencies need to be installed in it using the command – ‘pip install -r requirements.txt’. This command will install all the necessary tools with the correct versions that are needed to launch the website.
+### Security Features
+- **Multi-Factor Authentication**: Email OTP and Microsoft Azure AD integration
+- **Session Management**: Secure session handling with timeout controls
+- **Rate Limiting**: Protection against brute force attacks
+- **Audit Logging**: Comprehensive security event logging
+- **Device Fingerprinting**: Advanced user device tracking
+- **Password Security**: Complex password requirements with history tracking
 
-**Step 5:** After that, we have to open the ‘web’ configuration page by clicking the ‘Web’ button on the top right option panel. In the config page, we have to add the exact name of the virtual environment name in the virtual environment section.
+## Technical Architecture
 
-**Step 6:** From the web config page, under the ‘Code’ section, the WSGI Configuration File needs to be opened and in the ‘Django’ section, the code lines need to be uncommented as shown. The path needs to be changed to the git repository. 
-The os.environ['DJANGO_SETTINGS_MODULE'] = '<folder_name>.settings' should be set accordingly. The <folder_name> needs to be replaced by the name of the folder in which the settings.py file is located.
+### Backend Framework
+- **Django 4.2.14**: Modern Python web framework
+- **PostgreSQL**: Primary database with SQLite fallback
+- **Django REST Framework**: API development
+- **Celery & Redis**: Asynchronous task processing
 
-**Step 7:** We have to open the ‘settings.py’ config file from the ‘Files’ tab and add the Hardhat website URL as an allowed host in the ‘Allowed_Hosts’ option brackets. This will allow the website URL to launch the website whenever searched from any browser.
-ALLOWED_HOSTS = ['cwt12025.pythonanywhere.com']
+### Frontend Technologies
+- **Bootstrap 5**: Responsive UI framework
+- **JavaScript**: Interactive components and AJAX functionality
+- **TinyMCE**: Rich text editing
+- **Chart.js**: Data visualisation and analytics
 
-**Step 8:** After reloading the website using the green reload button on the Web configuration page, the URL can be used to check the deployed website.
+### Security & Authentication
+- **Microsoft OAuth 2.0**: Enterprise authentication
+- **bcrypt**: Secure password hashing
+- **CSRF Protection**: Cross-site request forgery prevention
+- **XSS Protection**: Input sanitisation with nh3
+- **HTTPS Enforcement**: SSL/TLS security headers
 
-Deploying HardHat Website from Docker Platform
- Prerequisites
-    Install Docker on your machine
+### DevOps & Deployment
+- **Docker**: Containerised deployment
+- **Nginx**: Reverse proxy and static file serving
+- **Gunicorn**: WSGI application server
+- **PostgreSQL**: Production database
 
-Step 1: clone the github project to your machine by running the command ‘git clone https://github.com/Hardhat-Enterprises/website.git’
+## Database Models
 
-Step 2: Run command 'docker-compose up build' and it will run the application on your machine using docker and You can access the application on localhost:80.
+### User Management
+- **Custom User Model**: Extended Django user with cybersecurity-specific fields
+- **Student Profiles**: Academic tracking and project preferences
+- **Admin Sessions**: Secure administrative access management
+- **Device Tracking**: User device fingerprinting and management
+
+### Educational Content
+- **Cyber Challenges**: Interactive learning challenges with multiple formats
+- **Skills & Progress**: Competency tracking and assessment
+- **Resources**: Educational materials and documentation
+- **Blog System**: Content management for cybersecurity articles
+
+### Security & Monitoring
+- **Security Events**: Comprehensive audit trail
+- **Admin Notifications**: System alerts and feedback management
+- **Vault Documents**: Secure file storage and sharing
+- **Password History**: Password reuse prevention
+
+## Getting Started
+
+### Prerequisites
+- Docker and Docker Compose
+- Python 3.8+ (for local development)
+- PostgreSQL (for production)
+
+### Docker Deployment (Recommended)
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Hardhat-Enterprises/website.git
+   cd website
+   ```
+
+2. **Configure environment variables**:
+   ```bash
+   cp env.sample .env
+   # Edit .env with your configuration
+   ```
+
+3. **Start the application**:
+   ```bash
+   docker-compose up --build
+   ```
+
+4. **Access the application**:
+   - Website: http://localhost:8000
+   - Nginx (production): http://localhost:8080
+
+### Local Development
+
+1. **Create virtual environment**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run migrations**:
+   ```bash
+   python manage.py migrate
+   python manage.py populate_database
+   ```
+
+4. **Start development server**:
+   ```bash
+   python manage.py runserver
+   ```
+
+## Configuration
+
+### Environment Variables
+- `SECRET_KEY`: Django secret key (auto-generated)
+- `DEBUG`: Development mode toggle
+- `DB_ENGINE`: Database engine (postgresql/sqlite3)
+- `MICROSOFT_CLIENT_ID`: Azure AD application ID
+- `MICROSOFT_CLIENT_SECRET`: Azure AD application secret
+- `EMAIL_HOST_USER`: SMTP email configuration
+
+### Security Settings
+- Rate limiting: 5 attempts per minute for login
+- Session timeout: 30 minutes with activity reset
+- Password complexity: Uppercase, lowercase, digit, and symbol required
+- HSTS: 1 year with subdomain inclusion
+
+## Project Structure
+
+```
+website/
+├── core/                    # Django project configuration
+│   ├── settings.py         # Main settings and security configuration
+│   ├── urls.py            # URL routing
+│   └── middleware.py      # Custom middleware components
+├── home/                   # Main application
+│   ├── models.py          # Database models
+│   ├── views.py           # Business logic and controllers
+│   ├── urls.py            # Application URL patterns
+│   ├── templates/         # HTML templates
+│   └── management/        # Custom Django commands
+├── custom_static/          # Static assets (CSS, JS, images)
+├── nginx/                  # Nginx configuration
+├── Scripts/               # Deployment and utility scripts
+├── utils/                 # Utility functions and helpers
+└── docker-compose.yml     # Docker orchestration
+```
+
+## Security Features
+
+- **Authentication**: Multi-factor with OTP and Microsoft OAuth
+- **Authorisation**: Role-based access control with staff/admin levels
+- **Data Protection**: Input sanitisation, CSRF tokens, and XSS prevention
+- **Session Security**: Secure cookies, timeout controls, and device tracking
+- **Audit Trail**: Comprehensive logging of security events
+- **Rate Limiting**: Brute force protection with intelligent lockout
+
+## Internationalization
+
+Supports multiple languages:
+- English (default)
+- Simplified Chinese
+- French
+- Spanish
+- Japanese
+- Korean
+
+## Analytics & Monitoring
+
+- **User Activity Tracking**: Comprehensive user behaviour analytics
+- **Security Event Monitoring**: Real-time threat detection
+- **Performance Metrics**: Application performance monitoring
+- **Audit Logging**: Detailed security and administrative logs
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Support
+
+For support and questions:
+- Email: hardhatwebsite@gmail.com
+- Security Issues: security@hardhatenterprises.com
+
+## Links
+
+- [Documentation](./deployment_README.md)
+- [Security Policy](/.well-known/security.txt)
+
+---
+
+**Hardhat Enterprises** - Empowering the next generation of cybersecurity professionals through hands-on learning and cutting-edge tools.
