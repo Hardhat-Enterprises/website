@@ -2,12 +2,12 @@
 <header class="header-global">
 
     <nav id="navbar-main" aria-label="Primary navigation" class="navbar navbar-main navbar-expand-lg  navbar-light">
-        <div class="navbar-container position-relative">
+        <div class="navbar-container position-relative" style="display:flex; align-items:center; justify-content:center; gap:16px;">
             <a class="navbar-brand me-lg-5" href="/">
                 <img class="navbar-brand-dark" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo light" />
                 <img class="navbar-brand-light" src="{% static 'assets/img/brand/logo.svg' %}" alt="Logo dark" />
             </a>
-            <div class="navbar-collapse collapse me-auto" id="navbar_global">
+            <div class="navbar-collapse collapse" id="navbar_global" style="flex:0 1 auto;">
                 <div class="navbar-collapse-header">
                     <div class="row">
                         <div class="col-4 collapse-brand">
@@ -94,11 +94,11 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="projectsDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap;">
                 {% trans "Projects" %}
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </a>
-                        <div class="dropdown-menu pt-2" style="width: max-content !important;margin-left: 50px;" aria-labelledby="blogDropdown">
+                        <div class="dropdown-menu pt-2" style="width: max-content !important;margin-left: 50px;" aria-labelledby="projectsDropdown">
                             <div class="row">
                                 <div class="col">
                                     <ul class="list-style-none m-0 p-0">
@@ -180,7 +180,7 @@
 
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap;">
                 {% trans "Blog" %}
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </a>
@@ -194,7 +194,7 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="careersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap;">
                 {% trans "Careers" %}
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </a>
@@ -224,7 +224,7 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="frontPagesDropdown" aria-expanded="false" data-bs-toggle="dropdown" style="display:inline-flex; align-items:center; gap:6px; white-space:nowrap;">
                 {% trans "Cyber Challenges" %}
                 <span class="fas fa-angle-down nav-link-arrow ms-1"></span>
               </a>
@@ -258,10 +258,10 @@
 
 
                     <div class="search-container position-relative">
-                        <form class="desktop-search-bar" method="POST" action="{% url 'pages/search-results' %}">
+                        <form class="desktop-search-bar" method="POST" action="{% url 'pages/search-results' %}" style="display: flex; align-items: center; position: relative; height: 36px;">
                             {% csrf_token %}
-                            <input class="form-control me-4 search-box" type="search" id="searchInput" name="q" placeholder="{% trans 'Search...' %}" aria-label="Search" autocomplete="off">
-                            <button class="search-btn" type="submit">
+                            <input class="form-control me-4 search-box" type="search" id="searchInput" name="q" placeholder="{% trans 'Search...' %}" aria-label="Search" autocomplete="off" style="border-radius: 25px 0 0 25px; border-right: none; height: 36px; padding-top: 6px; padding-bottom: 6px; line-height: 1;">
+                            <button class="search-btn" type="submit" style="border-radius: 0 25px 25px 0; border-left: 1px solid #ddd; height: 36px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; top: 50%; transform: translateY(calc(-50% + {% if request.resolver_match.url_name == 'profile' %}4px{% else %}0px{% endif %})); right: 2px;">
                   <div><i class="fas fa-search search-icon"></i></div>
                 </button>
                         </form>
@@ -272,23 +272,31 @@
 
                 </div>
 
-                <div class="d-flex align-items-center justify-content-center">
+                <div class="d-flex align-items-center justify-content-center" style="gap:8px;">
                     {% if request.user.is_authenticated %}
 
                     <!-- User Profile Dropdown -->
                     <div class="dropdown">
-                        <a href="#" id="profileDropdown" role="button" class="btn btn-outline-gray-100 me-md-3 d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                            <span class="fas fa-user-circle me-2"></span>
+                        <a href="#" id="profileDropdown" role="button" class="btn btn-outline-gray-100 d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" style="padding:.25rem .5rem; line-height:1; margin:0; gap:8px;">
+                            {% if request.user.is_authenticated and request.user.profile and request.user.profile.avatar %}
+                                <span style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;flex:0 0 28px; margin-left:1px;">
+                                    <img src="{{ request.user.profile.avatar_webp_80.url|default:request.user.profile.avatar.url }}"
+                                         alt="Avatar"
+                                         style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;" />
+                                </span>
+                            {% else %}
+                                <span class="fas fa-user-circle" style="font-size:22px; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; line-height:28px; color:#ffcd11; margin-left:1px;"></span>
+                            {% endif %}
                             <span class="header-profile-name">{{ request.user.username }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" style="border-radius: 15px; overflow: hidden;">
                             <li>
-                                <a class="dropdown-item" href="{% url 'profile' %}">
+                                <a class="dropdown-item" href="{% url 'profile' %}" style="color: #ffcd11; transition: color 0.3s ease;" onmouseover="this.style.color='white'; this.style.backgroundColor='rgba(255, 205, 17, 0.1)';" onmouseout="this.style.color='#ffcd11'; this.style.backgroundColor='transparent';">
                                     <span class="fas fa-user me-2"></span>{% trans 'Profile' %}
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{% url 'settings' %}">
+                                <a class="dropdown-item" href="{% url 'settings' %}" style="color: #ffcd11; transition: color 0.3s ease;" onmouseover="this.style.color='white'; this.style.backgroundColor='rgba(255, 205, 17, 0.1)';" onmouseout="this.style.color='#ffcd11'; this.style.backgroundColor='transparent';">
                                     <span class="fas fa-cog me-2"></span>{% trans 'Settings' %}
                                 </a>
                             </li>
@@ -296,7 +304,7 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                <a class="dropdown-item" href="{% url 'logout' %}" style="color: #ffcd11; transition: color 0.3s ease;" onmouseover="this.style.color='white'; this.style.backgroundColor='rgba(255, 205, 17, 0.1)';" onmouseout="this.style.color='#ffcd11'; this.style.backgroundColor='transparent';">
                                     <span class="fas fa-sign-out-alt me-2"></span>{% trans 'Logout' %}
                                 </a>
                             </li>
@@ -335,10 +343,10 @@
 
             
             <!-- language switcher (moved into right-side toolbar) -->
-            <div class="dropdown ms-2" style="margin-left:10px;margin-right:5px;">
+            <div class="dropdown" style="margin-left:4px;margin-right:0;">
               {% get_current_language as CURRENT_LANG %}
               {% with code=CURRENT_LANG|lower|slice:":2" %}
-              <button class="nav-link dropdown-toggle btn btn-link p-0"
+              <button class="nav-link dropdown-toggle btn btn-link p-0" style="line-height:1; padding:0;"
                       id="langDropdown"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
@@ -384,7 +392,7 @@
               </ul>
             </div>
 
-            <span class="hamburger-button-menu ms-2" type="button" data-bs-toggle="collapse"
+            <span class="hamburger-button-menu" type="button" data-bs-toggle="collapse" style="margin-left:4px;"
               data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
               aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -781,5 +789,20 @@
     .navbar .nav-link .fas,
     .navbar .nav-link .nav-link-arrow {
       color: inherit !important;
+    }
+
+    /* Keep dropdown carets inline and vertically centered next to text */
+    .navbar .nav-item .nav-link.dropdown-toggle {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      padding-right: 0.5rem;
+    }
+    .navbar .nav-link .nav-link-arrow {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+      margin-left: 0.25rem;
     }
   </style>
