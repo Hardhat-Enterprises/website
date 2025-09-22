@@ -887,9 +887,8 @@ class AdminSession(models.Model):
         if not self.is_active:
             return True
         expiry_time = self.last_activity + timedelta(minutes=timeout_minutes)
-        return now() > expiry_time        
+        return now() > expiry_time
 
-    
 def update_activity(self):
         self.last_activity = now()
         self.save(update_fields=['last_activity'])
@@ -960,18 +959,31 @@ class UserDevice(models.Model):
     def __str__(self):
         return f"{self.user.email} - {self.device_name} ({self.ip_address})"
 
-class UserDeletionRequest(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="deletion_request")
-    requested_at = models.DateTimeField(default=timezone.now)
-    scheduled_for = models.DateTimeField()
-    is_executed = models.BooleanField(default=False)
-    executed_at = models.DateTimeField(null=True, blank=True)
+class Resource(models.Model):
+    class Category(models.TextChoices):
+        WHITEPAPER = "whitepaper", "Whitepaper"
+        CHECKLIST  = "checklist", "Checklist / Guide"
+        INFOGRAPH  = "infographic", "Infographic"
+        CASESTUDY  = "casestudy", "Case Study"
+        OTHER      = "other", "Other"
+
+    title = models.CharField(max_length=180)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    summary = models.TextField(max_length=600, help_text="Short 1–3 line description.")
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.OTHER)
+    file = models.FileField(upload_to="resources/files/")
+    cover = models.ImageField(upload_to="resources/covers/", blank=True, null=True)
+    is_published = models.BooleanField(default=True)
+    published_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-published_at"]
 
     def save(self, *args, **kwargs):
-        if not self.scheduled_for:
-            self.scheduled_for = self.requested_at + timedelta(days=30)
-        super().save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(self.title)[:190]
+        return super().save(*args, **kwargs)
 
     def __str__(self):
-        status = "Executed" if self.is_executed else "Pending"
-        return f"Deletion request for {self.user.username} ({status}), scheduled {self.scheduled_for}"
+        return self.title
