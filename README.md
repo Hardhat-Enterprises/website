@@ -142,6 +142,11 @@ The Hardhat Enterprises Website is a comprehensive Django-based cybersecurity pl
    ```bash
    python manage.py runserver
    ```
+5. **Create Superuser
+   ```bash
+   python manage.py createsuperuser
+   ```
+   *Note any user email verfication may go to your spam folder so always check.
 
 ## Configuration
 
