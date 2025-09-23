@@ -2578,12 +2578,15 @@ class UpskillingSkillView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if self.request.user.is_authenticated:
+        # Only attempt DB lookups if the detail object is a real Skill instance.
+        # get_object() for UpskillingSkillView returns a dict (dummy skill) for static modules,
+        # which should not be used in FK lookups.
+        if self.request.user.is_authenticated and isinstance(self.object, Skill):
             student = Student.objects.filter(user=self.request.user).first()
             if student:
-                progress = Progress.objects.filter(student=student, skill=self.object).first()
-                if progress:
-                    context['progress_id'] = progress.id
+                prog_obj = Progress.objects.filter(student=student, skill=self.object).first()
+                if prog_obj:
+                    context['progress_id'] = prog_obj.id
 
         return context
 
@@ -4834,4 +4837,3 @@ def test_login(request):
     
     # Redirect to dashboard
     return HttpResponseRedirect('/dashboard/')
-
