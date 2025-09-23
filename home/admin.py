@@ -40,6 +40,12 @@ from .models import (
     #LeaderBaord
     LeaderBoardTable,
 
+    # Quiz Models
+    Quiz,
+    QuizQuestion,
+    QuizAttempt,
+    QuizAnswer,
+
     AppAttackReport, 
     PenTestingRequest, 
     SecureCodeReviewRequest,
@@ -233,6 +239,34 @@ class JobApplicationAdmin(admin.ModelAdmin):
     def job__title(self,obj):
         return obj.job.title
     
+@admin.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'total_questions', 'is_active', 'created_at')
+    list_filter = ('category', 'is_active', 'created_at')
+    search_fields = ('title', 'description')
+    ordering = ('category', 'title')
+
+@admin.register(QuizQuestion)
+class QuizQuestionAdmin(admin.ModelAdmin):
+    list_display = ('question_text', 'quiz', 'difficulty', 'points', 'correct_answer')
+    list_filter = ('quiz__category', 'difficulty', 'quiz')
+    search_fields = ('question_text', 'quiz__title')
+    ordering = ('quiz', 'difficulty', 'id')
+
+@admin.register(QuizAttempt)
+class QuizAttemptAdmin(admin.ModelAdmin):
+    list_display = ('user', 'quiz', 'total_score', 'max_possible_score', 'is_completed', 'started_at')
+    list_filter = ('quiz__category', 'is_completed', 'started_at')
+    search_fields = ('user__username', 'user__first_name', 'user__last_name', 'quiz__title')
+    ordering = ('-started_at',)
+
+@admin.register(QuizAnswer)
+class QuizAnswerAdmin(admin.ModelAdmin):
+    list_display = ('attempt', 'question', 'selected_answer', 'is_correct', 'points_earned')
+    list_filter = ('is_correct', 'question__difficulty')
+    search_fields = ('attempt__user__username', 'question__question_text')
+    ordering = ('-attempt__started_at',)
+
 @admin.register(LeaderBoardTable)
 class LeaderboardTableAdmin(admin.ModelAdmin):
     list_display = ('user', 'category', 'total_points')

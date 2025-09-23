@@ -1,0 +1,176 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/pre-loader.html' %}
+
+<div class="content-container container mt-10">
+    <h1 class="mb-4 text-center">Cybersecurity Quiz Categories</h1>
+    <p class="text-center mb-5">
+        Test your cybersecurity knowledge across different domains. Choose a category to begin your quiz!
+    </p>
+
+    <div class="row">
+        {% for quiz in quizzes %}
+        <div class="col-lg-6 col-md-6 mb-4">
+            <div class="card shadow-lg h-100 cyber-card">
+                <div class="card-header bg-primary text-white cyber-header">
+                    <h3 class="mb-0">{{ quiz.get_category_display }}</h3>
+                    <div class="cyber-particles"></div>
+                </div>
+                <div class="card-body cyber-body d-flex flex-column">
+                    <h5 class="card-title cyber-text">{{ quiz.title }}</h5>
+                    <p class="card-text cyber-text flex-grow-1">{{ quiz.description }}</p>
+                    <div class="quiz-info mb-3">
+                        <span class="badge bg-success cyber-score me-2">
+                            <i class="fas fa-question-circle"></i> {{ quiz.total_questions }} Questions
+                        </span>
+                        <span class="badge bg-info cyber-score">
+                            <i class="fas fa-star"></i> 5 Easy, 5 Medium, 5 Hard
+                        </span>
+                    </div>
+                    <div class="mt-auto">
+                        <a href="{% url 'quiz_detail' quiz.id %}" class="btn btn-primary cyber-btn w-100">
+                            <i class="fas fa-play"></i> Start Quiz
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <h4>No quizzes available at the moment</h4>
+                <p>Please check back later for new quiz categories.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'leaderboard' %}" class="btn btn-outline-primary btn-lg me-3">
+            <i class="fas fa-trophy"></i> View Leaderboard
+        </a>
+        <a href="{% url 'challenge_list' %}" class="btn btn-outline-secondary btn-lg">
+            <i class="fas fa-arrow-left"></i> Back to Challenges
+        </a>
+    </div>
+</div>
+
+<style>
+    .quiz-container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cyber-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 2px solid #00ff00;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cyber-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    }
+
+    .cyber-header {
+        position: relative;
+        background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+        border-bottom: 2px solid #00ff00;
+    }
+
+    .cyber-body {
+        background: rgba(26, 26, 46, 0.9);
+        color: #fff;
+    }
+
+    .cyber-text {
+        color: #fff;
+        text-shadow: 0 0 5px #00ff00;
+    }
+
+    .cyber-btn {
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .cyber-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+        background: linear-gradient(45deg, #00b300, #00ff00);
+    }
+
+    .cyber-score {
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .cyber-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #00ff00;
+        border-radius: 50%;
+        animation: particle-fall 3s linear infinite;
+    }
+
+    @keyframes particle-fall {
+        0% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+    }
+
+    @keyframes cyber-pulse {
+        0% {
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+        50% {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+    }
+</style>
+
+<script>
+    function createParticles() {
+        const particlesContainers = document.querySelectorAll('.cyber-particles');
+        particlesContainers.forEach(container => {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 3}s`;
+                container.appendChild(particle);
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', createParticles);
+</script>
+
+{% endblock content %}

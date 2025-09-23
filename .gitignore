@@ -22,3 +22,19 @@ media/
 *.log
 
 /static/
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# Large static assets
+custom_static/assets/videos/
+custom_static/assets/img/

@@ -1,0 +1,198 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/pre-loader.html' %}
+
+<div class="content-container container mt-10">
+    <div class="quiz-completed-container">
+        <div class="card shadow-lg cyber-card">
+            <div class="card-header bg-warning text-dark cyber-header">
+                <h3 class="mb-0">Quiz Already Completed</h3>
+                <div class="cyber-particles"></div>
+            </div>
+            <div class="card-body cyber-body text-center">
+                <div class="completed-icon mb-4">
+                    <i class="fas fa-check-circle" style="font-size: 4rem; color: #00ff00;"></i>
+                </div>
+
+                <h2 class="cyber-text mb-3">{{ quiz.title }} - {{ quiz.get_category_display }}</h2>
+                
+                <div class="previous-score mb-4">
+                    <div class="score-display">
+                        <span class="badge bg-success cyber-score">
+                            Your Score: {{ attempt.total_score }}/{{ attempt.max_possible_score }}
+                        </span>
+                    </div>
+                    <div class="completion-date">
+                        <i class="fas fa-calendar"></i>
+                        Completed on: {{ attempt.completed_at|date:"M d, Y H:i" }}
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    You have already completed this quiz. Your previous score has been recorded in the leaderboard.
+                </div>
+
+                <div class="action-buttons">
+                    <a href="{% url 'quiz_list' %}" class="btn btn-primary cyber-btn me-2">
+                        <i class="fas fa-list"></i> Try Another Quiz
+                    </a>
+                    <a href="{% url 'leaderboard' %}?category={{ quiz.category }}" class="btn btn-success cyber-btn me-2">
+                        <i class="fas fa-trophy"></i> View Leaderboard
+                    </a>
+                    <a href="{% url 'challenge_list' %}" class="btn btn-secondary cyber-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Challenges
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quiz-completed-container {
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cyber-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 2px solid #00ff00;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .cyber-header {
+        position: relative;
+        background: linear-gradient(90deg, #ffa500 0%, #ff8c00 100%);
+        border-bottom: 2px solid #ffa500;
+    }
+
+    .cyber-body {
+        background: rgba(26, 26, 46, 0.9);
+        color: #fff;
+    }
+
+    .cyber-text {
+        color: #fff;
+        text-shadow: 0 0 5px #00ff00;
+    }
+
+    .cyber-btn {
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .cyber-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+    }
+
+    .cyber-score {
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        font-size: 1.1rem;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .completed-icon {
+        animation: pulse 2s infinite;
+    }
+
+    .completion-date {
+        color: #fff;
+        margin-top: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .completion-date i {
+        color: #00ff00;
+        margin-right: 0.5rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+
+    .cyber-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #ffa500;
+        border-radius: 50%;
+        animation: particle-fall 3s linear infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes particle-fall {
+        0% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .cyber-btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+
+<script>
+    function createParticles() {
+        const particlesContainer = document.querySelector('.cyber-particles');
+        for (let i = 0; i < 25; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 3}s`;
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', createParticles);
+</script>
+
+{% endblock content %}

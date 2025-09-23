@@ -1,0 +1,323 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/pre-loader.html' %}
+
+<div class="content-container container mt-10">
+    <div class="quiz-container">
+        <div class="card shadow-lg cyber-card">
+            <div class="card-header bg-primary text-white cyber-header">
+                <h3 class="mb-0">{{ quiz.title }} - {{ quiz.get_category_display }}</h3>
+                <div class="cyber-particles"></div>
+            </div>
+            <div class="card-body cyber-body">
+                <div class="quiz-progress mb-3">
+                    <div class="progress">
+                        <div class="progress-bar cyber-progress" role="progressbar" style="width: 0%" id="progress-bar"></div>
+                    </div>
+                    <div class="progress-text cyber-text">Question <span id="current-question">1</span> of <span id="total-questions">{{ questions|length }}</span></div>
+                </div>
+
+                <div class="score-display mb-3">
+                    <span class="badge bg-success cyber-score">Score: <span id="score">0</span></span>
+                </div>
+
+                <form id="quiz-form" method="post">
+                    {% csrf_token %}
+                    <div id="question-container">
+                        {% for question in questions %}
+                        <div class="question-block" data-question="{{ forloop.counter }}" style="{% if not forloop.first %}display: none;{% endif %}">
+                            <h4 class="question-title cyber-text mb-4">{{ forloop.counter }}. {{ question.question_text }}</h4>
+                            <div class="options-container">
+                                <div class="option-item">
+                                    <input type="radio" name="question_{{ question.id }}" value="a" id="q{{ question.id }}_a" class="option-input">
+                                    <label for="q{{ question.id }}_a" class="option-label">
+                                        <span class="option-letter">A</span>
+                                        <span class="option-text">{{ question.option_a }}</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="question_{{ question.id }}" value="b" id="q{{ question.id }}_b" class="option-input">
+                                    <label for="q{{ question.id }}_b" class="option-label">
+                                        <span class="option-letter">B</span>
+                                        <span class="option-text">{{ question.option_b }}</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="question_{{ question.id }}" value="c" id="q{{ question.id }}_c" class="option-input">
+                                    <label for="q{{ question.id }}_c" class="option-label">
+                                        <span class="option-letter">C</span>
+                                        <span class="option-text">{{ question.option_c }}</span>
+                                    </label>
+                                </div>
+                                <div class="option-item">
+                                    <input type="radio" name="question_{{ question.id }}" value="d" id="q{{ question.id }}_d" class="option-input">
+                                    <label for="q{{ question.id }}_d" class="option-label">
+                                        <span class="option-letter">D</span>
+                                        <span class="option-text">{{ question.option_d }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="quiz-navigation mt-4">
+                        <button type="button" id="prev-btn" class="btn btn-secondary cyber-btn me-2" disabled>
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" id="next-btn" class="btn btn-primary cyber-btn">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" id="submit-btn" class="btn btn-success cyber-btn" style="display: none;">
+                            <i class="fas fa-check"></i> Submit Quiz
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quiz-container {
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cyber-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 2px solid #00ff00;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .cyber-header {
+        position: relative;
+        background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+        border-bottom: 2px solid #00ff00;
+    }
+
+    .cyber-body {
+        background: rgba(26, 26, 46, 0.9);
+        color: #fff;
+    }
+
+    .cyber-text {
+        color: #fff;
+        text-shadow: 0 0 5px #00ff00;
+    }
+
+    .cyber-btn {
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .cyber-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+    }
+
+    .cyber-btn:disabled {
+        background: #666;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+    .cyber-progress {
+        background: linear-gradient(90deg, #00ff00, #00b300);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .cyber-score {
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .question-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .options-container {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .option-item {
+        position: relative;
+    }
+
+    .option-input {
+        display: none;
+    }
+
+    .option-label {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: rgba(0, 255, 0, 0.1);
+        border: 2px solid #00ff00;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #fff;
+    }
+
+    .option-label:hover {
+        background: rgba(0, 255, 0, 0.2);
+        transform: translateX(5px);
+    }
+
+    .option-input:checked + .option-label {
+        background: rgba(0, 255, 0, 0.3);
+        border-color: #00ff00;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    }
+
+    .option-letter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        color: #000;
+        border-radius: 50%;
+        font-weight: bold;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .option-text {
+        flex-grow: 1;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .quiz-navigation {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .cyber-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #00ff00;
+        border-radius: 50%;
+        animation: particle-fall 3s linear infinite;
+    }
+
+    @keyframes particle-fall {
+        0% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+    }
+</style>
+
+<script>
+    let currentQuestion = 1;
+    const totalQuestions = {{ questions|length }};
+    let score = 0;
+
+    function createParticles() {
+        const particlesContainer = document.querySelector('.cyber-particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 3}s`;
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    function updateProgress() {
+        const progress = (currentQuestion / totalQuestions) * 100;
+        document.getElementById('progress-bar').style.width = `${progress}%`;
+        document.getElementById('current-question').textContent = currentQuestion;
+    }
+
+    function updateNavigation() {
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+
+        prevBtn.disabled = currentQuestion === 1;
+        
+        if (currentQuestion === totalQuestions) {
+            nextBtn.style.display = 'none';
+            submitBtn.style.display = 'inline-block';
+        } else {
+            nextBtn.style.display = 'inline-block';
+            submitBtn.style.display = 'none';
+        }
+    }
+
+    function showQuestion(questionNum) {
+        document.querySelectorAll('.question-block').forEach((block, index) => {
+            block.style.display = index + 1 === questionNum ? 'block' : 'none';
+        });
+        updateProgress();
+        updateNavigation();
+    }
+
+    function nextQuestion() {
+        if (currentQuestion < totalQuestions) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestion > 1) {
+            currentQuestion--;
+            showQuestion(currentQuestion);
+        }
+    }
+
+    document.getElementById('next-btn').addEventListener('click', nextQuestion);
+    document.getElementById('prev-btn').addEventListener('click', prevQuestion);
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' && currentQuestion < totalQuestions) {
+            nextQuestion();
+        } else if (e.key === 'ArrowLeft' && currentQuestion > 1) {
+            prevQuestion();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        createParticles();
+        updateProgress();
+        updateNavigation();
+    });
+</script>
+
+{% endblock content %}
