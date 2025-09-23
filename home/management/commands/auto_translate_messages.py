@@ -8,7 +8,7 @@ Auto-translate .po/.po(djangojs) using DeepL only (no manual msgstr).
 - Aligns leading/trailing newlines of msgstr to match msgid
 """
 
-import os, re
+import os, re, time
 from pathlib import Path
 import polib
 from django.core.management.base import BaseCommand
@@ -101,8 +101,11 @@ class Command(BaseCommand):
                         already = any(v.strip() for v in e.msgstr_plural.values())
                         if already and not opts["force"]:
                             continue
-                        s1 = self._tx(translator, e.msgid, target)
-                        s2 = self._tx(translator, e.msgid_plural, target)
+                        s1 = self._tx(translator, e.msgid, target, log=self.stderr.write)
+                        s2 = self._tx(translator, e.msgid_plural, target, log=self.stderr.write)
+                        # If translation failed due to rate limiting or other errors, skip this entry
+                        if s1 is None or s2 is None:
+                            continue
                         for i in range(npl):
                             out = s1 if i == 0 else s2
                             e.msgstr_plural[i] = _align_newlines(e.msgid, out)
@@ -117,7 +120,10 @@ class Command(BaseCommand):
                     if not e.msgid.strip():
                         continue
 
-                    out = self._tx(translator, e.msgid, target)
+                    out = self._tx(translator, e.msgid, target, log=self.stderr.write)
+                    if out is None:
+                        # Skip updating this entry so a future run can fill it
+                        continue
                     e.msgstr = _align_newlines(e.msgid, out)
                     e.tcomment = ((e.tcomment or "") + " [auto-translated provider=DeepL]").strip()
                     _defuzz(e)
@@ -132,14 +138,39 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Auto-translate finished. Now run compilemessages."))
 
     @staticmethod
-    def _tx(translator, text: str, target: str) -> str:
+    def _tx(translator, text: str, target: str, *, log=None) -> str | None:
         if not text.strip():
             return text
         masked, mp = _mask(text)
-        res = translator.translate_text(
-            masked,
-            target_lang=target,
-            preserve_formatting=True,
-            split_sentences="nonewlines",
-        )
-        return _unmask(res.text, mp)
+        # Retry with exponential backoff on DeepL rate limiting
+        max_retries = int(os.getenv("DEEPL_MAX_RETRIES", "4"))
+        backoff = float(os.getenv("DEEPL_BACKOFF_SECONDS", "2.0"))
+        attempt = 0
+        while True:
+            try:
+                res = translator.translate_text(
+                    masked,
+                    target_lang=target,
+                    preserve_formatting=True,
+                    split_sentences="nonewlines",
+                )
+                return _unmask(res.text, mp)
+            except deepl.exceptions.TooManyRequestsException as ex:
+                if attempt < max_retries:
+                    attempt += 1
+                    if log:
+                        log(f"DeepL rate limit hit; retry {attempt}/{max_retries} after {backoff:.1f}s")
+                    time.sleep(backoff)
+                    backoff *= 2
+                    continue
+                if log:
+                    log(f"DeepL still rate-limited after retries; skipping this string. ({ex})")
+                return None
+            except deepl.exceptions.DeepLException as ex:
+                if log:
+                    log(f"DeepL error; skipping this string. ({ex})")
+                return None
+            except Exception as ex:
+                if log:
+                    log(f"Unexpected translation error; skipping this string. ({ex})")
+                return None
