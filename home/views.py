@@ -6,7 +6,7 @@ from venv import logger
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
-from .models import CyberChallenge, UserChallenge
+from .models import CyberChallenge, UserChallenge, Quiz, QuizQuestion, QuizAttempt, QuizAnswer
 
 
 from home.models import TeamMember
@@ -2155,25 +2155,60 @@ def progress(request):
         started = has a UserChallenge row in that category
         earned  = has a completed=True row in that category
     - Overall % = earned challenges / total challenges (green bar).
+    - Now includes quiz progress as well.
     """
-    # All categories with their total number of challenges
-    cats_qs = (
+    # All challenge categories with their total number of challenges
+    challenge_cats_qs = (
         CyberChallenge.objects
         .values("category")
         .annotate(total=Count("id"))
         .order_by("category")
     )
 
+    # All quiz categories with their total number of questions
+    quiz_cats_qs = (
+        Quiz.objects
+        .filter(is_active=True)
+        .values("category")
+        .annotate(total=Count("questions"))
+        .order_by("category")
+    )
+
+    # Combine all categories (challenges + quizzes)
+    all_categories = {}
+    
+    # Add challenge categories
+    for row in challenge_cats_qs:
+        cat = row["category"]
+        all_categories[cat] = {
+            "challenge_total": row["total"],
+            "quiz_total": 0,
+            "total": row["total"]
+        }
+    
+    # Add quiz categories
+    for row in quiz_cats_qs:
+        cat = row["category"]
+        if cat in all_categories:
+            all_categories[cat]["quiz_total"] = row["total"]
+            all_categories[cat]["total"] += row["total"]
+        else:
+            all_categories[cat] = {
+                "challenge_total": 0,
+                "quiz_total": row["total"],
+                "total": row["total"]
+            }
+
     # If anonymous: everything locked
     if not request.user.is_authenticated:
         categories = [{
-            "raw": row["category"],
-            "name": row["category"].replace("_", " "),
-            "total": row["total"],
+            "raw": cat,
+            "name": cat.replace("_", " ").title(),
+            "total": data["total"],
             "state": "locked",
-        } for row in cats_qs]
+        } for cat, data in all_categories.items()]
 
-        return render(request, "pages/progress.html", {   # <- changed
+        return render(request, "pages/progress.html", {
             "percent": 0,
             "total_completed": 0,
             "total_challenges": sum(r["total"] for r in categories),
@@ -2182,7 +2217,8 @@ def progress(request):
         })
 
     # Logged-in user: compute started / earned per category
-    started_map = dict(
+    # Challenge progress
+    challenge_started_map = dict(
         UserChallenge.objects
         .filter(user=request.user)
         .values("challenge__category")
@@ -2190,7 +2226,7 @@ def progress(request):
         .values_list("challenge__category", "cnt")
     )
 
-    earned_map = dict(
+    challenge_earned_map = dict(
         UserChallenge.objects
         .filter(user=request.user, completed=True)
         .values("challenge__category")
@@ -2198,36 +2234,58 @@ def progress(request):
         .values_list("challenge__category", "done")
     )
 
+    # Quiz progress
+    quiz_started_map = dict(
+        QuizAttempt.objects
+        .filter(user=request.user)
+        .values("quiz__category")
+        .annotate(cnt=Count("id"))
+        .values_list("quiz__category", "cnt")
+    )
+
+    quiz_earned_map = dict(
+        QuizAttempt.objects
+        .filter(user=request.user, is_completed=True)
+        .values("quiz__category")
+        .annotate(done=Count("id"))
+        .values_list("quiz__category", "done")
+    )
+
     categories = []
     total_challenges = 0
     total_earned = 0
 
-    for row in cats_qs:
-        cat = row["category"]
-        total = row["total"]
+    for cat, data in all_categories.items():
+        total = data["total"]
         total_challenges += total
 
-        started_cnt = started_map.get(cat, 0)
-        earned_cnt  = earned_map.get(cat, 0)
-        total_earned += earned_cnt
+        # Combine challenge and quiz progress
+        challenge_started = challenge_started_map.get(cat, 0)
+        challenge_earned = challenge_earned_map.get(cat, 0)
+        quiz_started = quiz_started_map.get(cat, 0)
+        quiz_earned = quiz_earned_map.get(cat, 0)
+        
+        total_started = challenge_started + quiz_started
+        total_earned_cat = challenge_earned + quiz_earned
+        total_earned += total_earned_cat
 
-        if earned_cnt > 0:
+        if total_earned_cat > 0:
             state = "earned"
-        elif started_cnt > 0:
+        elif total_started > 0:
             state = "started"
         else:
             state = "locked"
 
         categories.append({
             "raw": cat,                     # slug used in URL
-            "name": cat.replace("_", " "),  # display name
+            "name": cat.replace("_", " ").title(),  # display name
             "total": total,
             "state": state,
         })
 
     percent = round((total_earned / total_challenges) * 100) if total_challenges else 0
 
-    return render(request, "pages/progress.html", {   # <- changed
+    return render(request, "pages/progress.html", {
         "percent": percent,
         "total_completed": total_earned,
         "total_challenges": total_challenges,
@@ -3558,6 +3616,7 @@ def leaderboard_update():
     LeaderBoardTable.objects.all().delete()
     users = User.objects.all()
     for user in users:
+        # Get challenge scores by category
         challenges_category = (UserChallenge.objects.filter(user=user, completed=True).values('category_challenges').annotate(total_points=Sum('score')))
 
         for categories in challenges_category:
@@ -3565,9 +3624,149 @@ def leaderboard_update():
             total_points = categories['total_points'] or 0
 
             if total_points > 0:
-                LeaderBoardTable.objects.create(first_name=user.first_name, last_name=user.last_name, category=category, total_points=total_points)
+                LeaderBoardTable.objects.create(user=user, category=category, total_points=total_points)
+        
+        # Get quiz scores by category
+        quiz_scores = QuizAttempt.objects.filter(user=user, is_completed=True).values('quiz__category').annotate(total_points=Sum('total_score'))
+        
+        for quiz_score in quiz_scores:
+            category = quiz_score['quiz__category']
+            points = quiz_score['total_points'] or 0
+            
+            if points > 0:
+                leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+                    user=user,
+                    category=category,
+                    defaults={'total_points': points}
+                )
+                if not created:
+                    leaderboard_entry.total_points += points
+                    leaderboard_entry.save()
 
 
+
+def quiz_list(request):
+    """
+    View for displaying available quiz categories.
+    """
+    quizzes = Quiz.objects.filter(is_active=True).order_by('category')
+    return render(request, 'pages/challenges/quiz_list.html', {'quizzes': quizzes})
+
+@login_required
+def quiz_detail(request, quiz_id):
+    """
+    View for displaying quiz questions and handling quiz completion.
+    """
+    quiz = get_object_or_404(Quiz, id=quiz_id, is_active=True)
+    
+    # Check if user has already completed this quiz
+    existing_attempt = QuizAttempt.objects.filter(
+        user=request.user, 
+        quiz=quiz, 
+        is_completed=True
+    ).first()
+    
+    if existing_attempt:
+        return render(request, 'pages/challenges/quiz_completed.html', {
+            'quiz': quiz,
+            'attempt': existing_attempt
+        })
+    
+    # Get or create a new attempt
+    attempt, created = QuizAttempt.objects.get_or_create(
+        user=request.user,
+        quiz=quiz,
+        is_completed=False,
+        defaults={'max_possible_score': quiz.total_questions * 10}
+    )
+    
+    if request.method == 'POST':
+        # Handle quiz submission
+        return handle_quiz_submission(request, attempt)
+    
+    # Get questions ordered by difficulty
+    questions = quiz.questions.all().order_by('difficulty', 'id')
+    
+    return render(request, 'pages/challenges/quiz_detail.html', {
+        'quiz': quiz,
+        'questions': questions,
+        'attempt': attempt
+    })
+
+@login_required
+def handle_quiz_submission(request, attempt):
+    """
+    Handle quiz answer submission and calculate score.
+    """
+    quiz = attempt.quiz
+    total_score = 0
+    
+    # Process each question
+    for question in quiz.questions.all():
+        answer_key = f'question_{question.id}'
+        selected_answer = request.POST.get(answer_key)
+        
+        if selected_answer:
+            is_correct = selected_answer.lower() == question.correct_answer.lower()
+            points_earned = question.points if is_correct else 0
+            total_score += points_earned
+            
+            # Save or update answer
+            QuizAnswer.objects.update_or_create(
+                attempt=attempt,
+                question=question,
+                defaults={
+                    'selected_answer': selected_answer.lower(),
+                    'is_correct': is_correct,
+                    'points_earned': points_earned
+                }
+            )
+    
+    # Update attempt
+    attempt.total_score = total_score
+    attempt.is_completed = True
+    attempt.completed_at = timezone.now()
+    attempt.save()
+    
+    # Update leaderboard
+    update_leaderboard_with_quiz_score(request.user, quiz.category, total_score)
+    
+    percentage = (total_score / attempt.max_possible_score) * 100 if attempt.max_possible_score > 0 else 0
+    
+    return render(request, 'pages/challenges/quiz_result.html', {
+        'quiz': quiz,
+        'attempt': attempt,
+        'total_score': total_score,
+        'max_score': attempt.max_possible_score,
+        'percentage': percentage
+    })
+
+def update_leaderboard_with_quiz_score(user, category, score):
+    """
+    Update leaderboard with quiz scores.
+    """
+    from django.db.models import Sum
+    
+    # Get or create leaderboard entry for this user and category
+    leaderboard_entry, created = LeaderBoardTable.objects.get_or_create(
+        user=user,
+        category=category,
+        defaults={'total_points': score}
+    )
+    
+    if not created:
+        # Add quiz score to existing points
+        leaderboard_entry.total_points += score
+        leaderboard_entry.save()
+    else:
+        # For new entries, also add any existing challenge scores
+        challenge_points = UserChallenge.objects.filter(
+            user=user, 
+            completed=True
+        ).aggregate(total=Sum('score'))['total'] or 0
+        
+        leaderboard_entry.total_points += challenge_points
+        leaderboard_entry.save()
 
 def cyber_quiz(request):
     """

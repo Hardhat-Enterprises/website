@@ -769,6 +769,88 @@ class JobApplication(models.Model):
     def __str__(self):
         return f"{self.name} - {self.job.title}"
 
+# Quiz Models
+class Quiz(models.Model):
+    CATEGORY_CHOICES = [
+        ('network', 'Network Security'),
+        ('web', 'Web Application Security'),
+        ('crypto', 'Cryptography'),
+        ('general', 'General Knowledge'),
+    ]
+    
+    title = models.CharField(max_length=200)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    description = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.title} - {self.get_category_display()}"
+    
+    @property
+    def total_questions(self):
+        return self.questions.count()
+
+class QuizQuestion(models.Model):
+    DIFFICULTY_CHOICES = [
+        ('easy', 'Easy'),
+        ('medium', 'Medium'),
+        ('hard', 'Hard'),
+    ]
+    
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
+    question_text = models.TextField()
+    option_a = models.CharField(max_length=500)
+    option_b = models.CharField(max_length=500)
+    option_c = models.CharField(max_length=500)
+    option_d = models.CharField(max_length=500)
+    correct_answer = models.CharField(max_length=1, choices=[
+        ('a', 'A'),
+        ('b', 'B'),
+        ('c', 'C'),
+        ('d', 'D'),
+    ])
+    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
+    points = models.IntegerField(default=10)
+    explanation = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['difficulty', 'id']
+    
+    def __str__(self):
+        return f"{self.quiz.title} - {self.question_text[:50]}..."
+
+class QuizAttempt(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    started_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
+    total_score = models.IntegerField(default=0)
+    max_possible_score = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ['-started_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.quiz.title} - {self.total_score}/{self.max_possible_score}"
+
+class QuizAnswer(models.Model):
+    attempt = models.ForeignKey(QuizAttempt, on_delete=models.CASCADE, related_name='answers')
+    question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
+    selected_answer = models.CharField(max_length=1, choices=[
+        ('a', 'A'),
+        ('b', 'B'),
+        ('c', 'C'),
+        ('d', 'D'),
+    ])
+    is_correct = models.BooleanField(default=False)
+    points_earned = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"{self.attempt.user.username} - {self.question.question_text[:30]}..."
+
 #Leaderboard
 class LeaderBoardTable(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

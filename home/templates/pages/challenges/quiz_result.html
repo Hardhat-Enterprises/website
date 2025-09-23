@@ -1,0 +1,341 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/pre-loader.html' %}
+
+<div class="content-container container mt-10">
+    <div class="quiz-result-container">
+        <div class="card shadow-lg cyber-card">
+            <div class="card-header bg-primary text-white cyber-header">
+                <h3 class="mb-0">Quiz Completed!</h3>
+                <div class="cyber-particles"></div>
+            </div>
+            <div class="card-body cyber-body text-center">
+                <!-- Trophy Animation -->
+                <div class="trophy-container mb-4">
+                    <div class="cyber-trophy">
+                        <div class="trophy-cup"></div>
+                        <div class="trophy-base"></div>
+                        <div class="trophy-handles"></div>
+                    </div>
+                </div>
+
+                <h2 class="cyber-text mb-3">{{ quiz.title }} - {{ quiz.get_category_display }}</h2>
+                
+                <div class="score-display mb-4">
+                    <div class="score-circle">
+                        <span class="score-number">{{ total_score }}</span>
+                        <span class="score-total">/ {{ max_score }}</span>
+                    </div>
+                    <div class="score-percentage">
+                        {{ percentage|floatformat:0 }}%
+                    </div>
+                </div>
+
+                <div class="performance-feedback mb-4">
+                    {% if percentage >= 80 %}
+                        <div class="feedback excellent">
+                            <i class="fas fa-star"></i>
+                            <h4>Excellent Performance!</h4>
+                            <p>Outstanding work! You have a strong understanding of {{ quiz.get_category_display }}.</p>
+                        </div>
+                    {% elif percentage >= 60 %}
+                        <div class="feedback good">
+                            <i class="fas fa-thumbs-up"></i>
+                            <h4>Good Job!</h4>
+                            <p>Well done! You have a solid foundation in {{ quiz.get_category_display }}.</p>
+                        </div>
+                    {% elif percentage >= 40 %}
+                        <div class="feedback average">
+                            <i class="fas fa-check-circle"></i>
+                            <h4>Not Bad!</h4>
+                            <p>Keep learning to improve your {{ quiz.get_category_display }} knowledge.</p>
+                        </div>
+                    {% else %}
+                        <div class="feedback poor">
+                            <i class="fas fa-exclamation-triple"></i>
+                            <h4>Keep Practicing!</h4>
+                            <p>{{ quiz.get_category_display }} is an important skill to develop. Don't give up!</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="quiz-details mb-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Completed: {{ attempt.completed_at|date:"M d, Y H:i" }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Duration: {{ attempt.started_at|timesince:attempt.completed_at }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="{% url 'quiz_list' %}" class="btn btn-primary cyber-btn me-2">
+                        <i class="fas fa-list"></i> Try Another Quiz
+                    </a>
+                    <a href="{% url 'leaderboard' %}?category={{ quiz.category }}" class="btn btn-success cyber-btn me-2">
+                        <i class="fas fa-trophy"></i> View Leaderboard
+                    </a>
+                    <a href="{% url 'challenge_list' %}" class="btn btn-secondary cyber-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Challenges
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quiz-result-container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cyber-card {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 2px solid #00ff00;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .cyber-header {
+        position: relative;
+        background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+        border-bottom: 2px solid #00ff00;
+    }
+
+    .cyber-body {
+        background: rgba(26, 26, 46, 0.9);
+        color: #fff;
+    }
+
+    .cyber-text {
+        color: #fff;
+        text-shadow: 0 0 5px #00ff00;
+    }
+
+    .cyber-btn {
+        background: linear-gradient(45deg, #00ff00, #00b300);
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .cyber-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+    }
+
+    .cyber-trophy {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        animation: trophy-bounce 2s ease-in-out;
+    }
+
+    .trophy-cup {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(45deg, #ffd700, #ffa500);
+        border-radius: 50% 50% 0 0;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+
+    .trophy-base {
+        width: 40px;
+        height: 25px;
+        background: linear-gradient(45deg, #ffd700, #ffa500);
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+    }
+
+    .trophy-handles {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 40px;
+        border: 4px solid #ffd700;
+        border-bottom: none;
+        border-radius: 30px 30px 0 0;
+    }
+
+    .score-circle {
+        width: 120px;
+        height: 120px;
+        border: 4px solid #00ff00;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        background: rgba(0, 255, 0, 0.1);
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .score-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #00ff00;
+        text-shadow: 0 0 10px #00ff00;
+    }
+
+    .score-total {
+        font-size: 1.2rem;
+        color: #fff;
+    }
+
+    .score-percentage {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #00ff00;
+        text-shadow: 0 0 10px #00ff00;
+    }
+
+    .performance-feedback {
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+    }
+
+    .feedback.excellent {
+        background: rgba(0, 255, 0, 0.2);
+        border: 2px solid #00ff00;
+        color: #00ff00;
+    }
+
+    .feedback.good {
+        background: rgba(0, 150, 255, 0.2);
+        border: 2px solid #0096ff;
+        color: #0096ff;
+    }
+
+    .feedback.average {
+        background: rgba(255, 165, 0, 0.2);
+        border: 2px solid #ffa500;
+        color: #ffa500;
+    }
+
+    .feedback.poor {
+        background: rgba(255, 0, 0, 0.2);
+        border: 2px solid #ff0000;
+        color: #ff0000;
+    }
+
+    .feedback h4 {
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        color: #fff;
+    }
+
+    .detail-item i {
+        color: #00ff00;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+
+    .cyber-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #00ff00;
+        border-radius: 50%;
+        animation: particle-fall 3s linear infinite;
+    }
+
+    @keyframes trophy-bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-20px);
+        }
+        60% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @keyframes particle-fall {
+        0% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .cyber-btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+
+<script>
+    function createParticles() {
+        const particlesContainer = document.querySelector('.cyber-particles');
+        for (let i = 0; i < 40; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 3}s`;
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', createParticles);
+</script>
+
+{% endblock content %}
