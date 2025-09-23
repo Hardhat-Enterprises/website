@@ -113,6 +113,11 @@ The Hardhat Enterprises Website is a comprehensive Django-based cybersecurity pl
    ```bash
    docker-compose up --build
    ```
+3. **Create Super User**:
+   ```bash
+   docker-compose exec web python manage.py createsuperuser
+   ```
+*Note any user email verfication may go to your spam folder so always check.*
 
 4. **Access the application**:
    - Website: http://localhost:8000
@@ -142,11 +147,11 @@ The Hardhat Enterprises Website is a comprehensive Django-based cybersecurity pl
    ```bash
    python manage.py runserver
    ```
-5. **Create Superuser
+5. **Create Superuser**:
    ```bash
    python manage.py createsuperuser
    ```
-   *Note any user email verfication may go to your spam folder so always check.
+   *Note any user email verfication may go to your spam folder so always check.*
 
 ## Configuration
 
