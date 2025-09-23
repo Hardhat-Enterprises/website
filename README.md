@@ -133,6 +133,7 @@ The Hardhat Enterprises Website is a comprehensive Django-based cybersecurity pl
 
 3. **Run migrations**:
    ```bash
+   python manage.py makemigrations #Delete Intial migration file and run this command to generate any changes from models.py file
    python manage.py migrate
    python manage.py populate_database
    ```
