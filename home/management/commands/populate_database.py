@@ -4,7 +4,12 @@ from home.models import (
     Announcement, Article, ContactSubmission, Contact, Course, CyberChallenge,
     Experience, JobApplication, Job, LeaderBoardTable, Project, SecurityEvent,
     Skill, Student, UserBlogPage, UserChallenge, DDT_contact, Progress,
-    Profile, Passkey, BlogPost, Smishingdetection_join_us, Projects_join_us
+    Profile, Passkey, BlogPost, Smishingdetection_join_us, Projects_join_us,
+    AdminNotification, APIModel, Folder, VaultDocument, PasswordHistory,
+    Webpage, TeamMember, JobAlert, GraduateProgram, CareerFAQ, Quiz,
+    QuizQuestion, QuizAttempt, QuizAnswer, Report, AppAttackReport,
+    PenTestingRequest, SecureCodeReviewRequest, AdminSession, Resource, Tip,
+    TipRotationState, UserDeletionRequest, UserDevice
 )
 from django.utils import timezone
 from datetime import timedelta, date
@@ -62,18 +67,54 @@ class Command(BaseCommand):
         self.create_projects()
         self.create_courses()
         self.create_students()
+        self.create_profiles_and_password_history()
+
+        # Content and notifications
         self.create_announcements()
+        self.create_admin_notifications()
         self.create_articles()
         self.create_contact_submissions()
         self.create_contacts()
+        self.create_team_members()
+        self.create_reports()
+        self.create_api_models()
+        self.create_webpages()
+        self.create_folders_and_vault_documents()
+
+        # Challenges and quizzes
         self.create_cyber_challenges()
+        self.create_quizzes()
         self.create_experiences()
+
+        # Jobs and programs
         self.create_jobs()
+        self.create_job_alerts()
         self.create_job_applications()
+        self.create_graduate_programs()
+        self.create_career_faqs()
+
+        # Leaderboard & events
         self.create_leader_board_tables()
         self.create_security_events()
+
+        # Blog and user challenge progress
         self.create_user_blog_pages()
         self.create_user_challenges()
+
+        # Reports and requests
+        self.create_appattack_reports()
+        self.create_pen_and_secure_code_requests()
+
+        # Admin sessions, resources, tips
+        self.create_admin_sessions()
+        self.create_resources()
+        self.create_tips_and_rotation()
+
+        # Devices and deletion requests
+        self.create_user_devices()
+        self.create_user_deletion_requests()
+
+        # Misc additional
         self.create_additional_models()
 
         self.stdout.write(self.style.SUCCESS('Database population completed successfully!'))
@@ -81,11 +122,21 @@ class Command(BaseCommand):
     def clear_data(self):
         """Clear existing data from all models"""
         models_to_clear = [
-            UserChallenge, JobApplication, Student, Progress, Profile, 
-            LeaderBoardTable, SecurityEvent, Article, UserBlogPage,
-            CyberChallenge, Experience, Job, ContactSubmission, Contact,
-            Announcement, Course, Project, Skill, BlogPost, DDT_contact,
-            Smishingdetection_join_us, Projects_join_us, Passkey
+            # Dependent/child records first
+            QuizAnswer, QuizAttempt, QuizQuestion, UserChallenge, Progress,
+            JobApplication, LeaderBoardTable, SecurityEvent, Article,
+            UserBlogPage, Experience, ContactSubmission, Contact, Report,
+            AdminSession, PasswordHistory, VaultDocument, Folder,
+            TipRotationState, Tip, Resource, BlogPost,
+            AppAttackReport, PenTestingRequest, SecureCodeReviewRequest,
+            TeamMember, JobAlert, CareerFAQ, GraduateProgram, Webpage,
+            APIModel, AdminNotification,
+            # Core domain
+            CyberChallenge, Quiz, Job, Announcement, Course, Project, Skill,
+            # Misc join-us/contact
+            DDT_contact, Smishingdetection_join_us, Projects_join_us,
+            # User-related auxiliaries
+            Profile, UserDevice, UserDeletionRequest, Passkey,
         ]
         
         for model in models_to_clear:
@@ -135,6 +186,24 @@ class Command(BaseCommand):
                     is_active=True
                 )
                 self.stdout.write(f'Created user: {user.email}')
+
+        # Ensure at least one staff/superuser exists for admin flows
+        if not User.objects.filter(is_staff=True).exists():
+            admin_email = 'admin@example.com'
+            if not User.objects.filter(email=admin_email).exists():
+                admin = User.objects.create_superuser(
+                    email=admin_email,
+                    password='adminpassword123',
+                    first_name='Admin',
+                    last_name='User'
+                )
+                self.stdout.write(f'Created superuser: {admin.email}')
+            else:
+                admin = User.objects.get(email=admin_email)
+                admin.is_staff = True
+                admin.is_superuser = True
+                admin.save(update_fields=["is_staff", "is_superuser"])
+                self.stdout.write(f'Ensured staff/superuser: {admin.email}')
 
     def create_skills(self):
         """Create 10 skills"""
@@ -196,6 +265,16 @@ class Command(BaseCommand):
             if Project.objects.count() < 10 and not Project.objects.filter(title=choice).exists():
                 Project.objects.create(title=choice)
                 self.stdout.write(f'Created project: {choice}')
+
+    def create_profiles_and_password_history(self):
+        """Create Profile and PasswordHistory entries for users"""
+        self.stdout.write('Creating profiles and password history...')
+        User = get_user_model()
+        for user in User.objects.all():
+            if not Profile.objects.filter(user=user).exists():
+                Profile.objects.create(user=user, bio=self.generate_lorem_text(20))
+            if not PasswordHistory.objects.filter(user=user).exists():
+                PasswordHistory.objects.create(user=user, encoded_password=user.password)
 
     def create_courses(self):
         """Create courses with specified data"""
@@ -277,6 +356,20 @@ class Command(BaseCommand):
             )
             self.stdout.write(f'Created announcement {i+1}')
 
+    def create_admin_notifications(self):
+        self.stdout.write('Creating admin notifications...')
+        User = get_user_model()
+        users = list(User.objects.all())
+        types = ['feedback', 'update', 'alert', 'info']
+        for i in range(8):
+            AdminNotification.objects.create(
+                title=f"Notification {i+1}",
+                message=self.generate_lorem_text(25),
+                notification_type=random.choice(types),
+                related_user=random.choice(users) if users and random.choice([True, False]) else None
+            )
+        self.stdout.write('Created admin notifications')
+
     def create_articles(self):
         """Create 10 articles"""
         self.stdout.write('Creating articles...')
@@ -306,6 +399,45 @@ class Command(BaseCommand):
                 date=timezone.now().date() - timedelta(days=random.randint(0, 60))
             )
             self.stdout.write(f'Created article: {title}')
+
+    def create_api_models(self):
+        self.stdout.write('Creating API models...')
+        for i in range(5):
+            APIModel.objects.get_or_create(
+                name=f"API {i+1}",
+                defaults={
+                    'field_name': 'Default Value',
+                    'description': self.generate_lorem_text(30)
+                }
+            )
+
+    def create_webpages(self):
+        self.stdout.write('Creating webpages...')
+        for i in range(5):
+            Webpage.objects.get_or_create(
+                title=f"Page {i+1}",
+                defaults={
+                    'url': f"/page-{i+1}/"
+                }
+            )
+
+    def create_folders_and_vault_documents(self):
+        self.stdout.write('Creating folders and vault documents...')
+        User = get_user_model()
+        users = list(User.objects.all()[:5])
+        for user in users:
+            folder, _ = Folder.objects.get_or_create(name="My Docs", owner=user, parent=None)
+            # Create a small text file in vault
+            file_content = ContentFile(b"Sample vault document content", name=f"doc-{user.id}.txt")
+            VaultDocument.objects.create(
+                file=file_content,
+                original_name=f"Document for {user.email}",
+                content_type="text/plain",
+                size_bytes=file_content.size,
+                description="Auto generated test document",
+                visibility=VaultDocument.VIS_PUBLIC,
+                uploaded_by=user,
+            )
 
     def create_contact_submissions(self):
         """Create 10 contact submissions"""
@@ -337,6 +469,31 @@ class Command(BaseCommand):
                 message=self.generate_lorem_text(25)
             )
             self.stdout.write(f'Created contact {i+1}')
+
+    def create_team_members(self):
+        """Create a few team members"""
+        self.stdout.write('Creating team members...')
+        members = [
+            ('Alice Johnson', 'Security Analyst'),
+            ('Bob Smith', 'Penetration Tester'),
+            ('Carol Davis', 'Software Engineer'),
+            ('Dan Brown', 'Data Scientist'),
+        ]
+        for name, role in members:
+            if not TeamMember.objects.filter(name=name).exists():
+                img = ContentFile(b"fake image bytes", name=f"{name.split()[0].lower()}.jpg")
+                TeamMember.objects.create(name=name, role=role, image=img)
+        
+    def create_reports(self):
+        """Create a few moderation reports"""
+        self.stdout.write('Creating reports...')
+        for i in range(5):
+            Report.objects.create(
+                blog_id=i+1,
+                blog_name=f"Blog {i+1}",
+                reason=self.generate_lorem_text(15),
+                created_at=timezone.now() - timedelta(days=random.randint(0, 20))
+            )
 
     def create_cyber_challenges(self):
         """Create 10 cyber challenges"""
@@ -437,6 +594,12 @@ class Command(BaseCommand):
                 closing_date=timezone.now().date() + timedelta(days=random.randint(7, 60))
             )
             self.stdout.write(f'Created job: {title}')
+
+    def create_job_alerts(self):
+        self.stdout.write('Creating job alerts...')
+        for i in range(5):
+            email = f"jobalert{i+1}@example.com"
+            JobAlert.objects.get_or_create(email=email)
 
     def create_job_applications(self):
         """Create 10 job applications"""
@@ -547,6 +710,60 @@ class Command(BaseCommand):
                 )
                 self.stdout.write(f'Created user challenge {i+1}')
 
+    def create_quizzes(self):
+        self.stdout.write('Creating quizzes and questions...')
+        quizzes_data = [
+            ("Network Fundamentals", 'network'),
+            ("Web Security Basics", 'web'),
+            ("Crypto 101", 'crypto'),
+            ("General Awareness", 'general'),
+        ]
+        quizzes = []
+        for title, category in quizzes_data:
+            quiz, _ = Quiz.objects.get_or_create(
+                title=title,
+                category=category,
+                defaults={'description': self.generate_lorem_text(25), 'is_active': True}
+            )
+            quizzes.append(quiz)
+            if quiz.questions.count() == 0:
+                for i in range(5):
+                    correct = random.choice(['a', 'b', 'c', 'd'])
+                    QuizQuestion.objects.create(
+                        quiz=quiz,
+                        question_text=f"{title} Q{i+1}: {self.generate_lorem_text(8)}?",
+                        option_a="Option A",
+                        option_b="Option B",
+                        option_c="Option C",
+                        option_d="Option D",
+                        correct_answer=correct,
+                        difficulty=random.choice(['easy','medium','hard']),
+                        points=10,
+                        explanation=self.generate_lorem_text(12)
+                    )
+        # Create attempts for a few users
+        User = get_user_model()
+        users = list(User.objects.all()[:5])
+        for user in users:
+            quiz = random.choice(quizzes)
+            attempt = QuizAttempt.objects.create(user=user, quiz=quiz, max_possible_score=quiz.questions.count()*10)
+            total = 0
+            for q in quiz.questions.all():
+                selected = random.choice(['a','b','c','d'])
+                correct = selected == q.correct_answer
+                pts = 10 if correct else 0
+                QuizAnswer.objects.create(
+                    attempt=attempt,
+                    question=q,
+                    selected_answer=selected,
+                    is_correct=correct,
+                    points_earned=pts
+                )
+                total += pts
+            attempt.total_score = total
+            attempt.is_completed = True
+            attempt.save(update_fields=['total_score','is_completed'])
+
     def create_additional_models(self):
         """Create entries for additional models"""
         self.stdout.write('Creating additional model entries...')
@@ -590,3 +807,143 @@ class Command(BaseCommand):
             )
         
         self.stdout.write('Created additional model entries')
+
+    def create_graduate_programs(self):
+        self.stdout.write('Creating graduate programs...')
+        programs = [
+            ("Cybersecurity Graduate Program", 'cybersecurity'),
+            ("Software Engineering Graduate Program", 'software_engineering'),
+            ("Data Science Graduate Program", 'data_science'),
+        ]
+        for title, prog_type in programs:
+            GraduateProgram.objects.get_or_create(
+                title=title,
+                defaults={
+                    'description': self.generate_lorem_text(40),
+                    'duration_months': random.choice([6,12,18]),
+                    'program_type': prog_type,
+                    'start_date': timezone.now().date() + timedelta(days=30),
+                    'application_deadline': timezone.now().date() + timedelta(days=60),
+                    'is_active': True,
+                    'overview': self.generate_lorem_text(60),
+                    'curriculum': self.generate_lorem_text(60),
+                    'benefits': self.generate_lorem_text(40),
+                    'requirements': self.generate_lorem_text(40),
+                    'application_process': self.generate_lorem_text(30),
+                }
+            )
+
+    def create_career_faqs(self):
+        self.stdout.write('Creating career FAQs...')
+        faqs = [
+            ("How do I apply?", 'application'),
+            ("What are the benefits?", 'benefits'),
+            ("How can I grow?", 'growth'),
+            ("General info", 'general'),
+        ]
+        for i, (q, cat) in enumerate(faqs, start=1):
+            CareerFAQ.objects.get_or_create(
+                question=q,
+                defaults={'answer': self.generate_lorem_text(30), 'category': cat, 'order': i}
+            )
+
+    def create_appattack_reports(self):
+        self.stdout.write('Creating AppAttack reports...')
+        for year in [2023, 2024]:
+            content = ContentFile(b"PDF content placeholder", name=f"appattack_{year}.pdf")
+            AppAttackReport.objects.get_or_create(
+                year=year,
+                title=f"AppAttack Report {year}",
+                defaults={'pdf': content}
+            )
+
+    def create_pen_and_secure_code_requests(self):
+        self.stdout.write('Creating pentesting and secure code requests...')
+        for i in range(5):
+            PenTestingRequest.objects.create(
+                name=f"Requester {i+1}",
+                email=f"pentest{i+1}@example.com",
+                github_repo_link="https://github.com/example/repo",
+                project_description=self.generate_lorem_text(20),
+                terms_accepted=True,
+            )
+            SecureCodeReviewRequest.objects.create(
+                name=f"SCR {i+1}",
+                email=f"scr{i+1}@example.com",
+                github_repo_link="https://github.com/example/scr",
+                project_description=self.generate_lorem_text(20),
+                terms_accepted=True,
+            )
+
+    def create_admin_sessions(self):
+        self.stdout.write('Creating admin sessions...')
+        User = get_user_model()
+        admins = list(User.objects.filter(is_staff=True)[:2]) or list(User.objects.all()[:2])
+        for user in admins:
+            AdminSession.objects.get_or_create(
+                user=user,
+                session_key=str(uuid.uuid4()).replace('-', '')[:40],
+                defaults={
+                    'ip_address': f"10.0.0.{random.randint(2,254)}",
+                    'user_agent': 'Mozilla/5.0 (Test Agent)',
+                    'is_active': True,
+                }
+            )
+
+    def create_resources(self):
+        self.stdout.write('Creating resources...')
+        for i in range(3):
+            title = f"Resource {i+1}"
+            content = ContentFile(b"Example resource file", name=f"resource_{i+1}.txt")
+            Resource.objects.get_or_create(
+                title=title,
+                defaults={
+                    'summary': self.generate_lorem_text(25),
+                    'category': Resource.Category.OTHER,
+                    'file': content,
+                    'is_published': True,
+                }
+            )
+
+    def create_tips_and_rotation(self):
+        self.stdout.write('Creating daily tips and rotation state...')
+        tips = [
+            "Use strong, unique passwords.",
+            "Enable two-factor authentication.",
+            "Beware of phishing emails.",
+            "Keep your software updated.",
+            "Use a password manager.",
+            "Verify website certificates.",
+            "Backup important data regularly.",
+            "Avoid public Wi-Fi for sensitive tasks.",
+            "Review app permissions.",
+            "Lock your devices when not in use.",
+        ]
+        for t in tips:
+            Tip.objects.get_or_create(text=t)
+        TipRotationState.objects.get_or_create(lock="default")
+
+    def create_user_devices(self):
+        self.stdout.write('Creating user devices...')
+        User = get_user_model()
+        for user in User.objects.all():
+            UserDevice.objects.get_or_create(
+                user=user,
+                device_fingerprint=str(uuid.uuid4()),
+                defaults={
+                    'device_name': 'Chrome on macOS',
+                    'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X)',
+                    'ip_address': f"172.16.0.{random.randint(2,254)}",
+                }
+            )
+
+    def create_user_deletion_requests(self):
+        self.stdout.write('Creating user deletion requests...')
+        User = get_user_model()
+        candidates = list(User.objects.all()[:1])
+        for user in candidates:
+            if not hasattr(user, 'deletion_request'):
+                UserDeletionRequest.objects.create(
+                    user=user,
+                    scheduled_for=timezone.now() + timedelta(days=30)
+                )
